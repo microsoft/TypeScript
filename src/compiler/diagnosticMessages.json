@@ -203,6 +203,14 @@
         "category": "Error",
         "code": 1068
     },
+    "'{0}' modifier cannot appear on a type member.": {
+        "category": "Error",
+        "code": 1070
+    },
+    "'{0}' modifier cannot appear on an index signature.": {
+        "category": "Error",
+        "code": 1071
+    },
     "A '{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
@@ -422,10 +430,6 @@
     "'{' or ';' expected.": {
         "category": "Error",
         "code": 1144
-    },
-    "Modifiers not permitted on index signature members.": {
-        "category": "Error",
-        "code": 1145
     },
     "Declaration expected.": {
         "category": "Error",

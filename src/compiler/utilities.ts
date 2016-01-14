@@ -1548,6 +1548,7 @@ namespace ts {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
                 return true;
         }
@@ -2279,6 +2280,7 @@ namespace ts {
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
             case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
+            case SyntaxKind.ReadonlyKeyword: return NodeFlags.Readonly;
         }
         return 0;
     }

@@ -1192,7 +1192,7 @@ namespace ts {
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
-                    return isStartOfTypeMember();
+                    return lookAhead(isTypeMemberStart);
                 case ParsingContext.ClassMembers:
                     // We allow semicolons as class elements (as specified by ES6) as long as we're
                     // not in error recovery.  If we're in error recovery, we don't want an errant
@@ -2233,13 +2233,13 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parsePropertyOrMethodSignature(): PropertySignature | MethodSignature {
-            const fullStart = scanner.getStartPos();
+        function parsePropertyOrMethodSignature(fullStart: number, modifiers: ModifiersArray): PropertySignature | MethodSignature {
             const name = parsePropertyName();
             const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 const method = <MethodSignature>createNode(SyntaxKind.MethodSignature, fullStart);
+                setModifiers(method, modifiers);
                 method.name = name;
                 method.questionToken = questionToken;
 
@@ -2251,6 +2251,7 @@ namespace ts {
             }
             else {
                 const property = <PropertySignature>createNode(SyntaxKind.PropertySignature, fullStart);
+                setModifiers(property, modifiers);
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
@@ -2267,77 +2268,51 @@ namespace ts {
             }
         }
 
-        function isStartOfTypeMember(): boolean {
-            switch (token) {
-                case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:
-                case SyntaxKind.OpenBracketToken: // Both for indexers and computed properties
-                    return true;
-                default:
-                    if (isModifierKind(token)) {
-                        const result = lookAhead(isStartOfIndexSignatureDeclaration);
-                        if (result) {
-                            return result;
-                        }
-                    }
-
-                    return isLiteralPropertyName() && lookAhead(isTypeMemberWithLiteralPropertyName);
+        function isTypeMemberStart(): boolean {
+            let idToken: SyntaxKind;
+            // Return true if we have the start of a signature member
+            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                return true;
             }
-        }
-
-        function isStartOfIndexSignatureDeclaration() {
+            // Eat up all modifiers, but hold on to the last one in case it is actually an identifier
             while (isModifierKind(token)) {
+                idToken = token;
                 nextToken();
             }
-
-            return isIndexSignature();
-        }
-
-        function isTypeMemberWithLiteralPropertyName() {
-            nextToken();
-            return token === SyntaxKind.OpenParenToken ||
-                token === SyntaxKind.LessThanToken ||
-                token === SyntaxKind.QuestionToken ||
-                token === SyntaxKind.ColonToken ||
-                canParseSemicolon();
+            // Index signatures and computed property names are type members
+            if (token === SyntaxKind.OpenBracketToken) {
+                return true;
+            }
+            // Try to get the first property-like token following all modifiers
+            if (isLiteralPropertyName()) {
+                idToken = token;
+                nextToken();
+            }
+            // If we were able to get any potential identifier, check that it is
+            // the start of a member declaration
+            if (idToken) {
+                return token === SyntaxKind.OpenParenToken ||
+                    token === SyntaxKind.LessThanToken ||
+                    token === SyntaxKind.QuestionToken ||
+                    token === SyntaxKind.ColonToken ||
+                    canParseSemicolon();
+            }
+            return false;
         }
 
         function parseTypeMember(): TypeElement {
-            switch (token) {
-                case SyntaxKind.OpenParenToken:
-                case SyntaxKind.LessThanToken:
-                    return parseSignatureMember(SyntaxKind.CallSignature);
-                case SyntaxKind.OpenBracketToken:
-                    // Indexer or computed property
-                    return isIndexSignature()
-                        ? parseIndexSignatureDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined)
-                        : parsePropertyOrMethodSignature();
-                case SyntaxKind.NewKeyword:
-                    if (lookAhead(isStartOfConstructSignature)) {
-                        return parseSignatureMember(SyntaxKind.ConstructSignature);
-                    }
-                // fall through.
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    return parsePropertyOrMethodSignature();
-                default:
-                    // Index declaration as allowed as a type member.  But as per the grammar,
-                    // they also allow modifiers. So we have to check for an index declaration
-                    // that might be following modifiers. This ensures that things work properly
-                    // when incrementally parsing as the parser will produce the Index declaration
-                    // if it has the same text regardless of whether it is inside a class or an
-                    // object type.
-                    if (isModifierKind(token)) {
-                        const result = tryParse(parseIndexSignatureWithModifiers);
-                        if (result) {
-                            return result;
-                        }
-                    }
-
-                    if (tokenIsIdentifierOrKeyword(token)) {
-                        return parsePropertyOrMethodSignature();
-                    }
+            if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
+                return parseSignatureMember(SyntaxKind.CallSignature);
             }
+            if (token === SyntaxKind.NewKeyword && lookAhead(isStartOfConstructSignature)) {
+                return parseSignatureMember(SyntaxKind.ConstructSignature);
+            }
+            const fullStart = getNodePos();
+            const modifiers = parseModifiers();
+            if (isIndexSignature()) {
+                return parseIndexSignatureDeclaration(fullStart, /*decorators*/ undefined, modifiers);
+            }
+            return parsePropertyOrMethodSignature(fullStart, modifiers);
         }
 
         function parseIndexSignatureWithModifiers() {
@@ -4423,6 +4398,7 @@ namespace ts {
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.ReadonlyKeyword:
                         nextToken();
                         // ASI takes effect for this modifier.
                         if (scanner.hasPrecedingLineBreak()) {
@@ -4501,6 +4477,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                     // When these don't start a declaration, they may be the start of a class member if an identifier
                     // immediately follows. Otherwise they're an identifier in an expression statement.
                     return isStartOfDeclaration() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
@@ -4582,6 +4559,7 @@ namespace ts {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                     if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
@@ -4868,6 +4846,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                     return true;
                 default:
                     return false;
