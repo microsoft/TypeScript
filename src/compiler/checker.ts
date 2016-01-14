@@ -3,8 +3,20 @@
 /* @internal */
 namespace ts {
     const enum ReportErrors {
-        None = 0,
+        /**
+         * Do not report errors at all.
+         */
+        None,
+        /**
+         * Report errors in any fashion if any are encountered.
+         * This option implies that if an error has already been cached for a relationship
+         * between two types, it is okay to use the top-level error without elaboration.
+         */
         Basic,
+        /**
+         * Always force elaboration when comparing two types,
+         * even if the relation has been cached
+         */
         Elaborate,
     }
 
