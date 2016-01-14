@@ -1000,7 +1000,7 @@ namespace ts.server {
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
-                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
+                        info.fileWatcher = this.host.watchFile(<Path>fileName, _ => { this.watchedFileChanged(fileName); });
                     }
                 }
             }
@@ -1213,7 +1213,7 @@ namespace ts.server {
                     }
                 }
                 project.finishGraph();
-                project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
+                project.projectFileWatcher = this.host.watchFile(<Path>configFilename, _ => this.watchedProjectConfigFileChanged(project));
                 this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
                 project.directoryWatcher = this.host.watchDirectory(
                     ts.getDirectoryPath(configFilename),

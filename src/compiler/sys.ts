@@ -11,7 +11,7 @@ namespace ts {
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
+        watchFile?(path: Path, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -500,13 +500,13 @@ namespace ts {
                 },
                 readFile,
                 writeFile,
-                watchFile: (fileName, callback) => {
+                watchFile: (filePath, callback) => {
                     // Node 4.0 stablized the `fs.watch` function on Windows which avoids polling
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
                     const watchSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
-                    const watchedFile =  watchSet.addFile(<Path>fileName, callback);
+                    const watchedFile =  watchSet.addFile(filePath, callback);
                     return {
                         close: () => watchSet.removeFile(watchedFile)
                     };

@@ -872,4 +872,11 @@ namespace ts {
         }
         return copiedList;
     }
+
+    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
+        return useCaseSensitivefileNames
+            ? ((fileName) => fileName)
+            : ((fileName) => fileName.toLowerCase());
+    }
+
 }
