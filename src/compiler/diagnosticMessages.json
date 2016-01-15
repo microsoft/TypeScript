@@ -1767,6 +1767,14 @@
         "category": "Error",
         "code": 2661
     },
+    "Cannot find name '{0}'. Did you mean the static member '{1}.{0}'?": {
+        "category": "Error",
+        "code": 2662
+    },
+    "Cannot find name '{0}'. Did you mean the instance member 'this.{0}'?": {
+        "category": "Error",
+        "code": 2663
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

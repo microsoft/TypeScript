@@ -741,7 +741,9 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg)) {
+                        error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                    }
                 }
                 return undefined;
             }
@@ -776,6 +778,43 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
+            if (!errorLocation || (errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
+                return false;
+            }
+
+            const container = getThisContainer(errorLocation, /* includeArrowFunctions */ true);
+            let location = container;
+            while (location) {
+                if (isClassLike(location.parent)) {
+                    const classSymbol = getSymbolOfNode(location.parent);
+                    if (!classSymbol) {
+                        break;
+                    }
+
+                    // Check to see if a static member exists.
+                    const constructorType = getTypeOfSymbol(classSymbol);
+                    if (getPropertyOfType(constructorType, name)) {
+                        error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(classSymbol));
+                        return true;
+                    }
+
+                    // No static member is present.
+                    // Check if we're in an instance method and look for a relevant instance member. 
+                    if (location === container && !(location.flags & NodeFlags.Static)) {
+                        const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
+                        if (getPropertyOfType(instanceType, name)) {
+                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                            return true;
+                        }
+                    }
+                }
+
+                location = location.parent;
+            }
+            return false;
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
@@ -6688,10 +6727,6 @@ namespace ts {
                 if (typeInfo && typeInfo.type === undefinedType) {
                     return type;
                 }
-                // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
-                if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
-                    return typeInfo.type;
-                }
                 let flags: TypeFlags;
                 if (typeInfo) {
                     flags = typeInfo.flags;
@@ -6702,6 +6737,10 @@ namespace ts {
                 }
                 // At this point we can bail if it's not a union
                 if (!(type.flags & TypeFlags.Union)) {
+                    // If we're on the true branch and the type is a subtype, we should return the primitive type
+                    if (assumeTrue && typeInfo && isTypeSubtypeOf(typeInfo.type, type)) {
+                        return typeInfo.type;
+                    }
                     // If the active non-union type would be removed from a union by this type guard, return an empty union
                     return filterUnion(type) ? type : emptyUnionType;
                 }
