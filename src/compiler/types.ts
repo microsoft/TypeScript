@@ -2084,39 +2084,42 @@ namespace ts {
     }
 
     export const enum TypeFlags {
-        Any                     = 0x00000001,
-        String                  = 0x00000002,
-        Number                  = 0x00000004,
-        Boolean                 = 0x00000008,
-        Void                    = 0x00000010,
-        Undefined               = 0x00000020,
-        Null                    = 0x00000040,
-        Enum                    = 0x00000080,  // Enum type
-        StringLiteral           = 0x00000100,  // String literal type
-        TypeParameter           = 0x00000200,  // Type parameter
-        Class                   = 0x00000400,  // Class
-        Interface               = 0x00000800,  // Interface
-        Reference               = 0x00001000,  // Generic type reference
-        Tuple                   = 0x00002000,  // Tuple
-        Union                   = 0x00004000,  // Union (T | U)
-        Intersection            = 0x00008000,  // Intersection (T & U)
-        Anonymous               = 0x00010000,  // Anonymous
-        Instantiated            = 0x00020000,  // Instantiated anonymous type
+        None                     = 0x00000000,
+        Any                      = 0x00000001,
+        String                   = 0x00000002,
+        Number                   = 0x00000004,
+        Boolean                  = 0x00000008,
+        Void                     = 0x00000010,
+        Undefined                = 0x00000020,
+        Null                     = 0x00000040,
+        Enum                     = 0x00000080,  // Enum type
+        StringLiteral            = 0x00000100,  // String literal type
+        TypeParameter            = 0x00000200,  // Type parameter
+        Class                    = 0x00000400,  // Class
+        Interface                = 0x00000800,  // Interface
+        Reference                = 0x00001000,  // Generic type reference
+        Tuple                    = 0x00002000,  // Tuple
+        Union                    = 0x00004000,  // Union (T | U)
+        Intersection             = 0x00008000,  // Intersection (T & U)
+        Anonymous                = 0x00010000,  // Anonymous
+        Instantiated             = 0x00020000,  // Instantiated anonymous type
         /* @internal */
-        FromSignature           = 0x00040000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00080000,  // Originates in an object literal
+        FromSignature            = 0x00040000,  // Created for signature assignment check
+        ObjectLiteral            = 0x00080000,  // Originates in an object literal
         /* @internal */
-        FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
+        FreshObjectLiteral       = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull  = 0x00200000,  // Type is or contains the Undefined or Null types
         /* @internal */
-        ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
+        ContainsObjectLiteral    = 0x00400000,  // Type is or contains an object literal type
         /* @internal */
-        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
-        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
-        ThisType                = 0x02000000,  // This type
+        ContainsAnyFunctionType  = 0x00800000,  // Type is or contains a function type
+        ESSymbol                 = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                 = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
+        PredicateType            = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
+        /* @internal */
+        ContainsFreshLiteralType = 0x10000000, // The type contains a literal type inferred from a literal expression.
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2128,9 +2131,9 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType | ContainsFreshLiteralType,
         /* @internal */
-        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType | ContainsFreshLiteralType,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
