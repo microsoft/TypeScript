@@ -459,7 +459,7 @@ namespace ts {
          * Get symbols that represent parameter-property-declaration as parameter and as property declaration
          * @param parameter a parameterDeclaration node
          * @param parameterName a name of the parameter to get the symbols for.
-         * @return a tuple of two symbols 
+         * @return a tuple of two symbols
          */
         function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
@@ -2751,7 +2751,7 @@ namespace ts {
                 if (type.flags & TypeFlags.PredicateType && (declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature)) {
                     return type;
                 }
-                
+
                 if (!declaration.type && declaration.initializer) {
                     // Don't perform mutability widening if the user supplied a type and there is an initializer.
                     // Otherwise, for something like
@@ -5999,11 +5999,11 @@ namespace ts {
                     return t;
                 }
             }
-            
+
             if (allTypesHaveKind(types, TypeFlags.StringLike)) {
                 return stringType;
             }
-            
+
             return undefined;
         }
 
@@ -6059,10 +6059,6 @@ namespace ts {
 
         function isTupleLikeType(type: Type): boolean {
             return !!getPropertyOfType(type, "0");
-        }
-
-        function isStringLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringLiteral;
         }
 
         /**
@@ -7497,10 +7493,6 @@ namespace ts {
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
-        }
-
-        function contextualTypeIsStringLiteralType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -10584,11 +10576,11 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                return allTypesHaveKind((<UnionOrIntersectionType>type).types, kind)
+                return allTypesHaveKind((<UnionOrIntersectionType>type).types, kind);
             }
             return false;
         }
-        
+
         function allTypesHaveKind(types: Type[], kind: TypeFlags) {
             for (const current of types) {
                 if (!(current.flags & kind)) {
