@@ -174,11 +174,6 @@ namespace ts {
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<StringLiteralType> = {};
-        let emitExtends = false;
-        let emitDecorate = false;
-        let emitParam = false;
-        let emitAwaiter = false;
-        const emitGenerator = false;
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -444,7 +439,7 @@ namespace ts {
          * Get symbols that represent parameter-property-declaration as parameter and as property declaration
          * @param parameter a parameterDeclaration node
          * @param parameterName a name of the parameter to get the symbols for.
-         * @return a tuple of two symbols 
+         * @return a tuple of two symbols
          */
         function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
@@ -10220,11 +10215,6 @@ namespace ts {
                 return anyFunctionType;
             }
 
-            const isAsync = isAsyncFunctionLike(node);
-            if (isAsync) {
-                emitAwaiter = true;
-            }
-
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
             const contextSensitive = isContextSensitive(node);
@@ -10273,10 +10263,6 @@ namespace ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             const isAsync = isAsyncFunctionLike(node);
-            if (isAsync) {
-                emitAwaiter = true;
-            }
-
             const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
             if (!node.asteriskToken) {
                 // return is not necessary in the body of generators
@@ -12413,11 +12399,6 @@ namespace ts {
                 }
             }
 
-            emitDecorate = true;
-            if (node.kind === SyntaxKind.Parameter) {
-                emitParam = true;
-            }
-
             forEach(node.decorators, checkDecorator);
         }
 
@@ -12435,9 +12416,6 @@ namespace ts {
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const isAsync = isAsyncFunctionLike(node);
-            if (isAsync) {
-                emitAwaiter = true;
-            }
 
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
@@ -13568,7 +13546,6 @@ namespace ts {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                emitExtends = emitExtends || !isInAmbientContext(node);
                 const baseTypes = getBaseTypes(type);
                 if (baseTypes.length && produceDiagnostics) {
                     const baseType = baseTypes[0];
@@ -14648,10 +14625,6 @@ namespace ts {
                 // Grammar checking
                 checkGrammarSourceFile(node);
 
-                emitExtends = false;
-                emitDecorate = false;
-                emitParam = false;
-                emitAwaiter = false;
                 potentialThisCollisions.length = 0;
 
                 deferredNodes = [];
@@ -14666,26 +14639,6 @@ namespace ts {
                 if (potentialThisCollisions.length) {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
-                }
-
-                if (emitExtends) {
-                    links.flags |= NodeCheckFlags.EmitExtends;
-                }
-
-                if (emitDecorate) {
-                    links.flags |= NodeCheckFlags.EmitDecorate;
-                }
-
-                if (emitParam) {
-                    links.flags |= NodeCheckFlags.EmitParam;
-                }
-
-                if (emitAwaiter) {
-                    links.flags |= NodeCheckFlags.EmitAwaiter;
-                }
-
-                if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
-                    links.flags |= NodeCheckFlags.EmitGenerator;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;

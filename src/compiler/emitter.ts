@@ -7353,12 +7353,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!compilerOptions.noEmitHelpers) {
                     // Only Emit __extends function when target ES5.
                     // For target ES6 and above, we can emit classDeclaration as is.
-                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
+                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
                         writeLines(extendsHelper);
                         extendsEmitted = true;
                     }
 
-                    if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
+                    if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
                         writeLines(decorateHelper);
                         if (compilerOptions.emitDecoratorMetadata) {
                             writeLines(metadataHelper);
@@ -7366,12 +7366,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         decorateEmitted = true;
                     }
 
-                    if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
+                    if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
 
-                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                    if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
                         writeLines(awaiterHelper);
                         awaiterEmitted = true;
                     }
