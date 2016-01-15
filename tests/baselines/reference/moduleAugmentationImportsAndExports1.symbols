@@ -18,10 +18,13 @@ import {A} from "./f1";
 import {B} from "./f2";
 >B : Symbol(B, Decl(f3.ts, 1, 8))
 
-(<any>A.prototype).foo = function () {}
+A.prototype.foo = function () { return undefined; }
+>A.prototype.foo : Symbol(A.foo, Decl(f3.ts, 5, 17))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(f3.ts, 0, 8))
 >prototype : Symbol(A.prototype)
+>foo : Symbol(A.foo, Decl(f3.ts, 5, 17))
+>undefined : Symbol(undefined)
 
 declare module "./f1" {
     interface A {

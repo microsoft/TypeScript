@@ -18,7 +18,7 @@ tests/cases/compiler/f3.ts(13,16): error TS4000: Import declaration 'C' is using
 ==== tests/cases/compiler/f3.ts (6 errors) ====
     import {A} from "./f1";
     
-    (<any>A.prototype).foo = function () {}
+    A.prototype.foo = function () { return undefined; }
     
     namespace N {
         export interface Ifc { a }

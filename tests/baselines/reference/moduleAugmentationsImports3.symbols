@@ -74,10 +74,13 @@ import {A} from "./a";
 import {Cls} from "C";
 >Cls : Symbol(Cls, Decl(e.ts, 2, 8))
 
-(<any>A.prototype).getCls = function () {}
+A.prototype.getCls = function () { return undefined; }
+>A.prototype.getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(e.ts, 1, 8))
 >prototype : Symbol(A.prototype)
+>getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
+>undefined : Symbol(undefined)
 
 declare module "./a" {
     interface A {

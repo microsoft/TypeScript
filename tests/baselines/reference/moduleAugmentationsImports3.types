@@ -78,16 +78,15 @@ import {A} from "./a";
 import {Cls} from "C";
 >Cls : typeof Cls
 
-(<any>A.prototype).getCls = function () {}
->(<any>A.prototype).getCls = function () {} : () => void
->(<any>A.prototype).getCls : any
->(<any>A.prototype) : any
-><any>A.prototype : any
+A.prototype.getCls = function () { return undefined; }
+>A.prototype.getCls = function () { return undefined; } : () => any
+>A.prototype.getCls : () => Cls
 >A.prototype : A
 >A : typeof A
 >prototype : A
->getCls : any
->function () {} : () => void
+>getCls : () => Cls
+>function () { return undefined; } : () => any
+>undefined : undefined
 
 declare module "./a" {
     interface A {

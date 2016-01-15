@@ -28,7 +28,7 @@ declare module "D" {
 import {A} from "./a";
 import {Cls} from "C";
 
-(<any>A.prototype).getCls = function () {}
+A.prototype.getCls = function () { return undefined; }
 
 declare module "./a" {
     interface A {
@@ -67,7 +67,7 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    a_1.A.prototype.getCls = function () { };
+    a_1.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "D", "e"], function (require, exports) {
     "use strict";

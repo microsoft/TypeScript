@@ -27,15 +27,21 @@ import {B} from "./b";
 import {Cls} from "C";
 >Cls : Symbol(Cls, Decl(d.ts, 4, 8))
 
-(<any>A.prototype).getB = function () {};
+A.prototype.getB = function () { return undefined; }
+>A.prototype.getB : Symbol(A.getB, Decl(d.ts, 10, 17))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(d.ts, 2, 8))
 >prototype : Symbol(A.prototype)
+>getB : Symbol(A.getB, Decl(d.ts, 10, 17))
+>undefined : Symbol(undefined)
 
-(<any>A.prototype).getCls = function () {}
+A.prototype.getCls = function () { return undefined; }
+>A.prototype.getCls : Symbol(A.getCls, Decl(d.ts, 16, 17))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(d.ts, 2, 8))
 >prototype : Symbol(A.prototype)
+>getCls : Symbol(A.getCls, Decl(d.ts, 16, 17))
+>undefined : Symbol(undefined)
 
 declare module "./a" {
     interface A {

@@ -18,7 +18,7 @@ declare module "C" {
 import {A} from "./a";
 import {B} from "./b";
 
-(<any>A.prototype).getB = function () {};
+A.prototype.getB = function () { return undefined; }
 
 declare module "./a" {
     interface A {
@@ -30,7 +30,7 @@ declare module "./a" {
 import {A} from "./a";
 import {Cls} from "C";
 
-(<any>A.prototype).getCls = function () {}
+A.prototype.getCls = function () { return undefined; }
 
 declare module "./a" {
     interface A {
@@ -69,11 +69,11 @@ define("b", ["require", "exports"], function (require, exports) {
 /// <reference path="c.d.ts"/>
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    a_1.A.prototype.getB = function () { };
+    a_1.A.prototype.getB = function () { return undefined; };
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_2) {
     "use strict";
-    a_2.A.prototype.getCls = function () { };
+    a_2.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "d", "e"], function (require, exports) {
     "use strict";

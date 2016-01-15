@@ -18,13 +18,16 @@ import {A} from "./f1";
 import {B} from "./f2";
 >B : Symbol(B, Decl(f3.ts, 1, 8))
 
-(<any>A.prototype).foo = function () {}
+A.prototype.foo = function () { return undefined; }
+>A.prototype.foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(f3.ts, 0, 8))
 >prototype : Symbol(A.prototype)
+>foo : Symbol(A.foo, Decl(f3.ts, 13, 17))
+>undefined : Symbol(undefined)
 
 export namespace N {
->N : Symbol(N, Decl(f3.ts, 3, 39))
+>N : Symbol(N, Decl(f3.ts, 3, 51))
 
     export interface Ifc { a: number; }
 >Ifc : Symbol(Ifc, Decl(f3.ts, 5, 20))
@@ -36,12 +39,12 @@ export namespace N {
 }
 import I = N.Ifc;
 >I : Symbol(I, Decl(f3.ts, 8, 1))
->N : Symbol(N, Decl(f3.ts, 3, 39))
+>N : Symbol(N, Decl(f3.ts, 3, 51))
 >Ifc : Symbol(I, Decl(f3.ts, 5, 20))
 
 import C = N.Cls;
 >C : Symbol(C, Decl(f3.ts, 9, 17))
->N : Symbol(N, Decl(f3.ts, 3, 39))
+>N : Symbol(N, Decl(f3.ts, 3, 51))
 >Cls : Symbol(C, Decl(f3.ts, 6, 39))
 
 declare module "./f1" {

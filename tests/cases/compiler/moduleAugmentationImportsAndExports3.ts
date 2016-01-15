@@ -12,7 +12,7 @@ export class B {
 // @filename: f3.ts
 import {A} from "./f1";
 
-(<any>A.prototype).foo = function () {}
+A.prototype.foo = function () { return undefined; }
 
 namespace N {
     export interface Ifc { a }

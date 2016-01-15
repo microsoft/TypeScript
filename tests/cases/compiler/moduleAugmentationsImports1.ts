@@ -20,8 +20,8 @@ import {A} from "./a";
 import {B} from "./b";
 import {Cls} from "C";
 
-(<any>A.prototype).getB = function () {};
-(<any>A.prototype).getCls = function () {}
+A.prototype.getB = function () { return undefined; }
+A.prototype.getCls = function () { return undefined; }
 
 declare module "./a" {
     interface A {

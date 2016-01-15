@@ -15,7 +15,7 @@ tests/cases/compiler/f3.ts(11,12): error TS4000: Import declaration 'C' is using
     import {A} from "./f1";
     import {B} from "./f2";
     
-    (<any>A.prototype).foo = function () {}
+    A.prototype.foo = function () { return undefined; }
     
     namespace N {
         export interface Ifc { a: number; }

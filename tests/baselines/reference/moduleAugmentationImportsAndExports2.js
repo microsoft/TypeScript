@@ -12,7 +12,7 @@ export class B {
 //// [f3.ts]
 import {A} from "./f1";
 
-(<any>A.prototype).foo = function () {}
+A.prototype.foo = function () { return undefined; }
 
 namespace N {
     export interface Ifc { a }
@@ -58,7 +58,7 @@ exports.B = B;
 //// [f3.js]
 "use strict";
 var f1_1 = require("./f1");
-f1_1.A.prototype.foo = function () { };
+f1_1.A.prototype.foo = function () { return undefined; };
 //// [f4.js]
 "use strict";
 require("./f3");

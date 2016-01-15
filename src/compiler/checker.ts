@@ -2490,7 +2490,7 @@ namespace ts {
             // Every class automatically contains a static property member named 'prototype',
             // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
             // It is an error to explicitly declare a static property member with the name 'prototype'.
-            const classType = <InterfaceType>getDeclaredTypeOfSymbol(prototype.parent);
+            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(prototype.parent));
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
@@ -14364,9 +14364,6 @@ namespace ts {
                                 reportError = symbol.parent !== undefined;
                             }
                             else {
-                                // this symbol contains only merged content from external modules and augmentations so it should always be exported (parent !== undefined)
-                                // and parent should have value side (valueDeclaration !== undefined)
-                                Debug.assert(symbol.parent !== undefined && symbol.parent.valueDeclaration !== undefined);
                                 // symbol should not originate in augmentation
                                 reportError = isExternalModuleAugmentation(symbol.parent.valueDeclaration);
                             }
@@ -15714,20 +15711,22 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
-            let mergeAugmentations = false;
+            let augmentations: LiteralExpression[][];
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
-                mergeAugmentations = mergeAugmentations || file.moduleAugmentations.length > 0;
+                if (file.moduleAugmentations) {
+                    (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                }
             });
 
-            if (mergeAugmentations) {
+            if (augmentations) {
                 // merge module augmentations.
-                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed 
-                for (const file of host.getSourceFiles()) {
-                    for (const augmentation of file.moduleAugmentations) {
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
+                for (const list of augmentations) {
+                    for (const augmentation of list) {
                         mergeModuleAugmentation(augmentation);
                     }
                 }

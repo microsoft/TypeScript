@@ -29,7 +29,7 @@ declare module "D" {
 import {A} from "./a";
 import {Cls} from "C";
 
-(<any>A.prototype).getCls = function () {}
+A.prototype.getCls = function () { return undefined; }
 
 declare module "./a" {
     interface A {

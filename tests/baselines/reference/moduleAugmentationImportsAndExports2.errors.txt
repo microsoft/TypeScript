@@ -1,3 +1,4 @@
+tests/cases/compiler/f3.ts(3,13): error TS2339: Property 'foo' does not exist on type 'A'.
 tests/cases/compiler/f3.ts(11,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/f3.ts(11,21): error TS2307: Cannot find module './f2'.
 tests/cases/compiler/f3.ts(12,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
@@ -19,10 +20,12 @@ tests/cases/compiler/f4.ts(5,11): error TS2339: Property 'foo' does not exist on
         n: number;
     }
     
-==== tests/cases/compiler/f3.ts (9 errors) ====
+==== tests/cases/compiler/f3.ts (10 errors) ====
     import {A} from "./f1";
     
-    (<any>A.prototype).foo = function () {}
+    A.prototype.foo = function () { return undefined; }
+                ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'A'.
     
     namespace N {
         export interface Ifc { a }

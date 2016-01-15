@@ -13,7 +13,7 @@ export class B {
 import {A} from "./f1";
 import {B} from "./f2";
 
-(<any>A.prototype).foo = function () {}
+A.prototype.foo = function () { return undefined; }
 
 export namespace N {
     export interface Ifc { a: number; }
