@@ -2365,7 +2365,9 @@ namespace ts {
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
                             Diagnostics.Cannot_find_name_0, firstIdentifier);
-                        buildVisibleNodeList(importSymbol.declarations);
+                        if (importSymbol) {
+                            buildVisibleNodeList(importSymbol.declarations);
+                        }
                     }
                 });
             }
