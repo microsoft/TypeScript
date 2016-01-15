@@ -5994,7 +5994,17 @@ namespace ts {
         }
 
         function getCommonSupertype(types: Type[]): Type {
-            return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+            for (const t of types) {
+                if (isSupertypeOfEach(t, types)) {
+                    return t;
+                }
+            }
+            
+            if (allTypesHaveKind(types, TypeFlags.StringLike)) {
+                return stringType;
+            }
+            
+            return undefined;
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
@@ -10574,15 +10584,18 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                const types = (<UnionOrIntersectionType>type).types;
-                for (const current of types) {
-                    if (!(current.flags & kind)) {
-                        return false;
-                    }
-                }
-                return true;
+                return allTypesHaveKind((<UnionOrIntersectionType>type).types, kind)
             }
             return false;
+        }
+        
+        function allTypesHaveKind(types: Type[], kind: TypeFlags) {
+            for (const current of types) {
+                if (!(current.flags & kind)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
