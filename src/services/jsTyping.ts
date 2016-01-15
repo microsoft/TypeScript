@@ -14,7 +14,7 @@ namespace ts.JsTyping {
         writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void;
     };
 
-    let _safeList: Map<string> = {};
+    let _safeList: Map<string>;
     const notFoundTypingNames: string[] = [];
 
     function tryParseJson(jsonPath: string, host: HostType): any {
@@ -115,16 +115,6 @@ namespace ts.JsTyping {
                 }
             }
         }
-        else if (!host.fileExists(tsdJsonPath) && typingOptions.enableAutoDiscovery) {
-            const tsdJsonOptions = {
-                version: "v4",
-                repo: "DefinitelyTyped/DefinitelyTyped",
-                ref: "master",
-                path: "typings",
-            };
-            host.writeFile(tsdJsonPath, JSON.stringify(tsdJsonOptions, undefined, "  "));
-            newTsdJsonPath = tsdJsonPath;
-        }
 
         // Remove typings that the user has added to the exclude list
         for (const excludeTypingName of exclude) {
@@ -141,7 +131,7 @@ namespace ts.JsTyping {
                 newTypingNames.push(typing);
             }
         }
-        return { cachedTypingPaths, newTypingNames, filesToWatch, newTsdJsonPath };
+        return { cachedTypingPaths, newTypingNames, filesToWatch };
 
         /**
          * Merge a given list of typingNames to the inferredTypings map
