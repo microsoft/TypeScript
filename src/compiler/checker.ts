@@ -2751,7 +2751,17 @@ namespace ts {
                 if (type.flags & TypeFlags.PredicateType && (declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature)) {
                     return type;
                 }
-                return declaration.flags & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
+                
+                if (!declaration.type) {
+                    // Don't perform mutability widening if the user supplied a type.
+                    // Otherwise, for something like
+                    //    let x: "hello" = "hello";
+                    // or
+                    //    function f(y: "blah"): void;
+                    // We will widen the types of 'x' and 'y' to 'string'.
+                    return declaration.flags & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
+                }
+                return getWidenedType(type);
             }
 
             // Rest parameters default to type any[], other parameters default to type any
