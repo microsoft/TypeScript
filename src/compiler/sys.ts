@@ -165,7 +165,7 @@ namespace ts {
                 return result;
 
                 function visitDirectory(path: string, depth?: number) {
-                    if (depth <= 0) {
+                    if (depth !== undefined && depth <= 0) {
                         return;
                     }
 

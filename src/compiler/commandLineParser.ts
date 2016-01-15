@@ -559,14 +559,13 @@ namespace ts {
                         }
                     }
                     else if (id === "include") {
-                        options.include = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                        options.include = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
                     }
                     else if (id === "exclude") {
-                        options.exclude = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                        options.exclude = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
                     }
                     else {
-                        // Todo: change diagnostics
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
                     }
                 }
             }

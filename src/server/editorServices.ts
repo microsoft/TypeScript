@@ -17,10 +17,6 @@ namespace ts.server {
 
     const lineCollectionCapacity = 4;
     const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
-    const globalCachePath = toPath(
-        ".typingCache",
-        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
-        getCanonicalFileName);
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -790,7 +786,7 @@ namespace ts.server {
                     this.openFileRoots.push(info);
                 }
 
-                if (fileExtensionIs(info.fileName, ".js") || fileExtensionIs(info.fileName, ".jsx")) {
+                if (hasJavaScriptFileExtension(info.fileName)) {
                     this.acquireTypingForJs(info.defaultProject);
                 }
             }
@@ -1054,20 +1050,12 @@ namespace ts.server {
         }
 
         acquireTypingForJs(project: Project) {
-            if (!project) { return; }
-
-            let tsd: any;
-            try {
-                tsd = require("tsd");
-            }
-            catch (e) {
-                this.log("Error requiring the tsd module");
-                return;
-            }
+            const tsd = this.host.getTsd();
+            if (!project || tsd === undefined) { return; }
 
             const cachePath = project.isConfiguredProject()
                 ? toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName)
-                : globalCachePath;
+                : this.host.globalCachePath;
 
             // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
             // has a default value
@@ -1078,13 +1066,13 @@ namespace ts.server {
             const { cachedTypingPaths, newTypingNames } = ts.JsTyping.discoverTypings(
                 sys,
                 project.getFileNames(),
-                globalCachePath,
+                this.host.globalCachePath,
                 cachePath,
                 typingOptions,
                 compilerOptions
             );
 
-            // Bail out when the autoTyping is disabled
+            // Bail out when no actions are needed
             if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
                 return;
             }
@@ -1092,6 +1080,7 @@ namespace ts.server {
             if (!sys.directoryExists(cachePath)) {
                 sys.createDirectory(cachePath);
             }
+
             const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
             const typingsPath = ts.combinePaths(cachePath, "typings");
             const api = tsd.getAPI(tsdJsonPath);
@@ -1112,7 +1101,7 @@ namespace ts.server {
                     query.addNamePattern(newTypingName);
                 }
 
-                let promise: PromiseLike<void>;
+                let promise: any;
                 if (!sys.fileExists(tsdJsonPath)) {
                     promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
                 }
@@ -1127,10 +1116,9 @@ namespace ts.server {
                         const keys = Object.keys(installResult.written.dict);
                         keys.forEach(key => addTypingToProject(ts.combinePaths(typingsPath, key), project));
                         project.projectService.updateProjectStructure();
-                        if (cachePath !== globalCachePath) {
-                            JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath);
-                        }
-                    });
+                        JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath, sys);
+                    })
+                    .catch((e: any) => this.log(e));
             }
 
             function addTypingToProject(fileName: string, project: Project) {

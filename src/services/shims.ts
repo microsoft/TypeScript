@@ -413,7 +413,20 @@ namespace ts {
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
-            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            // Wrap the API changes for 1.8 release. This try/catch
+            // should be removed once TypeScript 1.8 has shipped.
+            let encoded: string;
+            if (depth !== undefined) {
+                try {
+                    encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+                }
+                catch (e) {
+                    encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                }
+            }
+            else {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
             return JSON.parse(encoded);
         }
 
@@ -996,7 +1009,7 @@ namespace ts {
             return this.forwardJSONCall("updateNotFoundTypingNames()", () => {
                 const newTypingNames: string[] = JSON.parse(newTypingsJson);
                 const cachePath = projectRootPath ? projectRootPath : globalCachePath;
-                ts.JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath);
+                ts.JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath, this.host);
             });
         }
     }

@@ -2598,5 +2598,9 @@
     "JSX element '{0}' has no corresponding closing tag.": {
       "category": "Error",
       "code": 17008
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17009
     }
 }
