@@ -789,22 +789,25 @@ namespace ts {
             let location = container;
             while (location) {
                 if (isClassLike(location.parent)) {
-                    const symbol = getSymbolOfNode(location.parent);
-                    let classType: Type;
-                    if (location.flags & NodeFlags.Static) {
-                        classType = getTypeOfSymbol(symbol);
-                        if (getPropertyOfType(classType, name)) {
-                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(symbol));
-                            return true;
-                        }
+                    const classSymbol = getSymbolOfNode(location.parent);
+                    if (!classSymbol) {
+                        break;
                     }
-                    else {
-                        if (location === container) {
-                            classType = (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                            if (getPropertyOfType(classType, name)) {
-                                error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
-                                return true;
-                            }
+
+                    // Check to see if a static member exists.
+                    const constructorType = getTypeOfSymbol(classSymbol);
+                    if (getPropertyOfType(constructorType, name)) {
+                        error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(classSymbol));
+                        return true;
+                    }
+
+                    // No static member is present.
+                    // Check if we're in an instance method and look for a relevant instance member. 
+                    if (location === container && !(location.flags & NodeFlags.Static)) {
+                        const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
+                        if (getPropertyOfType(instanceType, name)) {
+                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                            return true;
                         }
                     }
                 }
