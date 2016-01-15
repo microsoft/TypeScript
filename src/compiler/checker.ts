@@ -2752,13 +2752,19 @@ namespace ts {
                     return type;
                 }
                 
-                if (!declaration.type) {
-                    // Don't perform mutability widening if the user supplied a type.
+                if (!declaration.type && declaration.initializer) {
+                    // Don't perform mutability widening if the user supplied a type and there is an initializer.
                     // Otherwise, for something like
                     //    let x: "hello" = "hello";
                     // or
                     //    function f(y: "blah"): void;
                     // We will widen the types of 'x' and 'y' to 'string'.
+                    //
+                    // We also need to know if there is an initializer in case
+                    // we are contextually typed by something like in the following:
+                    //
+                    //  function f(callback: (x: "foo") => "foo") { }
+                    //  f(x => x);
                     return declaration.flags & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
                 }
                 return getWidenedType(type);
