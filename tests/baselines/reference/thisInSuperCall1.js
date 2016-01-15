@@ -20,7 +20,7 @@ var Base = (function () {
     function Base(a) {
     }
     return Base;
-})();
+}());
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x) {
@@ -28,4 +28,4 @@ var Foo = (function (_super) {
         this.x = x;
     }
     return Foo;
-})(Base);
+}(Base));

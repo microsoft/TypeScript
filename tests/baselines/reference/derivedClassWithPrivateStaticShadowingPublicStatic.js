@@ -52,7 +52,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 // BUG 847404
 // should be error
 var Derived = (function (_super) {
@@ -70,7 +70,7 @@ var Derived = (function (_super) {
         configurable: true
     });
     return Derived;
-})(Base);
+}(Base));
 var r = Base.x; // ok
 var r2 = Derived.x; // error
 var r3 = Base.fn(); // ok

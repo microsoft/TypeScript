@@ -32,7 +32,7 @@ var Foo;
         function C() {
         }
         return C;
-    })();
+    }());
     Foo.C = C;
 })(Foo = exports.Foo || (exports.Foo = {}));
 var Foo;

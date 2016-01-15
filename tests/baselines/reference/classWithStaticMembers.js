@@ -38,7 +38,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var r = C.fn();
 var r2 = r.x;
 var r3 = r.foo;
@@ -48,7 +48,7 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 var r = D.fn();
 var r2 = r.x;
 var r3 = r.foo;

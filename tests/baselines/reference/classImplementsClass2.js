@@ -24,12 +24,12 @@ var A = (function () {
     }
     A.prototype.foo = function () { return 1; };
     return A;
-})();
+}());
 var C = (function () {
     function C() {
     }
     return C;
-})(); // error
+}()); // error
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
@@ -39,7 +39,7 @@ var C2 = (function (_super) {
         return 1;
     };
     return C2;
-})(A);
+}(A));
 var c;
 var c2;
 c = c2;

@@ -771,10 +771,6 @@ namespace ts {
             return doInsideOfContext(ParserContextFlags.Yield, func);
         }
 
-        function doOutsideOfYieldContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield, func);
-        }
-
         function doInDecoratorContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Decorator, func);
         }
@@ -789,10 +785,6 @@ namespace ts {
 
         function doInYieldAndAwaitContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
-        }
-
-        function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
         }
 
         function inContext(flags: ParserContextFlags) {
@@ -851,10 +843,6 @@ namespace ts {
             return token = scanner.scan();
         }
 
-        function getTokenPos(pos: number): number {
-            return skipTrivia(sourceText, pos);
-        }
-
         function reScanGreaterToken(): SyntaxKind {
             return token = scanner.reScanGreaterToken();
         }
@@ -908,17 +896,19 @@ namespace ts {
             return result;
         }
 
-        // Invokes the provided callback then unconditionally restores the parser to the state it
-        // was in immediately prior to invoking the callback.  The result of invoking the callback
-        // is returned from this function.
+        /** Invokes the provided callback then unconditionally restores the parser to the state it
+         * was in immediately prior to invoking the callback.  The result of invoking the callback
+         * is returned from this function. 
+         */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
         }
 
-        // Invokes the provided callback.  If the callback returns something falsy, then it restores
-        // the parser to the state it was in immediately prior to invoking the callback.  If the
-        // callback returns something truthy, then the parser state is not rolled back.  The result
-        // of invoking the callback is returned from this function.
+        /** Invokes the provided callback.  If the callback returns something falsy, then it restores
+         * the parser to the state it was in immediately prior to invoking the callback.  If the
+         * callback returns something truthy, then the parser state is not rolled back.  The result
+         * of invoking the callback is returned from this function.
+         */
         function tryParse<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ false);
         }
@@ -1134,6 +1124,14 @@ namespace ts {
             return token === t && tryParse(nextTokenCanFollowModifier);
         }
 
+        function nextTokenIsOnSameLineAndCanFollowModifier() {
+            nextToken();
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
+            return canFollowModifier();
+        }
+
         function nextTokenCanFollowModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
@@ -1154,11 +1152,7 @@ namespace ts {
                 return canFollowModifier();
             }
 
-            nextToken();
-            if (scanner.hasPrecedingLineBreak()) {
-                return false;
-            }
-            return canFollowModifier();
+            return nextTokenIsOnSameLineAndCanFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -1956,15 +1950,8 @@ namespace ts {
 
         // TYPES
 
-        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+        function parseTypeReference(): TypeReferenceNode {
             const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
-            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                nextToken();
-                const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
-                node.parameterName = <Identifier>typeName;
-                node.type = parseType();
-                return finishNode(node);
-            }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
             node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
@@ -1973,8 +1960,16 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseThisTypeNode(): TypeNode {
-            const node = <TypeNode>createNode(SyntaxKind.ThisType);
+        function parseTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+            nextToken();
+            const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
+            node.parameterName = lhs;
+            node.type = parseType();
+            return finishNode(node);
+        }
+
+        function parseThisTypeNode(): ThisTypeNode {
+            const node = createNode(SyntaxKind.ThisType) as ThisTypeNode;
             nextToken();
             return finishNode(node);
         }
@@ -2096,10 +2091,10 @@ namespace ts {
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
-                signature.type = parseType();
+                signature.type = parseTypeOrTypePredicate();
             }
             else if (parseOptional(returnToken)) {
-                signature.type = parseType();
+                signature.type = parseTypeOrTypePredicate();
             }
         }
 
@@ -2259,6 +2254,14 @@ namespace ts {
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
+
+                if (token === SyntaxKind.EqualsToken) {
+                    // Although type literal properties cannot not have initializers, we attempt
+                    // to parse an initializer so we can report in the checker that an interface
+                    // property or type literal property cannot have an initializer.
+                    property.initializer = parseNonParameterInitializer();
+                }
+
                 parseTypeMemberSemicolon();
                 return finishNode(property);
             }
@@ -2407,13 +2410,20 @@ namespace ts {
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReferenceOrTypePredicate();
+                    return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
-                case SyntaxKind.ThisKeyword:
-                    return parseThisTypeNode();
+                case SyntaxKind.ThisKeyword: {
+                    const thisKeyword = parseThisTypeNode();
+                    if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                        return parseTypePredicate(thisKeyword);
+                    }
+                    else {
+                        return thisKeyword;
+                    }
+                }
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
@@ -2423,7 +2433,7 @@ namespace ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReferenceOrTypePredicate();
+                    return parseTypeReference();
             }
         }
 
@@ -2530,6 +2540,28 @@ namespace ts {
             return false;
         }
 
+        function parseTypeOrTypePredicate(): TypeNode {
+            const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
+            const type = parseType();
+            if (typePredicateVariable) {
+                const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
+                node.parameterName = typePredicateVariable;
+                node.type = type;
+                return finishNode(node);
+            }
+            else {
+                return type;
+            }
+        }
+
+        function parseTypePredicatePrefix() {
+            const id = parseIdentifier();
+            if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                nextToken();
+                return id;
+            }
+        }
+
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
@@ -2619,10 +2651,6 @@ namespace ts {
                 token !== SyntaxKind.ClassKeyword &&
                 token !== SyntaxKind.AtToken &&
                 isStartOfExpression();
-        }
-
-        function allowInAndParseExpression(): Expression {
-            return allowInAnd(parseExpression);
         }
 
         function parseExpression(): Expression {
@@ -3490,6 +3518,20 @@ namespace ts {
             return finishNode(node);
         }
 
+        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
+            if (lhs.kind !== rhs.kind) {
+                return false;
+            }
+
+            if (lhs.kind === SyntaxKind.Identifier) {
+                return (<Identifier>lhs).text === (<Identifier>rhs).text;
+            }
+
+            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
+                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
+        }
+
+
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             const opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement;
@@ -3499,6 +3541,11 @@ namespace ts {
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
+
+                if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
+                    parseErrorAtPosition(node.closingElement.pos, node.closingElement.end - node.closingElement.pos, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
+                }
+
                 result = finishNode(node);
             }
             else {
@@ -3558,10 +3605,13 @@ namespace ts {
             while (true) {
                 token = scanner.reScanJsxToken();
                 if (token === SyntaxKind.LessThanSlashToken) {
+                    // Closing tag
                     break;
                 }
                 else if (token === SyntaxKind.EndOfFileToken) {
-                    parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    // If we hit EOF, issue the error at the tag that lacks the closing element
+                    // rather than at the end of the file (which is useless)
+                    parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     break;
                 }
                 result.push(parseJsxChild());
@@ -3627,7 +3677,7 @@ namespace ts {
 
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token !== SyntaxKind.CloseBraceToken) {
-                node.expression = parseExpression();
+                node.expression = parseAssignmentExpressionOrHigher();
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3939,7 +3989,6 @@ namespace ts {
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             const tokenIsIdentifier = isIdentifier();
-            const nameToken = token;
             const propertyName = parsePropertyName();
 
             // Disallowing of optional property assignments happens in the grammar checker.
@@ -3969,6 +4018,7 @@ namespace ts {
             }
             else {
                 const propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
+                propertyAssignment.modifiers = modifiers;
                 propertyAssignment.name = propertyName;
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
@@ -4915,15 +4965,31 @@ namespace ts {
             return decorators;
         }
 
-        function parseModifiers(): ModifiersArray {
+        /*
+         * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
+         * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
+         * and turns it into a standalone declaration), then it is better to parse it and report an error later.
+         *
+         * In such situations, 'permitInvalidConstAsModifier' should be set to true.
+         */
+        function parseModifiers(permitInvalidConstAsModifier?: boolean): ModifiersArray {
             let flags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 const modifierStart = scanner.getStartPos();
                 const modifierKind = token;
 
-                if (!parseAnyContextualModifier()) {
-                    break;
+                if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
+                    // We need to ensure that any subsequent modifiers appear on the same line
+                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
+                        break;
+                    }
+                }
+                else {
+                    if (!parseAnyContextualModifier()) {
+                        break;
+                    }
                 }
 
                 if (!modifiers) {
@@ -4968,7 +5034,7 @@ namespace ts {
 
             const fullStart = getNodePos();
             const decorators = parseDecorators();
-            const modifiers = parseModifiers();
+            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
 
             const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
             if (accessor) {
@@ -5062,10 +5128,6 @@ namespace ts {
             }
 
             return undefined;
-        }
-
-        function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
         }
 
         function parseHeritageClause() {
@@ -5213,12 +5275,6 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
-        function nextTokenIsCommaOrFromKeyword() {
-            nextToken();
-            return token === SyntaxKind.CommaToken ||
-                token === SyntaxKind.FromKeyword;
-        }
-
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
             const afterImportPos = scanner.getStartPos();
@@ -5302,16 +5358,17 @@ namespace ts {
         }
 
         function parseModuleSpecifier(): Expression {
-            // We allow arbitrary expressions here, even though the grammar only allows string
-            // literals.  We check to ensure that it is only a string literal later in the grammar
-            // walker.
-            const result = parseExpression();
-            // Ensure the string being required is in our 'identifier' table.  This will ensure
-            // that features like 'find refs' will look inside this file when search for its name.
-            if (result.kind === SyntaxKind.StringLiteral) {
+            if (token === SyntaxKind.StringLiteral) {
+                const result = parseLiteralNode();
                 internIdentifier((<LiteralExpression>result).text);
+                return result;
             }
-            return result;
+            else {
+                // We allow arbitrary expressions here, even though the grammar only allows string
+                // literals.  We check to ensure that it is only a string literal later in the grammar
+                // check pass.
+                return parseExpression();
+            }
         }
 
         function parseNamespaceImport(): NamespaceImport {
@@ -5708,13 +5765,6 @@ namespace ts {
                 const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
                 parameter.type = parseJSDocType();
                 return finishNode(parameter);
-            }
-
-            function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
-                const result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
-                nextToken();
-                result.type = type;
-                return finishNode(result);
             }
 
             function parseJSDocTypeReference(): JSDocTypeReference {

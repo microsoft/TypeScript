@@ -36,7 +36,7 @@ var FooBase = (function () {
     }
     FooBase.prototype.bar1 = function () { };
     return FooBase;
-})();
+}());
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
@@ -44,7 +44,7 @@ var Foo = (function (_super) {
     }
     Foo.prototype.bar1 = function () { };
     return Foo;
-})(FooBase);
+}(FooBase));
 var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);

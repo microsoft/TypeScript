@@ -29,7 +29,7 @@ var Foo = (function () {
     function Foo(x) {
     }
     return Foo;
-})();
+}());
 foo(function (s) { s = 5; }); // Error, can’t assign number to string
 new Foo(function (s) { s = 5; }); // error, if types are applied correctly
 var Bar = (function (_super) {
@@ -38,4 +38,4 @@ var Bar = (function (_super) {
         _super.call(this, function (s) { s = 5; });
     }
     return Bar;
-})(Foo); // error, if types are applied correctly
+}(Foo)); // error, if types are applied correctly

@@ -18,7 +18,7 @@ var _loop_1 = function(x) {
         function C() {
         }
         return C;
-    })();
+    }());
     data.push(function () { return C; });
 };
 for (var x = 0; x < 2; ++x) {

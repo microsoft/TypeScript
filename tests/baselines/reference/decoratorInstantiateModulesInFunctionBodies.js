@@ -49,4 +49,4 @@ var Wat = (function () {
         filter(function () { return a_1.test == 'abc'; })
     ], Wat, "whatever", null);
     return Wat;
-})();
+}());

@@ -25,7 +25,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
     class C {
         foo(x: string);
         foo(x: 'hi') { }
-        ~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
@@ -63,12 +63,12 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
         foo(x: 'hi') { },
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
-        ~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
         foo(x: 'a') { },
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
-        ~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     

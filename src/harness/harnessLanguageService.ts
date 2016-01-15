@@ -267,6 +267,10 @@ namespace Harness.LanguageService {
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
+        directoryExists(directoryName: string): boolean {
+            // for tests pessimistically assume that directory always exists
+            return true;
+        }
     }
 
     class ClassifierShimProxy implements ts.Classifier {
@@ -314,13 +318,6 @@ namespace Harness.LanguageService {
 
     class LanguageServiceShimProxy implements ts.LanguageService {
         constructor(private shim: ts.LanguageServiceShim) {
-        }
-        private unwrappJSONCallResult(result: string): any {
-            const parsedResult = JSON.parse(result);
-            if (parsedResult.error) {
-                throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
-            }
-            return parsedResult.result;
         }
         cleanupSemanticCache(): void {
             this.shim.cleanupSemanticCache();

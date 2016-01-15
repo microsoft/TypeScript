@@ -28,7 +28,7 @@ var C = (function () {
         var y = x;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D(x, y) {
         if (x === void 0) { x = 1; }
@@ -37,11 +37,11 @@ var D = (function () {
         var z = x;
     }
     return D;
-})();
+}());
 var E = (function () {
     function E(x) {
         if (x === void 0) { x = new Date(); }
         var y = x;
     }
     return E;
-})();
+}());

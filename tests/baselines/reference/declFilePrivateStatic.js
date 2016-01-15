@@ -43,7 +43,7 @@ var C = (function () {
     C.x = 1;
     C.y = 1;
     return C;
-})();
+}());
 
 
 //// [declFilePrivateStatic.d.ts]

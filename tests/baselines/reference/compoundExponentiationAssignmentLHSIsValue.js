@@ -105,7 +105,7 @@ var C = (function () {
         this = Math.pow(this, value);
     };
     return C;
-})();
+}());
 function foo() {
     this = Math.pow(this, value);
 }
@@ -152,7 +152,7 @@ var Derived = (function (_super) {
         var _a;
     };
     return Derived;
-})(C);
+}(C));
 // function expression
 function bar1() { }
 value;

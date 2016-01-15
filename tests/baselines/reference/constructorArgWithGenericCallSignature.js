@@ -21,7 +21,7 @@ var Test;
         function MyClass(func) {
         }
         return MyClass;
-    })();
+    }());
     Test.MyClass = MyClass;
     function F(func) { }
     Test.F = F;

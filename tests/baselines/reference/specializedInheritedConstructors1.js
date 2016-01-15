@@ -27,19 +27,19 @@ var View = (function () {
     function View(options) {
     }
     return View;
-})();
+}());
 var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 var MyView = (function (_super) {
     __extends(MyView, _super);
     function MyView() {
         _super.apply(this, arguments);
     }
     return MyView;
-})(View);
+}(View));
 var m = { model: new Model() };
 var aView = new View({ model: new Model() });
 var aView2 = new View(m);

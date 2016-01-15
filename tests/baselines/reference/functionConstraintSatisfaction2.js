@@ -51,13 +51,13 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var b;
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var b2;
 var r = foo2(new Function());
 var r2 = foo2(function (x) { return x; });

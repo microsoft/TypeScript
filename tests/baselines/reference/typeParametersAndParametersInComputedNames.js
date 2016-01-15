@@ -18,4 +18,4 @@ var A = (function () {
     A.prototype[foo(a)] = function (a) {
     };
     return A;
-})();
+}());

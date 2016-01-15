@@ -12,5 +12,5 @@ var Greeter = (function () {
         this.returnA = function () { return _this.a; };
     }
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map

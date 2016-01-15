@@ -57,7 +57,7 @@ var A = (function () {
         return "hello";
     };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -89,11 +89,11 @@ var B = (function (_super) {
         var c4 = c.z; // error
     };
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));

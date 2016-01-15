@@ -4,7 +4,7 @@ var obj: Object;
 >Object : Object
 
 if (ArrayBuffer.isView(obj)) {
->ArrayBuffer.isView(obj) : boolean
+>ArrayBuffer.isView(obj) : arg is ArrayBufferView
 >ArrayBuffer.isView : (arg: any) => arg is ArrayBufferView
 >ArrayBuffer : ArrayBufferConstructor
 >isView : (arg: any) => arg is ArrayBufferView

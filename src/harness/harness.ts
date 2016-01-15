@@ -31,7 +31,6 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-var expect: typeof _chai.expect = _chai.expect;
 declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 /* tslint:enable:no-var-keyword */
@@ -513,7 +512,6 @@ namespace Harness {
                 }
 
                 const folder: any = fso.GetFolder(path);
-                const paths: string[] = [];
 
                 return filesInFolder(folder, path);
             };
@@ -617,7 +615,6 @@ namespace Harness {
             export const getExecutingFilePath = () => "";
             export const exit = (exitCode: number) => {};
 
-            const supportsCodePage = () => false;
             export let log = (s: string) => console.log(s);
 
             namespace Http {
@@ -627,18 +624,6 @@ namespace Harness {
                 }
 
                 /// Ask the server to use node's path.resolve to resolve the given path
-                function getResolvedPathFromServer(path: string) {
-                    const xhr = new XMLHttpRequest();
-                    try {
-                        xhr.open("GET", path + "?resolve", /*async*/ false);
-                        xhr.send();
-                    }
-                    catch (e) {
-                        return { status: 404, responseText: null };
-                    }
-
-                    return waitForXHR(xhr);
-                }
 
                 export interface XHRResponse {
                     status: number;
@@ -908,6 +893,7 @@ namespace Harness {
             useCaseSensitiveFileNames?: boolean;
             includeBuiltFile?: string;
             baselineFile?: string;
+            libFiles?: string;
         }
 
         // Additional options not already in ts.optionDeclarations 
@@ -917,6 +903,7 @@ namespace Harness {
             { name: "baselineFile", type: "string" },
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
+            { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" }
         ];
 
@@ -995,14 +982,11 @@ namespace Harness {
             currentDirectory = currentDirectory || Harness.IO.getCurrentDirectory();
 
             // Parse settings
-            let useCaseSensitiveFileNames = Harness.IO.useCaseSensitiveFileNames();
             if (harnessSettings) {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
             }
-            if (options.useCaseSensitiveFileNames !== undefined) {
-                useCaseSensitiveFileNames = options.useCaseSensitiveFileNames;
-            }
 
+            const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
             const programFiles: TestFile[] = inputFiles.slice();
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
@@ -1016,6 +1000,15 @@ namespace Harness {
             }
 
             const fileOutputs: GeneratedFile[] = [];
+
+            // Files from tests\lib that are requested by "@libFiles"
+            if (options.libFiles) {
+                for (const fileName of options.libFiles.split(",")) {
+                    const libFileName = "tests/lib/" + fileName;
+                    programFiles.push({ unitName: libFileName, content: normalizeLineEndings(IO.readFile(libFileName), Harness.IO.newLine()) });
+                }
+            }
+
 
             const programFileNames = programFiles.map(file => file.unitName);
 

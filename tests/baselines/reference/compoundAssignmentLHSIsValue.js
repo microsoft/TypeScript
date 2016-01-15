@@ -146,7 +146,7 @@ var C = (function () {
         this += value;
     };
     return C;
-})();
+}());
 function foo() {
     this *= value;
     this += value;
@@ -210,7 +210,7 @@ var Derived = (function (_super) {
         _super. += value;
     };
     return Derived;
-})(C);
+}(C));
 // function expression
 function bar1() { }
 value;

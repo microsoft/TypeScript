@@ -50,7 +50,7 @@ var M;
             function Window() {
             }
             return Window;
-        })();
+        }());
         N.Window = Window;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
@@ -62,7 +62,7 @@ var M1;
             function Window() {
             }
             return Window;
-        })();
+        }());
         N.Window = Window;
     })(N = M1.N || (M1.N = {}));
 })(M1 || (M1 = {}));
@@ -72,19 +72,19 @@ var M2;
         function private1() {
         }
         return private1;
-    })();
+    }());
     var public1 = (function () {
         function public1() {
         }
         return public1;
-    })();
+    }());
     var m3;
     (function (m3) {
         var public1 = (function () {
             function public1() {
             }
             return public1;
-        })();
+        }());
         m3.public1 = public1;
     })(m3 || (m3 = {}));
 })(M2 || (M2 = {}));

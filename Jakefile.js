@@ -108,16 +108,6 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
-var scriptSources = [
-    "tslint/booleanTriviaRule.ts",
-    "tslint/nextLineRule.ts",
-    "tslint/noNullRule.ts",
-    "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts"
-].map(function (f) {
-    return path.join(scriptsDirectory, f);
-});
-
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -173,13 +163,13 @@ var harnessSources = harnessCoreSources.concat([
 }));
 
 var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["core.d.ts"] },
+        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
         { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -543,7 +533,8 @@ compileFile(word2mdJs,
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
+    var specMDFullPath = path.resolve(specMd);
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + '"' + specMDFullPath + '"';
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();
@@ -875,7 +866,9 @@ var tslintRules = ([
     "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule"
+    "typeOperatorSpacingRule",
+    "noInOperatorRule",
+    "noIncrementDecrementRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -900,6 +893,7 @@ function getLinterOptions() {
 
 function lintFileContents(options, path, contents) {
     var ll = new Linter(path, contents, options);
+    console.log("Linting '" + path + "'.")
     return ll.lint();
 }
 
@@ -918,20 +912,34 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
+var servicesLintTargets = [
+    "navigateTo.ts",
+    "outliningElementsCollector.ts",
+    "patternMatcher.ts",
+    "services.ts",
+    "shims.ts",
+].map(function (s) {
+    return path.join(servicesDirectory, s);
+});
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
-    .concat(scriptSources);
+    .concat(tslintRulesFiles)
+    .concat(servicesLintTargets);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
+    var failed = 0;
     for (var i in lintTargets) {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
-            fail('Linter errors.', result.failureCount);
+            failed += result.failureCount;
         }
+    }
+    if (failed > 0) {
+        fail('Linter errors.', failed);
     }
 });
 

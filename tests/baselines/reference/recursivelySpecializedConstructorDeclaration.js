@@ -47,7 +47,7 @@ var MsPortal;
                     function ItemValue(value) {
                     }
                     return ItemValue;
-                })();
+                }());
                 ItemList.ItemValue = ItemValue;
                 var ViewModel = (function (_super) {
                     __extends(ViewModel, _super);
@@ -55,7 +55,7 @@ var MsPortal;
                         _super.apply(this, arguments);
                     }
                     return ViewModel;
-                })(ItemValue);
+                }(ItemValue));
                 ItemList.ViewModel = ViewModel;
             })(ItemList = Base.ItemList || (Base.ItemList = {}));
         })(Base = Controls.Base || (Controls.Base = {}));

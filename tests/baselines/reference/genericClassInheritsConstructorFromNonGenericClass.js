@@ -17,16 +17,16 @@ var A = (function (_super) {
         _super.apply(this, arguments);
     }
     return A;
-})(B);
+}(B));
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(C);
+}(C));
 var C = (function () {
     function C(p) {
     }
     return C;
-})();
+}());

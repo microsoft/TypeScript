@@ -23,7 +23,7 @@ var C = (function () {
         return null;
     };
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
@@ -31,4 +31,4 @@ var C2 = (function () {
         return null;
     };
     return C2;
-})();
+}());

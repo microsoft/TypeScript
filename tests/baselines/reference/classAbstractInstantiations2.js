@@ -61,13 +61,13 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     B.prototype.foo = function () { return this.bar(); };
     return B;
-})();
+}());
 new B; // error
 var BB = B;
 var AA = BB; // error, AA is not of abstract type.
@@ -85,14 +85,14 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(B); // error -- not declared abstract
+}(B)); // error -- not declared abstract
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(B); // okay
+}(B)); // okay
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -100,7 +100,7 @@ var E = (function (_super) {
     }
     E.prototype.bar = function () { return 1; };
     return E;
-})(B);
+}(B));
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
@@ -108,14 +108,14 @@ var F = (function (_super) {
     }
     F.prototype.bar = function () { return 2; };
     return F;
-})(B);
+}(B));
 var G = (function () {
     function G() {
     }
     return G;
-})();
+}());
 var H = (function () {
     function H() {
     }
     return H;
-})();
+}());

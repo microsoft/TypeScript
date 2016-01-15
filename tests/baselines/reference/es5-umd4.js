@@ -33,6 +33,6 @@ export = A;
             return 42;
         };
         return A;
-    })();
+    }());
     return A;
 });

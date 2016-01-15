@@ -32,7 +32,7 @@ var C = (function () {
         x = 2; // error, x is string
     }
     return C;
-})();
+}());
 var y = 1;
 var D = (function () {
     function D(x) {
@@ -40,4 +40,4 @@ var D = (function () {
         var y = "";
     }
     return D;
-})();
+}());

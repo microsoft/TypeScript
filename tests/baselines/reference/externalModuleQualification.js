@@ -19,7 +19,7 @@ var DiffEditor = (function () {
         if (id === void 0) { id = exports.ID; }
     }
     return DiffEditor;
-})();
+}());
 exports.DiffEditor = DiffEditor;
 var NavigateAction = (function () {
     function NavigateAction() {
@@ -27,4 +27,4 @@ var NavigateAction = (function () {
     NavigateAction.prototype.f = function (editor) {
     };
     return NavigateAction;
-})();
+}());

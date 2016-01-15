@@ -9,4 +9,4 @@ var C = (function () {
     }
     C.Foo = function () { };
     return C;
-})();
+}());

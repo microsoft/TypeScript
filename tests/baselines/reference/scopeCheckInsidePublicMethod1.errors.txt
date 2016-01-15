@@ -1,4 +1,4 @@
-tests/cases/compiler/scopeCheckInsidePublicMethod1.ts(4,7): error TS2304: Cannot find name 's'.
+tests/cases/compiler/scopeCheckInsidePublicMethod1.ts(4,7): error TS2662: Cannot find name 's'. Did you mean the static member 'C.s'?
 
 
 ==== tests/cases/compiler/scopeCheckInsidePublicMethod1.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/scopeCheckInsidePublicMethod1.ts(4,7): error TS2304: Cannot
        public a() {
           s = 1; // ERR
           ~
-!!! error TS2304: Cannot find name 's'.
+!!! error TS2662: Cannot find name 's'. Did you mean the static member 'C.s'?
        }
     }

@@ -52,7 +52,7 @@ var C = (function () {
     }
     C.prototype.foo = function () { };
     return C;
-})();
+}());
 var x;
 // invalid left operand
 // the left operand is required to be of type Any, an object type, or a type parameter type

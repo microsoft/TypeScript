@@ -16,7 +16,7 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 var b = a;
 var b = a.b;
 var b = a.b.c;

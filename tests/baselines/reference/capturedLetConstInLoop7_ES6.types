@@ -53,45 +53,45 @@ l00:
 >l00 : any
 
 for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 
-    if (x == 1) {
->x == 1 : boolean
->x : any
->1 : number
+    if (x == "1") {
+>x == "1" : boolean
+>x : string
+>"1" : string
 
         break;
     }
-    if (x == 1) {
->x == 1 : boolean
->x : any
->1 : number
+    if (x == "1") {
+>x == "1" : boolean
+>x : string
+>"1" : string
 
         break l00;
 >l00 : any
     }
-    if (x == 2) {
->x == 2 : boolean
->x : any
->2 : number
+    if (x == "2") {
+>x == "2" : boolean
+>x : string
+>"2" : string
 
         continue;
     }
-    if (x == 2) {
->x == 2 : boolean
->x : any
->2 : number
+    if (x == "2") {
+>x == "2" : boolean
+>x : string
+>"2" : string
 
         continue l00;
 >l00 : any
@@ -607,45 +607,45 @@ l00_c:
 >l00_c : any
 
 for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => string
+>function() { return x} : () => string
+>x : string
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 
-    if (x == 1) {
->x == 1 : boolean
->x : any
->1 : number
+    if (x == "1") {
+>x == "1" : boolean
+>x : string
+>"1" : string
 
         break;
     }
-    if (x == 1) {
->x == 1 : boolean
->x : any
->1 : number
+    if (x == "1") {
+>x == "1" : boolean
+>x : string
+>"1" : string
 
         break l00_c;
 >l00_c : any
     }
-    if (x == 2) {
->x == 2 : boolean
->x : any
->2 : number
+    if (x == "2") {
+>x == "2" : boolean
+>x : string
+>"2" : string
 
         continue;
     }
-    if (x == 2) {
->x == 2 : boolean
->x : any
->2 : number
+    if (x == "2") {
+>x == "2" : boolean
+>x : string
+>"2" : string
 
         continue l00_c;
 >l00_c : any

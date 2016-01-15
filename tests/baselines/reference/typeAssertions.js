@@ -39,6 +39,15 @@ someOther = <SomeOther>someDerived; // Error
 someOther = <SomeOther>someBase; // Error
 someOther = <SomeOther>someOther;
 
+// Type assertion cannot be a type-predicate type
+var numOrStr: number | string;
+var str: string;
+if(<numOrStr is string>(numOrStr === undefined)) { // Error
+	str = numOrStr; // Error, no narrowing occurred
+}
+
+if((numOrStr === undefined) as numOrStr is string) { // Error
+}
 
 
 
@@ -61,19 +70,19 @@ var SomeBase = (function () {
     function SomeBase() {
     }
     return SomeBase;
-})();
+}());
 var SomeDerived = (function (_super) {
     __extends(SomeDerived, _super);
     function SomeDerived() {
         _super.apply(this, arguments);
     }
     return SomeDerived;
-})(SomeBase);
+}(SomeBase));
 var SomeOther = (function () {
     function SomeOther() {
     }
     return SomeOther;
-})();
+}());
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 var someDerived = new SomeDerived();
@@ -87,3 +96,16 @@ someDerived = someOther; // Error
 someOther = someDerived; // Error
 someOther = someBase; // Error
 someOther = someOther;
+// Type assertion cannot be a type-predicate type
+var numOrStr;
+var str;
+if (is)
+    string > (numOrStr === undefined);
+{
+    str = numOrStr; // Error, no narrowing occurred
+}
+if ((numOrStr === undefined))
+    is;
+string;
+{
+}

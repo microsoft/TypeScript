@@ -14,10 +14,10 @@ for (let x of []) {
 for (let x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }
@@ -133,10 +133,10 @@ for (const x of []) {
 for (const x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }
@@ -259,10 +259,10 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
 var _loop_2 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
 };
@@ -417,10 +417,10 @@ for (var _b = 0, _c = []; _b < _c.length; _b++) {
 var _loop_12 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
 };

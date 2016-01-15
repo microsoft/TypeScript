@@ -48,7 +48,7 @@ var B;
             this.end = end;
         }
         return Line;
-    })();
+    }());
     B.Line = Line;
 })(B || (B = {}));
 var Geometry;

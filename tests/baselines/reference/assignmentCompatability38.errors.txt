@@ -1,4 +1,5 @@
 tests/cases/compiler/assignmentCompatability38.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'new <Tstring>(param: Tstring) => any'.
+  Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature 'new <Tstring>(param: Tstring): any'
 
 
 ==== tests/cases/compiler/assignmentCompatability38.ts (1 errors) ====
@@ -13,3 +14,4 @@ tests/cases/compiler/assignmentCompatability38.ts(9,1): error TS2322: Type 'inte
     __test2__.__val__aa = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'new <Tstring>(param: Tstring) => any'.
+!!! error TS2322:   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature 'new <Tstring>(param: Tstring): any'

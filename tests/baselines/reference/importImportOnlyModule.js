@@ -24,7 +24,7 @@ define(["require", "exports"], function (require, exports) {
         }
         C1.s1 = true;
         return C1;
-    })();
+    }());
     exports.C1 = C1;
 });
 //// [foo_1.js]

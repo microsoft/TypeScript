@@ -501,7 +501,8 @@ namespace ts {
             }
             let count = 0;
             while (true) {
-                const name = baseName + "_" + (++count);
+                count++;
+                const name = baseName + "_" + count;
                 if (!hasProperty(currentIdentifiers, name)) {
                     return name;
                 }
@@ -1309,6 +1310,9 @@ namespace ts {
         }
 
         function emitSignatureDeclaration(node: SignatureDeclaration) {
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+
             // Construct signature or constructor type write new Signature
             if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                 write("new ");
@@ -1320,9 +1324,6 @@ namespace ts {
             else {
                 write("(");
             }
-
-            const prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
 
             // Parameters
             emitCommaList(node.parameters, emitParameterDeclaration);
@@ -1534,14 +1535,6 @@ namespace ts {
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
-                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage,
-                        errorNode: bindingElement,
-                        typeName: bindingElement.name
-                    } : undefined;
-                }
 
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),
@@ -1675,7 +1668,7 @@ namespace ts {
     /* @internal */
     export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
-        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath);
+        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
         if (!emitSkipped) {
             const declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);

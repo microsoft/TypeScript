@@ -37,7 +37,7 @@ var C1 = (function () {
         this.x = x;
     }
     return C1;
-})();
+}());
 var c1;
 c1.x; // OK
 var C2 = (function () {
@@ -45,7 +45,7 @@ var C2 = (function () {
         this.p = p;
     }
     return C2;
-})();
+}());
 var c2;
 c2.p; // private, error
 var C3 = (function () {
@@ -53,7 +53,7 @@ var C3 = (function () {
         this.p = p;
     }
     return C3;
-})();
+}());
 var c3;
 c3.p; // protected, error
 var Derived = (function (_super) {
@@ -63,4 +63,4 @@ var Derived = (function (_super) {
         this.p; // OK
     }
     return Derived;
-})(C3);
+}(C3));

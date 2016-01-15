@@ -32,30 +32,30 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var E = (function () {
     function E() {
     }
     return E;
-})();
+}());
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
         _super.apply(this, arguments);
     }
     return F;
-})(C);
+}(C));
 var C1 = (function () {
     function C1() {
         this.i = "foo";
     }
     return C1;
-})();
+}());
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
@@ -63,7 +63,7 @@ var D1 = (function (_super) {
         this.i = "bar";
     }
     return D1;
-})(C1);
+}(C1));
 var t1;
 var t2;
 var t3;

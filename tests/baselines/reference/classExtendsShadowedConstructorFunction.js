@@ -18,7 +18,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var M;
 (function (M) {
     var C = 1;
@@ -28,5 +28,5 @@ var M;
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
 })(M || (M = {}));
