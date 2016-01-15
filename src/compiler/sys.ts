@@ -378,7 +378,11 @@ namespace ts {
                  */
                 function fileEventHandler(eventName: string, relativefileName: string, baseDirPath: Path) {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    const filePath = relativefileName === undefined ? undefined : toPath(relativefileName, baseDirPath, getCanonicalPath);
+                    /* tslint:disable:no-null */
+                    const filePath = relativefileName === undefined || relativefileName === null
+                        ? undefined
+                        : toPath(relativefileName, baseDirPath, createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                    /* tslint:enable:no-null */
                     if (eventName === "change" && fileWatcherCallbacks.contains(filePath)) {
                         for (const fileCallback of fileWatcherCallbacks.get(filePath)) {
                             fileCallback(filePath);
@@ -460,7 +464,7 @@ namespace ts {
             }
 
             function getCanonicalPath(path: string): string {
-                return useCaseSensitiveFileNames ? path.toLowerCase() : path;
+                return useCaseSensitiveFileNames ? path : path.toLowerCase();
             }
 
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
