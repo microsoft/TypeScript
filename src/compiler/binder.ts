@@ -104,7 +104,6 @@ namespace ts {
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         let file: SourceFile;
         let options: CompilerOptions;
-        let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -136,7 +135,6 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
-            languageVersion = options.target || ScriptTarget.ES3;
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
             Symbol = objectAllocator.getSymbolConstructor();
@@ -149,7 +147,6 @@ namespace ts {
 
             file = undefined;
             options = undefined;
-            languageVersion = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
@@ -1444,8 +1441,7 @@ namespace ts {
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
-                if (getClassExtendsHeritageClauseElement(node) !== undefined &&
-                    languageVersion < ScriptTarget.ES6) {
+                if (getClassExtendsHeritageClauseElement(node) !== undefined) {
                     hasClassExtends = true;
                 }
                 if (nodeIsDecorated(node)) {
