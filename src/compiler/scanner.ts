@@ -94,6 +94,7 @@ namespace ts {
         "protected": SyntaxKind.ProtectedKeyword,
         "public": SyntaxKind.PublicKeyword,
         "require": SyntaxKind.RequireKeyword,
+        "global": SyntaxKind.GlobalKeyword,
         "return": SyntaxKind.ReturnKeyword,
         "set": SyntaxKind.SetKeyword,
         "static": SyntaxKind.StaticKeyword,

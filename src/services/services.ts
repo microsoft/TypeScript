@@ -811,6 +811,7 @@ namespace ts {
         public nameTable: Map<string>;
         public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
+        public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -6296,7 +6297,7 @@ namespace ts {
                     return SemanticMeaning.Value | SemanticMeaning.Type;
 
                 case SyntaxKind.ModuleDeclaration:
-                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                    if (isAmbientModule(<ModuleDeclaration>node)) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {

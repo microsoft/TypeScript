@@ -377,6 +377,32 @@ namespace ts {
             }
         }
 
+        function mergeModuleAugmentation(moduleName: LiteralExpression): void {
+            const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
+            if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
+                // this is a combined symbol for multiple augmentations within the same file.
+                // its symbol already has accumulated information for all declarations 
+                // so we need to add it just once - do the work only for first declaration 
+                Debug.assert(moduleAugmentation.symbol.declarations.length > 1);
+                return;
+            }
+
+            if (isGlobalScopeAugmentation(moduleAugmentation)) {
+                mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
+            }
+            else {
+                // find a module that about to be augmented 
+                let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found);
+                if (!mainModule) {
+                    return;
+                }
+                // if module symbol has already been merged - it is safe to use it.
+                // otherwise clone it
+                mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
+                mergeSymbol(mainModule, moduleAugmentation.symbol);
+            }
+        }
+
         function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
             for (const id in source) {
                 if (hasProperty(source, id)) {
@@ -404,10 +430,6 @@ namespace ts {
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
-        }
-
-        function getSourceFile(node: Node): SourceFile {
-            return <SourceFile>getAncestor(node, SyntaxKind.SourceFile);
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -584,8 +606,7 @@ namespace ts {
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         const moduleExports = getSymbolOfNode(location).exports;
-                        if (location.kind === SyntaxKind.SourceFile ||
-                            (location.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>location).name.kind === SyntaxKind.StringLiteral)) {
+                        if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
@@ -1118,6 +1139,10 @@ namespace ts {
         }
 
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, Diagnostics.Cannot_find_module_0);
+        }
+
+        function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage): Symbol {
             if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
@@ -1136,20 +1161,29 @@ namespace ts {
             if (!isRelative) {
                 const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
-                    return symbol;
+                    // merged symbol is module declaration symbol combined with all augmentations
+                    return getMergedSymbol(symbol);
                 }
             }
 
-            const resolvedModule = getResolvedModule(getSourceFile(location), moduleReferenceLiteral.text);
+            const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReferenceLiteral.text);
             const sourceFile = resolvedModule && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
-                    return sourceFile.symbol;
+                    // merged symbol is module declaration symbol combined with all augmentations
+                    return getMergedSymbol(sourceFile.symbol);
                 }
-                error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
-                return;
+                if (moduleNotFoundError) {
+                    // report errors only if it was requested 
+                    error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
+                }
+                return undefined;
             }
-            error(moduleReferenceLiteral, Diagnostics.Cannot_find_module_0, moduleName);
+            if (moduleNotFoundError) {
+                // report errors only if it was requested
+                error(moduleReferenceLiteral, moduleNotFoundError, moduleName);
+            }
+            return undefined;
         }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
@@ -1566,8 +1600,7 @@ namespace ts {
         }
 
         function hasExternalModuleSymbol(declaration: Node) {
-            return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
+            return isAmbientModule(declaration) || (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -1689,6 +1722,12 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
+            return node && node.parent &&
+                node.parent.kind === SyntaxKind.ModuleBlock &&
+                isExternalModuleAugmentation(node.parent.parent);
         }
 
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
@@ -2273,6 +2312,10 @@ namespace ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
+                        // external module augmentation is always visible
+                        if (isExternalModuleAugmentation(node)) {
+                            return true;
+                        }
                         const parent = getDeclarationContainer(node);
                         // If the node is not exported or it is not ambient module element (except import declaration)
                         if (!(getCombinedNodeFlags(node) & NodeFlags.Export) &&
@@ -2452,7 +2495,7 @@ namespace ts {
             // Every class automatically contains a static property member named 'prototype',
             // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
             // It is an error to explicitly declare a static property member with the name 'prototype'.
-            const classType = <InterfaceType>getDeclaredTypeOfSymbol(prototype.parent);
+            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(prototype.parent));
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
@@ -8665,7 +8708,7 @@ namespace ts {
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Grammar checking
             if (!node.argumentExpression) {
-                const sourceFile = getSourceFile(node);
+                const sourceFile = getSourceFileOfNode(node);
                 if (node.parent.kind === SyntaxKind.NewExpression && (<NewExpression>node.parent).expression === node) {
                     const start = skipTrivia(sourceFile.text, node.expression.end);
                     const end = node.end;
@@ -12045,7 +12088,7 @@ namespace ts {
                     case SyntaxKind.InterfaceDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
-                        return (<ModuleDeclaration>d).name.kind === SyntaxKind.StringLiteral || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
+                        return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
                             ? SymbolFlags.ExportNamespace | SymbolFlags.ExportValue
                             : SymbolFlags.ExportNamespace;
                     case SyntaxKind.ClassDeclaration:
@@ -12501,7 +12544,7 @@ namespace ts {
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
                 const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
-                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFile(declaration)) ?
+                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFileOfNode(declaration)) ?
                         declaration : undefined);
 
                 // Only type check the symbol once
@@ -14187,7 +14230,13 @@ namespace ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking
-                const isAmbientExternalModule = node.name.kind === SyntaxKind.StringLiteral;
+                const isGlobalAugmentation = isGlobalScopeAugmentation(node);
+                const inAmbientContext = isInAmbientContext(node);
+                if (isGlobalAugmentation && !inAmbientContext) {
+                    error(node.name, Diagnostics.Augmentations_for_the_global_scope_should_have_declare_modifier_unless_they_appear_in_already_ambient_context);
+                }
+
+                const isAmbientExternalModule = isAmbientModule(node);
                 const contextErrorMessage = isAmbientExternalModule
                     ? Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
                     : Diagnostics.A_namespace_declaration_is_only_allowed_in_a_namespace_or_module;
@@ -14197,7 +14246,7 @@ namespace ts {
                 }
 
                 if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
-                    if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
+                    if (!inAmbientContext && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
                 }
@@ -14210,7 +14259,7 @@ namespace ts {
                 // The following checks only apply on a non-ambient instantiated module declaration.
                 if (symbol.flags & SymbolFlags.ValueModule
                     && symbol.declarations.length > 1
-                    && !isInAmbientContext(node)
+                    && !inAmbientContext
                     && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules)) {
                     const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
@@ -14231,17 +14280,105 @@ namespace ts {
                     }
                 }
 
-                // Checks for ambient external modules.
                 if (isAmbientExternalModule) {
-                    if (!isGlobalSourceFile(node.parent)) {
-                        error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
+                    if (isExternalModuleAugmentation(node)) {
+                        // body of the augmentation should be checked for consistency only if augmentation was applied to its target (either global scope or module)
+                        // otherwise we'll be swamped in cascading errors. 
+                        // We can detect if augmentation was applied using following rules:
+                        // - augmentation for a global scope is always applied
+                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module). 
+                        const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
+                        if (checkBody) {
+                            // body of ambient external module is always a module block
+                            for (const statement of (<ModuleBlock>node.body).statements) {
+                                checkModuleAugmentationElement(statement, isGlobalAugmentation);
+                            }
+                        }
                     }
-                    if (isExternalModuleNameRelative(node.name.text)) {
-                        error(node.name, Diagnostics.Ambient_module_declaration_cannot_specify_relative_module_name);
+                    else if (isGlobalSourceFile(node.parent)) {
+                        if (isGlobalAugmentation) {
+                            error(node.name, Diagnostics.Augmentations_for_the_global_scope_can_only_be_directly_nested_in_external_modules_or_ambient_module_declarations);
+                        }
+                        else if (isExternalModuleNameRelative(node.name.text)) {
+                            error(node.name, Diagnostics.Ambient_module_declaration_cannot_specify_relative_module_name);
+                        }
+                    }
+                    else {
+                        if (isGlobalAugmentation) {
+                            error(node.name, Diagnostics.Augmentations_for_the_global_scope_can_only_be_directly_nested_in_external_modules_or_ambient_module_declarations);
+                        }
+                        else {
+                            // Node is not an augmentation and is not located on the script level.
+                            // This means that this is declaration of ambient module that is located in other module or namespace which is prohibited.
+                            error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
+                        }
                     }
                 }
             }
             checkSourceElement(node.body);
+        }
+
+        function checkModuleAugmentationElement(node: Node, isGlobalAugmentation: boolean): void {
+            switch (node.kind) {
+                case SyntaxKind.VariableStatement:
+                    // error each individual name in variable statement instead of marking the entire variable statement
+                    for (const decl of (<VariableStatement>node).declarationList.declarations) {
+                        checkModuleAugmentationElement(decl, isGlobalAugmentation);
+                    }
+                    break;
+                case SyntaxKind.ExportAssignment:
+                case SyntaxKind.ExportDeclaration:
+                    grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
+                    break;
+                case SyntaxKind.ImportEqualsDeclaration:
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
+                        error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        break;
+                    }
+                    // fallthrough
+                case SyntaxKind.ImportDeclaration:
+                    grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
+                    break;
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.VariableDeclaration:
+                    const name = (<VariableDeclaration | BindingElement>node).name;
+                    if (isBindingPattern(name)) {
+                        for (const el of name.elements) {
+                            // mark individual names in binding pattern
+                            checkModuleAugmentationElement(el, isGlobalAugmentation);
+                        }
+                        break;
+                    }
+                    // fallthrough
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    const symbol = getSymbolOfNode(node);
+                    if (symbol) {
+                        // module augmentations cannot introduce new names on the top level scope of the module
+                        // this is done it two steps
+                        // 1. quick check - if symbol for node is not merged - this is local symbol to this augmentation - report error
+                        // 2. main check - report error if value declaration of the parent symbol is module augmentation)
+                        let reportError = !(symbol.flags & SymbolFlags.Merged);
+                        if (!reportError) {
+                            if (isGlobalAugmentation) {
+                                // global symbol should not have parent since it is not explicitly exported
+                                reportError = symbol.parent !== undefined;
+                            }
+                            else {
+                                // symbol should not originate in augmentation
+                                reportError = isExternalModuleAugmentation(symbol.parent.valueDeclaration);
+                            }
+                        }
+                        if (reportError) {
+                            error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        }
+                    }
+                    break;
+            }
         }
 
         function getFirstIdentifier(node: EntityName | Expression): Identifier {
@@ -14266,7 +14403,7 @@ namespace ts {
                 error(moduleName, Diagnostics.String_literal_expected);
                 return false;
             }
-            const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
+            const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(<ModuleDeclaration>node.parent.parent);
             if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
                 error(moduleName, node.kind === SyntaxKind.ExportDeclaration ?
                     Diagnostics.Export_declarations_are_not_permitted_in_a_namespace :
@@ -14274,12 +14411,16 @@ namespace ts {
                 return false;
             }
             if (inAmbientExternalModule && isExternalModuleNameRelative((<LiteralExpression>moduleName).text)) {
-                // TypeScript 1.0 spec (April 2013): 12.1.6
-                // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference
-                // other external modules only through top - level external module names.
-                // Relative external module names are not permitted.
-                error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_module_declaration_cannot_reference_module_through_relative_module_name);
-                return false;
+                // we have already reported errors on top level imports\exports in external module augmentations in checkModuleDeclaration
+                // no need to do this again.
+                if (!isTopLevelInExternalModuleAugmentation(node)) {
+                    // TypeScript 1.0 spec (April 2013): 12.1.6
+                    // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference
+                    // other external modules only through top - level external module names.
+                    // Relative external module names are not permitted.
+                    error(node, Diagnostics.Import_or_export_declaration_in_an_ambient_module_declaration_cannot_reference_module_through_relative_module_name);
+                    return false;
+                }
             }
             return true;
         }
@@ -14385,7 +14526,7 @@ namespace ts {
                     // export { x, y } from "foo"
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
-                    const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
+                    const inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && isAmbientModule(node.parent.parent);
                     if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_a_namespace);
                     }
@@ -14429,7 +14570,7 @@ namespace ts {
             }
 
             const container = node.parent.kind === SyntaxKind.SourceFile ? <SourceFile>node.parent : <ModuleDeclaration>node.parent.parent;
-            if (container.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>container).name.kind === SyntaxKind.Identifier) {
+            if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
                 error(node, Diagnostics.An_export_assignment_cannot_be_used_in_a_namespace);
                 return;
             }
@@ -14474,7 +14615,9 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports["export="];
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
+                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                        error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
+                    }
                 }
                 // Checks for export * conflicts
                 const exports = getExportsOfModule(moduleSymbol);
@@ -15558,13 +15701,13 @@ namespace ts {
             };
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
-                const specifier = getExternalModuleName(declaration);
-                const moduleSymbol = getSymbolAtLocation(specifier);
-                if (!moduleSymbol) {
-                    return undefined;
-                }
-                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile {
+            const specifier = getExternalModuleName(declaration);
+            const moduleSymbol = resolveExternalModuleNameWorker(specifier, specifier, /*moduleNotFoundError*/ undefined);
+            if (!moduleSymbol) {
+                return undefined;
+            }
+            return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {
@@ -15573,12 +15716,26 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
+            let augmentations: LiteralExpression[][];
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
+                if (file.moduleAugmentations) {
+                    (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                }
             });
+
+            if (augmentations) {
+                // merge module augmentations.
+                // this needs to be done after global symbol table is initialized to make sure that all ambient modules are indexed
+                for (const list of augmentations) {
+                    for (const augmentation of list) {
+                        mergeModuleAugmentation(augmentation);
+                    }
+                }
+            }
 
             // Setup global builtins
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
@@ -16395,7 +16552,7 @@ namespace ts {
                     return true;
                 }
                 else if (node.body === undefined) {
-                    return grammarErrorAtPos(getSourceFile(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
+                    return grammarErrorAtPos(getSourceFileOfNode(node), node.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
 

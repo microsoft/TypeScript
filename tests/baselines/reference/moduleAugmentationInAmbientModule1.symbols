@@ -1,0 +1,46 @@
+=== tests/cases/compiler/main.ts ===
+/// <reference path="O.d.ts" />
+
+import {Observable} from "Observable";
+>Observable : Symbol(Observable, Decl(main.ts, 2, 8))
+
+let x: Observable;
+>x : Symbol(x, Decl(main.ts, 3, 3))
+>Observable : Symbol(Observable, Decl(main.ts, 2, 8))
+
+x.foo().x;
+>x.foo().x : Symbol(Cls.x, Decl(O.d.ts, 7, 15))
+>x.foo : Symbol(Observable.foo, Decl(O.d.ts, 13, 30))
+>x : Symbol(x, Decl(main.ts, 3, 3))
+>foo : Symbol(Observable.foo, Decl(O.d.ts, 13, 30))
+>x : Symbol(Cls.x, Decl(O.d.ts, 7, 15))
+
+=== tests/cases/compiler/O.d.ts ===
+
+
+declare module "Observable" {
+    class Observable {}
+>Observable : Symbol(Observable, Decl(O.d.ts, 2, 29), Decl(O.d.ts, 12, 25))
+}
+
+declare module "M" {
+    class Cls { x: number }
+>Cls : Symbol(Cls, Decl(O.d.ts, 6, 20))
+>x : Symbol(x, Decl(O.d.ts, 7, 15))
+}
+
+declare module "Map" {
+    import { Cls } from "M";
+>Cls : Symbol(Cls, Decl(O.d.ts, 11, 12))
+
+    module "Observable" {
+        interface Observable {
+>Observable : Symbol(Observable, Decl(O.d.ts, 2, 29), Decl(O.d.ts, 12, 25))
+
+            foo(): Cls;
+>foo : Symbol(foo, Decl(O.d.ts, 13, 30))
+>Cls : Symbol(Cls, Decl(O.d.ts, 11, 12))
+        }
+    }
+}
+
