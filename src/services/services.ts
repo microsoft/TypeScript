@@ -6028,6 +6028,10 @@ namespace ts {
              */
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
                 previousIterationSymbolsCache: SymbolTable): void {
+                if (!symbol) {
+                    return;
+                }
+
                 // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
                 // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
                 // For example:
@@ -6043,7 +6047,7 @@ namespace ts {
                     return;
                 }
 
-                if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
