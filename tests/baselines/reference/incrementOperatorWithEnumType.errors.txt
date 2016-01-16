@@ -1,20 +1,26 @@
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(6,25): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
 tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(7,23): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(10,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
 tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts(12,1): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts (2 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts (4 errors) ====
     // ++ operator on enum type
     
     enum ENUM1 { A, B, "" };
     
     // expression
     var ResultIsNumber1 = ++ENUM1["B"];
+                            ~~~~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     var ResultIsNumber2 = ENUM1.B++;
                           ~~~~~~~
 !!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     
     // miss assignment operator
     ++ENUM1["B"];
+      ~~~~~~~~~~
+!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
     
     ENUM1.B++;
     ~~~~~~~
