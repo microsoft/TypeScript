@@ -2765,7 +2765,7 @@ namespace ts {
                     //
                     //  function f(callback: (x: "foo") => "foo") { }
                     //  f(x => x);
-                    return declaration.flags & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
+                    return getCombinedNodeFlags(declaration) & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
                 }
                 return getWidenedType(type);
             }
@@ -6120,8 +6120,14 @@ namespace ts {
         }
 
         function getWidenedTypeForImmutableBinding(type: Type): Type {
-            if (type.flags & (TypeFlags.ContainsFreshLiteralType | TypeFlags.StringLiteral)) {
-                return getStringLiteralTypeForText((type as StringLiteralType).text, /*shouldGetFreshType*/ false);
+            const { flags } = type;
+            if (flags & TypeFlags.ContainsFreshLiteralType) {
+                if (flags & TypeFlags.StringLiteral) {
+                    return getStringLiteralTypeForText((type as StringLiteralType).text, /*shouldGetFreshType*/ false);
+                }
+                if (flags & TypeFlags.Union) {
+                    return getUnionType(map((<UnionType>type).types, getWidenedTypeForImmutableBinding), /*noSubtypeReduction*/ true);
+                }
             }
             return getWidenedType(type);
         }
@@ -10583,7 +10589,7 @@ namespace ts {
 
         function allTypesHaveKind(types: Type[], kind: TypeFlags) {
             for (const current of types) {
-                if (!(current.flags & kind)) {
+                if (!allConstituentTypesHaveKind(current, kind)) {
                     return false;
                 }
             }
