@@ -1217,7 +1217,7 @@ namespace ts {
             if (sourceFiles) {
                 const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
-                for (var sourceFile of sourceFiles) {
+                for (const sourceFile of sourceFiles) {
                     if (!isDeclarationFile(sourceFile)) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
