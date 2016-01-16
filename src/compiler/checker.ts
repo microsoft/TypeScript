@@ -5523,6 +5523,13 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
+                            if (isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Property_0_is_read_only_in_type_1_but_read_write_in_type_2,
+                                        symbolToString(targetProp), typeToString(source), typeToString(target));
+                                }
+                                return Ternary.False;
+                            }
                         }
                     }
                 }
@@ -10323,81 +10330,48 @@ namespace ts {
             return true;
         }
 
-        function checkReferenceExpression(n: Node, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
-            function findSymbol(n: Node): Symbol {
-                const symbol = getNodeLinks(n).resolvedSymbol;
-                // Because we got the symbol from the resolvedSymbol property, it might be of kind
-                // SymbolFlags.ExportValue. In this case it is necessary to get the actual export
-                // symbol, which will have the correct flags set on it.
-                return symbol && getExportSymbolOfValueSymbolIfExported(symbol);
+        function isReadonlySymbol(symbol: Symbol): boolean {
+            if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
+                return symbol === undefinedSymbol || (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
             }
-
-            function isReferenceOrErrorExpression(n: Node): boolean {
-                // TypeScript 1.0 spec (April 2014):
-                // Expressions are classified as values or references.
-                // References are the subset of expressions that are permitted as the target of an assignment.
-                // Specifically, references are combinations of identifiers(section 4.3), parentheses(section 4.7),
-                // and property accesses(section 4.10).
-                // All other expression constructs described in this chapter are classified as values.
-                switch (n.kind) {
-                    case SyntaxKind.Identifier: {
-                        const symbol = findSymbol(n);
-                        // TypeScript 1.0 spec (April 2014): 4.3
-                        // An identifier expression that references a variable or parameter is classified as a reference.
-                        // An identifier expression that references any other kind of entity is classified as a value(and therefore cannot be the target of an assignment).
-                        return !symbol || symbol === unknownSymbol || symbol === argumentsSymbol || (symbol.flags & SymbolFlags.Variable) !== 0;
-                    }
-                    case SyntaxKind.PropertyAccessExpression: {
-                        const symbol = findSymbol(n);
-                        // TypeScript 1.0 spec (April 2014): 4.10
-                        // A property access expression is always classified as a reference.
-                        // NOTE (not in spec): assignment to enum members should not be allowed
-                        return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
-                    }
-                    case SyntaxKind.ElementAccessExpression:
-                        //  old compiler doesn't check indexed access
-                        return true;
-                    case SyntaxKind.ParenthesizedExpression:
-                        return isReferenceOrErrorExpression((<ParenthesizedExpression>n).expression);
-                    default:
-                        return false;
-                }
+            if (symbol.flags & SymbolFlags.Accessor) {
+                return !(symbol.flags & SymbolFlags.SetAccessor);
             }
+            return false;
+        }
 
-            function isConstVariableReference(n: Node): boolean {
-                switch (n.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccessExpression: {
-                        const symbol = findSymbol(n);
-                        return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
-                    }
-                    case SyntaxKind.ElementAccessExpression: {
-                        const index = (<ElementAccessExpression>n).argumentExpression;
-                        const symbol = findSymbol((<ElementAccessExpression>n).expression);
-                        if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
-                            const name = (<LiteralExpression>index).text;
-                            const prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
-                            return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
-                        }
-                        return false;
-                    }
-                    case SyntaxKind.ParenthesizedExpression:
-                        return isConstVariableReference((<ParenthesizedExpression>n).expression);
-                    default:
-                        return false;
-                }
+        function isConstantSymbol(symbol: Symbol): boolean {
+            if (symbol.flags & SymbolFlags.Variable) {
+                return (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
             }
+        }
 
-            if (!isReferenceOrErrorExpression(n)) {
-                error(n, invalidReferenceMessage);
+        function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
+            // References are combinations of identifiers, parentheses, and property accesses.
+            const node = skipParenthesizedNodes(expr);
+            if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
+                error(expr, invalidReferenceMessage);
                 return false;
             }
-
-            if (isConstVariableReference(n)) {
-                error(n, constantVariableMessage);
-                return false;
+            // Because we got the symbol from the resolvedSymbol property, it might be of kind
+            // SymbolFlags.ExportValue. In this case it is necessary to get the actual export
+            // symbol, which will have the correct flags set on it.
+            const symbol = getExportSymbolOfValueSymbolIfExported(getNodeLinks(node).resolvedSymbol);
+            if (symbol) {
+                if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
+                    if (symbol === undefinedSymbol || !(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
+                        error(expr, invalidReferenceMessage);
+                        return false;
+                    }
+                    if (isReadonlySymbol(symbol) || isConstantSymbol(symbol)) {
+                        error(expr, constantVariableMessage);
+                        return false;
+                    }
+                }
             }
-
+            else {
+                // Check indexers
+            }
             return true;
         }
 
