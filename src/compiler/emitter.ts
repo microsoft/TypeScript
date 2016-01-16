@@ -1250,7 +1250,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         else {
                             // One object literal with all the attributes in them
                             write("{");
-                            for (var i = 0; i < attrs.length; i++) {
+                            for (let i = 0, n = attrs.length; i < n; i++) {
                                 if (i > 0) {
                                     write(", ");
                                 }
@@ -1262,7 +1262,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     // Children
                     if (children) {
-                        for (var i = 0; i < children.length; i++) {
+                        for (let i = 0; i < children.length; i++) {
                             // Don't emit empty expressions
                             if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
                                 continue;
@@ -1356,7 +1356,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 function emitJsxElement(node: JsxElement) {
                     emitJsxOpeningOrSelfClosingElement(node.openingElement);
 
-                    for (var i = 0, n = node.children.length; i < n; i++) {
+                    for (let i = 0, n = node.children.length; i < n; i++) {
                         emit(node.children[i]);
                     }
 
@@ -5172,7 +5172,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
                 if (isClassExpressionWithStaticProperties) {
-                    for (var property of staticProperties) {
+                    for (const property of staticProperties) {
                         write(",");
                         writeLine();
                         emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
@@ -5719,7 +5719,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         const parameters = valueDeclaration.parameters;
                         const parameterCount = parameters.length;
                         if (parameterCount > 0) {
-                            for (var i = 0; i < parameterCount; i++) {
+                            for (let i = 0; i < parameterCount; i++) {
                                 if (i > 0) {
                                     write(", ");
                                 }

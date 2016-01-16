@@ -6828,7 +6828,8 @@ namespace ts {
             function classifyDisabledMergeCode(text: string, start: number, end: number) {
                 // Classify the line that the ======= marker is on as a comment.  Then just lex
                 // all further tokens and add them to the result.
-                for (var i = start; i < end; i++) {
+                let i: number;
+                for (i = start; i < end; i++) {
                     if (isLineBreak(text.charCodeAt(i))) {
                         break;
                     }

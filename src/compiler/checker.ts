@@ -14600,7 +14600,7 @@ namespace ts {
         }
 
         function hasExportedMembers(moduleSymbol: Symbol) {
-            for (var id in moduleSymbol.exports) {
+            for (const id in moduleSymbol.exports) {
                 if (id !== "export=") {
                     return true;
                 }
