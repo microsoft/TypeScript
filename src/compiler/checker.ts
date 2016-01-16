@@ -2467,9 +2467,7 @@ namespace ts {
         }
 
         function isUnionContaining(type: Type, kinds: TypeFlags) {
-            return type 
-                && (type.flags & TypeFlags.Union) 
-                && someConstituentTypeHasKind(type, kinds);
+            return type && (type.flags & TypeFlags.Union) && someConstituentTypeHasKind(type, kinds);
         }
 
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
