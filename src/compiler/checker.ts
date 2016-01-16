@@ -2466,6 +2466,12 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
+        function isUnionContaining(type: Type, kinds: TypeFlags) {
+            return type 
+                && (type.flags & TypeFlags.Union) 
+                && someConstituentTypeHasKind(type, kinds);
+        }
+
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
@@ -10201,7 +10207,8 @@ namespace ts {
 
         /*
          *TypeScript Specification 1.0 (6.3) - July 2014
-         * An explicitly typed function whose return type isn't the Void or the Any type
+         * An explicitly typed function whose return type isn't the Void type, 
+         * the Any type, or a union type containing the Void or Any type as a constituent
          * must have at least one return statement somewhere in its body.
          * An exception to this rule is if the function implementation consists of a single 'throw' statement.
          * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
@@ -10212,7 +10219,7 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType === voidType || isTypeAny(returnType)) {
+            if (returnType === voidType || isTypeAny(returnType) || isUnionContaining(returnType, TypeFlags.Any) || isUnionContaining(returnType, TypeFlags.Void)) {
                 return;
             }
 

@@ -1,11 +1,10 @@
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(3,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(93,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(101,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(106,16): error TS2378: A 'get' accessor must return a value.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(129,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (5 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (4 errors) ====
     
     
     function f1(): string {
@@ -101,8 +100,6 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(129,5): e
     }
     
     function f19(): void | number {
-                    ~~~~~~~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
         // Okay; function return type is union containing void
     }
     
