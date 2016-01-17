@@ -2315,15 +2315,6 @@ namespace ts {
             return parsePropertyOrMethodSignature(fullStart, modifiers);
         }
 
-        function parseIndexSignatureWithModifiers() {
-            const fullStart = scanner.getStartPos();
-            const decorators = parseDecorators();
-            const modifiers = parseModifiers();
-            return isIndexSignature()
-                ? parseIndexSignatureDeclaration(fullStart, decorators, modifiers)
-                : undefined;
-        }
-
         function isStartOfConstructSignature() {
             nextToken();
             return token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken;
