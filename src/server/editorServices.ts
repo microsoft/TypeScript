@@ -1057,6 +1057,10 @@ namespace ts.server {
                 ? toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName)
                 : this.host.globalCachePath;
 
+            if (!cachePath) {
+                return;
+            }
+
             // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
             // has a default value
             const typingOptions: TypingOptions =

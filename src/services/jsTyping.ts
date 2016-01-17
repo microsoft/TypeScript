@@ -44,13 +44,13 @@ namespace ts.JsTyping {
         cachePath: Path,
         typingOptions: TypingOptions,
         compilerOptions?: CompilerOptions)
-        : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[], newTsdJsonPath?: string } {
+        : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // a typing name to typing file path mapping
         const inferredTypings: Map<string> = {};
 
         if (!typingOptions) {
-            return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [], newTsdJsonPath: undefined };
+            return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
         cachePath = cachePath ? cachePath : globalCachePath;
@@ -89,7 +89,6 @@ namespace ts.JsTyping {
             getTypingNamesFromCompilerOptions(compilerOptions);
         }
 
-        let newTsdJsonPath: string;
         const typingsPath = ts.combinePaths(cachePath, "typings");
         const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
         const tsdJsonDict = tryParseJson(tsdJsonPath, host);

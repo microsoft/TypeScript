@@ -125,7 +125,7 @@ namespace ts.server {
     }
 
     export interface ServerHost extends ts.System {
-        globalCachePath: Path;
+        globalCachePath?: Path;
         getTsd?: () => any;
     }
 
