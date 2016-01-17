@@ -2175,8 +2175,8 @@ namespace ts {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
-        declaredStringIndexType: Type;             // Declared string index type
-        declaredNumberIndexType: Type;             // Declared numeric index type
+        declaredStringIndexInfo: IndexInfo;        // Declared string indexing info
+        declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
     }
 
     // Type references (TypeFlags.Reference). When a class or interface has type parameters or
@@ -2228,8 +2228,8 @@ namespace ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType?: Type;            // String index type
-        numberIndexType?: Type;            // Numeric index type
+        stringIndexInfo?: IndexInfo;       // String indexing info
+        numberIndexInfo?: IndexInfo;       // Numeric indexing info
     }
 
     /* @internal */
@@ -2290,6 +2290,11 @@ namespace ts {
     export const enum IndexKind {
         String,
         Number,
+    }
+
+    export interface IndexInfo {
+        type: Type;
+        isReadonly: boolean;
     }
 
     /* @internal */

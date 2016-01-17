@@ -133,6 +133,8 @@ namespace ts {
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
+        const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
+
         const globals: SymbolTable = {};
 
         let globalESSymbolConstructorSymbol: Symbol;
@@ -1319,19 +1321,19 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function setObjectTypeMembers(type: ObjectType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedType {
+        function setObjectTypeMembers(type: ObjectType, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): ResolvedType {
             (<ResolvedType>type).members = members;
             (<ResolvedType>type).properties = getNamedMembers(members);
             (<ResolvedType>type).callSignatures = callSignatures;
             (<ResolvedType>type).constructSignatures = constructSignatures;
-            if (stringIndexType) (<ResolvedType>type).stringIndexType = stringIndexType;
-            if (numberIndexType) (<ResolvedType>type).numberIndexType = numberIndexType;
+            if (stringIndexInfo) (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
+            if (numberIndexInfo) (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
             return <ResolvedType>type;
         }
 
-        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexType: Type, numberIndexType: Type): ResolvedType {
+        function createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo, numberIndexInfo: IndexInfo): ResolvedType {
             return setObjectTypeMembers(createObjectType(TypeFlags.Anonymous, symbol),
-                members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node, callback: (symbolTable: SymbolTable) => T): T {
@@ -1967,7 +1969,7 @@ namespace ts {
 
                 function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
                     const resolved = resolveStructuredTypeMembers(type);
-                    if (!resolved.properties.length && !resolved.stringIndexType && !resolved.numberIndexType) {
+                    if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             writePunctuation(writer, SyntaxKind.OpenBraceToken);
                             writePunctuation(writer, SyntaxKind.CloseBraceToken);
@@ -2013,7 +2015,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    if (resolved.stringIndexType) {
+                    if (resolved.stringIndexInfo) {
                         // [x: string]:
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writer.writeParameter(getIndexerParameterName(resolved, IndexKind.String, /*fallbackName*/"x"));
@@ -2023,11 +2025,11 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
-                        writeType(resolved.stringIndexType, TypeFormatFlags.None);
+                        writeType(resolved.stringIndexInfo.type, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    if (resolved.numberIndexType) {
+                    if (resolved.numberIndexInfo) {
                         // [x: number]:
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writer.writeParameter(getIndexerParameterName(resolved, IndexKind.Number, /*fallbackName*/"x"));
@@ -2037,7 +2039,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
-                        writeType(resolved.numberIndexType, TypeFormatFlags.None);
+                        writeType(resolved.numberIndexInfo.type, TypeFormatFlags.None);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -3343,8 +3345,8 @@ namespace ts {
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
             return <InterfaceTypeWithDeclaredMembers>type;
         }
@@ -3362,15 +3364,15 @@ namespace ts {
             let members = source.symbol.members;
             let callSignatures = source.declaredCallSignatures;
             let constructSignatures = source.declaredConstructSignatures;
-            let stringIndexType = source.declaredStringIndexType;
-            let numberIndexType = source.declaredNumberIndexType;
+            let stringIndexInfo = source.declaredStringIndexInfo;
+            let numberIndexInfo = source.declaredNumberIndexInfo;
             if (!rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
                 mapper = createTypeMapper(typeParameters, typeArguments);
                 members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
                 callSignatures = instantiateList(source.declaredCallSignatures, mapper, instantiateSignature);
                 constructSignatures = instantiateList(source.declaredConstructSignatures, mapper, instantiateSignature);
-                stringIndexType = instantiateType(source.declaredStringIndexType, mapper);
-                numberIndexType = instantiateType(source.declaredNumberIndexType, mapper);
+                stringIndexInfo = instantiateIndexInfo(source.declaredStringIndexInfo, mapper);
+                numberIndexInfo = instantiateIndexInfo(source.declaredNumberIndexInfo, mapper);
             }
             const baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
@@ -3383,11 +3385,11 @@ namespace ts {
                     addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                    stringIndexType = stringIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.String);
-                    numberIndexType = numberIndexType || getIndexTypeOfType(instantiatedBaseType, IndexKind.Number);
+                    stringIndexInfo = stringIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
+                    numberIndexInfo = numberIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.Number);
                 }
             }
-            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function resolveClassOrInterfaceMembers(type: InterfaceType): void {
@@ -3458,7 +3460,7 @@ namespace ts {
             const arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type]));
             const members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
-            setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
+            setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexInfo, arrayType.numberIndexInfo);
         }
 
         function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
@@ -3526,16 +3528,18 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function getUnionIndexType(types: Type[], kind: IndexKind): Type {
+        function getUnionIndexInfo(types: Type[], kind: IndexKind): IndexInfo {
             const indexTypes: Type[] = [];
+            let isAnyReadonly = false;
             for (const type of types) {
-                const indexType = getIndexTypeOfType(type, kind);
-                if (!indexType) {
+                const indexInfo = getIndexInfoOfType(type, kind);
+                if (!indexInfo) {
                     return undefined;
                 }
-                indexTypes.push(indexType);
+                indexTypes.push(indexInfo.type);
+                isAnyReadonly = isAnyReadonly || indexInfo.isReadonly;
             }
-            return getUnionType(indexTypes);
+            return createIndexInfo(getUnionType(indexTypes), isAnyReadonly);
         }
 
         function resolveUnionTypeMembers(type: UnionType) {
@@ -3543,13 +3547,18 @@ namespace ts {
             // type use getPropertiesOfType (only the language service uses this).
             const callSignatures = getUnionSignatures(type.types, SignatureKind.Call);
             const constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
-            const stringIndexType = getUnionIndexType(type.types, IndexKind.String);
-            const numberIndexType = getUnionIndexType(type.types, IndexKind.Number);
-            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+            const stringIndexInfo = getUnionIndexInfo(type.types, IndexKind.String);
+            const numberIndexInfo = getUnionIndexInfo(type.types, IndexKind.Number);
+            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function intersectTypes(type1: Type, type2: Type): Type {
             return !type1 ? type2 : !type2 ? type1 : getIntersectionType([type1, type2]);
+        }
+
+        function intersectIndexInfos(info1: IndexInfo, info2: IndexInfo): IndexInfo {
+            return !info1 ? info2 : !info2 ? info1 : createIndexInfo(
+                getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
         function resolveIntersectionTypeMembers(type: IntersectionType) {
@@ -3557,15 +3566,15 @@ namespace ts {
             // intersection type use getPropertiesOfType (only the language service uses this).
             let callSignatures: Signature[] = emptyArray;
             let constructSignatures: Signature[] = emptyArray;
-            let stringIndexType: Type = undefined;
-            let numberIndexType: Type = undefined;
+            let stringIndexInfo: IndexInfo = undefined;
+            let numberIndexInfo: IndexInfo = undefined;
             for (const t of type.types) {
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 constructSignatures = concatenate(constructSignatures, getSignaturesOfType(t, SignatureKind.Construct));
-                stringIndexType = intersectTypes(stringIndexType, getIndexTypeOfType(t, IndexKind.String));
-                numberIndexType = intersectTypes(numberIndexType, getIndexTypeOfType(t, IndexKind.Number));
+                stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
+                numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
-            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function resolveAnonymousTypeMembers(type: AnonymousType) {
@@ -3574,17 +3583,17 @@ namespace ts {
                 const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
                 const callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
                 const constructSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper, instantiateSignature);
-                const stringIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.String), type.mapper);
-                const numberIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.Number), type.mapper);
-                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+                const stringIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.String), type.mapper);
+                const numberIndexInfo = instantiateIndexInfo(getIndexInfoOfType(type.target, IndexKind.Number), type.mapper);
+                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
                 const callSignatures = getSignaturesOfSymbol(members["__call"]);
                 const constructSignatures = getSignaturesOfSymbol(members["__new"]);
-                const stringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
-                const numberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
-                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
+                const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
+                const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
+                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
             else {
                 // Combinations of function, class, enum and module
@@ -3605,8 +3614,8 @@ namespace ts {
                         addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
                 }
-                const numberIndexType = (symbol.flags & SymbolFlags.Enum) ? stringType : undefined;
-                setObjectTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexType);
+                const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
+                setObjectTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo);
                 // We resolve the members before computing the signatures because a signature may use
                 // typeof with a qualified name expression that circularly references the type we are
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
@@ -3825,11 +3834,23 @@ namespace ts {
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
-        function getIndexTypeOfStructuredType(type: Type, kind: IndexKind): Type {
+
+        function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo {
             if (type.flags & TypeFlags.StructuredType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                return kind === IndexKind.String ? resolved.stringIndexType : resolved.numberIndexType;
+                return kind === IndexKind.String ? resolved.stringIndexInfo : resolved.numberIndexInfo;
             }
+        }
+
+        function getIndexTypeOfStructuredType(type: Type, kind: IndexKind): Type {
+            const info = getIndexInfoOfStructuredType(type, kind);
+            return info && info.type;
+        }
+
+        // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
+        // maps primitive types and type parameters are to their apparent types.
+        function getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo {
+            return getIndexInfoOfStructuredType(getApparentType(type), kind);
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
@@ -4104,11 +4125,17 @@ namespace ts {
             return undefined;
         }
 
-        function getIndexTypeOfSymbol(symbol: Symbol, kind: IndexKind): Type {
+        function createIndexInfo(type: Type, isReadonly: boolean): IndexInfo {
+            return { type, isReadonly };
+        }
+
+        function getIndexInfoOfSymbol(symbol: Symbol, kind: IndexKind): IndexInfo {
             const declaration = getIndexDeclarationOfSymbol(symbol, kind);
-            return declaration
-                ? declaration.type ? getTypeFromTypeNode(declaration.type) : anyType
-                : undefined;
+            if (declaration) {
+                return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
+                    (declaration.flags & NodeFlags.Readonly) !== 0);
+            }
+            return undefined;
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
@@ -4845,6 +4872,10 @@ namespace ts {
             return type;
         }
 
+        function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
+            return info && createIndexInfo(instantiateType(info.type, mapper), info.isReadonly);
+        }
+
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
         function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
@@ -5251,7 +5282,7 @@ namespace ts {
                 if (type.flags & TypeFlags.ObjectType) {
                     const resolved = resolveStructuredTypeMembers(type);
                     if (relation === assignableRelation && (type === globalObjectType || resolved.properties.length === 0) ||
-                        resolved.stringIndexType || resolved.numberIndexType || getPropertyOfType(type, name)) {
+                        resolved.stringIndexInfo || resolved.numberIndexInfo || getPropertyOfType(type, name)) {
                         return true;
                     }
                 }
@@ -6020,8 +6051,8 @@ namespace ts {
                     regularType.properties = (<ResolvedType>type).properties;
                     regularType.callSignatures = (<ResolvedType>type).callSignatures;
                     regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
-                    regularType.stringIndexType = (<ResolvedType>type).stringIndexType;
-                    regularType.numberIndexType = (<ResolvedType>type).numberIndexType;
+                    regularType.stringIndexInfo = (<ResolvedType>type).stringIndexInfo;
+                    regularType.numberIndexInfo = (<ResolvedType>type).numberIndexInfo;
                     (<FreshObjectLiteralType>type).regularType = regularType;
                 }
                 return regularType;
@@ -6046,11 +6077,11 @@ namespace ts {
                 }
                 members[p.name] = p;
             });
-            let stringIndexType = getIndexTypeOfType(type, IndexKind.String);
-            let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
-            if (stringIndexType) stringIndexType = getWidenedType(stringIndexType);
-            if (numberIndexType) numberIndexType = getWidenedType(numberIndexType);
-            return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
+            const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
+            return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
+                stringIndexInfo && createIndexInfo(getWidenedType(stringIndexInfo.type), stringIndexInfo.isReadonly),
+                numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
         }
 
         function getWidenedType(type: Type): Type {
@@ -7428,7 +7459,7 @@ namespace ts {
 
         // Return true if the given contextual type provides an index signature of the given kind
         function contextualTypeHasIndexSignature(type: Type, kind: IndexKind): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getIndexTypeOfStructuredType(t, kind)) : getIndexTypeOfStructuredType(type, kind));
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, t => getIndexInfoOfStructuredType(t, kind)) : getIndexInfoOfStructuredType(type, kind));
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -7923,9 +7954,9 @@ namespace ts {
                 }
             }
 
-            const stringIndexType = getIndexType(IndexKind.String);
-            const numberIndexType = getIndexType(IndexKind.Number);
-            const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
+            const stringIndexInfo = getIndexInfo(IndexKind.String);
+            const numberIndexInfo = getIndexInfo(IndexKind.Number);
+            const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);
             if (inDestructuringPattern) {
@@ -7933,7 +7964,7 @@ namespace ts {
             }
             return result;
 
-            function getIndexType(kind: IndexKind) {
+            function getIndexInfo(kind: IndexKind) {
                 if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     const propTypes: Type[] = [];
                     for (let i = 0; i < propertiesArray.length; i++) {
@@ -7949,9 +7980,9 @@ namespace ts {
                             }
                         }
                     }
-                    const result = propTypes.length ? getUnionType(propTypes) : undefinedType;
-                    typeFlags |= result.flags;
-                    return result;
+                    const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
+                    typeFlags |= unionType.flags;
+                    return createIndexInfo(unionType, /*isReadonly*/ false);
                 }
                 return undefined;
             }
@@ -8321,7 +8352,7 @@ namespace ts {
                     return links.resolvedJsxType = getTypeOfSymbol(sym);
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                    return links.resolvedJsxType = getIndexTypeOfSymbol(sym, IndexKind.String);
+                    return links.resolvedJsxType = getIndexInfoOfSymbol(sym, IndexKind.String).type;
                 }
                 else {
                     // Resolution failed, so we don't know
@@ -8956,7 +8987,7 @@ namespace ts {
             if (type.flags & TypeFlags.ObjectType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 if (resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0 &&
-                    resolved.properties.length === 0 && !resolved.stringIndexType && !resolved.numberIndexType) {
+                    resolved.properties.length === 0 && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                     return resolved.callSignatures[0];
                 }
             }
