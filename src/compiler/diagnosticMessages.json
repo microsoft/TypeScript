@@ -1083,6 +1083,10 @@
         "category": "Error",
         "code": 2365
     },
+    "Index signature is read-only in type '{0}' but read-write in type '{1}'.": {
+        "category": "Error",
+        "code": 2366
+    },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
         "code": 2368

@@ -2068,6 +2068,7 @@ namespace ts {
         resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
+        resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
@@ -2295,6 +2296,7 @@ namespace ts {
     export interface IndexInfo {
         type: Type;
         isReadonly: boolean;
+        declaration?: SignatureDeclaration;
     }
 
     /* @internal */

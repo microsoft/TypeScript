@@ -133,7 +133,7 @@ namespace ts {
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
-        const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
+        const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ false);
 
         const globals: SymbolTable = {};
 
@@ -1956,15 +1956,35 @@ namespace ts {
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
                 }
 
-                function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
-                    const declaration = <SignatureDeclaration>getIndexDeclarationOfSymbol(type.symbol, indexKind);
-                    if (!declaration) {
-                        // declaration might not be found if indexer was added from the contextual type.
-                        // in this case use fallback name
-                        return fallbackName;
+                function writeIndexSignature(info: IndexInfo, keyword: SyntaxKind) {
+                    if (info) {
+                        if (info.isReadonly) {
+                            writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
+                            writeSpace(writer);
+                        }
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                        writer.writeParameter(info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : "x");
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
+                        writeKeyword(writer, keyword);
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                        writePunctuation(writer, SyntaxKind.ColonToken);
+                        writeSpace(writer);
+                        writeType(info.type, TypeFormatFlags.None);
+                        writePunctuation(writer, SyntaxKind.SemicolonToken);
+                        writer.writeLine();
                     }
-                    Debug.assert(declaration.parameters.length !== 0);
-                    return declarationNameToString(declaration.parameters[0].name);
+                }
+
+                function writePropertyWithModifiers(prop: Symbol) {
+                    if (isReadonlySymbol(prop)) {
+                        writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
+                        writeSpace(writer);
+                    }
+                    buildSymbolDisplay(prop, writer);
+                    if (prop.flags & SymbolFlags.Optional) {
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
+                    }
                 }
 
                 function writeLiteralType(type: ObjectType, flags: TypeFormatFlags) {
@@ -2015,53 +2035,21 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    if (resolved.stringIndexInfo) {
-                        // [x: string]:
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter(getIndexerParameterName(resolved, IndexKind.String, /*fallbackName*/"x"));
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeKeyword(writer, SyntaxKind.StringKeyword);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeType(resolved.stringIndexInfo.type, TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
-                    if (resolved.numberIndexInfo) {
-                        // [x: number]:
-                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter(getIndexerParameterName(resolved, IndexKind.Number, /*fallbackName*/"x"));
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeKeyword(writer, SyntaxKind.NumberKeyword);
-                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
-                        writePunctuation(writer, SyntaxKind.ColonToken);
-                        writeSpace(writer);
-                        writeType(resolved.numberIndexInfo.type, TypeFormatFlags.None);
-                        writePunctuation(writer, SyntaxKind.SemicolonToken);
-                        writer.writeLine();
-                    }
+                    writeIndexSignature(resolved.stringIndexInfo, SyntaxKind.StringKeyword);
+                    writeIndexSignature(resolved.numberIndexInfo, SyntaxKind.NumberKeyword);
                     for (const p of resolved.properties) {
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
                             for (const signature of signatures) {
-                                buildSymbolDisplay(p, writer);
-                                if (p.flags & SymbolFlags.Optional) {
-                                    writePunctuation(writer, SyntaxKind.QuestionToken);
-                                }
+                                writePropertyWithModifiers(p);
                                 buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, /*kind*/ undefined, symbolStack);
                                 writePunctuation(writer, SyntaxKind.SemicolonToken);
                                 writer.writeLine();
                             }
                         }
                         else {
-                            buildSymbolDisplay(p, writer);
-                            if (p.flags & SymbolFlags.Optional) {
-                                writePunctuation(writer, SyntaxKind.QuestionToken);
-                            }
+                            writePropertyWithModifiers(p);
                             writePunctuation(writer, SyntaxKind.ColonToken);
                             writeSpace(writer);
                             writeType(t, TypeFormatFlags.None);
@@ -4125,15 +4113,15 @@ namespace ts {
             return undefined;
         }
 
-        function createIndexInfo(type: Type, isReadonly: boolean): IndexInfo {
-            return { type, isReadonly };
+        function createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo {
+            return { type, isReadonly, declaration };
         }
 
         function getIndexInfoOfSymbol(symbol: Symbol, kind: IndexKind): IndexInfo {
             const declaration = getIndexDeclarationOfSymbol(symbol, kind);
             if (declaration) {
                 return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
-                    (declaration.flags & NodeFlags.Readonly) !== 0);
+                    (declaration.flags & NodeFlags.Readonly) !== 0, declaration);
             }
             return undefined;
         }
@@ -4873,7 +4861,7 @@ namespace ts {
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
-            return info && createIndexInfo(instantiateType(info.type, mapper), info.isReadonly);
+            return info && createIndexInfo(instantiateType(info.type, mapper), info.isReadonly, info.declaration);
         }
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
@@ -5739,24 +5727,31 @@ namespace ts {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
-                const targetType = getIndexTypeOfType(target, IndexKind.String);
-                if (targetType) {
-                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                const targetInfo = getIndexInfoOfType(target, IndexKind.String);
+                if (targetInfo) {
+                    if ((targetInfo.type.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
                         // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: string]: any } = { property: 12 };`
                         return Ternary.True;
                     }
-                    const sourceType = getIndexTypeOfType(source, IndexKind.String);
-                    if (!sourceType) {
+                    const sourceInfo = getIndexInfoOfType(source, IndexKind.String);
+                    if (!sourceInfo) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
                         return Ternary.False;
                     }
-                    const related = isRelatedTo(sourceType, targetType, reportErrors);
+                    const related = isRelatedTo(sourceInfo.type, targetInfo.type, reportErrors);
                     if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signatures_are_incompatible);
+                        }
+                        return Ternary.False;
+                    }
+                    if (sourceInfo.isReadonly && !targetInfo.isReadonly) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_read_write_in_type_1,
+                                typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
                     }
@@ -5769,32 +5764,40 @@ namespace ts {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
-                const targetType = getIndexTypeOfType(target, IndexKind.Number);
-                if (targetType) {
-                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                const targetInfo = getIndexInfoOfType(target, IndexKind.Number);
+                if (targetInfo) {
+                    if ((targetInfo.type.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
                         // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: number]: any } = { property: 12 };`
                         return Ternary.True;
                     }
-                    const sourceStringType = getIndexTypeOfType(source, IndexKind.String);
-                    const sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
-                    if (!(sourceStringType || sourceNumberType)) {
+                    const sourceStringInfo = getIndexInfoOfType(source, IndexKind.String);
+                    const sourceNumberInfo = getIndexInfoOfType(source, IndexKind.Number);
+                    if (!(sourceStringInfo || sourceNumberInfo)) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
                         return Ternary.False;
                     }
                     let related: Ternary;
-                    if (sourceStringType && sourceNumberType) {
+                    if (sourceStringInfo && sourceNumberInfo) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        related = isRelatedTo(sourceStringType, targetType, /*reportErrors*/ false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        related = isRelatedTo(sourceStringInfo.type, targetInfo.type, /*reportErrors*/ false) ||
+                            isRelatedTo(sourceNumberInfo.type, targetInfo.type, reportErrors);
                     }
                     else {
-                        related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
+                        related = isRelatedTo((sourceStringInfo || sourceNumberInfo).type, targetInfo.type, reportErrors);
                     }
                     if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signatures_are_incompatible);
+                        }
+                        return Ternary.False;
+                    }
+                    if ((sourceStringInfo && sourceStringInfo.isReadonly || sourceNumberInfo && sourceNumberInfo.isReadonly) && !targetInfo.isReadonly) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_read_write_in_type_1,
+                                typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
                     }
@@ -5804,13 +5807,13 @@ namespace ts {
             }
 
             function indexTypesIdenticalTo(indexKind: IndexKind, source: Type, target: Type): Ternary {
-                const targetType = getIndexTypeOfType(target, indexKind);
-                const sourceType = getIndexTypeOfType(source, indexKind);
-                if (!sourceType && !targetType) {
+                const targetInfo = getIndexInfoOfType(target, indexKind);
+                const sourceInfo = getIndexInfoOfType(source, indexKind);
+                if (!sourceInfo && !targetInfo) {
                     return Ternary.True;
                 }
-                if (sourceType && targetType) {
-                    return isRelatedTo(sourceType, targetType);
+                if (sourceInfo && targetInfo && sourceInfo.isReadonly === targetInfo.isReadonly) {
+                    return isRelatedTo(sourceInfo.type, targetInfo.type);
                 }
                 return Ternary.False;
             }
@@ -8719,16 +8722,18 @@ namespace ts {
 
                 // Try to use a number indexer.
                 if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
-                    const numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
-                    if (numberIndexType) {
-                        return numberIndexType;
+                    const numberIndexInfo = getIndexInfoOfType(objectType, IndexKind.Number);
+                    if (numberIndexInfo) {
+                        getNodeLinks(node).resolvedIndexInfo = numberIndexInfo;
+                        return numberIndexInfo.type;
                     }
                 }
 
                 // Try to use string indexing.
-                const stringIndexType = getIndexTypeOfType(objectType, IndexKind.String);
-                if (stringIndexType) {
-                    return stringIndexType;
+                const stringIndexInfo = getIndexInfoOfType(objectType, IndexKind.String);
+                if (stringIndexInfo) {
+                    getNodeLinks(node).resolvedIndexInfo = stringIndexInfo;
+                    return stringIndexInfo.type;
                 }
 
                 // Fall back to any.
@@ -10384,10 +10389,11 @@ namespace ts {
                 error(expr, invalidReferenceMessage);
                 return false;
             }
-            // Because we got the symbol from the resolvedSymbol property, it might be of kind
+            // Because we get the symbol from the resolvedSymbol property, it might be of kind
             // SymbolFlags.ExportValue. In this case it is necessary to get the actual export
             // symbol, which will have the correct flags set on it.
-            const symbol = getExportSymbolOfValueSymbolIfExported(getNodeLinks(node).resolvedSymbol);
+            const links = getNodeLinks(node);
+            const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
             if (symbol) {
                 if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
                     if (symbol === undefinedSymbol || !(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
@@ -10400,8 +10406,11 @@ namespace ts {
                     }
                 }
             }
-            else {
-                // Check indexers
+            else if (node.kind === SyntaxKind.ElementAccessExpression) {
+                if (links.resolvedIndexInfo && links.resolvedIndexInfo.isReadonly) {
+                    error(expr, constantVariableMessage);
+                    return false;
+                }
             }
             return true;
         }
