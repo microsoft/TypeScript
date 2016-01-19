@@ -2466,10 +2466,6 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
-        function isUnionContaining(type: Type, kinds: TypeFlags) {
-            return type && (type.flags & TypeFlags.Union) && someConstituentTypeHasKind(type, kinds);
-        }
-
         // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
         // assigned by contextual typing.
         function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
@@ -10217,7 +10213,7 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType === voidType || isTypeAny(returnType) || isUnionContaining(returnType, TypeFlags.Any) || isUnionContaining(returnType, TypeFlags.Void)) {
+            if (returnType === voidType || isTypeAny(returnType) || (returnType && (returnType.flags & TypeFlags.Union) && someConstituentTypeHasKind(returnType, TypeFlags.Any | TypeFlags.Void))) {
                 return;
             }
 
