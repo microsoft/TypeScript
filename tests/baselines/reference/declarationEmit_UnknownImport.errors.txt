@@ -1,0 +1,15 @@
+tests/cases/compiler/declarationEmit_UnknownImport.ts(2,1): error TS2304: Cannot find name 'SomeNonExistingName'.
+tests/cases/compiler/declarationEmit_UnknownImport.ts(2,14): error TS2503: Cannot find namespace 'SomeNonExistingName'.
+tests/cases/compiler/declarationEmit_UnknownImport.ts(2,14): error TS4000: Import declaration 'Foo' is using private name 'SomeNonExistingName'.
+
+
+==== tests/cases/compiler/declarationEmit_UnknownImport.ts (3 errors) ====
+    
+    import Foo = SomeNonExistingName
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'SomeNonExistingName'.
+                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS2503: Cannot find namespace 'SomeNonExistingName'.
+                 ~~~~~~~~~~~~~~~~~~~
+!!! error TS4000: Import declaration 'Foo' is using private name 'SomeNonExistingName'.
+    export {Foo}

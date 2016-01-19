@@ -170,6 +170,7 @@ namespace ts {
         SymbolKeyword,
         TypeKeyword,
         FromKeyword,
+        GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
 
         // Parse tree nodes
@@ -389,6 +390,7 @@ namespace ts {
         ContainsThis =      1 << 18,  // Interface contains references to "this"
         HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation =    1 << 21,  // Set if module declaration is an augmentation for the global scope
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,
@@ -1577,6 +1579,7 @@ namespace ts {
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
+        /* @internal */ moduleAugmentations: LiteralExpression[];
     }
 
     export interface ScriptReferenceHost {
@@ -1725,6 +1728,7 @@ namespace ts {
         getSymbolAtLocation(node: Node): Symbol;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
         getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -1738,6 +1742,7 @@ namespace ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
+        isUnknownSymbol(symbol: Symbol): boolean;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
@@ -1909,7 +1914,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
     }
 
     export const enum SymbolFlags {
