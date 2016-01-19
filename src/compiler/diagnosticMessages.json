@@ -995,7 +995,7 @@
         "category": "Error",
         "code": 2342
     },
-    "Property '{0}' is read-only in type '{1}' but read-write in type '{2}'.": {
+    "Property '{0}' is read-only in type '{1}' but writable in type '{2}'.": {
         "category": "Error",
         "code": 2343
     },
@@ -1087,7 +1087,7 @@
         "category": "Error",
         "code": 2365
     },
-    "Index signature is read-only in type '{0}' but read-write in type '{1}'.": {
+    "Index signature is read-only in type '{0}' but writable in type '{1}'.": {
         "category": "Error",
         "code": 2366
     },

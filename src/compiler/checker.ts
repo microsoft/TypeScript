@@ -5641,7 +5641,7 @@ namespace ts {
                             }
                             if (isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_is_read_only_in_type_1_but_read_write_in_type_2,
+                                    reportError(Diagnostics.Property_0_is_read_only_in_type_1_but_writable_in_type_2,
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
                                 return Ternary.False;
@@ -5780,7 +5780,7 @@ namespace ts {
                     }
                     if (sourceInfo.isReadonly && !targetInfo.isReadonly) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_read_write_in_type_1,
+                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_writable_in_type_1,
                                 typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
@@ -5826,7 +5826,7 @@ namespace ts {
                     }
                     if ((sourceStringInfo && sourceStringInfo.isReadonly || sourceNumberInfo && sourceNumberInfo.isReadonly) && !targetInfo.isReadonly) {
                         if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_read_write_in_type_1,
+                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_writable_in_type_1,
                                 typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
