@@ -13,4 +13,4 @@ namespace Lets {
     export let { 0: letKind } = kindAndVal;
     kind = letKind;
     letKind = kind;
-} 
+}

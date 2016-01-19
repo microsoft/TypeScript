@@ -20,4 +20,4 @@ namespace Lets {
 
     kind2 = "kindA";
     kind2 = "kindB";
-} 
+}
