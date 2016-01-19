@@ -10378,7 +10378,7 @@ namespace ts {
         }
 
         function isReadonlySymbol(symbol: Symbol): boolean {
-            if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
+            if (symbol.flags & SymbolFlags.Property) {
                 return symbol === undefinedSymbol || (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
             }
             if (symbol.flags & SymbolFlags.Accessor) {
@@ -15786,11 +15786,8 @@ namespace ts {
                         if (flags & NodeFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "readonly");
                         }
-                        else if (flags & NodeFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "readonly", "async");
-                        }
-                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "readonly");
+                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature) {
+                            return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                         }
                         flags |= NodeFlags.Readonly;
                         lastReadonly = modifier;

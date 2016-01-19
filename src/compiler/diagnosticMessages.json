@@ -67,6 +67,10 @@
         "category": "Error",
         "code": 1023
     },
+    "'readonly' modifier can only appear on a property declaration or index signature.": {
+        "category": "Error",
+        "code": 1024
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
