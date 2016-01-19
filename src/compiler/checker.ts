@@ -10366,6 +10366,17 @@ namespace ts {
             return true;
         }
 
+        function isReferenceWithinOwnConstructor(expr: Expression, symbol: Symbol): boolean {
+            // Allow assignments to readonly properties or methods (but not readonly accessors) within constructors
+            // of the same class declaration.
+            if ((expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
+                (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword &&
+                symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
+                const func = getContainingFunction(expr);
+                return func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent;
+            }
+        }
+
         function isReadonlySymbol(symbol: Symbol): boolean {
             if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
                 return symbol === undefinedSymbol || (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
@@ -10400,7 +10411,7 @@ namespace ts {
                         error(expr, invalidReferenceMessage);
                         return false;
                     }
-                    if (isReadonlySymbol(symbol) || isConstantSymbol(symbol)) {
+                    if (isConstantSymbol(symbol) || (isReadonlySymbol(symbol) && !isReferenceWithinOwnConstructor(expr, symbol))) {
                         error(expr, constantVariableMessage);
                         return false;
                     }
