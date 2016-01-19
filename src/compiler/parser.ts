@@ -4397,6 +4397,9 @@ namespace ts {
                         }
                         continue;
 
+                    case SyntaxKind.GlobalKeyword:
+                        return nextToken() === SyntaxKind.OpenBraceToken;
+
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
@@ -4461,6 +4464,7 @@ namespace ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
+                case SyntaxKind.GlobalKeyword:
                     // When these don't start a declaration, they're an identifier in an expression statement
                     return true;
 
@@ -4551,6 +4555,7 @@ namespace ts {
                 case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.GlobalKeyword:
                     if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
@@ -4578,6 +4583,7 @@ namespace ts {
                     return parseTypeAliasDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.EnumKeyword:
                     return parseEnumDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.GlobalKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                     return parseModuleDeclaration(fullStart, decorators, modifiers);
@@ -5213,14 +5219,25 @@ namespace ts {
             const node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.name = parseLiteralNode(/*internName*/ true);
+            if (token === SyntaxKind.GlobalKeyword) {
+                // parse 'global' as name of global scope augmentation 
+                node.name = parseIdentifier();
+                node.flags |= NodeFlags.GlobalAugmentation;
+            }
+            else {
+                node.name = parseLiteralNode(/*internName*/ true);
+            }
             node.body = parseModuleBlock();
             return finishNode(node);
         }
 
         function parseModuleDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ModuleDeclaration {
             let flags = modifiers ? modifiers.flags : 0;
-            if (parseOptional(SyntaxKind.NamespaceKeyword)) {
+            if (token === SyntaxKind.GlobalKeyword) {
+                // global augmentation
+                return parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers);
+            }
+            else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
                 flags |= NodeFlags.Namespace;
             }
             else {

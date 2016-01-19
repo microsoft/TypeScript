@@ -893,6 +893,7 @@ function getLinterOptions() {
 
 function lintFileContents(options, path, contents) {
     var ll = new Linter(path, contents, options);
+    console.log("Linting '" + path + "'.")
     return ll.lint();
 }
 
