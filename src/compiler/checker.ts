@@ -145,6 +145,7 @@ namespace ts {
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
         let globalArrayType: GenericType;
+        let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
@@ -156,6 +157,7 @@ namespace ts {
         let globalIterableIteratorType: GenericType;
 
         let anyArrayType: Type;
+        let anyReadonlyArrayType: Type;
         let getGlobalClassDecoratorType: () => ObjectType;
         let getGlobalParameterDecoratorType: () => ObjectType;
         let getGlobalPropertyDecoratorType: () => ObjectType;
@@ -6054,8 +6056,10 @@ namespace ts {
         }
 
         function isArrayLikeType(type: Type): boolean {
-            // A type is array-like if it is not the undefined or null type and if it is assignable to any[]
-            return !(type.flags & (TypeFlags.Undefined | TypeFlags.Null)) && isTypeAssignableTo(type, anyArrayType);
+            // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
+            // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
+            return type.flags & TypeFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
+                !(type.flags & (TypeFlags.Undefined | TypeFlags.Null)) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -15719,6 +15723,7 @@ namespace ts {
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
+            globalReadonlyArrayType = <GenericType>getGlobalType("ReadonlyArray", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");
@@ -15763,6 +15768,8 @@ namespace ts {
             }
 
             anyArrayType = createArrayType(anyType);
+            anyReadonlyArrayType = globalReadonlyArrayType === emptyGenericType ? anyArrayType :
+                createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]);
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {
