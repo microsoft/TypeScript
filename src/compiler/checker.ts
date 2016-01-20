@@ -5203,9 +5203,9 @@ namespace ts {
                 if (source === target) return Ternary.True;
                 if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.StringLiteral) {
                     // String literal freshness may affect identity checking.
-                    return (source as StringLiteralType).text === (target as StringLiteralType).text ?
-                        Ternary.True :
-                        Ternary.False;
+                    if ((source as StringLiteralType).text === (target as StringLiteralType).text) {
+                        return Ternary.True;
+                    }
                 }
                 if (relation === identityRelation) {
                     return isIdenticalTo(source, target);
