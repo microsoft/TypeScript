@@ -361,8 +361,8 @@ namespace ts {
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
 
                 // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge
-                //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation 
-                //       and this case is specially handled. Module augmentations should only be merged with original module definition 
+                //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
+                //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     const exportKind =
@@ -1527,10 +1527,9 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
-            if (nodeIsDecorated(node) &&
-                nodeCanBeDecorated(node) &&
-                !isDeclarationFile(file) &&
-                !isInAmbientContext(node)) {
+            if (!isDeclarationFile(file) &&
+                !isInAmbientContext(node) &&
+                nodeIsDecorated(node)) {
                 hasDecorators = true;
                 hasParameterDecorators = true;
             }
@@ -1584,7 +1583,7 @@ namespace ts {
                 if (isAsyncFunctionLike(node)) {
                     hasAsyncFunctions = true;
                 }
-                if (nodeIsDecorated(node) && nodeCanBeDecorated(node)) {
+                if (nodeIsDecorated(node)) {
                     hasDecorators = true;
                 }
             }
