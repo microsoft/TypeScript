@@ -454,7 +454,7 @@ l1: for (var x = 0; x < 1; ++x) {
     }
 }
 var _loop_4 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -480,7 +480,7 @@ l2: while (1 === 1) {
     }
 }
 var _loop_5 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -557,7 +557,7 @@ l5: for (var x = 0, y = 1; x < 1; ++x) {
     }
 }
 var _loop_8 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -583,7 +583,7 @@ l6: while (1 === 1) {
     }
 }
 var _loop_9 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {

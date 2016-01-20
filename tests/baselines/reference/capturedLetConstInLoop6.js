@@ -287,7 +287,7 @@ for (var x = 0; x < 1; ++x) {
     if (state_3 === "continue") continue;
 }
 var _loop_4 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -303,7 +303,7 @@ while (1 === 1) {
     if (state_4 === "continue") continue;
 }
 var _loop_5 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -350,7 +350,7 @@ for (var x = 0, y = 1; x < 1; ++x) {
     if (state_7 === "continue") continue;
 }
 var _loop_8 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -366,7 +366,7 @@ while (1 === 1) {
     if (state_8 === "continue") continue;
 }
 var _loop_9 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
