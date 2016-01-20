@@ -18,7 +18,6 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
       Types of parameters 'items' and 'items' are incompatible.
         Type 'number | string' is not assignable to type 'Number'.
           Type 'string' is not assignable to type 'Number'.
-            Property 'toFixed' is missing in type 'String'.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (6 errors) ====
@@ -82,5 +81,4 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
 !!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
 !!! error TS2322:         Type 'number | string' is not assignable to type 'Number'.
 !!! error TS2322:           Type 'string' is not assignable to type 'Number'.
-!!! error TS2322:             Property 'toFixed' is missing in type 'String'.
     

@@ -170,6 +170,7 @@ namespace ts {
         SymbolKeyword,
         TypeKeyword,
         FromKeyword,
+        GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
 
         // Parse tree nodes
@@ -389,10 +390,11 @@ namespace ts {
         ContainsThis =      1 << 18,  // Interface contains references to "this"
         HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        HasClassExtends =       1 << 21,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =         1 << 22,  // If the file has decorators (initialized by binding)
-        HasParamDecorators =    1 << 23,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =     1 << 24,  // If the file has async functions (initialized by binding)
+        GlobalAugmentation =    1 << 21,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =       1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =         1 << 23,  // If the file has decorators (initialized by binding)
+        HasParamDecorators =    1 << 24,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =     1 << 25,  // If the file has async functions (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1583,6 +1585,7 @@ namespace ts {
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
+        /* @internal */ moduleAugmentations: LiteralExpression[];
     }
 
     export interface ScriptReferenceHost {
@@ -1917,7 +1920,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
     }
 
     export const enum SymbolFlags {
