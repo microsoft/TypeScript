@@ -1,13 +1,13 @@
 // @declaration: true
 // @noImplicitAny: true
-
+// @module: commonjs
 
 // @filename: file1.ts
 export const a = "A";
 export const b = "B";
 
 // @filename: file2.ts
-import * as file1 from "file1";
+import * as file1 from "./file1";
 
 const a: "A" = file1.a;
 const b: "B" = file1.b;
