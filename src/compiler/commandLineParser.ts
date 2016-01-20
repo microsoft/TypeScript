@@ -493,8 +493,9 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
-        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, configFileName: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
+        const basePath = getDirectoryPath(configFileName);
+        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
         return {
@@ -547,9 +548,13 @@ namespace ts {
         }
     }
 
-    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
         const options: CompilerOptions = {};
         const errors: Diagnostic[] = [];
+
+        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
+            options.allowJs = true;
+        }
 
         if (!jsonOptions) {
             return { options, errors };

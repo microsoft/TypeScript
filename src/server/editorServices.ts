@@ -1026,10 +1026,16 @@ namespace ts.server {
         // the newly opened file.
         findConfigFile(searchPath: string): string {
             while (true) {
-                const fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (this.host.fileExists(fileName)) {
-                    return fileName;
+                const tsconfigFileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (this.host.fileExists(tsconfigFileName)) {
+                    return tsconfigFileName;
                 }
+
+                const jsconfigFileName = ts.combinePaths(searchPath, "jsconfig.json");
+                if (this.host.fileExists(jsconfigFileName)) {
+                    return jsconfigFileName;
+                }
+
                 const parentPath = ts.getDirectoryPath(searchPath);
                 if (parentPath === searchPath) {
                     break;
@@ -1172,15 +1178,13 @@ namespace ts.server {
 
         configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, error?: ProjectOpenResult } {
             configFilename = ts.normalizePath(configFilename);
-            // file references will be relative to dirPath (or absolute)
-            const dirPath = ts.getDirectoryPath(configFilename);
             const contents = this.host.readFile(configFilename);
             const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath);
+                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, configFilename);
                 Debug.assert(!!parsedCommandLine.fileNames);
 
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
