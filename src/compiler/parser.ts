@@ -896,17 +896,19 @@ namespace ts {
             return result;
         }
 
-        // Invokes the provided callback then unconditionally restores the parser to the state it
-        // was in immediately prior to invoking the callback.  The result of invoking the callback
-        // is returned from this function.
+        /** Invokes the provided callback then unconditionally restores the parser to the state it
+         * was in immediately prior to invoking the callback.  The result of invoking the callback
+         * is returned from this function. 
+         */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
         }
 
-        // Invokes the provided callback.  If the callback returns something falsy, then it restores
-        // the parser to the state it was in immediately prior to invoking the callback.  If the
-        // callback returns something truthy, then the parser state is not rolled back.  The result
-        // of invoking the callback is returned from this function.
+        /** Invokes the provided callback.  If the callback returns something falsy, then it restores
+         * the parser to the state it was in immediately prior to invoking the callback.  If the
+         * callback returns something truthy, then the parser state is not rolled back.  The result
+         * of invoking the callback is returned from this function.
+         */
         function tryParse<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ false);
         }
@@ -1948,11 +1950,8 @@ namespace ts {
 
         // TYPES
 
-        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+        function parseTypeReference(): TypeReferenceNode {
             const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
-            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                return parseTypePredicate(typeName as Identifier);
-            }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
             node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
@@ -2092,10 +2091,10 @@ namespace ts {
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
-                signature.type = parseType();
+                signature.type = parseTypeOrTypePredicate();
             }
             else if (parseOptional(returnToken)) {
-                signature.type = parseType();
+                signature.type = parseTypeOrTypePredicate();
             }
         }
 
@@ -2411,7 +2410,7 @@ namespace ts {
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReferenceOrTypePredicate();
+                    return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
@@ -2434,7 +2433,7 @@ namespace ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReferenceOrTypePredicate();
+                    return parseTypeReference();
             }
         }
 
@@ -2539,6 +2538,28 @@ namespace ts {
                 }
             }
             return false;
+        }
+
+        function parseTypeOrTypePredicate(): TypeNode {
+            const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
+            const type = parseType();
+            if (typePredicateVariable) {
+                const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
+                node.parameterName = typePredicateVariable;
+                node.type = type;
+                return finishNode(node);
+            }
+            else {
+                return type;
+            }
+        }
+
+        function parseTypePredicatePrefix() {
+            const id = parseIdentifier();
+            if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                nextToken();
+                return id;
+            }
         }
 
         function parseType(): TypeNode {
@@ -4409,6 +4430,9 @@ namespace ts {
                         }
                         continue;
 
+                    case SyntaxKind.GlobalKeyword:
+                        return nextToken() === SyntaxKind.OpenBraceToken;
+
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
@@ -4473,6 +4497,7 @@ namespace ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
+                case SyntaxKind.GlobalKeyword:
                     // When these don't start a declaration, they're an identifier in an expression statement
                     return true;
 
@@ -4561,6 +4586,7 @@ namespace ts {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.AbstractKeyword:
                 case SyntaxKind.StaticKeyword:
+                case SyntaxKind.GlobalKeyword:
                     if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
@@ -4588,6 +4614,7 @@ namespace ts {
                     return parseTypeAliasDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.EnumKeyword:
                     return parseEnumDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.GlobalKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                     return parseModuleDeclaration(fullStart, decorators, modifiers);
@@ -5222,14 +5249,25 @@ namespace ts {
             const node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.name = parseLiteralNode(/*internName*/ true);
+            if (token === SyntaxKind.GlobalKeyword) {
+                // parse 'global' as name of global scope augmentation 
+                node.name = parseIdentifier();
+                node.flags |= NodeFlags.GlobalAugmentation;
+            }
+            else {
+                node.name = parseLiteralNode(/*internName*/ true);
+            }
             node.body = parseModuleBlock();
             return finishNode(node);
         }
 
         function parseModuleDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ModuleDeclaration {
             let flags = modifiers ? modifiers.flags : 0;
-            if (parseOptional(SyntaxKind.NamespaceKeyword)) {
+            if (token === SyntaxKind.GlobalKeyword) {
+                // global augmentation
+                return parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers);
+            }
+            else if (parseOptional(SyntaxKind.NamespaceKeyword)) {
                 flags |= NodeFlags.Namespace;
             }
             else {

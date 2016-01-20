@@ -334,7 +334,8 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                const configFilePath = toPath(configFileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                configFileWatcher = sys.watchFile(configFilePath, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
@@ -442,7 +443,8 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }

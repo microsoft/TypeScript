@@ -730,7 +730,24 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const resolveModuleNamesWorker = host.resolveModuleNames
             ? ((moduleNames: string[], containingFile: string) => host.resolveModuleNames(moduleNames, containingFile))
-            : ((moduleNames: string[], containingFile: string) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedModule));
+            : ((moduleNames: string[], containingFile: string) => {
+                const resolvedModuleNames: ResolvedModule[] = [];
+                // resolveModuleName does not store any results between calls.
+                // lookup is a local cache to avoid resolving the same module name several times
+                const lookup: Map<ResolvedModule> = {};
+                for (const moduleName of moduleNames) {
+                    let resolvedName: ResolvedModule;
+                    if (hasProperty(lookup, moduleName)) {
+                        resolvedName = lookup[moduleName];
+                    }
+                    else {
+                        resolvedName = resolveModuleName(moduleName, containingFile, options, host).resolvedModule;
+                        lookup[moduleName] = resolvedName;
+                    }
+                    resolvedModuleNames.push(resolvedName);
+                }
+                return resolvedModuleNames;
+            });
 
         const filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
@@ -867,15 +884,19 @@ namespace ts {
                         return false;
                     }
 
-                    // check imports
+                    // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
                         return false;
                     }
+                    if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                        // moduleAugmentations has changed
+                        return false;
+                    }
 
                     if (resolveModuleNamesWorker) {
-                        const moduleNames = map(newSourceFile.imports, name => name.text);
+                        const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
                         const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; i++) {
@@ -1264,65 +1285,85 @@ namespace ts {
             return a.text === b.text;
         }
 
+        function getTextOfLiteral(literal: LiteralExpression): string {
+            return literal.text;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
             }
 
             const isJavaScriptFile = isSourceFileJavaScript(file);
+            const isExternalModuleFile = isExternalModule(file);
 
             let imports: LiteralExpression[];
+            let moduleAugmentations: LiteralExpression[];
+
             for (const node of file.statements) {
-                collect(node, /*allowRelativeModuleNames*/ true, /*collectOnlyRequireCalls*/ false);
+                collectModuleReferences(node, /*inAmbientModule*/ false);
+                if (isJavaScriptFile) {
+                    collectRequireCalls(node);
+                }
             }
 
             file.imports = imports || emptyArray;
+            file.moduleAugmentations = moduleAugmentations || emptyArray;
 
             return;
 
-            function collect(node: Node, allowRelativeModuleNames: boolean, collectOnlyRequireCalls: boolean): void {
-                if (!collectOnlyRequireCalls) {
-                    switch (node.kind) {
-                        case SyntaxKind.ImportDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ExportDeclaration:
-                            let moduleNameExpr = getExternalModuleName(node);
-                            if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
-                                break;
-                            }
-                            if (!(<LiteralExpression>moduleNameExpr).text) {
-                                break;
-                            }
-
-                            if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
-                                (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
-                            }
+            function collectModuleReferences(node: Node, inAmbientModule: boolean): void {
+                switch (node.kind) {
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                        let moduleNameExpr = getExternalModuleName(node);
+                        if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
                             break;
-                        case SyntaxKind.ModuleDeclaration:
-                            if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
-                                // TypeScript 1.0 spec (April 2014): 12.1.6
+                        }
+                        if (!(<LiteralExpression>moduleNameExpr).text) {
+                            break;
+                        }
+
+                        // TypeScript 1.0 spec (April 2014): 12.1.6
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules 
+                        // only through top - level external module names. Relative external module names are not permitted.
+                        if (!inAmbientModule || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        }
+                        break;
+                    case SyntaxKind.ModuleDeclaration:
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                            const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
+                            // Ambient module declarations can be interpreted as augmentations for some existing external modules.
+                            // This will happen in two cases:
+                            // - if current file is external module then module augmentation is a ambient module declaration defined in the top level scope
+                            // - if current file is not external module then module augmentation is an ambient module declaration with non-relative module name
+                            //   immediately nested in top level ambient module declaration .
+                            if (isExternalModuleFile || (inAmbientModule && !isExternalModuleNameRelative(moduleName.text))) {
+                                (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
+                            }
+                            else if (!inAmbientModule) {
                                 // An AmbientExternalModuleDeclaration declares an external module. 
                                 // This type of declaration is permitted only in the global module.
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
-                                forEachChild((<ModuleDeclaration>node).body, node => {
-                                    // TypeScript 1.0 spec (April 2014): 12.1.6
-                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                    // only through top - level external module names. Relative external module names are not permitted.
-                                    collect(node, /*allowRelativeModuleNames*/ false, collectOnlyRequireCalls);
-                                });
-                            }
-                            break;
-                    }
-                }
 
-                if (isJavaScriptFile) {
-                    if (isRequireCall(node)) {
-                        (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
-                    }
-                    else {
-                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /*collectOnlyRequireCalls*/ true));
-                    }
+                                // NOTE: body of ambient module is always a module block
+                                for (const statement of (<ModuleBlock>(<ModuleDeclaration>node).body).statements) {
+                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                }
+                            }
+                        }
+                }
+            }
+
+            function collectRequireCalls(node: Node): void {
+                if (isRequireCall(node)) {
+                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                }
+                else {
+                    forEachChild(node, collectRequireCalls);
                 }
             }
         }
@@ -1452,14 +1493,22 @@ namespace ts {
 
         function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
-            if (file.imports.length) {
+            if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
-                const moduleNames = map(file.imports, name => name.text);
+                const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
-                for (let i = 0; i < file.imports.length; i++) {
+                for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
-                    if (resolution && !options.noResolve) {
+                    // add file to program only if:
+                    // - resolution was successfull
+                    // - noResolve is falsy
+                    // - module name come from the list fo imports
+                    const shouldAddFile = resolution &&
+                        !options.noResolve &&
+                        i < file.imports.length;
+
+                    if (shouldAddFile) {
                         const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
@@ -1537,7 +1586,7 @@ namespace ts {
             if (sourceFiles) {
                 const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
-                for (var sourceFile of sourceFiles) {
+                for (const sourceFile of sourceFiles) {
                     if (!isDeclarationFile(sourceFile)) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {

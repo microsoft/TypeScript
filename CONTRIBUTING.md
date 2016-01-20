@@ -1,3 +1,45 @@
+# Instructions for Logging Issues
+
+## 1. Read the FAQ
+
+Please [read the FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ) before logging new issues, even if you think you have found a bug.
+
+Issues that ask questions answered in the FAQ will be closed without elaboration.
+
+## 2. Search for Duplicates
+
+[Search the existing issues](https://github.com/Microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue) before logging a new one.
+
+## 3. Do you have a question?
+
+The issue tracker is for **issues**, in other words, bugs and suggestions.
+If you have a *question*, please use [http://stackoverflow.com/questions/tagged/typescript](Stack Overflow), [https://gitter.im/Microsoft/TypeScript](Gitter), your favorite search engine, or other resources.
+Due to increased traffic, we can no longer answer questions in the issue tracker.
+
+## 4. Did you find a bug?
+
+When logging a bug, please be sure to include the following:
+ * What version of TypeScript you're using (run `tsc --v`)
+ * If at all possible, an *isolated* way to reproduce the behavior
+ * The behavior you expect to see, and the actual behavior
+
+You can try out the nightly build of TypeScript (`npm install typescript@next`) to see if the bug has already been fixed.
+
+## 5. Do you have a suggestion?
+
+We also accept suggestions in the issue tracker.
+Be sure to [check the FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ) and [search](https://github.com/Microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue) first.
+
+In general, things we find useful when reviewing suggestins are:
+* A description of the problem you're trying to solve
+* An overview of the suggested solution
+* Examples of how the suggestion would work in various places
+  * Code examples showing e.g. "this would be an error, this wouldn't"
+  * Code examples showing the generated JavaScript (if applicable)
+* If relevant, precedent in other languages can be useful for establishing context and expected behavior
+
+# Instructions for Contributing Code
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
