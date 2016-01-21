@@ -117,6 +117,12 @@ namespace ts {
         let labelIndexMap: Map<number>;
         let implicitLabels: number[];
 
+        // state used for emit helpers
+        let hasClassExtends: boolean;
+        let hasAsyncFunctions: boolean;
+        let hasDecorators: boolean;
+        let hasParameterDecorators: boolean;
+
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
@@ -151,6 +157,10 @@ namespace ts {
             labelStack = undefined;
             labelIndexMap = undefined;
             implicitLabels = undefined;
+            hasClassExtends = false;
+            hasAsyncFunctions = false;
+            hasDecorators = false;
+            hasParameterDecorators = false;
         }
 
         return bindSourceFile;
@@ -351,8 +361,8 @@ namespace ts {
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
 
                 // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge
-                //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation 
-                //       and this case is specially handled. Module augmentations should only be merged with original module definition 
+                //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
+                //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     const exportKind =
@@ -429,6 +439,9 @@ namespace ts {
             // reset all reachability check related flags on node (for incremental scenarios)
             flags &= ~NodeFlags.ReachabilityCheckFlags;
 
+            // reset all emit helper flags on node (for incremental scenarios)
+            flags &= ~NodeFlags.EmitHelperFlags;
+
             if (kind === SyntaxKind.InterfaceDeclaration) {
                 seenThisKeyword = false;
             }
@@ -457,6 +470,21 @@ namespace ts {
 
             if (kind === SyntaxKind.InterfaceDeclaration) {
                 flags = seenThisKeyword ? flags | NodeFlags.ContainsThis : flags & ~NodeFlags.ContainsThis;
+            }
+
+            if (kind === SyntaxKind.SourceFile) {
+                if (hasClassExtends) {
+                    flags |= NodeFlags.HasClassExtends;
+                }
+                if (hasDecorators) {
+                    flags |= NodeFlags.HasDecorators;
+                }
+                if (hasParameterDecorators) {
+                    flags |= NodeFlags.HasParamDecorators;
+                }
+                if (hasAsyncFunctions) {
+                    flags |= NodeFlags.HasAsyncFunctions;
+                }
             }
 
             node.flags = flags;
@@ -1255,8 +1283,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
                 case SyntaxKind.FunctionDeclaration:
-                    checkStrictModeFunctionName(<FunctionDeclaration>node);
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                    return bindFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Constructor:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
@@ -1272,9 +1299,7 @@ namespace ts {
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    checkStrictModeFunctionName(<FunctionExpression>node);
-                    const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
-                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+                    return bindFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.CallExpression:
                     if (isInJavaScriptFile(node)) {
@@ -1424,6 +1449,15 @@ namespace ts {
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
+            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+                if (getClassExtendsHeritageClauseElement(node) !== undefined) {
+                    hasClassExtends = true;
+                }
+                if (nodeIsDecorated(node)) {
+                    hasDecorators = true;
+                }
+            }
+
             if (node.kind === SyntaxKind.ClassDeclaration) {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
@@ -1493,6 +1527,13 @@ namespace ts {
         }
 
         function bindParameter(node: ParameterDeclaration) {
+            if (!isDeclarationFile(file) &&
+                !isInAmbientContext(node) &&
+                nodeIsDecorated(node)) {
+                hasDecorators = true;
+                hasParameterDecorators = true;
+            }
+
             if (inStrictMode) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
@@ -1514,7 +1555,39 @@ namespace ts {
             }
         }
 
+        function bindFunctionDeclaration(node: FunctionDeclaration) {
+            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+                if (isAsyncFunctionLike(node)) {
+                    hasAsyncFunctions = true;
+                }
+            }
+
+            checkStrictModeFunctionName(<FunctionDeclaration>node);
+            return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+        }
+
+        function bindFunctionExpression(node: FunctionExpression) {
+            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+                if (isAsyncFunctionLike(node)) {
+                    hasAsyncFunctions = true;
+                }
+            }
+
+            checkStrictModeFunctionName(<FunctionExpression>node);
+            const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
+            return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+        }
+
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+                if (isAsyncFunctionLike(node)) {
+                    hasAsyncFunctions = true;
+                }
+                if (nodeIsDecorated(node)) {
+                    hasDecorators = true;
+                }
+            }
+
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
