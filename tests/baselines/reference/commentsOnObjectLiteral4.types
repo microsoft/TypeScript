@@ -1,8 +1,8 @@
 === tests/cases/compiler/commentsOnObjectLiteral4.ts ===
 
 var v = {
->v : { readonly bar: number; }
->{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : { readonly bar: number; }
+>v : { bar: number; }
+>{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : { bar: number; }
 
  /**
   * @type {number}
