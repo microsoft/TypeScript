@@ -38,7 +38,7 @@ thing.doSomething((x, y) => x.name === "bob"); // should not error
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
 >x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 6, 19))
 >y : Symbol(y, Decl(objectLiteralArraySpecialization.ts, 6, 21))
->x.name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
+>x.name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22), Decl(objectLiteralArraySpecialization.ts, 5, 47))
 >x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 6, 19))
->name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22))
+>name : Symbol(name, Decl(objectLiteralArraySpecialization.ts, 5, 22), Decl(objectLiteralArraySpecialization.ts, 5, 47))
 
