@@ -340,7 +340,7 @@ namespace ts {
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
                 directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current direcotry; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
                     directory == "" ? "." : directory,
@@ -376,7 +376,7 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, configFileName, commandLine.options);
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
