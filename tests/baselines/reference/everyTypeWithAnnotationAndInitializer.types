@@ -64,7 +64,7 @@ var aNumber: number = 9.9;
 
 var aString: string = 'this is a string';
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 var aDate: Date = new Date(12);
 >aDate : Date
@@ -160,6 +160,6 @@ var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
 >F2 : (x: number) => string
 >(x) => 'this is a string' : (x: number) => string
 >x : number
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 

@@ -60,7 +60,7 @@ var b = { foo(x: string) { return ''; } };
 >{ foo(x: string) { return ''; } } : { foo(x: string): string; }
 >foo : (x: string) => string
 >x : string
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

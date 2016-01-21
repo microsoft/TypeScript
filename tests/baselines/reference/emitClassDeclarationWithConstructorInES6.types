@@ -24,7 +24,7 @@ class B {
 
     x: string = "hello";
 >x : string
->"hello" : string
+>"hello" : "hello"
 
     _bar: string;
 >_bar : string
@@ -32,7 +32,7 @@ class B {
     constructor(x: number, z = "hello", ...args) {
 >x : number
 >z : string
->"hello" : string
+>"hello" : "hello"
 >args : any[]
 
         this.y = 10;

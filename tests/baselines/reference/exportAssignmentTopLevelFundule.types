@@ -20,7 +20,7 @@ function foo() {
 >foo : typeof foo
 
 	return "test";
->"test" : string
+>"test" : "test"
 }
 module foo {
 >foo : typeof foo

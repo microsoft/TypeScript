@@ -30,7 +30,7 @@ import {Cls} from "./m1";
 >prototype : Cls
 >bar : any
 >function() { return "1"; } : () => string
->"1" : string
+>"1" : "1"
 
 declare module "./m1" {
     interface Cls {

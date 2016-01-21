@@ -6,5 +6,5 @@ function f() {
 >typeof class {} === "function" : boolean
 >typeof class {} : string
 >class {} : typeof (Anonymous class)
->"function" : string
+>"function" : "function"
 }

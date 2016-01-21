@@ -15,13 +15,13 @@ export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
 >b : any
 >c : any
 >z1 : string
->{a: true, b: {c: "123"}} : { a: boolean; b: { c: string; }; }
+>{a: true, b: {c: "123"}} : { a: boolean; b: { c: "123"; }; }
 >a : boolean
 >true : boolean
->b : { c: string; }
->{c: "123"} : { c: string; }
->c : string
->"123" : string
+>b : { c: "123"; }
+>{c: "123"} : { c: "123"; }
+>c : "123"
+>"123" : "123"
 
 for ([x] of [[1]]) {}
 >[x] : number[]

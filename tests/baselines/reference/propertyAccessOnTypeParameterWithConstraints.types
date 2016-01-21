@@ -19,7 +19,7 @@ class C<T extends Date> {
 >x['getDate']() : number
 >x['getDate'] : () => number
 >x : T
->'getDate' : string
+>'getDate' : "getDate"
 
         return a + x.getDate();
 >a + x.getDate() : number
@@ -71,7 +71,7 @@ var r2b = i.foo['getDate']();
 >i.foo : Date
 >i : I<Date>
 >foo : Date
->'getDate' : string
+>'getDate' : "getDate"
 
 var a: {
 >a : <T extends Date>() => T
@@ -96,7 +96,7 @@ var r3b = a()['getDate']();
 >a()['getDate'] : () => number
 >a() : Date
 >a : <T extends Date>() => T
->'getDate' : string
+>'getDate' : "getDate"
 
 var b = {
 >b : { foo: <T extends Date>(x: T) => number; }
@@ -115,7 +115,7 @@ var b = {
 >x['getDate']() : number
 >x['getDate'] : () => number
 >x : T
->'getDate' : string
+>'getDate' : "getDate"
 
         return a + x.getDate();
 >a + x.getDate() : number

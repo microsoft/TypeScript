@@ -5,7 +5,7 @@ function fn(): number {
   throw new Error('NYI');
 >new Error('NYI') : Error
 >Error : ErrorConstructor
->'NYI' : string
+>'NYI' : "NYI"
 
   var t;
 >t : any

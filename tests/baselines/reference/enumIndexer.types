@@ -7,14 +7,14 @@ enum MyEnumType {
 >bar : MyEnumType
 }
 var _arr = [{ key: 'foo' }, { key: 'bar' }]
->_arr : { key: string; }[]
->[{ key: 'foo' }, { key: 'bar' }] : { key: string; }[]
->{ key: 'foo' } : { key: string; }
->key : string
->'foo' : string
->{ key: 'bar' } : { key: string; }
->key : string
->'bar' : string
+>_arr : ({ key: string; } | { key: string; })[]
+>[{ key: 'foo' }, { key: 'bar' }] : ({ key: "foo"; } | { key: "bar"; })[]
+>{ key: 'foo' } : { key: "foo"; }
+>key : "foo"
+>'foo' : "foo"
+>{ key: 'bar' } : { key: "bar"; }
+>key : "bar"
+>'bar' : "bar"
 
 var enumValue = MyEnumType.foo;
 >enumValue : MyEnumType
@@ -25,16 +25,16 @@ var enumValue = MyEnumType.foo;
 var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
 >x : boolean[]
 >_arr.map(o => MyEnumType[o.key] === enumValue) : boolean[]
->_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
->_arr : { key: string; }[]
->map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
->o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
->o : { key: string; }
+>_arr.map : <U>(callbackfn: (value: { key: string; } | { key: string; }, index: number, array: ({ key: string; } | { key: string; })[]) => U, thisArg?: any) => U[]
+>_arr : ({ key: string; } | { key: string; })[]
+>map : <U>(callbackfn: (value: { key: string; } | { key: string; }, index: number, array: ({ key: string; } | { key: string; })[]) => U, thisArg?: any) => U[]
+>o => MyEnumType[o.key] === enumValue : (o: { key: string; } | { key: string; }) => boolean
+>o : { key: string; } | { key: string; }
 >MyEnumType[o.key] === enumValue : boolean
 >MyEnumType[o.key] : any
 >MyEnumType : typeof MyEnumType
 >o.key : string
->o : { key: string; }
+>o : { key: string; } | { key: string; }
 >key : string
 >enumValue : MyEnumType
 

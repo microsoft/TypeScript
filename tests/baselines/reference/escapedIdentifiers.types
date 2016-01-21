@@ -233,9 +233,9 @@ class testClass {
 >1 : number
 
         arg2 = 'string';
->arg2 = 'string' : string
+>arg2 = 'string' : "string"
 >arg2 : string
->'string' : string
+>'string' : "string"
 
         arg\u0033 = true;
 >arg\u0033 = true : boolean
@@ -265,7 +265,7 @@ var constructorTestObject = new constructorTestClass(1, 'string', true, 2);
 >new constructorTestClass(1, 'string', true, 2) : constructorTestClass
 >constructorTestClass : typeof constructorTestClass
 >1 : number
->'string' : string
+>'string' : "string"
 >true : boolean
 >2 : number
 
@@ -277,11 +277,11 @@ constructorTestObject.arg\u0031 = 1;
 >1 : number
 
 constructorTestObject.arg2 = 'string';
->constructorTestObject.arg2 = 'string' : string
+>constructorTestObject.arg2 = 'string' : "string"
 >constructorTestObject.arg2 : string
 >constructorTestObject : constructorTestClass
 >arg2 : string
->'string' : string
+>'string' : "string"
 
 constructorTestObject.arg\u0033 = true;
 >constructorTestObject.arg\u0033 = true : boolean

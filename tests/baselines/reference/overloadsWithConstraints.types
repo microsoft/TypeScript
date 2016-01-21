@@ -19,5 +19,5 @@ var v = f<string>("");
 >v : string
 >f<string>("") : string
 >f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
->"" : string
+>"" : ""
 

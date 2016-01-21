@@ -30,14 +30,14 @@ class C1 implements base1 { i = "foo"; c }
 >C1 : C1
 >base1 : base1
 >i : string
->"foo" : string
+>"foo" : "foo"
 >c : any
 
 class D1 extends C1 { i = "bar"; d }
 >D1 : D1
 >C1 : C1
 >i : string
->"bar" : string
+>"bar" : "bar"
 >d : any
 
 var t1: [C, base];

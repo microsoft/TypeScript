@@ -27,7 +27,7 @@ function foo() {
 >TokenType : TokenType
 >list['one'] : any
 >list : {}
->'one' : string
+>'one' : "one"
 }
 
 

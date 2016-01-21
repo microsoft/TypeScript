@@ -7,7 +7,7 @@ function foo(callback: (x: string) => void) {
     callback("hello");   
 >callback("hello") : void
 >callback : (x: string) => void
->"hello" : string
+>"hello" : "hello"
 }
 
 foo(function(x) { x });
@@ -32,8 +32,8 @@ foo(function(x) { x });
 ["hello"].every(function(v,i,a) {return true;});
 >["hello"].every(function(v,i,a) {return true;}) : boolean
 >["hello"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
->["hello"] : string[]
->"hello" : string
+>["hello"] : "hello"[]
+>"hello" : "hello"
 >every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
 >v : string
@@ -68,8 +68,8 @@ foo(function(x) { x });
 ["s"].every(function(v,i,a) {return true;});
 >["s"].every(function(v,i,a) {return true;}) : boolean
 >["s"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
->["s"] : string[]
->"s" : string
+>["s"] : "s"[]
+>"s" : "s"
 >every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
 >v : string
@@ -80,8 +80,8 @@ foo(function(x) { x });
 ["s"].forEach(function(v,i,a) { v });
 >["s"].forEach(function(v,i,a) { v }) : void
 >["s"].forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->["s"] : string[]
->"s" : string
+>["s"] : "s"[]
+>"s" : "s"
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >function(v,i,a) { v } : (v: string, i: number, a: string[]) => void
 >v : string

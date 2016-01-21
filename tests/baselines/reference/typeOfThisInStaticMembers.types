@@ -103,6 +103,6 @@ var r7 = new t2('');
 >r7 : C2<{}>
 >new t2('') : C2<{}>
 >t2 : typeof C2
->'' : string
+>'' : ""
 
 

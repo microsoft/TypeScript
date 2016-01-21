@@ -27,9 +27,9 @@ var x = foo({ name: "Sprocket" });
 >x : string
 >foo({ name: "Sprocket" }) : string
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket" } : { name: string; }
->name : string
->"Sprocket" : string
+>{ name: "Sprocket" } : { name: "Sprocket"; }
+>name : "Sprocket"
+>"Sprocket" : "Sprocket"
 
 var x: string;
 >x : string
@@ -38,11 +38,11 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >y : string
 >foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
->name : string
->"Sprocket" : string
->description : string
->"Bumpy wheel" : string
+>{ name: "Sprocket", description: "Bumpy wheel" } : { name: "Sprocket"; description: "Bumpy wheel"; }
+>name : "Sprocket"
+>"Sprocket" : "Sprocket"
+>description : "Bumpy wheel"
+>"Bumpy wheel" : "Bumpy wheel"
 
 var y: string;
 >y : string
@@ -51,9 +51,9 @@ var z = foo({ name: "Sprocket", description: false });
 >z : number
 >foo({ name: "Sprocket", description: false }) : number
 >foo : { (item: Item): string; (item: any): number; }
->{ name: "Sprocket", description: false } : { name: string; description: boolean; }
->name : string
->"Sprocket" : string
+>{ name: "Sprocket", description: false } : { name: "Sprocket"; description: boolean; }
+>name : "Sprocket"
+>"Sprocket" : "Sprocket"
 >description : boolean
 >false : boolean
 

@@ -9,9 +9,9 @@ interface Array<T> {
 
 let t: [number, string] = [42, "hello"];
 >t : [number, string]
->[42, "hello"] : [number, string]
+>[42, "hello"] : [number, "hello"]
 >42 : number
->"hello" : string
+>"hello" : "hello"
 
 let a = t.slice();
 >a : [number, string]

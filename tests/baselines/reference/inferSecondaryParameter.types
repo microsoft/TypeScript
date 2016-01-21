@@ -23,7 +23,7 @@ b.m("test", function (bug) {
 >b.m : (test: string, fn: Function) => any
 >b : Ib
 >m : (test: string, fn: Function) => any
->"test" : string
+>"test" : "test"
 >function (bug) {    var a: number = bug;} : (bug: any) => void
 >bug : any
 

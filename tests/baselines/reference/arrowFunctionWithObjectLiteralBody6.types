@@ -4,11 +4,11 @@ var a = () => <Error>{ name: "foo", message: "bar" };
 >() => <Error>{ name: "foo", message: "bar" } : () => Error
 ><Error>{ name: "foo", message: "bar" } : Error
 >Error : Error
->{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string
->"foo" : string
->message : string
->"bar" : string
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
+>name : "foo"
+>"foo" : "foo"
+>message : "bar"
+>"bar" : "bar"
 
 var b = () => (<Error>{ name: "foo", message: "bar" });    
 >b : () => Error
@@ -16,21 +16,21 @@ var b = () => (<Error>{ name: "foo", message: "bar" });
 >(<Error>{ name: "foo", message: "bar" }) : Error
 ><Error>{ name: "foo", message: "bar" } : Error
 >Error : Error
->{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string
->"foo" : string
->message : string
->"bar" : string
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
+>name : "foo"
+>"foo" : "foo"
+>message : "bar"
+>"bar" : "bar"
 
 var c = () => ({ name: "foo", message: "bar" });           
 >c : () => { name: string; message: string; }
 >() => ({ name: "foo", message: "bar" }) : () => { name: string; message: string; }
->({ name: "foo", message: "bar" }) : { name: string; message: string; }
->{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string
->"foo" : string
->message : string
->"bar" : string
+>({ name: "foo", message: "bar" }) : { name: "foo"; message: "bar"; }
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
+>name : "foo"
+>"foo" : "foo"
+>message : "bar"
+>"bar" : "bar"
 
 var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >d : () => Error
@@ -39,10 +39,10 @@ var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >(<Error>({ name: "foo", message: "bar" })) : Error
 ><Error>({ name: "foo", message: "bar" }) : Error
 >Error : Error
->({ name: "foo", message: "bar" }) : { name: string; message: string; }
->{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string
->"foo" : string
->message : string
->"bar" : string
+>({ name: "foo", message: "bar" }) : { name: "foo"; message: "bar"; }
+>{ name: "foo", message: "bar" } : { name: "foo"; message: "bar"; }
+>name : "foo"
+>"foo" : "foo"
+>message : "bar"
+>"bar" : "bar"
 

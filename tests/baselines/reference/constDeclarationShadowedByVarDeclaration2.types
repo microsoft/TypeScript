@@ -13,6 +13,6 @@ function outer() {
 
         var x = "inner";
 >x : string
->"inner" : string
+>"inner" : "inner"
     }
 }

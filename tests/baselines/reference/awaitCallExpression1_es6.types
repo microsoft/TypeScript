@@ -39,7 +39,7 @@ async function func(): Promise<void> {
 >Promise : Promise<T>
 
     "before";
->"before" : string
+>"before" : "before"
 
     var b = fn(a, a, a);
 >b : void
@@ -50,5 +50,5 @@ async function func(): Promise<void> {
 >a : boolean
 
     "after";
->"after" : string
+>"after" : "after"
 }

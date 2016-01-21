@@ -17,11 +17,11 @@ c = 1;
 >1 : number
 
 c = { foo: '' }
->c = { foo: '' } : { foo: string; }
+>c = { foo: '' } : { foo: ""; }
 >c : C
->{ foo: '' } : { foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 
 c = () => { }
 >c = () => { } : () => void
@@ -51,11 +51,11 @@ d = 1;
 >1 : number
 
 d = { foo: '' }
->d = { foo: '' } : { foo: string; }
+>d = { foo: '' } : { foo: ""; }
 >d : D
->{ foo: '' } : { foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 
 d = () => { }
 >d = () => { } : () => void

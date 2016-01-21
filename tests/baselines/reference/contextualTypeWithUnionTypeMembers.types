@@ -76,11 +76,11 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >i1Ori2 : I1<number> | I2<number>
 >I1 : I1<T>
 >I2 : I2<T>
->{ // Like i1    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",} : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: string; }
+>{ // Like i1    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",} : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: "Hello"; }
 
     commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
     commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -101,19 +101,19 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >a : string
 
     propertyOnlyInI1: "Hello",
->propertyOnlyInI1 : string
->"Hello" : string
+>propertyOnlyInI1 : "Hello"
+>"Hello" : "Hello"
 
 };
 var i1Ori2: I1<number> | I2<number> = { // Like i2
 >i1Ori2 : I1<number> | I2<number>
 >I1 : I1<T>
 >I2 : I2<T>
->{ // Like i2    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: string; }
+>{ // Like i2    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: "Hello"; }
 
     commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
     commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -134,19 +134,19 @@ var i1Ori2: I1<number> | I2<number> = { // Like i2
 >a : string
 
     propertyOnlyInI2: "Hello",
->propertyOnlyInI2 : string
->"Hello" : string
+>propertyOnlyInI2 : "Hello"
+>"Hello" : "Hello"
 
 };
 var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >i1Ori2 : I1<number> | I2<number>
 >I1 : I1<T>
 >I2 : I2<T>
->{ // Like i1 and i2 both    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: string; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: string; }
+>{ // Like i1 and i2 both    commonPropertyType: "hello",    commonMethodType: a=> a,    commonMethodWithTypeParameter: a => a,    methodOnlyInI1: a => a,    propertyOnlyInI1: "Hello",    methodOnlyInI2: a => a,    propertyOnlyInI2: "Hello",} : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: "Hello"; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: "Hello"; }
 
     commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
     commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -167,8 +167,8 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >a : string
 
     propertyOnlyInI1: "Hello",
->propertyOnlyInI1 : string
->"Hello" : string
+>propertyOnlyInI1 : "Hello"
+>"Hello" : "Hello"
 
     methodOnlyInI2: a => a,
 >methodOnlyInI2 : (a: string) => string
@@ -177,8 +177,8 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >a : string
 
     propertyOnlyInI2: "Hello",
->propertyOnlyInI2 : string
->"Hello" : string
+>propertyOnlyInI2 : "Hello"
+>"Hello" : "Hello"
 
 };
 
@@ -187,14 +187,14 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >Array : T[]
 >I1 : I1<T>
 >I2 : I2<T>
->[i1, i2, { // Like i1        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",    },    { // Like i2        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    }, { // Like i1 and i2 both        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    }] : (I1<number> | I2<number> | { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: string; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: string; })[]
+>[i1, i2, { // Like i1        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",    },    { // Like i2        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    }, { // Like i1 and i2 both        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    }] : (I1<number> | I2<number> | { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: "Hello"; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: "Hello"; })[]
 >i1 : I1<number>
 >i2 : I2<number>
->{ // Like i1        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",    } : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: string; }
+>{ // Like i1        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",    } : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: "Hello"; }
 
         commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
         commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -215,16 +215,16 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >a : string
 
         propertyOnlyInI1: "Hello",
->propertyOnlyInI1 : string
->"Hello" : string
+>propertyOnlyInI1 : "Hello"
+>"Hello" : "Hello"
 
     },
     { // Like i2
->{ // Like i2        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: string; }
+>{ // Like i2        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: "Hello"; }
 
         commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
         commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -245,15 +245,15 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >a : string
 
         propertyOnlyInI2: "Hello",
->propertyOnlyInI2 : string
->"Hello" : string
+>propertyOnlyInI2 : "Hello"
+>"Hello" : "Hello"
 
     }, { // Like i1 and i2 both
->{ // Like i1 and i2 both        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : { commonPropertyType: string; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: string; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: string; }
+>{ // Like i1 and i2 both        commonPropertyType: "hello",        commonMethodType: a=> a,        commonMethodWithTypeParameter: a => a,        methodOnlyInI1: a => a,        propertyOnlyInI1: "Hello",        methodOnlyInI2: a => a,        propertyOnlyInI2: "Hello",    } : { commonPropertyType: "hello"; commonMethodType: (a: string) => string; commonMethodWithTypeParameter: (a: number) => number; methodOnlyInI1: (a: string) => string; propertyOnlyInI1: "Hello"; methodOnlyInI2: (a: string) => string; propertyOnlyInI2: "Hello"; }
 
         commonPropertyType: "hello",
->commonPropertyType : string
->"hello" : string
+>commonPropertyType : "hello"
+>"hello" : "hello"
 
         commonMethodType: a=> a,
 >commonMethodType : (a: string) => string
@@ -274,8 +274,8 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >a : string
 
         propertyOnlyInI1: "Hello",
->propertyOnlyInI1 : string
->"Hello" : string
+>propertyOnlyInI1 : "Hello"
+>"Hello" : "Hello"
 
         methodOnlyInI2: a => a,
 >methodOnlyInI2 : (a: string) => string
@@ -284,8 +284,8 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >a : string
 
         propertyOnlyInI2: "Hello",
->propertyOnlyInI2 : string
->"Hello" : string
+>propertyOnlyInI2 : "Hello"
+>"Hello" : "Hello"
 
     }];
 
@@ -335,7 +335,7 @@ var i11Ori21: I11 | I21 = {
 >i11Ori21 : I11 | I21
 >I11 : I11
 >I21 : I21
->{     // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;      },    commonPropertyDifferentType: "hello",  } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: string; }
+>{     // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;      },    commonPropertyDifferentType: "hello",  } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: "hello"; }
 
     // Like i1
     commonMethodDifferentReturnType: (a, b) => {
@@ -357,8 +357,8 @@ var i11Ori21: I11 | I21 = {
 
     },
     commonPropertyDifferentType: "hello",  
->commonPropertyDifferentType : string
->"hello" : string
+>commonPropertyDifferentType : "hello"
+>"hello" : "hello"
 
 };
 var i11Ori21: I11 | I21 = { 
@@ -402,7 +402,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >i11 || i21 : I11 | I21
 >i11 : I11
 >i21 : I21
->{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: string; }
+>{         // Like i1        commonMethodDifferentReturnType: (a, b) => {            var z = a.charAt(b);            return z;        },        commonPropertyDifferentType: "hello",    } : { commonMethodDifferentReturnType: (a: string, b: number) => string; commonPropertyDifferentType: "hello"; }
 
         // Like i1
         commonMethodDifferentReturnType: (a, b) => {
@@ -424,8 +424,8 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 
         },
         commonPropertyDifferentType: "hello",
->commonPropertyDifferentType : string
->"hello" : string
+>commonPropertyDifferentType : "hello"
+>"hello" : "hello"
 
     }, { 
 >{         // Like i2        commonMethodDifferentReturnType: (a, b) => {            var z = a.charCodeAt(b);            return z;        },        commonPropertyDifferentType: 10,    } : { commonMethodDifferentReturnType: (a: string, b: number) => number; commonPropertyDifferentType: number; }

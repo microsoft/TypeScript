@@ -9,7 +9,7 @@ function fee<T>() {
 
     var arr = [t, ""];
 >arr : (T | string)[]
->[t, ""] : (T | string)[]
+>[t, ""] : (T | "")[]
 >t : T
->"" : string
+>"" : ""
 }

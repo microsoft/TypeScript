@@ -26,28 +26,28 @@ interface Robot {
 var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >robotA : Robot
 >Robot : Robot
->{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
->name : string
->"mower" : string
->skills : { primary: string; secondary: string; }
->{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
->primary : string
->"mowing" : string
->secondary : string
->"none" : string
+>{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: "mower"; skills: { primary: "mowing"; secondary: "none"; }; }
+>name : "mower"
+>"mower" : "mower"
+>skills : { primary: "mowing"; secondary: "none"; }
+>{ primary: "mowing", secondary: "none" } : { primary: "mowing"; secondary: "none"; }
+>primary : "mowing"
+>"mowing" : "mowing"
+>secondary : "none"
+>"none" : "none"
 
 var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
 >robotB : Robot
 >Robot : Robot
->{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
->name : string
->"trimmer" : string
->skills : { primary: string; secondary: string; }
->{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
->primary : string
->"trimming" : string
->secondary : string
->"edging" : string
+>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: "trimmer"; skills: { primary: "trimming"; secondary: "edging"; }; }
+>name : "trimmer"
+>"trimmer" : "trimmer"
+>skills : { primary: "trimming"; secondary: "edging"; }
+>{ primary: "trimming", secondary: "edging" } : { primary: "trimming"; secondary: "edging"; }
+>primary : "trimming"
+>"trimming" : "trimming"
+>secondary : "edging"
+>"edging" : "edging"
 
 var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
 >skills : any
@@ -75,15 +75,15 @@ var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { na
 >primaryB : string
 >secondary : any
 >secondaryB : string
->{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
->name : string
->"Edger" : string
->skills : { primary: string; secondary: string; }
->{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
->primary : string
->"edging" : string
->secondary : string
->"branch trimming" : string
+>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: "Edger"; skills: { primary: "edging"; secondary: "branch trimming"; }; }
+>name : "Edger"
+>"Edger" : "Edger"
+>skills : { primary: "edging"; secondary: "branch trimming"; }
+>{ primary: "edging", secondary: "branch trimming" } : { primary: "edging"; secondary: "branch trimming"; }
+>primary : "edging"
+>"edging" : "edging"
+>secondary : "branch trimming"
+>"branch trimming" : "branch trimming"
 
 if (nameB == nameB) {
 >nameB == nameB : boolean

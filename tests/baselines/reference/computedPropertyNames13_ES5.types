@@ -32,7 +32,7 @@ class C {
 >s : string
 
     static [""]() { }
->"" : string
+>"" : ""
 
     [0]() { }
 >0 : number

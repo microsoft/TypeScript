@@ -35,11 +35,11 @@ var d2: D2;
 >D2 : D2
 
 d.x = '';
->d.x = '' : string
+>d.x = '' : ""
 >d.x : string
 >d : D
 >x : string
->'' : string
+>'' : ""
 
 b = d;
 >b = d : D

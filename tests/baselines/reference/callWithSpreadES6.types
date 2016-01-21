@@ -36,7 +36,7 @@ foo(1, 2, "abc");
 >foo : (x: number, y: number, ...z: string[]) => void
 >1 : number
 >2 : number
->"abc" : string
+>"abc" : "abc"
 
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
@@ -53,7 +53,7 @@ foo(1, 2, ...a, "abc");
 >2 : number
 >...a : string
 >a : string[]
->"abc" : string
+>"abc" : "abc"
 
 obj.foo(1, 2, "abc");
 >obj.foo(1, 2, "abc") : any
@@ -62,7 +62,7 @@ obj.foo(1, 2, "abc");
 >foo : (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"abc" : string
+>"abc" : "abc"
 
 obj.foo(1, 2, ...a);
 >obj.foo(1, 2, ...a) : any
@@ -83,7 +83,7 @@ obj.foo(1, 2, ...a, "abc");
 >2 : number
 >...a : string
 >a : string[]
->"abc" : string
+>"abc" : "abc"
 
 (obj.foo)(1, 2, "abc");
 >(obj.foo)(1, 2, "abc") : any
@@ -93,7 +93,7 @@ obj.foo(1, 2, ...a, "abc");
 >foo : (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"abc" : string
+>"abc" : "abc"
 
 (obj.foo)(1, 2, ...a);
 >(obj.foo)(1, 2, ...a) : any
@@ -116,7 +116,7 @@ obj.foo(1, 2, ...a, "abc");
 >2 : number
 >...a : string
 >a : string[]
->"abc" : string
+>"abc" : "abc"
 
 xa[1].foo(1, 2, "abc");
 >xa[1].foo(1, 2, "abc") : any
@@ -127,7 +127,7 @@ xa[1].foo(1, 2, "abc");
 >foo : (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"abc" : string
+>"abc" : "abc"
 
 xa[1].foo(1, 2, ...a);
 >xa[1].foo(1, 2, ...a) : any
@@ -152,7 +152,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >2 : number
 >...a : string
 >a : string[]
->"abc" : string
+>"abc" : "abc"
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
@@ -164,11 +164,11 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa : X[]
 >1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
->...[1, 2, "abc"] : number | string
->[1, 2, "abc"] : (number | string)[]
+>...[1, 2, "abc"] : number | "abc"
+>[1, 2, "abc"] : (number | "abc")[]
 >1 : number
 >2 : number
->"abc" : string
+>"abc" : "abc"
 
 class C {
 >C : C

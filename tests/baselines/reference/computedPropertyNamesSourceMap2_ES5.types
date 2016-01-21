@@ -4,7 +4,7 @@ var v = {
 >{    ["hello"]() {        debugger;    }} : { ["hello"](): void; }
 
     ["hello"]() {
->"hello" : string
+>"hello" : "hello"
 
         debugger;
     }

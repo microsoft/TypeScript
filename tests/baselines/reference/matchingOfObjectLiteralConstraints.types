@@ -13,9 +13,9 @@ function foo2<T, U extends { y: T; }>(x: U, z: T) { }
 foo2({ y: "foo" }, "foo");
 >foo2({ y: "foo" }, "foo") : void
 >foo2 : <T, U extends { y: T; }>(x: U, z: T) => void
->{ y: "foo" } : { y: string; }
->y : string
->"foo" : string
->"foo" : string
+>{ y: "foo" } : { y: "foo"; }
+>y : "foo"
+>"foo" : "foo"
+>"foo" : "foo"
  
 

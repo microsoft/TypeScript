@@ -7,7 +7,7 @@ class C {
 >z : string
 >x : number
 >y : string
->"hello" : string
+>"hello" : "hello"
 
     public foo(x: string, t = false) { }
 >foo : (x: string, t?: boolean) => void
@@ -39,7 +39,7 @@ class D {
 
     constructor(y = "hello") { }
 >y : string
->"hello" : string
+>"hello" : "hello"
 }
 
 class E {
@@ -47,6 +47,6 @@ class E {
 
     constructor(y = "hello", ...rest) { }
 >y : string
->"hello" : string
+>"hello" : "hello"
 >rest : any[]
 }

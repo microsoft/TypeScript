@@ -19,7 +19,7 @@ var x = foo({a:'foo'});
 >x : string
 >foo({a:'foo'}) : string
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->{a:'foo'} : { a: string; }
->a : string
->'foo' : string
+>{a:'foo'} : { a: "foo"; }
+>a : "foo"
+>'foo' : "foo"
 

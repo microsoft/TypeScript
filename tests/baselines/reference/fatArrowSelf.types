@@ -41,7 +41,7 @@ module Consumer {
 >this : this
 >emitter : Events.EventEmitter
 >addListener : (type: string, listener: Events.ListenerCallback) => void
->'change' : string
+>'change' : "change"
 >(e) => {                this.changed();            } : (e: any) => void
 >e : any
 

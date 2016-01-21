@@ -156,7 +156,7 @@ module m1 {
 >d : () => string
 
             return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
         }
 
         public e: { x: number; y: string; };
@@ -325,7 +325,7 @@ module exportTests {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
     class C2_private {
@@ -342,7 +342,7 @@ module exportTests {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
 

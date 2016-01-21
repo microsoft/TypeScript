@@ -66,7 +66,7 @@ var r5 = r4(''); // any not string
 >r5 : any
 >r4('') : any
 >r4 : { (x: number): number; (x: any): any; }
->'' : string
+>'' : ""
 
 var r5b = r4(1);
 >r5b : number
@@ -112,5 +112,5 @@ var r7 = r6(''); // any not string
 >r7 : any
 >r6('') : any
 >r6 : { (x: number): number; <T>(x: T): any; }
->'' : string
+>'' : ""
 

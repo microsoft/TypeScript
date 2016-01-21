@@ -76,10 +76,10 @@ var array = [1, 2, 3];
 
 var array2 = [true, false, "hello"];
 >array2 : (boolean | string)[]
->[true, false, "hello"] : (boolean | string)[]
+>[true, false, "hello"] : (boolean | "hello")[]
 >true : boolean
 >false : boolean
->"hello" : string
+>"hello" : "hello"
 
 a2([...array]);
 >a2([...array]) : void
@@ -97,24 +97,24 @@ a1(...array);
 a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
 >a9([1, 2, [["string"]], false, true]) : void
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
+>[1, 2, [["string"]], false, true] : [number, number, [["string"]], boolean, boolean]
 >1 : number
 >2 : number
->[["string"]] : [[string]]
->["string"] : [string]
->"string" : string
+>[["string"]] : [["string"]]
+>["string"] : ["string"]
+>"string" : "string"
 >false : boolean
 >true : boolean
 
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
 >a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
->[1, 2, [["string"]], false, true] : (number | string[][] | boolean)[]
+>[1, 2, [["string"]], false, true] : (number | "string"[][] | boolean)[]
 >1 : number
 >2 : number
->[["string"]] : string[][]
->["string"] : string[]
->"string" : string
+>[["string"]] : "string"[][]
+>["string"] : "string"[]
+>"string" : "string"
 >false : boolean
 >true : boolean
 
@@ -152,15 +152,15 @@ function foo<T>(...a: T[]) { }
 foo<number|string>("hello", 1, 2);
 >foo<number|string>("hello", 1, 2) : void
 >foo : <T>(...a: T[]) => void
->"hello" : string
+>"hello" : "hello"
 >1 : number
 >2 : number
 
 foo("hello", "world");
 >foo("hello", "world") : void
 >foo : <T>(...a: T[]) => void
->"hello" : string
->"world" : string
+>"hello" : "hello"
+>"world" : "world"
 
 enum E { a, b }
 >E : E

@@ -119,7 +119,7 @@ module GenericParameter {
 >T : T
 >x : T
 >T : T
->'' : string
+>'' : ""
 
     var r11 = foo6(<T>(x: T, y?: T) => ''); // any => string (+1 overload)
 >r11 : { (x: any): string; (x: any, y?: any): string; }
@@ -131,7 +131,7 @@ module GenericParameter {
 >T : T
 >y : T
 >T : T
->'' : string
+>'' : ""
 
     function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
@@ -168,7 +168,7 @@ module GenericParameter {
 >T : T
 >x : T
 >T : T
->'' : string
+>'' : ""
 
     var a: { <T>(x: T): string; <T>(x: number): T; }
 >a : { <T>(x: T): string; <T>(x: number): T; }

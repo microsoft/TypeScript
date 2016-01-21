@@ -20,7 +20,7 @@ var combineResult = combine("string", 10);
 >combineResult : [string, number]
 >combine("string", 10) : [string, number]
 >combine : <T, U>(x: T, y: U) => [T, U]
->"string" : string
+>"string" : "string"
 >10 : number
 
 var combineEle1 = combineResult[0]; // string
@@ -102,9 +102,9 @@ var zipResult = zip(["foo", "bar"], [5, 6]);
 >zipResult : [[string, number]]
 >zip(["foo", "bar"], [5, 6]) : [[string, number]]
 >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
->["foo", "bar"] : string[]
->"foo" : string
->"bar" : string
+>["foo", "bar"] : ("foo" | "bar")[]
+>"foo" : "foo"
+>"bar" : "bar"
 >[5, 6] : number[]
 >5 : number
 >6 : number

@@ -141,7 +141,7 @@ var array = [1, 2, 3];
 "string".length ? exprNumber1 : exprNumber2;
 >"string".length ? exprNumber1 : exprNumber2 : number
 >"string".length : number
->"string" : string
+>"string" : "string"
 >length : number
 >exprNumber1 : number
 >exprNumber2 : number
@@ -279,7 +279,7 @@ var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
 >resultIsNumber3 : number
 >"string".length ? exprNumber1 : exprNumber2 : number
 >"string".length : number
->"string" : string
+>"string" : "string"
 >length : number
 >exprNumber1 : number
 >exprNumber2 : number

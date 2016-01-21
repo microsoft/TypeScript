@@ -29,7 +29,7 @@ var j = 32 as number|string;
 >32 : number
 
 j = '';
->j = '' : string
+>j = '' : ""
 >j : number | string
->'' : string
+>'' : ""
 

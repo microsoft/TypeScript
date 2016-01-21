@@ -20,7 +20,7 @@ function declSpace() {
 
     for (var x = 'this is a string'; ;) { }
 >x : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 }
 interface Point { x: number; y: number; }
 >Point : Point
@@ -117,9 +117,9 @@ for (var a: string[]; ;) { }
 
 for (var a = ['a', 'b']; ;) { }
 >a : string[]
->['a', 'b'] : string[]
->'a' : string
->'b' : string
+>['a', 'b'] : ("a" | "b")[]
+>'a' : "a"
+>'b' : "b"
 
 for (var a = <string[]>[]; ;) { }
 >a : string[]

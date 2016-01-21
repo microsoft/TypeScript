@@ -64,7 +64,7 @@ var aNumber = 9.9;
 
 var aString = 'this is a string';
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 var aDate = new Date(12);
 >aDate : Date

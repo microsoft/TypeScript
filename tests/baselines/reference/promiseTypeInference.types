@@ -45,7 +45,7 @@ var $$x = load("something").then(s => convert(s));
 >load("something").then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
 >load("something") : Promise<string>
 >load : (name: string) => Promise<string>
->"something" : string
+>"something" : "something"
 >then : <U>(success?: (value: string) => Promise<U>) => Promise<U>
 >s => convert(s) : (s: string) => IPromise<number>
 >s : string

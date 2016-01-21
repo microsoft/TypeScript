@@ -36,9 +36,9 @@ var result = zipWith([1, 2], ['a', 'b'], pair);
 >[1, 2] : number[]
 >1 : number
 >2 : number
->['a', 'b'] : string[]
->'a' : string
->'b' : string
+>['a', 'b'] : ("a" | "b")[]
+>'a' : "a"
+>'b' : "b"
 >pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
 
 var i = result[0].x; // number

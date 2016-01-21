@@ -263,8 +263,8 @@ var r2arg = <T>(x: T) => [''];
 >T : T
 >x : T
 >T : T
->[''] : string[]
->'' : string
+>[''] : ""[]
+>'' : ""
 
 var r2arg2 = <T>(x: T) => [''];
 >r2arg2 : <T>(x: T) => string[]
@@ -272,8 +272,8 @@ var r2arg2 = <T>(x: T) => [''];
 >T : T
 >x : T
 >T : T
->[''] : string[]
->'' : string
+>[''] : ""[]
+>'' : ""
 
 var r2 = foo2(r2arg);
 >r2 : any
@@ -337,7 +337,7 @@ var r4arg = <T, U>(x: T, y: U) => '';
 >T : T
 >y : U
 >U : U
->'' : string
+>'' : ""
 
 var r4arg2 = <T, U>(x: T, y: U) => '';
 >r4arg2 : <T, U>(x: T, y: U) => string
@@ -348,7 +348,7 @@ var r4arg2 = <T, U>(x: T, y: U) => '';
 >T : T
 >y : U
 >U : U
->'' : string
+>'' : ""
 
 var r4 = foo4(r4arg);
 >r4 : any

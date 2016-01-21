@@ -27,7 +27,7 @@ var ResultIsString3 = typeof ENUM1["A"];
 >typeof ENUM1["A"] : string
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ResultIsString4 : string
@@ -39,7 +39,7 @@ var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
@@ -75,7 +75,7 @@ typeof ENUM1["B"];
 >typeof ENUM1["B"] : string
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 typeof ENUM, ENUM1;
 >typeof ENUM, ENUM1 : typeof ENUM1

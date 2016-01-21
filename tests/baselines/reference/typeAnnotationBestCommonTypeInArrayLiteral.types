@@ -23,36 +23,36 @@ interface IMenuItem {
 var menuData: IMenuItem[] = [
 >menuData : IMenuItem[]
 >IMenuItem : IMenuItem
->[    {        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    }, {        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    }] : ({ "id": string; "type": string; "link": string; "icon": string; } | { "id": string; "type": string; "link": string; "text": string; })[]
+>[    {        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    }, {        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    }] : ({ "id": "ourLogo"; "type": "image"; "link": ""; "icon": "modules/menu/logo.svg"; } | { "id": "productName"; "type": "default"; "link": ""; "text": "Product Name"; })[]
     {
->{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": string; "type": string; "link": string; "icon": string; }
+>{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": "ourLogo"; "type": "image"; "link": ""; "icon": "modules/menu/logo.svg"; }
 
         "id": "ourLogo",
->"ourLogo" : string
+>"ourLogo" : "ourLogo"
 
         "type": "image",
->"image" : string
+>"image" : "image"
 
         "link": "",
->"" : string
+>"" : ""
 
         "icon": "modules/menu/logo.svg"
->"modules/menu/logo.svg" : string
+>"modules/menu/logo.svg" : "modules/menu/logo.svg"
 
     }, {
->{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { "id": string; "type": string; "link": string; "text": string; }
+>{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { "id": "productName"; "type": "default"; "link": ""; "text": "Product Name"; }
 
         "id": "productName",
->"productName" : string
+>"productName" : "productName"
 
         "type": "default",
->"default" : string
+>"default" : "default"
 
         "link": "",
->"" : string
+>"" : ""
 
         "text": "Product Name"
->"Product Name" : string
+>"Product Name" : "Product Name"
     }
 ];
 

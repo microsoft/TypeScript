@@ -1,6 +1,6 @@
 === tests/cases/compiler/downlevelLetConst14.ts ===
 'use strict'
->'use strict' : string
+>'use strict' : "use strict"
 
 declare function use(a: any);
 >use : (a: any) => any
@@ -103,7 +103,7 @@ var y = true;
 {
     let y = "";
 >y : string
->"" : string
+>"" : ""
 
     let [z6] = [true]
 >z6 : boolean
@@ -161,7 +161,7 @@ var z5 = 1;
 {
     let z = "";
 >z : string
->"" : string
+>"" : ""
 
     let [z5] = [5];
 >z5 : number

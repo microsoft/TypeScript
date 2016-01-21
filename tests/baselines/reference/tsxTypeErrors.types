@@ -73,10 +73,10 @@ var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
 ><MyClass pt={{x: 4, y: 'oops'}} /> : any
 >MyClass : typeof MyClass
 >pt : any
->{x: 4, y: 'oops'} : { x: number; y: string; }
+>{x: 4, y: 'oops'} : { x: number; y: "oops"; }
 >x : number
 >4 : number
->y : string
->'oops' : string
+>y : "oops"
+>'oops' : "oops"
 
 

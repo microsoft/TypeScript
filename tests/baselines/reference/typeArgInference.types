@@ -37,11 +37,11 @@ interface I {
 }
 var o = { a: 3, b: "test" };
 >o : { a: number; b: string; }
->{ a: 3, b: "test" } : { a: number; b: string; }
+>{ a: 3, b: "test" } : { a: number; b: "test"; }
 >a : number
 >3 : number
->b : string
->"test" : string
+>b : "test"
+>"test" : "test"
 
 var x: I;
 >x : I

@@ -88,8 +88,8 @@ function f1() {
 
     var b = ["hello", ...a, true];
 >b : (string | number | boolean)[]
->["hello", ...a, true] : (string | number | boolean)[]
->"hello" : string
+>["hello", ...a, true] : ("hello" | number | boolean)[]
+>"hello" : "hello"
 >...a : number
 >a : number[]
 >true : boolean

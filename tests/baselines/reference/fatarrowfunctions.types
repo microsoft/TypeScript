@@ -220,11 +220,11 @@ declare function setTimeout(expression: any, msec?: number, language?: any): num
 
 var messenger = {
 >messenger : { message: string; start: () => void; }
->{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: string; start: () => void; }
+>{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: "Hello World"; start: () => void; }
 
     message: "Hello World",
->message : string
->"Hello World" : string
+>message : "Hello World"
+>"Hello World" : "Hello World"
 
     start: function() {
 >start : () => void

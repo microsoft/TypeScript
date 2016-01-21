@@ -30,9 +30,9 @@ function f1(): Promise<T1> {
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
->{ __t1: "foo_t1" } : { __t1: string; }
->__t1 : string
->"foo_t1" : string
+>{ __t1: "foo_t1" } : { __t1: "foo_t1"; }
+>__t1 : "foo_t1"
+>"foo_t1" : "foo_t1"
 }
 
 function f2(x: T1): T2 {
@@ -48,7 +48,7 @@ function f2(x: T1): T2 {
 >x.__t1 : string
 >x : T1
 >__t1 : string
->":foo_21" : string
+>":foo_21" : ":foo_21"
 }
 
 var x3 = f1()
@@ -84,6 +84,6 @@ var x3 = f1()
 >x.__t2 : string
 >x : T2
 >__t2 : string
->"bar" : string
+>"bar" : "bar"
 
 });

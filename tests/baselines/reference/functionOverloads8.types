@@ -9,5 +9,5 @@ function foo(foo:string);
 function foo(foo?:any){ return '' }
 >foo : { (): any; (foo: string): any; }
 >foo : any
->'' : string
+>'' : ""
 

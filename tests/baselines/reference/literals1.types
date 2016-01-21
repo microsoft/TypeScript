@@ -29,19 +29,19 @@ var g = false;
 
 var h = "";
 >h : string
->"" : string
+>"" : ""
 
 var i = "hi";
 >i : string
->"hi" : string
+>"hi" : "hi"
 
 var j = '';
 >j : string
->'' : string
+>'' : ""
 
 var k = 'q\tq';
 >k : string
->'q\tq' : string
+>'q\tq' : "q\tq"
 
 var m = /q/;
 >m : RegExp

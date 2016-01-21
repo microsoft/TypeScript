@@ -21,7 +21,7 @@ declare var a;
 (<any>"string"); 
 >(<any>"string") : any
 ><any>"string" : any
->"string" : string
+>"string" : "string"
 
 (<any>23.0); 
 >(<any>23.0) : any
@@ -115,7 +115,7 @@ declare var a;
 >a.b : any
 >a : any
 >b : any
->"0" : string
+>"0" : "0"
 
 (<any>a()).x;
 >(<any>a()).x : any

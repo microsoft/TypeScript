@@ -81,7 +81,7 @@ enum E3 {
     X = 'foo'.length, Y = 4 + 3, Z = +'foo'
 >X : E3
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 >Y : E3
 >4 + 3 : number
@@ -89,7 +89,7 @@ enum E3 {
 >3 : number
 >Z : E3
 >+'foo' : number
->'foo' : string
+>'foo' : "foo"
 }
 
 // Enum with constant members followed by computed members
@@ -102,7 +102,7 @@ enum E4 {
 >Y : E4
 >Z : E4
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 }
 
@@ -142,8 +142,8 @@ enum E7 {
     A = 'foo'['foo']
 >A : E7
 >'foo'['foo'] : any
->'foo' : string
->'foo' : string
+>'foo' : "foo"
+>'foo' : "foo"
 }
 
 // Enum with computed member initializer of type number
@@ -153,8 +153,8 @@ enum E8 {
     B = 'foo'['foo']
 >B : E8
 >'foo'['foo'] : any
->'foo' : string
->'foo' : string
+>'foo' : "foo"
+>'foo' : "foo"
 }
 
 //Enum with computed member intializer of same enum type

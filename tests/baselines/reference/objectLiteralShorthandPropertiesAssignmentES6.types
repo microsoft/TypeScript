@@ -5,7 +5,7 @@ var id: number = 10000;
 
 var name: string = "my name";
 >name : string
->"my name" : string
+>"my name" : "my name"
 
 var person: { name: string; id: number } = { name, id };
 >person : { name: string; id: number; }
@@ -54,7 +54,7 @@ var person1 = bar("Hello", 5);
 >person1 : { name: string; id: number; }
 >bar("Hello", 5) : { name: string; id: number; }
 >bar : (name: string, id: number) => { name: string; id: number; }
->"Hello" : string
+>"Hello" : "Hello"
 >5 : number
 
 var person2: { name: string } = bar("Hello", 5);
@@ -62,7 +62,7 @@ var person2: { name: string } = bar("Hello", 5);
 >name : string
 >bar("Hello", 5) : { name: string; id: number; }
 >bar : (name: string, id: number) => { name: string; id: number; }
->"Hello" : string
+>"Hello" : "Hello"
 >5 : number
 
 var person3: { name: string; id: number } = bar("Hello", 5);
@@ -71,6 +71,6 @@ var person3: { name: string; id: number } = bar("Hello", 5);
 >id : number
 >bar("Hello", 5) : { name: string; id: number; }
 >bar : (name: string, id: number) => { name: string; id: number; }
->"Hello" : string
+>"Hello" : "Hello"
 >5 : number
 

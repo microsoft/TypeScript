@@ -19,7 +19,7 @@ function foo(a: string): string | number {
     if (a === "hello") {
 >a === "hello" : boolean
 >a : string
->"hello" : string
+>"hello" : "hello"
 
         return a.length;
 >a.length : number

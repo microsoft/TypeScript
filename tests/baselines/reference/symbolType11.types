@@ -5,7 +5,7 @@ var s = Symbol.for("logical");
 >Symbol.for : (key: string) => symbol
 >Symbol : SymbolConstructor
 >for : (key: string) => symbol
->"logical" : string
+>"logical" : "logical"
 
 s && s;
 >s && s : symbol

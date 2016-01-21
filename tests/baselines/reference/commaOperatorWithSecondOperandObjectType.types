@@ -110,7 +110,7 @@ true, {}
 
 "string", new Date()
 >"string", new Date() : Date
->"string" : string
+>"string" : "string"
 >new Date() : Date
 >Date : DateConstructor
 
@@ -148,21 +148,21 @@ var resultIsObject8 = (true, {});
 
 var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
 >resultIsObject9 : { a: number; b: string; }
->(!BOOLEAN, { a: 1, b: "s" }) : { a: number; b: string; }
->!BOOLEAN, { a: 1, b: "s" } : { a: number; b: string; }
+>(!BOOLEAN, { a: 1, b: "s" }) : { a: number; b: "s"; }
+>!BOOLEAN, { a: 1, b: "s" } : { a: number; b: "s"; }
 >!BOOLEAN : boolean
 >BOOLEAN : boolean
->{ a: 1, b: "s" } : { a: number; b: string; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 
 var resultIsObject10 = ("string", new Date());
 >resultIsObject10 : Date
 >("string", new Date()) : Date
 >"string", new Date() : Date
->"string" : string
+>"string" : "string"
 >new Date() : Date
 >Date : DateConstructor
 

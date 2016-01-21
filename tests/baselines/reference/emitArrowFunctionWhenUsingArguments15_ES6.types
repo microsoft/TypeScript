@@ -5,7 +5,7 @@ function f() {
 
     var arguments = "hello";
 >arguments : string
->"hello" : string
+>"hello" : "hello"
 
     if (Math.random()) {
 >Math.random() : number

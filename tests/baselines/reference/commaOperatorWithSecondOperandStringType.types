@@ -95,22 +95,22 @@ ANY = new Date(), STRING;
 >STRING : string
 
 true, "";
->true, "" : string
+>true, "" : ""
 >true : boolean
->"" : string
+>"" : ""
 
 BOOLEAN == undefined, "";
->BOOLEAN == undefined, "" : string
+>BOOLEAN == undefined, "" : ""
 >BOOLEAN == undefined : boolean
 >BOOLEAN : boolean
 >undefined : undefined
->"" : string
+>"" : ""
 
 ["a", "b"], NUMBER.toString();
 >["a", "b"], NUMBER.toString() : string
->["a", "b"] : string[]
->"a" : string
->"b" : string
+>["a", "b"] : ("a" | "b")[]
+>"a" : "a"
+>"b" : "b"
 >NUMBER.toString() : string
 >NUMBER.toString : (radix?: number) => string
 >NUMBER : number
@@ -124,7 +124,7 @@ OBJECT = new Object, STRING + "string";
 >Object : ObjectConstructor
 >STRING + "string" : string
 >STRING : string
->"string" : string
+>"string" : "string"
 
 var resultIsString6 = (null, STRING);
 >resultIsString6 : string
@@ -145,27 +145,27 @@ var resultIsString7 = (ANY = new Date(), STRING);
 
 var resultIsString8 = (true, "");
 >resultIsString8 : string
->(true, "") : string
->true, "" : string
+>(true, "") : ""
+>true, "" : ""
 >true : boolean
->"" : string
+>"" : ""
 
 var resultIsString9 = (BOOLEAN == undefined, "");
 >resultIsString9 : string
->(BOOLEAN == undefined, "") : string
->BOOLEAN == undefined, "" : string
+>(BOOLEAN == undefined, "") : ""
+>BOOLEAN == undefined, "" : ""
 >BOOLEAN == undefined : boolean
 >BOOLEAN : boolean
 >undefined : undefined
->"" : string
+>"" : ""
 
 var resultIsString10 = (["a", "b"], NUMBER.toString());
 >resultIsString10 : string
 >(["a", "b"], NUMBER.toString()) : string
 >["a", "b"], NUMBER.toString() : string
->["a", "b"] : string[]
->"a" : string
->"b" : string
+>["a", "b"] : ("a" | "b")[]
+>"a" : "a"
+>"b" : "b"
 >NUMBER.toString() : string
 >NUMBER.toString : (radix?: number) => string
 >NUMBER : number
@@ -179,5 +179,5 @@ var resultIsString11 = (new Object, STRING + "string");
 >Object : ObjectConstructor
 >STRING + "string" : string
 >STRING : string
->"string" : string
+>"string" : "string"
 

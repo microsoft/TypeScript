@@ -74,20 +74,20 @@ var r8 = E['a'] + E['b'];
 >E['a'] + E['b'] : number
 >E['a'] : E
 >E : typeof E
->'a' : string
+>'a' : "a"
 >E['b'] : E
 >E : typeof E
->'b' : string
+>'b' : "b"
 
 var r9 = E['a'] + F['c'];
 >r9 : number
 >E['a'] + F['c'] : number
 >E['a'] : E
 >E : typeof E
->'a' : string
+>'a' : "a"
 >F['c'] : F
 >F : typeof F
->'c' : string
+>'c' : "c"
 
 var r10 = a + c;
 >r10 : number

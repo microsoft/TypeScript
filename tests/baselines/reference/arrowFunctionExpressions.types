@@ -217,7 +217,7 @@ function someOtherFn() {
 >(n: number) => '' + n : (n: number) => string
 >n : number
 >'' + n : string
->'' : string
+>'' : ""
 >n : number
 
     arr(4).charAt(0);
@@ -277,7 +277,7 @@ var g = f('')();
 >f('')() : string
 >f('') : () => string
 >f : (n: string) => () => string
->'' : string
+>'' : ""
 
 var g: string;
 >g : string
@@ -314,7 +314,7 @@ var h = someOuterFn()('')()();
 >someOuterFn()('') : () => () => number
 >someOuterFn() : (n: string) => () => () => number
 >someOuterFn : () => (n: string) => () => () => number
->'' : string
+>'' : ""
 
 h.toExponential();
 >h.toExponential() : string
@@ -348,7 +348,7 @@ function tryCatchFn() {
 >() => this + '' : () => string
 >this + '' : string
 >this : any
->'' : string
+>'' : ""
     }
 }
 

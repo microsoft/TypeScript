@@ -44,7 +44,7 @@ var o = new M.D('Hello');
 >M.D : typeof K.L
 >M : typeof M
 >D : typeof K.L
->'Hello' : string
+>'Hello' : "Hello"
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }

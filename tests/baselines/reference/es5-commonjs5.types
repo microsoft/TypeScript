@@ -2,6 +2,6 @@
 
 export default function () {
 	return "test";
->"test" : string
+>"test" : "test"
 }
 

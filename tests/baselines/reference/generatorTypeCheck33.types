@@ -7,10 +7,10 @@ function* g() {
 >0 : number
 
     function* g2() {
->g2 : () => IterableIterator<string>
+>g2 : () => IterableIterator<"">
 
         yield "";
 >yield "" : any
->"" : string
+>"" : ""
     }
 }

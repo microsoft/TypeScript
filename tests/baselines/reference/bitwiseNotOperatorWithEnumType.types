@@ -18,7 +18,7 @@ var ResultIsNumber2 = ~ENUM1["A"];
 >~ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
 >ResultIsNumber3 : number
@@ -30,7 +30,7 @@ var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
 >A : ENUM1
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple ~ operators
 var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
@@ -42,7 +42,7 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 >ENUM1["A"] + ENUM1.B : number
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 >ENUM1.B : ENUM1
 >ENUM1 : typeof ENUM1
 >B : ENUM1
@@ -56,7 +56,7 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 >~ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 ~ENUM1.A, ~ENUM1["B"];
 >~ENUM1.A, ~ENUM1["B"] : number
@@ -67,5 +67,5 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 >~ENUM1["B"] : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 

@@ -231,8 +231,8 @@ f16(x);
 var y: StringAndBoolean = ["1", false];
 >y : [string, boolean]
 >StringAndBoolean : [string, boolean]
->["1", false] : [string, boolean]
->"1" : string
+>["1", false] : ["1", boolean]
+>"1" : "1"
 >false : boolean
 
 y[0].toLowerCase();

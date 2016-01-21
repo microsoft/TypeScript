@@ -361,25 +361,25 @@ function f6() {
 >C : typeof C
 
             x.a = "a";
->x.a = "a" : string
+>x.a = "a" : "a"
 >x.a : string
 >x : C
 >a : string
->"a" : string
+>"a" : "a"
 
             x.b = "b";
->x.b = "b" : string
+>x.b = "b" : "b"
 >x.b : string
 >x : C
 >b : string
->"b" : string
+>"b" : "b"
 
             x.c = "c";
->x.c = "c" : string
+>x.c = "c" : "c"
 >x.c : string
 >x : C
 >c : string
->"c" : string
+>"c" : "c"
 
             return x;
 >x : C

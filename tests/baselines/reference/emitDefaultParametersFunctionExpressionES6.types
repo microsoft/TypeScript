@@ -3,35 +3,35 @@ var lambda1 = (y = "hello") => { }
 >lambda1 : (y?: string) => void
 >(y = "hello") => { } : (y?: string) => void
 >y : string
->"hello" : string
+>"hello" : "hello"
 
 var lambda2 = (x: number, y = "hello") => { }
 >lambda2 : (x: number, y?: string) => void
 >(x: number, y = "hello") => { } : (x: number, y?: string) => void
 >x : number
 >y : string
->"hello" : string
+>"hello" : "hello"
 
 var lambda3 = (x: number, y = "hello", ...rest) => { }
 >lambda3 : (x: number, y?: string, ...rest: any[]) => void
 >(x: number, y = "hello", ...rest) => { } : (x: number, y?: string, ...rest: any[]) => void
 >x : number
 >y : string
->"hello" : string
+>"hello" : "hello"
 >rest : any[]
 
 var lambda4 = (y = "hello", ...rest) => { }
 >lambda4 : (y?: string, ...rest: any[]) => void
 >(y = "hello", ...rest) => { } : (y?: string, ...rest: any[]) => void
 >y : string
->"hello" : string
+>"hello" : "hello"
 >rest : any[]
 
 var x = function (str = "hello", ...rest) { }
 >x : (str?: string, ...rest: any[]) => void
 >function (str = "hello", ...rest) { } : (str?: string, ...rest: any[]) => void
 >str : string
->"hello" : string
+>"hello" : "hello"
 >rest : any[]
 
 var y = (function (num = 10, boo = false, ...rest) { })()

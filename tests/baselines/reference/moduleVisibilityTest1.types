@@ -14,7 +14,7 @@ module OuterMod {
 
 		export function someExportedOuterInnerFunc() { return "foo"; }
 >someExportedOuterInnerFunc : () => string
->"foo" : string
+>"foo" : "foo"
 	}
 }
 

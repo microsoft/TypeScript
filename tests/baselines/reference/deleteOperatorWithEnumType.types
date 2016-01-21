@@ -26,7 +26,7 @@ var ResultIsBoolean3 = delete ENUM1["A"];
 >delete ENUM1["A"] : boolean
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
 >ResultIsBoolean4 : boolean
@@ -38,7 +38,7 @@ var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
 >0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple delete  operators
 var ResultIsBoolean5 = delete delete ENUM;
@@ -59,7 +59,7 @@ var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
 >0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // miss assignment operators
 delete ENUM;

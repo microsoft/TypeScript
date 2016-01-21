@@ -30,7 +30,7 @@
 >$('.foo').addClass : (className: string) => $
 >$('.foo') : $
 >$ : typeof $
->'.foo' : string
+>'.foo' : ".foo"
 >addClass : (className: string) => $
->'bar' : string
+>'bar' : "bar"
 

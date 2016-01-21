@@ -24,19 +24,19 @@ var { b1, } = { b1:1, };
 var { b2: { b21 } = { b21: "string" }  } = { b2: { b21: "world" } };
 >b2 : any
 >b21 : string
->{ b21: "string" } : { b21: string; }
->b21 : string
->"string" : string
->{ b2: { b21: "world" } } : { b2?: { b21: string; }; }
->b2 : { b21: string; }
->{ b21: "world" } : { b21: string; }
->b21 : string
->"world" : string
+>{ b21: "string" } : { b21: "string"; }
+>b21 : "string"
+>"string" : "string"
+>{ b2: { b21: "world" } } : { b2?: { b21: "world"; }; }
+>b2 : { b21: "world"; }
+>{ b21: "world" } : { b21: "world"; }
+>b21 : "world"
+>"world" : "world"
 
 var {1: b3} = { 1: "string" };
 >b3 : string
->{ 1: "string" } : { 1: string; }
->"string" : string
+>{ 1: "string" } : { 1: "string"; }
+>"string" : "string"
 
 var {b4 = 1}: any = { b4: 100000 };
 >b4 : number

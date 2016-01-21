@@ -1,7 +1,7 @@
 === tests/cases/compiler/downlevelLetConst18.ts ===
 
 'use strict'
->'use strict' : string
+>'use strict' : "use strict"
 
 for (let x; ;) {
 >x : any

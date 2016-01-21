@@ -4,18 +4,18 @@ class C {
 
     static ["" + ""]() { }
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
     static get ["" + ""]() { return 0; }
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 >0 : number
 
     static set ["" + ""](x) { }
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 >x : any
 }

@@ -11,7 +11,7 @@ function foo(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 >x.length === 10 : boolean
 >x.length : number
 >x : string
@@ -28,7 +28,7 @@ function foo2(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 >((x = 10) && x) : number | string
 >(x = 10) && x : number | string
 >(x = 10) : number
@@ -47,13 +47,13 @@ function foo3(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 >((x = "hello") && x) : number | string
 >(x = "hello") && x : number | string
->(x = "hello") : string
->x = "hello" : string
+>(x = "hello") : "hello"
+>x = "hello" : "hello"
 >x : number | string
->"hello" : string
+>"hello" : "hello"
 >x : number | string
 }
 function foo4(x: number | string | boolean) {
@@ -66,13 +66,13 @@ function foo4(x: number | string | boolean) {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string | boolean
->"string" : string
+>"string" : "string"
 
         && typeof x !== "number"  // number | boolean
 >typeof x !== "number" : boolean
 >typeof x : string
 >x : number | boolean
->"number" : string
+>"number" : "number"
 
         && x;   // boolean
 >x : boolean
@@ -90,7 +90,7 @@ function foo5(x: number | string | boolean) {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string | boolean
->"string" : string
+>"string" : "string"
 
         && ((b = x) && (typeof x !== "number"  // number | boolean
 >((b = x) && (typeof x !== "number"  // number | boolean        && x)) : boolean
@@ -104,7 +104,7 @@ function foo5(x: number | string | boolean) {
 >typeof x !== "number" : boolean
 >typeof x : string
 >x : number | boolean
->"number" : string
+>"number" : "number"
 
         && x));   // boolean
 >x : boolean
@@ -119,7 +119,7 @@ function foo6(x: number | string | boolean) {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string | boolean
->"string" : string
+>"string" : "string"
 
         && (typeof x !== "number" // number | boolean
 >(typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
@@ -127,7 +127,7 @@ function foo6(x: number | string | boolean) {
 >typeof x !== "number" : boolean
 >typeof x : string
 >x : number | boolean
->"number" : string
+>"number" : "number"
 
         ? x // boolean
 >x : boolean
@@ -154,7 +154,7 @@ function foo7(x: number | string | boolean) {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string | boolean
->"string" : string
+>"string" : "string"
 
         && ((z = x) // string | number | boolean - x changed deeper in conditional expression
 >((z = x) // string | number | boolean - x changed deeper in conditional expression        && (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()))) : string
@@ -170,7 +170,7 @@ function foo7(x: number | string | boolean) {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : number | string | boolean
->"number" : string
+>"number" : "number"
 
         // change value of x
         ? (x = 10 && x.toString()) // number | boolean | string
@@ -208,7 +208,7 @@ function foo8(x: number | string) {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 
         && (x = 10) // change x - number| string
 >(x = 10) : number
@@ -222,7 +222,7 @@ function foo8(x: number | string) {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : number | string
->"number" : string
+>"number" : "number"
 
         ? x // number
 >x : number

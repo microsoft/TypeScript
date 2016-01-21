@@ -18,13 +18,13 @@ var varWithInitialValue = 30;
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
->{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: "position"; }
 >x : number
 >30 : number
 >y : number
 >70 : number
->desc : string
->"position" : string
+>desc : "position"
+>"position" : "position"
 
 declare var declaredVar;
 >declaredVar : any
@@ -40,24 +40,24 @@ declare var deckareVarWithType: number;
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
->['a', 'b'] : string[]
->'a' : string
->'b' : string
+>['a', 'b'] : ("a" | "b")[]
+>'a' : "a"
+>'b' : "b"
 
 
 function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }
 
     return {
->{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
+>{        x: "Hello",        y: "word",        n: 2    } : { x: "Hello"; y: "word"; n: number; }
 
         x: "Hello",
->x : string
->"Hello" : string
+>x : "Hello"
+>"Hello" : "Hello"
 
         y: "word",
->y : string
->"word" : string
+>y : "word"
+>"word" : "word"
 
         n: 2
 >n : number
@@ -73,7 +73,7 @@ module m1 {
 >foo : () => string
 
         return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
     }
 }
 

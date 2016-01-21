@@ -9,9 +9,9 @@ x = 1;
 >1 : number
 
 x = '';
->x = '' : string
+>x = '' : ""
 >x : any
->'' : string
+>'' : ""
 
 x = true;
 >x = true : boolean

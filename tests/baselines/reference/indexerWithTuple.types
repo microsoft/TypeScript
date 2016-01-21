@@ -1,29 +1,29 @@
 === tests/cases/conformance/types/tuple/indexerWithTuple.ts ===
 var strNumTuple: [string, number] = ["foo", 10]; 
 >strNumTuple : [string, number]
->["foo", 10] : [string, number]
->"foo" : string
+>["foo", 10] : ["foo", number]
+>"foo" : "foo"
 >10 : number
 
 var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
 >numTupleTuple : [number, [string, number]]
->[10, ["bar", 20]] : [number, [string, number]]
+>[10, ["bar", 20]] : [number, ["bar", number]]
 >10 : number
->["bar", 20] : [string, number]
->"bar" : string
+>["bar", 20] : ["bar", number]
+>"bar" : "bar"
 >20 : number
 
 var unionTuple1: [number, string| number] = [10, "foo"]; 
 >unionTuple1 : [number, string | number]
->[10, "foo"] : [number, string]
+>[10, "foo"] : [number, "foo"]
 >10 : number
->"foo" : string
+>"foo" : "foo"
 
 var unionTuple2: [boolean, string| number] = [true, "foo"]; 
 >unionTuple2 : [boolean, string | number]
->[true, "foo"] : [boolean, string]
+>[true, "foo"] : [boolean, "foo"]
 >true : boolean
->"foo" : string
+>"foo" : "foo"
 
 // no error
 var idx0 = 0;
@@ -68,13 +68,13 @@ var ele15 = strNumTuple["0"]; // string
 >ele15 : string
 >strNumTuple["0"] : string
 >strNumTuple : [string, number]
->"0" : string
+>"0" : "0"
 
 var ele16 = strNumTuple["1"]; // number
 >ele16 : number
 >strNumTuple["1"] : number
 >strNumTuple : [string, number]
->"1" : string
+>"1" : "1"
 
 var strNumTuple1 = numTupleTuple[1];  //[string, number];
 >strNumTuple1 : [string, number]
@@ -122,13 +122,13 @@ var eleUnion15 = unionTuple1["0"]; // number
 >eleUnion15 : number
 >unionTuple1["0"] : number
 >unionTuple1 : [number, string | number]
->"0" : string
+>"0" : "0"
 
 var eleUnion16 = unionTuple1["1"]; // string | number
 >eleUnion16 : string | number
 >unionTuple1["1"] : string | number
 >unionTuple1 : [number, string | number]
->"1" : string
+>"1" : "1"
 
 var eleUnion20 = unionTuple2[0]; // boolean
 >eleUnion20 : boolean
@@ -164,11 +164,11 @@ var eleUnion25 = unionTuple2["0"]; // boolean
 >eleUnion25 : boolean
 >unionTuple2["0"] : boolean
 >unionTuple2 : [boolean, string | number]
->"0" : string
+>"0" : "0"
 
 var eleUnion26 = unionTuple2["1"]; // string | number
 >eleUnion26 : string | number
 >unionTuple2["1"] : string | number
 >unionTuple2 : [boolean, string | number]
->"1" : string
+>"1" : "1"
 

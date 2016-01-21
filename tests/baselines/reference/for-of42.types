@@ -1,10 +1,10 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of42.ts ===
 var array = [{ x: "", y: 0 }]
 >array : { x: string; y: number; }[]
->[{ x: "", y: 0 }] : { x: string; y: number; }[]
->{ x: "", y: 0 } : { x: string; y: number; }
->x : string
->"" : string
+>[{ x: "", y: 0 }] : { x: ""; y: number; }[]
+>{ x: "", y: 0 } : { x: ""; y: number; }
+>x : ""
+>"" : ""
 >y : number
 >0 : number
 

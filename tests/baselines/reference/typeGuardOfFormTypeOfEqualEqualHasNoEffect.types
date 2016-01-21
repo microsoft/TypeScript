@@ -21,7 +21,7 @@ if (typeof strOrNum == "string") {
 >typeof strOrNum == "string" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
->"string" : string
+>"string" : "string"
 
     var r1 = strOrNum; // string | number
 >r1 : string | number
@@ -37,7 +37,7 @@ if (typeof strOrBool == "boolean") {
 >typeof strOrBool == "boolean" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     var r2 = strOrBool; // string | boolean
 >r2 : string | boolean
@@ -53,7 +53,7 @@ if (typeof numOrBool == "number") {
 >typeof numOrBool == "number" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
->"number" : string
+>"number" : "number"
 
     var r3 = numOrBool; // number | boolean
 >r3 : number | boolean
@@ -69,7 +69,7 @@ if (typeof strOrC == "Object") {
 >typeof strOrC == "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
->"Object" : string
+>"Object" : "Object"
 
     var r4 = strOrC; // string | C
 >r4 : string | C

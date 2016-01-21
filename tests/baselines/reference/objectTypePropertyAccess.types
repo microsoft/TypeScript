@@ -23,7 +23,7 @@ var r2 = c['toString']();
 >c['toString']() : string
 >c['toString'] : () => string
 >c : C
->'toString' : string
+>'toString' : "toString"
 
 var r3 = c.foo;
 >r3 : string
@@ -35,7 +35,7 @@ var r4 = c['foo'];
 >r4 : string
 >c['foo'] : string
 >c : C
->'foo' : string
+>'foo' : "foo"
 
 interface I {
 >I : I
@@ -59,7 +59,7 @@ var r5 = i['toString']();
 >i['toString']() : string
 >i['toString'] : () => string
 >i : I
->'toString' : string
+>'toString' : "toString"
 
 var r6 = i.bar;
 >r6 : string
@@ -71,15 +71,15 @@ var r7 = i['bar'];
 >r7 : string
 >i['bar'] : string
 >i : I
->'bar' : string
+>'bar' : "bar"
 
 var a = {
 >a : { foo: string; }
->{    foo: ''} : { foo: string; }
+>{    foo: ''} : { foo: ""; }
 
     foo: ''
->foo : string
->'' : string
+>foo : ""
+>'' : ""
 }
 
 var r8 = a.toString();
@@ -94,7 +94,7 @@ var r9 = a['toString']();
 >a['toString']() : string
 >a['toString'] : () => string
 >a : { foo: string; }
->'toString' : string
+>'toString' : "toString"
 
 var r10 = a.foo;
 >r10 : string
@@ -106,5 +106,5 @@ var r11 = a['foo'];
 >r11 : string
 >a['foo'] : string
 >a : { foo: string; }
->'foo' : string
+>'foo' : "foo"
 

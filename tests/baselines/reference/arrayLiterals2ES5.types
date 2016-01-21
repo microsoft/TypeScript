@@ -19,19 +19,19 @@ var a0 = [,, 2, 3, 4]
 
 var a1 = ["hello", "world"]
 >a1 : string[]
->["hello", "world"] : string[]
->"hello" : string
->"world" : string
+>["hello", "world"] : ("hello" | "world")[]
+>"hello" : "hello"
+>"world" : "world"
 
 var a2 = [, , , ...a0, "hello"];
 >a2 : (number | string)[]
->[, , , ...a0, "hello"] : (number | string)[]
+>[, , , ...a0, "hello"] : (number | "hello")[]
 > : undefined
 > : undefined
 > : undefined
 >...a0 : number
 >a0 : number[]
->"hello" : string
+>"hello" : "hello"
 
 var a3 = [,, ...a0]
 >a3 : number[]
@@ -72,14 +72,14 @@ var b0: [any, any, any] = [undefined, null, undefined];
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >b1 : [number[], string[]]
->[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
+>[[1, 2, 3], ["hello", "string"]] : [number[], ("hello" | "string")[]]
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
->["hello", "string"] : string[]
->"hello" : string
->"string" : string
+>["hello", "string"] : ("hello" | "string")[]
+>"hello" : "hello"
+>"string" : "string"
 
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -105,10 +105,10 @@ var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
 //        non - spread element expressions and the numeric index signature types of the spread element expressions
 var temp = ["s", "t", "r"];
 >temp : string[]
->["s", "t", "r"] : string[]
->"s" : string
->"t" : string
->"r" : string
+>["s", "t", "r"] : ("s" | "t" | "r")[]
+>"s" : "s"
+>"t" : "t"
+>"r" : "r"
 
 var temp1 = [1, 2, 3];
 >temp1 : number[]
@@ -119,14 +119,14 @@ var temp1 = [1, 2, 3];
 
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >temp2 : [number[], string[]]
->[[1, 2, 3], ["hello", "string"]] : [number[], string[]]
+>[[1, 2, 3], ["hello", "string"]] : [number[], ("hello" | "string")[]]
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
->["hello", "string"] : string[]
->"hello" : string
->"string" : string
+>["hello", "string"] : ("hello" | "string")[]
+>"hello" : "hello"
+>"string" : "string"
 
 var temp3 = [undefined, null, undefined];
 >temp3 : any[]
@@ -215,11 +215,11 @@ var d8: number[][] = [[...temp1]]
 
 var d9 = [[...temp1], ...["hello"]];
 >d9 : (number[] | string)[]
->[[...temp1], ...["hello"]] : (number[] | string)[]
+>[[...temp1], ...["hello"]] : (number[] | "hello")[]
 >[...temp1] : number[]
 >...temp1 : number
 >temp1 : number[]
->...["hello"] : string
->["hello"] : string[]
->"hello" : string
+>...["hello"] : "hello"
+>["hello"] : "hello"[]
+>"hello" : "hello"
 

@@ -30,20 +30,20 @@ var b: string = x.doOtherStuff('hm');
 >x.doOtherStuff : <T>(x: T) => T
 >x : boolean
 >doOtherStuff : <T>(x: T) => T
->'hm' : string
+>'hm' : "hm"
 
 var c: string = x['doStuff']();
 >c : string
 >x['doStuff']() : string
 >x['doStuff'] : () => string
 >x : boolean
->'doStuff' : string
+>'doStuff' : "doStuff"
 
 var d: string = x['doOtherStuff']('hm');
 >d : string
 >x['doOtherStuff']('hm') : string
 >x['doOtherStuff'] : <T>(x: T) => T
 >x : boolean
->'doOtherStuff' : string
->'hm' : string
+>'doOtherStuff' : "doOtherStuff"
+>'hm' : "hm"
 

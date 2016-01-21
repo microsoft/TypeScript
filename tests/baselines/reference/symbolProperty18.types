@@ -13,7 +13,7 @@ var i = {
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
->"" : string
+>"" : ""
 
     set [Symbol.toPrimitive](p: boolean) { }
 >Symbol.toPrimitive : symbol

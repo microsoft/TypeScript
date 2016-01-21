@@ -9,7 +9,7 @@ class bar {
 
   public f() { return ''; }
 >f : () => string
->'' : string
+>'' : ""
 
   public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
 >g : () => { a: bar; b: any; c: any; }
@@ -31,7 +31,7 @@ class bar {
 >y : any
 >null : null
 >z : string
->'' : string
+>'' : ""
 >x++ : number
 >x : number
 }

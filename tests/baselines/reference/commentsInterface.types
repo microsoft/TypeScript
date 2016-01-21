@@ -92,7 +92,7 @@ var i2_i_i2_si = i2_i["hello"];
 >i2_i_i2_si : any
 >i2_i["hello"] : any
 >i2_i : i2
->"hello" : string
+>"hello" : "hello"
 
 var i2_i_i2_ii = i2_i[30];
 >i2_i_i2_ii : number
@@ -203,7 +203,7 @@ i3_i = {
 >(/**i3_i a*/a: number) => "Hello" + a : (a: number) => string
 >a : number
 >"Hello" + a : string
->"Hello" : string
+>"Hello" : "Hello"
 >a : number
 
     l: this.f,

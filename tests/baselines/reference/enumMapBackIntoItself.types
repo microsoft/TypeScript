@@ -27,5 +27,5 @@ var test = TShirtSize[mySize];
 test + ''
 >test + '' : string
 >test : string
->'' : string
+>'' : ""
 

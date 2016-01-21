@@ -6,7 +6,7 @@ module A {
 
     export var x = 'hello world'
 >x : string
->'hello world' : string
+>'hello world' : "hello world"
 
     export class Point {
 >Point : Point
@@ -168,7 +168,7 @@ var o = new M.D('Hello');
 >M.D : typeof K.L
 >M : typeof M
 >D : typeof K.L
->'Hello' : string
+>'Hello' : "Hello"
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }

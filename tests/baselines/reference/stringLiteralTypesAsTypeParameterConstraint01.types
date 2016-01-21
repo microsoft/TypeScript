@@ -33,7 +33,7 @@ let f = foo(x => x);
 >x : "foo"
 
 let fResult = f("foo");
->fResult : "foo"
+>fResult : string
 >f("foo") : "foo"
 >f : (x: "foo") => "foo"
 >"foo" : "foo"
@@ -48,7 +48,7 @@ let g = foo((x => x));
 >x : "foo"
 
 let gResult = g("foo");
->gResult : "foo"
+>gResult : string
 >g("foo") : "foo"
 >g : (x: "foo") => "foo"
 >"foo" : "foo"

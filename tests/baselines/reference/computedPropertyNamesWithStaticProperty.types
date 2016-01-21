@@ -12,7 +12,7 @@ class C {
 >staticProp : number
 
         return "hello";
->"hello" : string
+>"hello" : "hello"
     }
     set [C.staticProp](x: string) {
 >C.staticProp : number

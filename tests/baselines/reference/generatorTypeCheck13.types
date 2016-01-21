@@ -8,5 +8,5 @@ function* g(): IterableIterator<number> {
 >0 : number
 
     return "";
->"" : string
+>"" : ""
 }

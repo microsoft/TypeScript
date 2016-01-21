@@ -48,21 +48,21 @@ class Point implements IPoint {
 >"("+this.x+","+this.y : string
 >"("+this.x+"," : string
 >"("+this.x : string
->"(" : string
+>"(" : "("
 >this.x : any
 >this : this
 >x : any
->"," : string
+>"," : ","
 >this.y : any
 >this : this
 >y : any
->")" : string
+>")" : ")"
     }
 }
 
 var result="";
 >result : string
->"" : string
+>"" : ""
 
 result+=(new Point(3,4).move(2,2));
 >result+=(new Point(3,4).move(2,2)) : string

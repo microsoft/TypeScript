@@ -65,7 +65,7 @@ f `abc`["member"];
 >f `abc` : I
 >f : I
 >`abc` : string
->"member" : string
+>"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : I
@@ -74,7 +74,7 @@ f `abc${1}def${2}ghi`["member"];
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string
+>"member" : "member"
 
 f `abc`[0].member `abc${1}def${2}ghi`;
 >f `abc`[0].member `abc${1}def${2}ghi` : I
@@ -98,7 +98,7 @@ f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string
+>"member" : "member"
 >member : I
 >`abc${1}def${2}ghi` : string
 >1 : number

@@ -5,13 +5,13 @@ function foo(): string {
 >foo : () => string
 
     return "";
->"" : string
+>"" : ""
 }
 function foo2() {
 >foo2 : () => string
 
     return "";
->"" : string
+>"" : ""
 }
 
 // number

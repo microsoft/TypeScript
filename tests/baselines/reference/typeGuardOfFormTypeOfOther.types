@@ -52,7 +52,7 @@ if (typeof strOrC === "Object") {
 >typeof strOrC === "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
->"Object" : string
+>"Object" : "Object"
 
     c = strOrC; // C
 >c = strOrC : C
@@ -68,7 +68,7 @@ if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
 >typeof numOrC : string
 >numOrC : number | C
->"Object" : string
+>"Object" : "Object"
 
     c = numOrC; // C
 >c = numOrC : C
@@ -84,7 +84,7 @@ if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
->"Object" : string
+>"Object" : "Object"
 
     c = boolOrC; // C
 >c = boolOrC : C
@@ -102,7 +102,7 @@ if (typeof strOrNumOrBool === "Object") {
 >typeof strOrNumOrBool === "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"Object" : string
+>"Object" : "Object"
 
     var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean
@@ -121,7 +121,7 @@ if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
->"Object" : string
+>"Object" : "Object"
 
     var r2: string = strOrC; // string
 >r2 : string
@@ -137,7 +137,7 @@ if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
 >typeof numOrC : string
 >numOrC : number | C
->"Object" : string
+>"Object" : "Object"
 
     var r3: number = numOrC; // number
 >r3 : number
@@ -153,7 +153,7 @@ if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
->"Object" : string
+>"Object" : "Object"
 
     var r4: boolean = boolOrC; // boolean
 >r4 : boolean
@@ -171,7 +171,7 @@ if (typeof strOrNumOrBool !== "Object") {
 >typeof strOrNumOrBool !== "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"Object" : string
+>"Object" : "Object"
 
     var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean

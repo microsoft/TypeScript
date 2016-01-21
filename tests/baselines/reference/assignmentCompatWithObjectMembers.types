@@ -47,15 +47,15 @@ module SimpleTypes {
 
     var a2 = { foo: '' };
 >a2 : { foo: string; }
->{ foo: '' } : { foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 
     var b2 = { foo: '' };
 >b2 : { foo: string; }
->{ foo: '' } : { foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 
     s = t;
 >s = t : T

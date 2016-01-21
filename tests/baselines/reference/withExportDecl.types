@@ -24,23 +24,23 @@ export var exportedVarWithInitialValue = 70;
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
->{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: "position"; }
 >x : number
 >30 : number
 >y : number
 >70 : number
->desc : string
->"position" : string
+>desc : "position"
+>"position" : "position"
 
 export var exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
 >exportedWithComplicatedValue : { x: number; y: number; desc: string; }
->{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: "position"; }
 >x : number
 >30 : number
 >y : number
 >70 : number
->desc : string
->"position" : string
+>desc : "position"
+>"position" : "position"
 
 declare var declaredVar;
 >declaredVar : any
@@ -59,9 +59,9 @@ export declare var exportedDeclaredVar: number;
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
->['a', 'b'] : string[]
->'a' : string
->'b' : string
+>['a', 'b'] : ("a" | "b")[]
+>'a' : "a"
+>'b' : "b"
 
 export var exportedArrayVar: { x: number; y: string; }[] ;
 >exportedArrayVar : { x: number; y: string; }[]
@@ -73,25 +73,25 @@ exportedArrayVar.push({ x: 30, y : 'hello world' });
 >exportedArrayVar.push : (...items: { x: number; y: string; }[]) => number
 >exportedArrayVar : { x: number; y: string; }[]
 >push : (...items: { x: number; y: string; }[]) => number
->{ x: 30, y : 'hello world' } : { x: number; y: string; }
+>{ x: 30, y : 'hello world' } : { x: number; y: "hello world"; }
 >x : number
 >30 : number
->y : string
->'hello world' : string
+>y : "hello world"
+>'hello world' : "hello world"
 
 function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }
 
     return {
->{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
+>{        x: "Hello",        y: "word",        n: 2    } : { x: "Hello"; y: "word"; n: number; }
 
         x: "Hello",
->x : string
->"Hello" : string
+>x : "Hello"
+>"Hello" : "Hello"
 
         y: "word",
->y : string
->"word" : string
+>y : "word"
+>"word" : "word"
 
         n: 2
 >n : number
@@ -115,7 +115,7 @@ module m1 {
 >foo : () => string
 
         return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
     }
 }
 export declare module m2 {

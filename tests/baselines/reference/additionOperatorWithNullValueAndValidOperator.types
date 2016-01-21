@@ -66,7 +66,7 @@ var r7 = null + E['a'];
 >null : null
 >E['a'] : E
 >E : typeof E
->'a' : string
+>'a' : "a"
 
 var r8 = b + null;
 >r8 : number
@@ -99,7 +99,7 @@ var r12 = E['a'] + null;
 >E['a'] + null : number
 >E['a'] : E
 >E : typeof E
->'a' : string
+>'a' : "a"
 >null : null
 
 // null + string
@@ -113,7 +113,7 @@ var r14 = null + '';
 >r14 : string
 >null + '' : string
 >null : null
->'' : string
+>'' : ""
 
 var r15 = d + null;
 >r15 : string
@@ -124,6 +124,6 @@ var r15 = d + null;
 var r16 = '' + null;
 >r16 : string
 >'' + null : string
->'' : string
+>'' : ""
 >null : null
 

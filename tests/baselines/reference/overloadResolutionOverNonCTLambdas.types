@@ -36,7 +36,7 @@ module Bugs {
 >args[index] : any
 >args : any[]
 >index : any
->'undefined' : string
+>'undefined' : "undefined"
 
         ? args[index]
 >args[index] : any
@@ -58,7 +58,7 @@ function bug3(f:(x:string)=>string) { return f("s") }
 >x : string
 >f("s") : string
 >f : (x: string) => string
->"s" : string
+>"s" : "s"
 
 function fprime(x:string):string { return x; }
 >fprime : (x: string) => string

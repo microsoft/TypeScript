@@ -100,14 +100,14 @@ var b = bar(1, "one", g);  // Should be number | string
 >bar(1, "one", g) : number | string
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
->"one" : string
+>"one" : "one"
 >g : <T>(x: T, y: T) => T
 
 var b = bar("one", 1, g);  // Should be number | string
 >b : number | string
 >bar("one", 1, g) : string | number
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->"one" : string
+>"one" : "one"
 >1 : number
 >g : <T>(x: T, y: T) => T
 
@@ -133,14 +133,14 @@ var d = bar(1, "one", h);  // Should be number[] | string[]
 >bar(1, "one", h) : number[] | string[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
->"one" : string
+>"one" : "one"
 >h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
 >d : number[] | string[]
 >bar("one", 1, h) : string[] | number[]
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
->"one" : string
+>"one" : "one"
 >1 : number
 >h : <T, U>(x: T, y: U) => T[] | U[]
 

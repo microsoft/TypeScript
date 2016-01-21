@@ -113,7 +113,7 @@ function foo() {
 >2 : number
 
                     return "123"
->"123" : string
+>"123" : "123"
                 }
                 if (x == 3) {
 >x == 3 : boolean
@@ -167,7 +167,7 @@ function foo() {
 >2 : number
 
                 return "456";
->"456" : string
+>"456" : "456"
             }
             if (x == 3) {
 >x == 3 : boolean
@@ -288,7 +288,7 @@ function foo_c() {
 >2 : number
 
                     return "123"
->"123" : string
+>"123" : "123"
                 }
                 if (x == 3) {
 >x == 3 : boolean
@@ -342,7 +342,7 @@ function foo_c() {
 >2 : number
 
                 return "456";
->"456" : string
+>"456" : "456"
             }
             if (x == 3) {
 >x == 3 : boolean

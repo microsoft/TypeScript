@@ -8,7 +8,7 @@ class Foo {
 
     static bar = '';
 >bar : string
->'' : string
+>'' : ""
 }
 Foo.prototype.bar = undefined; // Should be OK
 >Foo.prototype.bar = undefined : undefined

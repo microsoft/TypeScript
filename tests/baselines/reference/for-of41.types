@@ -1,15 +1,15 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of41.ts ===
 var array = [{x: [0], y: {p: ""}}]
 >array : { x: number[]; y: { p: string; }; }[]
->[{x: [0], y: {p: ""}}] : { x: number[]; y: { p: string; }; }[]
->{x: [0], y: {p: ""}} : { x: number[]; y: { p: string; }; }
+>[{x: [0], y: {p: ""}}] : { x: number[]; y: { p: ""; }; }[]
+>{x: [0], y: {p: ""}} : { x: number[]; y: { p: ""; }; }
 >x : number[]
 >[0] : number[]
 >0 : number
->y : { p: string; }
->{p: ""} : { p: string; }
->p : string
->"" : string
+>y : { p: ""; }
+>{p: ""} : { p: ""; }
+>p : ""
+>"" : ""
 
 for (var {x: [a], y: {p}} of array) {
 >x : any

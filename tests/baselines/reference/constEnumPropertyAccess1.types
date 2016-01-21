@@ -52,7 +52,7 @@ var a1 = G["A"];
 >a1 : G
 >G["A"] : G
 >G : typeof G
->"A" : string
+>"A" : "A"
 
 var g = o[G.A];
 >g : boolean

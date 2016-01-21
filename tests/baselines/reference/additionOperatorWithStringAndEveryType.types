@@ -137,7 +137,7 @@ var r17 = x + '';
 >r17 : string
 >x + '' : string
 >x : string
->'' : string
+>'' : ""
 
 var r18 = x + 0;
 >r18 : string
@@ -149,9 +149,9 @@ var r19 = x + { a: '' };
 >r19 : string
 >x + { a: '' } : string
 >x : string
->{ a: '' } : { a: string; }
->a : string
->'' : string
+>{ a: '' } : { a: ""; }
+>a : ""
+>'' : ""
 
 var r20 = x + [];
 >r20 : string

@@ -144,7 +144,7 @@ var r17 = a + '';
 >r17 : string
 >a + '' : string
 >a : any
->'' : string
+>'' : ""
 
 var r18 = a + 123;
 >r18 : any
@@ -156,9 +156,9 @@ var r19 = a + { a: '' };
 >r19 : any
 >a + { a: '' } : any
 >a : any
->{ a: '' } : { a: string; }
->a : string
->'' : string
+>{ a: '' } : { a: ""; }
+>a : ""
+>'' : ""
 
 var r20 = a + ((a: string) => { return a });
 >r20 : any

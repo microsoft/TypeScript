@@ -9,18 +9,18 @@ var ANY1;
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
->["", ""] : string[]
->"" : string
->"" : string
+>["", ""] : ""[]
+>"" : ""
+>"" : ""
 
 var obj: () => {}
 >obj : () => {}
 
 var obj1 = { x: "", y: () => { }};
 >obj1 : { x: string; y: () => void; }
->{ x: "", y: () => { }} : { x: string; y: () => void; }
->x : string
->"" : string
+>{ x: "", y: () => { }} : { x: ""; y: () => void; }
+>x : ""
+>"" : ""
 >y : () => void
 >() => { } : () => void
 

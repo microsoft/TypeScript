@@ -85,7 +85,7 @@ foo2(1, '');
 >foo2(1, '') : string
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : number
->'' : string
+>'' : ""
 
 foo2({}, { length: 2 }); 
 >foo2({}, { length: 2 }) : { length: number; }
@@ -115,6 +115,6 @@ foo2(1, ['']);
 >foo2(1, ['']) : string[]
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : number
->[''] : string[]
->'' : string
+>[''] : ""[]
+>'' : ""
 

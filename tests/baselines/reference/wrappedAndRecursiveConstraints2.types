@@ -22,5 +22,5 @@ var c = new C(new C('')); // error
 >C : typeof C
 >new C('') : C<string>
 >C : typeof C
->'' : string
+>'' : ""
 

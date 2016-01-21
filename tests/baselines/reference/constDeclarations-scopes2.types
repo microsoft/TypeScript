@@ -2,8 +2,8 @@
 
 // global
 const c = "string";
->c : string
->"string" : string
+>c : "string"
+>"string" : "string"
 
 var n: number;
 >n : number

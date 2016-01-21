@@ -36,7 +36,7 @@ x1 += 0;
 x1 += '';
 >x1 += '' : string
 >x1 : any
->'' : string
+>'' : ""
 
 x1 += E.a;
 >x1 += E.a : any
@@ -86,7 +86,7 @@ x2 += 0;
 x2 += '';
 >x2 += '' : string
 >x2 : string
->'' : string
+>'' : ""
 
 x2 += E.a;
 >x2 += E.a : string
@@ -190,7 +190,7 @@ x6 += a;
 x6 += '';
 >x6 += '' : string
 >x6 : {}
->'' : string
+>'' : ""
 
 var x7: void;
 >x7 : void

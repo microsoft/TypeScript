@@ -13,5 +13,5 @@ class Greeter extends AbstractGreeter {
 
     public nameA = "Ten";
 >nameA : string
->"Ten" : string
+>"Ten" : "Ten"
 }

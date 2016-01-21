@@ -1,9 +1,9 @@
 === tests/cases/compiler/exportedVariable1.ts ===
 export var foo = {name: "Bill"};
 >foo : { name: string; }
->{name: "Bill"} : { name: string; }
->name : string
->"Bill" : string
+>{name: "Bill"} : { name: "Bill"; }
+>name : "Bill"
+>"Bill" : "Bill"
 
 var upper = foo.name.toUpperCase();
 >upper : string

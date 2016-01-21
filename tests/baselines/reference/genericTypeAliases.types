@@ -54,15 +54,15 @@ var ls: Lazy<string>;
 >Lazy : T | (() => T)
 
 ls = "eager";
->ls = "eager" : string
+>ls = "eager" : "eager"
 >ls : string | (() => string)
->"eager" : string
+>"eager" : "eager"
 
 ls = () => "lazy";
 >ls = () => "lazy" : () => string
 >ls : string | (() => string)
 >() => "lazy" : () => string
->"lazy" : string
+>"lazy" : "lazy"
 
 type Foo<T> = T | { x: Foo<T> };
 >Foo : T | { x: T | any; }
@@ -100,25 +100,25 @@ y = x;
 >x : string | { x: string | any; }
 
 x = "string";
->x = "string" : string
+>x = "string" : "string"
 >x : string | { x: string | any; }
->"string" : string
+>"string" : "string"
 
 x = { x: "hello" };
->x = { x: "hello" } : { x: string; }
+>x = { x: "hello" } : { x: "hello"; }
 >x : string | { x: string | any; }
->{ x: "hello" } : { x: string; }
->x : string
->"hello" : string
+>{ x: "hello" } : { x: "hello"; }
+>x : "hello"
+>"hello" : "hello"
 
 x = { x: { x: "world" } };
->x = { x: { x: "world" } } : { x: { x: string; }; }
+>x = { x: { x: "world" } } : { x: { x: "world"; }; }
 >x : string | { x: string | any; }
->{ x: { x: "world" } } : { x: { x: string; }; }
->x : { x: string; }
->{ x: "world" } : { x: string; }
->x : string
->"world" : string
+>{ x: { x: "world" } } : { x: { x: "world"; }; }
+>x : { x: "world"; }
+>{ x: "world" } : { x: "world"; }
+>x : "world"
+>"world" : "world"
 
 var z: Foo<number>;
 >z : number | { x: number | any; }
@@ -154,9 +154,9 @@ var s: Strange<number>;
 >Strange : string
 
 s = "hello";
->s = "hello" : string
+>s = "hello" : "hello"
 >s : string
->"hello" : string
+>"hello" : "hello"
 
 interface Tuple<A, B> {
 >Tuple : Tuple<A, B>
@@ -208,11 +208,11 @@ p.b = 2;
 >2 : number
 
 p.tag = "test";
->p.tag = "test" : string
+>p.tag = "test" : "test"
 >p.tag : string
 >p : TaggedPair<number>
 >tag : string
->"test" : string
+>"test" : "test"
 
 function f<A>() {
 >f : <A>() => A[] | { x: A[] | any; }

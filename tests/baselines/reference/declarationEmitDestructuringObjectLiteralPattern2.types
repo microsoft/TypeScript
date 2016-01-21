@@ -9,13 +9,13 @@ var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: tr
 >b : any
 >a : any
 >z11 : boolean
->{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
+>{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: "hello"; b: { a: boolean; }; }; }
 >a : number
 >1 : number
->b : { a: string; b: { a: boolean; }; }
->{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
->a : string
->"hello" : string
+>b : { a: "hello"; b: { a: boolean; }; }
+>{ a: "hello", b: { a: true } } : { a: "hello"; b: { a: boolean; }; }
+>a : "hello"
+>"hello" : "hello"
 >b : { a: boolean; }
 >{ a: true } : { a: boolean; }
 >a : boolean
@@ -26,7 +26,7 @@ function f15() {
 
     var a4 = "hello";
 >a4 : string
->"hello" : string
+>"hello" : "hello"
 
     var b4 = 1;
 >b4 : number

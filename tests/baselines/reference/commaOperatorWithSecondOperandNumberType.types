@@ -104,7 +104,7 @@ BOOLEAN = false, 1;
 
 "", NUMBER = 1;
 >"", NUMBER = 1 : number
->"" : string
+>"" : ""
 >NUMBER = 1 : number
 >NUMBER : number
 >1 : number
@@ -155,7 +155,7 @@ var resultIsNumber10 = ("", NUMBER = 1);
 >resultIsNumber10 : number
 >("", NUMBER = 1) : number
 >"", NUMBER = 1 : number
->"" : string
+>"" : ""
 >NUMBER = 1 : number
 >NUMBER : number
 >1 : number

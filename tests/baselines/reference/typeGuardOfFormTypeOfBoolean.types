@@ -48,7 +48,7 @@ if (typeof strOrBool === "boolean") {
 >typeof strOrBool === "boolean" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     bool = strOrBool; // boolean
 >bool = strOrBool : boolean
@@ -65,7 +65,7 @@ if (typeof numOrBool === "boolean") {
 >typeof numOrBool === "boolean" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     bool = numOrBool; // boolean
 >bool = numOrBool : boolean
@@ -82,7 +82,7 @@ if (typeof strOrNumOrBool === "boolean") {
 >typeof strOrNumOrBool === "boolean" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
@@ -99,7 +99,7 @@ if (typeof boolOrC === "boolean") {
 >typeof boolOrC === "boolean" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
->"boolean" : string
+>"boolean" : "boolean"
 
     bool = boolOrC; // boolean
 >bool = boolOrC : boolean
@@ -118,7 +118,7 @@ if (typeof strOrNum === "boolean") {
 >typeof strOrNum === "boolean" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
->"boolean" : string
+>"boolean" : "boolean"
 
     var z1: string | number = strOrNum; // string | number
 >z1 : string | number
@@ -138,7 +138,7 @@ if (typeof strOrBool !== "boolean") {
 >typeof strOrBool !== "boolean" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     str = strOrBool; // string
 >str = strOrBool : string
@@ -155,7 +155,7 @@ if (typeof numOrBool !== "boolean") {
 >typeof numOrBool !== "boolean" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     num = numOrBool; // number
 >num = numOrBool : number
@@ -172,7 +172,7 @@ if (typeof strOrNumOrBool !== "boolean") {
 >typeof strOrNumOrBool !== "boolean" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
@@ -189,7 +189,7 @@ if (typeof boolOrC !== "boolean") {
 >typeof boolOrC !== "boolean" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
->"boolean" : string
+>"boolean" : "boolean"
 
     c = boolOrC; // C
 >c = boolOrC : C
@@ -208,7 +208,7 @@ if (typeof strOrNum !== "boolean") {
 >typeof strOrNum !== "boolean" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
->"boolean" : string
+>"boolean" : "boolean"
 
     var z1: string | number = strOrNum; // string | number
 >z1 : string | number

@@ -21,25 +21,25 @@ var abc: A & B & C;
 >C : C
 
 abc.a = "hello";
->abc.a = "hello" : string
+>abc.a = "hello" : "hello"
 >abc.a : string
 >abc : A & B & C
 >a : string
->"hello" : string
+>"hello" : "hello"
 
 abc.b = "hello";
->abc.b = "hello" : string
+>abc.b = "hello" : "hello"
 >abc.b : string
 >abc : A & B & C
 >b : string
->"hello" : string
+>"hello" : "hello"
 
 abc.c = "hello";
->abc.c = "hello" : string
+>abc.c = "hello" : "hello"
 >abc.c : string
 >abc : A & B & C
 >c : string
->"hello" : string
+>"hello" : "hello"
 
 interface X { x: A }
 >X : X
@@ -63,31 +63,31 @@ var xyz: X & Y & Z;
 >Z : Z
 
 xyz.x.a = "hello";
->xyz.x.a = "hello" : string
+>xyz.x.a = "hello" : "hello"
 >xyz.x.a : string
 >xyz.x : A & B & C
 >xyz : X & Y & Z
 >x : A & B & C
 >a : string
->"hello" : string
+>"hello" : "hello"
 
 xyz.x.b = "hello";
->xyz.x.b = "hello" : string
+>xyz.x.b = "hello" : "hello"
 >xyz.x.b : string
 >xyz.x : A & B & C
 >xyz : X & Y & Z
 >x : A & B & C
 >b : string
->"hello" : string
+>"hello" : "hello"
 
 xyz.x.c = "hello";
->xyz.x.c = "hello" : string
+>xyz.x.c = "hello" : "hello"
 >xyz.x.c : string
 >xyz.x : A & B & C
 >xyz : X & Y & Z
 >x : A & B & C
 >c : string
->"hello" : string
+>"hello" : "hello"
 
 type F1 = (x: string) => string;
 >F1 : (x: string) => string
@@ -106,7 +106,7 @@ var s = f("hello");
 >s : string
 >f("hello") : string
 >f : ((x: string) => string) & ((x: number) => number)
->"hello" : string
+>"hello" : "hello"
 
 var n = f(42);
 >n : number

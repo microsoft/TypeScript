@@ -39,7 +39,7 @@ class Bug {
 >this.values : IMap
 >this : this
 >values : IMap
->'comments' : string
+>'comments' : "comments"
 >{ italic: true } : { italic: boolean; }
 >italic : boolean
 >true : boolean

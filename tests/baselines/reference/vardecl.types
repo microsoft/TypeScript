@@ -17,13 +17,13 @@ var varWithInitialValue = 30;
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
->{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: "position"; }
 >x : number
 >30 : number
 >y : number
 >70 : number
->desc : string
->"position" : string
+>desc : "position"
+>"position" : "position"
 
 declare var declaredVar;
 >declaredVar : any
@@ -39,9 +39,9 @@ declare var deckareVarWithType: number;
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
->['a', 'b'] : string[]
->'a' : string
->'b' : string
+>['a', 'b'] : ("a" | "b")[]
+>'a' : "a"
+>'b' : "b"
 
 var complicatedArrayVar: { x: number; y: string; }[] ;
 >complicatedArrayVar : { x: number; y: string; }[]
@@ -53,11 +53,11 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
 >complicatedArrayVar : { x: number; y: string; }[]
 >push : (...items: { x: number; y: string; }[]) => number
->{ x: 30, y : 'hello world' } : { x: number; y: string; }
+>{ x: 30, y : 'hello world' } : { x: number; y: "hello world"; }
 >x : number
 >30 : number
->y : string
->'hello world' : string
+>y : "hello world"
+>'hello world' : "hello world"
 
 var n1: { [s: string]: number; };
 >n1 : { [s: string]: number; }

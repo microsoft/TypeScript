@@ -38,7 +38,7 @@ export class ConstructorWithRestParamters {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
->"" : string
+>"" : ""
     }
 }
 
@@ -85,7 +85,7 @@ export class ConstructorWithParameterInitializer {
 
     constructor(public x = "hello") {
 >x : string
->"hello" : string
+>"hello" : "hello"
     }
 }
 
@@ -128,7 +128,7 @@ class GlobalConstructorWithRestParamters {
 >rests.join : (separator?: string) => string
 >rests : string[]
 >join : (separator?: string) => string
->"" : string
+>"" : ""
     }
 }
 
@@ -175,6 +175,6 @@ class GlobalConstructorWithParameterInitializer {
 
     constructor(public x = "hello") {
 >x : string
->"hello" : string
+>"hello" : "hello"
     }
 }

@@ -120,8 +120,8 @@ var x =
 
       "foo" + "bar"
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
     }
     attr2={
 >attr2 : any
@@ -130,12 +130,12 @@ var x =
 >"foo" + "bar" +            "baz" + "bug" : string
 >"foo" + "bar" +            "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
       
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
     }
     attr3={
 >attr3 : any
@@ -144,12 +144,12 @@ var x =
 >"foo" + "bar" +      "baz" + "bug" : string
 >"foo" + "bar" +      "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
 
       // Extra line here.
     }
