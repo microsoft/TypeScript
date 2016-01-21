@@ -11,9 +11,9 @@ var b = a = [undefined, null];
 >null : null
 
 b = ["", ""];
->b = ["", ""] : [string, string]
+>b = ["", ""] : ["", ""]
 >b : [any, any]
->["", ""] : [string, string]
->"" : string
->"" : string
+>["", ""] : ["", ""]
+>"" : ""
+>"" : ""
 

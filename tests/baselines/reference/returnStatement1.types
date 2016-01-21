@@ -13,6 +13,6 @@ function f() {
 
     };
     ("harmless extra line");
->("harmless extra line") : string
->"harmless extra line" : string
+>("harmless extra line") : "harmless extra line"
+>"harmless extra line" : "harmless extra line"
 }

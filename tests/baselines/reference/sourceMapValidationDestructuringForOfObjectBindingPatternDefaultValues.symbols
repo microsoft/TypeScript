@@ -93,7 +93,7 @@ for (let {name: nameA = "noName" } of getRobots()) {
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 31, 10))
 }
 for (let {name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 40))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 40), Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 76))
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 10))
 >name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 40))
 >skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 34, 55))
@@ -200,9 +200,9 @@ for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 55, 10))
 }
 for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 68))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 68), Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 104))
 >nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 10))
->skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 83))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 83), Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 121))
 >skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 33))
 >name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 68))
 >skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts, 58, 83))

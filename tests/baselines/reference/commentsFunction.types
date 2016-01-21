@@ -26,7 +26,7 @@ function fooWithParameters(/** this is comment about a*/a: string,
 fooWithParameters("a", 10);
 >fooWithParameters("a", 10) : void
 >fooWithParameters : (a: string, b: number) => void
->"a" : string
+>"a" : "a"
 >10 : number
 
 /** fooFunc

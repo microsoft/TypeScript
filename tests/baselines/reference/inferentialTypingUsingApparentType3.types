@@ -19,7 +19,7 @@ class CharField implements Field<string> {
 >input : string
 
         return "Yup";
->"Yup" : string
+>"Yup" : "Yup"
     }
 }
 

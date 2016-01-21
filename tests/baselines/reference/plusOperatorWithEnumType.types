@@ -26,7 +26,7 @@ var ResultIsNumber3 = +ENUM1["A"];
 >+ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 >ResultIsNumber4 : number
@@ -38,7 +38,7 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 >0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // miss assignment operators
 +ENUM;

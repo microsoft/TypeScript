@@ -112,34 +112,34 @@ condObject ? exprString1 : exprBoolean1; // union
 
 ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 >({ a: 1, b: "s" }) ? exprString1 : exprString2 : string
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
 ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
 >({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2 : Object
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 ({ a: 1, b: "s" }) ? exprString1: exprBoolean1; // union
 >({ a: 1, b: "s" }) ? exprString1: exprBoolean1 : string | boolean
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -268,36 +268,36 @@ var resultIsNumber2 = ({}) ? exprNumber1 : exprNumber2;
 var resultIsString2 = ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 >resultIsString2 : string
 >({ a: 1, b: "s" }) ? exprString1 : exprString2 : string
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
 var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
 >resultIsObject2 : Object
 >({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2 : Object
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 var resultIsStringOrBoolean2 = ({ a: 1, b: "s" }) ? exprString1 : exprBoolean1; // union
 >resultIsStringOrBoolean2 : string | boolean
 >({ a: 1, b: "s" }) ? exprString1 : exprBoolean1 : string | boolean
->({ a: 1, b: "s" }) : { a: number; b: string; }
->{ a: 1, b: "s" } : { a: number; b: string; }
+>({ a: 1, b: "s" }) : { a: number; b: "s"; }
+>{ a: 1, b: "s" } : { a: number; b: "s"; }
 >a : number
 >1 : number
->b : string
->"s" : string
+>b : "s"
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 

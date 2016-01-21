@@ -24,7 +24,7 @@ module m1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -37,7 +37,7 @@ module m1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 
         num = var2.length; // string
 >num = var2.length : number
@@ -61,7 +61,7 @@ module m1 {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 
         strOrNum = var3; // string | number
 >strOrNum = var3 : string | number
@@ -96,7 +96,7 @@ module m2 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -109,7 +109,7 @@ module m2 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -122,7 +122,7 @@ module m2 {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 >var3 : string | number
 
         // variables in module declaration
@@ -133,7 +133,7 @@ module m2 {
 >typeof var4 === "string" : boolean
 >typeof var4 : string
 >var4 : string | number
->"string" : string
+>"string" : "string"
 
             num = var4.length; // string
 >num = var4.length : number
@@ -157,7 +157,7 @@ module m2 {
 >typeof var5 === "string" : boolean
 >typeof var5 : string
 >var5 : string | number
->"string" : string
+>"string" : "string"
 
             strOrNum = var5; // string | number
 >strOrNum = var5 : string | number
@@ -185,7 +185,7 @@ module m3.m4 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -198,7 +198,7 @@ module m3.m4 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 
         num = var2.length; // string
 >num = var2.length : number
@@ -222,7 +222,7 @@ module m3.m4 {
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
->"string" : string
+>"string" : "string"
 
         strOrNum = var3; // string | number
 >strOrNum = var3 : string | number

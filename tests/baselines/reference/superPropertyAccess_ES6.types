@@ -84,6 +84,6 @@ class B extends A {
 >property : string
 >value + " addition" : string
 >value : string
->" addition" : string
+>" addition" : " addition"
     }
 }

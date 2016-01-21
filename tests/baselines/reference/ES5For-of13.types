@@ -1,10 +1,10 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of13.ts ===
 for (let v of ['a', 'b', 'c']) {
 >v : string
->['a', 'b', 'c'] : string[]
->'a' : string
->'b' : string
->'c' : string
+>['a', 'b', 'c'] : ("a" | "b" | "c")[]
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
 
     var x = v;
 >x : string

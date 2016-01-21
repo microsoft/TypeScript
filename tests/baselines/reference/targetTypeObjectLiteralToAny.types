@@ -21,11 +21,11 @@ function suggest(){
 >result.push : any
 >result : any
 >push : any
->{text:keyword, type:"keyword"} : { text: string; type: string; }
+>{text:keyword, type:"keyword"} : { text: string; type: "keyword"; }
 >text : string
 >keyword : string
->type : string
->"keyword" : string
+>type : "keyword"
+>"keyword" : "keyword"
 
 	});			
 }

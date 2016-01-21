@@ -4,7 +4,7 @@ module A {
 
 export var x = 'hello world'
 >x : string
->'hello world' : string
+>'hello world' : "hello world"
 
 export class Point {
 >Point : Point

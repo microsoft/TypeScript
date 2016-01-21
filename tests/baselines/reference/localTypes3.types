@@ -29,7 +29,7 @@ function f1() {
 >new C(10, "hello") : C<number, string>
 >C : typeof C
 >10 : number
->"hello" : string
+>"hello" : "hello"
 
     let x = v.x;
 >x : number
@@ -78,7 +78,7 @@ function f2() {
 >v : f<number>.C<string>
 >new C("hello") : f<number>.C<string>
 >C : typeof C
->"hello" : string
+>"hello" : "hello"
 
     let x = v.x;
 >x : number
@@ -124,7 +124,7 @@ function f3() {
 >f(10, "hello") : typeof C
 >f : <X, Y>(x: X, y: Y) => typeof C
 >10 : number
->"hello" : string
+>"hello" : "hello"
 
     let v = new C();
 >v : f<number, string>.C

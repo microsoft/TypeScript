@@ -14,11 +14,11 @@ class StringIterator {
 >next : () => { value: string; done: boolean; }
 
         return {
->{            value: "",            done: false        } : { value: string; done: boolean; }
+>{            value: "",            done: false        } : { value: ""; done: boolean; }
 
             value: "",
->value : string
->"" : string
+>value : ""
+>"" : ""
 
             done: false
 >done : boolean

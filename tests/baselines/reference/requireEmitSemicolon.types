@@ -23,7 +23,7 @@ export module Database {
 >P : typeof P
 >Models : typeof P.Models
 >Person : typeof P.Models.Person
->"Rock" : string
+>"Rock" : "Rock"
 	    }
 	}
 } 

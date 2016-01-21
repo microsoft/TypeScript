@@ -7,7 +7,7 @@ module Z.M {
 >bar : () => string
 
         return "";
->"" : string
+>"" : ""
     }
 }
 module A.M {

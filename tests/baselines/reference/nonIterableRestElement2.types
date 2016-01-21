@@ -4,11 +4,11 @@ var c = {};
 >{} : {}
 
 [...c] = ["", 0];
->[...c] = ["", 0] : (string | number)[]
+>[...c] = ["", 0] : ("" | number)[]
 >[...c] : undefined[]
 >...c : any
 >c : {}
->["", 0] : (string | number)[]
->"" : string
+>["", 0] : ("" | number)[]
+>"" : ""
 >0 : number
 

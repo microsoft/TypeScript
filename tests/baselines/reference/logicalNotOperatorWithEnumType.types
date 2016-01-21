@@ -22,7 +22,7 @@ var ResultIsBoolean2 = !ENUM["B"];
 >!ENUM["B"] : boolean
 >ENUM["B"] : ENUM
 >ENUM : typeof ENUM
->"B" : string
+>"B" : "B"
 
 var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
 >ResultIsBoolean3 : boolean
@@ -34,7 +34,7 @@ var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
 >B : ENUM
 >ENUM["C"] : ENUM
 >ENUM : typeof ENUM
->"C" : string
+>"C" : "C"
 
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
@@ -52,7 +52,7 @@ var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 >ENUM["B"] + ENUM.C : number
 >ENUM["B"] : ENUM
 >ENUM : typeof ENUM
->"B" : string
+>"B" : "B"
 >ENUM.C : ENUM
 >ENUM : typeof ENUM
 >C : ENUM

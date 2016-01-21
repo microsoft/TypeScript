@@ -8,9 +8,9 @@ class C1 {
 >toStringTag : symbol
 
         return { x: "" };
->{ x: "" } : { x: string; }
->x : string
->"" : string
+>{ x: "" } : { x: ""; }
+>x : ""
+>"" : ""
     }
 }
 

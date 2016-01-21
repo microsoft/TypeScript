@@ -9,7 +9,7 @@ function foo() {
 
     var b = "Hello";
 >b : string
->"Hello" : string
+>"Hello" : "Hello"
 
     return {
 >{        a,        b    } : { a: number; b: string; }

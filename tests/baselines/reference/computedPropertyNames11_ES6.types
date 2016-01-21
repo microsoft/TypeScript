@@ -38,7 +38,7 @@ var v = {
 >0 : number
 
     set [""](v) { },
->"" : string
+>"" : ""
 >v : any
 
     get [0]() { return 0; },

@@ -24,7 +24,7 @@ let l9 = 0, l10 :string = "", l11 = null;
 >l9 : number
 >0 : number
 >l10 : string
->"" : string
+>"" : ""
 >l11 : any
 >null : null
 

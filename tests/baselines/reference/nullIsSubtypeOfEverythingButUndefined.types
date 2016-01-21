@@ -49,17 +49,17 @@ var r1 = true ? null : 1;
 
 var r2 = true ? '' : null;
 >r2 : string
->true ? '' : null : string
+>true ? '' : null : ""
 >true : boolean
->'' : string
+>'' : ""
 >null : null
 
 var r2 = true ? null : '';
 >r2 : string
->true ? null : '' : string
+>true ? null : '' : ""
 >true : boolean
 >null : null
->'' : string
+>'' : ""
 
 var r3 = true ? true : null;
 >r3 : boolean

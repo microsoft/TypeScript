@@ -34,5 +34,5 @@ foo(n => n.length, () => 'hi');
 >n : string
 >length : number
 >() => 'hi' : () => string
->'hi' : string
+>'hi' : "hi"
 

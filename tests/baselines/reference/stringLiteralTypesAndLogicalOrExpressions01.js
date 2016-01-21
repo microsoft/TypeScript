@@ -20,7 +20,7 @@ var e = d;
 //// [stringLiteralTypesAndLogicalOrExpressions01.d.ts]
 declare function myRandBool(): boolean;
 declare let a: "foo";
-declare let b: "foo";
+declare let b: string;
 declare let c: "foo";
-declare let d: "foo" | "bar";
+declare let d: string;
 declare let e: "foo" | "bar";

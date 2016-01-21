@@ -51,7 +51,7 @@ module A {
     // not a collision, since we don't export
     var Origin: string = "0,0";
 >Origin : string
->"0,0" : string
+>"0,0" : "0,0"
 
     export module Utils {
 >Utils : typeof Utils

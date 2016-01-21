@@ -2,7 +2,7 @@
 function foo<T>() { return '' }
 >foo : <T>() => string
 >T : T
->'' : string
+>'' : ""
 
 class C<T> {
 >C : C<T>

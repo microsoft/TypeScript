@@ -173,39 +173,39 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >0 : number
 
 var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
->listOfPlays : { title: string; author: string; year: number; }[]
->[{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }] : { title: string; author: string; year: number; }[]
->{ title: "Cymbeline", author: "Shakespeare", year: 1611 } : { title: string; author: string; year: number; }
->title : string
->"Cymbeline" : string
->author : string
->"Shakespeare" : string
+>listOfPlays : ({ title: string; author: string; year: number; } | { title: string; author: string; year: number; } | { title: string; author: string; year: number; })[]
+>[{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }] : ({ title: "Cymbeline"; author: "Shakespeare"; year: number; } | { title: "The Tempest"; author: "Shakespeare"; year: number; } | { title: "Other"; author: "Not Shakespeare"; year: number; })[]
+>{ title: "Cymbeline", author: "Shakespeare", year: 1611 } : { title: "Cymbeline"; author: "Shakespeare"; year: number; }
+>title : "Cymbeline"
+>"Cymbeline" : "Cymbeline"
+>author : "Shakespeare"
+>"Shakespeare" : "Shakespeare"
 >year : number
 >1611 : number
->{ title: "The Tempest", author: "Shakespeare", year: 1611 } : { title: string; author: string; year: number; }
->title : string
->"The Tempest" : string
->author : string
->"Shakespeare" : string
+>{ title: "The Tempest", author: "Shakespeare", year: 1611 } : { title: "The Tempest"; author: "Shakespeare"; year: number; }
+>title : "The Tempest"
+>"The Tempest" : "The Tempest"
+>author : "Shakespeare"
+>"Shakespeare" : "Shakespeare"
 >year : number
 >1611 : number
->{ title: "Other", author: "Not Shakespeare", year: 2012 } : { title: string; author: string; year: number; }
->title : string
->"Other" : string
->author : string
->"Not Shakespeare" : string
+>{ title: "Other", author: "Not Shakespeare", year: 2012 } : { title: "Other"; author: "Not Shakespeare"; year: number; }
+>title : "Other"
+>"Other" : "Other"
+>author : "Not Shakespeare"
+>"Not Shakespeare" : "Not Shakespeare"
 >year : number
 >2012 : number
 
 _.where(listOfPlays, { author: "Shakespeare", year: 1611 });
->_.where(listOfPlays, { author: "Shakespeare", year: 1611 }) : { title: string; author: string; year: number; }[]
+>_.where(listOfPlays, { author: "Shakespeare", year: 1611 }) : ({ title: string; author: string; year: number; } | { title: string; author: string; year: number; } | { title: string; author: string; year: number; })[]
 >_.where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
 >_ : Underscore.Static
 >where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
->listOfPlays : { title: string; author: string; year: number; }[]
->{ author: "Shakespeare", year: 1611 } : { author: string; year: number; }
->author : string
->"Shakespeare" : string
+>listOfPlays : ({ title: string; author: string; year: number; } | { title: string; author: string; year: number; } | { title: string; author: string; year: number; })[]
+>{ author: "Shakespeare", year: 1611 } : { author: "Shakespeare"; year: number; }
+>author : "Shakespeare"
+>"Shakespeare" : "Shakespeare"
 >year : number
 >1611 : number
 
@@ -235,11 +235,11 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : (boolean | number | string)[]
+>[true, 1, null, 'yes'] : (boolean | number | "yes")[]
 >true : boolean
 >1 : number
 >null : null
->'yes' : string
+>'yes' : "yes"
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T
@@ -249,10 +249,10 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (number | string | boolean)[]
+>[null, 0, 'yes', false] : (number | "yes" | boolean)[]
 >null : null
 >0 : number
->'yes' : string
+>'yes' : "yes"
 >false : boolean
 
 _.contains([1, 2, 3], 3);
@@ -280,24 +280,24 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >3 : number
 >2 : number
 >1 : number
->'sort' : string
+>'sort' : "sort"
 
 var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
->stooges : { name: string; age: number; }[]
->[{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }] : { name: string; age: number; }[]
->{ name: 'moe', age: 40 } : { name: string; age: number; }
->name : string
->'moe' : string
+>stooges : ({ name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; })[]
+>[{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }] : ({ name: "moe"; age: number; } | { name: "larry"; age: number; } | { name: "curly"; age: number; })[]
+>{ name: 'moe', age: 40 } : { name: "moe"; age: number; }
+>name : "moe"
+>'moe' : "moe"
 >age : number
 >40 : number
->{ name: 'larry', age: 50 } : { name: string; age: number; }
->name : string
->'larry' : string
+>{ name: 'larry', age: 50 } : { name: "larry"; age: number; }
+>name : "larry"
+>'larry' : "larry"
 >age : number
 >50 : number
->{ name: 'curly', age: 60 } : { name: string; age: number; }
->name : string
->'curly' : string
+>{ name: 'curly', age: 60 } : { name: "curly"; age: number; }
+>name : "curly"
+>'curly' : "curly"
 >age : number
 >60 : number
 
@@ -306,19 +306,19 @@ _.pluck(stooges, 'name');
 >_.pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
 >_ : Underscore.Static
 >pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
->stooges : { name: string; age: number; }[]
->'name' : string
+>stooges : ({ name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; })[]
+>'name' : "name"
 
 _.max(stooges, (stooge) => stooge.age);
->_.max(stooges, (stooge) => stooge.age) : { name: string; age: number; }
+>_.max(stooges, (stooge) => stooge.age) : { name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; }
 >_.max : { <T>(list: T[], iterator?: Iterator<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): T; }
 >_ : Underscore.Static
 >max : { <T>(list: T[], iterator?: Iterator<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): T; }
->stooges : { name: string; age: number; }[]
->(stooge) => stooge.age : (stooge: { name: string; age: number; }) => number
->stooge : { name: string; age: number; }
+>stooges : ({ name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; })[]
+>(stooge) => stooge.age : (stooge: { name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; }) => number
+>stooge : { name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; }
 >stooge.age : number
->stooge : { name: string; age: number; }
+>stooge : { name: string; age: number; } | { name: string; age: number; } | { name: string; age: number; }
 >age : number
 
 var numbers = [10, 5, 100, 2, 1000];
@@ -401,11 +401,11 @@ _.groupBy(['one', 'two', 'three'], 'length');
 >_.groupBy : { <T>(list: T[], iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
 >_ : Underscore.Static
 >groupBy : { <T>(list: T[], iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
->['one', 'two', 'three'] : string[]
->'one' : string
->'two' : string
->'three' : string
->'length' : string
+>['one', 'two', 'three'] : ("one" | "two" | "three")[]
+>'one' : "one"
+>'two' : "two"
+>'three' : "three"
+>'length' : "length"
 
 _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >_.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd') : Dictionary<number>
@@ -420,14 +420,14 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >5 : number
 >(num) => num % 2 == 0 ? 'even' : 'odd' : (num: number) => string
 >num : number
->num % 2 == 0 ? 'even' : 'odd' : string
+>num % 2 == 0 ? 'even' : 'odd' : "even" | "odd"
 >num % 2 == 0 : boolean
 >num % 2 : number
 >num : number
 >2 : number
 >0 : number
->'even' : string
->'odd' : string
+>'even' : "even"
+>'odd' : "odd"
 
 _.shuffle([1, 2, 3, 4, 5, 6]);
 >_.shuffle([1, 2, 3, 4, 5, 6]) : number[]
@@ -512,12 +512,12 @@ _.compact([0, 1, false, 2, '', 3]);
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (number | boolean | string)[]
+>[0, 1, false, 2, '', 3] : (number | boolean | "")[]
 >0 : number
 >1 : number
 >false : boolean
 >2 : number
->'' : string
+>'' : ""
 >3 : number
 
 _.flatten([1, 2, 3, 4]);
@@ -659,10 +659,10 @@ _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 >_.zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
 >_ : Underscore.Static
 >zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
->['moe', 'larry', 'curly'] : string[]
->'moe' : string
->'larry' : string
->'curly' : string
+>['moe', 'larry', 'curly'] : ("moe" | "larry" | "curly")[]
+>'moe' : "moe"
+>'larry' : "larry"
+>'curly' : "curly"
 >[30, 40, 50] : number[]
 >30 : number
 >40 : number
@@ -677,10 +677,10 @@ _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
->['moe', 'larry', 'curly'] : string[]
->'moe' : string
->'larry' : string
->'curly' : string
+>['moe', 'larry', 'curly'] : ("moe" | "larry" | "curly")[]
+>'moe' : "moe"
+>'larry' : "larry"
+>'curly' : "curly"
 >[30, 40, 50] : number[]
 >30 : number
 >40 : number
@@ -691,15 +691,15 @@ _.object([['moe', 30], ['larry', 40], ['curly', 50]]);
 >_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
 >_ : Underscore.Static
 >object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
->[['moe', 30], ['larry', 40], ['curly', 50]] : (string | number)[][]
->['moe', 30] : (string | number)[]
->'moe' : string
+>[['moe', 30], ['larry', 40], ['curly', 50]] : (("moe" | number)[] | ("larry" | number)[] | ("curly" | number)[])[]
+>['moe', 30] : ("moe" | number)[]
+>'moe' : "moe"
 >30 : number
->['larry', 40] : (string | number)[]
->'larry' : string
+>['larry', 40] : ("larry" | number)[]
+>'larry' : "larry"
 >40 : number
->['curly', 50] : (string | number)[]
->'curly' : string
+>['curly', 50] : ("curly" | number)[]
+>'curly' : "curly"
 >50 : number
 
 _.indexOf([1, 2, 3], 2);
@@ -789,7 +789,7 @@ var func = function (greeting) { return greeting + ': ' + this.name };
 >greeting + ': ' + this.name : string
 >greeting + ': ' : string
 >greeting : any
->': ' : string
+>': ' : ": "
 >this.name : any
 >this : any
 >name : any
@@ -803,10 +803,10 @@ var func2 = _.bind(func, { name: 'moe' }, 'hi');
 >_ : Underscore.Static
 >bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
 >func : (greeting: any) => string
->{ name: 'moe' } : { name: string; }
->name : string
->'moe' : string
->'hi' : string
+>{ name: 'moe' } : { name: "moe"; }
+>name : "moe"
+>'moe' : "moe"
+>'hi' : "hi"
 
 func2();
 >func2() : any
@@ -814,11 +814,11 @@ func2();
 
 var buttonView = {
 >buttonView : { label: string; onClick: () => void; onHover: () => void; }
->{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : { label: string; onClick: () => void; onHover: () => void; }
+>{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : { label: "underscore"; onClick: () => void; onHover: () => void; }
 
     label: 'underscore',
->label : string
->'underscore' : string
+>label : "underscore"
+>'underscore' : "underscore"
 
     onClick: function () { alert('clicked: ' + this.label); },
 >onClick : () => void
@@ -826,7 +826,7 @@ var buttonView = {
 >alert('clicked: ' + this.label) : void
 >alert : (x: string) => void
 >'clicked: ' + this.label : string
->'clicked: ' : string
+>'clicked: ' : "clicked: "
 >this.label : any
 >this : any
 >label : any
@@ -837,7 +837,7 @@ var buttonView = {
 >alert('hovering: ' + this.label) : void
 >alert : (x: string) => void
 >'hovering: ' + this.label : string
->'hovering: ' : string
+>'hovering: ' : "hovering: "
 >this.label : any
 >this : any
 >label : any
@@ -855,9 +855,9 @@ $('#underscore_button').bind('click', buttonView.onClick);
 >$('#underscore_button').bind : any
 >$('#underscore_button') : any
 >$ : any
->'#underscore_button' : string
+>'#underscore_button' : "#underscore_button"
 >bind : any
->'click' : string
+>'click' : "click"
 >buttonView.onClick : () => void
 >buttonView : { label: string; onClick: () => void; onHover: () => void; }
 >onClick : () => void
@@ -909,7 +909,7 @@ _.delay(log, 1000, 'logged later');
 >delay : (func: Function, wait: number, ...args: any[]) => number
 >log : (message?: string, ...rest: string[]) => void
 >1000 : number
->'logged later' : string
+>'logged later' : "logged later"
 
 _.defer(function () { alert('deferred'); });
 >_.defer(function () { alert('deferred'); }) : number
@@ -919,14 +919,14 @@ _.defer(function () { alert('deferred'); });
 >function () { alert('deferred'); } : () => void
 >alert('deferred') : void
 >alert : (x: string) => void
->'deferred' : string
+>'deferred' : "deferred"
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
 >() => alert('updating position...') : () => void
 >alert('updating position...') : void
 >alert : (x: string) => void
->'updating position...' : string
+>'updating position...' : "updating position..."
 
 var throttled = _.throttle(updatePosition, 100);
 >throttled : () => void
@@ -951,7 +951,7 @@ var calculateLayout = () => alert('calculating layout...');
 >() => alert('calculating layout...') : () => void
 >alert('calculating layout...') : void
 >alert : (x: string) => void
->'calculating layout...' : string
+>'calculating layout...' : "calculating layout..."
 
 var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : () => void
@@ -976,7 +976,7 @@ var createApplication = () => alert('creating application...');
 >() => alert('creating application...') : () => void
 >alert('creating application...') : void
 >alert : (x: string) => void
->'creating application...' : string
+>'creating application...' : "creating application..."
 
 var initialize = _.once(createApplication);
 >initialize : () => void
@@ -1002,7 +1002,7 @@ var render = () => alert("rendering...");
 >() => alert("rendering...") : () => void
 >alert("rendering...") : void
 >alert : (x: string) => void
->"rendering..." : string
+>"rendering..." : "rendering..."
 
 var renderNotes = _.after(notes.length, render);
 >renderNotes : () => void
@@ -1036,7 +1036,7 @@ var hello = function (name) { return "hello: " + name; };
 >function (name) { return "hello: " + name; } : (name: any) => string
 >name : any
 >"hello: " + name : string
->"hello: " : string
+>"hello: " : "hello: "
 >name : any
 
 hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; });
@@ -1052,23 +1052,23 @@ hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"
 >arg : any
 >"before, " + func(arg) + ", after" : string
 >"before, " + func(arg) : string
->"before, " : string
+>"before, " : "before, "
 >func(arg) : string
 >func : (name: any) => string
 >arg : any
->", after" : string
+>", after" : ", after"
 
 hello("moe");
 >hello("moe") : string
 >hello : (name: any) => string
->"moe" : string
+>"moe" : "moe"
 
 var greet = function (name) { return "hi: " + name; };
 >greet : (name: any) => string
 >function (name) { return "hi: " + name; } : (name: any) => string
 >name : any
 >"hi: " + name : string
->"hi: " : string
+>"hi: " : "hi: "
 >name : any
 
 var exclaim = function (statement) { return statement + "!"; };
@@ -1077,7 +1077,7 @@ var exclaim = function (statement) { return statement + "!"; };
 >statement : any
 >statement + "!" : string
 >statement : any
->"!" : string
+>"!" : "!"
 
 var welcome = _.compose(exclaim, greet);
 >welcome : Function
@@ -1091,7 +1091,7 @@ var welcome = _.compose(exclaim, greet);
 welcome('moe');
 >welcome('moe') : any
 >welcome : Function
->'moe' : string
+>'moe' : "moe"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -1139,13 +1139,13 @@ _.invert({ Moe: "Moses", Larry: "Louis", Curly: "Jerome" });
 >_.invert : (object: any) => any
 >_ : Underscore.Static
 >invert : (object: any) => any
->{ Moe: "Moses", Larry: "Louis", Curly: "Jerome" } : { Moe: string; Larry: string; Curly: string; }
->Moe : string
->"Moses" : string
->Larry : string
->"Louis" : string
->Curly : string
->"Jerome" : string
+>{ Moe: "Moses", Larry: "Louis", Curly: "Jerome" } : { Moe: "Moses"; Larry: "Louis"; Curly: "Jerome"; }
+>Moe : "Moses"
+>"Moses" : "Moses"
+>Larry : "Louis"
+>"Louis" : "Louis"
+>Curly : "Jerome"
+>"Jerome" : "Jerome"
 
 _.functions(_);
 >_.functions(_) : string[]
@@ -1159,9 +1159,9 @@ _.extend({ name: 'moe' }, { age: 50 });
 >_.extend : <T>(destination: T, ...sources: any[]) => T
 >_ : Underscore.Static
 >extend : <T>(destination: T, ...sources: any[]) => T
->{ name: 'moe' } : { name: string; }
->name : string
->'moe' : string
+>{ name: 'moe' } : { name: "moe"; }
+>name : "moe"
+>'moe' : "moe"
 >{ age: 50 } : { age: number; }
 >age : number
 >50 : number
@@ -1171,35 +1171,35 @@ _.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age');
 >_.pick : <T>(object: T, ...keys: string[]) => T
 >_ : Underscore.Static
 >pick : <T>(object: T, ...keys: string[]) => T
->{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
->name : string
->'moe' : string
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: "moe"; age: number; userid: "moe1"; }
+>name : "moe"
+>'moe' : "moe"
 >age : number
 >50 : number
->userid : string
->'moe1' : string
->'name' : string
->'age' : string
+>userid : "moe1"
+>'moe1' : "moe1"
+>'name' : "name"
+>'age' : "age"
 
 _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 >_.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid') : { name: string; age: number; userid: string; }
 >_.omit : <T>(object: T, ...keys: string[]) => T
 >_ : Underscore.Static
 >omit : <T>(object: T, ...keys: string[]) => T
->{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
->name : string
->'moe' : string
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: "moe"; age: number; userid: "moe1"; }
+>name : "moe"
+>'moe' : "moe"
 >age : number
 >50 : number
->userid : string
->'moe1' : string
->'userid' : string
+>userid : "moe1"
+>'moe1' : "moe1"
+>'userid' : "userid"
 
 var iceCream = { flavor: "chocolate" };
 >iceCream : { flavor: string; }
->{ flavor: "chocolate" } : { flavor: string; }
->flavor : string
->"chocolate" : string
+>{ flavor: "chocolate" } : { flavor: "chocolate"; }
+>flavor : "chocolate"
+>"chocolate" : "chocolate"
 
 _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 >_.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" }) : { flavor: string; }
@@ -1207,20 +1207,20 @@ _.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
 >_ : Underscore.Static
 >defaults : <T>(object: T, ...defaults: any[]) => T
 >iceCream : { flavor: string; }
->{ flavor: "vanilla", sprinkles: "lots" } : { flavor: string; sprinkles: string; }
->flavor : string
->"vanilla" : string
->sprinkles : string
->"lots" : string
+>{ flavor: "vanilla", sprinkles: "lots" } : { flavor: "vanilla"; sprinkles: "lots"; }
+>flavor : "vanilla"
+>"vanilla" : "vanilla"
+>sprinkles : "lots"
+>"lots" : "lots"
 
 _.clone({ name: 'moe' });
 >_.clone({ name: 'moe' }) : { name: string; }
 >_.clone : <T>(object: T) => T
 >_ : Underscore.Static
 >clone : <T>(object: T) => T
->{ name: 'moe' } : { name: string; }
->name : string
->'moe' : string
+>{ name: 'moe' } : { name: "moe"; }
+>name : "moe"
+>'moe' : "moe"
 
 _.chain([1, 2, 3, 200])
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value() : number[]
@@ -1279,13 +1279,13 @@ _.has({ a: 1, b: 2, c: 3 }, "b");
 >2 : number
 >c : number
 >3 : number
->"b" : string
+>"b" : "b"
 
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 >moe : { name: string; luckyNumbers: number[]; }
->{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: string; luckyNumbers: number[]; }
->name : string
->'moe' : string
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: "moe"; luckyNumbers: number[]; }
+>name : "moe"
+>'moe' : "moe"
 >luckyNumbers : number[]
 >[13, 27, 34] : number[]
 >13 : number
@@ -1294,9 +1294,9 @@ var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 
 var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };
 >clone : { name: string; luckyNumbers: number[]; }
->{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: string; luckyNumbers: number[]; }
->name : string
->'moe' : string
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: "moe"; luckyNumbers: number[]; }
+>name : "moe"
+>'moe' : "moe"
 >luckyNumbers : number[]
 >[13, 27, 34] : number[]
 >13 : number
@@ -1341,7 +1341,7 @@ _.isElement($('body')[0]);
 >$('body')[0] : any
 >$('body') : any
 >$ : any
->'body' : string
+>'body' : "body"
 >0 : number
 
 (function () { return _.isArray(arguments); })();
@@ -1402,7 +1402,7 @@ _.isString("moe");
 >_.isString : (object: any) => boolean
 >_ : Underscore.Static
 >isString : (object: any) => boolean
->"moe" : string
+>"moe" : "moe"
 
 _.isNumber(8.4 * 5);
 >_.isNumber(8.4 * 5) : boolean
@@ -1506,9 +1506,9 @@ var underscore = _.noConflict();
 
 var moe2 = { name: 'moe' };
 >moe2 : { name: string; }
->{ name: 'moe' } : { name: string; }
->name : string
->'moe' : string
+>{ name: 'moe' } : { name: "moe"; }
+>name : "moe"
+>'moe' : "moe"
 
 moe2 === _.identity(moe);
 >moe2 === _.identity(moe) : boolean
@@ -1583,7 +1583,7 @@ _.mixin({
 ><any>_("fabio") : any
 >_("fabio") : Underscore.WrappedObject<string>
 >_ : Underscore.Static
->"fabio" : string
+>"fabio" : "fabio"
 >capitalize : any
 
 _.uniqueId('contact_');
@@ -1591,23 +1591,23 @@ _.uniqueId('contact_');
 >_.uniqueId : { (): number; (prefix: string): string; }
 >_ : Underscore.Static
 >uniqueId : { (): number; (prefix: string): string; }
->'contact_' : string
+>'contact_' : "contact_"
 
 _.escape('Curly, Larry & Moe');
 >_.escape('Curly, Larry & Moe') : string
 >_.escape : (s: string) => string
 >_ : Underscore.Static
 >escape : (s: string) => string
->'Curly, Larry & Moe' : string
+>'Curly, Larry & Moe' : "Curly, Larry & Moe"
 
 var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 >object : { cheese: string; stuff: () => string; }
->{ cheese: 'crumpets', stuff: function () { return 'nonsense'; } } : { cheese: string; stuff: () => string; }
->cheese : string
->'crumpets' : string
+>{ cheese: 'crumpets', stuff: function () { return 'nonsense'; } } : { cheese: "crumpets"; stuff: () => string; }
+>cheese : "crumpets"
+>'crumpets' : "crumpets"
 >stuff : () => string
 >function () { return 'nonsense'; } : () => string
->'nonsense' : string
+>'nonsense' : "nonsense"
 
 _.result(object, 'cheese');
 >_.result(object, 'cheese') : any
@@ -1615,7 +1615,7 @@ _.result(object, 'cheese');
 >_ : Underscore.Static
 >result : (object: any, property: string) => any
 >object : { cheese: string; stuff: () => string; }
->'cheese' : string
+>'cheese' : "cheese"
 
 _.result(object, 'stuff');
 >_.result(object, 'stuff') : any
@@ -1623,7 +1623,7 @@ _.result(object, 'stuff');
 >_ : Underscore.Static
 >result : (object: any, property: string) => any
 >object : { cheese: string; stuff: () => string; }
->'stuff' : string
+>'stuff' : "stuff"
 
 var compiled = _.template("hello: <%= name %>");
 >compiled : (data: any) => string
@@ -1631,18 +1631,18 @@ var compiled = _.template("hello: <%= name %>");
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
->"hello: <%= name %>" : string
+>"hello: <%= name %>" : "hello: <%= name %>"
 
 compiled({ name: 'moe' });
 >compiled({ name: 'moe' }) : string
 >compiled : (data: any) => string
->{ name: 'moe' } : { name: string; }
->name : string
->'moe' : string
+>{ name: 'moe' } : { name: "moe"; }
+>name : "moe"
+>'moe' : "moe"
 
 var list2 = "<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>";
 >list2 : string
->"<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>" : string
+>"<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>" : "<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>"
 
 _.template(list2, { people: ['moe', 'curly', 'larry'] });
 >_.template(list2, { people: ['moe', 'curly', 'larry'] }) : string
@@ -1650,12 +1650,12 @@ _.template(list2, { people: ['moe', 'curly', 'larry'] });
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >list2 : string
->{ people: ['moe', 'curly', 'larry'] } : { people: string[]; }
->people : string[]
->['moe', 'curly', 'larry'] : string[]
->'moe' : string
->'curly' : string
->'larry' : string
+>{ people: ['moe', 'curly', 'larry'] } : { people: ("moe" | "curly" | "larry")[]; }
+>people : ("moe" | "curly" | "larry")[]
+>['moe', 'curly', 'larry'] : ("moe" | "curly" | "larry")[]
+>'moe' : "moe"
+>'curly' : "curly"
+>'larry' : "larry"
 
 var template = _.template("<b><%- value %></b>");
 >template : (data: any) => string
@@ -1663,14 +1663,14 @@ var template = _.template("<b><%- value %></b>");
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
->"<b><%- value %></b>" : string
+>"<b><%- value %></b>" : "<b><%- value %></b>"
 
 template({ value: '<script>' });
 >template({ value: '<script>' }) : string
 >template : (data: any) => string
->{ value: '<script>' } : { value: string; }
->value : string
->'<script>' : string
+>{ value: '<script>' } : { value: "<script>"; }
+>value : "<script>"
+>'<script>' : "<script>"
 
 var compiled2 = _.template("<% print('Hello ' + epithet); %>");
 >compiled2 : (data: any) => string
@@ -1678,14 +1678,14 @@ var compiled2 = _.template("<% print('Hello ' + epithet); %>");
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
->"<% print('Hello ' + epithet); %>" : string
+>"<% print('Hello ' + epithet); %>" : "<% print('Hello ' + epithet); %>"
 
 compiled2({ epithet: "stooge" });
 >compiled2({ epithet: "stooge" }) : string
 >compiled2 : (data: any) => string
->{ epithet: "stooge" } : { epithet: string; }
->epithet : string
->"stooge" : string
+>{ epithet: "stooge" } : { epithet: "stooge"; }
+>epithet : "stooge"
+>"stooge" : "stooge"
 
 _.templateSettings = {
 >_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
@@ -1705,27 +1705,27 @@ var template2 = _.template("Hello {{ name }}!");
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
->"Hello {{ name }}!" : string
+>"Hello {{ name }}!" : "Hello {{ name }}!"
 
 template2({ name: "Mustache" });
 >template2({ name: "Mustache" }) : string
 >template2 : (data: any) => string
->{ name: "Mustache" } : { name: string; }
->name : string
->"Mustache" : string
+>{ name: "Mustache" } : { name: "Mustache"; }
+>name : "Mustache"
+>"Mustache" : "Mustache"
 
 _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
 >_.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' }) : string
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >_ : Underscore.Static
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
->"Using 'with': <%= data.answer %>" : string
->{ answer: 'no' } : { answer: string; }
->answer : string
->'no' : string
->{ variable: 'data' } : { variable: string; }
->variable : string
->'data' : string
+>"Using 'with': <%= data.answer %>" : "Using 'with': <%= data.answer %>"
+>{ answer: 'no' } : { answer: "no"; }
+>answer : "no"
+>'no' : "no"
+>{ variable: 'data' } : { variable: "data"; }
+>variable : "data"
+>'data' : "data"
 
 === tests/cases/compiler/underscoreTest1_underscore.ts ===
 interface Dictionary<T> {

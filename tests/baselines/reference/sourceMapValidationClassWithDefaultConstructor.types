@@ -8,5 +8,5 @@ class Greeter {
 
     public nameA = "Ten";
 >nameA : string
->"Ten" : string
+>"Ten" : "Ten"
 }

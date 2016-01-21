@@ -21,7 +21,7 @@ export = Widget1
 class Widget1 { name = 'one'; }
 >Widget1 : Widget1
 >name : string
->'one' : string
+>'one' : "one"
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');

@@ -4,7 +4,7 @@
 
 const a = {
 >a : { b: { foo: string; }; foo: string; }
->{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { foo: string; }; foo: string; }
+>{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { foo: string; }; foo: ""; }
 
     b: {
 >b : { foo: string; }
@@ -32,7 +32,7 @@ const a = {
         }
     },
     foo: ''
->foo : string
->'' : string
+>foo : ""
+>'' : ""
 
 };

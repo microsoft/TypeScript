@@ -17,13 +17,13 @@ class JQuery {
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : JQuery
 >JQuery : JQuery
->{ 0: { id : "a" }, 1: { id : "b" } } : { [x: number]: { id: string; }; 0: { id: string; }; 1: { id: string; }; }
->{ id : "a" } : { id: string; }
->id : string
->"a" : string
->{ id : "b" } : { id: string; }
->id : string
->"b" : string
+>{ 0: { id : "a" }, 1: { id : "b" } } : { [x: number]: { id: "a"; } | { id: "b"; }; 0: { id: "a"; }; 1: { id: "b"; }; }
+>{ id : "a" } : { id: "a"; }
+>id : "a"
+>"a" : "a"
+>{ id : "b" } : { id: "b"; }
+>id : "b"
+>"b" : "b"
 
 jq[0].id;
 >jq[0].id : string

@@ -31,10 +31,10 @@ var x = foo([{a: "str"}]);
 >x : string
 >foo([{a: "str"}]) : string
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
->[{a: "str"}] : { a: string; }[]
->{a: "str"} : { a: string; }
->a : string
->"str" : string
+>[{a: "str"}] : { a: "str"; }[]
+>{a: "str"} : { a: "str"; }
+>a : "str"
+>"str" : "str"
 
 var y = foo([{a: 100}]);
 >y : number

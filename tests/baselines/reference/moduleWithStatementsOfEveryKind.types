@@ -66,14 +66,14 @@ module A {
 
         return 'hello ' + s;
 >'hello ' + s : string
->'hello ' : string
+>'hello ' : "hello "
 >s : string
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
->{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
->s : string
->'hello' : string
+>{ s: 'hello', id: 2, isvalid: true } : { s: "hello"; id: number; isvalid: boolean; }
+>s : "hello"
+>'hello' : "hello"
 >id : number
 >2 : number
 >isvalid : boolean
@@ -154,14 +154,14 @@ module Y {
 
         return 'hello ' + s;
 >'hello ' + s : string
->'hello ' : string
+>'hello ' : "hello "
 >s : string
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
->{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
->s : string
->'hello' : string
+>{ s: 'hello', id: 2, isvalid: true } : { s: "hello"; id: number; isvalid: boolean; }
+>s : "hello"
+>'hello' : "hello"
 >id : number
 >2 : number
 >isvalid : boolean

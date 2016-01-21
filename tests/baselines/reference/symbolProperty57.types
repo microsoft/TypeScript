@@ -17,5 +17,5 @@ obj[Symbol["nonsense"]];
 >obj : { [Symbol.iterator]: number; }
 >Symbol["nonsense"] : any
 >Symbol : SymbolConstructor
->"nonsense" : string
+>"nonsense" : "nonsense"
 

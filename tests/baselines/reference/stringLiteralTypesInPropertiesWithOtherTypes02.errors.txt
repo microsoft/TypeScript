@@ -1,0 +1,57 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes02.ts(33,1): error TS2322: Type '{ kind: string | Map<number>; }' is not assignable to type 'Option'.
+  Types of property 'kind' are incompatible.
+    Type 'string | Map<number>' is not assignable to type '"string" | "number" | Map<number>'.
+      Type 'string' is not assignable to type '"string" | "number" | Map<number>'.
+        Type 'string' is not assignable to type 'Map<number>'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes02.ts(36,1): error TS2322: Type '{ kind: string | Map<number>; }' is not assignable to type 'Option'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes02.ts (2 errors) ====
+    
+    interface Map<T> {
+        [x: string]: number;
+    }
+    
+    interface Option {
+        // Intentionally omitting "boolean".
+        kind: "string" | "number" | Map<number>;
+    }
+    
+    declare const boolVal1: boolean;
+    declare const boolVal2: boolean;
+    
+    let option1: Option;
+    
+    let option2: Option = {
+        kind: boolVal1
+                ? "string"
+                : boolVal2
+                    ? "number"
+                    : ({} as Map<number>)
+    };
+    
+    let option3 = {
+        kind: boolVal1
+                ? "string"
+                : boolVal2
+                    ? "number"
+                    : ({} as Map<number>)
+    };
+    
+    option1 = option2;
+    option1 = option3;
+    ~~~~~~~
+!!! error TS2322: Type '{ kind: string | Map<number>; }' is not assignable to type 'Option'.
+!!! error TS2322:   Types of property 'kind' are incompatible.
+!!! error TS2322:     Type 'string | Map<number>' is not assignable to type '"string" | "number" | Map<number>'.
+!!! error TS2322:       Type 'string' is not assignable to type '"string" | "number" | Map<number>'.
+!!! error TS2322:         Type 'string' is not assignable to type 'Map<number>'.
+    
+    option2 = option1;
+    option2 = option3;
+    ~~~~~~~
+!!! error TS2322: Type '{ kind: string | Map<number>; }' is not assignable to type 'Option'.
+    
+    option3 = option2;
+    option3 = option3;
+    

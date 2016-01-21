@@ -10,10 +10,10 @@ var foo: () => [any] = function bar() {
 >bar : () => [any]
 
     intermediate = [""];
->intermediate = [""] : [string]
+>intermediate = [""] : [""]
 >intermediate : [any]
->[""] : [string]
->"" : string
+>[""] : [""]
+>"" : ""
 
     return [undefined];
 >[undefined] : [undefined]

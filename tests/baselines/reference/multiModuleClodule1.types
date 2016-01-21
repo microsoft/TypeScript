@@ -34,7 +34,7 @@ module C {
 
     function baz() { return ''; }
 >baz : () => string
->'' : string
+>'' : ""
 }
 
 var c = new C(C.x);

@@ -9,11 +9,11 @@ var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string
->"string" : string
+>"string" : "string"
 >x.substr : (from: number, length?: number) => string
 >x : string
 >substr : (from: number, length?: number) => string
@@ -30,11 +30,11 @@ var r2 = !(typeof x === "string" && typeof x === "string") ? x.toFixed : x.subst
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string
->"string" : string
+>"string" : "string"
 >x.toFixed : (fractionDigits?: number) => string
 >x : number
 >toFixed : (fractionDigits?: number) => string
@@ -49,11 +49,11 @@ var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number
->"string" : string
+>"string" : "string"
 >x.substr : (from: number, length?: number) => string
 >x : string
 >substr : (from: number, length?: number) => string
@@ -70,11 +70,11 @@ var r4 = !(typeof x === "string" || typeof x === "string") ? x.toFixed : x.subst
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
->"string" : string
+>"string" : "string"
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number
->"string" : string
+>"string" : "string"
 >x.toFixed : (fractionDigits?: number) => string
 >x : number
 >toFixed : (fractionDigits?: number) => string

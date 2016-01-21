@@ -1,5 +1,5 @@
 tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(2,1): error TS2322: Type 'number' is not assignable to type 'void'.
-tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(3,1): error TS2322: Type 'string' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(3,1): error TS2322: Type '""' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(4,1): error TS2322: Type 'boolean' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(7,1): error TS2322: Type 'typeof E' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(8,1): error TS2322: Type 'E' is not assignable to type 'void'.
@@ -18,7 +18,7 @@ tests/cases/conformance/types/primitives/void/invalidVoidValues.ts(26,1): error 
 !!! error TS2322: Type 'number' is not assignable to type 'void'.
     x = '';
     ~
-!!! error TS2322: Type 'string' is not assignable to type 'void'.
+!!! error TS2322: Type '""' is not assignable to type 'void'.
     x = true;
     ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'void'.

@@ -13,7 +13,7 @@ var anotherVariable = 30;
 // shouldn't appear
 var aVar = "";
 >aVar : string
->"" : string
+>"" : ""
 
 /** this is multiline comment
   * All these variables are of number type */

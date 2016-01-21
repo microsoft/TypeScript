@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionCall1.ts ===
 function foo():any{return ""};
 >foo : () => any
->"" : string
+>"" : ""
 
 var x = foo();
 >x : any

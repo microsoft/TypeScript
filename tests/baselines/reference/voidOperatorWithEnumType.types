@@ -26,7 +26,7 @@ var ResultIsAny3 = void ENUM1["A"];
 >void ENUM1["A"] : undefined
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 >ResultIsAny4 : any
@@ -38,7 +38,7 @@ var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 >0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple void  operators
 var ResultIsAny5 = void void ENUM;
@@ -74,7 +74,7 @@ void ENUM1["B"];
 >void ENUM1["B"] : undefined
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 void ENUM, ENUM1;
 >void ENUM, ENUM1 : typeof ENUM1

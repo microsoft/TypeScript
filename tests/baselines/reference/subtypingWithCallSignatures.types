@@ -28,7 +28,7 @@ module CallSignature {
 >T : T
 >x : T
 >T : T
->'' : string
+>'' : ""
 
     declare function foo2(cb: (x: number, y: number) => void): typeof cb;
 >foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
@@ -58,5 +58,5 @@ module CallSignature {
 >T : T
 >x : T
 >T : T
->'' : string
+>'' : ""
 }

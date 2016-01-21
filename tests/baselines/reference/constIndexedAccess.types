@@ -55,7 +55,7 @@ let s2 = test[numbers["zero"]];
 >test : indexAccess
 >numbers["zero"] : numbers
 >numbers : typeof numbers
->"zero" : string
+>"zero" : "zero"
 
 let n2 = test[numbers["one"]];
 >n2 : number
@@ -63,7 +63,7 @@ let n2 = test[numbers["one"]];
 >test : indexAccess
 >numbers["one"] : numbers
 >numbers : typeof numbers
->"one" : string
+>"one" : "one"
 
 enum numbersNotConst {
 >numbersNotConst : numbersNotConst

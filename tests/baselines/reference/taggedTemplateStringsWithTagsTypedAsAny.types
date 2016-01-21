@@ -55,7 +55,7 @@ f `abc`["member"];
 >f `abc` : any
 >f : any
 >`abc` : string
->"member" : string
+>"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : any
@@ -64,7 +64,7 @@ f `abc${1}def${2}ghi`["member"];
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string
+>"member" : "member"
 
 f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"].someOtherTag `abc${1}def${2}ghi` : any
@@ -73,7 +73,7 @@ f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc` : any
 >f : any
 >`abc` : string
->"member" : string
+>"member" : "member"
 >someOtherTag : any
 >`abc${1}def${2}ghi` : string
 >1 : number
@@ -88,7 +88,7 @@ f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string
+>"member" : "member"
 >someOtherTag : any
 >`abc${1}def${2}ghi` : string
 >1 : number

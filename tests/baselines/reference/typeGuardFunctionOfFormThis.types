@@ -137,7 +137,7 @@ if (((a["isLeader"])())) {
 >(a["isLeader"]) : () => this is LeadGuard
 >a["isLeader"] : () => this is LeadGuard
 >a : RoyalGuard
->"isLeader" : string
+>"isLeader" : "isLeader"
 
     a.lead();
 >a.lead() : void
@@ -151,7 +151,7 @@ else if (((a)["isFollower"]())) {
 >(a)["isFollower"] : () => this is FollowerGuard
 >(a) : RoyalGuard
 >a : RoyalGuard
->"isFollower" : string
+>"isFollower" : "isFollower"
 
     a.follow();
 >a.follow() : void

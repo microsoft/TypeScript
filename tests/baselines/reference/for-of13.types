@@ -6,7 +6,7 @@ for (v of [""].values()) { }
 >v : string
 >[""].values() : IterableIterator<string>
 >[""].values : () => IterableIterator<string>
->[""] : string[]
->"" : string
+>[""] : ""[]
+>"" : ""
 >values : () => IterableIterator<string>
 

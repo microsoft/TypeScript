@@ -1,0 +1,28 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables03.ts(8,20): error TS2322: Type '"kindB"' is not assignable to type '"kindA"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables03.ts(9,26): error TS2322: Type '"kindB"' is not assignable to type '"kindA"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables03.ts (2 errors) ====
+    
+    var kindAndVal: {
+         kind: "kindA";
+         val: any;
+    };
+    
+    namespace Consts {
+        export const { kind = "kindB", val } = kindAndVal;
+                       ~~~~
+!!! error TS2322: Type '"kindB"' is not assignable to type '"kindA"'.
+        export const { kind: constKind = "kindB" } = kindAndVal;
+                             ~~~~~~~~~
+!!! error TS2322: Type '"kindB"' is not assignable to type '"kindA"'.
+        export const a: "kindA" = kind;
+        export const b: "kindA" = constKind;
+    }
+    
+    namespace Lets {
+        export let { kind = "kindB" } = kindAndVal;
+        export let { kind: letKind = "kindB" } = kindAndVal;
+        kind = letKind;
+        letKind = kind;
+    }

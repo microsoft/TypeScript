@@ -50,9 +50,9 @@ var a: {
 var b: { [x: string]: string; } = { foo: '' };
 >b : { [x: string]: string; }
 >x : string
->{ foo: '' } : { [x: string]: string; foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { [x: string]: ""; foo: ""; }
+>foo : ""
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

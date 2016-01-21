@@ -52,11 +52,11 @@ function getFoo1(): Foo {
 >arg : B
 
             arg.strProp = "hello";
->arg.strProp = "hello" : string
+>arg.strProp = "hello" : "hello"
 >arg.strProp : string
 >arg : B
 >strProp : string
->"hello" : string
+>"hello" : "hello"
         }
     }
 }
@@ -87,11 +87,11 @@ function getFoo2(): Foo {
 >arg : B
 
             arg.strProp = "hello";
->arg.strProp = "hello" : string
+>arg.strProp = "hello" : "hello"
 >arg.strProp : string
 >arg : B
 >strProp : string
->"hello" : string
+>"hello" : "hello"
         }
     }
 }
@@ -122,11 +122,11 @@ function getFoo3(): Foo {
 >arg : B
 
             arg.strProp = "hello";
->arg.strProp = "hello" : string
+>arg.strProp = "hello" : "hello"
 >arg.strProp : string
 >arg : B
 >strProp : string
->"hello" : string
+>"hello" : "hello"
         }
     }
 }

@@ -2,7 +2,7 @@ tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.t
 tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(8,18): error TS2507: Type 'boolean' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(9,18): error TS2507: Type 'boolean' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(10,18): error TS2507: Type 'number' is not a constructor function type.
-tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(11,18): error TS2507: Type 'string' is not a constructor function type.
+tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(11,18): error TS2507: Type '"hello"' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(12,18): error TS2507: Type '{}' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.ts(13,18): error TS2507: Type '() => void' is not a constructor function type.
 
@@ -28,7 +28,7 @@ tests/cases/conformance/classes/classDeclarations/classExtendingNonConstructor.t
 !!! error TS2507: Type 'number' is not a constructor function type.
     class C5 extends "hello" { }
                      ~~~~~~~
-!!! error TS2507: Type 'string' is not a constructor function type.
+!!! error TS2507: Type '"hello"' is not a constructor function type.
     class C6 extends x { }
                      ~
 !!! error TS2507: Type '{}' is not a constructor function type.

@@ -6,5 +6,5 @@ import a = require('./b');
 === tests/cases/compiler/b.ts ===
 export var c = '';
 >c : string
->'' : string
+>'' : ""
 

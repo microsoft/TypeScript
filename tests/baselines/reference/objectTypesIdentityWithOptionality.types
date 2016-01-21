@@ -37,9 +37,9 @@ var a: { foo?: string; }
 
 var b = { foo: '' };
 >b : { foo: string; }
->{ foo: '' } : { foo: string; }
->foo : string
->'' : string
+>{ foo: '' } : { foo: ""; }
+>foo : ""
+>'' : ""
 
 function foo2(x: I);
 >foo2 : { (x: I): any; (x: I): any; }

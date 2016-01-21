@@ -33,13 +33,13 @@ x = b;
 >b : boolean
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : any
->"" : string
+>"" : ""
 
 var c = "";
 >c : string
->"" : string
+>"" : ""
 
 x = c;
 >x = c : string

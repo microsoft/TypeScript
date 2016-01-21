@@ -1,0 +1,91 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralConstsReturnedFromFunction02.ts ===
+
+namespace E {
+>E : typeof E
+
+    export const A = "A";
+>A : "A"
+>"A" : "A"
+
+    export const B = "B";
+>B : "B"
+>"B" : "B"
+}
+
+function f1() {
+>f1 : () => "A"
+
+    return E.A;
+>E.A : "A"
+>E : typeof E
+>A : "A"
+}
+
+function f2(b1: boolean, b2: boolean) {
+>f2 : (b1: boolean, b2: boolean) => "A" | "B"
+>b1 : boolean
+>b2 : boolean
+
+    if (b1) {
+>b1 : boolean
+
+        return b2 ? E.A : E.B;
+>b2 ? E.A : E.B : "A" | "B"
+>b2 : boolean
+>E.A : "A"
+>E : typeof E
+>A : "A"
+>E.B : "B"
+>E : typeof E
+>B : "B"
+    }
+    
+    return b2 ? E.B : E.A;
+>b2 ? E.B : E.A : "B" | "A"
+>b2 : boolean
+>E.B : "B"
+>E : typeof E
+>B : "B"
+>E.A : "A"
+>E : typeof E
+>A : "A"
+}
+
+function f3(b1: boolean, b2: boolean) {
+>f3 : (b1: boolean, b2: boolean) => "A" | "B"
+>b1 : boolean
+>b2 : boolean
+
+    if (b1) {
+>b1 : boolean
+
+        const result1 = b2 ? E.A : E.B;
+>result1 : "A" | "B"
+>b2 ? E.A : E.B : "A" | "B"
+>b2 : boolean
+>E.A : "A"
+>E : typeof E
+>A : "A"
+>E.B : "B"
+>E : typeof E
+>B : "B"
+
+        return result1;
+>result1 : "A" | "B"
+    }
+    
+    const result2 = b2 ? E.B : E.A;
+>result2 : "B" | "A"
+>b2 ? E.B : E.A : "B" | "A"
+>b2 : boolean
+>E.B : "B"
+>E : typeof E
+>B : "B"
+>E.A : "A"
+>E : typeof E
+>A : "A"
+
+    return result2;
+>result2 : "B" | "A"
+}
+

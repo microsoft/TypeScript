@@ -4,8 +4,8 @@ var o = {
 >{    ["" || 0]: 0} : {}
 
     ["" || 0]: 0
->"" || 0 : string | number
->"" : string
+>"" || 0 : "" | number
+>"" : ""
 >0 : number
 >0 : number
 

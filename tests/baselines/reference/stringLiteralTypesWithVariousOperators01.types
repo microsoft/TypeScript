@@ -23,14 +23,14 @@ let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
 let a = "" + abc;
 >a : string
 >"" + abc : string
->"" : string
+>"" : ""
 >abc : "ABC"
 
 let b = abc + "";
 >b : string
 >abc + "" : string
 >abc : "ABC"
->"" : string
+>"" : ""
 
 let c = 10 + abc;
 >c : string
@@ -96,12 +96,12 @@ let m = abcOrXyzOrNumber + "";
 >m : string
 >abcOrXyzOrNumber + "" : string
 >abcOrXyzOrNumber : "ABC" | "XYZ" | number
->"" : string
+>"" : ""
 
 let n = "" + abcOrXyzOrNumber;
 >n : string
 >"" + abcOrXyzOrNumber : string
->"" : string
+>"" : ""
 >abcOrXyzOrNumber : "ABC" | "XYZ" | number
 
 let o = abcOrXyzOrNumber + abcOrXyz;

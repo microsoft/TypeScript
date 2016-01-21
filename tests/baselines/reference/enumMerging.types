@@ -80,15 +80,15 @@ module M2 {
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
 >A : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 >B : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 >C : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
     }
 
@@ -98,15 +98,15 @@ module M2 {
         D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
 >D : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 >E : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
 >F : EComp2
 >'foo'.length : number
->'foo' : string
+>'foo' : "foo"
 >length : number
     }
 

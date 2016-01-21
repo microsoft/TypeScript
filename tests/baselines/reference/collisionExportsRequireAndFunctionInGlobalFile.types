@@ -9,7 +9,7 @@ function require() {
 >require : () => string
 
     return "require";
->"require" : string
+>"require" : "require"
 }
 module m3 {
 >m3 : typeof m3
@@ -24,7 +24,7 @@ module m3 {
 >require : () => string
 
         return "require";
->"require" : string
+>"require" : "require"
     }
 }
 module m4 {
@@ -40,6 +40,6 @@ module m4 {
 >require : () => string
 
         return "require";
->"require" : string
+>"require" : "require"
     }
 }

@@ -30,10 +30,10 @@ var d = false ? false : true;
 
 var e = false ? "foo" : "bar";
 >e : string
->false ? "foo" : "bar" : string
+>false ? "foo" : "bar" : "foo" | "bar"
 >false : boolean
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
 var f = false ? null : undefined;
 >f : any

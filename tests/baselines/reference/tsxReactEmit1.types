@@ -55,7 +55,7 @@ var selfClosed6 = <div x={"1"} y='0' />;
 ><div x={"1"} y='0' /> : JSX.Element
 >div : any
 >x : any
->"1" : string
+>"1" : "1"
 >y : any
 
 var selfClosed7 = <div x={p} y='p' b />;

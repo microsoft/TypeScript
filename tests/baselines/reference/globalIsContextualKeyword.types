@@ -24,9 +24,9 @@ function foo(global: number) {
 
 let obj = {
 >obj : { global: string; }
->{    global: "123"} : { global: string; }
+>{    global: "123"} : { global: "123"; }
 
     global: "123"
->global : string
->"123" : string
+>global : "123"
+>"123" : "123"
 }

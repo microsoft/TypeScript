@@ -57,7 +57,7 @@ class D extends C {
 >super.baz : (a: string, y: number) => void
 >super : C
 >baz : (a: string, y: number) => void
->"hello" : string
+>"hello" : "hello"
 >10 : number
     }
 }

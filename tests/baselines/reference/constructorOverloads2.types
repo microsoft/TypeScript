@@ -45,7 +45,7 @@ var f1 = new Foo("hey");
 >f1 : Foo
 >new Foo("hey") : Foo
 >Foo : typeof Foo
->"hey" : string
+>"hey" : "hey"
 
 var f2 = new Foo(0);
 >f2 : Foo

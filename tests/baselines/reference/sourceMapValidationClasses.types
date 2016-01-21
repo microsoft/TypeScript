@@ -4,7 +4,7 @@ module Foo.Bar {
 >Bar : typeof Bar
 
     "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
     class Greeter {
 >Greeter : Greeter
@@ -19,11 +19,11 @@ module Foo.Bar {
             return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
 >"<h1>" + this.greeting : string
->"<h1>" : string
+>"<h1>" : "<h1>"
 >this.greeting : string
 >this : this
 >greeting : string
->"</h1>" : string
+>"</h1>" : "</h1>"
         }
     }
 
@@ -43,7 +43,7 @@ module Foo.Bar {
 >greeter : Greeter
 >new Greeter("Hello, world!") : Greeter
 >Greeter : typeof Greeter
->"Hello, world!" : string
+>"Hello, world!" : "Hello, world!"
 
     var str = greeter.greet();
 >str : string
@@ -102,9 +102,9 @@ module Foo.Bar {
 >b : Greeter[]
 >foo2("Hello", "World", "!") : Greeter[]
 >foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
->"Hello" : string
->"World" : string
->"!" : string
+>"Hello" : "Hello"
+>"World" : "World"
+>"!" : "!"
 
     // This is simple signle line comment
     for (var j = 0; j < b.length; j++) {

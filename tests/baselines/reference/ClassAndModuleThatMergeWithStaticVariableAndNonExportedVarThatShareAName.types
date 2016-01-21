@@ -21,7 +21,7 @@ module Point {
 
     var Origin = ""; // not an error, since not exported
 >Origin : string
->"" : string
+>"" : ""
 }
 
 
@@ -50,6 +50,6 @@ module A {
 
         var Origin = ""; // not an error since not exported
 >Origin : string
->"" : string
+>"" : ""
     }
 }

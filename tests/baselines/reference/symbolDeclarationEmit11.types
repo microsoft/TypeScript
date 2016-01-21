@@ -17,7 +17,7 @@ class C {
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
->"" : string
+>"" : ""
 
     static set [Symbol.toPrimitive](x) { }
 >Symbol.toPrimitive : symbol

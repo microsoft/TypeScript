@@ -6,21 +6,21 @@ var {a1, a2}: { a1: number, a2: string } = { a1: 10, a2: "world" }
 >a2 : string
 >a1 : number
 >a2 : string
->{ a1: 10, a2: "world" } : { a1: number; a2: string; }
+>{ a1: 10, a2: "world" } : { a1: number; a2: "world"; }
 >a1 : number
 >10 : number
->a2 : string
->"world" : string
+>a2 : "world"
+>"world" : "world"
 
 var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [["hello"]], true];
 >a3 : number
 >a4 : string
 >a5 : boolean
->[1, [["hello"]], true] : [number, [[string]], boolean]
+>[1, [["hello"]], true] : [number, [["hello"]], boolean]
 >1 : number
->[["hello"]] : [[string]]
->["hello"] : [string]
->"hello" : string
+>[["hello"]] : [["hello"]]
+>["hello"] : ["hello"]
+>"hello" : "hello"
 >true : boolean
 
 // The type T associated with a destructuring variable declaration is determined as follows:
@@ -28,22 +28,22 @@ var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [["hello"]], true];
 var { b1: { b11 } = { b11: "string" }  } = { b1: { b11: "world" } };
 >b1 : any
 >b11 : string
->{ b11: "string" } : { b11: string; }
->b11 : string
->"string" : string
->{ b1: { b11: "world" } } : { b1?: { b11: string; }; }
->b1 : { b11: string; }
->{ b11: "world" } : { b11: string; }
->b11 : string
->"world" : string
+>{ b11: "string" } : { b11: "string"; }
+>b11 : "string"
+>"string" : "string"
+>{ b1: { b11: "world" } } : { b1?: { b11: "world"; }; }
+>b1 : { b11: "world"; }
+>{ b11: "world" } : { b11: "world"; }
+>b11 : "world"
+>"world" : "world"
 
 var temp = { t1: true, t2: "false" };
 >temp : { t1: boolean; t2: string; }
->{ t1: true, t2: "false" } : { t1: boolean; t2: string; }
+>{ t1: true, t2: "false" } : { t1: boolean; t2: "false"; }
 >t1 : boolean
 >true : boolean
->t2 : string
->"false" : string
+>t2 : "false"
+>"false" : "false"
 
 var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >b2 : number
@@ -52,14 +52,14 @@ var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >true : boolean
 >b4 : { t1: boolean; t2: string; }
 >temp : { t1: boolean; t2: string; }
->[3, false, { t1: false, t2: "hello" }] : [number, boolean, { t1: boolean; t2: string; }]
+>[3, false, { t1: false, t2: "hello" }] : [number, boolean, { t1: boolean; t2: "hello"; }]
 >3 : number
 >false : boolean
->{ t1: false, t2: "hello" } : { t1: boolean; t2: string; }
+>{ t1: false, t2: "hello" } : { t1: boolean; t2: "hello"; }
 >t1 : boolean
 >false : boolean
->t2 : string
->"hello" : string
+>t2 : "hello"
+>"hello" : "hello"
 
 var [b5 = 3, b6 = true, b7 = temp] = [undefined, undefined, undefined];
 >b5 : any
@@ -85,11 +85,11 @@ var [...c1] = [1,2,3];
 
 var [...c2] = [1,2,3, "string"]; 
 >c2 : (number | string)[]
->[1,2,3, "string"] : (number | string)[]
+>[1,2,3, "string"] : (number | "string")[]
 >1 : number
 >2 : number
 >3 : number
->"string" : string
+>"string" : "string"
 
 // The type T associated with a binding element is determined as follows:
 //      Otherwise, if S is a tuple- like type (section 3.3.3):
@@ -98,9 +98,9 @@ var [...c2] = [1,2,3, "string"];
 var [d1,d2] = [1,"string"]	
 >d1 : number
 >d2 : string
->[1,"string"] : [number, string]
+>[1,"string"] : [number, "string"]
 >1 : number
->"string" : string
+>"string" : "string"
 
 // The type T associated with a binding element is determined as follows:
 //      Otherwise, if S is a tuple- like type (section 3.3.3):
@@ -115,9 +115,9 @@ var temp1 = [true, false, true]
 var [d3, d4] = [1, "string", ...temp1];
 >d3 : number | string | boolean
 >d4 : number | string | boolean
->[1, "string", ...temp1] : (number | string | boolean)[]
+>[1, "string", ...temp1] : (number | "string" | boolean)[]
 >1 : number
->"string" : string
+>"string" : "string"
 >...temp1 : boolean
 >temp1 : boolean[]
 

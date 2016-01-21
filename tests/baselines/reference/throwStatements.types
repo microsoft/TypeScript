@@ -70,7 +70,7 @@ throw aNumber;
 
 var aString = 'this is a string';
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 throw aString;
 >aString : string
@@ -150,7 +150,7 @@ throw aFunction;
 throw aFunction('');
 >aFunction('') : number
 >aFunction : (x: string) => number
->'' : string
+>'' : ""
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
@@ -217,11 +217,11 @@ throw undefined;
 >undefined : undefined
 
 throw 'a string';
->'a string' : string
+>'a string' : "a string"
 
 throw function () { return 'a string' };
 >function () { return 'a string' } : () => string
->'a string' : string
+>'a string' : "a string"
 
 throw <T>(x:T) => 42;
 ><T>(x:T) => 42 : <T>(x: T) => number
@@ -241,10 +241,10 @@ throw [];
 >[] : undefined[]
 
 throw ['a', ['b']];
->['a', ['b']] : (string | string[])[]
->'a' : string
->['b'] : string[]
->'b' : string
+>['a', ['b']] : ("a" | "b"[])[]
+>'a' : "a"
+>['b'] : "b"[]
+>'b' : "b"
 
 throw /[a-z]/;
 >/[a-z]/ : RegExp

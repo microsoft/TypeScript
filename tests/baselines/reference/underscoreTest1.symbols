@@ -164,9 +164,9 @@ _.max(stooges, (stooge) => stooge.age);
 >max : Symbol(Underscore.Static.max, Decl(underscoreTest1_underscore.ts, 467, 66), Decl(underscoreTest1_underscore.ts, 469, 73))
 >stooges : Symbol(stooges, Decl(underscoreTest1_underscoreTests.ts, 33, 3))
 >stooge : Symbol(stooge, Decl(underscoreTest1_underscoreTests.ts, 36, 16))
->stooge.age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29))
+>stooge.age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29), Decl(underscoreTest1_underscoreTests.ts, 33, 57), Decl(underscoreTest1_underscoreTests.ts, 33, 85))
 >stooge : Symbol(stooge, Decl(underscoreTest1_underscoreTests.ts, 36, 16))
->age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29))
+>age : Symbol(age, Decl(underscoreTest1_underscoreTests.ts, 33, 29), Decl(underscoreTest1_underscoreTests.ts, 33, 57), Decl(underscoreTest1_underscoreTests.ts, 33, 85))
 
 var numbers = [10, 5, 100, 2, 1000];
 >numbers : Symbol(numbers, Decl(underscoreTest1_underscoreTests.ts, 38, 3))

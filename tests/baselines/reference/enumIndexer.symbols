@@ -24,8 +24,8 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
 >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
->o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>o.key : Symbol(key, Decl(enumIndexer.ts, 3, 13), Decl(enumIndexer.ts, 3, 29))
 >o : Symbol(o, Decl(enumIndexer.ts, 5, 17))
->key : Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>key : Symbol(key, Decl(enumIndexer.ts, 3, 13), Decl(enumIndexer.ts, 3, 29))
 >enumValue : Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
 

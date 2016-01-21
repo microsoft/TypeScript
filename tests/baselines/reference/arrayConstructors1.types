@@ -14,16 +14,16 @@ x = new Array('hi', 'bye');
 >x : string[]
 >new Array('hi', 'bye') : string[]
 >Array : ArrayConstructor
->'hi' : string
->'bye' : string
+>'hi' : "hi"
+>'bye' : "bye"
 
 x = new Array<string>('hi', 'bye');
 >x = new Array<string>('hi', 'bye') : string[]
 >x : string[]
 >new Array<string>('hi', 'bye') : string[]
 >Array : ArrayConstructor
->'hi' : string
->'bye' : string
+>'hi' : "hi"
+>'bye' : "bye"
 
 var y: number[];
 >y : number[]

@@ -73,8 +73,8 @@ namespace Test {
 >FileSystemObject : FileSystemObject
 >new File("foo/bar.txt", "foo") : File
 >File : typeof File
->"foo/bar.txt" : string
->"foo" : string
+>"foo/bar.txt" : "foo/bar.txt"
+>"foo" : "foo"
 
 	file.isNetworked = false;
 >file.isNetworked = false : boolean

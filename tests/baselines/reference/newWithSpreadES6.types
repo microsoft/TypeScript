@@ -87,7 +87,7 @@ new f(1, 2, "string");
 >f : (x: number, y: number, ...z: string[]) => void
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new f(1, 2, ...a);
 >new f(1, 2, ...a) : any
@@ -104,7 +104,7 @@ new f(1, 2, ...a, "string");
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Multiple spreads arguments
 new f2(...a, ...a);
@@ -132,7 +132,7 @@ new f(1, 2, "string")();
 >f : (x: number, y: number, ...z: string[]) => void
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new f(1, 2, ...a)();
 >new f(1, 2, ...a)() : any
@@ -151,7 +151,7 @@ new f(1, 2, ...a, "string")();
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Property access expression
 new b.f(1, 2, "string");
@@ -161,7 +161,7 @@ new b.f(1, 2, "string");
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new b.f(1, 2, ...a);
 >new b.f(1, 2, ...a) : any
@@ -182,7 +182,7 @@ new b.f(1, 2, ...a, "string");
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Parenthesised expression
 new (b.f)(1, 2, "string");
@@ -193,7 +193,7 @@ new (b.f)(1, 2, "string");
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new (b.f)(1, 2, ...a);
 >new (b.f)(1, 2, ...a) : any
@@ -216,7 +216,7 @@ new (b.f)(1, 2, ...a, "string");
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Element access expression
 new d[1].f(1, 2, "string");
@@ -228,7 +228,7 @@ new d[1].f(1, 2, "string");
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new d[1].f(1, 2, ...a);
 >new d[1].f(1, 2, ...a) : any
@@ -253,7 +253,7 @@ new d[1].f(1, 2, ...a, "string");
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Element access expression with a punctuated key
 new e["a-b"].f(1, 2, "string");
@@ -261,18 +261,18 @@ new e["a-b"].f(1, 2, "string");
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
 >e["a-b"] : A
 >e : { [key: string]: A; }
->"a-b" : string
+>"a-b" : "a-b"
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new e["a-b"].f(1, 2, ...a);
 >new e["a-b"].f(1, 2, ...a) : any
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
 >e["a-b"] : A
 >e : { [key: string]: A; }
->"a-b" : string
+>"a-b" : "a-b"
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
@@ -284,13 +284,13 @@ new e["a-b"].f(1, 2, ...a, "string");
 >e["a-b"].f : new (x: number, y: number, ...z: string[]) => any
 >e["a-b"] : A
 >e : { [key: string]: A; }
->"a-b" : string
+>"a-b" : "a-b"
 >f : new (x: number, y: number, ...z: string[]) => any
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Basic expression
 new B(1, 2, "string");
@@ -298,7 +298,7 @@ new B(1, 2, "string");
 >B : typeof B
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new B(1, 2, ...a);
 >new B(1, 2, ...a) : B
@@ -315,23 +315,23 @@ new B(1, 2, ...a, "string");
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Property access expression
 new c["a-b"](1, 2, "string");
 >new c["a-b"](1, 2, "string") : B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new c["a-b"](1, 2, ...a);
 >new c["a-b"](1, 2, ...a) : B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
@@ -341,12 +341,12 @@ new c["a-b"](1, 2, ...a, "string");
 >new c["a-b"](1, 2, ...a, "string") : B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Parenthesised expression
 new (c["a-b"])(1, 2, "string");
@@ -354,17 +354,17 @@ new (c["a-b"])(1, 2, "string");
 >(c["a-b"]) : typeof B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new (c["a-b"])(1, 2, ...a);
 >new (c["a-b"])(1, 2, ...a) : B
 >(c["a-b"]) : typeof B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
@@ -375,12 +375,12 @@ new (c["a-b"])(1, 2, ...a, "string");
 >(c["a-b"]) : typeof B
 >c["a-b"] : typeof B
 >c : C
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Element access expression
 new g[1]["a-b"](1, 2, "string");
@@ -389,10 +389,10 @@ new g[1]["a-b"](1, 2, "string");
 >g[1] : C
 >g : C[]
 >1 : number
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new g[1]["a-b"](1, 2, ...a);
 >new g[1]["a-b"](1, 2, ...a) : B
@@ -400,7 +400,7 @@ new g[1]["a-b"](1, 2, ...a);
 >g[1] : C
 >g : C[]
 >1 : number
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
@@ -412,12 +412,12 @@ new g[1]["a-b"](1, 2, ...a, "string");
 >g[1] : C
 >g : C[]
 >1 : number
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Element access expression with a punctuated key
 new h["a-b"]["a-b"](1, 2, "string");
@@ -425,19 +425,19 @@ new h["a-b"]["a-b"](1, 2, "string");
 >h["a-b"]["a-b"] : typeof B
 >h["a-b"] : C
 >h : { [key: string]: C; }
->"a-b" : string
->"a-b" : string
+>"a-b" : "a-b"
+>"a-b" : "a-b"
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new h["a-b"]["a-b"](1, 2, ...a);
 >new h["a-b"]["a-b"](1, 2, ...a) : B
 >h["a-b"]["a-b"] : typeof B
 >h["a-b"] : C
 >h : { [key: string]: C; }
->"a-b" : string
->"a-b" : string
+>"a-b" : "a-b"
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
@@ -448,13 +448,13 @@ new h["a-b"]["a-b"](1, 2, ...a, "string");
 >h["a-b"]["a-b"] : typeof B
 >h["a-b"] : C
 >h : { [key: string]: C; }
->"a-b" : string
->"a-b" : string
+>"a-b" : "a-b"
+>"a-b" : "a-b"
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 
 // Element access expression with a number
 new i["a-b"][1](1, 2, "string");
@@ -462,18 +462,18 @@ new i["a-b"][1](1, 2, "string");
 >i["a-b"][1] : any
 >i["a-b"] : any
 >i : C[][]
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >1 : number
 >2 : number
->"string" : string
+>"string" : "string"
 
 new i["a-b"][1](1, 2, ...a);
 >new i["a-b"][1](1, 2, ...a) : any
 >i["a-b"][1] : any
 >i["a-b"] : any
 >i : C[][]
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >1 : number
 >2 : number
@@ -485,11 +485,11 @@ new i["a-b"][1](1, 2, ...a, "string");
 >i["a-b"][1] : any
 >i["a-b"] : any
 >i : C[][]
->"a-b" : string
+>"a-b" : "a-b"
 >1 : number
 >1 : number
 >2 : number
 >...a : string
 >a : string[]
->"string" : string
+>"string" : "string"
 

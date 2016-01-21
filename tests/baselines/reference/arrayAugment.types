@@ -11,8 +11,8 @@ interface Array<T> {
 
 var x = [''];
 >x : string[]
->[''] : string[]
->'' : string
+>[''] : ""[]
+>'' : ""
 
 var y = x.split(4);
 >y : string[][]

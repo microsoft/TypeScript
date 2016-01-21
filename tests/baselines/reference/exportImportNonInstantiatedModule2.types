@@ -8,9 +8,9 @@ export function w(): e.w { // Should be OK
 >w : e.w
 
     return {name: 'value' };
->{name: 'value' } : { name: string; }
->name : string
->'value' : string
+>{name: 'value' } : { name: "value"; }
+>name : "value"
+>'value' : "value"
 }
 === tests/cases/compiler/w1.ts ===
 

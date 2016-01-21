@@ -18,5 +18,5 @@ var y = i(""); // y should be string
 >y : string
 >i("") : string
 >i : I<string>
->"" : string
+>"" : ""
 

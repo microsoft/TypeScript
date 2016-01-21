@@ -28,14 +28,14 @@ var strRepresentation3 = MyEmusEnum["monehh"];
 >strRepresentation3 : any
 >MyEmusEnum["monehh"] : any
 >MyEmusEnum : typeof MyEmusEnum
->"monehh" : string
+>"monehh" : "monehh"
 
 // Should be okay; should be a MyEmusEnum
 var strRepresentation4 = MyEmusEnum["emu"];
 >strRepresentation4 : MyEmusEnum
 >MyEmusEnum["emu"] : MyEmusEnum
 >MyEmusEnum : typeof MyEmusEnum
->"emu" : string
+>"emu" : "emu"
 
 
 // Should be okay, as we suppress implicit 'any' property access checks
@@ -43,7 +43,7 @@ var x = {}["hi"];
 >x : any
 >{}["hi"] : any
 >{} : {}
->"hi" : string
+>"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
@@ -54,7 +54,7 @@ var y = {}[10];
 
 var hi: any = "hi";
 >hi : any
->"hi" : string
+>"hi" : "hi"
 
 var emptyObj = {};
 >emptyObj : {}

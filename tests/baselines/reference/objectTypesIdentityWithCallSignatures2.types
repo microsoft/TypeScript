@@ -62,7 +62,7 @@ var b = { foo(x: RegExp) { return ''; } };
 >foo : (x: RegExp) => string
 >x : RegExp
 >RegExp : RegExp
->'' : string
+>'' : ""
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

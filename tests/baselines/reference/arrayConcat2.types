@@ -8,15 +8,15 @@ a.concat("hello", 'world');
 >a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
 >a : string[]
 >concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->"hello" : string
->'world' : string
+>"hello" : "hello"
+>'world' : "world"
 
 a.concat('Hello');
 >a.concat('Hello') : string[]
 >a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
 >a : string[]
 >concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->'Hello' : string
+>'Hello' : "Hello"
 
 var b = new Array<string>();
 >b : string[]
@@ -28,5 +28,5 @@ b.concat('hello');
 >b.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
 >b : string[]
 >concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->'hello' : string
+>'hello' : "hello"
 

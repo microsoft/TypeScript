@@ -174,6 +174,7 @@ namespace ts {
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<StringLiteralType> = {};
+        const freshStringLiteralTypes: Map<StringLiteralType> = {};
         let emitExtends = false;
         let emitDecorate = false;
         let emitParam = false;
@@ -458,7 +459,7 @@ namespace ts {
          * Get symbols that represent parameter-property-declaration as parameter and as property declaration
          * @param parameter a parameterDeclaration node
          * @param parameterName a name of the parameter to get the symbols for.
-         * @return a tuple of two symbols 
+         * @return a tuple of two symbols
          */
         function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
@@ -2750,6 +2751,22 @@ namespace ts {
                 if (type.flags & TypeFlags.PredicateType && (declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature)) {
                     return type;
                 }
+
+                if (!declaration.type && declaration.initializer) {
+                    // Don't perform mutability widening if the user supplied a type and there is an initializer.
+                    // Otherwise, for something like
+                    //    let x: "hello" = "hello";
+                    // or
+                    //    function f(y: "blah"): void;
+                    // We will widen the types of 'x' and 'y' to 'string'.
+                    //
+                    // We also need to know if there is an initializer in case
+                    // we are contextually typed by something like in the following:
+                    //
+                    //  function f(callback: (x: "foo") => "foo") { }
+                    //  f(x => x);
+                    return getCombinedNodeFlags(declaration) & NodeFlags.Const ? getWidenedTypeForImmutableBinding(type) : getWidenedTypeForMutableBinding(type);
+                }
                 return getWidenedType(type);
             }
 
@@ -4614,12 +4631,15 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralTypeForText(text: string): StringLiteralType {
-            if (hasProperty(stringLiteralTypes, text)) {
-                return stringLiteralTypes[text];
+        function getStringLiteralTypeForText(text: string, shouldGetFreshType: boolean): StringLiteralType {
+            const typeMap = shouldGetFreshType ? freshStringLiteralTypes : stringLiteralTypes;
+
+            if (hasProperty(typeMap, text)) {
+                return typeMap[text];
             }
 
-            const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            const freshnessFlag = shouldGetFreshType ? TypeFlags.ContainsFreshLiteralType : TypeFlags.None;
+            const type = typeMap[text] = <StringLiteralType>createType(TypeFlags.StringLiteral | freshnessFlag);
             type.text = text;
             return type;
         }
@@ -4627,7 +4647,7 @@ namespace ts {
         function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getStringLiteralTypeForText(node.text);
+                links.resolvedType = getStringLiteralTypeForText(node.text, /*shouldGetFreshType*/ false);
             }
             return links.resolvedType;
         }
@@ -5181,6 +5201,12 @@ namespace ts {
                 let result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
+                if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.StringLiteral) {
+                    // String literal freshness may affect identity checking.
+                    if ((source as StringLiteralType).text === (target as StringLiteralType).text) {
+                        return Ternary.True;
+                    }
+                }
                 if (relation === identityRelation) {
                     return isIdenticalTo(source, target);
                 }
@@ -5194,7 +5220,11 @@ namespace ts {
                         return result;
                     }
                 }
-                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
+                if (source.flags & TypeFlags.StringLiteral) {
+                    if (target === stringType) {
+                        return Ternary.True;
+                    }
+                }
                 if (relation === assignableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
@@ -5964,7 +5994,17 @@ namespace ts {
         }
 
         function getCommonSupertype(types: Type[]): Type {
-            return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+            for (const t of types) {
+                if (isSupertypeOfEach(t, types)) {
+                    return t;
+                }
+            }
+
+            if (allTypesHaveKind(types, TypeFlags.StringLike)) {
+                return stringType;
+            }
+
+            return undefined;
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
@@ -6021,10 +6061,6 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
-        function isStringLiteralType(type: Type) {
-            return type.flags & TypeFlags.StringLiteral;
-        }
-
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -6076,10 +6112,35 @@ namespace ts {
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndexType, numberIndexType);
         }
 
+        function getWidenedTypeForMutableBinding(type: Type): Type {
+            if (type.flags & TypeFlags.StringLiteral) {
+                return stringType;
+            }
+            return getWidenedType(type);
+        }
+
+        function getWidenedTypeForImmutableBinding(type: Type): Type {
+            const { flags } = type;
+            if (flags & TypeFlags.ContainsFreshLiteralType) {
+                if (flags & TypeFlags.StringLiteral) {
+                    return getStringLiteralTypeForText((type as StringLiteralType).text, /*shouldGetFreshType*/ false);
+                }
+                if (flags & TypeFlags.Union) {
+                    return getUnionType(map((<UnionType>type).types, getWidenedTypeForImmutableBinding), /*noSubtypeReduction*/ true);
+                }
+            }
+            return getWidenedType(type);
+        }
+
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                     return anyType;
+                }
+                if (type.flags & TypeFlags.StringLiteral) {
+                    // 'RequiresWidening' implies this should be a fresh string literal.
+                    // All fresh string literals in non-binding locations should be widened to string.
+                    return stringType;
                 }
                 if (type.flags & TypeFlags.PredicateType) {
                     return booleanType;
@@ -7438,10 +7499,6 @@ namespace ts {
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
-        }
-
-        function contextualTypeIsStringLiteralType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -9107,8 +9164,9 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
+                        // TODO (drosen): Probably shouldn't need special logic here since we always get the literal text unless widening.
                         argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                            ? getStringLiteralTypeForText((<StringLiteral>arg).text)
+                            ? getStringLiteralTypeForText((<StringLiteral>arg).text, /*shouldGetFreshType*/ true)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
@@ -9303,7 +9361,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
-                        return getStringLiteralTypeForText((<Identifier | LiteralExpression>element.name).text);
+                        return getStringLiteralTypeForText((<Identifier | LiteralExpression>element.name).text, /*shouldGetFreshType*/ true);
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
@@ -9953,11 +10011,7 @@ namespace ts {
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
 
-                // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike =
-                    someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
-                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
-                if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
+                if (!isTypeAssignableTo(targetType, widenedType)) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
@@ -10524,15 +10578,18 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                const types = (<UnionOrIntersectionType>type).types;
-                for (const current of types) {
-                    if (!(current.flags & kind)) {
-                        return false;
-                    }
-                }
-                return true;
+                return allTypesHaveKind((<UnionOrIntersectionType>type).types, kind);
             }
             return false;
+        }
+
+        function allTypesHaveKind(types: Type[], kind: TypeFlags) {
+            for (const current of types) {
+                if (!allConstituentTypesHaveKind(current, kind)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isConstEnumObjectType(type: Type): boolean {
@@ -10807,10 +10864,6 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (someConstituentTypeHasKind(leftType, TypeFlags.StringLike) && someConstituentTypeHasKind(rightType, TypeFlags.StringLike)) {
-                        return booleanType;
-                    }
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -10950,12 +11003,7 @@ namespace ts {
         }
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
-            const contextualType = getContextualType(node);
-            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
-                return getStringLiteralTypeForText(node.text);
-            }
-
-            return stringType;
+            return getStringLiteralTypeForText(node.text, /*shouldGetFreshType*/ true);
         }
 
         function checkTemplateExpression(node: TemplateExpression): Type {
@@ -13334,7 +13382,6 @@ namespace ts {
             let hasDuplicateDefaultClause = false;
 
             const expressionType = checkExpression(node.expression);
-            const expressionTypeIsStringLike = someConstituentTypeHasKind(expressionType, TypeFlags.StringLike);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -13356,12 +13403,7 @@ namespace ts {
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
 
-                    const expressionTypeIsAssignableToCaseType =
-                        // Permit 'number[] | "foo"' to be asserted to 'string'.
-                        (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) ||
-                        isTypeAssignableTo(expressionType, caseType);
-
-                    if (!expressionTypeIsAssignableToCaseType) {
+                   if (!isTypeAssignableTo(expressionType, caseType)) {
                         // 'expressionType is not assignable to caseType', try the reversed check and report errors if it fails
                         checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }

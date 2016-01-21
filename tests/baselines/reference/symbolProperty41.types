@@ -40,7 +40,7 @@ c[Symbol.iterator]("");
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->"" : string
+>"" : ""
 
 c[Symbol.iterator]("hello");
 >c[Symbol.iterator]("hello") : { x: string; hello: string; }

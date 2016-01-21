@@ -17,24 +17,24 @@ var a: any;
 extractIndexer({
 >extractIndexer({    [a]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    [a]: ""} : { [x: number]: string; }
+>{    [a]: ""} : { [x: number]: ""; }
 
     [a]: ""
 >a : any
->"" : string
+>"" : ""
 
 }); // Should return string
 
 extractIndexer({
 >extractIndexer({    [E.x]: ""}) : string
 >extractIndexer : <T>(p: { [n: number]: T; }) => T
->{    [E.x]: ""} : { [x: number]: string; }
+>{    [E.x]: ""} : { [x: number]: ""; }
 
     [E.x]: ""
 >E.x : E
 >E : typeof E
 >x : E
->"" : string
+>"" : ""
 
 }); // Should return string
 
@@ -44,9 +44,9 @@ extractIndexer({
 >{    ["" || 0]: ""} : { [x: number]: undefined; }
 
     ["" || 0]: ""
->"" || 0 : string | number
->"" : string
+>"" || 0 : "" | number
+>"" : ""
 >0 : number
->"" : string
+>"" : ""
 
 }); // Should return any (widened form of undefined)

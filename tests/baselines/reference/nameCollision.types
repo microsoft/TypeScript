@@ -10,7 +10,7 @@ module A {
 
     var _A = '';
 >_A : string
->'' : string
+>'' : ""
 }
 
 module B {
@@ -93,5 +93,5 @@ module D {
 
     export var E = 'hello';
 >E : string
->'hello' : string
+>'hello' : "hello"
 }

@@ -19,5 +19,5 @@ class D {
     constructor(x: number, z="hello") {}
 >x : number
 >z : string
->"hello" : string
+>"hello" : "hello"
 }

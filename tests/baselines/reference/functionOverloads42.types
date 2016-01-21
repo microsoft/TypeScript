@@ -19,8 +19,8 @@ var x = foo([{a:'s'}]);
 >x : number
 >foo([{a:'s'}]) : number
 >foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }
->[{a:'s'}] : { a: string; }[]
->{a:'s'} : { a: string; }
->a : string
->'s' : string
+>[{a:'s'}] : { a: "s"; }[]
+>{a:'s'} : { a: "s"; }
+>a : "s"
+>'s' : "s"
 

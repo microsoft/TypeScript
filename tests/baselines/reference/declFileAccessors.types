@@ -64,7 +64,7 @@ export class c1 {
 >nc_s3 : string
 
         return "";
->"" : string
+>"" : ""
     }
     static set nc_s3(value: string) {
 >nc_s3 : string
@@ -151,7 +151,7 @@ class c2 {
 >nc_s3 : string
 
         return "";
->"" : string
+>"" : ""
     }
     static set nc_s3(value: string) {
 >nc_s3 : string

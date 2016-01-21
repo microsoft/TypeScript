@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/stringLiteral/file1.ts ===
+
+export const a = "A";
+>a : "A"
+>"A" : "A"
+
+export const b = "B";
+>b : "B"
+>"B" : "B"
+
+=== tests/cases/conformance/types/stringLiteral/file2.ts ===
+import * as file1 from "./file1";
+>file1 : typeof file1
+
+const a: "A" = file1.a;
+>a : "A"
+>file1.a : "A"
+>file1 : typeof file1
+>a : "A"
+
+const b: "B" = file1.b;
+>b : "B"
+>file1.b : "B"
+>file1 : typeof file1
+>b : "B"
+
+let aOrB: "A" | "B";
+>aOrB : "A" | "B"
+
+aOrB = file1.a;
+>aOrB = file1.a : "A"
+>aOrB : "A" | "B"
+>file1.a : "A"
+>file1 : typeof file1
+>a : "A"
+
+aOrB = file1.b;
+>aOrB = file1.b : "B"
+>aOrB : "A" | "B"
+>file1.b : "B"
+>file1 : typeof file1
+>b : "B"
+

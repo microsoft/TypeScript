@@ -159,13 +159,13 @@ const enum Enum1 {
 >W3 : Enum1
 >Enum1["A0"] : Enum1
 >Enum1 : typeof Enum1
->"A0" : string
+>"A0" : "A0"
 
     W4 = Enum1["W"],
 >W4 : Enum1
 >Enum1["W"] : Enum1
 >Enum1 : typeof Enum1
->"W" : string
+>"W" : "W"
 }
 
 
@@ -226,7 +226,7 @@ module A {
 >B : typeof B
 >C : typeof C
 >E : typeof E
->"V2" : string
+>"V2" : "V2"
 >200 : number
             }
         }
@@ -496,7 +496,7 @@ function foo(x: Enum1) {
         case Enum1["T"]:
 >Enum1["T"] : Enum1
 >Enum1 : typeof Enum1
->"T" : string
+>"T" : "T"
 
         case Enum1.U:
 >Enum1.U : Enum1

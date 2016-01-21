@@ -5,13 +5,13 @@ var STRING: string;
 
 var STRING1: string[] = ["", "abc"];
 >STRING1 : string[]
->["", "abc"] : string[]
->"" : string
->"abc" : string
+>["", "abc"] : ("" | "abc")[]
+>"" : ""
+>"abc" : "abc"
 
 function foo(): string { return "abc"; }
 >foo : () => string
->"abc" : string
+>"abc" : "abc"
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return ""; }
 >foo : () => string
->"" : string
+>"" : ""
 }
 module M {
 >M : typeof M
@@ -50,23 +50,23 @@ var ResultIsAny2 = void STRING1;
 var ResultIsAny3 = void "";
 >ResultIsAny3 : any
 >void "" : undefined
->"" : string
+>"" : ""
 
 var ResultIsAny4 = void { x: "", y: "" };
 >ResultIsAny4 : any
 >void { x: "", y: "" } : undefined
->{ x: "", y: "" } : { x: string; y: string; }
->x : string
->"" : string
->y : string
->"" : string
+>{ x: "", y: "" } : { x: ""; y: ""; }
+>x : ""
+>"" : ""
+>y : ""
+>"" : ""
 
 var ResultIsAny5 = void { x: "", y: (s: string) => { return s; } };
 >ResultIsAny5 : any
 >void { x: "", y: (s: string) => { return s; } } : undefined
->{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->x : string
->"" : string
+>{ x: "", y: (s: string) => { return s; } } : { x: ""; y: (s: string) => string; }
+>x : ""
+>"" : ""
 >y : (s: string) => string
 >(s: string) => { return s; } : (s: string) => string
 >s : string
@@ -145,7 +145,7 @@ var ResultIsAny14 = void void void (STRING + STRING);
 // miss assignment operators
 void "";
 >void "" : undefined
->"" : string
+>"" : ""
 
 void STRING;
 >void STRING : undefined

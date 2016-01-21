@@ -12,70 +12,70 @@ type MultiSkilledRobot = [string, string[]];
 var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : [string, string[]]
 >MultiSkilledRobot : [string, string[]]
->["mower", ["mowing", ""]] : [string, string[]]
->"mower" : string
->["mowing", ""] : string[]
->"mowing" : string
->"" : string
+>["mower", ["mowing", ""]] : ["mower", ("mowing" | "")[]]
+>"mower" : "mower"
+>["mowing", ""] : ("mowing" | "")[]
+>"mowing" : "mowing"
+>"" : ""
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : [string, string[]]
 >MultiSkilledRobot : [string, string[]]
->["trimmer", ["trimming", "edging"]] : [string, string[]]
->"trimmer" : string
->["trimming", "edging"] : string[]
->"trimming" : string
->"edging" : string
+>["trimmer", ["trimming", "edging"]] : ["trimmer", ("trimming" | "edging")[]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : ("trimming" | "edging")[]
+>"trimming" : "trimming"
+>"edging" : "edging"
 
 let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 > : undefined
 >skillA : string[]
->["noSkill", "noSkill"] : string[]
->"noSkill" : string
->"noSkill" : string
+>["noSkill", "noSkill"] : "noSkill"[]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
 >multiRobotA : [string, string[]]
 
 let [nameMB = "noName" ] = multiRobotB;
 >nameMB : string
->"noName" : string
+>"noName" : "noName"
 >multiRobotB : [string, string[]]
 
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 >nameMA : string
->"noName" : string
+>"noName" : "noName"
 >primarySkillA : string
->"noSkill" : string
+>"noSkill" : "noSkill"
 >secondarySkillA : string
->"noSkill" : string
->["noSkill", "noSkill"] : [string, string]
->"noSkill" : string
->"noSkill" : string
+>"noSkill" : "noSkill"
+>["noSkill", "noSkill"] : ["noSkill", "noSkill"]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
 >multiRobotA : [string, string[]]
 
 let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
 >nameMC : string
->"noName" : string
->["roomba", ["vaccum", "mopping"]] : [string, string[]]
->"roomba" : string
->["vaccum", "mopping"] : string[]
->"vaccum" : string
->"mopping" : string
+>"noName" : "noName"
+>["roomba", ["vaccum", "mopping"]] : ["roomba", ("vaccum" | "mopping")[]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : ("vaccum" | "mopping")[]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
 
 let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
 >nameMC2 : string
->"noName" : string
+>"noName" : "noName"
 >primarySkillC : string
->"noSkill" : string
+>"noSkill" : "noSkill"
 >secondarySkillC : string
->"noSkill" : string
->["noSkill", "noSkill"] : [string, string]
->"noSkill" : string
->"noSkill" : string
->["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
->"roomba" : string
->["vaccum", "mopping"] : [string, string]
->"vaccum" : string
->"mopping" : string
+>"noSkill" : "noSkill"
+>["noSkill", "noSkill"] : ["noSkill", "noSkill"]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
+>["roomba", ["vaccum", "mopping"]] : ["roomba", ["vaccum", "mopping"]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : ["vaccum", "mopping"]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
 
 if (nameMB == nameMA) {
 >nameMB == nameMA : boolean

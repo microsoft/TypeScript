@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables01.ts ===
+
+var kindAndVal: {
+>kindAndVal : Symbol(kindAndVal, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 3))
+
+     kind: "kindA";
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 17))
+
+     val: any;
+>val : Symbol(val, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 2, 19))
+
+};
+
+namespace Consts {
+>Consts : Symbol(Consts, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 4, 2))
+
+    export const { kind, val } = kindAndVal;
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 7, 18))
+>val : Symbol(val, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 7, 24))
+>kindAndVal : Symbol(kindAndVal, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 3))
+
+    export const { kind: constKind } = kindAndVal;
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 17))
+>constKind : Symbol(constKind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 8, 18))
+>kindAndVal : Symbol(kindAndVal, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 3))
+
+    export let a: "kindA" = kind;
+>a : Symbol(a, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 9, 14))
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 7, 18))
+
+    export let b: "kindA" = constKind;
+>b : Symbol(b, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 10, 14))
+>constKind : Symbol(constKind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 8, 18))
+}
+
+namespace Lets {
+>Lets : Symbol(Lets, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 11, 1))
+
+    export let { kind } = kindAndVal;
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 14, 16))
+>kindAndVal : Symbol(kindAndVal, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 3))
+
+    export let { kind: letKind } = kindAndVal;
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 17))
+>letKind : Symbol(letKind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 15, 16))
+>kindAndVal : Symbol(kindAndVal, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 1, 3))
+
+    kind = letKind;
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 14, 16))
+>letKind : Symbol(letKind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 15, 16))
+
+    letKind = kind;
+>letKind : Symbol(letKind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 15, 16))
+>kind : Symbol(kind, Decl(stringLiteralTypesForBindingPatternVariables01.ts, 14, 16))
+}

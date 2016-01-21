@@ -15,5 +15,5 @@ var b = x['toString']();
 >x['toString']() : string
 >x['toString'] : () => string
 >x : boolean
->'toString' : string
+>'toString' : "toString"
 

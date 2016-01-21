@@ -3,9 +3,9 @@
 var x: { a: string } = { a: "hello", b: 42 };  // No error
 >x : { a: string; }
 >a : string
->{ a: "hello", b: 42 } : { a: string; b: number; }
->a : string
->"hello" : string
+>{ a: "hello", b: 42 } : { a: "hello"; b: number; }
+>a : "hello"
+>"hello" : "hello"
 >b : number
 >42 : number
 

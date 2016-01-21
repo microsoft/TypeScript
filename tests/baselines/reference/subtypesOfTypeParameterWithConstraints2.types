@@ -259,17 +259,17 @@ function f6<T extends String>(x: T) {
 
     var r2 = true ? '' : x; // ok
 >r2 : string | T
->true ? '' : x : string | T
+>true ? '' : x : "" | T
 >true : boolean
->'' : string
+>'' : ""
 >x : T
 
     var r2 = true ? x : ''; // ok
 >r2 : string | T
->true ? x : '' : T | string
+>true ? x : '' : T | ""
 >true : boolean
 >x : T
->'' : string
+>'' : ""
 }
 
 function f7<T extends Boolean>(x: T) {

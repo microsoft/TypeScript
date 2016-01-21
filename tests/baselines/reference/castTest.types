@@ -28,7 +28,7 @@ var b = <boolean>true;
 var s = <string>"";
 >s : string
 ><string>"" : string
->"" : string
+>"" : ""
 
 var ar = <any[]>null;
 >ar : any[]

@@ -1,0 +1,15 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsInArrayWithAny01.ts(6,17): error TS2304: Cannot find name 'number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsInArrayWithAny01.ts(6,24): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsInArrayWithAny01.ts (2 errors) ====
+    
+    const c: any = null;
+    const src = ["hello", c];
+    
+    const okayDest: string[] = src;
+    const badDest = number[] = src;
+                    ~~~~~~
+!!! error TS2304: Cannot find name 'number'.
+                           ~
+!!! error TS1109: Expression expected.

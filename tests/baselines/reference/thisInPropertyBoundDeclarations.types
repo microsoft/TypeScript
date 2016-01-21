@@ -131,14 +131,14 @@ class B {
 >'  ' +    function() {    } +    ' ' +    (() => () => () => this) : string
 >'  ' +    function() {    } +    ' ' : string
 >'  ' +    function() {    } : string
->'  ' : string
+>'  ' : "  "
 
     function() {
 >function() {    } : () => void
 
     } +
     ' ' +
->' ' : string
+>' ' : " "
 
     (() => () => () => this);
 >(() => () => () => this) : () => () => () => this

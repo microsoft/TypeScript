@@ -28,7 +28,7 @@ declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 foo("", { [Symbol.unscopables]: s => s.length });
 >foo("", { [Symbol.unscopables]: s => s.length }) : number
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
->"" : string
+>"" : ""
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor

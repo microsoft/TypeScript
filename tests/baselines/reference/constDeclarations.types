@@ -13,7 +13,7 @@ const c3 = 0, c4 :string = "", c5 = null;
 >c3 : number
 >0 : number
 >c4 : string
->"" : string
+>"" : ""
 >c5 : any
 >null : null
 

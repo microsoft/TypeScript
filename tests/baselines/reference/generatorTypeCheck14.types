@@ -7,5 +7,5 @@ function* g() {
 >0 : number
 
     return "";
->"" : string
+>"" : ""
 }

@@ -9,7 +9,7 @@ var x: foo;
 x("test");
 >x("test") : void
 >x : foo
->"test" : string
+>"test" : "test"
 
 x(42);
 >x(42) : number

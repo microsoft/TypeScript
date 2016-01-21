@@ -16,7 +16,7 @@ let y: T = "foo";
 if (x === "") {
 >x === "" : boolean
 >x : "" | "foo"
->"" : string
+>"" : ""
 
     let a = x;
 >a : "" | "foo"
@@ -26,7 +26,7 @@ if (x === "") {
 if (x !== "") {
 >x !== "" : boolean
 >x : "" | "foo"
->"" : string
+>"" : ""
 
     let b = x;
 >b : "" | "foo"
@@ -36,7 +36,7 @@ if (x !== "") {
 if (x == "") {
 >x == "" : boolean
 >x : "" | "foo"
->"" : string
+>"" : ""
 
     let c = x;
 >c : "" | "foo"
@@ -46,7 +46,7 @@ if (x == "") {
 if (x != "") {
 >x != "" : boolean
 >x : "" | "foo"
->"" : string
+>"" : ""
 
     let d = x;
 >d : "" | "foo"

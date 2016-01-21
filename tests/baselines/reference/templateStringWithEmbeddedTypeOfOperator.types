@@ -3,5 +3,5 @@ var x = `abc${ typeof "hi" }def`;
 >x : string
 >`abc${ typeof "hi" }def` : string
 >typeof "hi" : string
->"hi" : string
+>"hi" : "hi"
 

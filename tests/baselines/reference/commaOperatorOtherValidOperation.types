@@ -32,7 +32,7 @@ var resultIsString = foo(1, "123");
 >foo(1, "123") : string
 >foo : (x: number, y: string) => string
 >1 : number
->"123" : string
+>"123" : "123"
 
 //TypeParameters
 function foo1<T1, T2>()

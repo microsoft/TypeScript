@@ -23,7 +23,7 @@ class C1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -39,7 +39,7 @@ class C1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -52,7 +52,7 @@ class C1 {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -70,7 +70,7 @@ class C1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -86,7 +86,7 @@ class C1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -99,7 +99,7 @@ class C1 {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -117,7 +117,7 @@ class C1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -133,7 +133,7 @@ class C1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -146,7 +146,7 @@ class C1 {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -164,7 +164,7 @@ class C1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -180,7 +180,7 @@ class C1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -193,7 +193,7 @@ class C1 {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -211,7 +211,7 @@ class C1 {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -227,7 +227,7 @@ class C1 {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -240,7 +240,7 @@ class C1 {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number

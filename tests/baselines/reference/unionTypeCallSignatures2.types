@@ -74,7 +74,7 @@ var s1 = f1("abc");          // boolean | string | number
 >s1 : boolean | string | number
 >f1("abc") : boolean | string | number
 >f1 : A | B | C
->"abc" : string
+>"abc" : "abc"
 
 var a1 = f1([true, false]);  // boolean[]
 >a1 : boolean[]
@@ -100,7 +100,7 @@ var s2 = f2("abc");          // number | string | boolean
 >s2 : number | string | boolean
 >f2("abc") : number | string | boolean
 >f2 : C | B | A
->"abc" : string
+>"abc" : "abc"
 
 var a2 = f2([true, false]);  // boolean[]
 >a2 : boolean[]
@@ -126,7 +126,7 @@ var s3 = f3("abc");          // string | boolean | number
 >s3 : string | boolean | number
 >f3("abc") : string | boolean | number
 >f3 : B | A | C
->"abc" : string
+>"abc" : "abc"
 
 var a3 = f3([true, false]);  // boolean[]
 >a3 : boolean[]

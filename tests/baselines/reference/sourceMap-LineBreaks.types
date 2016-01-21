@@ -32,9 +32,9 @@ var stringLiteralWithCarriageReturnLineFeed = "line 1\
 line 2";
 var stringLiteralWithCarriageReturn = "line 1\line 2";
 >stringLiteralWithLineFeed : string
->"line 1\line 2" : string
+>"line 1\line 2" : "line 1line 2"
 
 var stringLiteralWithLineSeparator = "line 1\ line 2"; var stringLiteralWithParagraphSeparator = "line 1\ line 2"; var stringLiteralWithNextLine = "line 1\line 2";
 >stringLiteralWithCarriageReturnLineFeed : string
->"line 1\line 2" : string
+>"line 1\line 2" : "line 1line 2"
 

@@ -80,9 +80,9 @@ fold(
 >result : [string, string][]
 
         ["", ""]
->["", ""] : [string, string]
->"" : string
->"" : string
+>["", ""] : ["", ""]
+>"" : ""
+>"" : ""
 
     )
 );

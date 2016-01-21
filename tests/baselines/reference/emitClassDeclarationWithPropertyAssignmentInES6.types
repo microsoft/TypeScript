@@ -4,7 +4,7 @@ class C {
 
     x: string = "Hello world";
 >x : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 }
 
 class D {
@@ -12,7 +12,7 @@ class D {
 
     x: string = "Hello world";
 >x : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 
     y: number;
 >y : number
@@ -53,10 +53,10 @@ class F extends D{
 >super : typeof D
 
         this.j = "HI";
->this.j = "HI" : string
+>this.j = "HI" : "HI"
 >this.j : string
 >this : this
 >j : string
->"HI" : string
+>"HI" : "HI"
     }
 }

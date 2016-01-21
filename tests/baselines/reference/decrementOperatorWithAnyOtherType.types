@@ -9,9 +9,9 @@ var ANY1;
 
 var ANY2: any[] = ["", ""];
 >ANY2 : any[]
->["", ""] : string[]
->"" : string
->"" : string
+>["", ""] : ""[]
+>"" : ""
+>"" : ""
 
 var obj = {x:1,y:null};
 >obj : { x: number; y: any; }

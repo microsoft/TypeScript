@@ -75,7 +75,7 @@ function foo00(x) {
         if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
             return;
         }
@@ -550,7 +550,7 @@ function foo00_c(x) {
         if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
             return;
         }

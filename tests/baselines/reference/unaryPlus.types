@@ -10,7 +10,7 @@ var b = +(<any>"");
 >+(<any>"") : number
 >(<any>"") : any
 ><any>"" : any
->"" : string
+>"" : ""
 
 enum E { some, thing };
 >E : E
@@ -28,15 +28,15 @@ var c = +E.some;
 var x = +"3"; //should be valid
 >x : number
 >+"3" : number
->"3" : string
+>"3" : "3"
 
 var y = -"3"; // should be valid
 >y : number
 >-"3" : number
->"3" : string
+>"3" : "3"
 
 var z = ~"3"; // should be valid
 >z : number
 >~"3" : number
->"3" : string
+>"3" : "3"
 

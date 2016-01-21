@@ -5,13 +5,13 @@ var STRING: string;
 
 var STRING1: string[] = ["", "abc"];
 >STRING1 : string[]
->["", "abc"] : string[]
->"" : string
->"abc" : string
+>["", "abc"] : ("" | "abc")[]
+>"" : ""
+>"abc" : "abc"
 
 function foo(): string { return "abc"; }
 >foo : () => string
->"abc" : string
+>"abc" : "abc"
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return ""; }
 >foo : () => string
->"" : string
+>"" : ""
 }
 module M {
 >M : typeof M
@@ -50,23 +50,23 @@ var ResultIsBoolean2 = !STRING1;
 var ResultIsBoolean3 = !"";
 >ResultIsBoolean3 : boolean
 >!"" : boolean
->"" : string
+>"" : ""
 
 var ResultIsBoolean4 = !{ x: "", y: "" };
 >ResultIsBoolean4 : boolean
 >!{ x: "", y: "" } : boolean
->{ x: "", y: "" } : { x: string; y: string; }
->x : string
->"" : string
->y : string
->"" : string
+>{ x: "", y: "" } : { x: ""; y: ""; }
+>x : ""
+>"" : ""
+>y : ""
+>"" : ""
 
 var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
 >ResultIsBoolean5 : boolean
 >!{ x: "", y: (s: string) => { return s; } } : boolean
->{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->x : string
->"" : string
+>{ x: "", y: (s: string) => { return s; } } : { x: ""; y: (s: string) => string; }
+>x : ""
+>"" : ""
 >y : (s: string) => string
 >(s: string) => { return s; } : (s: string) => string
 >s : string
@@ -145,7 +145,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 // miss assignment operators
 !"";
 >!"" : boolean
->"" : string
+>"" : ""
 
 !STRING;
 >!STRING : boolean

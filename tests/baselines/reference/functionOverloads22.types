@@ -15,8 +15,8 @@ function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
 >bar : any
 >a : any
 >b : any
->[{a:""}] : { a: string; }[]
->{a:""} : { a: string; }
->a : string
->"" : string
+>[{a:""}] : { a: ""; }[]
+>{a:""} : { a: ""; }
+>a : ""
+>"" : ""
 

@@ -5,9 +5,9 @@ function f() {
 
     var { arguments } = { arguments: "hello" };
 >arguments : string
->{ arguments: "hello" } : { arguments: string; }
->arguments : string
->"hello" : string
+>{ arguments: "hello" } : { arguments: "hello"; }
+>arguments : "hello"
+>"hello" : "hello"
 
     if (Math.random()) {
 >Math.random() : number
@@ -23,5 +23,5 @@ function f() {
     }
     var arguments = "world";
 >arguments : string
->"world" : string
+>"world" : "world"
 }

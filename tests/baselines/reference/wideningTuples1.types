@@ -14,8 +14,8 @@ var y = foo([undefined]);
 >undefined : undefined
 
 y = [""];
->y = [""] : [string]
+>y = [""] : [""]
 >y : [any]
->[""] : [string]
->"" : string
+>[""] : [""]
+>"" : ""
 

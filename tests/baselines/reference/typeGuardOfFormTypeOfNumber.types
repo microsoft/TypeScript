@@ -48,7 +48,7 @@ if (typeof strOrNum === "number") {
 >typeof strOrNum === "number" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
->"number" : string
+>"number" : "number"
 
     num = strOrNum; // number
 >num = strOrNum : number
@@ -65,7 +65,7 @@ if (typeof numOrBool === "number") {
 >typeof numOrBool === "number" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
->"number" : string
+>"number" : "number"
 
     num = numOrBool; // number
 >num = numOrBool : number
@@ -81,7 +81,7 @@ if (typeof strOrNumOrBool === "number") {
 >typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"number" : string
+>"number" : "number"
 
     num = strOrNumOrBool; // number
 >num = strOrNumOrBool : number
@@ -98,7 +98,7 @@ if (typeof numOrC === "number") {
 >typeof numOrC === "number" : boolean
 >typeof numOrC : string
 >numOrC : number | C
->"number" : string
+>"number" : "number"
 
     num = numOrC; // number
 >num = numOrC : number
@@ -117,7 +117,7 @@ if (typeof strOrBool === "number") {
 >typeof strOrBool === "number" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->"number" : string
+>"number" : "number"
 
     var y1: string | boolean = strOrBool; // string | boolean
 >y1 : string | boolean
@@ -136,7 +136,7 @@ if (typeof strOrNum !== "number") {
 >typeof strOrNum !== "number" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
->"number" : string
+>"number" : "number"
 
     str === strOrNum; // string
 >str === strOrNum : boolean
@@ -153,7 +153,7 @@ if (typeof numOrBool !== "number") {
 >typeof numOrBool !== "number" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
->"number" : string
+>"number" : "number"
 
     var x: number | boolean = numOrBool; // number | boolean
 >x : number | boolean
@@ -169,7 +169,7 @@ if (typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
->"number" : string
+>"number" : "number"
 
     strOrBool = strOrNumOrBool; // string | boolean
 >strOrBool = strOrNumOrBool : string | boolean
@@ -186,7 +186,7 @@ if (typeof numOrC !== "number") {
 >typeof numOrC !== "number" : boolean
 >typeof numOrC : string
 >numOrC : number | C
->"number" : string
+>"number" : "number"
 
     c = numOrC; // C
 >c = numOrC : C
@@ -205,7 +205,7 @@ if (typeof strOrBool !== "number") {
 >typeof strOrBool !== "number" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
->"number" : string
+>"number" : "number"
 
     var y1: string | boolean = strOrBool; // string | boolean
 >y1 : string | boolean

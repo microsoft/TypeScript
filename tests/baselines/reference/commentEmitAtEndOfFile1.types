@@ -3,7 +3,7 @@
 // test
 var f = ''
 >f : string
->'' : string
+>'' : ""
 
 // test #2
 module foo {

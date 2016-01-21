@@ -3,11 +3,11 @@ var x;
 >x : any
 
 x.name = "hello";
->x.name = "hello" : string
+>x.name = "hello" : "hello"
 >x.name : any
 >x : any
 >name : any
->"hello" : string
+>"hello" : "hello"
 
 var z = x + x;
 >z : any

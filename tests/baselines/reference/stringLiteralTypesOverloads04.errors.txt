@@ -1,0 +1,18 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts(4,3): error TS2345: Argument of type '(y: "foo" | "bar") => string' is not assignable to parameter of type '(p: "foo" | "bar") => "foo"'.
+  Type 'string' is not assignable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads04.ts (1 errors) ====
+    
+    declare function f(x: (p: "foo" | "bar") => "foo");
+    
+    f(y => {
+      ~~~~~~
+        let z = y = "foo";
+    ~~~~~~~~~~~~~~~~~~~~~~
+        return z;
+    ~~~~~~~~~~~~~
+    })
+    ~
+!!! error TS2345: Argument of type '(y: "foo" | "bar") => string' is not assignable to parameter of type '(p: "foo" | "bar") => "foo"'.
+!!! error TS2345:   Type 'string' is not assignable to type '"foo"'.

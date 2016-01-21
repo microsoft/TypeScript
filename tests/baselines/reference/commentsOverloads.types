@@ -18,7 +18,7 @@ function f1(aOrb: any) {
 f1("hello");
 >f1("hello") : number
 >f1 : { (a: number): number; (b: string): number; }
->"hello" : string
+>"hello" : "hello"
 
 f1(10);
 >f1(10) : number
@@ -45,7 +45,7 @@ function f2(aOrb: any) {
 f2("hello");
 >f2("hello") : number
 >f2 : { (a: number): number; (b: string): number; }
->"hello" : string
+>"hello" : "hello"
 
 f2(10);
 >f2(10) : number
@@ -70,7 +70,7 @@ function f3(aOrb: any) {
 f3("hello");
 >f3("hello") : number
 >f3 : { (a: number): number; (b: string): number; }
->"hello" : string
+>"hello" : "hello"
 
 f3(10);
 >f3(10) : number
@@ -97,7 +97,7 @@ function f4(aOrb: any) {
 f4("hello");
 >f4("hello") : number
 >f4 : { (a: number): number; (b: string): number; }
->"hello" : string
+>"hello" : "hello"
 
 f4(10);
 >f4(10) : number
@@ -411,7 +411,7 @@ var c1_i_2 = new c1("hello");
 >c1_i_2 : c1
 >new c1("hello") : c1
 >c1 : typeof c1
->"hello" : string
+>"hello" : "hello"
 
 var c2_i_1 = new c2(10);
 >c2_i_1 : c2
@@ -423,7 +423,7 @@ var c2_i_2 = new c2("hello");
 >c2_i_2 : c2
 >new c2("hello") : c2
 >c2 : typeof c2
->"hello" : string
+>"hello" : "hello"
 
 var c3_i_1 = new c3(10);
 >c3_i_1 : c3
@@ -435,7 +435,7 @@ var c3_i_2 = new c3("hello");
 >c3_i_2 : c3
 >new c3("hello") : c3
 >c3 : typeof c3
->"hello" : string
+>"hello" : "hello"
 
 var c4_i_1 = new c4(10);
 >c4_i_1 : c4
@@ -447,7 +447,7 @@ var c4_i_2 = new c4("hello");
 >c4_i_2 : c4
 >new c4("hello") : c4
 >c4 : typeof c4
->"hello" : string
+>"hello" : "hello"
 
 var c5_i_1 = new c5(10);
 >c5_i_1 : c5
@@ -459,5 +459,5 @@ var c5_i_2 = new c5("hello");
 >c5_i_2 : c5
 >new c5("hello") : c5
 >c5 : typeof c5
->"hello" : string
+>"hello" : "hello"
 

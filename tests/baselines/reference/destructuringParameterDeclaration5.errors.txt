@@ -7,9 +7,9 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(49,4): error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type '{ y: D; }'.
   Types of property 'y' are incompatible.
     Type 'number' is not assignable to type 'D'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,4): error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,4): error TS2345: Argument of type '{ y: "world"; }' is not assignable to parameter of type '{ y: D; }'.
   Types of property 'y' are incompatible.
-    Type 'string' is not assignable to type 'D'.
+    Type '"world"' is not assignable to type 'D'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts (4 errors) ====
@@ -76,6 +76,6 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
 !!! error TS2345:     Type 'number' is not assignable to type 'D'.
     d3({ y: "world" });
        ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
+!!! error TS2345: Argument of type '{ y: "world"; }' is not assignable to parameter of type '{ y: D; }'.
 !!! error TS2345:   Types of property 'y' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'D'.
+!!! error TS2345:     Type '"world"' is not assignable to type 'D'.

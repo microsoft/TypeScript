@@ -37,7 +37,7 @@ class C {
 >0 : number
 
     static set [""](v) { }
->"" : string
+>"" : ""
 >v : any
 
     get [0]() { return 0; }

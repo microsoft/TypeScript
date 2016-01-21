@@ -2,7 +2,7 @@
 function f1(x: number): string { return "foo"; }
 >f1 : (x: number) => string
 >x : number
->"foo" : string
+>"foo" : "foo"
 
 function f2(x: number): number { return 10; }
 >f2 : (x: number) => number

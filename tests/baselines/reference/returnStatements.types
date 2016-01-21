@@ -6,7 +6,7 @@ function fn1(): number { return 1; }
 
 function fn2(): string { return ''; }
 >fn2 : () => string
->'' : string
+>'' : ""
 
 function fn3(): void { return undefined; }
 >fn3 : () => void

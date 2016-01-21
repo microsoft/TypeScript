@@ -24,7 +24,7 @@ var x = fg("abc");
 >x : string
 >fg("abc") : string
 >fg : ((s: string) => string) & ((x: any) => any)
->"abc" : string
+>"abc" : "abc"
 
 var x: string;
 >x : string
@@ -33,7 +33,7 @@ var y = gf("abc");
 >y : any
 >gf("abc") : any
 >gf : ((x: any) => any) & ((s: string) => string)
->"abc" : string
+>"abc" : "abc"
 
 var y: any;
 >y : any

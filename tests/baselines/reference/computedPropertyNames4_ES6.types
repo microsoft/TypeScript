@@ -38,7 +38,7 @@ var v = {
 >s : string
 
     [""]: 0,
->"" : string
+>"" : ""
 >0 : number
 
     [0]: 0,

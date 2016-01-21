@@ -33,7 +33,7 @@ foo.then((x) => {
 
     // x is inferred to be a number
     return "asdf";
->"asdf" : string
+>"asdf" : "asdf"
 
 }).then((x) => {
 >then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>

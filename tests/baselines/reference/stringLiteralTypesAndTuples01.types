@@ -6,11 +6,11 @@ let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 >brave : string
 >newish : string
 >world : string
->["Hello", "Brave", "New", "World"] : [string, string, string, string]
->"Hello" : string
->"Brave" : string
->"New" : string
->"World" : string
+>["Hello", "Brave", "New", "World"] : ["Hello", "Brave", "New", "World"]
+>"Hello" : "Hello"
+>"Brave" : "Brave"
+>"New" : "New"
+>"World" : "World"
 
 type RexOrRaptor = "t-rex" | "raptor"
 >RexOrRaptor : "t-rex" | "raptor"
@@ -38,22 +38,22 @@ function rawr(dino: RexOrRaptor) {
     if (dino === "t-rex") {
 >dino === "t-rex" : boolean
 >dino : "t-rex" | "raptor"
->"t-rex" : string
+>"t-rex" : "t-rex"
 
         return "ROAAAAR!";
->"ROAAAAR!" : string
+>"ROAAAAR!" : "ROAAAAR!"
     }
     if (dino === "raptor") {
 >dino === "raptor" : boolean
 >dino : "t-rex" | "raptor"
->"raptor" : string
+>"raptor" : "raptor"
 
         return "yip yip!";
->"yip yip!" : string
+>"yip yip!" : "yip yip!"
     }
 
     throw "Unexpected " + dino;
 >"Unexpected " + dino : string
->"Unexpected " : string
+>"Unexpected " : "Unexpected "
 >dino : "t-rex" | "raptor"
 }

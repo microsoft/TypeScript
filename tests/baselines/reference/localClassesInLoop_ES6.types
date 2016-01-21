@@ -5,7 +5,7 @@ declare function use(a: any);
 >a : any
 
 "use strict"
->"use strict" : string
+>"use strict" : "use strict"
 
 var data = [];
 >data : any[]

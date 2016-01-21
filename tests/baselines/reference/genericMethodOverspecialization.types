@@ -1,12 +1,12 @@
 === tests/cases/compiler/genericMethodOverspecialization.ts ===
 var names = ["list", "table1", "table2", "table3", "summary"];
 >names : string[]
->["list", "table1", "table2", "table3", "summary"] : string[]
->"list" : string
->"table1" : string
->"table2" : string
->"table3" : string
->"summary" : string
+>["list", "table1", "table2", "table3", "summary"] : ("list" | "table1" | "table2" | "table3" | "summary")[]
+>"list" : "list"
+>"table1" : "table1"
+>"table2" : "table2"
+>"table3" : "table3"
+>"summary" : "summary"
 
 interface HTMLElement {
 >HTMLElement : HTMLElement

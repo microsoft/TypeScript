@@ -1,0 +1,39 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables02.ts ===
+
+var kindAndVal: ["kindA", any];
+>kindAndVal : ["kindA", any]
+
+namespace Consts {
+>Consts : typeof Consts
+
+    export const [ kind, val ] = kindAndVal;
+>kind : "kindA"
+>val : any
+>kindAndVal : ["kindA", any]
+
+    export let a: "kindA" = kind;
+>a : "kindA"
+>kind : "kindA"
+}
+
+namespace Lets {
+>Lets : typeof Lets
+
+    export let [ kind ] = kindAndVal;
+>kind : "kindA"
+>kindAndVal : ["kindA", any]
+
+    export let { 0: letKind } = kindAndVal;
+>letKind : "kindA"
+>kindAndVal : ["kindA", any]
+
+    kind = letKind;
+>kind = letKind : "kindA"
+>kind : "kindA"
+>letKind : "kindA"
+
+    letKind = kind;
+>letKind = kind : "kindA"
+>letKind : "kindA"
+>kind : "kindA"
+}

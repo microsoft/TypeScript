@@ -69,14 +69,14 @@ for (let x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break l00;
 >l00 : any
@@ -84,14 +84,14 @@ for (let x in []) {
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue l00;
 >l00 : any
@@ -623,14 +623,14 @@ for (const x in []) {
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break;
     }
     if (x == "1") {
 >x == "1" : boolean
 >x : string
->"1" : string
+>"1" : "1"
 
         break l00_c;
 >l00_c : any
@@ -638,14 +638,14 @@ for (const x in []) {
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue;
     }
     if (x == "2") {
 >x == "2" : boolean
 >x : string
->"2" : string
+>"2" : "2"
 
         continue l00_c;
 >l00_c : any

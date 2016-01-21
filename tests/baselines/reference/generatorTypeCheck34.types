@@ -10,6 +10,6 @@ function* g() {
 >g2 : () => IterableIterator<any>
 
         return "";
->"" : string
+>"" : ""
     }
 }

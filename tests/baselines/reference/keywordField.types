@@ -12,9 +12,9 @@ obj.if = 1;
 
 var a = { if: "test" }
 >a : { if: string; }
->{ if: "test" } : { if: string; }
->if : string
->"test" : string
+>{ if: "test" } : { if: "test"; }
+>if : "test"
+>"test" : "test"
 
 var n = a.if
 >n : string
@@ -26,5 +26,5 @@ var q = a["if"];
 >q : string
 >a["if"] : string
 >a : { if: string; }
->"if" : string
+>"if" : "if"
 

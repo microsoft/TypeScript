@@ -95,7 +95,7 @@ b2 = (foo, bar) => { return "hello"; }
 >(foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
 >foo : number
 >bar : string
->"hello" : string
+>"hello" : "hello"
 
 var b3: (name: string, num: number, boo: boolean) => void;
 >b3 : (name: string, num: number, boo: boolean) => void
@@ -117,15 +117,15 @@ var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >(number = 1) => { return "hello"; } : (number?: E) => string
 >number : E
 >1 : number
->"hello" : string
+>"hello" : "hello"
 
 var b5: (n: {}) => string = (number = "string") => { return "hello"; };
 >b5 : (n: {}) => string
 >n : {}
 >(number = "string") => { return "hello"; } : (number?: {}) => string
 >number : {}
->"string" : string
->"hello" : string
+>"string" : "string"
+>"hello" : "hello"
 
 // A contextual signature S is extracted from a function type T as follows:
 //      Otherwise, no contextual signature can be extracted from T and S is undefined.

@@ -24,5 +24,5 @@ module M {
 >obj : { [Symbol.iterator]: number; }
 >Symbol["iterator"] : any
 >Symbol : {}
->"iterator" : string
+>"iterator" : "iterator"
 }
