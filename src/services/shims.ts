@@ -946,7 +946,8 @@ namespace ts {
                         };
                     }
 
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    const normalizedFileName = normalizeSlashes(fileName);
+                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
