@@ -1,0 +1,40 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays04.ts(8,31): error TS2345: Argument of type '("d" | "e" | "f")[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+  Type '"d" | "e" | "f"' is not assignable to type '"a" | "b" | "c"'.
+    Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+      Type '"d"' is not assignable to type '"c"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays04.ts(10,31): error TS2345: Argument of type '"d"[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+  Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+    Type '"d"' is not assignable to type '"c"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays04.ts(12,48): error TS2345: Argument of type '("d" | "e")[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+  Type '"d" | "e"' is not assignable to type '"a" | "b" | "c"'.
+    Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+      Type '"d"' is not assignable to type '"c"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays04.ts (3 errors) ====
+    
+    interface Array<T> {
+        concatHomogeneously(...arrays: T[][]): T[]
+    }
+    
+    let a: ("a" | "b" | "c")[] = ["a", "b", "c"];
+    let b = a.concatHomogeneously(["a", "b", "c"]);
+    let c = a.concatHomogeneously(["d", "e", "f"]);
+                                  ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '("d" | "e" | "f")[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+!!! error TS2345:   Type '"d" | "e" | "f"' is not assignable to type '"a" | "b" | "c"'.
+!!! error TS2345:     Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+!!! error TS2345:       Type '"d"' is not assignable to type '"c"'.
+    let d = a.concatHomogeneously(["a"], ["a"], ["a"]);
+    let e = a.concatHomogeneously(["d"], ["e"], ["f"]);
+                                  ~~~~~
+!!! error TS2345: Argument of type '"d"[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+!!! error TS2345:   Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+!!! error TS2345:     Type '"d"' is not assignable to type '"c"'.
+    let f = a.concatHomogeneously(["a"], ["b"], ["c"]);
+    let g = a.concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+                                                   ~~~~~~~~~~
+!!! error TS2345: Argument of type '("d" | "e")[]' is not assignable to parameter of type '("a" | "b" | "c")[]'.
+!!! error TS2345:   Type '"d" | "e"' is not assignable to type '"a" | "b" | "c"'.
+!!! error TS2345:     Type '"d"' is not assignable to type '"a" | "b" | "c"'.
+!!! error TS2345:       Type '"d"' is not assignable to type '"c"'.

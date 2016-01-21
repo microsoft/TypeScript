@@ -1,0 +1,29 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsFromConstToLet01.ts(10,1): error TS2322: Type '"C"' is not assignable to type '"A" | "B"'.
+  Type '"C"' is not assignable to type '"B"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsFromConstToLet01.ts(15,1): error TS2322: Type '"C"' is not assignable to type '"A" | "B"'.
+  Type '"C"' is not assignable to type '"B"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsFromConstToLet01.ts (2 errors) ====
+    
+    declare var randVal: boolean;
+    
+    const a = randVal ? "A" : "B";
+    const b = a;
+    
+    let c = a;
+    c = "A";
+    c = "B";
+    c = "C";
+    ~
+!!! error TS2322: Type '"C"' is not assignable to type '"A" | "B"'.
+!!! error TS2322:   Type '"C"' is not assignable to type '"B"'.
+    
+    let d = b;
+    d = "A";
+    d = "B";
+    d = "C";
+    ~
+!!! error TS2322: Type '"C"' is not assignable to type '"A" | "B"'.
+!!! error TS2322:   Type '"C"' is not assignable to type '"B"'.
+    

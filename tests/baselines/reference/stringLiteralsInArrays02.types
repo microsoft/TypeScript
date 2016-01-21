@@ -1,0 +1,192 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays02.ts ===
+
+interface Array<T> {
+>Array : T[]
+>T : T
+
+    concatHomogeneously(...arrays: T[][]): T[];
+>concatHomogeneously : (...arrays: T[][]) => T[]
+>arrays : T[][]
+>T : T
+>T : T
+}
+
+let a = ["a", "b", "c"];
+>a : string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+let b = a.concatHomogeneously(["a", "b", "c"]);
+>b : string[]
+>a.concatHomogeneously(["a", "b", "c"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+let c = a.concatHomogeneously(["d", "e", "f"]);
+>c : string[]
+>a.concatHomogeneously(["d", "e", "f"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["d", "e", "f"] : ("d" | "e" | "f")[]
+>"d" : "d"
+>"e" : "e"
+>"f" : "f"
+
+let d = a.concatHomogeneously(["a"], ["a"], ["a"]);
+>d : string[]
+>a.concatHomogeneously(["a"], ["a"], ["a"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+
+let e = a.concatHomogeneously(["d"], ["e"], ["f"]);
+>e : string[]
+>a.concatHomogeneously(["d"], ["e"], ["f"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["d"] : "d"[]
+>"d" : "d"
+>["e"] : "e"[]
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+let f = a.concatHomogeneously(["a"], ["b"], ["c"]);
+>f : string[]
+>a.concatHomogeneously(["a"], ["b"], ["c"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a"] : "a"[]
+>"a" : "a"
+>["b"] : "b"[]
+>"b" : "b"
+>["c"] : "c"[]
+>"c" : "c"
+
+let g = a.concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+>g : string[]
+>a.concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]) : string[]
+>a.concatHomogeneously : (...arrays: string[][]) => string[]
+>a : string[]
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>["d", "e"] : ("d" | "e")[]
+>"d" : "d"
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+let h = ["a", "b", "c"].concatHomogeneously(["a", "b", "c"]);
+>h : string[]
+>["a", "b", "c"].concatHomogeneously(["a", "b", "c"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+let i = ["a", "b", "c"].concatHomogeneously(["d", "e", "f"]);
+>i : string[]
+>["a", "b", "c"].concatHomogeneously(["d", "e", "f"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["d", "e", "f"] : ("d" | "e" | "f")[]
+>"d" : "d"
+>"e" : "e"
+>"f" : "f"
+
+let j = ["a", "b", "c"].concatHomogeneously(["a"], ["a"], ["a"]);
+>j : string[]
+>["a", "b", "c"].concatHomogeneously(["a"], ["a"], ["a"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+
+let k = ["a", "b", "c"].concatHomogeneously(["d"], ["e"], ["f"]);
+>k : string[]
+>["a", "b", "c"].concatHomogeneously(["d"], ["e"], ["f"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["d"] : "d"[]
+>"d" : "d"
+>["e"] : "e"[]
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+let l = ["a", "b", "c"].concatHomogeneously(["a"], ["a"], ["a"]);
+>l : string[]
+>["a", "b", "c"].concatHomogeneously(["a"], ["a"], ["a"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+
+let m = ["a", "b", "c"].concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+>m : string[]
+>["a", "b", "c"].concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]) : string[]
+>["a", "b", "c"].concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHomogeneously : (...arrays: string[][]) => string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>["d", "e"] : ("d" | "e")[]
+>"d" : "d"
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+

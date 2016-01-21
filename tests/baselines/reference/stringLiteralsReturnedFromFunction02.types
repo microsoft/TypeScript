@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsReturnedFromFunction02.ts ===
+
+function f1() {
+>f1 : () => string
+
+    return "A";
+>"A" : "A"
+}
+
+function f2(b1: boolean, b2: boolean) {
+>f2 : (b1: boolean, b2: boolean) => string
+>b1 : boolean
+>b2 : boolean
+
+    if (b1) {
+>b1 : boolean
+
+        return b2 ? "A" : "B";
+>b2 ? "A" : "B" : "A" | "B"
+>b2 : boolean
+>"A" : "A"
+>"B" : "B"
+    }
+    
+    return b2 ? "B" : "A";
+>b2 ? "B" : "A" : "B" | "A"
+>b2 : boolean
+>"B" : "B"
+>"A" : "A"
+}
+
+function f3(b1: boolean, b2: boolean) {
+>f3 : (b1: boolean, b2: boolean) => "A" | "B"
+>b1 : boolean
+>b2 : boolean
+
+    if (b1) {
+>b1 : boolean
+
+        const result1 = b2 ? "A" : "B";
+>result1 : "A" | "B"
+>b2 ? "A" : "B" : "A" | "B"
+>b2 : boolean
+>"A" : "A"
+>"B" : "B"
+
+        return result1;
+>result1 : "A" | "B"
+    }
+    
+    const result2 = b2 ? "B" : "A";
+>result2 : "B" | "A"
+>b2 ? "B" : "A" : "B" | "A"
+>b2 : boolean
+>"B" : "B"
+>"A" : "A"
+
+    return result2;
+>result2 : "B" | "A"
+}
+

@@ -1,0 +1,52 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(8,20): error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+  Type '"kindC"' is not assignable to type '"kindB"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(9,26): error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+  Type '"kindC"' is not assignable to type '"kindB"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(10,18): error TS2322: Type '"kindA" | "kindB"' is not assignable to type '"kindA"'.
+  Type '"kindB"' is not assignable to type '"kindA"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(11,18): error TS2322: Type '"kindA" | "kindB"' is not assignable to type '"kindA"'.
+  Type '"kindB"' is not assignable to type '"kindA"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(15,18): error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+  Type '"kindC"' is not assignable to type '"kindB"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts(16,24): error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+  Type '"kindC"' is not assignable to type '"kindB"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesForBindingPatternVariables05.ts (6 errors) ====
+    
+    var kindAndVal: {
+         kind: "kindA" | "kindB";
+         val: any;
+    };
+    
+    namespace Consts {
+        export const { kind = "kindC", val } = kindAndVal;
+                       ~~~~
+!!! error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+!!! error TS2322:   Type '"kindC"' is not assignable to type '"kindB"'.
+        export const { kind: constKind = "kindC" } = kindAndVal;
+                             ~~~~~~~~~
+!!! error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+!!! error TS2322:   Type '"kindC"' is not assignable to type '"kindB"'.
+        export const a: "kindA" = kind;
+                     ~
+!!! error TS2322: Type '"kindA" | "kindB"' is not assignable to type '"kindA"'.
+!!! error TS2322:   Type '"kindB"' is not assignable to type '"kindA"'.
+        export const b: "kindA" = constKind;
+                     ~
+!!! error TS2322: Type '"kindA" | "kindB"' is not assignable to type '"kindA"'.
+!!! error TS2322:   Type '"kindB"' is not assignable to type '"kindA"'.
+    }
+    
+    namespace Lets {
+        export let { kind = "kindC" } = kindAndVal;
+                     ~~~~
+!!! error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+!!! error TS2322:   Type '"kindC"' is not assignable to type '"kindB"'.
+        export let { kind: letKind = "kindC" } = kindAndVal;
+                           ~~~~~~~
+!!! error TS2322: Type '"kindC"' is not assignable to type '"kindA" | "kindB"'.
+!!! error TS2322:   Type '"kindC"' is not assignable to type '"kindB"'.
+        kind = letKind;
+        letKind = kind;
+    }

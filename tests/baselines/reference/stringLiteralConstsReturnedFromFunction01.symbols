@@ -1,0 +1,88 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralConstsReturnedFromFunction01.ts ===
+
+namespace E {
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+
+    export const A = "A";
+>A : Symbol(A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+
+    export const B = "B";
+>B : Symbol(B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+
+    export const C = "C";
+>C : Symbol(C, Decl(stringLiteralConstsReturnedFromFunction01.ts, 4, 16))
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 5, 1))
+
+    return E.A;
+>E.A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+}
+
+function f2(b1: boolean, b2: boolean) {
+>f2 : Symbol(f2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 9, 1))
+>b1 : Symbol(b1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 11, 12))
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 11, 24))
+
+    if (b1) {
+>b1 : Symbol(b1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 11, 12))
+
+        return b2 ? E.A : E.B;
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 11, 24))
+>E.A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+>E.B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+    }
+    
+    return b2 ? E.C : E.B;
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 11, 24))
+>E.C : Symbol(E.C, Decl(stringLiteralConstsReturnedFromFunction01.ts, 4, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>C : Symbol(E.C, Decl(stringLiteralConstsReturnedFromFunction01.ts, 4, 16))
+>E.B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+}
+
+function f3(b1: boolean, b2: boolean) {
+>f3 : Symbol(f3, Decl(stringLiteralConstsReturnedFromFunction01.ts, 17, 1))
+>b1 : Symbol(b1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 19, 12))
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 19, 24))
+
+    if (b1) {
+>b1 : Symbol(b1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 19, 12))
+
+        const result1 = b2 ? E.A : E.B;
+>result1 : Symbol(result1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 21, 13))
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 19, 24))
+>E.A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>A : Symbol(E.A, Decl(stringLiteralConstsReturnedFromFunction01.ts, 2, 16))
+>E.B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+
+        return result1;
+>result1 : Symbol(result1, Decl(stringLiteralConstsReturnedFromFunction01.ts, 21, 13))
+    }
+    
+    const result2 = b2 ? E.C : E.B;
+>result2 : Symbol(result2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 25, 9))
+>b2 : Symbol(b2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 19, 24))
+>E.C : Symbol(E.C, Decl(stringLiteralConstsReturnedFromFunction01.ts, 4, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>C : Symbol(E.C, Decl(stringLiteralConstsReturnedFromFunction01.ts, 4, 16))
+>E.B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+>E : Symbol(E, Decl(stringLiteralConstsReturnedFromFunction01.ts, 0, 0))
+>B : Symbol(E.B, Decl(stringLiteralConstsReturnedFromFunction01.ts, 3, 16))
+
+    return result2;
+>result2 : Symbol(result2, Decl(stringLiteralConstsReturnedFromFunction01.ts, 25, 9))
+}
+

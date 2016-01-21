@@ -1,0 +1,35 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsFromConstToLet02.ts ===
+
+const a = "A";
+>a : Symbol(a, Decl(stringLiteralsFromConstToLet02.ts, 1, 5))
+
+const b = a;
+>b : Symbol(b, Decl(stringLiteralsFromConstToLet02.ts, 2, 5))
+>a : Symbol(a, Decl(stringLiteralsFromConstToLet02.ts, 1, 5))
+
+let c = a;
+>c : Symbol(c, Decl(stringLiteralsFromConstToLet02.ts, 4, 3))
+>a : Symbol(a, Decl(stringLiteralsFromConstToLet02.ts, 1, 5))
+
+c = "A";
+>c : Symbol(c, Decl(stringLiteralsFromConstToLet02.ts, 4, 3))
+
+c = "B";
+>c : Symbol(c, Decl(stringLiteralsFromConstToLet02.ts, 4, 3))
+
+c = "C";
+>c : Symbol(c, Decl(stringLiteralsFromConstToLet02.ts, 4, 3))
+
+let d = b;
+>d : Symbol(d, Decl(stringLiteralsFromConstToLet02.ts, 9, 3))
+>b : Symbol(b, Decl(stringLiteralsFromConstToLet02.ts, 2, 5))
+
+d = "A";
+>d : Symbol(d, Decl(stringLiteralsFromConstToLet02.ts, 9, 3))
+
+d = "B";
+>d : Symbol(d, Decl(stringLiteralsFromConstToLet02.ts, 9, 3))
+
+d = "C";
+>d : Symbol(d, Decl(stringLiteralsFromConstToLet02.ts, 9, 3))
+

@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays07.ts ===
+
+interface Array<T> {
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(stringLiteralsInArrays07.ts, 0, 0))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(stringLiteralsInArrays07.ts, 1, 16))
+
+    concatHeterogeneously<U>(...arrays: U[][]): (T | U)[]
+>concatHeterogeneously : Symbol(concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>U : Symbol(U, Decl(stringLiteralsInArrays07.ts, 2, 26))
+>arrays : Symbol(arrays, Decl(stringLiteralsInArrays07.ts, 2, 29))
+>U : Symbol(U, Decl(stringLiteralsInArrays07.ts, 2, 26))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(stringLiteralsInArrays07.ts, 1, 16))
+>U : Symbol(U, Decl(stringLiteralsInArrays07.ts, 2, 26))
+}
+
+const a: ("a" | "b" | "c")[] = ["a", "b", "c"];
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+
+const b = a.concatHeterogeneously(["a", "b", "c"]);
+>b : Symbol(b, Decl(stringLiteralsInArrays07.ts, 6, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+
+const c = a.concatHeterogeneously(["d", "e", "f"]);
+>c : Symbol(c, Decl(stringLiteralsInArrays07.ts, 7, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+
+const d = a.concatHeterogeneously(["a"], ["a"], ["a"]);
+>d : Symbol(d, Decl(stringLiteralsInArrays07.ts, 8, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+
+const e = a.concatHeterogeneously(["d"], ["e"], ["f"]);
+>e : Symbol(e, Decl(stringLiteralsInArrays07.ts, 9, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+
+const f = a.concatHeterogeneously(["a"], ["b"], ["c"]);
+>f : Symbol(f, Decl(stringLiteralsInArrays07.ts, 10, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+
+const g = a.concatHeterogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+>g : Symbol(g, Decl(stringLiteralsInArrays07.ts, 11, 5))
+>a.concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+>a : Symbol(a, Decl(stringLiteralsInArrays07.ts, 5, 5))
+>concatHeterogeneously : Symbol(Array.concatHeterogeneously, Decl(stringLiteralsInArrays07.ts, 1, 20))
+

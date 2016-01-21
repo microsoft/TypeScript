@@ -1,0 +1,53 @@
+=== tests/cases/conformance/types/stringLiteral/file1.ts ===
+
+export type A = "A";
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+export type B = "B";
+>B : Symbol(B, Decl(file1.ts, 1, 20))
+
+export const a = "A";
+>a : Symbol(a, Decl(file1.ts, 4, 12))
+
+export const b = "B";
+>b : Symbol(b, Decl(file1.ts, 5, 12))
+
+=== tests/cases/conformance/types/stringLiteral/file2.ts ===
+import * as file1 from "./file1";
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+
+const a: file1.A = file1.a;
+>a : Symbol(a, Decl(file2.ts, 2, 5))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>A : Symbol(file1.A, Decl(file1.ts, 0, 0))
+>file1.a : Symbol(file1.a, Decl(file1.ts, 4, 12))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>a : Symbol(file1.a, Decl(file1.ts, 4, 12))
+
+const b: file1.B = file1.b;
+>b : Symbol(b, Decl(file2.ts, 3, 5))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>B : Symbol(file1.B, Decl(file1.ts, 1, 20))
+>file1.b : Symbol(file1.b, Decl(file1.ts, 5, 12))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>b : Symbol(file1.b, Decl(file1.ts, 5, 12))
+
+let aOrB: file1.A | file1.B;
+>aOrB : Symbol(aOrB, Decl(file2.ts, 5, 3))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>A : Symbol(file1.A, Decl(file1.ts, 0, 0))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>B : Symbol(file1.B, Decl(file1.ts, 1, 20))
+
+aOrB = file1.a;
+>aOrB : Symbol(aOrB, Decl(file2.ts, 5, 3))
+>file1.a : Symbol(file1.a, Decl(file1.ts, 4, 12))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>a : Symbol(file1.a, Decl(file1.ts, 4, 12))
+
+aOrB = file1.b;
+>aOrB : Symbol(aOrB, Decl(file2.ts, 5, 3))
+>file1.b : Symbol(file1.b, Decl(file1.ts, 5, 12))
+>file1 : Symbol(file1, Decl(file2.ts, 0, 6))
+>b : Symbol(file1.b, Decl(file1.ts, 5, 12))
+

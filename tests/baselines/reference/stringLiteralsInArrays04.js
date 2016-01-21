@@ -1,0 +1,35 @@
+//// [stringLiteralsInArrays04.ts]
+
+interface Array<T> {
+    concatHomogeneously(...arrays: T[][]): T[]
+}
+
+let a: ("a" | "b" | "c")[] = ["a", "b", "c"];
+let b = a.concatHomogeneously(["a", "b", "c"]);
+let c = a.concatHomogeneously(["d", "e", "f"]);
+let d = a.concatHomogeneously(["a"], ["a"], ["a"]);
+let e = a.concatHomogeneously(["d"], ["e"], ["f"]);
+let f = a.concatHomogeneously(["a"], ["b"], ["c"]);
+let g = a.concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+
+//// [stringLiteralsInArrays04.js]
+var a = ["a", "b", "c"];
+var b = a.concatHomogeneously(["a", "b", "c"]);
+var c = a.concatHomogeneously(["d", "e", "f"]);
+var d = a.concatHomogeneously(["a"], ["a"], ["a"]);
+var e = a.concatHomogeneously(["d"], ["e"], ["f"]);
+var f = a.concatHomogeneously(["a"], ["b"], ["c"]);
+var g = a.concatHomogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+
+
+//// [stringLiteralsInArrays04.d.ts]
+interface Array<T> {
+    concatHomogeneously(...arrays: T[][]): T[];
+}
+declare let a: ("a" | "b" | "c")[];
+declare let b: ("a" | "b" | "c")[];
+declare let c: any;
+declare let d: ("a" | "b" | "c")[];
+declare let e: any;
+declare let f: ("a" | "b" | "c")[];
+declare let g: any;

@@ -1,0 +1,194 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsInArrays05.ts ===
+
+interface Array<T> {
+>Array : T[]
+>T : T
+
+    concatHeterogeneously<U>(...arrays: U[][]): (T | U)[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (T | U)[]
+>U : U
+>arrays : U[][]
+>U : U
+>T : T
+>U : U
+}
+
+const a = ["a", "b", "c"];
+>a : string[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+const b = a.concatHeterogeneously(["a", "b", "c"]);
+>b : string[]
+>a.concatHeterogeneously(["a", "b", "c"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+const c = a.concatHeterogeneously(["d", "e", "f"]);
+>c : string[]
+>a.concatHeterogeneously(["d", "e", "f"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["d", "e", "f"] : ("d" | "e" | "f")[]
+>"d" : "d"
+>"e" : "e"
+>"f" : "f"
+
+const d = a.concatHeterogeneously(["a"], ["a"], ["a"]);
+>d : string[]
+>a.concatHeterogeneously(["a"], ["a"], ["a"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+
+const e = a.concatHeterogeneously(["d"], ["e"], ["f"]);
+>e : string[]
+>a.concatHeterogeneously(["d"], ["e"], ["f"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["d"] : "d"[]
+>"d" : "d"
+>["e"] : "e"[]
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+const f = a.concatHeterogeneously(["a"], ["b"], ["c"]);
+>f : string[]
+>a.concatHeterogeneously(["a"], ["b"], ["c"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a"] : "a"[]
+>"a" : "a"
+>["b"] : "b"[]
+>"b" : "b"
+>["c"] : "c"[]
+>"c" : "c"
+
+const g = a.concatHeterogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+>g : string[]
+>a.concatHeterogeneously(["a", "b", "c"], ["d", "e"], ["f"]) : string[]
+>a.concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>a : string[]
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>["d", "e"] : ("d" | "e")[]
+>"d" : "d"
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+const h = ["a", "b", "c"].concatHeterogeneously(["a", "b", "c"]);
+>h : string[]
+>["a", "b", "c"].concatHeterogeneously(["a", "b", "c"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+const i = ["a", "b", "c"].concatHeterogeneously(["d", "e", "f"]);
+>i : string[]
+>["a", "b", "c"].concatHeterogeneously(["d", "e", "f"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["d", "e", "f"] : ("d" | "e" | "f")[]
+>"d" : "d"
+>"e" : "e"
+>"f" : "f"
+
+const j = ["a", "b", "c"].concatHeterogeneously(["a"], ["a"], ["a"]);
+>j : string[]
+>["a", "b", "c"].concatHeterogeneously(["a"], ["a"], ["a"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+>["a"] : "a"[]
+>"a" : "a"
+
+const k = ["a", "b", "c"].concatHeterogeneously(["d"], ["e"], ["f"]);
+>k : string[]
+>["a", "b", "c"].concatHeterogeneously(["d"], ["e"], ["f"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["d"] : "d"[]
+>"d" : "d"
+>["e"] : "e"[]
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+
+const l = ["a", "b", "c"].concatHeterogeneously(["a"], ["b"], ["c"]);
+>l : string[]
+>["a", "b", "c"].concatHeterogeneously(["a"], ["b"], ["c"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a"] : "a"[]
+>"a" : "a"
+>["b"] : "b"[]
+>"b" : "b"
+>["c"] : "c"[]
+>"c" : "c"
+
+const m = ["a", "b", "c"].concatHeterogeneously(["a", "b", "c"], ["d", "e"], ["f"]);
+>m : string[]
+>["a", "b", "c"].concatHeterogeneously(["a", "b", "c"], ["d", "e"], ["f"]) : string[]
+>["a", "b", "c"].concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>concatHeterogeneously : <U>(...arrays: U[][]) => (string | U)[]
+>["a", "b", "c"] : ("a" | "b" | "c")[]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+>["d", "e"] : ("d" | "e")[]
+>"d" : "d"
+>"e" : "e"
+>["f"] : "f"[]
+>"f" : "f"
+

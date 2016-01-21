@@ -1,0 +1,43 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes01.ts(20,1): error TS2322: Type '"boolean"' is not assignable to type '"string" | "number" | Map<number>'.
+  Type '"boolean"' is not assignable to type 'Map<number>'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes01.ts(28,1): error TS2322: Type '"boolean"' is not assignable to type '"string" | "number" | Map<number>'.
+  Type '"boolean"' is not assignable to type 'Map<number>'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInPropertiesWithOtherTypes01.ts (2 errors) ====
+    
+    interface Map<T> {
+        [x: string]: number;
+    }
+    
+    interface Option {
+        // Intentionally omitting "boolean".
+        kind: "string" | "number" | Map<number>;
+    }
+    
+    let option: Option;
+    
+    const constKind = option.kind;
+    
+    let letKind = option.kind;
+    letKind = constKind;
+    letKind = varKind;
+    letKind = "string";
+    letKind = "number";
+    letKind = "boolean";
+    ~~~~~~~
+!!! error TS2322: Type '"boolean"' is not assignable to type '"string" | "number" | Map<number>'.
+!!! error TS2322:   Type '"boolean"' is not assignable to type 'Map<number>'.
+    letKind = {};
+    
+    var varKind = option.kind;
+    varKind = constKind;
+    varKind = letKind;
+    varKind = "string";
+    varKind = "number";
+    varKind = "boolean";
+    ~~~~~~~
+!!! error TS2322: Type '"boolean"' is not assignable to type '"string" | "number" | Map<number>'.
+!!! error TS2322:   Type '"boolean"' is not assignable to type 'Map<number>'.
+    varKind = {};
+    

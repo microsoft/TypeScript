@@ -1,0 +1,48 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsFromConstToLet02.ts ===
+
+const a = "A";
+>a : "A"
+>"A" : "A"
+
+const b = a;
+>b : "A"
+>a : "A"
+
+let c = a;
+>c : string
+>a : "A"
+
+c = "A";
+>c = "A" : "A"
+>c : string
+>"A" : "A"
+
+c = "B";
+>c = "B" : "B"
+>c : string
+>"B" : "B"
+
+c = "C";
+>c = "C" : "C"
+>c : string
+>"C" : "C"
+
+let d = b;
+>d : string
+>b : "A"
+
+d = "A";
+>d = "A" : "A"
+>d : string
+>"A" : "A"
+
+d = "B";
+>d = "B" : "B"
+>d : string
+>"B" : "B"
+
+d = "C";
+>d = "C" : "C"
+>d : string
+>"C" : "C"
+
