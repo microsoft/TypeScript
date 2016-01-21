@@ -1,0 +1,55 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts(22,5): error TS2352: Neither type 'string' nor type '("a" | "b")[] | "a" | "b"' is assignable to the other.
+  Type 'string' is not assignable to type '"b"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts(23,5): error TS2352: Neither type 'string' nor type '("a" | "b")[] | "a" | "b"' is assignable to the other.
+  Type 'string' is not assignable to type '"b"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts(30,7): error TS2352: Neither type '("a" | "b")[] | "a" | "b"' nor type 'string' is assignable to the other.
+  Type '("a" | "b")[]' is not assignable to type 'string'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts(31,7): error TS2352: Neither type '("a" | "b")[] | "a" | "b"' nor type 'string' is assignable to the other.
+  Type '("a" | "b")[]' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypeAssertion01.ts (4 errors) ====
+    
+    type S = "a" | "b";
+    type T = S[] | S;
+    
+    var s: S;
+    var t: T;
+    var str: string;
+    
+    ////////////////
+    
+    s = <S>t;
+    s = t as S;
+    
+    s = <S>str;
+    s = str as S;
+    
+    ////////////////
+    
+    t = <T>s;
+    t = s as T;
+    
+    t = <T>str;
+        ~~~~~~
+!!! error TS2352: Neither type 'string' nor type '("a" | "b")[] | "a" | "b"' is assignable to the other.
+!!! error TS2352:   Type 'string' is not assignable to type '"b"'.
+    t = str as T;
+        ~~~~~~~~
+!!! error TS2352: Neither type 'string' nor type '("a" | "b")[] | "a" | "b"' is assignable to the other.
+!!! error TS2352:   Type 'string' is not assignable to type '"b"'.
+    
+    ////////////////
+    
+    str = <string>s;
+    str = s as string;
+    
+    str = <string>t;
+          ~~~~~~~~~
+!!! error TS2352: Neither type '("a" | "b")[] | "a" | "b"' nor type 'string' is assignable to the other.
+!!! error TS2352:   Type '("a" | "b")[]' is not assignable to type 'string'.
+    str = t as string;
+          ~~~~~~~~~~~
+!!! error TS2352: Neither type '("a" | "b")[] | "a" | "b"' nor type 'string' is assignable to the other.
+!!! error TS2352:   Type '("a" | "b")[]' is not assignable to type 'string'.
+    

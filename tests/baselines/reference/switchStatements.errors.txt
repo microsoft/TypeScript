@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): error TS2322: Type '{ id: number; name: string; }' is not assignable to type 'C'.
+tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): error TS2322: Type '{ id: number; name: ""; }' is not assignable to type 'C'.
   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
@@ -39,7 +39,7 @@ tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): 
         case new D():
         case { id: 12, name: '' }:
                        ~~~~~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type 'C'.
+!!! error TS2322: Type '{ id: number; name: ""; }' is not assignable to type 'C'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
         case new C():
     }

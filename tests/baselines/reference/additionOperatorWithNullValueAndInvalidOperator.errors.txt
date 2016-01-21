@@ -6,7 +6,7 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(16,10): error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(19,10): error TS2365: Operator '+' cannot be applied to types 'Number' and 'Number'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(20,10): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(21,10): error TS2365: Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(21,10): error TS2365: Operator '+' cannot be applied to types '{ a: ""; }' and '{ a: ""; }'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(22,11): error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts(23,11): error TS2365: Operator '+' cannot be applied to types '() => void' and '() => void'.
 
@@ -50,7 +50,7 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
 !!! error TS2365: Operator '+' cannot be applied to types 'boolean' and 'boolean'.
     var r9 = null + { a: '' };
              ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types '{ a: string; }' and '{ a: string; }'.
+!!! error TS2365: Operator '+' cannot be applied to types '{ a: ""; }' and '{ a: ""; }'.
     var r10 = null + foo();
               ~~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'void' and 'void'.

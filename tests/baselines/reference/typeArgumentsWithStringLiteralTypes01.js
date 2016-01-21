@@ -229,9 +229,9 @@ declare namespace n1 {
     let e: string;
 }
 declare namespace n2 {
-    let a: "Hello";
+    let a: string;
     let b: any;
-    let c: "Hello";
+    let c: string;
     let d: any;
     let e: any;
 }

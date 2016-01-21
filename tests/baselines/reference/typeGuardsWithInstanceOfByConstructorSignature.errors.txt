@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(12,10): error TS2339: Property 'bar' does not exist on type 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(33,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(33,5): error TS2322: Type '"str"' is not assignable to type 'number'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(34,10): error TS2339: Property 'bar' does not exist on type 'B<number>'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(66,10): error TS2339: Property 'bar2' does not exist on type 'C1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(85,10): error TS2339: Property 'bar' does not exist on type 'D'.
@@ -47,7 +47,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
         obj3.foo = 1;
         obj3.foo = "str";
         ~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type '"str"' is not assignable to type 'number'.
         obj3.bar = "str";
              ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'B<number>'.

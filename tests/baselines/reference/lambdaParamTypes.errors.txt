@@ -1,5 +1,5 @@
-tests/cases/compiler/lambdaParamTypes.ts(17,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
-tests/cases/compiler/lambdaParamTypes.ts(18,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+tests/cases/compiler/lambdaParamTypes.ts(17,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; } | { name: string; id: number; }'.
+tests/cases/compiler/lambdaParamTypes.ts(18,31): error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; } | { name: string; id: number; }'.
 tests/cases/compiler/lambdaParamTypes.ts(19,34): error TS2339: Property 'charAt' does not exist on type 'number'.
 tests/cases/compiler/lambdaParamTypes.ts(20,36): error TS2339: Property 'toExponential' does not exist on type 'string'.
 tests/cases/compiler/lambdaParamTypes.ts(21,34): error TS2339: Property 'charAt' does not exist on type 'number'.
@@ -25,10 +25,10 @@ tests/cases/compiler/lambdaParamTypes.ts(22,36): error TS2339: Property 'toExpon
     // Below should all be in error
     thing.doSomething((x, y) => x.foo); // no such property on x
                                   ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; } | { name: string; id: number; }'.
     thing.doSomething((x, y) => y.foo); // no such property on y
                                   ~~~
-!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; }'.
+!!! error TS2339: Property 'foo' does not exist on type '{ name: string; id: number; } | { name: string; id: number; }'.
     thing.doSomething((x, y) => x.id.charAt(0));      // x.id should be number, no charAt member
                                      ~~~~~~
 !!! error TS2339: Property 'charAt' does not exist on type 'number'.

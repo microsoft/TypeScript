@@ -38,9 +38,9 @@ hResult = h("bar");
 declare function foo<T extends "foo">(f: (x: T) => T): (x: T) => T;
 declare function bar<T extends "foo" | "bar">(f: (x: T) => T): (x: T) => T;
 declare let f: (x: "foo") => "foo";
-declare let fResult: "foo";
+declare let fResult: string;
 declare let g: (x: "foo") => "foo";
-declare let gResult: "foo";
+declare let gResult: string;
 declare let h: (x: "foo" | "bar") => "foo" | "bar";
 declare let hResult: "foo" | "bar";
 
@@ -58,11 +58,11 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterCon
     declare let f: (x: "foo") => "foo";
                    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-    declare let fResult: "foo";
+    declare let fResult: string;
     declare let g: (x: "foo") => "foo";
                    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-    declare let gResult: "foo";
+    declare let gResult: string;
     declare let h: (x: "foo" | "bar") => "foo" | "bar";
     declare let hResult: "foo" | "bar";
     

@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(2,7): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(15,12): error TS2322: Type 'string' is not assignable to type 'x is A'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(15,12): error TS2322: Type '""' is not assignable to type 'x is A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,55): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,57): error TS1144: '{' or ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,57): error TS2304: Cannot find name 'is'.
@@ -76,7 +76,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
                ~~
-!!! error TS2322: Type 'string' is not assignable to type 'x is A'.
+!!! error TS2322: Type '""' is not assignable to type 'x is A'.
     }
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
