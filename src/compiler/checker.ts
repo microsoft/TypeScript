@@ -10412,19 +10412,13 @@ namespace ts {
         }
 
         function isReadonlySymbol(symbol: Symbol): boolean {
-            if (symbol.flags & SymbolFlags.Property) {
-                return symbol === undefinedSymbol || (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
-            }
-            if (symbol.flags & SymbolFlags.Accessor) {
-                return !(symbol.flags & SymbolFlags.SetAccessor);
-            }
-            return false;
+            return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
         }
 
         function isConstantSymbol(symbol: Symbol): boolean {
-            if (symbol.flags & SymbolFlags.Variable) {
-                return (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
-            }
+            return symbol === undefinedSymbol ||
+                symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
+                symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor);
         }
 
         function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
@@ -15723,7 +15717,6 @@ namespace ts {
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
-            globalReadonlyArrayType = <GenericType>getGlobalType("ReadonlyArray", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");
@@ -15768,8 +15761,10 @@ namespace ts {
             }
 
             anyArrayType = createArrayType(anyType);
-            anyReadonlyArrayType = globalReadonlyArrayType === emptyGenericType ? anyArrayType :
-                createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]);
+
+            const symbol = getGlobalSymbol("ReadonlyArray", SymbolFlags.Type, /*diagnostic*/ undefined);
+            globalReadonlyArrayType = symbol && <GenericType>getTypeOfGlobalSymbol(symbol, /*arity*/ 1);
+            anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {
