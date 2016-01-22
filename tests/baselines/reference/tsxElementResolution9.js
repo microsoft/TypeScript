@@ -1,6 +1,6 @@
 //// [file.tsx]
 declare module JSX {
-	interface Element { }
+	interface Element { something; }
 	interface IntrinsicElements { }
 }
 

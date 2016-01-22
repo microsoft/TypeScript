@@ -811,6 +811,7 @@ namespace ts {
         public nameTable: Map<string>;
         public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
+        public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -1616,6 +1617,9 @@ namespace ts {
         public static jsxOpenTagName = "jsx open tag name";
         public static jsxCloseTagName = "jsx close tag name";
         public static jsxSelfClosingTagName = "jsx self closing tag name";
+        public static jsxAttribute = "jsx attribute";
+        public static jsxText = "jsx text";
+        public static jsxAttributeStringLiteralValue = "jsx attribute string literal value";
     }
 
     export const enum ClassificationType {
@@ -1640,7 +1644,9 @@ namespace ts {
         jsxOpenTagName = 19,
         jsxCloseTagName = 20,
         jsxSelfClosingTagName = 21,
-        jsxAttribute = 22
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
     }
 
     /// Language Service
@@ -2012,13 +2018,6 @@ namespace ts {
         // Otherwise, just create a new source file.
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true);
     }
-
-    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
-        return useCaseSensitivefileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
-    }
-
 
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
@@ -5512,10 +5511,8 @@ namespace ts {
                 };
             }
 
-            function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
-                return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
-                    return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
-                });
+            function isImportSpecifierSymbol(symbol: Symbol) {
+                return (symbol.flags & SymbolFlags.Alias) && !!getDeclarationOfKind(symbol, SyntaxKind.ImportSpecifier);
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
@@ -5959,8 +5956,17 @@ namespace ts {
                 let result = [symbol];
 
                 // If the symbol is an alias, add what it alaises to the list
-                if (isImportOrExportSpecifierImportSymbol(symbol)) {
-                    result.push(typeChecker.getAliasedSymbol(symbol));
+                if (isImportSpecifierSymbol(symbol)) {
+                     result.push(typeChecker.getAliasedSymbol(symbol));
+                }
+
+                // For export specifiers, the exported name can be refering to a local symbol, e.g.:
+                //     import {a} from "mod";
+                //     export {a as somethingElse}
+                // We want the *local* declaration of 'a' as declared in the import,
+                // *not* as declared within "mod" (or farther)
+                if (location.parent.kind === SyntaxKind.ExportSpecifier) {
+                    result.push(typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>location.parent));
                 }
 
                 // If the location is in a context sensitive location (i.e. in an object literal) try
@@ -6006,15 +6012,43 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
                     }
                 });
 
                 return result;
             }
 
-            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
-                if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+            /**
+             * Find symbol of the given property-name and add the symbol to the given result array
+             * @param symbol a symbol to start searching for the given propertyName
+             * @param propertyName a name of property to serach for
+             * @param result an array of symbol of found property symbols
+             * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisitng of the same symbol.
+             *                                The value of previousIterationSymbol is undefined when the function is first called.
+             */
+            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
+                previousIterationSymbolsCache: SymbolTable): void {
+                if (!symbol) {
+                    return;
+                }
+
+                // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
+                // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
+                // For example:
+                //      interface C extends C {
+                //          /*findRef*/propName: string;
+                //      }
+                // The first time getPropertySymbolsFromBaseTypes is called when finding-all-references at propName,
+                // the symbol argument will be the symbol of an interface "C" and previousIterationSymbol is undefined,
+                // the function will add any found symbol of the property-name, then its sub-routine will call
+                // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
+                // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
+                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                    return;
+                }
+
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
@@ -6037,7 +6071,8 @@ namespace ts {
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result);
+                            previousIterationSymbolsCache[symbol.name] = symbol;
+                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                         }
                     }
                 }
@@ -6050,8 +6085,19 @@ namespace ts {
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
-                if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
+                if (isImportSpecifierSymbol(referenceSymbol)) {
                     const aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
+                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
+                        return aliasedSymbol;
+                    }
+                }
+
+                // For export specifiers, it can be a local symbol, e.g. 
+                //     import {a} from "mod";
+                //     export {a as somethingElse}
+                // We want the local target of the export (i.e. the import symbol) and not the final target (i.e. "mod".a)
+                if (referenceLocation.parent.kind === SyntaxKind.ExportSpecifier) {
+                    const aliasedSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>referenceLocation.parent);
                     if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
                         return aliasedSymbol;
                     }
@@ -6078,7 +6124,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
@@ -6251,7 +6297,7 @@ namespace ts {
                     return SemanticMeaning.Value | SemanticMeaning.Type;
 
                 case SyntaxKind.ModuleDeclaration:
-                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                    if (isAmbientModule(<ModuleDeclaration>node)) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
@@ -6595,6 +6641,9 @@ namespace ts {
                 case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
                 case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
                 case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
+                case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
+                case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
+                case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
             }
         }
 
@@ -6779,7 +6828,8 @@ namespace ts {
             function classifyDisabledMergeCode(text: string, start: number, end: number) {
                 // Classify the line that the ======= marker is on as a comment.  Then just lex
                 // all further tokens and add them to the result.
-                for (var i = start; i < end; i++) {
+                let i: number;
+                for (i = start; i < end; i++) {
                     if (isLineBreak(text.charCodeAt(i))) {
                         break;
                     }
@@ -6803,12 +6853,12 @@ namespace ts {
                 }
             }
 
-            function classifyToken(token: Node): void {
+            function classifyTokenOrJsxText(token: Node): void {
                 if (nodeIsMissing(token)) {
                     return;
                 }
 
-                const tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
+                const tokenStart = token.kind === SyntaxKind.JsxText ? token.pos : classifyLeadingTriviaAndGetTokenStart(token);
 
                 const tokenWidth = token.end - tokenStart;
                 Debug.assert(tokenWidth >= 0);
@@ -6844,7 +6894,8 @@ namespace ts {
                             // the '=' in a variable declaration is special cased here.
                             if (token.parent.kind === SyntaxKind.VariableDeclaration ||
                                 token.parent.kind === SyntaxKind.PropertyDeclaration ||
-                                token.parent.kind === SyntaxKind.Parameter) {
+                                token.parent.kind === SyntaxKind.Parameter ||
+                                token.parent.kind === SyntaxKind.JsxAttribute) {
                                 return ClassificationType.operator;
                             }
                         }
@@ -6863,7 +6914,7 @@ namespace ts {
                     return ClassificationType.numericLiteral;
                 }
                 else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
-                    return ClassificationType.stringLiteral;
+                    return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                     // TODO: we should get another classification type for these literals.
@@ -6872,6 +6923,9 @@ namespace ts {
                 else if (isTemplateLiteralKind(tokenKind)) {
                     // TODO (drosen): we should *also* get another classification type for these literals.
                     return ClassificationType.stringLiteral;
+                }
+                else if (tokenKind === SyntaxKind.JsxText) {
+                    return ClassificationType.jsxText;
                 }
                 else if (tokenKind === SyntaxKind.Identifier) {
                     if (token) {
@@ -6946,8 +7000,8 @@ namespace ts {
                     const children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         const child = children[i];
-                        if (isToken(child)) {
-                            classifyToken(child);
+                        if (isToken(child) || child.kind === SyntaxKind.JsxText) {
+                            classifyTokenOrJsxText(child);
                         }
                         else {
                             // Recurse into our child nodes.

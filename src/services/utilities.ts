@@ -608,6 +608,36 @@ namespace ts {
         }
         return true;
     }
+
+    export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
+        if (node.kind === SyntaxKind.ArrayLiteralExpression ||
+            node.kind === SyntaxKind.ObjectLiteralExpression) {
+            // [a,b,c] from:
+            // [a, b, c] = someExpression;
+            if (node.parent.kind === SyntaxKind.BinaryExpression &&
+                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                return true;
+            }
+
+            // [a, b, c] from:
+            // for([a, b, c] of expression)
+            if (node.parent.kind === SyntaxKind.ForOfStatement &&
+                (<ForOfStatement>node.parent).initializer === node) {
+                return true;
+            }
+
+            // [a, b, c] of
+            // [x, [a, b, c] ] = someExpression
+            // or 
+            // {x, a: {a, b, c} } = someExpression
+            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 // Display-part writer helpers

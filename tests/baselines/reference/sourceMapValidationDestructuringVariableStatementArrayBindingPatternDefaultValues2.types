@@ -1,0 +1,97 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts ===
+declare var console: {
+>console : { log(msg: string): void; }
+
+    log(msg: string): void;
+>log : (msg: string) => void
+>msg : string
+}
+type MultiSkilledRobot = [string, string[]];
+>MultiSkilledRobot : [string, string[]]
+
+var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+>multiRobotA : [string, string[]]
+>MultiSkilledRobot : [string, string[]]
+>["mower", ["mowing", ""]] : [string, string[]]
+>"mower" : string
+>["mowing", ""] : string[]
+>"mowing" : string
+>"" : string
+
+var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+>multiRobotB : [string, string[]]
+>MultiSkilledRobot : [string, string[]]
+>["trimmer", ["trimming", "edging"]] : [string, string[]]
+>"trimmer" : string
+>["trimming", "edging"] : string[]
+>"trimming" : string
+>"edging" : string
+
+let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
+> : undefined
+>skillA : string[]
+>["noSkill", "noSkill"] : string[]
+>"noSkill" : string
+>"noSkill" : string
+>multiRobotA : [string, string[]]
+
+let [nameMB = "noName" ] = multiRobotB;
+>nameMB : string
+>"noName" : string
+>multiRobotB : [string, string[]]
+
+let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
+>nameMA : string
+>"noName" : string
+>primarySkillA : string
+>"noSkill" : string
+>secondarySkillA : string
+>"noSkill" : string
+>["noSkill", "noSkill"] : [string, string]
+>"noSkill" : string
+>"noSkill" : string
+>multiRobotA : [string, string[]]
+
+let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
+>nameMC : string
+>"noName" : string
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : string
+>["vaccum", "mopping"] : string[]
+>"vaccum" : string
+>"mopping" : string
+
+let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+>nameMC2 : string
+>"noName" : string
+>primarySkillC : string
+>"noSkill" : string
+>secondarySkillC : string
+>"noSkill" : string
+>["noSkill", "noSkill"] : [string, string]
+>"noSkill" : string
+>"noSkill" : string
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : string
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : string
+>"mopping" : string
+
+if (nameMB == nameMA) {
+>nameMB == nameMA : boolean
+>nameMB : string
+>nameMA : string
+
+    console.log(skillA[0] + skillA[1]);
+>console.log(skillA[0] + skillA[1]) : void
+>console.log : (msg: string) => void
+>console : { log(msg: string): void; }
+>log : (msg: string) => void
+>skillA[0] + skillA[1] : string
+>skillA[0] : string
+>skillA : string[]
+>0 : number
+>skillA[1] : string
+>skillA : string[]
+>1 : number
+}
