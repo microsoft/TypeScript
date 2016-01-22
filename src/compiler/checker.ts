@@ -7283,25 +7283,25 @@ namespace ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
             }
 
-            if (container.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (isInJavaScriptFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== unknownType) {
                     return type;
                 }
-            }
 
-            // If this is a function in a JS file, it might be a class method. Check if it's the RHS
-            // of a x.prototype.y = function [name]() { .... }
-            if (isInJavaScriptFile(node) && container.kind === SyntaxKind.FunctionExpression) {
-                if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
-                    const className = (((container.parent as BinaryExpression)   // x.protoype.y = f
-                                        .left as PropertyAccessExpression)       // x.prototype.y
-                                        .expression as PropertyAccessExpression) // x.prototype
-                                        .expression;                             // x
-                    const classSymbol = checkExpression(className).symbol;
-                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        return getInferredClassType(classSymbol);
+                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
+                // of a x.prototype.y = function [name]() { .... }
+                if (container.kind === SyntaxKind.FunctionExpression) {
+                    if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                        // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
+                        const className = (((container.parent as BinaryExpression)   // x.protoype.y = f
+                            .left as PropertyAccessExpression)       // x.prototype.y
+                            .expression as PropertyAccessExpression) // x.prototype
+                            .expression;                             // x
+                        const classSymbol = checkExpression(className).symbol;
+                        if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                            return getInferredClassType(classSymbol);
+                        }
                     }
                 }
             }
