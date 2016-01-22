@@ -1,7 +1,6 @@
 tests/cases/compiler/promisePermutations3.ts(68,69): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'number' is not assignable to type 'IPromise<number>'.
-      Property 'then' is missing in type 'Number'.
 tests/cases/compiler/promisePermutations3.ts(73,70): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'number' is not assignable to type 'IPromise<number>'.
@@ -159,7 +158,6 @@ tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of 
 !!! error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'number' is not assignable to type 'IPromise<number>'.
-!!! error TS2345:       Property 'then' is missing in type 'Number'.
     var s3: Promise<number>;
     var s3a = s3.then(testFunction3, testFunction3, testFunction3);
     var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);

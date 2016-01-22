@@ -1105,9 +1105,15 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
+                baselineFile = baselineFile.replace(".ts", ".baseline");
+
+            }
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },

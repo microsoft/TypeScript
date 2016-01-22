@@ -69,7 +69,7 @@ interface Console {
     select(element: any): void;
     time(timerName?: string): void;
     timeEnd(timerName?: string): void;
-    trace(): void;
+    trace(message?: any, ...optionalParams: any[]): void;
     warn(message?: any, ...optionalParams: any[]): void;
 }
 
@@ -309,7 +309,7 @@ interface IDBDatabase extends EventTarget {
     objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
-    version: string;
+    version: number;
     close(): void;
     createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     deleteObjectStore(name: string): void;
