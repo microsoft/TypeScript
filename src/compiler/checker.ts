@@ -10400,25 +10400,44 @@ namespace ts {
             return true;
         }
 
-        function isReferenceWithinOwnConstructor(expr: Expression, symbol: Symbol): boolean {
-            // Allow assignments to readonly properties or methods (but not readonly accessors) within constructors
-            // of the same class declaration.
-            if ((expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
-                (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword &&
-                symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const func = getContainingFunction(expr);
-                return func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent;
-            }
-        }
-
         function isReadonlySymbol(symbol: Symbol): boolean {
             return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
         }
 
-        function isConstantSymbol(symbol: Symbol): boolean {
-            return symbol === undefinedSymbol ||
-                symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
-                symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor);
+        function isReferenceToConstant(expr: Expression, symbol: Symbol): boolean {
+            if (symbol.flags & SymbolFlags.Variable) {
+                // A variable declared with 'const' is considered constant.
+                if (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) {
+                    return true;
+                }
+                // An exported variable declared in an external module and accessed through a property
+                // or element access is considered constant.
+                if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+                    if (symbol.parent && symbol.parent.flags & SymbolFlags.ValueModule) {
+                        const declaration = symbol.parent.valueDeclaration;
+                        return declaration && (declaration.kind === SyntaxKind.SourceFile ||
+                            declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral);
+                    }
+                }
+            }
+            if (symbol.flags & SymbolFlags.Accessor) {
+                // An get accessor with no corresponding set accessor is considered constant.
+                return !(symbol.flags & SymbolFlags.SetAccessor);
+            }
+            return false;
+        }
+
+        function isReferenceToReadonlyProperty(expr: Expression, symbol: Symbol): boolean {
+            if (isReadonlySymbol(symbol)) {
+                // Allow assignments to readonly properties within constructors of the same class declaration.
+                if ((expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
+                    (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
+                    const func = getContainingFunction(expr);
+                    return !(func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent);
+                }
+                return true;
+            }
+            return false;
         }
 
         function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, constantVariableMessage: DiagnosticMessage): boolean {
@@ -10435,11 +10454,12 @@ namespace ts {
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
             if (symbol) {
                 if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
-                    if (symbol === undefinedSymbol || !(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
+                    if (symbol === undefinedSymbol ||
+                        !(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
                         error(expr, invalidReferenceMessage);
                         return false;
                     }
-                    if (isConstantSymbol(symbol) || (isReadonlySymbol(symbol) && !isReferenceWithinOwnConstructor(expr, symbol))) {
+                    if (isReferenceToConstant(node, symbol) || isReferenceToReadonlyProperty(node, symbol)) {
                         error(expr, constantVariableMessage);
                         return false;
                     }
