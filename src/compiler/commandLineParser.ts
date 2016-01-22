@@ -552,6 +552,7 @@ namespace ts {
         const errors: Diagnostic[] = [];
 
         if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
+            options.module = ModuleKind.CommonJS;
             options.allowJs = true;
         }
 
