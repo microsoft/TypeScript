@@ -7,57 +7,11 @@ namespace ts.server {
     const readline: NodeJS.ReadLine = require("readline");
     const fs: typeof NodeJS.fs = require("fs");
 
-    // TODO: "net" module not defined in local node.d.ts
-    const net: any = require("net");
-
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false,
     });
-
-    // Need to write directly to stdout, else rl.write also causes an input "line" event
-    // See https://github.com/joyent/node/issues/4243
-    let writeHost = (data: string) => process.stdout.write(data);
-
-    // Stubs for I/O
-    const onInput = (input: string) => { return; };
-    const onClose = () => { return; };
-
-    // Use a socket for comms if defined
-    const tss_debug: string = process.env["TSS_DEBUG"];
-    let tcp_port = 0;
-    if (tss_debug) {
-        tss_debug.split(" ").forEach( param => {
-            if (param.indexOf("port=") === 0) {
-                tcp_port = parseInt(param.substring(5));
-            }
-        });
-        if (tcp_port) {
-            net.createServer( (socket: any) => {
-                // Called once a connection is made
-                socket.setEncoding("utf8");
-                // Wire up the I/O handers to the socket
-                writeHost = (data: string) => {
-                    socket.write(data);
-                    return true;
-                };
-                socket.on("data", (data: string) => {
-                    // May get multiple requests in one network read
-                    if (data) {
-                        data.trim().split(/(\r\n)|\n/).forEach(line => onInput(line));
-                    }
-                });
-                socket.on("end", onClose);
-
-            }).listen(tcp_port);
-        }
-    }
-    if (!tcp_port) {
-        // If not using tcp, wire up the I/O handler to stdin/stdout
-        rl.on("line", (input: string) => onInput(input));
-        rl.on("close", () => onClose());
-    }
 
     class Logger implements ts.server.Logger {
         fd = -1;
