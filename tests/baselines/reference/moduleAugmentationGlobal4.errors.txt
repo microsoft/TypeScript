@@ -1,0 +1,25 @@
+tests/cases/compiler/f1.ts(3,15): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/f2.ts(3,15): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+
+
+==== tests/cases/compiler/f1.ts (1 errors) ====
+    
+    declare global {
+        interface Something {x}
+                  ~~~~~~~~~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+    }
+    export {};
+==== tests/cases/compiler/f2.ts (1 errors) ====
+    
+    declare global {
+        interface Something {y}
+                  ~~~~~~~~~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+    }
+    export {};
+==== tests/cases/compiler/f3.ts (0 errors) ====
+    import "./f1";
+    import "./f2";
+    
+    

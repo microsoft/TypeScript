@@ -251,6 +251,31 @@ namespace ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    export function isAmbientModule(node: Node): boolean {
+        return node && node.kind === SyntaxKind.ModuleDeclaration &&
+            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+    }
+
+    export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
+        return !!(module.flags & NodeFlags.GlobalAugmentation);
+    }
+
+    export function isExternalModuleAugmentation(node: Node): boolean {
+        // external module augmentation is a ambient module declaration that is either:
+        // - defined in the top level scope and source file is an external module
+        // - defined inside ambient module declaration located in the top level scope and source file not an external module
+        if (!node || !isAmbientModule(node)) {
+            return false;
+        }
+        switch (node.parent.kind) {
+            case SyntaxKind.SourceFile:
+                return isExternalModule(<SourceFile>node.parent);
+            case SyntaxKind.ModuleBlock:
+                return isAmbientModule(node.parent.parent) && !isExternalModule(<SourceFile>node.parent.parent.parent);
+        }
+        return false;
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
@@ -343,6 +368,7 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
         }
@@ -776,8 +802,8 @@ namespace ts {
     }
 
     /**
-      * Given an super call\property node returns a closest node where either  
-      * - super call\property is legal in the node and not legal in the parent node the node. 
+      * Given an super call\property node returns a closest node where either
+      * - super call\property is legal in the node and not legal in the parent node the node.
       *   i.e. super call is legal in constructor but not legal in the class body.
       * - node is arrow function (so caller might need to call getSuperContainer in case it needs to climb higher)
       * - super call\property is definitely illegal in the node (but might be legal in some subnode)
@@ -859,54 +885,28 @@ namespace ts {
                 // property declarations are valid if their parent is a class declaration.
                 return node.parent.kind === SyntaxKind.ClassDeclaration;
 
-            case SyntaxKind.Parameter:
-                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
-
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
-                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node).body !== undefined
+                    && node.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.Parameter:
+                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                return (<FunctionLikeDeclaration>node.parent).body !== undefined
+                    && (node.parent.kind === SyntaxKind.Constructor
+                    || node.parent.kind === SyntaxKind.MethodDeclaration
+                    || node.parent.kind === SyntaxKind.SetAccessor)
+                    && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
         }
 
         return false;
     }
 
     export function nodeIsDecorated(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ClassDeclaration:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.Parameter:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.GetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.SetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return false;
-        }
-
-        return false;
+        return node.decorators !== undefined
+            && nodeCanBeDecorated(node);
     }
 
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
@@ -1114,6 +1114,9 @@ namespace ts {
         }
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
+        }
+        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+            return (<ModuleDeclaration>node).name;
         }
     }
 
