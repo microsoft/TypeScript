@@ -168,10 +168,10 @@ var librarySourceMap = [
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts"]},
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
-        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es7.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "es7.d.ts", "es6.d.ts", "core.d.ts"]},
+        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es7.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
