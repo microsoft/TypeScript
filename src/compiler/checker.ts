@@ -3958,7 +3958,7 @@ namespace ts {
             return getIndexTypeOfStructuredType(getApparentType(type), kind);
         }
 
-        function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
+        function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
                 if (templateTag) {
@@ -4055,7 +4055,7 @@ namespace ts {
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
-                    getTypeParametersFromSignatureDeclaration(declaration);
+                    getTypeParametersFromJSDocTemplate(declaration);
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
