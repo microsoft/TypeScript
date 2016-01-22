@@ -4444,14 +4444,7 @@ namespace ts {
                 return unknownSymbol;
             }
 
-            let symbol = resolveEntityName(typeReferenceName, SymbolFlags.Type);
-            if (!symbol && node.kind === SyntaxKind.JSDocTypeReference) {
-                // If the reference didn't resolve to a type, try seeing if results to a 
-                // value.  If it does, get the type of that value.
-                symbol = resolveEntityName(typeReferenceName, SymbolFlags.Value);
-            }
-
-            return symbol || unknownSymbol;
+            return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol) {
