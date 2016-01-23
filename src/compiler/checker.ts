@@ -5641,13 +5641,6 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                            if (isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_is_read_only_in_type_1_but_writable_in_type_2,
-                                        symbolToString(targetProp), typeToString(source), typeToString(target));
-                                }
-                                return Ternary.False;
-                            }
                         }
                     }
                 }
@@ -5780,13 +5773,6 @@ namespace ts {
                         }
                         return Ternary.False;
                     }
-                    if (sourceInfo.isReadonly && !targetInfo.isReadonly) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_writable_in_type_1,
-                                typeToString(source), typeToString(target));
-                        }
-                        return Ternary.False;
-                    }
                     return related;
                 }
                 return Ternary.True;
@@ -5823,13 +5809,6 @@ namespace ts {
                     if (!related) {
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signatures_are_incompatible);
-                        }
-                        return Ternary.False;
-                    }
-                    if ((sourceStringInfo && sourceStringInfo.isReadonly || sourceNumberInfo && sourceNumberInfo.isReadonly) && !targetInfo.isReadonly) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_read_only_in_type_0_but_writable_in_type_1,
-                                typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
                     }
@@ -10401,41 +10380,38 @@ namespace ts {
         }
 
         function isReadonlySymbol(symbol: Symbol): boolean {
-            return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0;
+            return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0 ||
+                symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor);
         }
 
-        function isReferenceToConstant(expr: Expression, symbol: Symbol): boolean {
-            if (symbol.flags & SymbolFlags.Variable) {
-                // A variable declared with 'const' is considered constant.
-                if (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) {
-                    return true;
-                }
-                // An exported variable declared in an external module and accessed through a property
-                // or element access is considered constant.
-                if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
-                    if (symbol.parent && symbol.parent.flags & SymbolFlags.ValueModule) {
-                        const declaration = symbol.parent.valueDeclaration;
-                        return declaration && (declaration.kind === SyntaxKind.SourceFile ||
-                            declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral);
-                    }
-                }
-            }
-            if (symbol.flags & SymbolFlags.Accessor) {
-                // An get accessor with no corresponding set accessor is considered constant.
-                return !(symbol.flags & SymbolFlags.SetAccessor);
-            }
-            return false;
+        function isConstantSymbol(symbol: Symbol): boolean {
+            return symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
         }
 
         function isReferenceToReadonlyProperty(expr: Expression, symbol: Symbol): boolean {
             if (isReadonlySymbol(symbol)) {
                 // Allow assignments to readonly properties within constructors of the same class declaration.
-                if ((expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
+                if (symbol.flags & SymbolFlags.Property &&
+                    (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
                     const func = getContainingFunction(expr);
                     return !(func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent);
                 }
                 return true;
+            }
+            return false;
+        }
+
+        function isReferenceThroughNamespaceImport(expr: Expression): boolean {
+            if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+                const node = skipParenthesizedNodes((expr as PropertyAccessExpression | ElementAccessExpression).expression);
+                if (node.kind === SyntaxKind.Identifier) {
+                    const symbol = getNodeLinks(node).resolvedSymbol;
+                    if (symbol.flags & SymbolFlags.Alias) {
+                        const declaration = getDeclarationOfAliasSymbol(symbol);
+                        return declaration && declaration.kind === SyntaxKind.NamespaceImport;
+                    }
+                }
             }
             return false;
         }
@@ -10454,12 +10430,11 @@ namespace ts {
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
             if (symbol) {
                 if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
-                    if (symbol === undefinedSymbol ||
-                        !(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor))) {
+                    if (node.kind === SyntaxKind.Identifier && !(symbol.flags & SymbolFlags.Variable) || symbol.flags & SymbolFlags.EnumMember) {
                         error(expr, invalidReferenceMessage);
                         return false;
                     }
-                    if (isReferenceToConstant(node, symbol) || isReferenceToReadonlyProperty(node, symbol)) {
+                    if (isConstantSymbol(symbol) || isReferenceToReadonlyProperty(node, symbol) || isReferenceThroughNamespaceImport(node)) {
                         error(expr, constantVariableMessage);
                         return false;
                     }

@@ -995,10 +995,6 @@
         "category": "Error",
         "code": 2342
     },
-    "Property '{0}' is read-only in type '{1}' but writable in type '{2}'.": {
-        "category": "Error",
-        "code": 2343
-    },
     "Type '{0}' does not satisfy the constraint '{1}'.": {
         "category": "Error",
         "code": 2344
@@ -1086,10 +1082,6 @@
     "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
         "category": "Error",
         "code": 2365
-    },
-    "Index signature is read-only in type '{0}' but writable in type '{1}'.": {
-        "category": "Error",
-        "code": 2366
     },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
