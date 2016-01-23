@@ -54,8 +54,8 @@ for (let x; ;) {
 >x : any
 
     ({ get foo() { return x } })
->({ get foo() { return x } }) : { foo: any; }
->{ get foo() { return x } } : { foo: any; }
+>({ get foo() { return x } }) : { readonly foo: any; }
+>{ get foo() { return x } } : { readonly foo: any; }
 >foo : any
 >x : any
 }
