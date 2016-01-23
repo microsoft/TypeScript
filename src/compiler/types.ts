@@ -312,11 +312,11 @@ namespace ts {
         // Top-level nodes
         SourceFile,
 
-        // JSDoc nodes.
+        // JSDoc nodes
         JSDocTypeExpression,
-        // The * type.
+        // The * type
         JSDocAllType,
-        // The ? type.
+        // The ? type
         JSDocUnknownType,
         JSDocArrayType,
         JSDocUnionType,
@@ -1004,7 +1004,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.CallExpression)
-    export interface CallExpression extends LeftHandSideExpression {
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
@@ -1482,6 +1482,8 @@ namespace ts {
     export interface JSDocThisType extends JSDocType {
         type: JSDocType;
     }
+
+    export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     // @kind(SyntaxKind.JSDocRecordMember)
     export interface JSDocRecordMember extends PropertySignature {
