@@ -134,7 +134,7 @@ namespace ts {
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
-        const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ false);
+        const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const globals: SymbolTable = {};
 
@@ -5912,6 +5912,9 @@ namespace ts {
                     return Ternary.False;
                 }
             }
+            if (isReadonlySymbol(sourceProp) !== isReadonlySymbol(targetProp)) {
+                return Ternary.False;
+            }
             return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
@@ -10380,15 +10383,18 @@ namespace ts {
         }
 
         function isReadonlySymbol(symbol: Symbol): boolean {
+            // The following symbols are considered read-only:
+            // Properties with a 'readonly' modifier
+            // Variables declared with 'const'
+            // Get accessors without matching set accessors
+            // Enum members
             return symbol.flags & SymbolFlags.Property && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Readonly) !== 0 ||
-                symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor);
+                symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 ||
+                symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
+                (symbol.flags & SymbolFlags.EnumMember) !== 0;
         }
 
-        function isConstantSymbol(symbol: Symbol): boolean {
-            return symbol.flags & SymbolFlags.Variable && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
-        }
-
-        function isReferenceToReadonlyProperty(expr: Expression, symbol: Symbol): boolean {
+        function isReferenceToReadonlyEntity(expr: Expression, symbol: Symbol): boolean {
             if (isReadonlySymbol(symbol)) {
                 // Allow assignments to readonly properties within constructors of the same class declaration.
                 if (symbol.flags & SymbolFlags.Property &&
@@ -10430,11 +10436,13 @@ namespace ts {
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
             if (symbol) {
                 if (symbol !== unknownSymbol && symbol !== argumentsSymbol) {
-                    if (node.kind === SyntaxKind.Identifier && !(symbol.flags & SymbolFlags.Variable) || symbol.flags & SymbolFlags.EnumMember) {
+                    // Only variables (and not functions, classes, namespaces, enum objects, or enum members)
+                    // are considered references when referenced using a simple identifier.
+                    if (node.kind === SyntaxKind.Identifier && !(symbol.flags & SymbolFlags.Variable)) {
                         error(expr, invalidReferenceMessage);
                         return false;
                     }
-                    if (isConstantSymbol(symbol) || isReferenceToReadonlyProperty(node, symbol) || isReferenceThroughNamespaceImport(node)) {
+                    if (isReferenceToReadonlyEntity(node, symbol) || isReferenceThroughNamespaceImport(node)) {
                         error(expr, constantVariableMessage);
                         return false;
                     }
