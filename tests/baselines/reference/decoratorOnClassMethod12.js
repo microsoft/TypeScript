@@ -10,19 +10,16 @@ module M {
 }
 
 //// [decoratorOnClassMethod12.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var __decorate = this.__decorate || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var M;
 (function (M) {
@@ -31,17 +28,16 @@ var M;
         }
         S.prototype.decorator = function (target, key) { };
         return S;
-    })();
+    }());
     var C = (function (_super) {
         __extends(C, _super);
         function C() {
             _super.apply(this, arguments);
         }
         C.prototype.method = function () { };
-        Object.defineProperty(C.prototype, "method",
-            __decorate([
-                _super.decorator
-            ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+        __decorate([
+            _super.decorator
+        ], C.prototype, "method", null);
         return C;
-    })(S);
+    }(S));
 })(M || (M = {}));

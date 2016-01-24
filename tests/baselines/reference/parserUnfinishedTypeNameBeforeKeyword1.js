@@ -5,4 +5,4 @@ module TypeModule2 {
 
 
 //// [parserUnfinishedTypeNameBeforeKeyword1.js]
-var x = TypeModule2, _a = void 0;
+var x;

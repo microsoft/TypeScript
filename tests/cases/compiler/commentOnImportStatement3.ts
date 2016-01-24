@@ -1,5 +1,5 @@
-//@module: commonjs
-// @comments: true
+// @module: commonjs
+// @removeComments: false
 /* copyright */
 
 /* not copyright */

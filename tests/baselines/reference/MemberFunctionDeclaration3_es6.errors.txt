@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts(2,4): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts(2,4): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
 tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts(2,6): error TS2304: Cannot find name 'foo'.
 
 
@@ -6,7 +6,7 @@ tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration
     class C {
        *[foo]() { }
        ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
          ~~~
 !!! error TS2304: Cannot find name 'foo'.
     }

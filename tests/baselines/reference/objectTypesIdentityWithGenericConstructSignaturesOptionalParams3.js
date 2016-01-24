@@ -83,13 +83,13 @@ var B = (function () {
         return null;
     }
     return B;
-})();
+}());
 var C = (function () {
     function C(x, y) {
         return null;
     }
     return C;
-})();
+}());
 var a;
 var b = { new: function (x, y) { return new C(x, y); } }; // not a construct signature, function called new
 function foo1b(x) { }

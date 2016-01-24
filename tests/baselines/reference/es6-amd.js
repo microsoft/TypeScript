@@ -21,10 +21,3 @@ class A {
         return 42;
     }
 }
-//# sourceMappingURL=es6-amd.js.map
-
-//// [es6-amd.d.ts]
-declare class A {
-    constructor();
-    B(): number;
-}

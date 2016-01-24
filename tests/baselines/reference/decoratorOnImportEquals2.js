@@ -10,5 +10,6 @@ import lib = require('./decoratorOnImportEquals2_0');
 declare function dec<T>(target: T): T;
 
 //// [decoratorOnImportEquals2_0.js]
-exports.X;
+"use strict";
 //// [decoratorOnImportEquals2_1.js]
+"use strict";

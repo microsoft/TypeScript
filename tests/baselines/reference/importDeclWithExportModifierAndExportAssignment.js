@@ -7,3 +7,4 @@ export import a = x.c;
 export = x;
 
 //// [importDeclWithExportModifierAndExportAssignment.js]
+"use strict";

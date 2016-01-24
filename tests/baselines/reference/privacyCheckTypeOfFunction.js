@@ -6,7 +6,7 @@ export var b = foo;
 
 
 //// [privacyCheckTypeOfFunction.js]
+"use strict";
 function foo() {
 }
-exports.x;
 exports.b = foo;

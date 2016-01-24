@@ -18,5 +18,4 @@
 
 // @Filename: inputFile5.js
 //// var x2 = 1000;
-debugger;
 verify.baselineGetEmitOutput();

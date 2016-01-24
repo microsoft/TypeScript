@@ -3,8 +3,8 @@ declare function ClassDecorator1(target: Function): void;
 declare function ClassDecorator2(x: number): (target: Function) => void;
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
-declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
-declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
+declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
+declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
 
 @ClassDecorator1
 @ClassDecorator2(10)
@@ -55,15 +55,15 @@ class Greeter {
 }
 
 //// [sourceMapValidationDecorators.js]
-var __decorate = this.__decorate || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var Greeter = (function () {
     function Greeter(greeting) {
         var b = [];
@@ -89,31 +89,28 @@ var Greeter = (function () {
         configurable: true
     });
     Greeter.x1 = 10;
-    Object.defineProperty(Greeter.prototype, "greet",
-        __decorate([
-            PropertyDecorator1,
-            PropertyDecorator2(40)
-        ], Greeter.prototype, "greet", Object.getOwnPropertyDescriptor(Greeter.prototype, "greet")));
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(40)
+    ], Greeter.prototype, "greet", null);
     __decorate([
         PropertyDecorator1,
         PropertyDecorator2(50)
-    ], Greeter.prototype, "x");
-    Object.defineProperty(Greeter.prototype, "fn",
-        __decorate([
-            __param(0, ParameterDecorator1),
-            __param(0, ParameterDecorator2(70))
-        ], Greeter.prototype, "fn", Object.getOwnPropertyDescriptor(Greeter.prototype, "fn")));
-    Object.defineProperty(Greeter.prototype, "greetings",
-        __decorate([
-            PropertyDecorator1,
-            PropertyDecorator2(80),
-            __param(0, ParameterDecorator1),
-            __param(0, ParameterDecorator2(90))
-        ], Greeter.prototype, "greetings", Object.getOwnPropertyDescriptor(Greeter.prototype, "greetings")));
+    ], Greeter.prototype, "x", void 0);
+    __decorate([
+        __param(0, ParameterDecorator1),
+        __param(0, ParameterDecorator2(70))
+    ], Greeter.prototype, "fn", null);
+    __decorate([
+        PropertyDecorator1,
+        PropertyDecorator2(80),
+        __param(0, ParameterDecorator1),
+        __param(0, ParameterDecorator2(90))
+    ], Greeter.prototype, "greetings", null);
     __decorate([
         PropertyDecorator1,
         PropertyDecorator2(60)
-    ], Greeter, "x1");
+    ], Greeter, "x1", void 0);
     Greeter = __decorate([
         ClassDecorator1,
         ClassDecorator2(10),
@@ -123,5 +120,5 @@ var Greeter = (function () {
         __param(1, ParameterDecorator2(30))
     ], Greeter);
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationDecorators.js.map

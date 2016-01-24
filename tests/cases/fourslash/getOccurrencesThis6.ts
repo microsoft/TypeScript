@@ -142,14 +142,14 @@
 ////}
 
 
-function verifyOccurencesAtMarker(marker: string, count: number) {
+function verifyOccurrencesAtMarker(marker: string, count: number) {
     goTo.marker(marker);
     verify.occurrencesAtPositionCount(count);
 }
 
-verifyOccurencesAtMarker("1", 2);
-verifyOccurencesAtMarker("2", 6);
-verifyOccurencesAtMarker("3", 1);
-verifyOccurencesAtMarker("4", 1);
-verifyOccurencesAtMarker("5", 1);
-verifyOccurencesAtMarker("6", 0);
+verifyOccurrencesAtMarker("1", 2);
+verifyOccurrencesAtMarker("2", 6);
+verifyOccurrencesAtMarker("3", 1);
+verifyOccurrencesAtMarker("4", 1);
+verifyOccurrencesAtMarker("5", 1);
+verifyOccurrencesAtMarker("6", 0);

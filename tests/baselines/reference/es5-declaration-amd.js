@@ -21,8 +21,8 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
-//# sourceMappingURL=es5-declaration-amd.js.map
+}());
+
 
 //// [es5-declaration-amd.d.ts]
 declare class A {

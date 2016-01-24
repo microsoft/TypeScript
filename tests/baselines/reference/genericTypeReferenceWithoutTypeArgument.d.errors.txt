@@ -8,7 +8,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(14,23): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(14,27): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(16,25): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(22,28): error TS2305: Module 'M' has no exported member 'C'.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(22,28): error TS2339: Property 'C' does not exist on type 'typeof M'.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(23,28): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(25,30): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts(26,30): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
@@ -58,7 +58,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
     
     declare class D2 extends M.C { }
                                ~
-!!! error TS2305: Module 'M' has no exported member 'C'.
+!!! error TS2339: Property 'C' does not exist on type 'typeof M'.
     declare class D3<T extends M.E> { }
                                ~~~
 !!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).

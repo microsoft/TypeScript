@@ -20,7 +20,7 @@ export var x: SubModule.m.m3.c;
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.js]
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.js]
-exports.x;
+"use strict";
 
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]

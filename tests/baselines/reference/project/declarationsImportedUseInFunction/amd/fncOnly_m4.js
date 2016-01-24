@@ -1,12 +1,12 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var d = (function () {
         function d() {
         }
         return d;
-    })();
+    }());
     exports.d = d;
     ;
-    exports.x;
     function foo() {
         return new d();
     }

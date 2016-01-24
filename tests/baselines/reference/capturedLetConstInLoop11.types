@@ -1,0 +1,29 @@
+=== tests/cases/compiler/capturedLetConstInLoop11.ts ===
+for (;;) {
+    let x = 1;
+>x : number
+>1 : number
+
+    () => x;
+>() => x : () => number
+>x : number
+}
+
+function foo() {
+>foo : () => () => number
+
+    for (;;) {
+        const a = 0;
+>a : number
+>0 : number
+
+        switch(a) {
+>a : number
+
+            case 0: return () => a;
+>0 : number
+>() => a : () => number
+>a : number
+        }
+    }
+}

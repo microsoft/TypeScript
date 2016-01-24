@@ -1,0 +1,33 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(13,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'AA'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(15,7): error TS2515: Non-abstract class 'DD' does not implement inherited abstract member 'foo' from class 'BB'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts(19,7): error TS2515: Non-abstract class 'FF' does not implement inherited abstract member 'foo' from class 'CC'.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts (3 errors) ====
+    abstract class A {}
+    
+    abstract class B extends A {}
+    
+    class C extends A {}
+    
+    abstract class AA {
+        abstract foo();
+    }
+    
+    abstract class BB extends AA {}
+    
+    class CC extends AA {}
+          ~~
+!!! error TS2515: Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'AA'.
+    
+    class DD extends BB {}
+          ~~
+!!! error TS2515: Non-abstract class 'DD' does not implement inherited abstract member 'foo' from class 'BB'.
+    
+    abstract class EE extends BB {}
+    
+    class FF extends CC {}
+          ~~
+!!! error TS2515: Non-abstract class 'FF' does not implement inherited abstract member 'foo' from class 'CC'.
+    
+    abstract class GG extends CC {}

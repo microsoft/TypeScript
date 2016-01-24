@@ -46,7 +46,7 @@ verify.currentFileContentIs(
 "        C;\n" +
 "    class C {\n" +
 "        constructor(b\n" +
-"            ) {\n" +
+"        ) {\n" +
 "        }\n" +
 "        foo(a\n" +
 "            : string) {\n" +
@@ -54,7 +54,7 @@ verify.currentFileContentIs(
 "                || true;\n" +
 "        }\n" +
 "        get bar(\n" +
-"            ) {\n" +
+"        ) {\n" +
 "            return 1;\n" +
 "        }\n" +
 "    }\n" +

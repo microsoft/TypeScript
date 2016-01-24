@@ -16,7 +16,7 @@ class GenericBase<T extends Constraint> {
 }
 class Derived extends GenericBase<TypeArg> {
 >Derived : Derived
->GenericBase : GenericBase<T>
+>GenericBase : GenericBase<TypeArg>
 >TypeArg : TypeArg
 
 }

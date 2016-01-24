@@ -1,0 +1,25 @@
+=== tests/cases/conformance/async/es6/awaitBinaryExpression/awaitBinaryExpression5_es6.ts ===
+declare var a: boolean;
+>a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 0, 11))
+
+declare var p: Promise<boolean>;
+>p : Symbol(p, Decl(awaitBinaryExpression5_es6.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(awaitBinaryExpression5_es6.ts, 1, 32))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    "before";
+    var o: { a: boolean; };
+>o : Symbol(o, Decl(awaitBinaryExpression5_es6.ts, 4, 7))
+>a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 4, 12))
+
+    o.a = await p;
+>o.a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 4, 12))
+>o : Symbol(o, Decl(awaitBinaryExpression5_es6.ts, 4, 7))
+>a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 4, 12))
+>p : Symbol(p, Decl(awaitBinaryExpression5_es6.ts, 1, 11))
+
+    "after";
+}

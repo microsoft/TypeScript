@@ -1,0 +1,24 @@
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts(2,11): error TS2304: Cannot find name 'async'.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts(2,17): error TS1005: ',' expected.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts(2,20): error TS1005: '=' expected.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts(2,24): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts(4,11): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction10_es6.ts (5 errors) ====
+    
+    var foo = async foo(): Promise<void> => {
+              ~~~~~
+!!! error TS2304: Cannot find name 'async'.
+                    ~~~
+!!! error TS1005: ',' expected.
+                       ~
+!!! error TS1005: '=' expected.
+                           ~~~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+       // Legal to use 'await' in a type context.
+       var v: await;
+              ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+    }
+    

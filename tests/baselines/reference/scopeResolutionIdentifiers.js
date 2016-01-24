@@ -43,7 +43,6 @@ module M3 {
 var s;
 var M1;
 (function (M1) {
-    M1.s;
     var n = M1.s;
     var n;
 })(M1 || (M1 = {}));
@@ -67,7 +66,7 @@ var C = (function () {
         var p;
     };
     return C;
-})();
+}());
 var M3;
 (function (M3) {
     var s;

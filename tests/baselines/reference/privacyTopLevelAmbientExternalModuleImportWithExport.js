@@ -32,8 +32,8 @@ declare module 'm2' {
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
 // Privacy errors - importing private elements
-export import im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require");
-export import im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
+export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
+export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 export import im_public_mi_public = require("m");
 export import im_public_mu_public = require("m2");
 
@@ -51,26 +51,29 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require3.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require.js]
+"use strict";
 // Public elements
 var c_public = (function () {
     function c_public() {
     }
     return c_public;
-})();
+}());
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
+"use strict";
 var c_public = (function () {
     function c_public() {
     }
     return c_public;
-})();
+}());
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
+"use strict";
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
 // Privacy errors - importing private elements
-exports.im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require");
-exports.im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
+exports.im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
+exports.im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 exports.im_public_mi_public = require("m");
 exports.im_public_mu_public = require("m2");
 // Usage of privacy error imports
@@ -107,8 +110,8 @@ export declare class c_public {
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.d.ts]
 /// <reference path="privacyTopLevelAmbientExternalModuleImportWithExport_require2.d.ts" />
 /// <reference path="privacyTopLevelAmbientExternalModuleImportWithExport_require3.d.ts" />
-export import im_public_mi_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require");
-export import im_public_mu_private = require("privacyTopLevelAmbientExternalModuleImportWithExport_require1");
+export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
+export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 export import im_public_mi_public = require("m");
 export import im_public_mu_public = require("m2");
 export declare var publicUse_im_public_mi_private: im_public_mi_private.c_public;

@@ -31,11 +31,10 @@ b.hue();
 
 
 //// [derivedClasses.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Red = (function (_super) {
     __extends(Red, _super);
@@ -48,14 +47,14 @@ var Red = (function (_super) {
         return getHue() + " red";
     };
     return Red;
-})(Color);
+}(Color));
 var Color = (function () {
     function Color() {
     }
     Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
     return Color;
-})();
+}());
 var Blue = (function (_super) {
     __extends(Blue, _super);
     function Blue() {
@@ -67,7 +66,7 @@ var Blue = (function (_super) {
         return getHue() + " blue";
     };
     return Blue;
-})(Color);
+}(Color));
 var r = new Red();
 var b = new Blue();
 r.shade();

@@ -146,8 +146,8 @@ var h = fun((((x => x))), ((x => x)), 10);
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
->i : any
->fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : any
+>i : number
+>fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : number
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? x => x : x => undefined) : (x: number) => any
 >Math.random() < 0.5 ? x => x : x => undefined : (x: number) => any
@@ -166,8 +166,8 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
->j : any
->fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : any
+>j : number
+>fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : number
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
@@ -188,8 +188,8 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
->k : any
->fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : any
+>k : number
+>fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : number
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
@@ -207,14 +207,14 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->x => x : (x: any) => any
->x : any
->x : any
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : number
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
->l : any
->fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : any
+>l : number
+>fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : number
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))) : (x: number) => any
 >(Math.random() < 0.5 ? ((x => x)) : ((x => undefined))) : (x: number) => any
@@ -235,11 +235,11 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->((x => x)) : (x: any) => any
->(x => x) : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>((x => x)) : (x: number) => number
+>(x => x) : (x: number) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : number
 
 var lambda1: (x: number) => number = x => x;

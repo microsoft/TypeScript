@@ -5,7 +5,7 @@ export var x: number;
 
 // @Filename: declFileForExportedImport_1.ts
 ///<reference path='declFileForExportedImport_0.ts'/>
-export import a = require('declFileForExportedImport_0');
+export import a = require('./declFileForExportedImport_0');
 var y = a.x;
 
 export import b = a;

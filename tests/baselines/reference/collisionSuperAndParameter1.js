@@ -10,17 +10,16 @@ class Foo2 extends Foo {
 }
 
 //// [collisionSuperAndParameter1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
@@ -31,4 +30,4 @@ var Foo2 = (function (_super) {
         };
     };
     return Foo2;
-})(Foo);
+}(Foo));

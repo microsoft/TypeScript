@@ -1,40 +1,43 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2311: A class may only extend another class.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,18): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(4,17): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,18): error TS2507: Type '{ foo: any; }' is not a constructor function type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,25): error TS2304: Cannot find name 'string'.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(6,31): error TS1005: ',' expected.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(8,18): error TS2304: Cannot find name 'x'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(11,18): error TS2304: Cannot find name 'M'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(14,18): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,18): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(8,18): error TS2507: Type '{ foo: string; }' is not a constructor function type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(11,18): error TS2507: Type 'typeof M' is not a constructor function type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(14,18): error TS2507: Type '() => void' is not a constructor function type.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts(16,18): error TS2507: Type 'undefined[]' is not a constructor function type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts (7 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType.ts (8 errors) ====
     interface I {
         foo: string;
     }
     class C extends I { } // error
                     ~
-!!! error TS2311: A class may only extend another class.
+!!! error TS2304: Cannot find name 'I'.
     
     class C2 extends { foo: string; } { } // error
                      ~~~~~~~~~~~~~~~~
-!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+!!! error TS2507: Type '{ foo: any; }' is not a constructor function type.
+                            ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
                                   ~
 !!! error TS1005: ',' expected.
     var x: { foo: string; }
     class C3 extends x { } // error
                      ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2507: Type '{ foo: string; }' is not a constructor function type.
     
     module M { export var x = 1; }
     class C4 extends M { } // error
                      ~
-!!! error TS2304: Cannot find name 'M'.
+!!! error TS2507: Type 'typeof M' is not a constructor function type.
     
     function foo() { }
     class C5 extends foo { } // error
                      ~~~
-!!! error TS2304: Cannot find name 'foo'.
+!!! error TS2507: Type '() => void' is not a constructor function type.
     
     class C6 extends []{ } // error
                      ~~
-!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+!!! error TS2507: Type 'undefined[]' is not a constructor function type.

@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf02.ts ===
+
+type S = "a" | "b";
+>S : "a" | "b"
+
+type T = S[] | S;
+>T : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>S : "a" | "b"
+
+function isS(t: T): t is S {
+>isS : (t: ("a" | "b")[] | "a" | "b") => t is "a" | "b"
+>t : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+>t : any
+>S : "a" | "b"
+
+    return t === "a" || t === "b";
+>t === "a" || t === "b" : boolean
+>t === "a" : boolean
+>t : ("a" | "b")[] | "a" | "b"
+>"a" : string
+>t === "b" : boolean
+>t : ("a" | "b")[] | "a" | "b"
+>"b" : string
+}
+
+function f(foo: T) {
+>f : (foo: ("a" | "b")[] | "a" | "b") => "a" | "b"
+>foo : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+
+    if (isS(foo)) {
+>isS(foo) : t is "a" | "b"
+>isS : (t: ("a" | "b")[] | "a" | "b") => t is "a" | "b"
+>foo : ("a" | "b")[] | "a" | "b"
+
+        return foo;
+>foo : "a" | "b"
+    }
+    else { 
+        return foo[0];
+>foo[0] : "a" | "b"
+>foo : ("a" | "b")[]
+>0 : number
+    }
+}

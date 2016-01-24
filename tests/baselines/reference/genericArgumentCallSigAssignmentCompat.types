@@ -49,7 +49,7 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
->[true, 1, null, 'yes'] : (string | number | boolean)[]
+>[true, 1, null, 'yes'] : (boolean | number | string)[]
 >true : boolean
 >1 : number
 >null : null

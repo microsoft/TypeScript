@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: commentsExternalModules_file0.ts
-/////** Module comment*/
-////export module m/*1*/1 {
+/////** Namespace comment*/
+////export namespace m/*1*/1 {
 ////    /** b's comment*/
 ////    export var b: number;
 ////    /** foo's comment*/
@@ -10,7 +10,7 @@
 ////        return /*2*/b;
 ////    }
 ////    /** m2 comments*/
-////    export module m2 {
+////    export namespace m2 {
 ////        /** class comment;*/
 ////        export class c {
 ////        };
@@ -36,7 +36,7 @@ edit.insert('');
 
 goTo.file("commentsExternalModules_file0.ts");
 goTo.marker('1');
-verify.quickInfoIs("module m1", "Module comment");
+verify.quickInfoIs("namespace m1", "Namespace comment");
 
 goTo.marker('2');
 verify.completionListContains("b", "var m1.b: number", "b's comment");
@@ -48,12 +48,12 @@ goTo.marker('3q');
 verify.quickInfoIs("function foo(): number", "foo's comment");
 
 goTo.marker('4');
-verify.completionListContains("m1", "module m1", "Module comment");
+verify.completionListContains("m1", "namespace m1", "Namespace comment");
 
 goTo.marker('5');
 verify.memberListContains("b", "var m1.b: number", "b's comment");
 verify.memberListContains("fooExport", "function m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "module m1.m2");
+verify.memberListContains("m2", "namespace m1.m2");
 
 goTo.marker('6');
 verify.currentSignatureHelpDocCommentIs("exported function");
@@ -75,12 +75,12 @@ goTo.marker('10');
 verify.completionListContains("extMod", 'import extMod = require("commentsExternalModules_file0")', "This is on import declaration");
 
 goTo.marker('11');
-verify.memberListContains("m1", "module extMod.m1");
+verify.memberListContains("m1", "namespace extMod.m1");
 
 goTo.marker('12');
 verify.memberListContains("b", "var extMod.m1.b: number", "b's comment");
 verify.memberListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "module extMod.m1.m2");
+verify.memberListContains("m2", "namespace extMod.m1.m2");
 
 goTo.marker('13');
 verify.currentSignatureHelpDocCommentIs("exported function");

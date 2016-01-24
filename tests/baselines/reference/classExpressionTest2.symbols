@@ -1,0 +1,36 @@
+=== tests/cases/compiler/classExpressionTest2.ts ===
+function M() {
+>M : Symbol(M, Decl(classExpressionTest2.ts, 0, 0))
+
+    var m = class C<X> {
+>m : Symbol(m, Decl(classExpressionTest2.ts, 1, 7))
+>C : Symbol(C, Decl(classExpressionTest2.ts, 1, 11))
+>X : Symbol(X, Decl(classExpressionTest2.ts, 1, 20))
+
+        f<T>() {
+>f : Symbol(C.f, Decl(classExpressionTest2.ts, 1, 24))
+>T : Symbol(T, Decl(classExpressionTest2.ts, 2, 10))
+
+            var t: T;
+>t : Symbol(t, Decl(classExpressionTest2.ts, 3, 15))
+>T : Symbol(T, Decl(classExpressionTest2.ts, 2, 10))
+
+            var x: X;
+>x : Symbol(x, Decl(classExpressionTest2.ts, 4, 15))
+>X : Symbol(X, Decl(classExpressionTest2.ts, 1, 20))
+
+            return { t, x };
+>t : Symbol(t, Decl(classExpressionTest2.ts, 5, 20))
+>x : Symbol(x, Decl(classExpressionTest2.ts, 5, 23))
+        }
+    }
+
+    var v = new m<number>();
+>v : Symbol(v, Decl(classExpressionTest2.ts, 9, 7))
+>m : Symbol(m, Decl(classExpressionTest2.ts, 1, 7))
+
+    return v.f<string>();
+>v.f : Symbol(C.f, Decl(classExpressionTest2.ts, 1, 24))
+>v : Symbol(v, Decl(classExpressionTest2.ts, 9, 7))
+>f : Symbol(C.f, Decl(classExpressionTest2.ts, 1, 24))
+}

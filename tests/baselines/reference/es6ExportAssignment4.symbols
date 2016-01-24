@@ -1,0 +1,14 @@
+=== tests/cases/compiler/modules.d.ts ===
+
+declare module "a" {
+    var a: number;
+>a : Symbol(a, Decl(modules.d.ts, 2, 7))
+
+    export = a;  // OK, in ambient context
+>a : Symbol(a, Decl(modules.d.ts, 2, 7))
+}
+
+=== tests/cases/compiler/b.ts ===
+import * as a from "a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+

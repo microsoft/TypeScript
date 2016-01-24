@@ -90,10 +90,9 @@ var A = (function () {
         return a;
     };
     return A;
-})();
+}());
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // any type var
@@ -132,9 +131,15 @@ var ResultIsNumber30 = obj1.y--;
 // miss assignment operators
 --ANY2;
 ANY2--;
---ANY1--;
---ANY1++;
-++ANY1--;
---ANY2[0]--;
---ANY2[0]++;
-++ANY2[0]--;
+--ANY1;
+--;
+--ANY1;
+++;
+++ANY1;
+--;
+--ANY2[0];
+--;
+--ANY2[0];
+++;
+++ANY2[0];
+--;

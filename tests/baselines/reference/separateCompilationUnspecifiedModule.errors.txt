@@ -1,6 +1,0 @@
-error TS5047: Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.
-
-
-!!! error TS5047: Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.
-==== tests/cases/compiler/separateCompilationUnspecifiedModule.ts (0 errors) ====
-    export var x;

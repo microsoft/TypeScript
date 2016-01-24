@@ -1,0 +1,39 @@
+=== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts ===
+
+interface C { }
+>C : Symbol(C, Decl(classAndInterfaceMerge.d.ts, 0, 0), Decl(classAndInterfaceMerge.d.ts, 1, 15), Decl(classAndInterfaceMerge.d.ts, 3, 19), Decl(classAndInterfaceMerge.d.ts, 5, 15))
+
+declare class C { }
+>C : Symbol(C, Decl(classAndInterfaceMerge.d.ts, 0, 0), Decl(classAndInterfaceMerge.d.ts, 1, 15), Decl(classAndInterfaceMerge.d.ts, 3, 19), Decl(classAndInterfaceMerge.d.ts, 5, 15))
+
+interface C { }
+>C : Symbol(C, Decl(classAndInterfaceMerge.d.ts, 0, 0), Decl(classAndInterfaceMerge.d.ts, 1, 15), Decl(classAndInterfaceMerge.d.ts, 3, 19), Decl(classAndInterfaceMerge.d.ts, 5, 15))
+
+interface C { }
+>C : Symbol(C, Decl(classAndInterfaceMerge.d.ts, 0, 0), Decl(classAndInterfaceMerge.d.ts, 1, 15), Decl(classAndInterfaceMerge.d.ts, 3, 19), Decl(classAndInterfaceMerge.d.ts, 5, 15))
+
+declare module M {
+>M : Symbol(M, Decl(classAndInterfaceMerge.d.ts, 7, 15), Decl(classAndInterfaceMerge.d.ts, 20, 1))
+
+    interface C1 { }
+>C1 : Symbol(C1, Decl(classAndInterfaceMerge.d.ts, 9, 18), Decl(classAndInterfaceMerge.d.ts, 11, 20), Decl(classAndInterfaceMerge.d.ts, 13, 16), Decl(classAndInterfaceMerge.d.ts, 15, 20))
+
+    class C1 { }
+>C1 : Symbol(C1, Decl(classAndInterfaceMerge.d.ts, 9, 18), Decl(classAndInterfaceMerge.d.ts, 11, 20), Decl(classAndInterfaceMerge.d.ts, 13, 16), Decl(classAndInterfaceMerge.d.ts, 15, 20))
+
+    interface C1 { }
+>C1 : Symbol(C1, Decl(classAndInterfaceMerge.d.ts, 9, 18), Decl(classAndInterfaceMerge.d.ts, 11, 20), Decl(classAndInterfaceMerge.d.ts, 13, 16), Decl(classAndInterfaceMerge.d.ts, 15, 20))
+
+    interface C1 { }
+>C1 : Symbol(C1, Decl(classAndInterfaceMerge.d.ts, 9, 18), Decl(classAndInterfaceMerge.d.ts, 11, 20), Decl(classAndInterfaceMerge.d.ts, 13, 16), Decl(classAndInterfaceMerge.d.ts, 15, 20))
+
+    export class C2 { }
+>C2 : Symbol(C2, Decl(classAndInterfaceMerge.d.ts, 17, 20), Decl(classAndInterfaceMerge.d.ts, 22, 18))
+}
+
+declare module M {
+>M : Symbol(M, Decl(classAndInterfaceMerge.d.ts, 7, 15), Decl(classAndInterfaceMerge.d.ts, 20, 1))
+
+    export interface C2 { }
+>C2 : Symbol(C2, Decl(classAndInterfaceMerge.d.ts, 17, 20), Decl(classAndInterfaceMerge.d.ts, 22, 18))
+}

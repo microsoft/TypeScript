@@ -1,5 +1,5 @@
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(14,23): error TS2339: Property 'z' does not exist on type 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(18,24): error TS2339: Property 'y' does not exist on type 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(19,24): error TS2339: Property 'z' does not exist on type 'A'.
 tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(22,18): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'.
@@ -33,7 +33,7 @@ tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAcc
     
             var s1 = super.x;    // error
                            ~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             var s2 = super.f();
             var s3 = super.y;    // error
                            ~

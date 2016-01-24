@@ -1,0 +1,30 @@
+tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type 'boolean' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(12,1): error TS2324: Property 'n' is missing in type '{ n: boolean; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		test1: { n?: boolean; s?: string};
+    		test2: { n: boolean; };
+    	}
+    }
+    
+    // Error
+    <test1 s />;
+           ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    <test1 n='true' />;
+           ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+    <test2 />;
+    ~~~~~~~~~
+!!! error TS2324: Property 'n' is missing in type '{ n: boolean; }'.
+    
+    // OK
+    <test1 n />;
+    <test1 n={false} />;
+    <test2 n />;
+    

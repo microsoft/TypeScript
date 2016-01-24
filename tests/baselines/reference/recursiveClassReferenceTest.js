@@ -105,11 +105,10 @@ module Sample.Thing.Languages.PlainText {
 //// [recursiveClassReferenceTest.js]
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Sample;
 (function (Sample) {
@@ -127,7 +126,7 @@ var Sample;
                         return true;
                     };
                     return StartFindAction;
-                })();
+                }());
                 Find.StartFindAction = StartFindAction;
             })(Find = Thing_1.Find || (Thing_1.Find = {}));
         })(Thing = Actions.Thing || (Actions.Thing = {}));
@@ -155,7 +154,7 @@ var Sample;
                 FindWidget.prototype.destroy = function () {
                 };
                 return FindWidget;
-            })();
+            }());
             Widgets.FindWidget = FindWidget;
         })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
     })(Thing = Sample.Thing || (Sample.Thing = {}));
@@ -165,7 +164,7 @@ var AbstractMode = (function () {
     }
     AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
-})();
+}());
 var Sample;
 (function (Sample) {
     var Thing;
@@ -186,7 +185,7 @@ var Sample;
                     };
                     State.prototype.getMode = function () { return mode; };
                     return State;
-                })();
+                }());
                 PlainText.State = State;
                 var Mode = (function (_super) {
                     __extends(Mode, _super);
@@ -198,7 +197,7 @@ var Sample;
                         return new State(self);
                     };
                     return Mode;
-                })(AbstractMode);
+                }(AbstractMode));
                 PlainText.Mode = Mode;
             })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
         })(Languages = Thing.Languages || (Thing.Languages = {}));

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declareIdentifierAsBeginningOfStatementExpression01.ts ===
+class C {
+>C : Symbol(C, Decl(declareIdentifierAsBeginningOfStatementExpression01.ts, 0, 0))
+}
+
+var declare: any;
+>declare : Symbol(declare, Decl(declareIdentifierAsBeginningOfStatementExpression01.ts, 3, 3))
+
+declare instanceof C;
+>declare : Symbol(declare, Decl(declareIdentifierAsBeginningOfStatementExpression01.ts, 3, 3))
+>C : Symbol(C, Decl(declareIdentifierAsBeginningOfStatementExpression01.ts, 0, 0))
+

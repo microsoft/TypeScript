@@ -16,7 +16,6 @@
 ////[|fina/*3*/lly|] {
 ////}
 
-debugger;
 for (var i = 1; i <= test.markers().length; i++) {
     goTo.marker("" + i);
     verify.occurrencesAtPositionCount(3);

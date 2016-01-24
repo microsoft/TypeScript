@@ -60,6 +60,44 @@ export function fooWithSingleOverload(a: any) {
 >a : any
 }
 
+export function fooWithTypePredicate(a: any): a is number {
+>fooWithTypePredicate : (a: any) => a is number
+>a : any
+>a : any
+
+    return true;
+>true : boolean
+}
+export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+>fooWithTypePredicateAndMulitpleParams : (a: any, b: any, c: any) => a is number
+>a : any
+>b : any
+>c : any
+>a : any
+
+    return true;
+>true : boolean
+}
+export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
+>fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
+>T : T
+>a : any
+>a : any
+>T : T
+
+    return true;
+>true : boolean
+}
+export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
+>fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
+>a : any
+>rest : any[]
+>a : any
+
+    return true;
+>true : boolean
+}
+
 /** This comment should appear for nonExportedFoo*/
 function nonExportedFoo() {
 >nonExportedFoo : () => void

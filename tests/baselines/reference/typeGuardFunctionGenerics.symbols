@@ -1,0 +1,132 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionGenerics.ts ===
+
+class A {
+>A : Symbol(A, Decl(typeGuardFunctionGenerics.ts, 0, 0))
+
+    propA: number;
+>propA : Symbol(propA, Decl(typeGuardFunctionGenerics.ts, 1, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(typeGuardFunctionGenerics.ts, 3, 1))
+
+    propB: number;
+>propB : Symbol(propB, Decl(typeGuardFunctionGenerics.ts, 5, 9))
+}
+
+class C extends A {
+>C : Symbol(C, Decl(typeGuardFunctionGenerics.ts, 7, 1))
+>A : Symbol(A, Decl(typeGuardFunctionGenerics.ts, 0, 0))
+
+    propC: number;
+>propC : Symbol(propC, Decl(typeGuardFunctionGenerics.ts, 9, 19))
+}
+
+declare function isB(p1): p1 is B;
+>isB : Symbol(isB, Decl(typeGuardFunctionGenerics.ts, 11, 1))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 13, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 13, 21))
+>B : Symbol(B, Decl(typeGuardFunctionGenerics.ts, 3, 1))
+
+declare function isC(p1): p1 is C;
+>isC : Symbol(isC, Decl(typeGuardFunctionGenerics.ts, 13, 34))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 14, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 14, 21))
+>C : Symbol(C, Decl(typeGuardFunctionGenerics.ts, 7, 1))
+
+declare function retC(x): C; 
+>retC : Symbol(retC, Decl(typeGuardFunctionGenerics.ts, 14, 34))
+>x : Symbol(x, Decl(typeGuardFunctionGenerics.ts, 15, 22))
+>C : Symbol(C, Decl(typeGuardFunctionGenerics.ts, 7, 1))
+
+declare function funA<T>(p1: (p1) => T): T;
+>funA : Symbol(funA, Decl(typeGuardFunctionGenerics.ts, 15, 28))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 17, 22))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 17, 25))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 17, 30))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 17, 22))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 17, 22))
+
+declare function funB<T>(p1: (p1) => T, p2: any): p2 is T;
+>funB : Symbol(funB, Decl(typeGuardFunctionGenerics.ts, 17, 43))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 18, 22))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 18, 25))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 18, 30))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 18, 22))
+>p2 : Symbol(p2, Decl(typeGuardFunctionGenerics.ts, 18, 39))
+>p2 : Symbol(p2, Decl(typeGuardFunctionGenerics.ts, 18, 39))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 18, 22))
+
+declare function funC<T>(p1: (p1) => p1 is T): T;
+>funC : Symbol(funC, Decl(typeGuardFunctionGenerics.ts, 18, 58))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 19, 22))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 19, 25))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 19, 30))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 19, 30))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 19, 22))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 19, 22))
+
+declare function funD<T>(p1: (p1) => p1 is T, p2: any): p2 is T;
+>funD : Symbol(funD, Decl(typeGuardFunctionGenerics.ts, 19, 49))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 20, 22))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 20, 25))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 20, 30))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 20, 30))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 20, 22))
+>p2 : Symbol(p2, Decl(typeGuardFunctionGenerics.ts, 20, 45))
+>p2 : Symbol(p2, Decl(typeGuardFunctionGenerics.ts, 20, 45))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 20, 22))
+
+declare function funE<T, U>(p1: (p1) => p1 is T, p2: U): T;
+>funE : Symbol(funE, Decl(typeGuardFunctionGenerics.ts, 20, 64))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 21, 22))
+>U : Symbol(U, Decl(typeGuardFunctionGenerics.ts, 21, 24))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 21, 28))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 21, 33))
+>p1 : Symbol(p1, Decl(typeGuardFunctionGenerics.ts, 21, 33))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 21, 22))
+>p2 : Symbol(p2, Decl(typeGuardFunctionGenerics.ts, 21, 48))
+>U : Symbol(U, Decl(typeGuardFunctionGenerics.ts, 21, 24))
+>T : Symbol(T, Decl(typeGuardFunctionGenerics.ts, 21, 22))
+
+let a: A;
+>a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 23, 3))
+>A : Symbol(A, Decl(typeGuardFunctionGenerics.ts, 0, 0))
+
+let test1: boolean = funA(isB);
+>test1 : Symbol(test1, Decl(typeGuardFunctionGenerics.ts, 24, 3))
+>funA : Symbol(funA, Decl(typeGuardFunctionGenerics.ts, 15, 28))
+>isB : Symbol(isB, Decl(typeGuardFunctionGenerics.ts, 11, 1))
+
+if (funB(retC, a)) {
+>funB : Symbol(funB, Decl(typeGuardFunctionGenerics.ts, 17, 43))
+>retC : Symbol(retC, Decl(typeGuardFunctionGenerics.ts, 14, 34))
+>a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 23, 3))
+
+    a.propC;
+>a.propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 9, 19))
+>a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 23, 3))
+>propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 9, 19))
+}
+let test2: B = funC(isB);
+>test2 : Symbol(test2, Decl(typeGuardFunctionGenerics.ts, 28, 3))
+>B : Symbol(B, Decl(typeGuardFunctionGenerics.ts, 3, 1))
+>funC : Symbol(funC, Decl(typeGuardFunctionGenerics.ts, 18, 58))
+>isB : Symbol(isB, Decl(typeGuardFunctionGenerics.ts, 11, 1))
+
+if (funD(isC, a)) {
+>funD : Symbol(funD, Decl(typeGuardFunctionGenerics.ts, 19, 49))
+>isC : Symbol(isC, Decl(typeGuardFunctionGenerics.ts, 13, 34))
+>a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 23, 3))
+
+    a.propC;
+>a.propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 9, 19))
+>a : Symbol(a, Decl(typeGuardFunctionGenerics.ts, 23, 3))
+>propC : Symbol(C.propC, Decl(typeGuardFunctionGenerics.ts, 9, 19))
+}
+let test3: B = funE(isB, 1);
+>test3 : Symbol(test3, Decl(typeGuardFunctionGenerics.ts, 32, 3))
+>B : Symbol(B, Decl(typeGuardFunctionGenerics.ts, 3, 1))
+>funE : Symbol(funE, Decl(typeGuardFunctionGenerics.ts, 20, 64))
+>isB : Symbol(isB, Decl(typeGuardFunctionGenerics.ts, 11, 1))
+

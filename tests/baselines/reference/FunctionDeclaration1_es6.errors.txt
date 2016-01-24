@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration1_es6.ts(1,10): error TS9001: Generators are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration1_es6.ts(1,10): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
 
 
 ==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration1_es6.ts (1 errors) ====
     function * foo() {
              ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
     }

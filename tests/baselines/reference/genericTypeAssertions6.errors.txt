@@ -1,6 +1,7 @@
 tests/cases/compiler/genericTypeAssertions6.ts(8,13): error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
 tests/cases/compiler/genericTypeAssertions6.ts(9,13): error TS2352: Neither type 'T' nor type 'U' is assignable to the other.
 tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
+  Type 'Date' is not assignable to type 'T'.
 
 
 ==== tests/cases/compiler/genericTypeAssertions6.ts (3 errors) ====
@@ -29,6 +30,7 @@ tests/cases/compiler/genericTypeAssertions6.ts(19,17): error TS2352: Neither typ
             var e = <T><U>new Date();
                     ~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type 'U' nor type 'T' is assignable to the other.
+!!! error TS2352:   Type 'Date' is not assignable to type 'T'.
         }
     }
     

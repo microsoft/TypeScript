@@ -23,6 +23,7 @@ function bar({a1, b1, c1}: { a1: number, b1: boolean, c1: string }): void { }
 function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }): void { } 
 >baz : Symbol(baz, Decl(declarationEmitDestructuring1.ts, 2, 77))
 >a2 : Symbol(a2, Decl(declarationEmitDestructuring1.ts, 3, 14))
+>b2 : Symbol(b2, Decl(declarationEmitDestructuring1.ts, 3, 46))
 >b1 : Symbol(b1, Decl(declarationEmitDestructuring1.ts, 3, 23))
 >c1 : Symbol(c1, Decl(declarationEmitDestructuring1.ts, 3, 26))
 >a2 : Symbol(a2, Decl(declarationEmitDestructuring1.ts, 3, 34))

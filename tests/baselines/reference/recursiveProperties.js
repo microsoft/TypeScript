@@ -17,7 +17,7 @@ var A = (function () {
         configurable: true
     });
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
@@ -27,4 +27,4 @@ var B = (function () {
         configurable: true
     });
     return B;
-})();
+}());

@@ -32,11 +32,10 @@ module Generic {
 }
 
 //// [constructorHasPrototypeProperty.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var NonGeneric;
 (function (NonGeneric) {
@@ -44,14 +43,14 @@ var NonGeneric;
         function C() {
         }
         return C;
-    })();
+    }());
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
     var r = C.prototype;
     r.foo;
     var r2 = D.prototype;
@@ -63,14 +62,14 @@ var Generic;
         function C() {
         }
         return C;
-    })();
+    }());
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
     var r = C.prototype; // C<any, any>
     var ra = r.foo; // any
     var r2 = D.prototype; // D<any, any>

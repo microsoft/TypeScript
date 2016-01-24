@@ -21,7 +21,6 @@ var M;
         var x;
     }
     var y;
-    M.z;
     var test1 = x;
     var test2 = y; // y visible because same module
 })(M || (M = {}));

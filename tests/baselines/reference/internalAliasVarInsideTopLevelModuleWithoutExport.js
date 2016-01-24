@@ -9,6 +9,7 @@ export var bVal = b;
 
 
 //// [internalAliasVarInsideTopLevelModuleWithoutExport.js]
+"use strict";
 var a;
 (function (a) {
     a.x = 10;

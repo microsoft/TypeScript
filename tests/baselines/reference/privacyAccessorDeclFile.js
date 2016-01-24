@@ -1060,16 +1060,17 @@ module publicModuleInGlobal {
 }
 
 //// [privacyAccessorDeclFile_externalModule.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var publicClassWithWithPrivateGetAccessorTypes = (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
@@ -1131,7 +1132,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithWithPrivateGetAccessorTypes;
-})();
+}());
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
 var publicClassWithWithPublicGetAccessorTypes = (function () {
     function publicClassWithWithPublicGetAccessorTypes() {
@@ -1193,7 +1194,7 @@ var publicClassWithWithPublicGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithWithPublicGetAccessorTypes;
-})();
+}());
 exports.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
 var privateClassWithWithPrivateGetAccessorTypes = (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
@@ -1255,7 +1256,7 @@ var privateClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithWithPrivateGetAccessorTypes;
-})();
+}());
 var privateClassWithWithPublicGetAccessorTypes = (function () {
     function privateClassWithWithPublicGetAccessorTypes() {
     }
@@ -1316,7 +1317,7 @@ var privateClassWithWithPublicGetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithWithPublicGetAccessorTypes;
-})();
+}());
 var publicClassWithWithPrivateSetAccessorTypes = (function () {
     function publicClassWithWithPrivateSetAccessorTypes() {
     }
@@ -1345,7 +1346,7 @@ var publicClassWithWithPrivateSetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithWithPrivateSetAccessorTypes;
-})();
+}());
 exports.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
 var publicClassWithWithPublicSetAccessorTypes = (function () {
     function publicClassWithWithPublicSetAccessorTypes() {
@@ -1375,7 +1376,7 @@ var publicClassWithWithPublicSetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithWithPublicSetAccessorTypes;
-})();
+}());
 exports.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
 var privateClassWithWithPrivateSetAccessorTypes = (function () {
     function privateClassWithWithPrivateSetAccessorTypes() {
@@ -1405,7 +1406,7 @@ var privateClassWithWithPrivateSetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithWithPrivateSetAccessorTypes;
-})();
+}());
 var privateClassWithWithPublicSetAccessorTypes = (function () {
     function privateClassWithWithPublicSetAccessorTypes() {
     }
@@ -1434,7 +1435,7 @@ var privateClassWithWithPublicSetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithWithPublicSetAccessorTypes;
-})();
+}());
 var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
@@ -1467,7 +1468,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithPrivateModuleGetAccessorTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
 var publicClassWithPrivateModuleSetAccessorTypes = (function () {
     function publicClassWithPrivateModuleSetAccessorTypes() {
@@ -1485,7 +1486,7 @@ var publicClassWithPrivateModuleSetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithPrivateModuleSetAccessorTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
 var privateClassWithPrivateModuleGetAccessorTypes = (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -1519,7 +1520,7 @@ var privateClassWithPrivateModuleGetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithPrivateModuleGetAccessorTypes;
-})();
+}());
 var privateClassWithPrivateModuleSetAccessorTypes = (function () {
     function privateClassWithPrivateModuleSetAccessorTypes() {
     }
@@ -1536,19 +1537,19 @@ var privateClassWithPrivateModuleSetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithPrivateModuleSetAccessorTypes;
-})();
+}());
 var publicModule;
 (function (publicModule) {
     var privateClass = (function () {
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     publicModule.publicClass = publicClass;
     var publicClassWithWithPrivateGetAccessorTypes = (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
@@ -1610,7 +1611,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
     var publicClassWithWithPublicGetAccessorTypes = (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
@@ -1672,7 +1673,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
     var privateClassWithWithPrivateGetAccessorTypes = (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
@@ -1734,7 +1735,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicGetAccessorTypes = (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
@@ -1795,7 +1796,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     var publicClassWithWithPrivateSetAccessorTypes = (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
@@ -1824,7 +1825,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
     var publicClassWithWithPublicSetAccessorTypes = (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
@@ -1854,7 +1855,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
     var privateClassWithWithPrivateSetAccessorTypes = (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
@@ -1884,7 +1885,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicSetAccessorTypes = (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
@@ -1913,7 +1914,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     var publicClassWithPrivateModuleGetAccessorTypes = (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
@@ -1946,7 +1947,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
     var publicClassWithPrivateModuleSetAccessorTypes = (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
@@ -1964,7 +1965,7 @@ var publicModule;
             configurable: true
         });
         return publicClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
     publicModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
     var privateClassWithPrivateModuleGetAccessorTypes = (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -1998,7 +1999,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     var privateClassWithPrivateModuleSetAccessorTypes = (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
@@ -2015,7 +2016,7 @@ var publicModule;
             configurable: true
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
@@ -2023,12 +2024,12 @@ var privateModule;
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     privateModule.publicClass = publicClass;
     var publicClassWithWithPrivateGetAccessorTypes = (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
@@ -2090,7 +2091,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
     var publicClassWithWithPublicGetAccessorTypes = (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
@@ -2152,7 +2153,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
     var privateClassWithWithPrivateGetAccessorTypes = (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
@@ -2214,7 +2215,7 @@ var privateModule;
             configurable: true
         });
         return privateClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicGetAccessorTypes = (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
@@ -2275,7 +2276,7 @@ var privateModule;
             configurable: true
         });
         return privateClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     var publicClassWithWithPrivateSetAccessorTypes = (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
@@ -2304,7 +2305,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
     var publicClassWithWithPublicSetAccessorTypes = (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
@@ -2334,7 +2335,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
     var privateClassWithWithPrivateSetAccessorTypes = (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
@@ -2364,7 +2365,7 @@ var privateModule;
             configurable: true
         });
         return privateClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicSetAccessorTypes = (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
@@ -2393,7 +2394,7 @@ var privateModule;
             configurable: true
         });
         return privateClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     var publicClassWithPrivateModuleGetAccessorTypes = (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
@@ -2426,7 +2427,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
     var publicClassWithPrivateModuleSetAccessorTypes = (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
@@ -2444,7 +2445,7 @@ var privateModule;
             configurable: true
         });
         return publicClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
     privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
     var privateClassWithPrivateModuleGetAccessorTypes = (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -2478,7 +2479,7 @@ var privateModule;
             configurable: true
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     var privateClassWithPrivateModuleSetAccessorTypes = (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
@@ -2495,14 +2496,14 @@ var privateModule;
             configurable: true
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
 })(privateModule || (privateModule = {}));
 //// [privacyAccessorDeclFile_GlobalFile.js]
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {
     }
     return publicClassInGlobal;
-})();
+}());
 var publicClassInGlobalWithPublicGetAccessorTypes = (function () {
     function publicClassInGlobalWithPublicGetAccessorTypes() {
     }
@@ -2563,7 +2564,7 @@ var publicClassInGlobalWithPublicGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassInGlobalWithPublicGetAccessorTypes;
-})();
+}());
 var publicClassInGlobalWithWithPublicSetAccessorTypes = (function () {
     function publicClassInGlobalWithWithPublicSetAccessorTypes() {
     }
@@ -2592,19 +2593,19 @@ var publicClassInGlobalWithWithPublicSetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassInGlobalWithWithPublicSetAccessorTypes;
-})();
+}());
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
     var privateClass = (function () {
         function privateClass() {
         }
         return privateClass;
-    })();
+    }());
     var publicClass = (function () {
         function publicClass() {
         }
         return publicClass;
-    })();
+    }());
     publicModuleInGlobal.publicClass = publicClass;
     var privateModule;
     (function (privateModule) {
@@ -2612,12 +2613,12 @@ var publicModuleInGlobal;
             function privateClass() {
             }
             return privateClass;
-        })();
+        }());
         var publicClass = (function () {
             function publicClass() {
             }
             return publicClass;
-        })();
+        }());
         privateModule.publicClass = publicClass;
         var publicClassWithWithPrivateGetAccessorTypes = (function () {
             function publicClassWithWithPrivateGetAccessorTypes() {
@@ -2679,7 +2680,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithWithPrivateGetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
         var publicClassWithWithPublicGetAccessorTypes = (function () {
             function publicClassWithWithPublicGetAccessorTypes() {
@@ -2741,7 +2742,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithWithPublicGetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
         var privateClassWithWithPrivateGetAccessorTypes = (function () {
             function privateClassWithWithPrivateGetAccessorTypes() {
@@ -2803,7 +2804,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithWithPrivateGetAccessorTypes;
-        })();
+        }());
         var privateClassWithWithPublicGetAccessorTypes = (function () {
             function privateClassWithWithPublicGetAccessorTypes() {
             }
@@ -2864,7 +2865,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithWithPublicGetAccessorTypes;
-        })();
+        }());
         var publicClassWithWithPrivateSetAccessorTypes = (function () {
             function publicClassWithWithPrivateSetAccessorTypes() {
             }
@@ -2893,7 +2894,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithWithPrivateSetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
         var publicClassWithWithPublicSetAccessorTypes = (function () {
             function publicClassWithWithPublicSetAccessorTypes() {
@@ -2923,7 +2924,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithWithPublicSetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
         var privateClassWithWithPrivateSetAccessorTypes = (function () {
             function privateClassWithWithPrivateSetAccessorTypes() {
@@ -2953,7 +2954,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithWithPrivateSetAccessorTypes;
-        })();
+        }());
         var privateClassWithWithPublicSetAccessorTypes = (function () {
             function privateClassWithWithPublicSetAccessorTypes() {
             }
@@ -2982,7 +2983,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithWithPublicSetAccessorTypes;
-        })();
+        }());
         var publicClassWithPrivateModuleGetAccessorTypes = (function () {
             function publicClassWithPrivateModuleGetAccessorTypes() {
             }
@@ -3015,7 +3016,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithPrivateModuleGetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
         var publicClassWithPrivateModuleSetAccessorTypes = (function () {
             function publicClassWithPrivateModuleSetAccessorTypes() {
@@ -3033,7 +3034,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return publicClassWithPrivateModuleSetAccessorTypes;
-        })();
+        }());
         privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
         var privateClassWithPrivateModuleGetAccessorTypes = (function () {
             function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -3067,7 +3068,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithPrivateModuleGetAccessorTypes;
-        })();
+        }());
         var privateClassWithPrivateModuleSetAccessorTypes = (function () {
             function privateClassWithPrivateModuleSetAccessorTypes() {
             }
@@ -3084,7 +3085,7 @@ var publicModuleInGlobal;
                 configurable: true
             });
             return privateClassWithPrivateModuleSetAccessorTypes;
-        })();
+        }());
     })(privateModule || (privateModule = {}));
     var publicClassWithWithPrivateGetAccessorTypes = (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
@@ -3146,7 +3147,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
     var publicClassWithWithPublicGetAccessorTypes = (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
@@ -3208,7 +3209,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
     var privateClassWithWithPrivateGetAccessorTypes = (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
@@ -3270,7 +3271,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithWithPrivateGetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicGetAccessorTypes = (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
@@ -3331,7 +3332,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithWithPublicGetAccessorTypes;
-    })();
+    }());
     var publicClassWithWithPrivateSetAccessorTypes = (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
@@ -3360,7 +3361,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
     var publicClassWithWithPublicSetAccessorTypes = (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
@@ -3390,7 +3391,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
     var privateClassWithWithPrivateSetAccessorTypes = (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
@@ -3420,7 +3421,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithWithPrivateSetAccessorTypes;
-    })();
+    }());
     var privateClassWithWithPublicSetAccessorTypes = (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
@@ -3449,7 +3450,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithWithPublicSetAccessorTypes;
-    })();
+    }());
     var publicClassWithPrivateModuleGetAccessorTypes = (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
@@ -3482,7 +3483,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
     var publicClassWithPrivateModuleSetAccessorTypes = (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
@@ -3500,7 +3501,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return publicClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
     publicModuleInGlobal.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
     var privateClassWithPrivateModuleGetAccessorTypes = (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -3534,7 +3535,7 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
-    })();
+    }());
     var privateClassWithPrivateModuleSetAccessorTypes = (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
@@ -3551,5 +3552,5 @@ var publicModuleInGlobal;
             configurable: true
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
-    })();
+    }());
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));

@@ -18,17 +18,16 @@ class Derived2 extends Base2 {
 }
 
 //// [derivedClassOverridesIndexersWithAssignmentCompatibility.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 // ok, use assignment compatibility
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -36,12 +35,12 @@ var Derived = (function (_super) {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 var Base2 = (function () {
     function Base2() {
     }
     return Base2;
-})();
+}());
 // ok, use assignment compatibility
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
@@ -49,4 +48,4 @@ var Derived2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base2);
+}(Base2));

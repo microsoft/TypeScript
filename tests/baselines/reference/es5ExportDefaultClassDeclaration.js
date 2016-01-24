@@ -6,12 +6,14 @@ export default class C {
 
 
 //// [es5ExportDefaultClassDeclaration.js]
+"use strict";
 var C = (function () {
     function C() {
     }
     C.prototype.method = function () { };
     return C;
-})();
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
 
 

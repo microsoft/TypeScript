@@ -1,11 +1,11 @@
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_main.ts ===
-import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 
-import moduleA = require("extendingClassFromAliasAndUsageInIndexer_moduleA");
+import moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 >moduleA : typeof moduleA
 
-import moduleB = require("extendingClassFromAliasAndUsageInIndexer_moduleB");
+import moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 >moduleB : typeof moduleB
 
 interface IHasVisualizationModel {
@@ -56,27 +56,27 @@ export class Model {
 }
 
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
-import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }
 
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
-import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
+import Backbone = require("./extendingClassFromAliasAndUsageInIndexer_backbone");
 >Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // different interesting stuff here
 }

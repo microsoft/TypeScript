@@ -4,27 +4,28 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(4,34): error TS
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(5,9): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(5,19): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(5,28): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(7,22): error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(7,22): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(11,24): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(11,32): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(13,10): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(13,19): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(13,27): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(14,18): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(15,26): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(21,9): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(21,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(23,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS2304: Cannot find name 'public'.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS2503: Cannot find namespace 'public'.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS2304: Cannot find name 'public'.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS2503: Cannot find namespace 'public'.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS2304: Cannot find name 'package'.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS2304: Cannot find name 'package'.
 
 
-==== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts (24 errors) ====
+==== tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts (25 errors) ====
     interface public { }
     
     class Foo {
@@ -45,7 +46,7 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
         }
         public banana(x: public) { }
                          ~~~~~~
-!!! error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
     }
     
     class C {
@@ -66,6 +67,8 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
                      ~~~
 !!! error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
             var z = function let() { };
+                             ~~~
+!!! error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         }
     
         public pulbic() { } // No Error;
@@ -85,12 +88,12 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
                        ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                        ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
+!!! error TS2503: Cannot find namespace 'public'.
     class F1 implements public.private.implements { }
                         ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                         ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
+!!! error TS2503: Cannot find namespace 'public'.
     class G extends package { }
                     ~~~~~~~
 !!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.

@@ -42,17 +42,16 @@ module Generics {
 
 //// [assignmentCompatWithNumericIndexer3.js]
 // Derived type indexer must be subtype of base type indexer
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var a;
 var b;
 a = b; // error
@@ -63,7 +62,7 @@ var B2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return B2;
-})(A);
+}(A));
 var b2;
 a = b2; // ok
 b2 = a; // error
@@ -73,7 +72,7 @@ var Generics;
         function A() {
         }
         return A;
-    })();
+    }());
     function foo() {
         var a;
         var b;

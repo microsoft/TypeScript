@@ -1,14 +1,14 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression16_es6.ts(1,9): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression16_es6.ts(3,5): error TS1163: 'yield' expression must be contained_within a generator declaration.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression16_es6.ts(1,9): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression16_es6.ts(3,5): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression16_es6.ts (2 errors) ====
     function* foo() {
             ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
       function bar() {
         yield foo;
         ~~~~~
-!!! error TS1163: 'yield' expression must be contained_within a generator declaration.
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
       }
     }

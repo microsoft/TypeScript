@@ -10,7 +10,7 @@ var C = (function () {
     function C() {
     }
     C.prototype.M = function () {
-        _super..call(this, 0);
+        _super.prototype..call(this, 0);
     };
     return C;
-})();
+}());

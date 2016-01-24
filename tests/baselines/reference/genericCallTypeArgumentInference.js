@@ -139,7 +139,7 @@ var C = (function () {
         return x;
     };
     return C;
-})();
+}());
 var c = new C('', 1);
 var r4 = c.foo('', 1); // string
 var r5 = c.foo2('', 1); // number

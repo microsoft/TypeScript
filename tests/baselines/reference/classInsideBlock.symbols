@@ -1,0 +1,7 @@
+=== tests/cases/conformance/classes/classDeclarations/classInsideBlock.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(classInsideBlock.ts, 0, 0))
+
+    class C { }
+>C : Symbol(C, Decl(classInsideBlock.ts, 0, 16))
+}

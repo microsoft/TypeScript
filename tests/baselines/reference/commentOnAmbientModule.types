@@ -5,16 +5,21 @@ declare module E {
 
     class foobar extends D.bar {
 >foobar : foobar
->D.bar : any
+>D.bar : D.bar
 >D : typeof D
->bar : D.bar
+>bar : typeof D.bar
 
         foo();
 >foo : () => any
     }
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare module C {
 >C : typeof C
 

@@ -1,0 +1,45 @@
+=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction1.ts ===
+class Module {
+>Module : Module
+
+    public members: Class[];
+>members : Class[]
+>Class : Class
+}
+
+class Namespace {
+>Namespace : Namespace
+
+    public members: (Class | Property)[];
+>members : (Class | Property)[]
+>Class : Class
+>Property : Property
+}
+
+class Class {
+>Class : Class
+
+    public parent: Namespace;
+>parent : Namespace
+>Namespace : Namespace
+}
+
+class Property {
+>Property : Property
+
+    public parent: Module | Class;
+>parent : Module | Class
+>Module : Module
+>Class : Class
+}
+
+var t: Class | Property;
+>t : Class | Property
+>Class : Class
+>Property : Property
+
+t.parent;
+>t.parent : Namespace | Class
+>t : Class | Property
+>parent : Namespace | Class
+

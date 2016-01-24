@@ -1,8 +1,8 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-module ts.NavigationBar {
-    export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
+namespace ts.NavigationBar {
+    export function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[]  {
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.
         let hasGlobalNode = false;
@@ -228,7 +228,7 @@ module ts.NavigationBar {
 
         function merge(target: ts.NavigationBarItem, source: ts.NavigationBarItem) {
             // First, add any spans in the source to the target.
-            target.spans.push.apply(target.spans, source.spans);
+            addRange(target.spans, source.spans);
 
             if (source.childItems) {
                 if (!target.childItems) {
@@ -387,7 +387,7 @@ module ts.NavigationBar {
 
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
-                if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
+                if (isAmbientModule(moduleDeclaration)) {
                     return getTextOfNode(moduleDeclaration.name);
                 }
 
@@ -465,7 +465,7 @@ module ts.NavigationBar {
                     // are not properties will be filtered out later by createChildItem.
                     let nodes: Node[] = removeDynamicallyNamedProperties(node);
                     if (constructor) {
-                        nodes.push.apply(nodes, filter(constructor.parameters, p => !isBindingPattern(p.name)));
+                        addRange(nodes, filter(constructor.parameters, p => !isBindingPattern(p.name)));
                     }
 
                     childItems = getItemsWorker(sortNodes(nodes), createChildItem);

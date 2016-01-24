@@ -13,7 +13,6 @@ module B {
 //// [importOnAliasedIdentifiers.js]
 var A;
 (function (A) {
-    A.X;
 })(A || (A = {}));
 var B;
 (function (B) {

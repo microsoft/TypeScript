@@ -5,9 +5,8 @@
 
 ////module A./*moduleName2*/
 
+goTo.marker("moduleName1");
+verify.not.completionListIsEmpty();
 
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.not.completionListIsEmpty();
-    verify.completionListAllowsNewIdentifier();
-});
+goTo.marker("moduleName2");
+verify.completionListIsEmpty();

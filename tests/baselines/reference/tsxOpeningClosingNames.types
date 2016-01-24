@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+}
+
+declare module A.B.C {
+>A : typeof A
+>B : typeof B
+>C : typeof C
+
+  var D: any;
+>D : any
+}
+
+<A.B.C.D>foo</A . B . C.D>
+><A.B.C.D>foo</A . B . C.D> : JSX.Element
+>A : any
+>B : any
+>C : any
+>D : any
+>A : any
+>B : any
+>C : any
+>D : any
+

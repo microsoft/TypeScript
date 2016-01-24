@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck14.ts ===
+function* g() {
+>g : Symbol(g, Decl(generatorTypeCheck14.ts, 0, 0))
+
+    yield 0;
+    return "";
+}

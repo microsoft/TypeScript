@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 
 var y = 10;
 /**

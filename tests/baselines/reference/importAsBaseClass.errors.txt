@@ -1,11 +1,11 @@
-tests/cases/compiler/importAsBaseClass_1.ts(2,21): error TS2304: Cannot find name 'Greeter'.
+tests/cases/compiler/importAsBaseClass_1.ts(2,21): error TS2507: Type 'typeof "tests/cases/compiler/importAsBaseClass_0"' is not a constructor function type.
 
 
 ==== tests/cases/compiler/importAsBaseClass_1.ts (1 errors) ====
-    import Greeter = require("importAsBaseClass_0");
+    import Greeter = require("./importAsBaseClass_0");
     class Hello extends Greeter { }
                         ~~~~~~~
-!!! error TS2304: Cannot find name 'Greeter'.
+!!! error TS2507: Type 'typeof "tests/cases/compiler/importAsBaseClass_0"' is not a constructor function type.
     
 ==== tests/cases/compiler/importAsBaseClass_0.ts (0 errors) ====
     export class Greeter {

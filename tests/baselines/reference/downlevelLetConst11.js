@@ -4,4 +4,4 @@ let
 
 //// [downlevelLetConst11.js]
 "use strict";
-var ;
+let;

@@ -1,4 +1,5 @@
 //// [forStatementsMultipleInvalidDecl.ts]
+
 interface I {
     id: number;
 }
@@ -54,29 +55,28 @@ for(var m: typeof M;;){}
 for( var m = M.A;;){}
 
 //// [forStatementsMultipleInvalidDecl.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(C);
+}(C));
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 function F(x) { return 42; }
 var M;
 (function (M) {
@@ -84,7 +84,7 @@ var M;
         function A() {
         }
         return A;
-    })();
+    }());
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;

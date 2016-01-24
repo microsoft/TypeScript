@@ -11,4 +11,4 @@ var selfReferencingFile3 = (function () {
     function selfReferencingFile3() {
     }
     return selfReferencingFile3;
-})();
+}());

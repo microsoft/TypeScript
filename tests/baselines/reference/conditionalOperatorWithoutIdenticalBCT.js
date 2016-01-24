@@ -24,18 +24,17 @@ var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.p
 
 
 //// [conditionalOperatorWithoutIdenticalBCT.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 var X = (function () {
     function X() {
     }
     return X;
-})();
+}());
 ;
 var A = (function (_super) {
     __extends(A, _super);
@@ -43,7 +42,7 @@ var A = (function (_super) {
         _super.apply(this, arguments);
     }
     return A;
-})(X);
+}(X));
 ;
 var B = (function (_super) {
     __extends(B, _super);
@@ -51,7 +50,7 @@ var B = (function (_super) {
         _super.apply(this, arguments);
     }
     return B;
-})(X);
+}(X));
 ;
 var x;
 var a;

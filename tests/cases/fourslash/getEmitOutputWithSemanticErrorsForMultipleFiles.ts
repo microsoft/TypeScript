@@ -12,5 +12,4 @@
 // @Filename: inputFile2.ts
 //// // File not emitted, and contains semantic errors
 //// var semanticError: boolean = "string";
-debugger;
 verify.baselineGetEmitOutput();

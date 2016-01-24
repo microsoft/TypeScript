@@ -1,39 +1,12 @@
-error TS2318: Cannot find global type 'PropertyDecorator'.
-error TS2318: Cannot find global type 'Array'.
-error TS2318: Cannot find global type 'RegExp'.
-error TS2318: Cannot find global type 'ClassDecorator'.
-error TS2318: Cannot find global type 'String'.
-error TS2318: Cannot find global type 'IArguments'.
-error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
-error TS2318: Cannot find global type 'Number'.
-error TS2318: Cannot find global type 'Boolean'.
-error TS2318: Cannot find global type 'Object'.
-error TS2318: Cannot find global type 'MethodDecorator'.
-error TS2318: Cannot find global type 'Function'.
-error TS2318: Cannot find global type 'ParameterDecorator'.
-tests/cases/compiler/typeCheckTypeArgument.ts(3,19): error TS2304: Cannot find name 'UNKNOWN'.
-tests/cases/compiler/typeCheckTypeArgument.ts(5,26): error TS2304: Cannot find name 'UNKNOWN'.
-tests/cases/compiler/typeCheckTypeArgument.ts(7,21): error TS2304: Cannot find name 'UNKNOWN'.
-tests/cases/compiler/typeCheckTypeArgument.ts(9,24): error TS2304: Cannot find name 'UNKNOWN'.
-tests/cases/compiler/typeCheckTypeArgument.ts(12,22): error TS2304: Cannot find name 'UNKNOWN'.
-tests/cases/compiler/typeCheckTypeArgument.ts(15,13): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(2,19): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(4,26): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(6,21): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(8,24): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(11,22): error TS2304: Cannot find name 'UNKNOWN'.
+tests/cases/compiler/typeCheckTypeArgument.ts(14,13): error TS2304: Cannot find name 'UNKNOWN'.
 
 
-!!! error TS2318: Cannot find global type 'PropertyDecorator'.
-!!! error TS2318: Cannot find global type 'Array'.
-!!! error TS2318: Cannot find global type 'RegExp'.
-!!! error TS2318: Cannot find global type 'ClassDecorator'.
-!!! error TS2318: Cannot find global type 'String'.
-!!! error TS2318: Cannot find global type 'IArguments'.
-!!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
-!!! error TS2318: Cannot find global type 'Number'.
-!!! error TS2318: Cannot find global type 'Boolean'.
-!!! error TS2318: Cannot find global type 'Object'.
-!!! error TS2318: Cannot find global type 'MethodDecorator'.
-!!! error TS2318: Cannot find global type 'Function'.
-!!! error TS2318: Cannot find global type 'ParameterDecorator'.
 ==== tests/cases/compiler/typeCheckTypeArgument.ts (6 errors) ====
-    /// <reference no-default-lib="true"/>
     
     var f: <T extends UNKNOWN>() => void;
                       ~~~~~~~

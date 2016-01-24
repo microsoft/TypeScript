@@ -3,19 +3,19 @@ var x = {
 >x : Symbol(x, Decl(symbolProperty5.ts, 0, 3))
 
     [Symbol.iterator]: 0,
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
     [Symbol.toPrimitive]() { },
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 
     get [Symbol.toStringTag]() {
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 
         return 0;
     }

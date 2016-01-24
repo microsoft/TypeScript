@@ -124,41 +124,40 @@ function foo16(x: any) { }
 
 //// [objectTypesIdentityWithNumericIndexers1.js]
 // object types are identical structurally
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var PA = (function (_super) {
     __extends(PA, _super);
     function PA() {
         _super.apply(this, arguments);
     }
     return PA;
-})(A);
+}(A));
 var PB = (function (_super) {
     __extends(PB, _super);
     function PB() {
         _super.apply(this, arguments);
     }
     return PB;
-})(B);
+}(B));
 var a;
 var b = { foo: '' };
 function foo1(x) { }

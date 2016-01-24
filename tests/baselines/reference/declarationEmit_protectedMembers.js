@@ -51,11 +51,10 @@ class C4 {
 }
 
 //// [declarationEmit_protectedMembers.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // Class with protected members
 var C1 = (function () {
@@ -84,7 +83,7 @@ var C1 = (function () {
         configurable: true
     });
     return C1;
-})();
+}());
 // Derived class overriding protected members
 var C2 = (function (_super) {
     __extends(C2, _super);
@@ -98,7 +97,7 @@ var C2 = (function (_super) {
         return _super.sf.call(this) + this.sx;
     };
     return C2;
-})(C1);
+}(C1));
 // Derived class making protected members public
 var C3 = (function (_super) {
     __extends(C3, _super);
@@ -117,7 +116,7 @@ var C3 = (function (_super) {
         configurable: true
     });
     return C3;
-})(C2);
+}(C2));
 // Protected properties in constructors
 var C4 = (function () {
     function C4(a, b) {
@@ -125,7 +124,7 @@ var C4 = (function () {
         this.b = b;
     }
     return C4;
-})();
+}());
 
 
 //// [declarationEmit_protectedMembers.d.ts]

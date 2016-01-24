@@ -2,8 +2,8 @@
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 
 var a = [1, '']; // {}[]
->a : (string | number)[]
->[1, ''] : (string | number)[]
+>a : (number | string)[]
+>[1, ''] : (number | string)[]
 >1 : number
 >'' : string
 
@@ -14,8 +14,8 @@ var b = [1, null]; // number[]
 >null : null
 
 var c = [1, '', null]; // {}[]
->c : (string | number)[]
->[1, '', null] : (string | number)[]
+>c : (number | string)[]
+>[1, '', null] : (number | string)[]
 >1 : number
 >'' : string
 >null : null
@@ -40,16 +40,16 @@ var f = [[], [1]]; // number[][]
 >1 : number
 
 var g = [[1], ['']]; // {}[]
->g : (string[] | number[])[]
->[[1], ['']] : (string[] | number[])[]
+>g : (number[] | string[])[]
+>[[1], ['']] : (number[] | string[])[]
 >[1] : number[]
 >1 : number
 >[''] : string[]
 >'' : string
 
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
->h : { foo: number; }[]
->[{ foo: 1, bar: '' }, { foo: 2 }] : { foo: number; }[]
+>h : ({ foo: number; bar: string; } | { foo: number; })[]
+>[{ foo: 1, bar: '' }, { foo: 2 }] : ({ foo: number; bar: string; } | { foo: number; })[]
 >{ foo: 1, bar: '' } : { foo: number; bar: string; }
 >foo : number
 >1 : number
@@ -145,8 +145,8 @@ module Derived {
 >Derived : typeof Derived
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
->h : { foo: Base; }[]
->[{ foo: base, basear: derived }, { foo: base }] : { foo: Base; }[]
+>h : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
+>[{ foo: base, basear: derived }, { foo: base }] : ({ foo: Base; basear: Derived; } | { foo: Base; })[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
 >foo : Base
 >base : Base
@@ -296,8 +296,8 @@ function foo<T, U>(t: T, u: U) {
 >u : U
 
     var d = [t, 1]; // {}[]
->d : (number | T)[]
->[t, 1] : (number | T)[]
+>d : (T | number)[]
+>[t, 1] : (T | number)[]
 >t : T
 >1 : number
 
@@ -350,8 +350,8 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >u : U
 
     var d = [t, 1]; // {}[]
->d : (number | T)[]
->[t, 1] : (number | T)[]
+>d : (T | number)[]
+>[t, 1] : (T | number)[]
 >t : T
 >1 : number
 
@@ -380,8 +380,8 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >base : Base
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
->[t, derived] : (Derived | T)[]
+>h : (T | Derived)[]
+>[t, derived] : (T | Derived)[]
 >t : T
 >derived : Derived
 
@@ -428,8 +428,8 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >u : U
 
     var d = [t, 1]; // {}[]
->d : (number | T)[]
->[t, 1] : (number | T)[]
+>d : (T | number)[]
+>[t, 1] : (T | number)[]
 >t : T
 >1 : number
 
@@ -506,8 +506,8 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >u : U
 
     var d = [t, 1]; // {}[]
->d : (number | T)[]
->[t, 1] : (number | T)[]
+>d : (T | number)[]
+>[t, 1] : (T | number)[]
 >t : T
 >1 : number
 
@@ -536,8 +536,8 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >base : Base
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[]
->[t, derived] : (Derived | T)[]
+>h : (T | Derived)[]
+>[t, derived] : (T | Derived)[]
 >t : T
 >derived : Derived
 
@@ -548,8 +548,8 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >base : Base
 
     var j = [u, derived]; // Derived[]
->j : (Derived | U)[]
->[u, derived] : (Derived | U)[]
+>j : (U | Derived)[]
+>[u, derived] : (U | Derived)[]
 >u : U
 >derived : Derived
 

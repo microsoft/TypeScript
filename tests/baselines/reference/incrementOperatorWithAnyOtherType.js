@@ -58,10 +58,9 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // any type var

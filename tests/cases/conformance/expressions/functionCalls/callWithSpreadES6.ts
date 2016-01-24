@@ -49,6 +49,3 @@ class D extends C {
         super.foo(1, 2, ...a);
     }
 }
-
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);

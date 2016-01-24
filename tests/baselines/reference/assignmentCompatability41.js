@@ -25,7 +25,7 @@ var __test2__;
             this.two = two;
         }
         return classWithTwoPrivate;
-    })();
+    }());
     __test2__.classWithTwoPrivate = classWithTwoPrivate;
     var x6 = new classWithTwoPrivate(1, "a");
     ;

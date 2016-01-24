@@ -27,18 +27,18 @@ declare function PropertyDecorator2(x: number): (target: Object, key: string | s
 >descriptor : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor
 
-declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
->target : Function
->Function : Function
+declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
+>ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>target : Object
+>Object : Object
 >key : string | symbol
 >paramIndex : number
 
-declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
+>ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >x : number
->target : Function
->Function : Function
+>target : Object
+>Object : Object
 >key : string | symbol
 >paramIndex : number
 
@@ -55,22 +55,22 @@ class Greeter {
 
     constructor(
       @ParameterDecorator1 
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
 
       @ParameterDecorator2(20) 
->ParameterDecorator2(20) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2(20) : (target: Object, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >20 : number
 
       public greeting: string, 
 >greeting : string
       
       @ParameterDecorator1 
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
 
       @ParameterDecorator2(30) 
->ParameterDecorator2(30) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2(30) : (target: Object, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >30 : number
 
       ...b: string[]) {
@@ -93,7 +93,7 @@ class Greeter {
 >"<h1>" + this.greeting : string
 >"<h1>" : string
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
 >"</h1>" : string
     }
@@ -125,11 +125,11 @@ class Greeter {
 >fn : (x: number) => string
 
       @ParameterDecorator1 
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
 
       @ParameterDecorator2(70) 
->ParameterDecorator2(70) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2(70) : (target: Object, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >70 : number
 
       x: number) {
@@ -137,7 +137,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
     }
 
@@ -154,7 +154,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
     }
 
@@ -162,11 +162,11 @@ class Greeter {
 >greetings : string
 
       @ParameterDecorator1 
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
 
       @ParameterDecorator2(90) 
->ParameterDecorator2(90) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2(90) : (target: Object, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >90 : number
 
       greetings: string) {
@@ -175,7 +175,7 @@ class Greeter {
         this.greeting = greetings;
 >this.greeting = greetings : string
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
 >greetings : string
     }    

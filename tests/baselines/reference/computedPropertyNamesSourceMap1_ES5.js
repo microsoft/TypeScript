@@ -13,5 +13,5 @@ var C = (function () {
         debugger;
     };
     return C;
-})();
+}());
 //# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map

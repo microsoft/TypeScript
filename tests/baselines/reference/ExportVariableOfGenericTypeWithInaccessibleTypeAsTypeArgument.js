@@ -15,7 +15,6 @@ var A;
         function B() {
         }
         return B;
-    })();
-    A.beez;
+    }());
     A.beez2 = new Array();
 })(A || (A = {}));

@@ -7,9 +7,9 @@ verify.syntacticClassificationsAre(
     c.keyword("for"),
     c.punctuation("("),
     c.keyword("var"),
-    c.text("of"),
+    c.identifier("of"),
     c.keyword("of"),
-    c.text("of"),
+    c.identifier("of"),
     c.punctuation(")"),
     c.punctuation("{"),
     c.punctuation("}")

@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(1,25): error TS1005: ';' expected.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts(4,17): error TS1005: '=' expected.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts (4 errors) ====
+    export default abstract class A {}
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
+                            ~~~~~
+!!! error TS1005: ';' expected.
+    export abstract class B {}
+    default abstract class C {}
+    ~~~~~~~
+!!! error TS1128: Declaration or statement expected.
+    import abstract class D {}
+                    ~~~~~
+!!! error TS1005: '=' expected.

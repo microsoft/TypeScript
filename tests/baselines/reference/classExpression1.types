@@ -1,0 +1,6 @@
+=== tests/cases/conformance/classes/classExpressions/classExpression1.ts ===
+var v = class C {};
+>v : typeof C
+>class C {} : typeof C
+>C : typeof C
+

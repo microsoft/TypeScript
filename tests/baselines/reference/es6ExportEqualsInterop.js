@@ -209,6 +209,7 @@ export * from "class-module";
 
 //// [main.js]
 /// <reference path="modules.d.ts"/>
+"use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
@@ -289,7 +290,6 @@ exports.a8 = function_module_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
 // export-star
-__export(require("interface"));
 __export(require("variable"));
 __export(require("interface-variable"));
 __export(require("module"));

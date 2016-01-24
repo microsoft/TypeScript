@@ -9,5 +9,5 @@ var default_1 = (function () {
     function default_1() {
     }
     return default_1;
-})();
+}());
 void {}; // parse error unlike the others

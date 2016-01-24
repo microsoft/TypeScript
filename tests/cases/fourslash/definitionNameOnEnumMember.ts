@@ -7,6 +7,5 @@
 ////}
 ////var enumMember = e./*1*/thirdMember;
 
-debugger;
 goTo.marker("1");
 verify.verifyDefinitionsName("thirdMember", "e");

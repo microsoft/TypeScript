@@ -60,8 +60,8 @@ var r4 = true ? a : b; // typeof a
 >b : { x: number; z?: number; }
 
 var r5 = true ? b : a; // typeof b
->r5 : { x: number; y?: number; } | { x: number; z?: number; }
->true ? b : a : { x: number; y?: number; } | { x: number; z?: number; }
+>r5 : { x: number; z?: number; } | { x: number; y?: number; }
+>true ? b : a : { x: number; z?: number; } | { x: number; y?: number; }
 >true : boolean
 >b : { x: number; z?: number; }
 >a : { x: number; y?: number; }

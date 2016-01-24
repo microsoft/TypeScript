@@ -3,8 +3,9 @@ tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(4,7): error TS2420
     Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
       Types of parameters 'a' and 'a' are incompatible.
         Type 'T' is not assignable to type '{ a: number; }'.
-          Types of property 'a' are incompatible.
-            Type 'string' is not assignable to type 'number'.
+          Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+            Types of property 'a' are incompatible.
+              Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322: Type 'X<{ a: string; }>' is not assignable to type 'I'.
   Types of property 'f' are incompatible.
     Type '(a: { a: string; }) => void' is not assignable to type '(a: { a: number; }) => void'.
@@ -25,8 +26,9 @@ tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts(8,5): error TS2322
 !!! error TS2420:     Type '(a: T) => void' is not assignable to type '(a: { a: number; }) => void'.
 !!! error TS2420:       Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2420:         Type 'T' is not assignable to type '{ a: number; }'.
-!!! error TS2420:           Types of property 'a' are incompatible.
-!!! error TS2420:             Type 'string' is not assignable to type 'number'.
+!!! error TS2420:           Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+!!! error TS2420:             Types of property 'a' are incompatible.
+!!! error TS2420:               Type 'string' is not assignable to type 'number'.
     	f(a: T): void { }
     }
     var x = new X<{ a: string }>();

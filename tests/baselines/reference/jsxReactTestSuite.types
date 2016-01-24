@@ -1,0 +1,338 @@
+=== tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
+
+declare var React: any;
+>React : any
+
+declare var Component:any;
+>Component : any
+
+declare var Composite:any;
+>Composite : any
+
+declare var Composite2:any;
+>Composite2 : any
+
+declare var Child:any;
+>Child : any
+
+declare var Namespace:any;
+>Namespace : any
+
+declare var foo: any;
+>foo : any
+
+declare var bar: any;
+>bar : any
+
+declare var y:any;
+>y : any
+
+declare var x:any;
+>x : any
+
+declare var z:any;
+>z : any
+
+declare var hasOwnProperty:any;
+>hasOwnProperty : any
+
+<div>text</div>;
+><div>text</div> : any
+>div : any
+>div : any
+
+<div>
+><div>  {this.props.children}</div> : any
+>div : any
+
+  {this.props.children}
+>this.props.children : any
+>this.props : any
+>this : any
+>props : any
+>children : any
+
+</div>;
+>div : any
+
+<div>
+><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : any
+>div : any
+
+  <div><br /></div>
+><div><br /></div> : any
+>div : any
+><br /> : any
+>br : any
+>div : any
+
+  <Component>{foo}<br />{bar}</Component>
+><Component>{foo}<br />{bar}</Component> : any
+>Component : any
+>foo : any
+><br /> : any
+>br : any
+>bar : any
+>Component : any
+
+  <br />
+><br /> : any
+>br : any
+
+</div>;
+>div : any
+
+
+<Composite>
+><Composite>    {this.props.children}</Composite> : any
+>Composite : any
+
+    {this.props.children}
+>this.props.children : any
+>this.props : any
+>this : any
+>props : any
+>children : any
+
+</Composite>;
+>Composite : any
+
+<Composite>
+><Composite>    <Composite2 /></Composite> : any
+>Composite : any
+
+    <Composite2 />
+><Composite2 /> : any
+>Composite2 : any
+
+</Composite>;
+>Composite : any
+
+var x =
+>x : any
+
+  <div
+><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : any
+>div : any
+
+    attr1={
+>attr1 : any
+
+      "foo" + "bar"
+>"foo" + "bar" : string
+>"foo" : string
+>"bar" : string
+    }
+    attr2={
+>attr2 : any
+
+      "foo" + "bar" +
+>"foo" + "bar" +            "baz" + "bug" : string
+>"foo" + "bar" +            "baz" : string
+>"foo" + "bar" : string
+>"foo" : string
+>"bar" : string
+      
+      "baz" + "bug"
+>"baz" : string
+>"bug" : string
+    }
+    attr3={
+>attr3 : any
+
+      "foo" + "bar" +
+>"foo" + "bar" +      "baz" + "bug" : string
+>"foo" + "bar" +      "baz" : string
+>"foo" + "bar" : string
+>"foo" : string
+>"bar" : string
+
+      "baz" + "bug"
+>"baz" : string
+>"bug" : string
+
+      // Extra line here.
+    }
+    attr4="baz">
+>attr4 : any
+
+  </div>;
+>div : any
+
+(
+>(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : any
+
+  <div>
+><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : any
+>div : any
+
+    {/* A comment at the beginning */}
+    {/* A second comment at the beginning */}
+    <span>
+><span>      {/* A nested comment */}    </span> : any
+>span : any
+
+      {/* A nested comment */}
+    </span>
+>span : any
+
+    {/* A sandwiched comment */}
+    <br />
+><br /> : any
+>br : any
+
+    {/* A comment at the end */}
+    {/* A second comment at the end */}
+  </div>
+>div : any
+
+);
+
+(
+>(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : any
+
+  <div
+><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : any
+>div : any
+
+    /* a multi-line
+       comment */
+    attr1="foo">
+>attr1 : any
+
+    <span // a double-slash comment
+><span // a double-slash comment      attr2="bar"    /> : any
+>span : any
+
+      attr2="bar"
+>attr2 : any
+
+    />
+  </div>
+>div : any
+
+);
+
+<div>&nbsp;</div>;
+><div>&nbsp;</div> : any
+>div : any
+>div : any
+
+<div>&nbsp; </div>;
+><div>&nbsp; </div> : any
+>div : any
+>div : any
+
+<hasOwnProperty>testing</hasOwnProperty>;
+><hasOwnProperty>testing</hasOwnProperty> : any
+>hasOwnProperty : any
+>hasOwnProperty : any
+
+<Component constructor="foo" />;
+><Component constructor="foo" /> : any
+>Component : any
+>constructor : any
+
+<Namespace.Component />;
+><Namespace.Component /> : any
+>Namespace : any
+>Component : any
+
+<Namespace.DeepNamespace.Component />;
+><Namespace.DeepNamespace.Component /> : any
+>Namespace : any
+>DeepNamespace : any
+>Component : any
+
+<Component { ... x } y
+><Component { ... x } y={2 } z /> : any
+>Component : any
+>x : any
+>y : any
+
+={2 } z />;
+>2 : number
+>z : any
+
+<Component
+><Component    {...this.props} sound="moo" /> : any
+>Component : any
+
+    {...this.props} sound="moo" />;
+>this.props : any
+>this : any
+>props : any
+>sound : any
+
+<font-face />;
+><font-face /> : any
+>font-face : any
+
+<Component x={y} />;
+><Component x={y} /> : any
+>Component : any
+>x : any
+>y : any
+
+<x-component />;
+><x-component /> : any
+>x-component : any
+
+<Component {...x} />;
+><Component {...x} /> : any
+>Component : any
+>x : any
+
+<Component { ...x } y={2} />;
+><Component { ...x } y={2} /> : any
+>Component : any
+>x : any
+>y : any
+>2 : number
+
+<Component { ... x } y={2} z />;
+><Component { ... x } y={2} z /> : any
+>Component : any
+>x : any
+>y : any
+>2 : number
+>z : any
+
+<Component x={1} {...y} />;
+><Component x={1} {...y} /> : any
+>Component : any
+>x : any
+>1 : number
+>y : any
+
+
+<Component x={1} y="2" {...z} {...z}><Child /></Component>;
+><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
+>Component : any
+>x : any
+>1 : number
+>y : any
+>z : any
+>z : any
+><Child /> : any
+>Child : any
+>Component : any
+
+<Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
+>Component : any
+>x : any
+>(z = { y: 2 }, z) : any
+>z = { y: 2 }, z : any
+>z = { y: 2 } : { y: number; }
+>z : any
+>{ y: 2 } : { y: number; }
+>y : number
+>2 : number
+>z : any
+>z : any
+>3 : number
+>Component : any
+
+
+

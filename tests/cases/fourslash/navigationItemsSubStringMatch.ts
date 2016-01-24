@@ -17,7 +17,6 @@
 ////// Local variables
 ////{| "itemName": "MymyPointThatIJustInitiated", "kind": "var", "parentName": "", "matchKind": "substring"|}var MymyPointThatIJustInitiated = new Shapes.Point();
 
-debugger;
 test.markers().forEach((marker) => {
     if (marker.data) {
         var name = marker.data.itemName;

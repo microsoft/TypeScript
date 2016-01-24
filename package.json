@@ -2,13 +2,8 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "1.5.0",
-    "licenses": [
-        {
-            "type": "Apache License 2.0",
-            "url": "https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt"
-        }
-    ],
+    "version": "1.8.0",
+    "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
         "TypeScript",
@@ -24,8 +19,8 @@
         "type": "git",
         "url": "https://github.com/Microsoft/TypeScript.git"
     },
-    "preferGlobal": true,
-    "main": "./bin/typescript.js",
+    "main": "./lib/typescript.js",
+    "typings": "./lib/typescript.d.ts",
     "bin": {
         "tsc": "./bin/tsc",
         "tsserver": "./bin/tsserver"
@@ -38,9 +33,27 @@
         "mocha": "latest",
         "chai": "latest",
         "browserify": "latest",
-        "istanbul": "latest"
+        "istanbul": "latest",
+        "mocha-fivemat-progress-reporter": "latest",
+        "tslint": "next",
+        "typescript": "next",
+        "tsd": "latest"
     },
     "scripts": {
-        "test": "jake runtests"
+        "pretest": "jake tests",
+        "test": "jake runtests",
+        "build": "npm run build:compiler && npm run build:tests",
+        "build:compiler": "jake local",
+        "build:tests": "jake tests",
+        "clean": "jake clean",
+        "jake": "jake",
+        "lint": "jake lint",
+        "setup-hooks": "node scripts/link-hooks.js"
+    },
+    "browser": {
+        "buffer": false,
+        "fs": false,
+        "os": false,
+        "path": false
     }
 }

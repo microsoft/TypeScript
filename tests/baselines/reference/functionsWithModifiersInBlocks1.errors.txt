@@ -1,15 +1,14 @@
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,4): error TS1184: Modifiers cannot appear here.
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,21): error TS2393: Duplicate function implementation.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,25): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/functionsWithModifiersInBlocks1.ts(2,25): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(3,4): error TS1184: Modifiers cannot appear here.
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(3,20): error TS2393: Duplicate function implementation.
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,4): error TS1184: Modifiers cannot appear here.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,12): error TS1029: 'export' modifier must precede 'declare' modifier.
 tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,28): error TS2393: Duplicate function implementation.
-tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,32): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,32): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/functionsWithModifiersInBlocks1.ts (9 errors) ====
+==== tests/cases/compiler/functionsWithModifiersInBlocks1.ts (8 errors) ====
     {
        declare function f() { }
        ~~~~~~~
@@ -17,7 +16,7 @@ tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,32): error TS1184: An 
                         ~
 !!! error TS2393: Duplicate function implementation.
                             ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
        export function f() { }
        ~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
@@ -26,10 +25,8 @@ tests/cases/compiler/functionsWithModifiersInBlocks1.ts(4,32): error TS1184: An 
        declare export function f() { }
        ~~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
-               ~~~~~~
-!!! error TS1029: 'export' modifier must precede 'declare' modifier.
                                ~
 !!! error TS2393: Duplicate function implementation.
                                    ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
     }

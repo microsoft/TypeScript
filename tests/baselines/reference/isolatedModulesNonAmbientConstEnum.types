@@ -1,0 +1,16 @@
+=== tests/cases/compiler/file1.ts ===
+
+const enum E { X = 100 };
+>E : E
+>X : E
+>100 : number
+
+var e = E.X;
+>e : E
+>E.X : E
+>E : typeof E
+>X : E
+
+export var x;
+>x : any
+

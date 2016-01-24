@@ -1,0 +1,47 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck46.ts ===
+declare function foo<T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T): T;
+>foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
+>T : T
+>U : U
+>x : T
+>T : T
+>fun : () => Iterable<(x: T) => U>
+>Iterable : Iterable<T>
+>x : T
+>T : T
+>U : U
+>fun2 : (y: U) => T
+>y : U
+>U : U
+>T : T
+>T : T
+
+foo("", function* () {
+>foo("", function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }}, p => undefined) : string
+>foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
+>"" : string
+>function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => IterableIterator<(x: string) => number>
+
+    yield* {
+>yield* {        *[Symbol.iterator]() {            yield x => x.length        }    } : any
+>{        *[Symbol.iterator]() {            yield x => x.length        }    } : { [Symbol.iterator](): IterableIterator<(x: string) => number>; }
+
+        *[Symbol.iterator]() {
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+            yield x => x.length
+>yield x => x.length : any
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+        }
+    }
+}, p => undefined); // T is fixed, should be string
+>p => undefined : (p: number) => any
+>p : number
+>undefined : undefined
+

@@ -1,6 +1,6 @@
 ///<reference path='services.ts' />
 /* @internal */
-module ts.SignatureHelp {
+namespace ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
     // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference. 
@@ -178,7 +178,7 @@ module ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationToken): SignatureHelpItems {
         let typeChecker = program.getTypeChecker();
 
         // Decide whether to show signature help
@@ -204,7 +204,7 @@ module ts.SignatureHelp {
         if (!candidates.length) {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
             // file, then see if we can figure out anything better.
-            if (isJavaScript(sourceFile.fileName)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 return createJavaScriptSignatureHelpItems(argumentInfo);
             }
 
@@ -550,7 +550,7 @@ module ts.SignatureHelp {
                 let suffixDisplayParts: SymbolDisplayPart[] = [];
 
                 if (callTargetDisplayParts) {
-                    prefixDisplayParts.push.apply(prefixDisplayParts, callTargetDisplayParts);
+                    addRange(prefixDisplayParts, callTargetDisplayParts);
                 }
 
                 if (isTypeParameterList) {
@@ -560,12 +560,12 @@ module ts.SignatureHelp {
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     let parameterParts = mapToDisplayParts(writer =>
                         typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
-                    suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
+                    addRange(suffixDisplayParts, parameterParts);
                 }
                 else {
                     let typeParameterParts = mapToDisplayParts(writer =>
                         typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
-                    prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
+                    addRange(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
                     let parameters = candidateSignature.parameters;
@@ -575,7 +575,7 @@ module ts.SignatureHelp {
 
                 let returnTypeParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
-                suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
+                addRange(suffixDisplayParts, returnTypeParts);
                 
                 return {
                     isVariadic: candidateSignature.hasRestParameter,
@@ -611,13 +611,11 @@ module ts.SignatureHelp {
                 let displayParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                let isOptional = hasQuestionToken(parameter.valueDeclaration);
-
                 return {
                     name: parameter.name,
                     documentation: parameter.getDocumentationComment(),
                     displayParts,
-                    isOptional
+                    isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
                 };
             }
 

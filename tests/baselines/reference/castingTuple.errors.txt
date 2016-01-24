@@ -8,11 +8,12 @@ tests/cases/conformance/types/tuple/castingTuple.ts(28,10): error TS2352: Neithe
 tests/cases/conformance/types/tuple/castingTuple.ts(29,10): error TS2352: Neither type '[C, D]' nor type '[A, I]' is assignable to the other.
   Types of property '0' are incompatible.
     Type 'C' is not assignable to type 'A'.
+      Property 'a' is missing in type 'C'.
 tests/cases/conformance/types/tuple/castingTuple.ts(30,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(30,14): error TS2352: Neither type '[number, string]' nor type 'number[]' is assignable to the other.
   Types of property 'pop' are incompatible.
-    Type '() => string | number' is not assignable to type '() => number'.
-      Type 'string | number' is not assignable to type 'number'.
+    Type '() => number | string' is not assignable to type '() => number'.
+      Type 'number | string' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot find name 't4'.
 
@@ -61,14 +62,15 @@ tests/cases/conformance/types/tuple/castingTuple.ts(31,1): error TS2304: Cannot 
 !!! error TS2352: Neither type '[C, D]' nor type '[A, I]' is assignable to the other.
 !!! error TS2352:   Types of property '0' are incompatible.
 !!! error TS2352:     Type 'C' is not assignable to type 'A'.
+!!! error TS2352:       Property 'a' is missing in type 'C'.
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
                  ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type '[number, string]' nor type 'number[]' is assignable to the other.
 !!! error TS2352:   Types of property 'pop' are incompatible.
-!!! error TS2352:     Type '() => string | number' is not assignable to type '() => number'.
-!!! error TS2352:       Type 'string | number' is not assignable to type 'number'.
+!!! error TS2352:     Type '() => number | string' is not assignable to type '() => number'.
+!!! error TS2352:       Type 'number | string' is not assignable to type 'number'.
 !!! error TS2352:         Type 'string' is not assignable to type 'number'.
     t4[2] = 10;
     ~~

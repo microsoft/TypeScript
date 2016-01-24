@@ -1,4 +1,4 @@
-//@module: commonjs
+// @module: commonjs
 // @declaration: true
 // @Filename: importDecl_require.ts
 export class d {
@@ -29,7 +29,7 @@ export var x: d;
 export function foo(): d { return null; }
 
 // @Filename: importDecl_require4.ts
-import m4 = require("importDecl_require");
+import m4 = require("./importDecl_require");
 export function foo2(): m4.d { return null; }
 
 // @Filename: importDecl_1.ts
@@ -38,7 +38,7 @@ export function foo2(): m4.d { return null; }
 ///<reference path='importDecl_require2.ts'/>
 ///<reference path='importDecl_require3.ts'/>
 ///<reference path='importDecl_require4.ts'/>
-import m4 = require("importDecl_require"); // Emit used
+import m4 = require("./importDecl_require"); // Emit used
 export var x4 = m4.x;
 export var d4 = m4.d;
 export var f4 = m4.foo();
@@ -54,16 +54,16 @@ export module m1 {
 }
 
 //Emit global only usage
-import glo_m4 = require("importDecl_require1");
+import glo_m4 = require("./importDecl_require1");
 export var useGlo_m4_d4 = glo_m4.d;
 export var useGlo_m4_f4 = glo_m4.foo();
 
 //Emit even when used just in function type
-import fncOnly_m4 = require("importDecl_require2");
+import fncOnly_m4 = require("./importDecl_require2");
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
 
 // only used privately no need to emit
-import private_m4 = require("importDecl_require3");
+import private_m4 = require("./importDecl_require3");
 export module usePrivate_m4_m1 {
     var x3 = private_m4.x;
     var d3 = private_m4.d;
@@ -71,11 +71,11 @@ export module usePrivate_m4_m1 {
 }
 
 // Do not emit unused import
-import m5 = require("importDecl_require4");
+import m5 = require("./importDecl_require4");
 export var d = m5.foo2();
 
 // Do not emit multiple used import statements
-import multiImport_m4 = require("importDecl_require"); // Emit used
+import multiImport_m4 = require("./importDecl_require"); // Emit used
 export var useMultiImport_m4_x4 = multiImport_m4.x;
 export var useMultiImport_m4_d4 = multiImport_m4.d;
 export var useMultiImport_m4_f4 = multiImport_m4.foo();

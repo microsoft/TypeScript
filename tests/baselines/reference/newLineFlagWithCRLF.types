@@ -1,0 +1,11 @@
+=== tests/cases/compiler/newLineFlagWithCRLF.ts ===
+var x=1;
+>x : number
+>1 : number
+
+x=2;
+>x=2 : number
+>x : number
+>2 : number
+
+

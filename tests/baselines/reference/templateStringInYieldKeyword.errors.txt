@@ -1,14 +1,11 @@
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,9): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(3,13): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts(1,9): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts (2 errors) ====
+==== tests/cases/conformance/es6/templates/templateStringInYieldKeyword.ts (1 errors) ====
     function* gen() {
             ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
         // Once this is supported, the inner expression does not need to be parenthesized.
         var x = yield `abc${ x }def`;
-                ~~~~~
-!!! error TS9000: 'yield' expressions are not currently supported.
     }
     

@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts(3,10): error TS2331: 'this' cannot be referenced in a module body.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts(3,10): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts(3,
         var obj = {
             [this.bar]: 0
              ~~~~
-!!! error TS2331: 'this' cannot be referenced in a module body.
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
         }
     }

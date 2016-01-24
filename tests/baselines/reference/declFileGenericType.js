@@ -40,11 +40,11 @@ export var j = C.F6;
 
 
 //// [declFileGenericType.js]
-var __extends = this.__extends || function (d, b) {
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C;
 (function (C) {
@@ -52,13 +52,13 @@ var C;
         function A() {
         }
         return A;
-    })();
+    }());
     C.A = A;
     var B = (function () {
         function B() {
         }
         return B;
-    })();
+    }());
     C.B = B;
     function F(x) { return null; }
     C.F = F;
@@ -77,10 +77,9 @@ var C;
             this.val = val;
         }
         return D;
-    })();
+    }());
     C.D = D;
 })(C = exports.C || (exports.C = {}));
-exports.a;
 exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;
@@ -95,7 +94,7 @@ var h = (function (_super) {
         _super.apply(this, arguments);
     }
     return h;
-})(C.A);
+}(C.A));
 exports.h = h;
 exports.j = C.F6;
 

@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,15): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,15): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,23): error TS1163: 'yield' expression must be contained_within a generator declaration.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,15): error TS2378: A 'get' accessor must return a value.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,23): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts (3 errors) ====
@@ -8,6 +8,6 @@ tests/cases/conformance/es6/yieldExpressions/YieldExpression17_es6.ts(1,23): err
                   ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                   ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
                           ~~~~~
-!!! error TS1163: 'yield' expression must be contained_within a generator declaration.
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.

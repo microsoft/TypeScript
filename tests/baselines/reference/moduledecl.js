@@ -1,4 +1,5 @@
 //// [moduledecl.ts]
+
 module a {
 }
 
@@ -243,7 +244,7 @@ var m0;
         function c1() {
         }
         return c1;
-    })();
+    }());
 })(m0 || (m0 = {}));
 var m1;
 (function (m1) {
@@ -264,7 +265,7 @@ var m1;
             return "Hello";
         };
         return c1;
-    })();
+    }());
     m1.c1 = c1;
 })(m1 || (m1 = {}));
 var m;
@@ -272,11 +273,9 @@ var m;
     var m2;
     (function (m2) {
         var a = 10;
-        m2.b;
     })(m2 = m.m2 || (m.m2 = {}));
     var m3;
     (function (m3) {
-        m3.c;
     })(m3 = m.m3 || (m.m3 = {}));
 })(m || (m = {}));
 var m;
@@ -285,7 +284,6 @@ var m;
     (function (m25) {
         var m5;
         (function (m5) {
-            m5.c;
         })(m5 = m25.m5 || (m25.m5 = {}));
     })(m25 = m.m25 || (m.m25 = {}));
 })(m || (m = {}));
@@ -297,7 +295,6 @@ var m13;
         (function (m2) {
             var m3;
             (function (m3) {
-                m3.c;
             })(m3 = m2.m3 || (m2.m3 = {}));
         })(m2 = m4.m2 || (m4.m2 = {}));
         function f() {
@@ -318,7 +315,7 @@ var exportTests;
             return "string";
         };
         return C1_public;
-    })();
+    }());
     exportTests.C1_public = C1_public;
     var C2_private = (function () {
         function C2_private() {
@@ -330,7 +327,7 @@ var exportTests;
             return "string";
         };
         return C2_private;
-    })();
+    }());
     var C3_public = (function () {
         function C3_public() {
         }
@@ -359,7 +356,7 @@ var exportTests;
             configurable: true
         });
         return C3_public;
-    })();
+    }());
     exportTests.C3_public = C3_public;
 })(exportTests || (exportTests = {}));
 function foo() {

@@ -96,17 +96,16 @@ class Derived10<T> extends Base2<T> {
 
 //// [derivedClassParameterProperties.js]
 // ordering of super calls in derived constructors matters depending on other class contents
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(y) {
@@ -114,7 +113,7 @@ var Derived = (function (_super) {
         _super.call(this); // ok
     }
     return Derived;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(y) {
@@ -123,7 +122,7 @@ var Derived2 = (function (_super) {
         _super.call(this); // error
     }
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(y) {
@@ -132,7 +131,7 @@ var Derived3 = (function (_super) {
         var a = 1;
     }
     return Derived3;
-})(Base);
+}(Base));
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(y) {
@@ -141,7 +140,7 @@ var Derived4 = (function (_super) {
         _super.call(this); // error
     }
     return Derived4;
-})(Base);
+}(Base));
 var Derived5 = (function (_super) {
     __extends(Derived5, _super);
     function Derived5(y) {
@@ -150,7 +149,7 @@ var Derived5 = (function (_super) {
         var b = 2;
     }
     return Derived5;
-})(Base);
+}(Base));
 var Derived6 = (function (_super) {
     __extends(Derived6, _super);
     function Derived6(y) {
@@ -159,7 +158,7 @@ var Derived6 = (function (_super) {
         _super.call(this); // ok
     }
     return Derived6;
-})(Base);
+}(Base));
 var Derived7 = (function (_super) {
     __extends(Derived7, _super);
     function Derived7(y) {
@@ -169,7 +168,7 @@ var Derived7 = (function (_super) {
         _super.call(this); // error
     }
     return Derived7;
-})(Base);
+}(Base));
 var Derived8 = (function (_super) {
     __extends(Derived8, _super);
     function Derived8(y) {
@@ -179,13 +178,13 @@ var Derived8 = (function (_super) {
         this.b = 3;
     }
     return Derived8;
-})(Base);
+}(Base));
 // generic cases of Derived7 and Derived8
 var Base2 = (function () {
     function Base2() {
     }
     return Base2;
-})();
+}());
 var Derived9 = (function (_super) {
     __extends(Derived9, _super);
     function Derived9(y) {
@@ -195,7 +194,7 @@ var Derived9 = (function (_super) {
         _super.call(this); // error
     }
     return Derived9;
-})(Base2);
+}(Base2));
 var Derived10 = (function (_super) {
     __extends(Derived10, _super);
     function Derived10(y) {
@@ -205,4 +204,4 @@ var Derived10 = (function (_super) {
         this.b = 3;
     }
     return Derived10;
-})(Base2);
+}(Base2));

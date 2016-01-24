@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 /* @internal */
-module ts.formatting {
+namespace ts.formatting {
     export class RulesMap {
         public map: RulesBucket[];
         public mapRowLength: number;
@@ -41,15 +41,15 @@ module ts.formatting {
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            let specificRule = rule.Descriptor.LeftTokenRange != Shared.TokenRange.Any &&
-                               rule.Descriptor.RightTokenRange != Shared.TokenRange.Any;
+            let specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
+                               rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
 
             rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
                 rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {
                     let rulesBucketIndex = this.GetRuleBucketIndex(left, right);
 
                     let rulesBucket = this.map[rulesBucketIndex];
-                    if (rulesBucket == undefined) {
+                    if (rulesBucket === undefined) {
                         rulesBucket = this.map[rulesBucketIndex] = new RulesBucket();
                     }
 
@@ -124,7 +124,7 @@ module ts.formatting {
         public IncreaseInsertionIndex(maskPosition: RulesPosition): void {
             let value = (this.rulesInsertionIndexBitmap >> maskPosition) & Mask;
             value++;
-            Debug.assert((value & Mask) == value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
+            Debug.assert((value & Mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
 
             let temp = this.rulesInsertionIndexBitmap & ~(Mask << maskPosition);
             temp |= value << maskPosition;
@@ -147,7 +147,7 @@ module ts.formatting {
         public AddRule(rule: Rule, specificTokens: boolean, constructionState: RulesBucketConstructionState[], rulesBucketIndex: number): void {
             let position: RulesPosition;
 
-            if (rule.Operation.Action == RuleAction.Ignore) {
+            if (rule.Operation.Action === RuleAction.Ignore) {
                 position = specificTokens ?
                     RulesPosition.IgnoreRulesSpecific :
                     RulesPosition.IgnoreRulesAny;

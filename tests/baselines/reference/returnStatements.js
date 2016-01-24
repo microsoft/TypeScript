@@ -25,11 +25,10 @@ function fn13(): C { return null; }
 
 
 //// [returnStatements.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // all the following should be valid
 function fn1() { return 1; }
@@ -45,14 +44,14 @@ var C = (function () {
     }
     C.prototype.dispose = function () { };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 function fn10() { return { id: 12 }; }
 function fn11() { return new C(); }
 function fn12() { return new D(); }

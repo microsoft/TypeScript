@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts(1,9): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts(2,3): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts(1,9): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts(2,9): error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression6_es6.ts (2 errors) ====
     function* foo() {
             ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
       yield*foo
-      ~~~~~
-!!! error TS9000: 'yield' expressions are not currently supported.
+            ~~~
+!!! error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
     }

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/functionDeclarationWithResolutionOfTypeNamedArguments01.ts ===
+interface arguments {
+>arguments : arguments
+}
+
+function f() {
+>f : () => void
+
+    <arguments>arguments;
+><arguments>arguments : arguments
+>arguments : arguments
+>arguments : IArguments
+}

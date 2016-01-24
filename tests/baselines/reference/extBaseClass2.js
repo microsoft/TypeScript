@@ -11,11 +11,10 @@ module M {
 
 
 //// [extBaseClass2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var N;
 (function (N) {
@@ -25,7 +24,7 @@ var N;
             _super.apply(this, arguments);
         }
         return C4;
-    })(M.B);
+    }(M.B));
     N.C4 = C4;
 })(N || (N = {}));
 var M;
@@ -36,6 +35,6 @@ var M;
             _super.apply(this, arguments);
         }
         return C5;
-    })(B);
+    }(B));
     M.C5 = C5;
 })(M || (M = {}));

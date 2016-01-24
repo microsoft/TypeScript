@@ -1,0 +1,64 @@
+=== tests/cases/conformance/jsx/tsxInArrowFunction.tsx ===
+
+declare namespace JSX {
+>JSX : any
+
+    interface Element { }
+>Element : Element
+
+    interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+        div: {
+>div : { text?: string; }
+
+            text?: string;
+>text : string
+        }
+    }
+}
+
+
+// didn't work
+<div>{() => <div text="wat" />}</div>;
+><div>{() => <div text="wat" />}</div> : JSX.Element
+>div : any
+>() => <div text="wat" /> : () => JSX.Element
+><div text="wat" /> : JSX.Element
+>div : any
+>text : any
+>div : any
+
+// didn't work
+<div>{x => <div text="wat" />}</div>;
+><div>{x => <div text="wat" />}</div> : JSX.Element
+>div : any
+>x => <div text="wat" /> : (x: any) => JSX.Element
+>x : any
+><div text="wat" /> : JSX.Element
+>div : any
+>text : any
+>div : any
+
+// worked
+<div>{() => (<div text="wat" />)}</div>;
+><div>{() => (<div text="wat" />)}</div> : JSX.Element
+>div : any
+>() => (<div text="wat" />) : () => JSX.Element
+>(<div text="wat" />) : JSX.Element
+><div text="wat" /> : JSX.Element
+>div : any
+>text : any
+>div : any
+
+// worked (!)
+<div>{() => <div text="wat"></div>}</div>;
+><div>{() => <div text="wat"></div>}</div> : JSX.Element
+>div : any
+>() => <div text="wat"></div> : () => JSX.Element
+><div text="wat"></div> : JSX.Element
+>div : any
+>text : any
+>div : any
+>div : any
+

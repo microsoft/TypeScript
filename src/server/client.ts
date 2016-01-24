@@ -1,6 +1,6 @@
 /// <reference path="session.ts" />
  
-module ts.server {
+namespace ts.server {
 
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
@@ -120,8 +120,8 @@ module ts.server {
             return response;
         }
 
-        openFile(fileName: string): void {
-            var args: protocol.FileRequestArgs = { file: fileName };
+        openFile(fileName: string, content?: string): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
             this.processRequest(CommandNames.Open, args);
         }
 
@@ -171,6 +171,21 @@ module ts.server {
                 documentation: [{ kind: "text", text: response.body.documentation }]
             };
         }
+
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            var args: protocol.ProjectInfoRequestArgs = {
+                file: fileName,
+                needFileNameList: needFileNameList
+            };
+
+            var request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
+            var response = this.processResponse<protocol.ProjectInfoResponse>(request);
+
+            return {
+                configFileName: response.body.configFileName,
+                fileNames: response.body.fileNames
+            };
+        }
         
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
@@ -187,9 +202,7 @@ module ts.server {
             return  {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body,
-                fileName: fileName,
-                position: position
+                entries: response.body
             };
         }
      
@@ -204,7 +217,7 @@ module ts.server {
 
             var request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
             var response = this.processResponse<protocol.CompletionDetailsResponse>(request);
-            Debug.assert(response.body.length == 1, "Unexpected length of completion details response body.");
+            Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
             return response.body[0];
         }
 
@@ -284,6 +297,32 @@ module ts.server {
 
             var request = this.processRequest<protocol.DefinitionRequest>(CommandNames.Definition, args);
             var response = this.processResponse<protocol.DefinitionResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: "",
+                    name: ""
+                };
+            });
+        }
+
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
+            var response = this.processResponse<protocol.TypeDefinitionResponse>(request);
 
             return response.body.map(entry => {
                 var fileName = entry.file;
@@ -388,8 +427,8 @@ module ts.server {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.fileName !== fileName ||
                 this.lastRenameEntry.position !== position ||
-                this.lastRenameEntry.findInStrings != findInStrings ||
-                this.lastRenameEntry.findInComments != findInComments) {
+                this.lastRenameEntry.findInStrings !== findInStrings ||
+                this.lastRenameEntry.findInComments !== findInComments) {
                 this.getRenameInfo(fileName, position, findInStrings, findInComments);
             }
 
@@ -488,8 +527,33 @@ module ts.server {
             });
         }
 
-        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
-            throw new Error("Not Implemented Yet.");
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+            let { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            let args: protocol.DocumentHighlightsRequestArgs = { file: fileName, line, offset, filesToSearch };
+
+            let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
+            let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
+
+            let self = this;
+            return response.body.map(convertToDocumentHighlights);
+
+            function convertToDocumentHighlights(item: ts.server.protocol.DocumentHighlightsItem): ts.DocumentHighlights {
+                let { file, highlightSpans } = item;
+
+                return {
+                    fileName: file,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                };
+
+                function convertHighlightSpan(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
+                    let start = self.lineOffsetToPosition(file, span.start);
+                    let end = self.lineOffsetToPosition(file, span.end);
+                    return {
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        kind: span.kind
+                    };
+                }
+            }
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {
@@ -497,6 +561,10 @@ module ts.server {
         }
 
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            throw new Error("Not Implemented Yet."); 
+        }
+        
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             throw new Error("Not Implemented Yet."); 
         }
 
@@ -530,6 +598,14 @@ module ts.server {
         }
 
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

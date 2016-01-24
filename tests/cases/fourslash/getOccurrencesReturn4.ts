@@ -19,15 +19,15 @@
 ////    return/*7*/ true;
 ////}
 
-function verifyOccurencesAtMarker(marker: string, count: number) {
+function verifyOccurrencesAtMarker(marker: string, count: number) {
     goTo.marker(marker);
     verify.occurrencesAtPositionCount(count);
 }
 
-verifyOccurencesAtMarker("1", 4);
-verifyOccurencesAtMarker("2", 4);
-verifyOccurencesAtMarker("3", 4);
-verifyOccurencesAtMarker("4", 4);
-verifyOccurencesAtMarker("5", 1);
-verifyOccurencesAtMarker("6", 3);
-verifyOccurencesAtMarker("7", 3);
+verifyOccurrencesAtMarker("1", 4);
+verifyOccurrencesAtMarker("2", 4);
+verifyOccurrencesAtMarker("3", 4);
+verifyOccurrencesAtMarker("4", 4);
+verifyOccurrencesAtMarker("5", 1);
+verifyOccurrencesAtMarker("6", 3);
+verifyOccurrencesAtMarker("7", 3);

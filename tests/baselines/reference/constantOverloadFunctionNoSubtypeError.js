@@ -15,18 +15,17 @@ function foo(tagName: any): Base {
 
 
 //// [constantOverloadFunctionNoSubtypeError.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Base = (function () {
     function Base() {
     }
     Base.prototype.foo = function () { };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
@@ -34,7 +33,7 @@ var Derived1 = (function (_super) {
     }
     Derived1.prototype.bar = function () { };
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
@@ -42,7 +41,7 @@ var Derived2 = (function (_super) {
     }
     Derived2.prototype.baz = function () { };
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
@@ -50,7 +49,7 @@ var Derived3 = (function (_super) {
     }
     Derived3.prototype.biz = function () { };
     return Derived3;
-})(Base);
+}(Base));
 function foo(tagName) {
     return null;
 }

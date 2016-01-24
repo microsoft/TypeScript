@@ -1,7 +1,0 @@
-error TS5043: Option 'sourceMap' cannot be specified with option 'separateCompilation'.
-
-
-!!! error TS5043: Option 'sourceMap' cannot be specified with option 'separateCompilation'.
-==== tests/cases/compiler/separateCompilationSourceMap.ts (0 errors) ====
-    
-    export var x;

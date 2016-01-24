@@ -86,11 +86,11 @@ module templa.dom.mvc {
 >templa : any
 >mvc : any
 >IModel : templa.mvc.IModel
->templa.mvc.AbstractController : any
+>templa.mvc.AbstractController : templa.mvc.AbstractController<ModelType>
 >templa.mvc : typeof templa.mvc
 >templa : typeof templa
 >mvc : typeof templa.mvc
->AbstractController : templa.mvc.AbstractController<ModelType>
+>AbstractController : typeof templa.mvc.AbstractController
 >ModelType : ModelType
 >IElementController : IElementController<ModelType>
 >ModelType : ModelType
@@ -116,13 +116,13 @@ module templa.dom.mvc.composite {
 >mvc : any
 >composite : any
 >ICompositeControllerModel : templa.mvc.composite.ICompositeControllerModel
->templa.dom.mvc.AbstractElementController : any
+>templa.dom.mvc.AbstractElementController : AbstractElementController<ModelType>
 >templa.dom.mvc : typeof mvc
 >templa.dom : typeof dom
 >templa : typeof templa
 >dom : typeof dom
 >mvc : typeof mvc
->AbstractElementController : AbstractElementController<ModelType>
+>AbstractElementController : typeof AbstractElementController
 >ModelType : ModelType
 
         public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
@@ -142,7 +142,7 @@ module templa.dom.mvc.composite {
             this._controllers = [];
 >this._controllers = [] : undefined[]
 >this._controllers : templa.mvc.IController<templa.mvc.IModel>[]
->this : AbstractCompositeElementController<ModelType>
+>this : this
 >_controllers : templa.mvc.IController<templa.mvc.IModel>[]
 >[] : undefined[]
         }

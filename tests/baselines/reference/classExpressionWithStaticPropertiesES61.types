@@ -1,0 +1,10 @@
+=== tests/cases/compiler/classExpressionWithStaticPropertiesES61.ts ===
+var v = class C { static a = 1; static b = 2 };
+>v : typeof C
+>class C { static a = 1; static b = 2 } : typeof C
+>C : typeof C
+>a : number
+>1 : number
+>b : number
+>2 : number
+

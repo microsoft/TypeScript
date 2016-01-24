@@ -1,0 +1,25 @@
+=== tests/cases/compiler/argumentsObjectIterator01_ES6.ts ===
+
+function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
+>doubleAndReturnAsArray : Symbol(doubleAndReturnAsArray, Decl(argumentsObjectIterator01_ES6.ts, 0, 0))
+>x : Symbol(x, Decl(argumentsObjectIterator01_ES6.ts, 1, 32))
+>y : Symbol(y, Decl(argumentsObjectIterator01_ES6.ts, 1, 42))
+>z : Symbol(z, Decl(argumentsObjectIterator01_ES6.ts, 1, 53))
+
+    let result = [];
+>result : Symbol(result, Decl(argumentsObjectIterator01_ES6.ts, 2, 7))
+
+    for (let arg of arguments) {
+>arg : Symbol(arg, Decl(argumentsObjectIterator01_ES6.ts, 3, 12))
+>arguments : Symbol(arguments)
+
+        result.push(arg + arg);
+>result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>result : Symbol(result, Decl(argumentsObjectIterator01_ES6.ts, 2, 7))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>arg : Symbol(arg, Decl(argumentsObjectIterator01_ES6.ts, 3, 12))
+>arg : Symbol(arg, Decl(argumentsObjectIterator01_ES6.ts, 3, 12))
+    }
+    return <[any, any, any]>result;
+>result : Symbol(result, Decl(argumentsObjectIterator01_ES6.ts, 2, 7))
+}

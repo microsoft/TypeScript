@@ -1,7 +1,0 @@
-error TS5044: Option 'declaration' cannot be specified with option 'separateCompilation'.
-
-
-!!! error TS5044: Option 'declaration' cannot be specified with option 'separateCompilation'.
-==== tests/cases/compiler/separateCompilationDeclaration.ts (0 errors) ====
-    
-    export var x;

@@ -35,11 +35,10 @@ class ItemSetEvent extends Event {
 
 
 //// [lambdaArgCrash.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Event = (function () {
     function Event() {
@@ -53,7 +52,7 @@ var Event = (function () {
         this._listeners.push(listener);
     };
     return Event;
-})();
+}());
 var ItemSetEvent = (function (_super) {
     __extends(ItemSetEvent, _super);
     function ItemSetEvent() {
@@ -63,4 +62,4 @@ var ItemSetEvent = (function (_super) {
         _super.prototype.add.call(this, listener);
     };
     return ItemSetEvent;
-})(Event);
+}(Event));

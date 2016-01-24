@@ -49,11 +49,10 @@ enum SomeEnum {
 
 
 //// [thisInInvalidContexts.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 //'this' in static member initializer
 var ErrClass1 = (function () {
@@ -61,12 +60,12 @@ var ErrClass1 = (function () {
     }
     ErrClass1.t = this; // Error
     return ErrClass1;
-})();
+}());
 var BaseErrClass = (function () {
     function BaseErrClass(t) {
     }
     return BaseErrClass;
-})();
+}());
 var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
@@ -74,7 +73,7 @@ var ClassWithNoInitializer = (function (_super) {
         _super.call(this, this); // OK
     }
     return ClassWithNoInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var ClassWithInitializer = (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
@@ -83,7 +82,7 @@ var ClassWithInitializer = (function (_super) {
         this.t = 4;
     }
     return ClassWithInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var M;
 (function (M) {
     //'this' in module variable
@@ -93,14 +92,14 @@ var M;
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
 function genericFunc(x) { }
-genericFunc < this > (undefined); // Should be an error
+genericFunc(undefined); // Should be an error
 var ErrClass3 = (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {
         _super.apply(this, arguments);
     }
     return ErrClass3;
-})(this);
+}(this));
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {

@@ -1,0 +1,274 @@
+=== tests/cases/conformance/types/typeAliases/genericTypeAliases.ts ===
+type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+>Tree : T | { left: T | any; right: T | any; }
+>T : T
+>T : T
+>left : T | { left: T | any; right: T | any; }
+>Tree : T | { left: T | any; right: T | any; }
+>T : T
+>right : T | { left: T | any; right: T | any; }
+>Tree : T | { left: T | any; right: T | any; }
+>T : T
+
+var tree: Tree<number> = {
+>tree : number | { left: number | any; right: number | any; }
+>Tree : T | { left: T | any; right: T | any; }
+>{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : { left: { left: number; right: { left: number; right: number; }; }; right: number; }
+
+    left: {
+>left : { left: number; right: { left: number; right: number; }; }
+>{        left: 0,        right: {            left: 1,            right: 2        },    } : { left: number; right: { left: number; right: number; }; }
+
+        left: 0,
+>left : number
+>0 : number
+
+        right: {
+>right : { left: number; right: number; }
+>{            left: 1,            right: 2        } : { left: number; right: number; }
+
+            left: 1,
+>left : number
+>1 : number
+
+            right: 2
+>right : number
+>2 : number
+
+        },
+    },
+    right: 3
+>right : number
+>3 : number
+
+};
+
+type Lazy<T> = T | (() => T);
+>Lazy : T | (() => T)
+>T : T
+>T : T
+>T : T
+
+var ls: Lazy<string>;
+>ls : string | (() => string)
+>Lazy : T | (() => T)
+
+ls = "eager";
+>ls = "eager" : string
+>ls : string | (() => string)
+>"eager" : string
+
+ls = () => "lazy";
+>ls = () => "lazy" : () => string
+>ls : string | (() => string)
+>() => "lazy" : () => string
+>"lazy" : string
+
+type Foo<T> = T | { x: Foo<T> };
+>Foo : T | { x: T | any; }
+>T : T
+>T : T
+>x : T | { x: T | any; }
+>Foo : T | { x: T | any; }
+>T : T
+
+type Bar<U> = U | { x: Bar<U> };
+>Bar : U | { x: U | any; }
+>U : U
+>U : U
+>x : U | { x: U | any; }
+>Bar : U | { x: U | any; }
+>U : U
+
+// Deeply instantiated generics
+var x: Foo<string>;
+>x : string | { x: string | any; }
+>Foo : T | { x: T | any; }
+
+var y: Bar<string>;
+>y : string | { x: string | any; }
+>Bar : U | { x: U | any; }
+
+x = y;
+>x = y : string | { x: string | any; }
+>x : string | { x: string | any; }
+>y : string | { x: string | any; }
+
+y = x;
+>y = x : string | { x: string | any; }
+>y : string | { x: string | any; }
+>x : string | { x: string | any; }
+
+x = "string";
+>x = "string" : string
+>x : string | { x: string | any; }
+>"string" : string
+
+x = { x: "hello" };
+>x = { x: "hello" } : { x: string; }
+>x : string | { x: string | any; }
+>{ x: "hello" } : { x: string; }
+>x : string
+>"hello" : string
+
+x = { x: { x: "world" } };
+>x = { x: { x: "world" } } : { x: { x: string; }; }
+>x : string | { x: string | any; }
+>{ x: { x: "world" } } : { x: { x: string; }; }
+>x : { x: string; }
+>{ x: "world" } : { x: string; }
+>x : string
+>"world" : string
+
+var z: Foo<number>;
+>z : number | { x: number | any; }
+>Foo : T | { x: T | any; }
+
+z = 42;
+>z = 42 : number
+>z : number | { x: number | any; }
+>42 : number
+
+z = { x: 42 };
+>z = { x: 42 } : { x: number; }
+>z : number | { x: number | any; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : number
+
+z = { x: { x: 42 } };
+>z = { x: { x: 42 } } : { x: { x: number; }; }
+>z : number | { x: number | any; }
+>{ x: { x: 42 } } : { x: { x: number; }; }
+>x : { x: number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : number
+
+type Strange<T> = string;  // Type parameter not used
+>Strange : string
+>T : T
+
+var s: Strange<number>;
+>s : string
+>Strange : string
+
+s = "hello";
+>s = "hello" : string
+>s : string
+>"hello" : string
+
+interface Tuple<A, B> {
+>Tuple : Tuple<A, B>
+>A : A
+>B : B
+
+    a: A;
+>a : A
+>A : A
+
+    b: B;
+>b : B
+>B : B
+}
+
+type Pair<T> = Tuple<T, T>;
+>Pair : Tuple<T, T>
+>T : T
+>Tuple : Tuple<A, B>
+>T : T
+>T : T
+
+interface TaggedPair<T> extends Pair<T> {
+>TaggedPair : TaggedPair<T>
+>T : T
+>Pair : Tuple<T, T>
+>T : T
+
+    tag: string;
+>tag : string
+}
+
+var p: TaggedPair<number>;
+>p : TaggedPair<number>
+>TaggedPair : TaggedPair<T>
+
+p.a = 1;
+>p.a = 1 : number
+>p.a : number
+>p : TaggedPair<number>
+>a : number
+>1 : number
+
+p.b = 2;
+>p.b = 2 : number
+>p.b : number
+>p : TaggedPair<number>
+>b : number
+>2 : number
+
+p.tag = "test";
+>p.tag = "test" : string
+>p.tag : string
+>p : TaggedPair<number>
+>tag : string
+>"test" : string
+
+function f<A>() {
+>f : <A>() => A[] | { x: A[] | any; }
+>A : A
+
+    type Foo<T> = T | { x: Foo<T> };
+>Foo : T | { x: T | any; }
+>T : T
+>T : T
+>x : T | { x: T | any; }
+>Foo : T | { x: T | any; }
+>T : T
+
+    var x: Foo<A[]>;
+>x : A[] | { x: A[] | any; }
+>Foo : T | { x: T | any; }
+>A : A
+
+    return x;
+>x : A[] | { x: A[] | any; }
+}
+
+function g<B>() {
+>g : <B>() => B[] | { x: B[] | any; }
+>B : B
+
+    type Bar<U> = U | { x: Bar<U> };
+>Bar : U | { x: U | any; }
+>U : U
+>U : U
+>x : U | { x: U | any; }
+>Bar : U | { x: U | any; }
+>U : U
+
+    var x: Bar<B[]>;
+>x : B[] | { x: B[] | any; }
+>Bar : U | { x: U | any; }
+>B : B
+
+    return x;
+>x : B[] | { x: B[] | any; }
+}
+
+// Deeply instantiated generics
+var a = f<string>();
+>a : string[] | { x: string[] | any; }
+>f<string>() : string[] | { x: string[] | any; }
+>f : <A>() => A[] | { x: A[] | any; }
+
+var b = g<string>();
+>b : string[] | { x: string[] | any; }
+>g<string>() : string[] | { x: string[] | any; }
+>g : <B>() => B[] | { x: B[] | any; }
+
+a = b;
+>a = b : string[] | { x: string[] | any; }
+>a : string[] | { x: string[] | any; }
+>b : string[] | { x: string[] | any; }
+

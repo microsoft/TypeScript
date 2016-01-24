@@ -1,0 +1,68 @@
+//// [typeGuardFunctionGenerics.ts]
+
+class A {
+    propA: number;
+}
+
+class B {
+    propB: number;
+}
+
+class C extends A {
+    propC: number;
+}
+
+declare function isB(p1): p1 is B;
+declare function isC(p1): p1 is C;
+declare function retC(x): C; 
+
+declare function funA<T>(p1: (p1) => T): T;
+declare function funB<T>(p1: (p1) => T, p2: any): p2 is T;
+declare function funC<T>(p1: (p1) => p1 is T): T;
+declare function funD<T>(p1: (p1) => p1 is T, p2: any): p2 is T;
+declare function funE<T, U>(p1: (p1) => p1 is T, p2: U): T;
+
+let a: A;
+let test1: boolean = funA(isB);
+if (funB(retC, a)) {
+    a.propC;
+}
+let test2: B = funC(isB);
+if (funD(isC, a)) {
+    a.propC;
+}
+let test3: B = funE(isB, 1);
+
+//// [typeGuardFunctionGenerics.js]
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var A = (function () {
+    function A() {
+    }
+    return A;
+}());
+var B = (function () {
+    function B() {
+    }
+    return B;
+}());
+var C = (function (_super) {
+    __extends(C, _super);
+    function C() {
+        _super.apply(this, arguments);
+    }
+    return C;
+}(A));
+var a;
+var test1 = funA(isB);
+if (funB(retC, a)) {
+    a.propC;
+}
+var test2 = funC(isB);
+if (funD(isC, a)) {
+    a.propC;
+}
+var test3 = funE(isB, 1);

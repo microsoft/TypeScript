@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: quickInfoDisplayPartsExternalModuleAlias_file0.ts
-////export module m1 {
+////export namespace m1 {
 ////    export class c {
 ////    }
 ////}

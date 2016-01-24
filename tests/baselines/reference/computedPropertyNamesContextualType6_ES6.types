@@ -17,9 +17,9 @@ declare function foo<T>(obj: I<T>): T
 >T : T
 
 foo({
->foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | number | boolean | number[] | (() => void)
+>foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | (() => void) | boolean | number | number[]
 >foo : <T>(obj: I<T>) => T
->{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | number | boolean | number[] | (() => void); 0: () => void; p: string; }
+>{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | (() => void) | boolean | number | number[]; 0: () => void; p: string; }
 
     p: "",
 >p : string

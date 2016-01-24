@@ -22,21 +22,21 @@ export module uninstantiated {
 }
 
 === tests/cases/compiler/client.ts ===
-export { c } from "server";
+export { c } from "./server";
 >c : typeof c
 
-export { c as c2 } from "server";
+export { c as c2 } from "./server";
 >c : typeof c
 >c2 : typeof c
 
-export { i, m as instantiatedModule } from "server";
+export { i, m as instantiatedModule } from "./server";
 >i : any
->m : typeof instantiatedModule
->instantiatedModule : typeof instantiatedModule
+>m : typeof m
+>instantiatedModule : typeof m
 
-export { uninstantiated } from "server";
+export { uninstantiated } from "./server";
 >uninstantiated : any
 
-export { x } from "server";
+export { x } from "./server";
 >x : number
 

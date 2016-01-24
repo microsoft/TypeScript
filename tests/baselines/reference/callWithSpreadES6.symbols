@@ -94,7 +94,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11), Decl(lib.d.ts, 1325, 1))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 1, 13))
 >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 11, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 1, 13))
@@ -157,10 +157,4 @@ class D extends C {
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
     }
 }
-
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);
->c : Symbol(c, Decl(callWithSpreadES6.ts, 52, 3))
->C : Symbol(C, Decl(callWithSpreadES6.ts, 29, 40))
->a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
 

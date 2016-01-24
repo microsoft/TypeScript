@@ -27,7 +27,7 @@ class Model { }
 
 class MyView extends View<Model> { }
 >MyView : MyView
->View : View<TModel>
+>View : View<Model>
 >Model : Model
 
 var m: ViewOptions<Model> = { model: new Model() };

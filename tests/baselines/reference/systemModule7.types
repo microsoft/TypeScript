@@ -1,0 +1,18 @@
+=== tests/cases/compiler/systemModule7.ts ===
+
+// filename: instantiatedModule.ts
+export module M {
+>M : typeof M
+
+    var x = 1;
+>x : number
+>1 : number
+}
+
+// filename: nonInstantiatedModule.ts
+export module M {
+>M : typeof M
+
+    interface I {}
+>I : I
+}

@@ -35,9 +35,9 @@ class FooIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
         return this;
 >this : Symbol(FooIterator, Decl(iterableArrayPattern13.ts, 3, 27))

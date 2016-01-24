@@ -61,26 +61,25 @@ class Ds extends A {
 }
 
 //// [strictModeInConstructor.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        this.s = 9;
         "use strict"; // No error
+        this.s = 9;
         _super.call(this);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -89,7 +88,7 @@ var C = (function (_super) {
         "use strict";
     }
     return C;
-})(A);
+}(A));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -99,7 +98,7 @@ var D = (function (_super) {
         "use strict";
     }
     return D;
-})(A);
+}(A));
 var Bs = (function (_super) {
     __extends(Bs, _super);
     function Bs() {
@@ -108,7 +107,7 @@ var Bs = (function (_super) {
     }
     Bs.s = 9;
     return Bs;
-})(A);
+}(A));
 var Cs = (function (_super) {
     __extends(Cs, _super);
     function Cs() {
@@ -117,7 +116,7 @@ var Cs = (function (_super) {
     }
     Cs.s = 9;
     return Cs;
-})(A);
+}(A));
 var Ds = (function (_super) {
     __extends(Ds, _super);
     function Ds() {
@@ -127,4 +126,4 @@ var Ds = (function (_super) {
     }
     Ds.s = 9;
     return Ds;
-})(A);
+}(A));

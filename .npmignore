@@ -1,7 +1,14 @@
 built
 doc
+lib/README.md
 scripts
 src
 tests
-Jakefile
+internal
+tslint.json
+Jakefile.js
+.editorconfig
+.gitattributes
+.settings/
 .travis.yml
+.vscode/

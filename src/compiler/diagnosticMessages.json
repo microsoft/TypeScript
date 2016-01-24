@@ -1,4 +1,4 @@
-{
+ {
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -67,22 +67,6 @@
         "category": "Error",
         "code": 1023
     },
-    "A class or interface declaration can only have one 'extends' clause.": {
-        "category": "Error",
-        "code": 1024
-    },
-    "An 'extends' clause must precede an 'implements' clause.": {
-        "category": "Error",
-        "code": 1025
-    },
-    "A class can only extend a single class.": {
-        "category": "Error",
-        "code": 1026
-    },
-    "A class declaration can only have one 'implements' clause.": {
-        "category": "Error",
-        "code": 1027
-    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -98,10 +82,6 @@
     "'{0}' modifier cannot appear on a class element.": {
         "category": "Error",
         "code": 1031
-    },
-    "An interface declaration cannot have an 'implements' clause.": {
-        "category": "Error",
-        "code": 1032
     },
     "'super' must be followed by an argument list or member access.": {
         "category": "Error",
@@ -123,11 +103,27 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": {
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "A '{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045
     },
@@ -163,19 +159,43 @@
         "category": "Error",
         "code": 1054
     },
+    "Type '{0}' is not a valid async function return type.": {
+        "category": "Error",
+        "code": 1055
+    },
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
+    },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Operand for 'await' does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1058
+    },
+    "Return expression in async function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1059
+    },
+    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1060
     },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
     },
-    "An export assignment cannot be used in an internal module.": {
+    "{0} is referenced directly or indirectly in the fulfillment callback of its own 'then' method.": {
+        "category": "Error",
+        "code": 1062
+    },
+    "An export assignment cannot be used in a namespace.": {
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
     },
@@ -183,7 +203,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "A '{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -363,10 +383,6 @@
         "category": "Error",
         "code": 1132
     },
-    "Type reference expected.": {
-        "category": "Error",
-        "code": 1133
-    },
     "Variable declaration expected.": {
         "category": "Error",
         "code": 1134
@@ -415,11 +431,11 @@
         "category": "Error",
         "code": 1146
     },
-    "Import declarations in an internal module cannot reference an external module.": {
+    "Import declarations in a namespace cannot reference a module.": {
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile external modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -430,18 +446,6 @@
     "'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.": {
         "category": "Error",
         "code": 1150
-    },
-    "'var', 'let' or 'const' expected.": {
-        "category": "Error",
-        "code": 1152
-    },
-    "'let' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1153
-    },
-    "'const' declarations are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1154
     },
     "'const' declarations must be initialized": {
         "category": "Error",
@@ -467,7 +471,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "A 'yield' expression is only allowed in a generator body.": {
         "category": "Error",
         "code": 1163
     },
@@ -482,10 +486,6 @@
     "A computed property name in a class property declaration must directly refer to a built-in symbol.": {
         "category": "Error",
         "code": 1166
-    },
-    "Computed property names are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1167
     },
     "A computed property name in a method overload must directly refer to a built-in symbol.": {
         "category": "Error",
@@ -547,13 +547,9 @@
         "category": "Error",
         "code": 1182
     },
-    "Destructuring declarations are not allowed in ambient contexts.": {
-        "category": "Error",
-        "code": 1183
-    },
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
-        "code": 1184
+        "code": 1183
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -587,7 +583,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export.": {
+    "Module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -595,7 +591,7 @@
         "category": "Error",
         "code": 1193
     },
-    "Export declarations are not permitted in an internal module.": {
+    "Export declarations are not permitted in a namespace.": {
         "category": "Error",
         "code": 1194
     },
@@ -623,21 +619,17 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
-    },
-    "Decorators are only available when targeting ECMAScript 5 and higher.": {
-        "category": "Error",
-        "code": 1205
     },
     "Decorators are not valid here.": {
         "category": "Error",
@@ -647,11 +639,11 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1209
     },
@@ -671,21 +663,157 @@
         "category": "Error",
         "code": 1213
     },
-    "Identifier expected. '{0}' is a reserved word in strict mode. External Module is automatically in strict mode.": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1214
     },
-    "Type expected. '{0}' is a reserved word in strict mode": {
+    "Invalid use of '{0}'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1215
     },
-    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+    "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
-        "code": 1216
+        "code": 1218
     },
-    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
         "category": "Error",
-        "code": 1217
+        "code": 1219
+    },
+    "Generators are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 1220
+    },
+    "Generators are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1221
+    },
+    "An overload signature cannot be declared as a generator.": {
+        "category": "Error",
+        "code": 1222
+    },
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1223
+    },
+    "Signature '{0}' must have a type predicate.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Type predicate '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "A type predicate cannot reference a rest parameter.": {
+        "category": "Error",
+        "code": 1229
+    },
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
+    },
+    "An export assignment can only be used in a module.": {
+        "category": "Error",
+        "code": 1231
+    },
+    "An import declaration can only be used in a namespace or module.": {
+        "category": "Error",
+        "code": 1232
+    },
+    "An export declaration can only be used in a module.": {
+        "category": "Error",
+        "code": 1233
+    },
+    "An ambient module declaration is only allowed at the top level in a file.": {
+        "category": "Error",
+        "code": 1234
+    },
+    "A namespace declaration is only allowed in a namespace or module.": {
+        "category": "Error",
+        "code": 1235
+    },
+    "The return type of a property decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1236
+    },
+    "The return type of a parameter decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1237
+    },
+    "Unable to resolve signature of class decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1238
+    },
+    "Unable to resolve signature of parameter decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1239
+    },
+    "Unable to resolve signature of property decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1240
+    },
+    "Unable to resolve signature of method decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1241
+    },
+    "'abstract' modifier can only appear on a class or method declaration.": {
+        "category": "Error",
+        "code": 1242
+    },
+    "'{0}' modifier cannot be used with '{1}' modifier.": {
+        "category": "Error",
+        "code": 1243
+    },
+    "Abstract methods can only appear within an abstract class.": {
+        "category": "Error",
+        "code": 1244
+    },
+    "Method '{0}' cannot have an implementation because it is marked abstract.": {
+        "category": "Error",
+        "code": 1245
+    },
+    "An interface property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1246
+    },
+    "A type literal property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1247
+    },
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
+    "A decorator can only decorate a method implementation, not an overload.": {
+        "category": "Error",
+        "code": 1249
+    }, 
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'await' expression is only allowed within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
+    },
+    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+        "category": "Error",
+        "code": 1312
+    },
+    "The body of an 'if' statement cannot be the empty statement.": {
+        "category": "Error",
+        "code": 1313
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -711,15 +839,15 @@
         "category": "Error",
         "code": 2305
     },
-    "File '{0}' is not an external module.": {
+    "File '{0}' is not a module.": {
         "category": "Error",
         "code": 2306
     },
-    "Cannot find external module '{0}'.": {
+    "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
     },
-    "A module cannot have more than one export assignment.": {
+    "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
         "category": "Error",
         "code": 2308
     },
@@ -739,7 +867,7 @@
         "category": "Error",
         "code": 2312
     },
-    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+    "Type parameter '{0}' has a circular constraint.": {
         "category": "Error",
         "code": 2313
     },
@@ -779,6 +907,10 @@
         "category": "Error",
         "code": 2322
     },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
+    },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2324
@@ -807,7 +939,7 @@
         "category": "Error",
         "code": 2330
     },
-    "'this' cannot be referenced in a module body.": {
+    "'this' cannot be referenced in a module or namespace body.": {
         "category": "Error",
         "code": 2331
     },
@@ -831,11 +963,11 @@
         "category": "Error",
         "code": 2336
     },
-    "Super calls are not permitted outside constructors or in nested functions inside constructors": {
+    "Super calls are not permitted outside constructors or in nested functions inside constructors.": {
         "category": "Error",
         "code": 2337
     },
-    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class": {
+    "'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.": {
         "category": "Error",
         "code": 2338
     },
@@ -843,7 +975,7 @@
         "category": "Error",
         "code": 2339
     },
-    "Only public and protected methods of the base class are accessible via the 'super' keyword": {
+    "Only public and protected methods of the base class are accessible via the 'super' keyword.": {
         "category": "Error",
         "code": 2340
     },
@@ -851,7 +983,7 @@
         "category": "Error",
         "code": 2341
     },
-    "An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.": {
+    "An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.": {
         "category": "Error",
         "code": 2342
     },
@@ -891,11 +1023,15 @@
         "category": "Error",
         "code": 2352
     },
+    "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
+        "category": "Error",
+        "code": 2353
+    },
     "No best common type exists among return expressions.": {
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.": {
+    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -979,7 +1115,7 @@
         "category": "Error",
         "code": 2377
     },
-    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
+    "A 'get' accessor must return a value.": {
         "category": "Error",
         "code": 2378
     },
@@ -1047,13 +1183,17 @@
         "category": "Error",
         "code": 2394
     },
-    "Individual declarations in merged declaration {0} must be all exported or all local.": {
+    "Individual declarations in merged declaration '{0}' must be all exported or all local.": {
         "category": "Error",
         "code": 2395
     },
     "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
         "category": "Error",
         "code": 2396
+    },
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
+        "category": "Error",
+        "code": 2397
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -1175,19 +1315,19 @@
         "category": "Error",
         "code": 2432
     },
-    "A module declaration cannot be in a different file from a class or function with which it is merged": {
+    "A namespace declaration cannot be in a different file from a class or function with which it is merged": {
         "category": "Error",
         "code": 2433
     },
-    "A module declaration cannot be located prior to a class or function with which it is merged": {
+    "A namespace declaration cannot be located prior to a class or function with which it is merged": {
         "category": "Error",
         "code": 2434
     },
-    "Ambient external modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules or namespaces.": {
         "category": "Error",
         "code": 2435
     },
-    "Ambient external module declaration cannot specify relative module name.": {
+    "Ambient module declaration cannot specify relative module name.": {
         "category": "Error",
         "code": 2436
     },
@@ -1199,7 +1339,7 @@
         "category": "Error",
         "code": 2438
     },
-    "Import or export declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+    "Import or export declaration in an ambient module declaration cannot reference module through relative module name.": {
         "category": "Error",
         "code": 2439
     },
@@ -1207,7 +1347,7 @@
         "category": "Error",
         "code": 2440
     },
-    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of an external module.": {
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module.": {
         "category": "Error",
         "code": 2441
     },
@@ -1327,7 +1467,7 @@
         "category": "Error",
         "code": 2471
     },
-    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
     },
@@ -1423,11 +1563,11 @@
         "category": "Error",
         "code": 2496
     },
-    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
         "category": "Error",
         "code": 2497
     },
-    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+    "Module '{0}' uses 'export =' and cannot be used with 'export *'.": {
         "category": "Error",
         "code": 2498
     },
@@ -1443,7 +1583,226 @@
         "category": "Error",
         "code": 2501
     },
-
+    "'{0}' is referenced directly or indirectly in its own type annotation.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
+    "No best common type exists among yield expressions.": {
+        "category": "Error",
+        "code": 2504
+    },
+    "A generator cannot have a 'void' type annotation.": {
+        "category": "Error",
+        "code": 2505
+    },
+    "'{0}' is referenced directly or indirectly in its own base expression.": {
+        "category": "Error",
+        "code": 2506
+    },
+    "Type '{0}' is not a constructor function type.": {
+        "category": "Error",
+        "code": 2507
+    },
+    "No base constructor has the specified number of type arguments.": {
+        "category": "Error",
+        "code": 2508
+    },
+    "Base constructor return type '{0}' is not a class or interface type.": {
+        "category": "Error",
+        "code": 2509
+    },
+    "Base constructors must all have the same return type.": {
+        "category": "Error",
+        "code": 2510
+    },
+    "Cannot create an instance of the abstract class '{0}'.": {
+        "category": "Error",
+        "code": 2511
+    },
+    "Overload signatures must all be abstract or not abstract.": {
+        "category": "Error",
+        "code": 2512
+    },
+    "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
+        "category": "Error",
+        "code": 2513
+    },
+    "Classes containing abstract methods must be marked abstract.": {
+        "category": "Error",
+        "code": 2514
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+        "category": "Error",
+        "code": 2515
+    },
+    "All declarations of an abstract method must be consecutive.": {
+        "category": "Error",
+        "code": 2516
+    },
+    "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
+        "category": "Error",
+        "code": 2517
+    },
+    "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
+        "category": "Error",
+        "code": 2520
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2521
+    },
+    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
+        "category": "Error",
+        "code": 2522
+    },
+    "'yield' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2523
+    },
+    "'await' expressions cannot be used in a parameter initializer.": {
+        "category": "Error",
+        "code": 2524
+    },
+    "Initializer provides no value for this binding element and the binding element has no default value.": {
+        "category": "Error",
+        "code": 2525
+    },
+    "A 'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
+    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2527
+    },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
+    },
+    "JSX element attributes type '{0}' may not be a union type.": {
+        "category": "Error",
+        "code": 2600
+    },
+    "The return type of a JSX element constructor must return an object type.": {
+        "category": "Error",
+        "code": 2601
+    },
+    "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
+        "category": "Error",
+        "code": 2602
+    },
+    "Property '{0}' in type '{1}' is not assignable to type '{2}'": {
+        "category": "Error",
+        "code": 2603
+    },
+    "JSX element type '{0}' does not have any construct or call signatures.": {
+        "category": "Error",
+        "code": 2604
+    },
+    "JSX element type '{0}' is not a constructor function for JSX elements.": {
+        "category": "Error",
+        "code": 2605
+    },
+    "Property '{0}' of JSX spread attribute is not assignable to target property.": {
+        "category": "Error",
+        "code": 2606
+    },
+    "JSX element class does not support attributes because it does not have a '{0}' property": {
+        "category": "Error",
+        "code": 2607
+    },
+    "The global type 'JSX.{0}' may not have more than one property": {
+        "category": "Error",
+        "code": 2608
+    },
+    "Cannot emit namespaced JSX elements in React": {
+        "category": "Error",
+        "code": 2650
+    },
+    "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
+        "category": "Error",
+        "code": 2651
+    },
+    "Merged declaration '{0}' cannot include a default export declaration. Consider adding a separate 'export default {0}' declaration instead.": {
+        "category": "Error",
+        "code": 2652
+    },
+    "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
+        "category": "Error",
+        "code": 2653
+    },
+    "Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2656
+    },
+    "JSX expressions must have one parent element": {
+        "category": "Error",
+        "code": 2657
+    },
+    "Type '{0}' provides no match for the signature '{1}'": {
+        "category": "Error",
+        "code": 2658
+    },
+    "'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.": {
+        "category": "Error",
+        "code": 2659
+    },
+    "'super' can only be referenced in members of derived classes or object literal expressions.": {
+        "category": "Error",
+        "code": 2660
+    },
+    "Cannot re-export name that is not defined in the module.": {
+        "category": "Error",
+        "code": 2661
+    },
+    "Cannot find name '{0}'. Did you mean the static member '{1}.{0}'?": {
+        "category": "Error",
+        "code": 2662
+    },
+    "Cannot find name '{0}'. Did you mean the instance member 'this.{0}'?": {
+        "category": "Error",
+        "code": 2663
+    },
+    "Invalid module name in augmentation, module '{0}' cannot be found.": {
+        "category": "Error",
+        "code": 2664
+    },
+    "Module augmentation cannot introduce new names in the top level scope.": {
+        "category": "Error",
+        "code": 2665
+    },
+    "Exports and export assignments are not permitted in module augmentations.": {
+        "category": "Error",
+        "code": 2666
+    },
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.": {
+        "category": "Error",
+        "code": 2667
+    },
+    "'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.": {
+        "category": "Error",
+        "code": 2668
+    },
+    "Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.": {
+        "category": "Error",
+        "code": 2669
+    },
+    "Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.": {
+        "category": "Error",
+        "code": 2670
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -1724,10 +2083,6 @@
         "category": "Error",
         "code": 4082
     },
-    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 4091
-    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -1744,6 +2099,10 @@
         "category": "Error",
         "code": 5013
     },
+    "Failed to parse file '{0}': {1}.": {
+        "category": "Error",
+        "code": 5014
+    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -1756,46 +2115,51 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
-        "category": "Error",
-        "code": 5038
-    },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
-        "category": "Error",
-        "code": 5039
-    },
-    "Option 'noEmit' cannot be specified with option 'out' or 'outDir'.": {
-        "category": "Error",
-        "code": 5040
-    },
-    "Option 'noEmit' cannot be specified with option 'declaration'.": {
-        "category": "Error",
-        "code": 5041
-    },
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
-        "category": "Error",
-        "code": 5043
-    },
-    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
-        "category": "Error",
-        "code": 5044
-    },
-    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
-        "category": "Error",
-        "code": 5045
-    },
-    "Option 'out' cannot be specified with option 'separateCompilation'.": {
-        "category": "Error",
-        "code": 5046
-    },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
     },
+    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+        "category": "Error",
+        "code": 5051
+    },
+    "Option '{0}' cannot be specified without specifying option '{1}'.": {
+        "category": "Error",
+        "code": 5052
+    },
+    "Option '{0}' cannot be specified with option '{1}'.": {
+        "category": "Error",
+        "code": 5053
+    },
+    "A 'tsconfig.json' file is already defined at: '{0}'.": {
+        "category": "Error",
+        "code": 5054
+    },
+    "Cannot write file '{0}' because it would overwrite input file.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Cannot write file '{0}' because it would be overwritten by multiple input files.": {
+        "category": "Error",
+        "code": 5056
+    },
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
+        "category": "Error",
+        "code": 5057
+    },
+    "The specified path does not exist: '{0}'": {
+        "category": "Error",
+        "code": 5058
+    },
+    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+        "category": "Error",
+        "code": 5059
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1824,7 +2188,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
@@ -1836,11 +2200,15 @@
         "category": "Message",
         "code": 6010
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)": {
+    "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
         "category": "Message",
-        "code": 6015
+        "code": 6011
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "category": "Message",
+    "code": 6015
+  },
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
     },
@@ -1924,14 +2292,14 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
-        "category": "Error",
-        "code": 6047
-    },
+  "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
+    "category": "Error",
+    "code": 6047
+  },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
@@ -1956,7 +2324,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -1968,10 +2336,6 @@
         "category": "Message",
         "code": 6056
     },
-    "Preserve new-lines when emitting code.": {
-        "category": "Message",
-        "code": 6057
-    },
     "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
@@ -1980,7 +2344,95 @@
         "category": "Error",
         "code": 6059
     },
+    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+        "category": "Message",
+        "code": 6060
+    },
+    "NEWLINE": {
+        "category": "Message",
+        "code": 6061
+    },
+    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
+        "category": "Error",
+        "code": 6062
+    },
+    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
+        "category": "Error",
+        "code": 6063
+    },
 
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
+    "Enables experimental support for emitting type metadata for decorators.": {
+        "category": "Message",
+        "code": 6066
+    },
+    "Enables experimental support for ES7 async functions.": {
+        "category": "Message",
+        "code": 6068
+    },
+    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
+        "category": "Message",
+        "code": 6069
+    },
+    "Initializes a TypeScript project and creates a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6070
+    },
+    "Successfully created a tsconfig.json file.": {
+        "category": "Message",
+        "code": 6071
+    },
+    "Suppress excess property checks for object literals.": {
+        "category": "Message",
+        "code": 6072
+    },
+    "Stylize errors and messages using color and context. (experimental)": {
+        "category": "Message",
+        "code": 6073
+    },
+    "Do not report errors on unused labels.": {
+        "category": "Message",
+        "code": 6074
+    },
+    "Report error when not all code paths in function return a value.": {
+        "category": "Message",
+        "code": 6075
+    },
+    "Report errors for fallthrough cases in switch statement.": {
+        "category": "Message",
+        "code": 6076
+    },
+    "Do not report errors on unreachable code.": {
+        "category": "Message",
+        "code": 6077
+    },
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6078
+    },
+    "Specify JSX code generation: 'preserve' or 'react'": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
+    },
+    "Only 'amd' and 'system' modules are supported alongside --{0}.": {
+        "category": "Error",
+        "code": 6082
+    },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6083
+    },
+    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+        "category": "Message",
+        "code": 6084
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2010,6 +2462,10 @@
         "category": "Error",
         "code": 7013
     },
+    "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
+        "category": "Error",
+        "code": 7015
+    },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",
         "code": 7016
@@ -2030,11 +2486,7 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.": {
-        "category": "Error",
-        "code": 7021
-    },
-    "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
+    "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
     },
@@ -2045,6 +2497,30 @@
     "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.": {
         "category": "Error",
         "code": 7024
+    },
+    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7025
+    },
+    "JSX element implicitly has type 'any' because no interface 'JSX.{0}' exists": {
+        "category": "Error",
+        "code": 7026
+    },
+    "Unreachable code detected.": {
+        "category": "Error",
+        "code": 7027
+    },
+    "Unused label.": {
+        "category": "Error",
+        "code": 7028
+    },
+    "Fallthrough case in switch.": {
+        "category": "Error",
+        "code": 7029
+    },
+    "Not all code paths return a value.": {
+        "category": "Error",
+        "code": 7030
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -2098,10 +2574,6 @@
         "category": "Error",
         "code": 8012
     },
-    "'?' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8013
-    },
     "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8014
@@ -2119,14 +2591,6 @@
         "code": 8017
     },
 
-    "'yield' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9000
-    },
-    "Generators are not currently supported.": {
-        "category": "Error",
-        "code": 9001
-    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2135,8 +2599,40 @@
         "category": "Error",
         "code": 9003
     },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+    "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
-        "code": 9004
+        "code": 17000
+    },
+    "JSX elements cannot have multiple attributes with the same name.": {
+        "category": "Error",
+        "code": 17001
+    },
+    "Expected corresponding JSX closing tag for '{0}'.": {
+        "category": "Error",
+        "code": 17002
+    },
+    "JSX attribute expected.": {
+        "category": "Error",
+        "code": 17003
+    },
+    "Cannot use JSX unless the '--jsx' flag is provided.": {
+        "category": "Error",
+        "code": 17004
+    },
+    "A constructor cannot contain a 'super' call when its class extends 'null'": {
+      "category": "Error",
+      "code": 17005
+    },
+    "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17006
+    },
+    "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17007
+    },
+    "JSX element '{0}' has no corresponding closing tag.": {
+      "category": "Error",
+      "code": 17008
     }
 }

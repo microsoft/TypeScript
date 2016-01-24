@@ -130,7 +130,7 @@ var n4;
 var d4;
 var m2;
 (function (m2) {
-    m2.a, m2.b2 = 10, m2.b;
+    m2.b2 = 10;
     var m1;
     var a2, b22 = 10, b222;
     var m3;
@@ -139,18 +139,16 @@ var m2;
             this.b = b;
         }
         return C;
-    })();
+    }());
     var C2 = (function () {
         function C2(b) {
             this.b = b;
         }
         return C2;
-    })();
+    }());
     m2.C2 = C2;
     var m;
     var b23;
-    m2.mE;
-    m2.b2E;
 })(m2 || (m2 = {}));
 var a22, b22 = 10, c22 = 30;
 var nn;

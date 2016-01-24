@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -13,74 +13,79 @@
 // limitations under the License.
 //
 
-/// <reference path='test262Runner.ts' />
-/// <reference path='compilerRunner.ts' />
-/// <reference path='fourslashRunner.ts' />
-/// <reference path='projectsRunner.ts' />
-/// <reference path='rwcRunner.ts' />
+/// <reference path="test262Runner.ts" />
+/// <reference path="compilerRunner.ts" />
+/// <reference path="fourslashRunner.ts" />
+/// <reference path="projectsRunner.ts" />
+/// <reference path="rwcRunner.ts" />
+/// <reference path="harness.ts" />
+
+/* tslint:disable:no-null */
+
+let runners: RunnerBase[] = [];
+let iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
-    if (reverse) {
-        runners = runners.reverse();
-    }
-    for (var i = iterations; i > 0; i--) {
-        for (var j = 0; j < runners.length; j++) {
+    for (let i = iterations; i > 0; i--) {
+        for (let j = 0; j < runners.length; j++) {
             runners[j].initializeTests();
         }
     }
 }
 
-var runners: RunnerBase[] = [];
-global.runners = runners;
-var reverse: boolean = false;
-var iterations: number = 1;
-
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
-var mytestconfig = 'mytest.config';
-var testconfig = 'test.config';
-var testConfigFile =
+let mytestconfig = "mytest.config";
+let testconfig = "test.config";
+let testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
-    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
+    (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : "");
 
-if (testConfigFile !== '') {
-    // TODO: not sure why this is crashing mocha
-    //var testConfig = JSON.parse(testConfigRaw);
-    var testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
-    var options = testConfig ? [testConfig[1]] : [];
-    for (var i = 0; i < options.length; i++) {
-        switch (options[i]) {
-            case 'compiler':
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                runners.push(new ProjectRunner());  
-                break;
-            case 'conformance':
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                break;
-            case 'project':
-                runners.push(new ProjectRunner());
-                break;
-            case 'fourslash':
-                runners.push(new FourSlashRunner(FourSlashTestType.Native));
-                break;
-            case 'fourslash-shims':
-                runners.push(new FourSlashRunner(FourSlashTestType.Shims));
-                break;
-            case 'fourslash-server':
-                runners.push(new FourSlashRunner(FourSlashTestType.Server));
-                break;
-            case 'fourslash-generated':
-                runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
-                break;
-            case 'rwc':
-                runners.push(new RWCRunner());
-                break;
-            case 'test262':
-                runners.push(new Test262BaselineRunner());
-                break;
-            case 'reverse':
-                reverse = true;
-                break;
+if (testConfigFile !== "") {
+    const testConfig = JSON.parse(testConfigFile);
+    if (testConfig.light) {
+        Harness.lightMode = true;
+    }
+
+    if (testConfig.test && testConfig.test.length > 0) {
+        for (const option of testConfig.test) {
+            if (!option) {
+                continue;
+            }
+
+            switch (option) {
+                case "compiler":
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
+                    runners.push(new ProjectRunner());
+                    break;
+                case "conformance":
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                    break;
+                case "project":
+                    runners.push(new ProjectRunner());
+                    break;
+                case "fourslash":
+                    runners.push(new FourSlashRunner(FourSlashTestType.Native));
+                    break;
+                case "fourslash-shims":
+                    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+                    break;
+                case "fourslash-shims-pp":
+                    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+                    break;
+                case "fourslash-server":
+                    runners.push(new FourSlashRunner(FourSlashTestType.Server));
+                    break;
+                case "fourslash-generated":
+                    runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
+                    break;
+                case "rwc":
+                    runners.push(new RWCRunner());
+                    break;
+                case "test262":
+                    runners.push(new Test262BaselineRunner());
+                    break;
+            }
         }
     }
 }
@@ -98,10 +103,9 @@ if (runners.length === 0) {
     // language services
     runners.push(new FourSlashRunner(FourSlashTestType.Native));
     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
     runners.push(new FourSlashRunner(FourSlashTestType.Server));
-    //runners.push(new GeneratedFourslashRunner());
+    // runners.push(new GeneratedFourslashRunner());
 }
-
-ts.sys.newLine = '\r\n';
 
 runTests(runners);

@@ -1,8 +1,8 @@
 === tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
-import Backbone = require("aliasUsageInFunctionExpression_backbone");
+import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : typeof Backbone
 
-import moduleA = require("aliasUsageInFunctionExpression_moduleA");
+import moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
@@ -37,14 +37,14 @@ export class Model {
 }
 
 === tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
-import Backbone = require("aliasUsageInFunctionExpression_backbone");
+import Backbone = require("./aliasUsageInFunctionExpression_backbone");
 >Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : any
+>Backbone.Model : Backbone.Model
 >Backbone : typeof Backbone
->Model : Backbone.Model
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

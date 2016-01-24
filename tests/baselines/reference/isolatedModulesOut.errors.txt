@@ -1,0 +1,12 @@
+error TS5053: Option 'out' cannot be specified with option 'isolatedModules'.
+tests/cases/compiler/file2.ts(1,1): error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+
+
+!!! error TS5053: Option 'out' cannot be specified with option 'isolatedModules'.
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    
+    export var x;
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    var y;
+    ~~~
+!!! error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.

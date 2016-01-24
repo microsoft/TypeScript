@@ -1,4 +1,5 @@
 //// [constructorWithIncompleteTypeAnnotation.ts]
+
 declare module "fs" {
     export class File {
         constructor(filename: string);
@@ -280,11 +281,10 @@ TypeScriptAllInOne.Program.Main();
 
 
 //// [constructorWithIncompleteTypeAnnotation.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var fs = module;
 ("fs");
@@ -331,7 +331,7 @@ var TypeScriptAllInOne;
             console.log(e);
         };
         return Program;
-    })();
+    }());
     TypeScriptAllInOne.Program = Program;
     try {
     }
@@ -484,7 +484,7 @@ var BasicFeatures = (function () {
             return 1;
     };
     return BasicFeatures;
-})();
+}());
 var CLASS = (function () {
     function CLASS() {
         this.d = function () { yield 0; };
@@ -507,13 +507,13 @@ var CLASS = (function () {
             return false;
     };
     return CLASS;
-})();
+}());
 // todo: use these
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 method1(val, number);
 {
     return val;
@@ -531,13 +531,13 @@ var B = (function (_super) {
         return this.method1(2);
     };
     return B;
-})(A);
+}(A));
 var Overloading = (function () {
     function Overloading() {
         this.otherValue = 42;
     }
     return Overloading;
-})();
+}());
 Overloads(value, string);
 Overloads();
 while ()

@@ -44,7 +44,6 @@ var M2;
 (function (M2) {
     var X;
     (function (X) {
-        X.Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
 var m = M2.X;

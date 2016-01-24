@@ -22,8 +22,8 @@ var c = classification;
 verify.syntacticClassificationsAre(
     c.comment("// comment"),
     c.keyword("module"), c.moduleName("M"), c.punctuation("{"),
-        c.keyword("var"), c.text("v"), c.operator("="), c.numericLiteral("0"), c.operator("+"), c.numericLiteral("1"), c.punctuation(";"),
-        c.keyword("var"), c.text("s"), c.operator("="), c.stringLiteral('"string"'), c.punctuation(";"),
+        c.keyword("var"), c.identifier("v"), c.operator("="), c.numericLiteral("0"), c.operator("+"), c.numericLiteral("1"), c.punctuation(";"),
+        c.keyword("var"), c.identifier("s"), c.operator("="), c.stringLiteral('"string"'), c.punctuation(";"),
         c.keyword("class"), c.className("C"), c.punctuation("<"), c.typeParameterName("T"), c.punctuation(">"), c.punctuation("{"),
         c.punctuation("}"),
         c.keyword("enum"), c.enumName("E"), c.punctuation("{"),

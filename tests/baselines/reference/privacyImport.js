@@ -357,6 +357,7 @@ export module m3 {
 }
 
 //// [privacyImport.js]
+"use strict";
 var m1;
 (function (m1) {
     var m1_M1_public;
@@ -365,14 +366,13 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M1_public.c1 = c1;
         function f1() {
             return new c1;
         }
         m1_M1_public.f1 = f1;
         m1_M1_public.v1 = c1;
-        m1_M1_public.v2;
     })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
     var m1_M2_private;
     (function (m1_M2_private) {
@@ -380,14 +380,13 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M2_private.c1 = c1;
         function f1() {
             return new c1;
         }
         m1_M2_private.f1 = f1;
         m1_M2_private.v1 = c1;
-        m1_M2_private.v2;
     })(m1_M2_private || (m1_M2_private = {}));
     //export declare module "m1_M3_public" {
     //    export function f1();
@@ -450,14 +449,13 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M1_public.c1 = c1;
         function f1() {
             return new c1;
         }
         m2_M1_public.f1 = f1;
         m2_M1_public.v1 = c1;
-        m2_M1_public.v2;
     })(m2_M1_public = m2.m2_M1_public || (m2.m2_M1_public = {}));
     var m2_M2_private;
     (function (m2_M2_private) {
@@ -465,14 +463,13 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M2_private.c1 = c1;
         function f1() {
             return new c1;
         }
         m2_M2_private.f1 = f1;
         m2_M2_private.v1 = c1;
-        m2_M2_private.v2;
     })(m2_M2_private || (m2_M2_private = {}));
     //export declare module "m2_M3_public" {
     //    export function f1();
@@ -534,14 +531,13 @@ var glo_M1_public;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M1_public.c1 = c1;
     function f1() {
         return new c1;
     }
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
-    glo_M1_public.v2;
 })(glo_M1_public = exports.glo_M1_public || (exports.glo_M1_public = {}));
 //export declare module "glo_M2_public" {
 //    export function f1();
@@ -556,14 +552,13 @@ var glo_M3_private;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M3_private.c1 = c1;
     function f1() {
         return new c1;
     }
     glo_M3_private.f1 = f1;
     glo_M3_private.v1 = c1;
-    glo_M3_private.v2;
 })(glo_M3_private = exports.glo_M3_private || (exports.glo_M3_private = {}));
 //export declare module "glo_M4_private" {
 //    export function f1();

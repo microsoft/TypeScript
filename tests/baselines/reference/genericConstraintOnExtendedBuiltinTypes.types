@@ -37,7 +37,7 @@ module EndGate.Tweening {
             this._from = from.Clone();
 >this._from = from.Clone() : any
 >this._from : T
->this : Tween<T>
+>this : this
 >_from : T
 >from.Clone() : any
 >from.Clone : () => any
@@ -53,7 +53,7 @@ module EndGate.Tweening {
 
     export class NumberTween extends Tween<number>{
 >NumberTween : NumberTween
->Tween : Tween<T>
+>Tween : Tween<number>
 
         constructor(from: number) {
 >from : number

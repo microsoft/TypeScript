@@ -1,4 +1,4 @@
-tests/cases/compiler/staticsInConstructorBodies.ts(3,3): error TS1129: Statement expected.
+tests/cases/compiler/staticsInConstructorBodies.ts(3,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/staticsInConstructorBodies.ts(6,1): error TS1128: Declaration or statement expected.
 
 
@@ -7,7 +7,7 @@ tests/cases/compiler/staticsInConstructorBodies.ts(6,1): error TS1128: Declarati
     	constructor() {
     		static p1 = 0; // ERROR
     		~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     		static m1() {} // ERROR
     	}
     }

@@ -28,5 +28,5 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) {
         function C() {
         }
         return C;
-    })();
-} // error   
+    }()); // error   
+}

@@ -34,7 +34,6 @@ goTo.position(0);
 //    : |--- delete "\n\n///..."
 //   1: 
 //   2: 
-debugger;
 edit.deleteAtCaret(100);
 
 

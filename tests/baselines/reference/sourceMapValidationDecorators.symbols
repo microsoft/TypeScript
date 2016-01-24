@@ -2,45 +2,45 @@
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 0, 33))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 1, 33))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 1, 46))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 2, 36))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 2, 51))
 >descriptor : Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 2, 73))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 3, 36))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 3, 49))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 3, 64))
 >descriptor : Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 3, 86))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, 79, 66))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
 
-declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
+declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 4, 37))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
->key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 4, 54))
->paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 4, 76))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 4, 52))
+>paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 4, 74))
 
-declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
->ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
+>ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 5, 37))
 >target : Symbol(target, Decl(sourceMapValidationDecorators.ts, 5, 50))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
->key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 5, 67))
->paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 5, 89))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>key : Symbol(key, Decl(sourceMapValidationDecorators.ts, 5, 65))
+>paramIndex : Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 5, 87))
 
 @ClassDecorator1
 >ClassDecorator1 : Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
@@ -49,14 +49,14 @@ declare function ParameterDecorator2(x: number): (target: Function, key: string 
 >ClassDecorator2 : Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
 
 class Greeter {
->Greeter : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>Greeter : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
 
     constructor(
       @ParameterDecorator1 
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(20) 
->ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 
       public greeting: string, 
 >greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
@@ -65,7 +65,7 @@ class Greeter {
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(30) 
->ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 
       ...b: string[]) {
 >b : Symbol(b, Decl(sourceMapValidationDecorators.ts, 13, 30))
@@ -82,7 +82,7 @@ class Greeter {
 
         return "<h1>" + this.greeting + "</h1>";
 >this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
->this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
 >greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
     }
 
@@ -111,14 +111,14 @@ class Greeter {
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(70) 
->ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 
       x: number) {
 >x : Symbol(x, Decl(sourceMapValidationDecorators.ts, 34, 15))
 
         return this.greeting;
 >this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
->this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
 >greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
     }
 
@@ -133,7 +133,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
->this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
 >greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
     }
 
@@ -144,14 +144,14 @@ class Greeter {
 >ParameterDecorator1 : Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(90) 
->ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>ParameterDecorator2 : Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 101))
 
       greetings: string) {
 >greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
 
         this.greeting = greetings;
 >this.greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
->this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>this : Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 116))
 >greeting : Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
 >greetings : Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
     }    

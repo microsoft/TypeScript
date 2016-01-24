@@ -1,0 +1,18 @@
+tests/cases/compiler/systemModule10.ts(2,20): error TS2307: Cannot find module 'file1'.
+tests/cases/compiler/systemModule10.ts(3,21): error TS2307: Cannot find module 'file2'.
+
+
+==== tests/cases/compiler/systemModule10.ts (2 errors) ====
+    
+    import n, {x} from 'file1'
+                       ~~~~~~~
+!!! error TS2307: Cannot find module 'file1'.
+    import n2 = require('file2');
+                        ~~~~~~~
+!!! error TS2307: Cannot find module 'file2'.
+    export {x}
+    export {x as y}
+    export {n}
+    export {n as n1}
+    export {n2}
+    export {n2 as n3}

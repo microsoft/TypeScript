@@ -1,4 +1,5 @@
 //// [downlevelLetConst16.ts]
+
 'use strict'
 
 declare function use(a: any);
@@ -277,7 +278,7 @@ var A = (function () {
         use(x);
     };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
@@ -301,7 +302,7 @@ var B = (function () {
         use(x);
     };
     return B;
-})();
+}());
 function bar1() {
     var x = 1;
     use(x);

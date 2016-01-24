@@ -12,6 +12,6 @@ var C = (function () {
     }
     C.x = 1;
     return C;
-})();
+}());
 var c = new C();
 var r = C.x;

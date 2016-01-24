@@ -19,20 +19,23 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleD.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleC.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleB.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ClassB = (function () {
         function ClassB() {
         }
         return ClassB;
-    })();
+    }());
     return ClassB;
 });
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleA.js]
 define(["require", "exports"], function (require, exports) {
-    exports.b; // This should result in type ClassB
+    "use strict";
 });

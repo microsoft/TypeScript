@@ -19,11 +19,10 @@ module A.B.C {
 }
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var A;
 (function (A) {
@@ -33,7 +32,7 @@ var A;
             function EventManager() {
             }
             return EventManager;
-        })();
+        }());
         B.EventManager = EventManager;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
@@ -49,7 +48,7 @@ var A;
                     _super.apply(this, arguments);
                 }
                 return ContextMenu;
-            })(B.EventManager);
+            }(B.EventManager));
             C.ContextMenu = ContextMenu;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));

@@ -1,9 +1,0 @@
-tests/cases/compiler/extendNonClassSymbol1.ts(3,17): error TS2304: Cannot find name 'x'.
-
-
-==== tests/cases/compiler/extendNonClassSymbol1.ts (1 errors) ====
-    class A { foo() { } }
-    var x = A;
-    class C extends x { } // error, could not find symbol xs
-                    ~
-!!! error TS2304: Cannot find name 'x'.

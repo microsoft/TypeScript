@@ -1,14 +1,10 @@
-lib.d.ts(521,11): error TS2300: Duplicate identifier 'TemplateStringsArray'.
-tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(2,7): error TS2300: Duplicate identifier 'TemplateStringsArray'.
 tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts(8,3): error TS2345: Argument of type '{ [x: number]: undefined; }' is not assignable to parameter of type 'TemplateStringsArray'.
   Property 'raw' is missing in type '{ [x: number]: undefined; }'.
 
 
-==== tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts (2 errors) ====
+==== tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts (1 errors) ====
     
     class TemplateStringsArray {
-          ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'TemplateStringsArray'.
     }
     
     function f(x: TemplateStringsArray, y: number, z: number) {

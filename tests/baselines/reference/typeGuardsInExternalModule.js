@@ -26,6 +26,7 @@ else {
 //// [typeGuardsInExternalModule.js]
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
+"use strict";
 // local variable in external module
 var num;
 var var1;
@@ -37,7 +38,6 @@ else {
 }
 // exported variable in external module
 var strOrNum;
-exports.var2;
 if (typeof exports.var2 === "string") {
     // export makes the var property and not variable
     strOrNum = exports.var2; // string | number

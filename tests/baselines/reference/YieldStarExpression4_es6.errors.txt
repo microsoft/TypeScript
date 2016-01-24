@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts(1,10): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts(2,13): error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts (2 errors) ====
+    function *g() {
+             ~
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+        yield * [];
+                ~~
+!!! error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+    }

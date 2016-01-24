@@ -2,12 +2,13 @@ tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(2,6): error 
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(5,6): error TS2457: Type alias name cannot be 'string'
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1003: Identifier expected.
-tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1005: ';' expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,1): error TS2304: Cannot find name 'type'.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,6): error TS1005: ';' expected.
+tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,11): error TS1109: Expression expected.
 tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error TS2304: Cannot find name 'I'.
 
 
-==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (7 errors) ====
+==== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts (8 errors) ====
     interface I {}
     type any = I;
          ~~~
@@ -22,9 +23,11 @@ tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts(6,13): error
          ~~~~~~
 !!! error TS2457: Type alias name cannot be 'string'
     type void = I;
+    ~~~~
+!!! error TS2304: Cannot find name 'type'.
          ~~~~
-!!! error TS1003: Identifier expected.
-              ~
 !!! error TS1005: ';' expected.
+              ~
+!!! error TS1109: Expression expected.
                 ~
 !!! error TS2304: Cannot find name 'I'.

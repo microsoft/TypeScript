@@ -23,6 +23,6 @@ var x3 = a[0], y3 = a[1], z3 = a[2]; // emit x3, y3, z3
 declare var x: number;
 declare var x1: number, y1: string;
 declare var z1: number;
-declare var a: (string | number)[];
-declare var x2: string | number;
-declare var x3: string | number, y3: string | number, z3: string | number;
+declare var a: (number | string)[];
+declare var x2: number | string;
+declare var x3: number | string, y3: number | string, z3: number | string;

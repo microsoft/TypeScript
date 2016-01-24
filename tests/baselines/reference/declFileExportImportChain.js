@@ -26,6 +26,7 @@ export var x: c.b1.a.m2.c1;
 
 //// [declFileExportImportChain_a.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var m1;
     (function (m1) {
         var m2;
@@ -34,7 +35,7 @@ define(["require", "exports"], function (require, exports) {
                 function c1() {
                 }
                 return c1;
-            })();
+            }());
             m2.c1 = c1;
         })(m2 = m1.m2 || (m1.m2 = {}));
     })(m1 || (m1 = {}));
@@ -42,19 +43,22 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [declFileExportImportChain_b.js]
 define(["require", "exports", "declFileExportImportChain_a"], function (require, exports, a) {
+    "use strict";
     exports.a = a;
 });
 //// [declFileExportImportChain_b1.js]
 define(["require", "exports", "declFileExportImportChain_b"], function (require, exports, b) {
+    "use strict";
     return b;
 });
 //// [declFileExportImportChain_c.js]
 define(["require", "exports", "declFileExportImportChain_b1"], function (require, exports, b1) {
+    "use strict";
     exports.b1 = b1;
 });
 //// [declFileExportImportChain_d.js]
 define(["require", "exports"], function (require, exports) {
-    exports.x;
+    "use strict";
 });
 
 

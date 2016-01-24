@@ -1,17 +1,17 @@
-tests/cases/compiler/classExtendsInterface.ts(2,17): error TS2311: A class may only extend another class.
-tests/cases/compiler/classExtendsInterface.ts(6,21): error TS2311: A class may only extend another class.
+tests/cases/compiler/classExtendsInterface.ts(2,17): error TS2304: Cannot find name 'Comparable'.
+tests/cases/compiler/classExtendsInterface.ts(6,21): error TS2304: Cannot find name 'Comparable2'.
 
 
 ==== tests/cases/compiler/classExtendsInterface.ts (2 errors) ====
     interface Comparable {}
     class A extends Comparable {}
                     ~~~~~~~~~~
-!!! error TS2311: A class may only extend another class.
+!!! error TS2304: Cannot find name 'Comparable'.
     class B implements Comparable {}
      
     interface Comparable2<T> {}
     class A2<T> extends Comparable2<T> {}
-                        ~~~~~~~~~~~~~~
-!!! error TS2311: A class may only extend another class.
+                        ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'Comparable2'.
     class B2<T> implements Comparable2<T> {}
     

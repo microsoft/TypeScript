@@ -28,11 +28,10 @@ c = d;
 d = c; // error
 
 //// [interfaceExtendsClassWithPrivate1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var C = (function () {
     function C() {
@@ -40,7 +39,7 @@ var C = (function () {
     }
     C.prototype.foo = function (x) { return x; };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -50,7 +49,7 @@ var D = (function (_super) {
     D.prototype.other = function (x) { return x; };
     D.prototype.bar = function () { };
     return D;
-})(C);
+}(C));
 var c;
 var i;
 var d;

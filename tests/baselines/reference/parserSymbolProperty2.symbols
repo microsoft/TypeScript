@@ -3,7 +3,7 @@ interface I {
 >I : Symbol(I, Decl(parserSymbolProperty2.ts, 0, 0))
 
     [Symbol.unscopables](): string;
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
 }

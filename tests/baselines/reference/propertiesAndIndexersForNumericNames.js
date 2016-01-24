@@ -81,4 +81,4 @@ var C = (function () {
         this["0.000000000000000000012"] = "should've been in exponential form"; // No error
     }
     return C;
-})();
+}());

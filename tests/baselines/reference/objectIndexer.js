@@ -17,10 +17,11 @@ class Emitter {
 
 //// [objectIndexer.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Emitter = (function () {
         function Emitter() {
             this.listeners = {};
         }
         return Emitter;
-    })();
+    }());
 });

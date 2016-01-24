@@ -4,13 +4,12 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(6,18): error TS2304: Cannot find name 'Void'.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(7,19): error TS1109: Expression expected.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(8,18): error TS2304: Cannot find name 'Null'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(9,19): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(10,18): error TS2304: Cannot find name 'undefined'.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(10,18): error TS2507: Type 'undefined' is not a constructor function type.
 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(11,18): error TS2304: Cannot find name 'Undefined'.
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(14,18): error TS2311: A class may only extend another class.
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts(14,18): error TS2507: Type 'typeof E' is not a constructor function type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts (10 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive.ts (9 errors) ====
     // classes cannot extend primitives
     
     class C extends number { }
@@ -32,11 +31,9 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
                      ~~~~
 !!! error TS2304: Cannot find name 'Null'.
     class C5a extends null { }
-                      ~~~~
-!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
     class C6 extends undefined { }
                      ~~~~~~~~~
-!!! error TS2304: Cannot find name 'undefined'.
+!!! error TS2507: Type 'undefined' is not a constructor function type.
     class C7 extends Undefined { }
                      ~~~~~~~~~
 !!! error TS2304: Cannot find name 'Undefined'.
@@ -44,4 +41,4 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
     enum E { A }
     class C8 extends E { }
                      ~
-!!! error TS2311: A class may only extend another class.
+!!! error TS2507: Type 'typeof E' is not a constructor function type.

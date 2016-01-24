@@ -1,7 +1,7 @@
 /// <reference path="checker.ts"/>
 
 /* @internal */
-module ts {
+namespace ts {
     interface ModuleElementDeclarationEmitInfo {
         node: Node;
         outputPos: number;
@@ -31,30 +31,39 @@ module ts {
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
-        let diagnostics: Diagnostic[] = [];
-        let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
-        return diagnostics;
+        const declarationDiagnostics = createDiagnosticCollection();
+        forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
+        return declarationDiagnostics.getDiagnostics(targetSourceFile.fileName);
+
+        function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
+        }
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
-        let newLine = host.getNewLine();
-        let compilerOptions = host.getCompilerOptions();
-        let languageVersion = compilerOptions.target || ScriptTarget.ES3;
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string,
+        sourceFiles: SourceFile[], isBundledEmit: boolean): DeclarationEmit {
+        const newLine = host.getNewLine();
+        const compilerOptions = host.getCompilerOptions();
 
         let write: (s: string) => void;
         let writeLine: () => void;
         let increaseIndent: () => void;
         let decreaseIndent: () => void;
-        let writeTextOfNode: (sourceFile: SourceFile, node: Node) => void;
+        let writeTextOfNode: (text: string, node: Node) => void;
 
         let writer = createAndSetNewTextWriterWithSymbolWriter();
 
         let enclosingDeclaration: Node;
-        let currentSourceFile: SourceFile;
+        let resultHasExternalModuleIndicator: boolean;
+        let currentText: string;
+        let currentLineMap: number[];
+        let currentIdentifiers: Map<string>;
+        let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
-        let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
-        let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
+        let errorNameNode: DeclarationName;
+        const emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
+        const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
+        let noDeclare: boolean;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -64,84 +73,99 @@ module ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
 
-        if (root) {
-            // Emitting just a single file, so emit references in this file only
+        // Emit references corresponding to each file
+        const emittedReferencedFiles: SourceFile[] = [];
+        let addedGlobalFileReference = false;
+        let allSourcesModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
+        forEach(sourceFiles, sourceFile => {
+            // Dont emit for javascript file
+            if (isSourceFileJavaScript(sourceFile)) {
+                return;
+            }
+
+            // Check what references need to be added
             if (!compilerOptions.noResolve) {
-                let addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    let referencedFile = tryResolveScriptReference(host, root, fileReference);
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                    // Emit reference in dts, if the file reference was not already emitted
+                    if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
+                        // Add a reference to generated dts file,
+                        // global file reference is added only 
+                        //  - if it is not bundled emit (because otherwise it would be self reference)
+                        //  - and it is not already added
+                        if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
                             addedGlobalFileReference = true;
                         }
+                        emittedReferencedFiles.push(referencedFile);
                     }
                 });
             }
 
-            emitSourceFile(root);
+            resultHasExternalModuleIndicator = false;
+            if (!isBundledEmit || !isExternalModule(sourceFile)) {
+                noDeclare = false;
+                emitSourceFile(sourceFile);
+            }
+            else if (isExternalModule(sourceFile)) {
+                noDeclare = true;
+                write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
+                writeLine();
+                increaseIndent();
+                emitSourceFile(sourceFile);
+                decreaseIndent();
+                write("}");
+                writeLine();
+            }
 
             // create asynchronous output for the importDeclarations
             if (moduleElementDeclarationEmitInfo.length) {
-                let oldWriter = writer;
+                const oldWriter = writer;
                 forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                    if (aliasEmitInfo.isVisible) {
+                    if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
                         Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
                         createAndSetNewTextWriterWithSymbolWriter();
-                        Debug.assert(aliasEmitInfo.indent === 0);
+                        Debug.assert(aliasEmitInfo.indent === 0 || (aliasEmitInfo.indent === 1 && isBundledEmit));
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            increaseIndent();
+                        }
                         writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
                         aliasEmitInfo.asynchronousOutput = writer.getText();
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            decreaseIndent();
+                        }
                     }
                 });
                 setWriter(oldWriter);
+
+                allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                moduleElementDeclarationEmitInfo = [];
             }
-        }
-        else {
-            // Emit references corresponding to this file
-            let emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-
-                    emitSourceFile(sourceFile);
-                }
-            });
-        }
+            if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
+                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
+                write("export {};");
+                writeLine();
+            }
+        });
 
         return {
             reportedDeclarationError,
-            moduleElementDeclarationEmitInfo,
+            moduleElementDeclarationEmitInfo: allSourcesModuleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
-        }
+        };
 
         function hasInternalAnnotation(range: CommentRange) {
-            let text = currentSourceFile.text;
-            let comment = text.substring(range.pos, range.end);
+            const comment = currentText.substring(range.pos, range.end);
             return comment.indexOf("@internal") >= 0;
         }
 
         function stripInternal(node: Node) {
             if (node) {
-                let leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+                const leadingCommentRanges = getLeadingCommentRanges(currentText, node.pos);
                 if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
                     return;
                 }
@@ -151,8 +175,9 @@ module ts {
         }
 
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
-            let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
+            const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
+            writer.reportInaccessibleThisError = reportInaccessibleThisError;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -174,14 +199,16 @@ module ts {
         }
 
         function writeAsynchronousModuleElements(nodes: Node[]) {
-            let oldWriter = writer;
+            const oldWriter = writer;
             forEach(nodes, declaration => {
                 let nodeToCheck: Node;
                 if (declaration.kind === SyntaxKind.VariableDeclaration) {
                     nodeToCheck = declaration.parent.parent;
-                } else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
+                }
+                else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
                     Debug.fail("We should be getting ImportDeclaration instead to write");
-                } else {
+                }
+                else {
                     nodeToCheck = declaration;
                 }
 
@@ -189,7 +216,7 @@ module ts {
                 if (!moduleElementEmitInfo && asynchronousSubModuleDeclarationEmitInfo) {
                     moduleElementEmitInfo = forEach(asynchronousSubModuleDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
                 }
-                                
+
                 // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
                 // then we don't need to write it at this point. We will write it when we actually see its declaration
                 // Eg.
@@ -199,7 +226,7 @@ module ts {
                 // we would write alias foo declaration when we visit it since it would now be marked as visible
                 if (moduleElementEmitInfo) {
                     if (moduleElementEmitInfo.node.kind === SyntaxKind.ImportDeclaration) {
-                        // we have to create asynchronous output only after we have collected complete information 
+                        // we have to create asynchronous output only after we have collected complete information
                         // because it is possible to enable multiple bindings as asynchronously visible
                         moduleElementEmitInfo.isVisible = true;
                     }
@@ -235,17 +262,17 @@ module ts {
             else {
                 // Report error
                 reportedDeclarationError = true;
-                let errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
+                const errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
                 if (errorInfo) {
                     if (errorInfo.typeName) {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
-                            getSourceTextOfNodeFromSourceFile(currentSourceFile, errorInfo.typeName),
+                            getTextOfNodeFromSourceText(currentText, errorInfo.typeName),
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
                     }
                     else {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
@@ -258,6 +285,14 @@ module ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
+        function reportInaccessibleThisError() {
+            if (errorNameNode) {
+                reportedDeclarationError = true;
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode)));
+            }
+        }
+
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
@@ -266,7 +301,9 @@ module ts {
                 emitType(type);
             }
             else {
+                errorNameNode = declaration.name;
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                errorNameNode = undefined;
             }
         }
 
@@ -278,19 +315,21 @@ module ts {
                 emitType(signature.type);
             }
             else {
+                errorNameNode = signature.name;
                 resolver.writeReturnTypeOfSignatureDeclaration(signature, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                errorNameNode = undefined;
             }
         }
 
         function emitLines(nodes: Node[]) {
-            for (let node of nodes) {
+            for (const node of nodes) {
                 emit(node);
             }
         }
 
         function emitSeparatedList(nodes: Node[], separator: string, eachNodeEmitFn: (node: Node) => void, canEmitFn?: (node: Node) => boolean) {
             let currentWriterPos = writer.getTextPos();
-            for (let node of nodes) {
+            for (const node of nodes) {
                 if (!canEmitFn || canEmitFn(node)) {
                     if (currentWriterPos !== writer.getTextPos()) {
                         write(separator);
@@ -307,10 +346,10 @@ module ts {
 
         function writeJsDocComments(declaration: Node) {
             if (declaration) {
-                let jsDocComments = getJsDocComments(declaration, currentSourceFile);
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, declaration, jsDocComments);
+                const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
+                emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                emitComments(currentText, currentLineMap, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
             }
         }
 
@@ -327,10 +366,11 @@ module ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
-                case SyntaxKind.StringLiteral:
-                    return writeTextOfNode(currentSourceFile, type);
-                case SyntaxKind.HeritageClauseElement:
-                    return emitHeritageClauseElement(<HeritageClauseElement>type);
+                case SyntaxKind.ThisType:
+                case SyntaxKind.StringLiteralType:
+                    return writeTextOfNode(currentText, type);
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -341,6 +381,8 @@ module ts {
                     return emitTupleType(<TupleTypeNode>type);
                 case SyntaxKind.UnionType:
                     return emitUnionType(<UnionTypeNode>type);
+                case SyntaxKind.IntersectionType:
+                    return emitIntersectionType(<IntersectionTypeNode>type);
                 case SyntaxKind.ParenthesizedType:
                     return emitParenType(<ParenthesizedTypeNode>type);
                 case SyntaxKind.FunctionType:
@@ -352,32 +394,34 @@ module ts {
                     return emitEntityName(<Identifier>type);
                 case SyntaxKind.QualifiedName:
                     return emitEntityName(<QualifiedName>type);
+                case SyntaxKind.TypePredicate:
+                    return emitTypePredicate(<TypePredicateNode>type);
+            }
+
+            function writeEntityName(entityName: EntityName | Expression) {
+                if (entityName.kind === SyntaxKind.Identifier) {
+                    writeTextOfNode(currentText, entityName);
+                }
+                else {
+                    const left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                    const right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                    writeEntityName(left);
+                    write(".");
+                    writeTextOfNode(currentText, right);
+                }
             }
 
             function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
-                let visibilityResult = resolver.isEntityNameVisible(entityName,
+                const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
 
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
-
-                function writeEntityName(entityName: EntityName | Expression) {
-                    if (entityName.kind === SyntaxKind.Identifier) {
-                        writeTextOfNode(currentSourceFile, entityName);
-                    }
-                    else {
-                        let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                        let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                        writeEntityName(left);
-                        write(".");
-                        writeTextOfNode(currentSourceFile, right);
-                    }
-                }
             }
 
-            function emitHeritageClauseElement(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
                     emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
                     if (node.typeArguments) {
@@ -395,6 +439,12 @@ module ts {
                     emitCommaList(type.typeArguments, emitType);
                     write(">");
                 }
+            }
+
+            function emitTypePredicate(type: TypePredicateNode) {
+                writeTextOfNode(currentText, type.parameterName);
+                write(" is ");
+                emitType(type.type);
             }
 
             function emitTypeQuery(type: TypeQueryNode) {
@@ -417,6 +467,10 @@ module ts {
                 emitSeparatedList(type.types, " | ", emitType);
             }
 
+            function emitIntersectionType(type: IntersectionTypeNode) {
+                emitSeparatedList(type.types, " & ", emitType);
+            }
+
             function emitParenType(type: ParenthesizedTypeNode) {
                 write("(");
                 emitType(type.type);
@@ -437,8 +491,12 @@ module ts {
         }
 
         function emitSourceFile(node: SourceFile) {
-            currentSourceFile = node;
+            currentText = node.text;
+            currentLineMap = getLineStarts(node);
+            currentIdentifiers = node.identifiers;
+            isCurrentFileExternalModule = isExternalModule(node);
             enclosingDeclaration = node;
+            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, true /* remove comments */);
             emitLines(node.statements);
         }
 
@@ -447,14 +505,15 @@ module ts {
         // Note that export default is only allowed at most once in a module, so we
         // do not need to keep track of created temp names.
         function getExportDefaultTempVariableName(): string {
-            let baseName = "_default";
-            if (!hasProperty(currentSourceFile.identifiers, baseName)) {
+            const baseName = "_default";
+            if (!hasProperty(currentIdentifiers, baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
-                let name = baseName + "_" + (++count);
-                if (!hasProperty(currentSourceFile.identifiers, name)) {
+                count++;
+                const name = baseName + "_" + count;
+                if (!hasProperty(currentIdentifiers, name)) {
                     return name;
                 }
             }
@@ -463,11 +522,11 @@ module ts {
         function emitExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
-                writeTextOfNode(currentSourceFile, node.expression);
+                writeTextOfNode(currentText, node.expression);
             }
             else {
                 // Expression
-                let tempVarName = getExportDefaultTempVariableName();
+                const tempVarName = getExportDefaultTempVariableName();
                 write("declare var ");
                 write(tempVarName);
                 write(": ");
@@ -483,7 +542,7 @@ module ts {
 
             // Make all the declarations visible for the export name
             if (node.expression.kind === SyntaxKind.Identifier) {
-                let nodes = resolver.collectLinkedAliases(<Identifier>node.expression);
+                const nodes = resolver.collectLinkedAliases(<Identifier>node.expression);
 
                 // write each of these declarations asynchronously
                 writeAsynchronousModuleElements(nodes);
@@ -507,7 +566,7 @@ module ts {
             }
             // Import equals declaration in internal module can become visible as part of any emit so lets make sure we add these irrespective
             else if (node.kind === SyntaxKind.ImportEqualsDeclaration ||
-                (node.parent.kind === SyntaxKind.SourceFile && isExternalModule(currentSourceFile))) {
+                (node.parent.kind === SyntaxKind.SourceFile && isCurrentFileExternalModule)) {
                 let isVisible: boolean;
                 if (asynchronousSubModuleDeclarationEmitInfo && node.parent.kind !== SyntaxKind.SourceFile) {
                     // Import declaration of another module that is visited async so lets put it in right spot
@@ -520,7 +579,7 @@ module ts {
                 }
                 else {
                     if (node.kind === SyntaxKind.ImportDeclaration) {
-                        let importDeclaration = <ImportDeclaration>node;
+                        const importDeclaration = <ImportDeclaration>node;
                         if (importDeclaration.importClause) {
                             isVisible = (importDeclaration.importClause.name && resolver.isDeclarationVisible(importDeclaration.importClause)) ||
                             isVisibleNamedBinding(importDeclaration.importClause.namedBindings);
@@ -563,7 +622,7 @@ module ts {
 
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
-            if (node.parent === currentSourceFile) {
+            if (node.parent.kind === SyntaxKind.SourceFile) {
                 // If the node is exported
                 if (node.flags & NodeFlags.Export) {
                     write("export ");
@@ -572,7 +631,7 @@ module ts {
                 if (node.flags & NodeFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
                     write("declare ");
                 }
             }
@@ -589,17 +648,20 @@ module ts {
             if (node.flags & NodeFlags.Static) {
                 write("static ");
             }
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
         }
 
         function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // note usage of writer. methods instead of aliases created, just to make sure we are using 
+            // note usage of writer. methods instead of aliases created, just to make sure we are using
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
                 write("export ");
             }
             write("import ");
-            writeTextOfNode(currentSourceFile, node.name);
+            writeTextOfNode(currentText, node.name);
             write(" = ");
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 emitTypeWithNewGetSymbolAccessibilityDiagnostic(<EntityName>node.moduleReference, getImportEntityNameVisibilityError);
@@ -607,7 +669,7 @@ module ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentSourceFile, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(node);
                 write(");");
             }
             writer.writeLine();
@@ -634,7 +696,7 @@ module ts {
 
         function writeImportDeclaration(node: ImportDeclaration) {
             if (!node.importClause && !(node.flags & NodeFlags.Export)) {
-                // do not write non-exported import declarations that don't have import clauses 
+                // do not write non-exported import declarations that don't have import clauses
                 return;
             }
             emitJsDocComments(node);
@@ -643,9 +705,9 @@ module ts {
             }
             write("import ");
             if (node.importClause) {
-                let currentWriterPos = writer.getTextPos();
+                const currentWriterPos = writer.getTextPos();
                 if (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) {
-                    writeTextOfNode(currentSourceFile, node.importClause.name);
+                    writeTextOfNode(currentText, node.importClause.name);
                 }
                 if (node.importClause.namedBindings && isVisibleNamedBinding(node.importClause.namedBindings)) {
                     if (currentWriterPos !== writer.getTextPos()) {
@@ -654,7 +716,7 @@ module ts {
                     }
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");
-                        writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
+                        writeTextOfNode(currentText, (<NamespaceImport>node.importClause.namedBindings).name);
                     }
                     else {
                         write("{ ");
@@ -664,24 +726,56 @@ module ts {
                 }
                 write(" from ");
             }
-            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            emitExternalModuleSpecifier(node);
             write(";");
             writer.writeLine();
         }
 
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
+            // emitExternalModuleSpecifier is usually called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
+            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
+            // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
+            // so compiler will treat them as external modules.
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
+            let moduleSpecifier: Node;
+            if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                const node = parent as ImportEqualsDeclaration;
+                moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
+            }
+            else if (parent.kind === SyntaxKind.ModuleDeclaration) {
+                moduleSpecifier = (<ModuleDeclaration>parent).name;
+            }
+            else {
+                const node = parent as (ImportDeclaration | ExportDeclaration);
+                moduleSpecifier = node.moduleSpecifier;
+            }
+
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
+                if (moduleName) {
+                    write("\"");
+                    write(moduleName);
+                    write("\"");
+                    return;
+                }
+            }
+
+            writeTextOfNode(currentText, moduleSpecifier);
+        }
+
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
-                writeTextOfNode(currentSourceFile, node.propertyName);
+                writeTextOfNode(currentText, node.propertyName);
                 write(" as ");
             }
-            writeTextOfNode(currentSourceFile, node.name);
+            writeTextOfNode(currentText, node.name);
         }
 
         function emitExportSpecifier(node: ExportSpecifier) {
             emitImportOrExportSpecifier(node);
 
             // Make all the declarations visible for the export name
-            let nodes = resolver.collectLinkedAliases(node.propertyName || node.name);
+            const nodes = resolver.collectLinkedAliases(node.propertyName || node.name);
 
             // write each of these declarations asynchronously
             writeAsynchronousModuleElements(nodes);
@@ -700,7 +794,7 @@ module ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                emitExternalModuleSpecifier(node);
             }
             write(";");
             writer.writeLine();
@@ -709,14 +803,29 @@ module ts {
         function writeModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            write("module ");
-            writeTextOfNode(currentSourceFile, node.name);
+            if (isGlobalScopeAugmentation(node)) {
+                write("global ");
+            }
+            else {
+                if (node.flags & NodeFlags.Namespace) {
+                    write("namespace ");
+                }
+                else {
+                    write("module ");
+                }
+                if (isExternalModuleAugmentation(node)) {
+                    emitExternalModuleSpecifier(node);
+                }
+                else {
+                    writeTextOfNode(currentText, node.name);
+                }
+            }
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
-                writeTextOfNode(currentSourceFile, node.name);
+                writeTextOfNode(currentText, node.name);
             }
-            let prevEnclosingDeclaration = enclosingDeclaration;
+            const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             write(" {");
             writeLine();
@@ -729,14 +838,18 @@ module ts {
         }
 
         function writeTypeAliasDeclaration(node: TypeAliasDeclaration) {
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
-            writeTextOfNode(currentSourceFile, node.name);
+            writeTextOfNode(currentText, node.name);
+            emitTypeParameters(node.typeParameters);
             write(" = ");
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
             write(";");
             writeLine();
+            enclosingDeclaration = prevEnclosingDeclaration;
 
             function getTypeAliasDeclarationVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                 return {
@@ -751,10 +864,10 @@ module ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (isConst(node)) {
-                write("const ")
+                write("const ");
             }
             write("enum ");
-            writeTextOfNode(currentSourceFile, node.name);
+            writeTextOfNode(currentText, node.name);
             write(" {");
             writeLine();
             increaseIndent();
@@ -766,8 +879,8 @@ module ts {
 
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
-            writeTextOfNode(currentSourceFile, node.name);
-            let enumMemberValue = resolver.getConstantValue(node);
+            writeTextOfNode(currentText, node.name);
+            const enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
                 write(enumMemberValue.toString());
@@ -785,7 +898,7 @@ module ts {
                 increaseIndent();
                 emitJsDocComments(node);
                 decreaseIndent();
-                writeTextOfNode(currentSourceFile, node.name);
+                writeTextOfNode(currentText, node.name);
                 // If there is constraint present and this is not a type parameter of the private method emit the constraint
                 if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
@@ -861,15 +974,18 @@ module ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: HeritageClauseElement[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+                }
+                else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
+                    write("null");
                 }
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
@@ -908,12 +1024,16 @@ module ts {
 
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
+
             write("class ");
-            writeTextOfNode(currentSourceFile, node.name);
-            let prevEnclosingDeclaration = enclosingDeclaration;
+            writeTextOfNode(currentText, node.name);
+            const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            let baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
             }
@@ -933,8 +1053,8 @@ module ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("interface ");
-            writeTextOfNode(currentSourceFile, node.name);
-            let prevEnclosingDeclaration = enclosingDeclaration;
+            writeTextOfNode(currentText, node.name);
+            const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
             emitHeritageClause(getInterfaceBaseTypeNodes(node), /*isImplementsList*/ false);
@@ -971,7 +1091,7 @@ module ts {
                     // If this node is a computed name, it can only be a symbol, because we've already skipped
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
-                    writeTextOfNode(currentSourceFile, node.name);
+                    writeTextOfNode(currentText, node.name);
                     // If optional property emit ?
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                         write("?");
@@ -1020,7 +1140,7 @@ module ts {
             }
 
             function getVariableDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                let diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
                 return diagnosticMessage !== undefined ? {
                     diagnosticMessage,
                     errorNode: node,
@@ -1034,9 +1154,9 @@ module ts {
                 // For example:
                 //      original: var [, c,,] = [ 2,3,4]
                 //      emitted: declare var c: number; // instead of declare var c:number, ;
-                let elements: Node[] = [];
-                for (let element of bindingPattern.elements) {
-                    if (element.kind !== SyntaxKind.OmittedExpression){
+                const elements: Node[] = [];
+                for (const element of bindingPattern.elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
                         elements.push(element);
                     }
                 }
@@ -1045,7 +1165,7 @@ module ts {
 
             function emitBindingElement(bindingElement: BindingElement) {
                 function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    let diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                    const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
                     return diagnosticMessage !== undefined ? {
                         diagnosticMessage,
                         errorNode: bindingElement,
@@ -1058,7 +1178,7 @@ module ts {
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
                     else {
-                        writeTextOfNode(currentSourceFile, bindingElement.name);
+                        writeTextOfNode(currentText, bindingElement.name);
                         writeTypeOfDeclaration(bindingElement, /*type*/ undefined, getBindingElementTypeVisibilityError);
                     }
                 }
@@ -1101,20 +1221,20 @@ module ts {
                 return;
             }
 
-            let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
+            const accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, node);
             let accessorWithTypeAnnotation: AccessorDeclaration;
 
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(node);
-                writeTextOfNode(currentSourceFile, node.name);
+                writeTextOfNode(currentText, node.name);
                 if (!(node.flags & NodeFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);
                     if (!type) {
                         // couldn't get type for the first accessor, try the another one
-                        let anotherAccessor = node.kind === SyntaxKind.GetAccessor ? accessors.setAccessor : accessors.getAccessor;
+                        const anotherAccessor = node.kind === SyntaxKind.GetAccessor ? accessors.setAccessor : accessors.getAccessor;
                         type = getTypeAnnotationFromAccessor(anotherAccessor);
                         if (type) {
                             accessorWithTypeAnnotation = anotherAccessor;
@@ -1198,13 +1318,13 @@ module ts {
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
-                    writeTextOfNode(currentSourceFile, node.name);
+                    writeTextOfNode(currentText, node.name);
                 }
                 else if (node.kind === SyntaxKind.Constructor) {
                     write("constructor");
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node.name);
+                    writeTextOfNode(currentText, node.name);
                     if (hasQuestionToken(node)) {
                         write("?");
                     }
@@ -1219,6 +1339,9 @@ module ts {
         }
 
         function emitSignatureDeclaration(node: SignatureDeclaration) {
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+
             // Construct signature or constructor type write new Signature
             if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                 write("new ");
@@ -1231,9 +1354,6 @@ module ts {
                 write("(");
             }
 
-            let prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
-
             // Parameters
             emitCommaList(node.parameters, emitParameterDeclaration);
 
@@ -1245,7 +1365,7 @@ module ts {
             }
 
             // If this is not a constructor and is not private, emit the return type
-            let isFunctionTypeOrConstructorType = node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType;
+            const isFunctionTypeOrConstructorType = node.kind === SyntaxKind.FunctionType || node.kind === SyntaxKind.ConstructorType;
             if (isFunctionTypeOrConstructorType || node.parent.kind === SyntaxKind.TypeLiteral) {
                 // Emit type literal signature return type only if specified
                 if (node.type) {
@@ -1326,7 +1446,7 @@ module ts {
 
                 return {
                     diagnosticMessage,
-                    errorNode: <Node>node.name || node,
+                    errorNode: <Node>node.name || node
                 };
             }
         }
@@ -1344,9 +1464,9 @@ module ts {
                 emitBindingPattern(<BindingPattern>node.name);
             }
             else {
-                writeTextOfNode(currentSourceFile, node.name);
+                writeTextOfNode(currentText, node.name);
             }
-            if (node.initializer || hasQuestionToken(node)) {
+            if (resolver.isOptionalParameter(node)) {
                 write("?");
             }
             decreaseIndent();
@@ -1361,7 +1481,7 @@ module ts {
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                let diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                const diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
                 return diagnosticMessage !== undefined ? {
                     diagnosticMessage,
                     errorNode: node,
@@ -1434,7 +1554,7 @@ module ts {
                 }
                 else if (bindingPattern.kind === SyntaxKind.ArrayBindingPattern) {
                     write("[");
-                    let elements = bindingPattern.elements;
+                    const elements = bindingPattern.elements;
                     emitCommaList(elements, emitBindingElement);
                     if (elements && elements.hasTrailingComma) {
                         write(", ");
@@ -1444,14 +1564,6 @@ module ts {
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
-                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    let diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage,
-                        errorNode: bindingElement,
-                        typeName: bindingElement.name
-                    } : undefined;
-                }
 
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),
@@ -1470,13 +1582,10 @@ module ts {
                         // Example:
                         //      original: function foo({y: [a,b,c]}) {}
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
-                        writeTextOfNode(currentSourceFile, bindingElement.propertyName);
+                        writeTextOfNode(currentText, bindingElement.propertyName);
                         write(": ");
-
-                        // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
-                        emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
-                    else if (bindingElement.name) {
+                    if (bindingElement.name) {
                         if (isBindingPattern(bindingElement.name)) {
                             // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
                             // In the case of rest element, we will omit rest element.
@@ -1496,11 +1605,11 @@ module ts {
                             if (bindingElement.dotDotDotToken) {
                                 write("...");
                             }
-                            writeTextOfNode(currentSourceFile, bindingElement.name);
+                            writeTextOfNode(currentText, bindingElement.name);
                         }
                     }
                 }
-            } 
+            }
         }
 
         function emitNode(node: Node) {
@@ -1543,34 +1652,58 @@ module ts {
             }
         }
 
-        function writeReferencePath(referencedFile: SourceFile) {
-            let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                ? referencedFile.fileName // Declaration file, use declaration file name
-                : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.out) + ".d.ts";// Global out file
+        /**
+         * Adds the reference to referenced file, returns true if global file reference was emitted
+         * @param referencedFile
+         * @param addBundledFileReference Determines if global file reference corresponding to bundled file should be emitted or not
+         */
+        function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean): boolean {
+            let declFileName: string;
+            let addedBundledEmitReference = false;
+            if (isDeclarationFile(referencedFile)) {
+                // Declaration file, use declaration file name
+                declFileName = referencedFile.fileName;
+            }
+            else {
+                // Get the declaration file path
+                forEachExpectedEmitFile(host, getDeclFileName, referencedFile);
+            }
 
-            declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(jsFilePath)),
-                declFileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ false);
+            if (declFileName) {
+                declFileName = getRelativePathToDirectoryOrUrl(
+                    getDirectoryPath(normalizeSlashes(declarationFilePath)),
+                    declFileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
 
-            referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+            }
+            return addedBundledEmitReference;
+
+            function getDeclFileName(emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+                // Dont add reference path to this file if it is a bundled emit and caller asked not emit bundled file path
+                if (isBundledEmit && !addBundledFileReference) {
+                    return;
+                }
+
+                Debug.assert(!!emitFileNames.declarationFilePath || isSourceFileJavaScript(referencedFile), "Declaration file is not present only for javascript files");
+                declFileName = emitFileNames.declarationFilePath || emitFileNames.jsFilePath;
+                addedBundledEmitReference = isBundledEmit;
+            }
         }
     }
-    
+
     /* @internal */
-    export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
-        // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
-            let declarationOutput = emitDeclarationResult.referencePathsOutput
+    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
+        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
+        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
+        if (!emitSkipped) {
+            const declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
+            writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM);
         }
+        return emitSkipped;
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;

@@ -1,7 +1,7 @@
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2304: Cannot find name 'V'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,12): error TS2304: Cannot find name 'E'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2503: Cannot find namespace 'C'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(17,12): error TS2503: Cannot find namespace 'E'.
+tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2503: Cannot find namespace 'I'.
 
 
 ==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (4 errors) ====
@@ -11,7 +11,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import v = V;
                ~
-!!! error TS2304: Cannot find name 'V'.
+!!! error TS2503: Cannot find namespace 'V'.
     
     class C {
         name: string;
@@ -19,7 +19,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import c = C;
                ~
-!!! error TS2304: Cannot find name 'C'.
+!!! error TS2503: Cannot find namespace 'C'.
     
     enum E {
         Red, Blue
@@ -27,7 +27,7 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import e = E;
                ~
-!!! error TS2304: Cannot find name 'E'.
+!!! error TS2503: Cannot find namespace 'E'.
     
     interface I {
         id: number;
@@ -35,5 +35,5 @@ tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIde
     
     import i = I;
                ~
-!!! error TS2304: Cannot find name 'I'.
+!!! error TS2503: Cannot find namespace 'I'.
     

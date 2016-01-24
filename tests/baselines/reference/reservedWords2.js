@@ -14,6 +14,7 @@ enum void {}
 
 
 //// [reservedWords2.js]
+"use strict";
 require();
 while ( = require("dfdf"))
     ;
@@ -23,6 +24,7 @@ var ;
 typeof ;
 10;
 throw function () { };
+module;
 void {};
 var _a = { while: 1, return: 2 },  = _a.while,  = _a.return;
 var _b = { this: 1, switch: { continue: 2 } },  = _b.this,  = _b.switch.continue;

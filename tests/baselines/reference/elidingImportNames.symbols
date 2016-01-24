@@ -1,6 +1,6 @@
 === tests/cases/compiler/elidingImportNames_test.ts ===
 
-import a = require('elidingImportNames_main'); // alias used in typeof
+import a = require('./elidingImportNames_main'); // alias used in typeof
 >a : Symbol(a, Decl(elidingImportNames_test.ts, 0, 0))
 
 var b = a;
@@ -11,7 +11,7 @@ var x: typeof a;
 >x : Symbol(x, Decl(elidingImportNames_test.ts, 3, 3))
 >a : Symbol(a, Decl(elidingImportNames_test.ts, 0, 0))
 
-import a2 = require('elidingImportNames_main1'); // alias not used in typeof
+import a2 = require('./elidingImportNames_main1'); // alias not used in typeof
 >a2 : Symbol(a2, Decl(elidingImportNames_test.ts, 3, 16))
 
 var b2 = a2;
