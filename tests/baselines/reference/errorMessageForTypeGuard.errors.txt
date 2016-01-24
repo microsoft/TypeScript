@@ -1,0 +1,28 @@
+tests/cases/compiler/errorMessageForTypeGuard.ts(16,39): error TS2322: A type guard's type must be assignable to its parameter's type. Type 'Animal' is not assignable to type 'Car | Dog'.
+  A type guard's type must be assignable to its parameter's type. Type 'Animal' is not assignable to type 'Dog'.
+    Property 'dog' is missing in type 'Animal'.
+
+
+==== tests/cases/compiler/errorMessageForTypeGuard.ts (1 errors) ====
+    interface Animal {
+        animal;
+    }
+    
+    interface Dog extends Animal {
+        dog;
+    }
+    
+    interface Car {
+        car;
+    }
+    
+    let thing: Dog | Car;
+    
+    // error code 2322.
+    function isAnimal(x: Car | Dog): x is Animal {
+                                          ~~~~~~
+!!! error TS2322: A type guard's type must be assignable to its parameter's type. Type 'Animal' is not assignable to type 'Car | Dog'.
+!!! error TS2322:   A type guard's type must be assignable to its parameter's type. Type 'Animal' is not assignable to type 'Dog'.
+!!! error TS2322:     Property 'dog' is missing in type 'Animal'.
+        return "animal" in x;
+    }
