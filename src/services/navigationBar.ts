@@ -387,7 +387,7 @@ namespace ts.NavigationBar {
 
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
-                if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
+                if (isAmbientModule(moduleDeclaration)) {
                     return getTextOfNode(moduleDeclaration.name);
                 }
 

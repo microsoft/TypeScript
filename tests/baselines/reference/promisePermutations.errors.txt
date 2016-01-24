@@ -1,7 +1,6 @@
 tests/cases/compiler/promisePermutations.ts(74,70): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'number' is not assignable to type 'IPromise<number>'.
-      Property 'then' is missing in type 'Number'.
 tests/cases/compiler/promisePermutations.ts(79,19): error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -157,7 +156,6 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
 !!! error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'number' is not assignable to type 'IPromise<number>'.
-!!! error TS2345:       Property 'then' is missing in type 'Number'.
     
     var r4: IPromise<string>;
     var sIPromise: (x: any) => IPromise<string>;

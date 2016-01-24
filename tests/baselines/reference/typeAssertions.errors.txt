@@ -7,9 +7,23 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): err
   Property 'q' is missing in type 'SomeDerived'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
   Property 'q' is missing in type 'SomeBase'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS2304: Cannot find name 'numOrStr'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS1005: '>' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS1005: ')' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,48): error TS1005: ';' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): error TS2322: Type 'number | string' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS2304: Cannot find name 'numOrStr'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS1005: ')' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS1005: ';' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (5 errors) ====
+==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (18 errors) ====
     // Function call whose argument is a 1 arg generic function call with explicit type arguments
     function fn1<T>(t: T) { }
     function fn2(t: any) { }
@@ -64,5 +78,41 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): err
 !!! error TS2352:   Property 'q' is missing in type 'SomeBase'.
     someOther = <SomeOther>someOther;
     
+    // Type assertion cannot be a type-predicate type
+    var numOrStr: number | string;
+    var str: string;
+    if(<numOrStr is string>(numOrStr === undefined)) { // Error
+        ~~~~~~~~
+!!! error TS2304: Cannot find name 'numOrStr'.
+                 ~~
+!!! error TS1005: '>' expected.
+                 ~~
+!!! error TS2304: Cannot find name 'is'.
+                    ~~~~~~
+!!! error TS1005: ')' expected.
+                    ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                                   ~
+!!! error TS1005: ';' expected.
+    	str = numOrStr; // Error, no narrowing occurred
+    	~~~
+!!! error TS2322: Type 'number | string' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    }
+    
+    if((numOrStr === undefined) as numOrStr is string) { // Error
+                                   ~~~~~~~~
+!!! error TS2304: Cannot find name 'numOrStr'.
+                                            ~~
+!!! error TS1005: ')' expected.
+                                            ~~
+!!! error TS2304: Cannot find name 'is'.
+                                               ~~~~~~
+!!! error TS1005: ';' expected.
+                                               ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                                     ~
+!!! error TS1005: ';' expected.
+    }
     
     

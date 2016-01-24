@@ -29,6 +29,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
+        scanJSDocToken(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
@@ -41,6 +42,10 @@ namespace ts {
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
         lookAhead<T>(callback: () => T): T;
+
+        // Invokes the callback with the scanner set to scan the specified range. When the callback
+        // returns, the scanner is restored to the state it was in before scanRange was called.
+        scanRange<T>(start: number, length: number, callback: () => T): T;
 
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
         // the scanner to the state it was in immediately prior to invoking the callback.  If the
@@ -94,6 +99,7 @@ namespace ts {
         "protected": SyntaxKind.ProtectedKeyword,
         "public": SyntaxKind.PublicKeyword,
         "require": SyntaxKind.RequireKeyword,
+        "global": SyntaxKind.GlobalKeyword,
         "return": SyntaxKind.ReturnKeyword,
         "set": SyntaxKind.SetKeyword,
         "static": SyntaxKind.StaticKeyword,
@@ -749,6 +755,7 @@ namespace ts {
             scanJsxIdentifier,
             reScanJsxToken,
             scanJsxToken,
+            scanJSDocToken,
             scan,
             setText,
             setScriptTarget,
@@ -757,6 +764,7 @@ namespace ts {
             setTextPos,
             tryScan,
             lookAhead,
+            scanRange,
         };
 
         function error(message: DiagnosticMessage, length?: number): void {
@@ -1664,6 +1672,60 @@ namespace ts {
             return token;
         }
 
+        function scanJSDocToken(): SyntaxKind {
+            if (pos >= end) {
+                return token = SyntaxKind.EndOfFileToken;
+            }
+
+            startPos = pos;
+
+            // Eat leading whitespace
+            let ch = text.charCodeAt(pos);
+            while (pos < end) {
+                ch = text.charCodeAt(pos);
+                if (isWhiteSpace(ch)) {
+                    pos++;
+                }
+                else {
+                    break;
+                }
+            }
+            tokenPos = pos;
+
+            switch (ch) {
+                case CharacterCodes.at:
+                    return pos += 1, token = SyntaxKind.AtToken;
+                case CharacterCodes.lineFeed:
+                case CharacterCodes.carriageReturn:
+                    return pos += 1, token = SyntaxKind.NewLineTrivia;
+                case CharacterCodes.asterisk:
+                    return pos += 1, token = SyntaxKind.AsteriskToken;
+                case CharacterCodes.openBrace:
+                    return pos += 1, token = SyntaxKind.OpenBraceToken;
+                case CharacterCodes.closeBrace:
+                    return pos += 1, token = SyntaxKind.CloseBraceToken;
+                case CharacterCodes.openBracket:
+                    return pos += 1, token = SyntaxKind.OpenBracketToken;
+                case CharacterCodes.closeBracket:
+                    return pos += 1, token = SyntaxKind.CloseBracketToken;
+                case CharacterCodes.equals:
+                    return pos += 1, token = SyntaxKind.EqualsToken;
+                case CharacterCodes.comma:
+                    return pos += 1, token = SyntaxKind.CommaToken;
+            }
+
+            if (isIdentifierStart(ch, ScriptTarget.Latest)) {
+                pos++;
+                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
+                    pos++;
+                }
+                return token = SyntaxKind.Identifier;
+            }
+            else {
+                return pos += 1, token = SyntaxKind.Unknown;
+            }
+        }
+
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             const savePos = pos;
             const saveStartPos = startPos;
@@ -1683,6 +1745,33 @@ namespace ts {
                 tokenValue = saveTokenValue;
                 precedingLineBreak = savePrecedingLineBreak;
             }
+            return result;
+        }
+
+        function scanRange<T>(start: number, length: number, callback: () => T): T {
+            const saveEnd = end;
+            const savePos = pos;
+            const saveStartPos = startPos;
+            const saveTokenPos = tokenPos;
+            const saveToken = token;
+            const savePrecedingLineBreak = precedingLineBreak;
+            const saveTokenValue = tokenValue;
+            const saveHasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+            const saveTokenIsUnterminated = tokenIsUnterminated;
+
+            setText(text, start, length);
+            const result = callback();
+
+            end = saveEnd;
+            pos = savePos;
+            startPos = saveStartPos;
+            tokenPos = saveTokenPos;
+            token = saveToken;
+            precedingLineBreak = savePrecedingLineBreak;
+            tokenValue = saveTokenValue;
+            hasExtendedUnicodeEscape = saveHasExtendedUnicodeEscape;
+            tokenIsUnterminated = saveTokenIsUnterminated;
+
             return result;
         }
 
