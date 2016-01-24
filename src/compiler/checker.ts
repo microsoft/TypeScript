@@ -5360,7 +5360,7 @@ namespace ts {
                     sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                     targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 }
-                reportError(message || Diagnostics.A_type_guard_s_type_must_be_assignable_to_its_parameter_s_type_Type_0_is_not_assignable_to_type_1, sourceType, targetType);
+                reportError(message || Diagnostics.Type_0_is_not_assignable_to_type_1, sourceType, targetType);
             }
 
             // Compare two types and return

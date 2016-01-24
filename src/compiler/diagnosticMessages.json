@@ -903,7 +903,7 @@
         "category": "Error",
         "code": 2321
     },
-    "A type guard's type must be assignable to its parameter's type. Type '{0}' is not assignable to type '{1}'.": {
+    "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
     },
