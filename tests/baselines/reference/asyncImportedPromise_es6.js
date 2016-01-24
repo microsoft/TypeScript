@@ -24,7 +24,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.call(thisArg, _arguments)).next());
     });
 };
-var task_1 = require("./task");
+const task_1 = require("./task");
 class Test {
     example() {
         return __awaiter(this, void 0, task_1.Task, function* () { return; });
