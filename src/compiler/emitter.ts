@@ -6108,7 +6108,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import x = require("foo")
                             // import * as x from "foo"
                             if (!isExportedImport) {
-                                if (languageVersion !== ScriptTarget.ES6) {
+                                if (languageVersion <= ScriptTarget.ES5) {
                                     write("var ");
                                 }
                                 else {
@@ -6126,7 +6126,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                if (languageVersion !== ScriptTarget.ES6) {
+                                if (languageVersion <= ScriptTarget.ES5) {
                                     write("var ");
                                 }
                                 else {
@@ -6158,7 +6158,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            if (languageVersion !== ScriptTarget.ES6) {
+                            if (languageVersion <= ScriptTarget.ES5) {
                                 write("var ");
                             }
                             else {
