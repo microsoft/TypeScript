@@ -2473,10 +2473,21 @@ namespace ts {
 
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
+            while (node) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.NamedImports:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.ImportClause:
+                        node = node.parent;
+                        break;
 
-            // Parent chain:
-            // VaribleDeclaration -> VariableDeclarationList -> VariableStatement -> 'Declaration Container'
-            return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent.parent : node.parent;
+                    default:
+                        return node.parent;
+                }
+            }
         }
 
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
@@ -11625,6 +11636,9 @@ namespace ts {
                             checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
+                    else if (isAsyncFunctionLike(node)) {
+                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
+                    }
                 }
             }
 
@@ -12549,6 +12563,21 @@ namespace ts {
                 return unknownType;
             }
 
+            if (languageVersion >= ScriptTarget.ES6) {
+                const promisedType = getPromisedType(promiseType);
+                if (!promisedType) {
+                    error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                    return unknownType;
+                }
+
+                const promiseInstantiation = createPromiseType(promisedType);
+                if (!checkTypeAssignableTo(promiseInstantiation, promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+                    return unknownType;
+                }
+
+                return promisedType;
+            }
+
             const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
                 const typeName = promiseConstructor
@@ -12723,6 +12752,7 @@ namespace ts {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
         }
 
@@ -12907,6 +12937,25 @@ namespace ts {
             }
         }
 
+        function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
+            if (!needCollisionCheckForIdentifier(node, name, "Promise")) {
+                return;
+            }
+
+            // Uninstantiated modules shouldnt do this check
+            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                return;
+            }
+
+            // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
+            const parent = getDeclarationContainer(node);
+            if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent) && parent.flags & NodeFlags.HasAsyncFunctions) {
+                // If the declaration happens to be in external module, report error that require and exports are reserved keywords
+                error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
+                    declarationNameToString(name), declarationNameToString(name));
+            }
+        }
+
         function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
             // - ScriptBody : StatementList
             // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList
@@ -13085,6 +13134,7 @@ namespace ts {
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
         }
 
@@ -13850,6 +13900,7 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
@@ -14356,6 +14407,7 @@ namespace ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -14460,6 +14512,7 @@ namespace ts {
 
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
 
@@ -14652,6 +14705,7 @@ namespace ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkAliasSymbol(node);
         }
 
