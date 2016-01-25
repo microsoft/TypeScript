@@ -812,6 +812,7 @@ namespace ts {
         public nameTable: Map<string>;
         public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
+        public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -6029,6 +6030,10 @@ namespace ts {
              */
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
                 previousIterationSymbolsCache: SymbolTable): void {
+                if (!symbol) {
+                    return;
+                }
+
                 // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
                 // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
                 // For example:
@@ -6044,7 +6049,7 @@ namespace ts {
                     return;
                 }
 
-                if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
                             getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
@@ -6293,7 +6298,7 @@ namespace ts {
                     return SemanticMeaning.Value | SemanticMeaning.Type;
 
                 case SyntaxKind.ModuleDeclaration:
-                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                    if (isAmbientModule(<ModuleDeclaration>node)) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
@@ -6824,7 +6829,8 @@ namespace ts {
             function classifyDisabledMergeCode(text: string, start: number, end: number) {
                 // Classify the line that the ======= marker is on as a comment.  Then just lex
                 // all further tokens and add them to the result.
-                for (var i = start; i < end; i++) {
+                let i: number;
+                for (i = start; i < end; i++) {
                     if (isLineBreak(text.charCodeAt(i))) {
                         break;
                     }
@@ -7174,8 +7180,7 @@ namespace ts {
 
             const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
 
-            // TODO: call a helper method instead once PR #4133 gets merged in.
-            const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
+            const newLine = getNewLineOrDefaultFromHost(host);
 
             let docParams = "";
             for (let i = 0, numParams = parameters.length; i < numParams; i++) {

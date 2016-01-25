@@ -494,7 +494,7 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
-        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
         return {
@@ -517,14 +517,14 @@ namespace ts {
             else {
                 const filesSeen: Map<boolean> = {};
                 const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                const supportedExtensions = getSupportedExtensions(options, configFileName);
+                const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
                 // Get files of supported extensions in their order of resolution
                 for (const extension of supportedExtensions) {
                     const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
                     for (const fileName of filesInDirWithExtension) {
-                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension, 
+                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
                             continue;
@@ -573,9 +573,14 @@ namespace ts {
         }
     }
 
-    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
         const options: CompilerOptions = {};
         const errors: Diagnostic[] = [];
+
+        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
+            options.module = ModuleKind.CommonJS;
+            options.allowJs = true;
+        }
 
         if (!jsonOptions) {
             return { options, errors };

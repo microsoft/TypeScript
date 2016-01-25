@@ -1,3 +1,4 @@
+tests/cases/compiler/privacyGloImportParseErrors.ts(22,5): error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
 tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(49,29): error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
@@ -13,12 +14,12 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(125,45): error TS1147: Impor
 tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2664: Invalid module name in augmentation, module 'abc3' cannot be found.
 tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
 
-==== tests/cases/compiler/privacyGloImportParseErrors.ts (18 errors) ====
+==== tests/cases/compiler/privacyGloImportParseErrors.ts (19 errors) ====
     module m1 {
         export module m1_M1_public {
             export class c1 {
@@ -41,6 +42,8 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
         }
     
         export declare module "m1_M3_public" {
+        ~~~~~~
+!!! error TS2668: 'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.
                               ~~~~~~~~~~~~~~
 !!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
             export function f1();
@@ -191,7 +194,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
         }
         module "abc3" {
                ~~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+!!! error TS2664: Invalid module name in augmentation, module 'abc3' cannot be found.
         }
     }
     
