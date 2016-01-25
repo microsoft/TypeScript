@@ -29,6 +29,17 @@ namespace ts.JsTyping {
         return undefined;
     }
 
+    function isTypingEnabled(options: TypingOptions): boolean {
+        if (options) {
+            if (options.enableAutoDiscovery ||
+                (options.include && options.include.length > 0) ||
+                (options.exclude && options.exclude.length > 0)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param host is the object provoding I/O related operations.
      * @param fileNames are the file names that belong to the same project.
@@ -49,7 +60,7 @@ namespace ts.JsTyping {
         // a typing name to typing file path mapping
         const inferredTypings: Map<string> = {};
 
-        if (!typingOptions) {
+        if (!isTypingEnabled(typingOptions)) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 

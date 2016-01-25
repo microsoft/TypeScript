@@ -548,8 +548,9 @@ namespace ts {
         }
 
         function getTypingOptions(): TypingOptions {
-            const options: TypingOptions =
-                getBaseFileName(configFileName) === "jsconfig.json" ? { enableAutoDiscovery: true } : undefined;
+            const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
+                ? { enableAutoDiscovery: true, include: [], exclude: [] }
+                : { enableAutoDiscovery: false, include: [], exclude: [] };
             const jsonTypingOptions = json["typingOptions"];
             if (jsonTypingOptions) {
                 for (const id in jsonTypingOptions) {
