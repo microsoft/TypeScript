@@ -1,6 +1,0 @@
-error TS5064: Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.
-
-
-!!! error TS5064: Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.
-==== tests/cases/compiler/root/src/folder1/file1.ts (0 errors) ====
-    export var x = 1;

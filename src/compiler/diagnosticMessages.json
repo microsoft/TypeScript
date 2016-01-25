@@ -2159,7 +2159,7 @@
         "category": "Error",
         "code": 5059
     },
-    "Option '{0}' can only be used when option 'moduleResolution' is 'baseUrl'.": {
+    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
         "category": "Error",
         "code": 5060
     },
@@ -2170,14 +2170,6 @@
     "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
         "category": "Error",
         "code": 5062
-    },
-    "'moduleResolution' kind 'baseUrl' cannot be used without specifying '--baseUrl' option.": {
-        "category": "Error",
-        "code": 5063
-    },
-    "Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.": {
-        "category": "Error",
-        "code": 5064
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2479,101 +2471,93 @@
         "category": "Message",
         "code": 6090
     },
-    "Resolving rooted module name '{0}' - use it as a candidate location.": {
+    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
         "category": "Message",
         "code": 6091
     },
-    "Resolving relative module name '{0}'.": {
+    "Module name '{0}', matched pattern '{1}'.": {
         "category": "Message",
         "code": 6092
     },
-    "Resolving non-relative module name '{0}'.": {
+    "Trying substitution '{0}', candidate module location: '{1}'.": {
         "category": "Message",
         "code": 6093
     },
-    "Converting relative module name '{0}' to absolute using '{1}' as a base directory => '{2}'.": {
+    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
         "category": "Message",
         "code": 6094
     },
-    "'rootDirs' option is specified, searching for a longest matching prefix...": {
+    "Loading module as file / folder, candidate module location '{0}'.": {
         "category": "Message",
         "code": 6095
     },
-    "Found longest matching rootDir '{0}', 'converted relative path '{1}', to non-relative path '{2}'": {
+    "File '{0}' does not exist.": {
         "category": "Message",
         "code": 6096
     },
-    "'rootDirs' option is not specified, using '{0}' as candidate location.": {
+    "File '{0}' exist - use it as a module resolution result.": {
         "category": "Message",
         "code": 6097
     },
-    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
+    "Loading module '{0}' from 'node_modules' folder.": {
         "category": "Message",
         "code": 6098
     },
-    "Module name '{0}', matched pattern '{1}'.": {
+    "Found 'package.json' at '{0}'.": {
         "category": "Message",
         "code": 6099
     },
-    "Trying substitution '{0}', candidate module location: '{1}'.": {
+    "'package.json' does not have 'typings' field.": {
         "category": "Message",
         "code": 6100
     },
-    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
+    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
         "category": "Message",
         "code": 6101
     },
-    "Loading module '{0}' as file / folder, candidate module location '{1}'.": {
+    "Module name '{0}' contains '!' character.": {
         "category": "Message",
         "code": 6102
     },
-    "File '{0}' does not exist.": {
+    "Allow javascript files to be compiled.": {
         "category": "Message",
         "code": 6103
     },
-    "File '{0}' exist - use it as a module resolution result.": {
-        "category": "Message",
-        "code": 6104
-    },
-    "Loading module '{0}' from 'node_modules' folder.": {
-        "category": "Message",
-        "code": 6105
-    },
-    "Found 'package.json' at '{0}'.": {
-        "category": "Message",
-        "code": 6106
-    },
-    "'package.json' does not have 'typings' field.": {
-        "category": "Message",
-        "code": 6107
-    },
-    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
-        "category": "Message",
-        "code": 6108
-    },
-    "Module name '{0}' contains '!' character.": {
-        "category": "Message",
-        "code": 6109
-    },
-    "Allow javascript files to be compiled.": {
-        "category": "Message",
-        "code": 6110
-    },
-    "Base url: '{0}'.": {
-        "category": "Message",
-        "code": 6111
-    },
     "Option '{0}' should have array of strings as a value.": {
         "category": "Error",
-        "code": 6112
+        "code": 6104
     },
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
-        "code": 6113
+        "code": 6105
     },
     "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
         "category": "Message",
-        "code": 6114
+        "code": 6106
+    },
+    "'baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'": {
+        "category": "Message",
+        "code": 6107
+    },
+    "'rootDirs' option is set, using it to resolve relative module name '{0}'": {
+        "category": "Message",
+        "code": 6108
+    },
+    "Longest matching prefix for '{0}' is '{1}'": {
+        "category": "Message",
+        "code": 6109
+    },
+    "Loading '{0}' from the root dir '{1}', candidate location '{2}'": {
+        "category": "Message",
+        "code": 6110
+    },
+    "Trying other entries in 'rootDirs'": {
+        "category": "Message",
+        "code": 6111
+    },
+    "Module resolution using 'rootDirs' has failed": {
+        "category": "Message",
+        "code": 6112
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

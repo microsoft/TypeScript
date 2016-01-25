@@ -2376,8 +2376,7 @@ namespace ts {
 
     export enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs   = 2,
-        BaseUrl  = 3
+        NodeJs   = 2
     }
 
     export type RootPaths = string[];
@@ -2442,8 +2441,6 @@ namespace ts {
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
-        // inferred baseUrl - currently this will be set in 'parseJsonConfigFileContent' to 'baseDir'
-        /* @internal */ inferredBaseUrl?: string;
 
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }

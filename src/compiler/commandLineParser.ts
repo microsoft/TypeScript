@@ -256,8 +256,6 @@ namespace ts {
             type: {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
-                // name is lowercased so we can still use hasProperty(userValue.toLower()) to check if user has entered the right value
-                "baseurl": ModuleResolutionKind.BaseUrl,
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_classic_or_baseUrl,
@@ -529,8 +527,6 @@ namespace ts {
         const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
-        // set basePath as inferredBaseUrl so baseUrl module resolution strategy can still work even if user have not specified baseUrl explicity
-        options.inferredBaseUrl = basePath;
 
         return {
             options,

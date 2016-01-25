@@ -139,6 +139,14 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
+            it (`Correct module resolution tracing for ${fileName}`, () => {
+                if (options.traceModuleResolution) {
+                    Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
+                        return JSON.stringify(result.traceResults || [], undefined, 4);
+                    });
+                }
+            });
+
             // Source maps?
             it("Correct sourcemap content for " + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {

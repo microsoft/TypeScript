@@ -547,7 +547,8 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(path: string): boolean {
-            return false;
+            // for tests assume that directory exists
+            return true;
         }
 
         getExecutingFilePath(): string {
