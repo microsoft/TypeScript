@@ -525,8 +525,8 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
-        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
+        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
         // set basePath as inferredBaseUrl so baseUrl module resolution strategy can still work even if user have not specified baseUrl explicity
@@ -558,7 +558,7 @@ namespace ts {
                 for (const extension of supportedExtensions) {
                     const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
                     for (const fileName of filesInDirWithExtension) {
-                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension, 
+                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
                             continue;
@@ -582,9 +582,14 @@ namespace ts {
         }
     }
 
-    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
         const options: CompilerOptions = {};
         const errors: Diagnostic[] = [];
+
+        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
+            options.module = ModuleKind.CommonJS;
+            options.allowJs = true;
+        }
 
         if (!jsonOptions) {
             return { options, errors };
