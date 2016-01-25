@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0.
 // See LICENSE.txt in the project root for complete license information.
 
 /// <reference path='services.ts' />
@@ -41,7 +41,7 @@ namespace ts.JsTyping {
         host: HostType,
         fileNames: string[],
         globalCachePath: Path,
-        cachePath: Path,
+        projectRootPath: Path,
         typingOptions: TypingOptions,
         compilerOptions?: CompilerOptions)
         : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -53,7 +53,7 @@ namespace ts.JsTyping {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
-        cachePath = cachePath ? cachePath : globalCachePath;
+        const cachePath = projectRootPath ? projectRootPath : globalCachePath;
         // Only infer typings for .js and .jsx files
         fileNames = fileNames
             .map(ts.normalizePath)
@@ -73,7 +73,11 @@ namespace ts.JsTyping {
         exclude = typingOptions.exclude ? typingOptions.exclude : [];
 
         if (typingOptions.enableAutoDiscovery) {
-            searchDirs = ts.deduplicate(fileNames.map(ts.getDirectoryPath));
+            const possibleSearchDirs = fileNames.map(ts.getDirectoryPath);
+            if (projectRootPath !== undefined) {
+                possibleSearchDirs.push(projectRootPath);
+            }
+            searchDirs = ts.deduplicate(possibleSearchDirs);
             for (const searchDir of searchDirs) {
                 const packageJsonPath = ts.combinePaths(searchDir, "package.json");
                 getTypingNamesFromJson(packageJsonPath, filesToWatch);
@@ -99,7 +103,7 @@ namespace ts.JsTyping {
                 }
             }
 
-            // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
+            // The "installed" property in the tsd.json serves as a registry of installed typings. Each item
             // of this object has a key of the relative file path, and a value that contains the corresponding
             // commit hash.
             if (hasProperty(tsdJsonDict, "installed")) {
@@ -237,8 +241,8 @@ namespace ts.JsTyping {
     }
 
     /**
-     * Keep a list of typings names that we knew cannot be obtained at the moment (could be because 
-     * of network issues or because the package doesn't hava a d.ts files in DefinitelyTyped), so 
+     * Keep a list of typings names that we knew cannot be obtained at the moment (could be because
+     * of network issues or because the package doesn't hava a d.ts files in DefinitelyTyped), so
      * that we won't try again next time within thie session.
      * @param cachedTypingsPaths The list of resolved cached d.ts paths
      * @param newTypings The list of new typings that the host attempted to acquire using TSD
@@ -248,13 +252,13 @@ namespace ts.JsTyping {
         const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
         const cacheTsdJsonDict = tryParseJson(tsdJsonPath, host);
         if (cacheTsdJsonDict) {
-            if (cacheTsdJsonDict.hasOwnProperty("installed")) {
-                const installedTypingFiles = Object.keys(cacheTsdJsonDict.installed);
-                const newMissingTypingNames =
-                    ts.filter(triedTypingNames, name => notFoundTypingNames.indexOf(name) < 0 && !isInstalled(name, installedTypingFiles));
-                for (const newMissingTypingName of newMissingTypingNames) {
-                    notFoundTypingNames.push(newMissingTypingName);
-                }
+            const installedTypingFiles = hasProperty(cacheTsdJsonDict, "installed")
+                ? Object.keys(cacheTsdJsonDict.installed)
+                : [];
+            const newMissingTypingNames =
+                ts.filter(triedTypingNames, name => notFoundTypingNames.indexOf(name) < 0 && !isInstalled(name, installedTypingFiles));
+            for (const newMissingTypingName of newMissingTypingNames) {
+                notFoundTypingNames.push(newMissingTypingName);
             }
         }
     }

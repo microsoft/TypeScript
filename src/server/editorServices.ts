@@ -1053,13 +1053,9 @@ namespace ts.server {
             const tsd = this.host.getTsd();
             if (!project || tsd === undefined) { return; }
 
-            const cachePath = project.isConfiguredProject()
+            const projectRootPath = project.isConfiguredProject()
                 ? toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName)
-                : this.host.globalCachePath;
-
-            if (!cachePath) {
-                return;
-            }
+                : undefined;
 
             // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
             // has a default value
@@ -1071,13 +1067,18 @@ namespace ts.server {
                 sys,
                 project.getFileNames(),
                 this.host.globalCachePath,
-                cachePath,
+                projectRootPath,
                 typingOptions,
                 compilerOptions
             );
 
             // Bail out when no actions are needed
             if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            const cachePath = projectRootPath ? projectRootPath : this.host.globalCachePath;
+            if (!cachePath) {
                 return;
             }
 
