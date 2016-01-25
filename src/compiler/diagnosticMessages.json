@@ -794,7 +794,7 @@
     "A decorator can only decorate a method implementation, not an overload.": {
         "category": "Error",
         "code": 1249
-    }, 
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1686,6 +1686,10 @@
     "A module cannot have multiple default exports.": {
         "category": "Error",
         "code": 2528
+    },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module containing async functions.": {
+        "category": "Error",
+        "code": 2529
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

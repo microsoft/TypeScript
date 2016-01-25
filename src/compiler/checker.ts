@@ -376,8 +376,8 @@ namespace ts {
             const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
             if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
-                // its symbol already has accumulated information for all declarations 
-                // so we need to add it just once - do the work only for first declaration 
+                // its symbol already has accumulated information for all declarations
+                // so we need to add it just once - do the work only for first declaration
                 Debug.assert(moduleAugmentation.symbol.declarations.length > 1);
                 return;
             }
@@ -386,7 +386,7 @@ namespace ts {
                 mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
             }
             else {
-                // find a module that about to be augmented 
+                // find a module that about to be augmented
                 let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found);
                 if (!mainModule) {
                     return;
@@ -810,7 +810,7 @@ namespace ts {
                     }
 
                     // No static member is present.
-                    // Check if we're in an instance method and look for a relevant instance member. 
+                    // Check if we're in an instance method and look for a relevant instance member.
                     if (location === container && !(location.flags & NodeFlags.Static)) {
                         const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
                         if (getPropertyOfType(instanceType, name)) {
@@ -1161,7 +1161,7 @@ namespace ts {
                     return getMergedSymbol(sourceFile.symbol);
                 }
                 if (moduleNotFoundError) {
-                    // report errors only if it was requested 
+                    // report errors only if it was requested
                     error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 }
                 return undefined;
@@ -2471,10 +2471,21 @@ namespace ts {
 
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
+            while (node) {
+                switch (node.kind) {
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.NamedImports:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.ImportClause:
+                        node = node.parent;
+                        break;
 
-            // Parent chain:
-            // VaribleDeclaration -> VariableDeclarationList -> VariableStatement -> 'Declaration Container'
-            return node.kind === SyntaxKind.VariableDeclaration ? node.parent.parent.parent : node.parent;
+                    default:
+                        return node.parent;
+                }
+            }
         }
 
         function getTypeOfPrototypeProperty(prototype: Symbol): Type {
@@ -11359,6 +11370,9 @@ namespace ts {
                             checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
+                    else if (isAsyncFunctionLike(node)) {
+                        checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
+                    }
                 }
             }
 
@@ -12283,6 +12297,21 @@ namespace ts {
                 return unknownType;
             }
 
+            if (languageVersion >= ScriptTarget.ES6) {
+                const promisedType = getPromisedType(promiseType);
+                if (!promisedType) {
+                    error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                    return unknownType;
+                }
+
+                const promiseInstantiation = createPromiseType(promisedType);
+                if (!checkTypeAssignableTo(promiseInstantiation, promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
+                    return unknownType;
+                }
+
+                return promisedType;
+            }
+
             const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
                 const typeName = promiseConstructor
@@ -12457,6 +12486,7 @@ namespace ts {
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
         }
 
@@ -12641,6 +12671,25 @@ namespace ts {
             }
         }
 
+        function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
+            if (!needCollisionCheckForIdentifier(node, name, "Promise")) {
+                return;
+            }
+
+            // Uninstantiated modules shouldnt do this check
+            if (node.kind === SyntaxKind.ModuleDeclaration && getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
+                return;
+            }
+
+            // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
+            const parent = getDeclarationContainer(node);
+            if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent) && parent.flags & NodeFlags.HasAsyncFunctions) {
+                // If the declaration happens to be in external module, report error that require and exports are reserved keywords
+                error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
+                    declarationNameToString(name), declarationNameToString(name));
+            }
+        }
+
         function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
             // - ScriptBody : StatementList
             // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList
@@ -12819,6 +12868,7 @@ namespace ts {
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
         }
 
@@ -13584,6 +13634,7 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
@@ -14090,6 +14141,7 @@ namespace ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -14194,6 +14246,7 @@ namespace ts {
 
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
 
@@ -14224,10 +14277,10 @@ namespace ts {
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
                         // body of the augmentation should be checked for consistency only if augmentation was applied to its target (either global scope or module)
-                        // otherwise we'll be swamped in cascading errors. 
+                        // otherwise we'll be swamped in cascading errors.
                         // We can detect if augmentation was applied using following rules:
                         // - augmentation for a global scope is always applied
-                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module). 
+                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
                         const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
                         if (checkBody) {
                             // body of ambient external module is always a module block
@@ -14386,6 +14439,7 @@ namespace ts {
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkAliasSymbol(node);
         }
 
