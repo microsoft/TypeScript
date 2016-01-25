@@ -6096,19 +6096,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
-            function emitVar() {
-                if (languageVersion <= ScriptTarget.ES5) {
-                    write("var ");
-                }
-                else {
-                    write("const ");
-                }
-            }
-
             function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 if (contains(externalImports, node)) {
                     const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     const namespaceDeclaration = getNamespaceDeclarationNode(node);
+                    const varOrConst = (languageVersion <= ScriptTarget.ES5) ? "var " : "const ";
 
                     if (modulekind !== ModuleKind.AMD) {
                         emitLeadingComments(node);
@@ -6117,7 +6109,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import x = require("foo")
                             // import * as x from "foo"
                             if (!isExportedImport) {
-                                emitVar();
+                                write(varOrConst);
                             };
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
@@ -6130,7 +6122,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                emitVar();
+                                write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
@@ -6157,7 +6149,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            emitVar();
+                            write(varOrConst);
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             write(getGeneratedNameForNode(<ImportDeclaration>node));
