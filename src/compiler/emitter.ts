@@ -6096,6 +6096,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
+            function emitVar() {
+                if (languageVersion <= ScriptTarget.ES5) {
+                    write("var ");
+                }
+                else {
+                    write("const ");
+                }
+            }
+
             function emitExternalImportDeclaration(node: ImportDeclaration | ImportEqualsDeclaration) {
                 if (contains(externalImports, node)) {
                     const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
@@ -6108,12 +6117,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import x = require("foo")
                             // import * as x from "foo"
                             if (!isExportedImport) {
-                                if (languageVersion <= ScriptTarget.ES5) {
-                                    write("var ");
-                                }
-                                else {
-                                    write("const ");
-                                }
+                                emitVar();
                             };
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
@@ -6126,12 +6130,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                if (languageVersion <= ScriptTarget.ES5) {
-                                    write("var ");
-                                }
-                                else {
-                                    write("const ");
-                                }
+                                emitVar();
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
@@ -6158,12 +6157,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            if (languageVersion <= ScriptTarget.ES5) {
-                                write("var ");
-                            }
-                            else {
-                                write("const ");
-                            }
+                            emitVar();
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             write(getGeneratedNameForNode(<ImportDeclaration>node));
