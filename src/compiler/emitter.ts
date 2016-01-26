@@ -2294,16 +2294,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write(")");
             }
 
-            function isSuperPropertyAccess(node: Expression): node is PropertyAccessExpression {
-                return node.kind === SyntaxKind.PropertyAccessExpression
-                    && (<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
-            }
-
-            function isSuperElementAccess(node: Expression): node is ElementAccessExpression {
-                return node.kind === SyntaxKind.ElementAccessExpression
-                    && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
-            }
-
             function isInAsyncMethodWithSuperInES6(node: Node) {
                 if (languageVersion === ScriptTarget.ES6) {
                     const container = getSuperContainer(node, /*includeFunctions*/ false);
@@ -2337,7 +2327,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     superCall = true;
                 }
                 else {
-                    superCall = isSuperPropertyAccess(expression) || isSuperElementAccess(expression);
+                    superCall = isSuperPropertyOrElementAccess(expression);
                     isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
                     emit(expression);
                 }

@@ -7115,12 +7115,6 @@ namespace ts {
             return false;
         }
 
-        function isSuperPropertyOrElementAccess(node: Node) {
-            return (node.kind === SyntaxKind.PropertyAccessExpression
-                || node.kind === SyntaxKind.ElementAccessExpression)
-                && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
-        }
-
         function checkSuperExpression(node: Node): Type {
             const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
 
