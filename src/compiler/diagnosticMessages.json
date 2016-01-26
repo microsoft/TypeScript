@@ -2645,6 +2645,6 @@
     },
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
       "category": "Error",
-      "code": 17008
+      "code": 17009
     }
 }

@@ -1,11 +1,9 @@
-tests/cases/compiler/thisInSuperCall.ts(7,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/thisInSuperCall.ts(14,15): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/compiler/thisInSuperCall.ts(14,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/thisInSuperCall.ts(20,15): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/thisInSuperCall.ts(7,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/thisInSuperCall.ts(14,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/thisInSuperCall.ts (5 errors) ====
+==== tests/cases/compiler/thisInSuperCall.ts (3 errors) ====
     class Base { 
         constructor(x: any) {}
     }
@@ -14,7 +12,7 @@ tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17008: 'super' must be c
         constructor() {
             super(this); // error: "super" has to be called before "this" accessing
                   ~~~~
-!!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
@@ -23,9 +21,7 @@ tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17008: 'super' must be c
         constructor() {
             super(this); // error
                   ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
-                  ~~~~
-!!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
@@ -33,8 +29,6 @@ tests/cases/compiler/thisInSuperCall.ts(20,15): error TS17008: 'super' must be c
         constructor(public p) {
             super(this); // error
                   ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
-                  ~~~~
-!!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
