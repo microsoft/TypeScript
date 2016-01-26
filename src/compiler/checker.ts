@@ -376,8 +376,8 @@ namespace ts {
             const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
             if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
-                // its symbol already has accumulated information for all declarations 
-                // so we need to add it just once - do the work only for first declaration 
+                // its symbol already has accumulated information for all declarations
+                // so we need to add it just once - do the work only for first declaration
                 Debug.assert(moduleAugmentation.symbol.declarations.length > 1);
                 return;
             }
@@ -386,7 +386,7 @@ namespace ts {
                 mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
             }
             else {
-                // find a module that about to be augmented 
+                // find a module that about to be augmented
                 let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found);
                 if (!mainModule) {
                     return;
@@ -812,7 +812,7 @@ namespace ts {
                     }
 
                     // No static member is present.
-                    // Check if we're in an instance method and look for a relevant instance member. 
+                    // Check if we're in an instance method and look for a relevant instance member.
                     if (location === container && !(location.flags & NodeFlags.Static)) {
                         const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
                         if (getPropertyOfType(instanceType, name)) {
@@ -1163,7 +1163,7 @@ namespace ts {
                     return getMergedSymbol(sourceFile.symbol);
                 }
                 if (moduleNotFoundError) {
-                    // report errors only if it was requested 
+                    // report errors only if it was requested
                     error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 }
                 return undefined;
@@ -7147,7 +7147,6 @@ namespace ts {
 
                 if (node.parserContextFlags & ParserContextFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
-                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
                 }
             }
 
@@ -7378,6 +7377,71 @@ namespace ts {
             }
 
             getNodeLinks(node).flags |= nodeCheckFlag;
+
+            // Due to how we emit async functions, we need to specialize the emit for an async method that contains a `super` reference.
+            // This is due to the fact that we emit the body of an async function inside of a generator function. As generator
+            // functions cannot reference `super`, we emit a helper inside of the method body, but outside of the generator. This helper
+            // uses an arrow function, which is permitted to reference `super`.
+            //
+            // There are two primary ways we can access `super` from within an async method. The first is getting the value of a property
+            // or indexed access on super, either as part of a right-hand-side expression or call expression. The second is when setting the value
+            // of a property or indexed access, either as part of an assignment expression or destructuring assignment.
+            //
+            // The simplest case is reading a value, in which case we will emit something like the following:
+            //
+            //  // ts
+            //  ...
+            //  async asyncMethod() {
+            //    let x = await super.asyncMethod();
+            //    return x;
+            //  }
+            //  ...
+            //
+            //  // js
+            //  ...
+            //  asyncMethod() {
+            //      const _super = name => super[name];
+            //      return __awaiter(this, arguments, Promise, function *() {
+            //          let x = yield _super("asyncMethod").call(this);
+            //          return x;
+            //      });
+            //  }
+            //  ...
+            //
+            // The more complex case is when we wish to assign a value, especially as part of a destructuring assignment. As both cases
+            // are legal in ES6, but also likely less frequent, we emit the same more complex helper for both scenarios:
+            //
+            //  // ts
+            //  ...
+            //  async asyncMethod(ar: Promise<any[]>) {
+            //      [super.a, super.b] = await ar;
+            //  }
+            //  ...
+            //
+            //  // js
+            //  ...
+            //  asyncMethod(ar) {
+            //      const _super = (function (geti, seti) {
+            //          const cache = Object.create(null);
+            //          return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+            //      })(name => super[name], (name, value) => super[name] = value);
+            //      return __awaiter(this, arguments, Promise, function *() {
+            //          [_super("a").value, _super("b").value] = yield ar;
+            //      });
+            //  }
+            //  ...
+            //
+            // This helper creates an object with a "value" property that wraps the `super` property or indexed access for both get and set.
+            // This is required for destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment
+            // while a property access can.
+            if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
+                if (isSuperPropertyOrElementAccess(node.parent) && isAssignmentTarget(node.parent)) {
+                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
+                }
+                else {
+                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                }
+            }
 
             if (needToCaptureLexicalThis) {
                 // call expressions are allowed only in constructors so they should always capture correct 'this'
@@ -14426,10 +14490,10 @@ namespace ts {
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
                         // body of the augmentation should be checked for consistency only if augmentation was applied to its target (either global scope or module)
-                        // otherwise we'll be swamped in cascading errors. 
+                        // otherwise we'll be swamped in cascading errors.
                         // We can detect if augmentation was applied using following rules:
                         // - augmentation for a global scope is always applied
-                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module). 
+                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
                         const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
                         if (checkBody) {
                             // body of ambient external module is always a module block

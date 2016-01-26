@@ -324,7 +324,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.call(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };`;
 
@@ -1488,11 +1488,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
-                    write("_arguments");
-                    return;
-                }
-
                 const container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -2122,6 +2117,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    const name = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                    name.text = node.name.text;
+                    emitSuperAccessInAsyncMethod(node.expression, name);
+                    return;
+                }
+
                 emit(node.expression);
                 const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
@@ -2207,6 +2211,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
+
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    emitSuperAccessInAsyncMethod(node.expression, node.argumentExpression);
+                    return;
+                }
+
                 emit(node.expression);
                 write("[");
                 emit(node.argumentExpression);
@@ -2282,23 +2294,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write(")");
             }
 
+            function isInAsyncMethodWithSuperInES6(node: Node) {
+                if (languageVersion === ScriptTarget.ES6) {
+                    const container = getSuperContainer(node, /*includeFunctions*/ false);
+                    if (container && resolver.getNodeCheckFlags(container) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function emitSuperAccessInAsyncMethod(superNode: Node, argumentExpression: Expression) {
+                const container = getSuperContainer(superNode, /*includeFunctions*/ false);
+                const isSuperBinding = resolver.getNodeCheckFlags(container) & NodeCheckFlags.AsyncMethodWithSuperBinding;
+                write("_super(");
+                emit(argumentExpression);
+                write(isSuperBinding ? ").value" : ")");
+            }
+
             function emitCallExpression(node: CallExpression) {
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
                 }
+
+                const expression = node.expression;
                 let superCall = false;
-                if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    emitSuper(node.expression);
+                let isAsyncMethodWithSuper = false;
+                if (expression.kind === SyntaxKind.SuperKeyword) {
+                    emitSuper(expression);
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
+                    superCall = isSuperPropertyOrElementAccess(expression);
+                    isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
+                    emit(expression);
                 }
-                if (superCall && languageVersion < ScriptTarget.ES6) {
+
+                if (superCall && (languageVersion < ScriptTarget.ES6 || isAsyncMethodWithSuper)) {
                     write(".call(");
-                    emitThis(node.expression);
+                    emitThis(expression);
                     if (node.arguments.length) {
                         write(", ");
                         emitCommaList(node.arguments);
@@ -4470,6 +4506,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(" {");
                     increaseIndent();
                     writeLine();
+
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                        writeLines(`
+const _super = (function (geti, seti) {
+    const cache = Object.create(null);
+    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+})(name => super[name], (name, value) => super[name] = value);`);
+                        writeLine();
+                    }
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                        write(`const _super = name => super[name];`);
+                        writeLine();
+                    }
+
                     write("return");
                 }
 
@@ -4489,12 +4539,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 // Emit the call to __awaiter.
-                if (hasLexicalArguments) {
-                    write(", function* (_arguments)");
-                }
-                else {
-                    write(", function* ()");
-                }
+                write(", function* ()");
 
                 // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);

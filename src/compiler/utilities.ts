@@ -850,6 +850,16 @@ namespace ts {
         }
     }
 
+    /**
+     * Determines whether a node is a property or element access expression for super.
+     */
+    export function isSuperPropertyOrElementAccess(node: Node) {
+        return (node.kind === SyntaxKind.PropertyAccessExpression
+            || node.kind === SyntaxKind.ElementAccessExpression)
+            && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+    }
+
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
         if (node) {
             switch (node.kind) {
