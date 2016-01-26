@@ -2294,16 +2294,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write(")");
             }
 
-            function isSuperPropertyAccess(node: Expression): node is PropertyAccessExpression {
-                return node.kind === SyntaxKind.PropertyAccessExpression
-                    && (<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
-            }
-
-            function isSuperElementAccess(node: Expression): node is ElementAccessExpression {
-                return node.kind === SyntaxKind.ElementAccessExpression
-                    && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
-            }
-
             function isInAsyncMethodWithSuperInES6(node: Node) {
                 if (languageVersion === ScriptTarget.ES6) {
                     const container = getSuperContainer(node, /*includeFunctions*/ false);
@@ -2337,7 +2327,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     superCall = true;
                 }
                 else {
-                    superCall = isSuperPropertyAccess(expression) || isSuperElementAccess(expression);
+                    superCall = isSuperPropertyOrElementAccess(expression);
                     isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
                     emit(expression);
                 }
@@ -6155,6 +6145,7 @@ const _super = (function (geti, seti) {
                 if (contains(externalImports, node)) {
                     const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     const namespaceDeclaration = getNamespaceDeclarationNode(node);
+                    const varOrConst = (languageVersion <= ScriptTarget.ES5) ? "var " : "const ";
 
                     if (modulekind !== ModuleKind.AMD) {
                         emitLeadingComments(node);
@@ -6162,7 +6153,9 @@ const _super = (function (geti, seti) {
                         if (namespaceDeclaration && !isDefaultImport(node)) {
                             // import x = require("foo")
                             // import * as x from "foo"
-                            if (!isExportedImport) write("var ");
+                            if (!isExportedImport) {
+                                write(varOrConst);
+                            };
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                         }
@@ -6174,7 +6167,7 @@ const _super = (function (geti, seti) {
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                write("var ");
+                                write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
@@ -6201,7 +6194,7 @@ const _super = (function (geti, seti) {
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            write("var ");
+                            write(varOrConst);
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             write(getGeneratedNameForNode(<ImportDeclaration>node));
