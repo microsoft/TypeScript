@@ -5,7 +5,7 @@ declare namespace chai.assert {
     function deepEqual(actual: any, expected: any): void;
 }
 
-module ts {
+namespace ts {
     function diagnosticToString(diagnostic: Diagnostic) {
         let output = "";
 
@@ -471,7 +471,7 @@ import b = require("./moduleB.ts");
                 directoryExists: _ => false
             };
 
-            const result = resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ModuleResolutionKind.NodeJs }, host);
+            const result = resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ModuleResolutionKind.Node }, host);
             assert(!result.resolvedModule);
         });
     });

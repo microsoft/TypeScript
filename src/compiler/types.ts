@@ -2376,7 +2376,7 @@ namespace ts {
 
     export const enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs  = 2
+        Node  = 2
     }
 
     export interface CompilerOptions {
