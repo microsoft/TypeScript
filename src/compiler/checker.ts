@@ -15366,6 +15366,18 @@ namespace ts {
                 return getSymbolOfNode(entityName.parent);
             }
 
+            if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+                switch (specialPropertyAssignmentKind) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return getSymbolOfNode(entityName.parent);
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        return getSymbolOfNode(entityName.parent.parent);
+                }
+            }
+
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
                 return resolveEntityName(<Identifier>entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
