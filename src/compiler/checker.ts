@@ -2629,7 +2629,7 @@ namespace ts {
                 }
             }
             else if (declaration.kind === SyntaxKind.Parameter) {
-                // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+                // If it's a parameter, see if the parent has a jsdoc comment with an @param
                 // annotation.
                 const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
                 if (paramTag && paramTag.typeExpression) {
@@ -2644,7 +2644,7 @@ namespace ts {
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
-                // one as its type), otherwise fallback to the below standard TS codepaths to 
+                // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
                 const type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
                 if (type && type !== unknownType) {
@@ -4069,7 +4069,7 @@ namespace ts {
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 let returnType: Type = undefined;
 
-                // If this is a JSDoc construct signature, then skip the first parameter in the 
+                // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
                 // signature.
                 for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
@@ -4472,7 +4472,7 @@ namespace ts {
             }
 
             if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In 
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In
                 // that case, the type of this reference is just the type of the value we resolved
                 // to.
                 return getTypeOfSymbol(symbol);
@@ -10479,7 +10479,7 @@ namespace ts {
 
         /*
          *TypeScript Specification 1.0 (6.3) - July 2014
-         * An explicitly typed function whose return type isn't the Void type, 
+         * An explicitly typed function whose return type isn't the Void type,
          * the Any type, or a union type containing the Void or Any type as a constituent
          * must have at least one return statement somewhere in its body.
          * An exception to this rule is if the function implementation consists of a single 'throw' statement.
@@ -12509,6 +12509,33 @@ namespace ts {
         }
 
         /**
+         * Checks that the return type provided is an instantiation of the global Promise<T> type
+         * and returns the awaited type of the return type.
+         */
+        function checkCorrectPromiseType(returnType: Type, location: Node) {
+            if (returnType === unknownType) {
+                // The return type already had some other error, so we ignore and return
+                // the unknown type.
+                return unknownType;
+            }
+
+            const globalPromiseType = getGlobalPromiseType();
+            if (globalPromiseType === emptyGenericType
+                || globalPromiseType === getTargetType(returnType)) {
+                // Either we couldn't resolve the global promise type, which would have already
+                // reported an error, or we could resolve it and the return type is a valid type
+                // reference to the global type. In either case, we return the awaited type for
+                // the return type.
+                return checkAwaitedType(returnType, location, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            }
+
+            // The promise type was not a valid type reference to the global promise type, so we
+            // report an error and return the unknown type.
+            error(location, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T);
+            return unknownType;
+        }
+
+        /**
           * Checks the return type of an async function to ensure it is a compatible
           * Promise implementation.
           * @param node The signature to check
@@ -12522,6 +12549,11 @@ namespace ts {
           * callable `then` signature.
           */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
+            if (languageVersion >= ScriptTarget.ES6) {
+                const returnType = getTypeFromTypeNode(node.type);
+                return checkCorrectPromiseType(returnType, node.type);
+            }
+
             const globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
             if (globalPromiseConstructorLikeType === emptyObjectType) {
                 // If we couldn't resolve the global PromiseConstructorLike type we cannot verify
@@ -12561,21 +12593,6 @@ namespace ts {
                 // If we are compiling with isolatedModules, we may not be able to resolve the
                 // type as a value. As such, we will just return unknownType;
                 return unknownType;
-            }
-
-            if (languageVersion >= ScriptTarget.ES6) {
-                const promisedType = getPromisedType(promiseType);
-                if (!promisedType) {
-                    error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
-                    return unknownType;
-                }
-
-                const promiseInstantiation = createPromiseType(promisedType);
-                if (!checkTypeAssignableTo(promiseInstantiation, promiseType, node.type, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
-                    return unknownType;
-                }
-
-                return promisedType;
             }
 
             const promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
