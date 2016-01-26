@@ -376,8 +376,8 @@ namespace ts {
             const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
             if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
-                // its symbol already has accumulated information for all declarations 
-                // so we need to add it just once - do the work only for first declaration 
+                // its symbol already has accumulated information for all declarations
+                // so we need to add it just once - do the work only for first declaration
                 Debug.assert(moduleAugmentation.symbol.declarations.length > 1);
                 return;
             }
@@ -386,7 +386,7 @@ namespace ts {
                 mergeSymbolTable(globals, moduleAugmentation.symbol.exports);
             }
             else {
-                // find a module that about to be augmented 
+                // find a module that about to be augmented
                 let mainModule = resolveExternalModuleNameWorker(moduleName, moduleName, Diagnostics.Invalid_module_name_in_augmentation_module_0_cannot_be_found);
                 if (!mainModule) {
                     return;
@@ -812,7 +812,7 @@ namespace ts {
                     }
 
                     // No static member is present.
-                    // Check if we're in an instance method and look for a relevant instance member. 
+                    // Check if we're in an instance method and look for a relevant instance member.
                     if (location === container && !(location.flags & NodeFlags.Static)) {
                         const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
                         if (getPropertyOfType(instanceType, name)) {
@@ -1163,7 +1163,7 @@ namespace ts {
                     return getMergedSymbol(sourceFile.symbol);
                 }
                 if (moduleNotFoundError) {
-                    // report errors only if it was requested 
+                    // report errors only if it was requested
                     error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 }
                 return undefined;
@@ -2618,7 +2618,7 @@ namespace ts {
                 }
             }
             else if (declaration.kind === SyntaxKind.Parameter) {
-                // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+                // If it's a parameter, see if the parent has a jsdoc comment with an @param
                 // annotation.
                 const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
                 if (paramTag && paramTag.typeExpression) {
@@ -2633,7 +2633,7 @@ namespace ts {
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
-                // one as its type), otherwise fallback to the below standard TS codepaths to 
+                // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
                 const type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
                 if (type && type !== unknownType) {
@@ -4058,7 +4058,7 @@ namespace ts {
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 let returnType: Type = undefined;
 
-                // If this is a JSDoc construct signature, then skip the first parameter in the 
+                // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
                 // signature.
                 for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
@@ -4461,7 +4461,7 @@ namespace ts {
             }
 
             if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In 
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In
                 // that case, the type of this reference is just the type of the value we resolved
                 // to.
                 return getTypeOfSymbol(symbol);
@@ -10404,7 +10404,7 @@ namespace ts {
 
         /*
          *TypeScript Specification 1.0 (6.3) - July 2014
-         * An explicitly typed function whose return type isn't the Void type, 
+         * An explicitly typed function whose return type isn't the Void type,
          * the Any type, or a union type containing the Void or Any type as a constituent
          * must have at least one return statement somewhere in its body.
          * An exception to this rule is if the function implementation consists of a single 'throw' statement.
@@ -14426,10 +14426,10 @@ namespace ts {
                 if (isAmbientExternalModule) {
                     if (isExternalModuleAugmentation(node)) {
                         // body of the augmentation should be checked for consistency only if augmentation was applied to its target (either global scope or module)
-                        // otherwise we'll be swamped in cascading errors. 
+                        // otherwise we'll be swamped in cascading errors.
                         // We can detect if augmentation was applied using following rules:
                         // - augmentation for a global scope is always applied
-                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module). 
+                        // - augmentation for some external module is applied if symbol for augmentation is merged (it was combined with target module).
                         const checkBody = isGlobalAugmentation || (getSymbolOfNode(node).flags & SymbolFlags.Merged);
                         if (checkBody) {
                             // body of ambient external module is always a module block
@@ -15198,6 +15198,18 @@ namespace ts {
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
+            }
+
+            if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+                switch (specialPropertyAssignmentKind) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return getSymbolOfNode(entityName.parent);
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        return getSymbolOfNode(entityName.parent.parent);
+                }
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
