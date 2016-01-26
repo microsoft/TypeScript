@@ -39,10 +39,10 @@ namespace ts {
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const moduleResolution = compilerOptions.moduleResolution !== undefined
             ? compilerOptions.moduleResolution
-            : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+            : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.Node : ModuleResolutionKind.Classic;
 
         switch (moduleResolution) {
-            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+            case ModuleResolutionKind.Node: return nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
             case ModuleResolutionKind.Classic: return classicNameResolver(moduleName, containingFile, compilerOptions, host);
         }
     }
