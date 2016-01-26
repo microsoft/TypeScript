@@ -1,4 +1,5 @@
 /// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
+/// <reference path="..\..\..\src\harness\external\chai.d.ts" />
 /// <reference path="..\..\..\src\compiler\parser.ts" />
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
@@ -985,15 +986,29 @@ module ts {
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
                 let comment = parseIsolatedJSDocComment(content);
-                Debug.assert(comment && comment.diagnostics.length === 0);
+                if (!comment) {
+                    Debug.fail('Comment failed to parse entirely');
+                }
+                if (comment.diagnostics.length > 0) {
+                    Debug.fail('Comment has at least one diagnostic: ' + comment.diagnostics[0].messageText);
+                }
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
                     return v && v.pos !== undefined
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
-                }, "    ");
+                }, 4);
                 
-                assert.equal(result, expected);
+                if (result !== expected) {
+                    // Turn on a human-readable diff
+                    if (typeof require !== 'undefined') {
+                        require('chai').config.showDiff = true;
+                        chai.expect(JSON.parse(result)).equal(JSON.parse(expected));
+                    }
+                    else {
+                        assert.equal(result, expected);
+                    }
+                }
             }
 
             function parsesIncorrectly(content: string) {
@@ -1577,7 +1592,7 @@ module ts {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
-            "end": 30,
+            "end": 31,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1609,7 +1624,7 @@ module ts {
         },
         "length": 1,
         "pos": 8,
-        "end": 30
+        "end": 31
     }
 }`);
                 });
@@ -1627,7 +1642,7 @@ module ts {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
-            "end": 31,
+            "end": 36,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1659,7 +1674,7 @@ module ts {
         },
         "length": 1,
         "pos": 8,
-        "end": 31
+        "end": 36
     }
 }`);
                 });
@@ -2113,7 +2128,7 @@ module ts {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
-            "end": 24,
+            "end": 23,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2150,12 +2165,12 @@ module ts {
                 },
                 "length": 2,
                 "pos": 17,
-                "end": 24
+                "end": 23
             }
         },
         "length": 1,
         "pos": 8,
-        "end": 24
+        "end": 23
     }
 }`);
                 });
