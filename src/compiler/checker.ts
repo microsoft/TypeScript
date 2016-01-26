@@ -4285,7 +4285,7 @@ namespace ts {
 
         function hasConstraintReferenceTo(type: Type, target: TypeParameter): boolean {
             let checked: Type[];
-            while (type && type.flags & TypeFlags.TypeParameter && !contains(checked, type)) {
+            while (type && !(type.flags & TypeFlags.ThisType) && type.flags & TypeFlags.TypeParameter && !contains(checked, type)) {
                 if (type === target) {
                     return true;
                 }
