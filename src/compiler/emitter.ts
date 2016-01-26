@@ -6145,6 +6145,7 @@ const _super = (function (geti, seti) {
                 if (contains(externalImports, node)) {
                     const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     const namespaceDeclaration = getNamespaceDeclarationNode(node);
+                    const varOrConst = (languageVersion <= ScriptTarget.ES5) ? "var " : "const ";
 
                     if (modulekind !== ModuleKind.AMD) {
                         emitLeadingComments(node);
@@ -6152,7 +6153,9 @@ const _super = (function (geti, seti) {
                         if (namespaceDeclaration && !isDefaultImport(node)) {
                             // import x = require("foo")
                             // import * as x from "foo"
-                            if (!isExportedImport) write("var ");
+                            if (!isExportedImport) {
+                                write(varOrConst);
+                            };
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                         }
@@ -6164,7 +6167,7 @@ const _super = (function (geti, seti) {
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                write("var ");
+                                write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
@@ -6191,7 +6194,7 @@ const _super = (function (geti, seti) {
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            write("var ");
+                            write(varOrConst);
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             write(getGeneratedNameForNode(<ImportDeclaration>node));

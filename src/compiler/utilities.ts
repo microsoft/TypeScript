@@ -1064,7 +1064,7 @@ namespace ts {
 
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
-     * exactly one string literal argument.
+     * exactly one argument.
      * This function does not test if the node is in a JavaScript file or not.
     */
     export function isRequireCall(expression: Node): expression is CallExpression {
@@ -1072,8 +1072,7 @@ namespace ts {
         return expression.kind === SyntaxKind.CallExpression &&
                 (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
                 (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1 &&
-                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
+                (<CallExpression>expression).arguments.length === 1;
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -1153,26 +1152,56 @@ namespace ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
-        if (node && node.jsDocComment) {
-            for (const tag of node.jsDocComment.tags) {
-                if (tag.kind === kind) {
-                    return tag;
-                }
+    function getJSDocTag(node: Node, kind: SyntaxKind, checkParentVariableStatement: boolean): JSDocTag {
+        if (!node) {
+            return undefined;
+        }
+
+        const jsDocComment = getJSDocComment(node, checkParentVariableStatement);
+        if (!jsDocComment) {
+            return undefined;
+        }
+
+        for (const tag of jsDocComment.tags) {
+            if (tag.kind === kind) {
+                return tag;
             }
         }
     }
 
+    function getJSDocComment(node: Node, checkParentVariableStatement: boolean): JSDocComment {
+        if (node.jsDocComment) {
+            return node.jsDocComment;
+        }
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement. 
+        // /** 
+        //   * @param {number} name
+        //   * @returns {number} 
+        //   */
+        // var x = function(name) { return name.length; }
+        if (checkParentVariableStatement) {
+            const isInitializerOfVariableDeclarationInStatement =
+                node.parent.kind === SyntaxKind.VariableDeclaration &&
+                (<VariableDeclaration>node.parent).initializer === node &&
+                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+
+            const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
+            return variableStatementNode && variableStatementNode.jsDocComment;
+        }
+
+        return undefined;
+    }
+
     export function getJSDocTypeTag(node: Node): JSDocTypeTag {
-        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag, /*checkParentVariableStatement*/ false);
     }
 
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
-        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag, /*checkParentVariableStatement*/ true);
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
-        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag, /*checkParentVariableStatement*/ false);
     }
 
     export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
@@ -1181,19 +1210,21 @@ namespace ts {
             // annotation.
             const parameterName = (<Identifier>parameter.name).text;
 
-            const docComment = parameter.parent.jsDocComment;
-            if (docComment) {
-                return <JSDocParameterTag>forEach(docComment.tags, t => {
-                    if (t.kind === SyntaxKind.JSDocParameterTag) {
-                        const parameterTag = <JSDocParameterTag>t;
+            const jsDocComment = getJSDocComment(parameter.parent, /*checkParentVariableStatement*/ true);
+            if (jsDocComment) {
+                for (const tag of jsDocComment.tags) {
+                    if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                        const parameterTag = <JSDocParameterTag>tag;
                         const name = parameterTag.preParameterName || parameterTag.postParameterName;
                         if (name.text === parameterName) {
-                            return t;
+                            return parameterTag;
                         }
                     }
-                });
+                }
             }
         }
+
+        return undefined;
     }
 
     export function hasRestParameter(s: SignatureDeclaration): boolean {

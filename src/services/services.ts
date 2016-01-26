@@ -7179,8 +7179,7 @@ namespace ts {
 
             const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
 
-            // TODO: call a helper method instead once PR #4133 gets merged in.
-            const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
+            const newLine = getNewLineOrDefaultFromHost(host);
 
             let docParams = "";
             for (let i = 0, numParams = parameters.length; i < numParams; i++) {

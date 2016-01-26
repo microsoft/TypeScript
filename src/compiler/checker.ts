@@ -557,7 +557,9 @@ namespace ts {
                             // - Type parameters of a function are in scope in the entire function declaration, including the parameter
                             //   list and return type. However, local types are only in scope in the function body.
                             // - parameters are only in the scope of function body
-                            if (meaning & result.flags & SymbolFlags.Type) {
+                            // This restriction does not apply to JSDoc comment types because they are parented
+                            // at a higher level than type parameters would normally be
+                            if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDocComment) {
                                 useResult = result.flags & SymbolFlags.TypeParameter
                                     // type parameters are visible in parameter list, return type and type parameter list
                                     ? lastLocation === (<FunctionLikeDeclaration>location).type ||
@@ -2591,8 +2593,54 @@ namespace ts {
             return type;
         }
 
+        function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
+            const jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+            if (jsDocType) {
+                return getTypeFromTypeNode(jsDocType);
+            }
+        }
+
+        function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
+            // First, see if this node has an @type annotation on it directly.
+            const typeTag = getJSDocTypeTag(declaration);
+            if (typeTag) {
+                return typeTag.typeExpression.type;
+            }
+
+            if (declaration.kind === SyntaxKind.VariableDeclaration &&
+                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
+                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
+
+                // @type annotation might have been on the variable statement, try that instead.
+                const annotation = getJSDocTypeTag(declaration.parent.parent);
+                if (annotation) {
+                    return annotation.typeExpression.type;
+                }
+            }
+            else if (declaration.kind === SyntaxKind.Parameter) {
+                // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+                // annotation.
+                const paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type;
+                }
+            }
+
+            return undefined;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
+                // one as its type), otherwise fallback to the below standard TS codepaths to 
+                // try to figure it out.
+                const type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
             // A variable declared in a for..in statement is always of type string
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return stringType;
@@ -3910,6 +3958,17 @@ namespace ts {
             return getIndexTypeOfStructuredType(getApparentType(type), kind);
         }
 
+        function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                const templateTag = getJSDocTemplateTag(declaration);
+                if (templateTag) {
+                    return getTypeParametersFromDeclaration(templateTag.typeParameters);
+                }
+            }
+
+            return undefined;
+        }
+
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
         function getTypeParametersFromDeclaration(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
@@ -3934,6 +3993,23 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
+                    return true;
+                }
+
+                const paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag) {
+                    if (paramTag.isBracketed) {
+                        return true;
+                    }
+
+                    if (paramTag.typeExpression) {
+                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                    }
+                }
+            }
+
             if (hasQuestionToken(node)) {
                 return true;
             }
@@ -3974,12 +4050,20 @@ namespace ts {
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
+                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
+                    getTypeParametersFromJSDocTemplate(declaration);
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
-                for (let i = 0, n = declaration.parameters.length; i < n; i++) {
+                const isJSConstructSignature = isJSDocConstructSignature(declaration);
+                let returnType: Type = undefined;
+
+                // If this is a JSDoc construct signature, then skip the first parameter in the 
+                // parameter list.  The first parameter represents the return type of the construct
+                // signature.
+                for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
                     const param = declaration.parameters[i];
+
                     let paramSymbol = param.symbol;
                     // Include parameter symbol instead of property symbol in the signature
                     if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
@@ -3987,6 +4071,7 @@ namespace ts {
                         paramSymbol = resolvedSymbol;
                     }
                     parameters.push(paramSymbol);
+
                     if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
                         hasStringLiterals = true;
                     }
@@ -4006,14 +4091,24 @@ namespace ts {
                     minArgumentCount = declaration.parameters.length;
                 }
 
-                let returnType: Type;
-                if (classType) {
+                if (isJSConstructSignature) {
+                    minArgumentCount--;
+                    returnType = getTypeFromTypeNode(declaration.parameters[0].type);
+                }
+                else if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
+                    if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                        const type = getReturnTypeFromJSDocComment(declaration);
+                        if (type && type !== unknownType) {
+                            returnType = type;
+                        }
+                    }
+
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
                     if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
@@ -4050,6 +4145,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.JSDocFunctionType:
                         // Don't include signature if node is the implementation of an overloaded function. A node is considered
                         // an implementation node if it has a body and the previous node is of the same kind and immediately
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -4269,7 +4365,7 @@ namespace ts {
         }
 
         // Get type from reference to class or interface
-        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -4292,7 +4388,7 @@ namespace ts {
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
-        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
@@ -4313,7 +4409,7 @@ namespace ts {
         }
 
         // Get type from reference to named type that cannot be generic (enum or type parameter)
-        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
@@ -4321,18 +4417,83 @@ namespace ts {
             return getDeclaredTypeOfSymbol(symbol);
         }
 
-        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
+        function getTypeReferenceName(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): LeftHandSideExpression | EntityName {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return (<TypeReferenceNode>node).typeName;
+                case SyntaxKind.JSDocTypeReference:
+                    return (<JSDocTypeReference>node).name;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    // We only support expressions that are simple qualified names. For other
+                    // expressions this produces undefined.
+                    if (isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node)) {
+                        return (<ExpressionWithTypeArguments>node).expression;
+                    }
+
+                // fall through;
+            }
+
+            return undefined;
+        }
+
+        function resolveTypeReferenceName(
+            node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference,
+            typeReferenceName: LeftHandSideExpression | EntityName) {
+
+            if (!typeReferenceName) {
+                return unknownSymbol;
+            }
+
+            return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
+        }
+
+        function getTypeReferenceType(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol) {
+            if (symbol === unknownSymbol) {
+                return unknownType;
+            }
+
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                return getTypeFromClassOrInterfaceReference(node, symbol);
+            }
+
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getTypeFromTypeAliasReference(node, symbol);
+            }
+
+            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In 
+                // that case, the type of this reference is just the type of the value we resolved
+                // to.
+                return getTypeOfSymbol(symbol);
+            }
+
+            return getTypeFromNonGenericTypeReference(node, symbol);
+        }
+
+        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                // We only support expressions that are simple qualified names. For other expressions this produces undefined.
-                const typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
-                    isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
-                        undefined;
-                const symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
-                const type = symbol === unknownSymbol ? unknownType :
-                    symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                        symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                            getTypeFromNonGenericTypeReference(node, symbol);
+                let symbol: Symbol;
+                let type: Type;
+                if (node.kind === SyntaxKind.JSDocTypeReference) {
+                    const typeReferenceName = getTypeReferenceName(node);
+                    symbol = resolveTypeReferenceName(node, typeReferenceName);
+                    type = getTypeReferenceType(node, symbol);
+
+                    links.resolvedSymbol = symbol;
+                    links.resolvedType = type;
+                }
+                else {
+                    // We only support expressions that are simple qualified names. For other expressions this produces undefined.
+                    const typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
+                        isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
+                            undefined;
+                    symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
+                    type = symbol === unknownSymbol ? unknownType :
+                        symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
+                            symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                                getTypeFromNonGenericTypeReference(node, symbol);
+                }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -4627,6 +4788,24 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                const type = getTypeFromTypeNode(node.type);
+                links.resolvedType = type ? createArrayType(type) : unknownType;
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromJSDocTupleType(node: JSDocTupleType): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                const types = map(node.types, getTypeFromTypeNode);
+                links.resolvedType = createTupleType(types);
+            }
+            return links.resolvedType;
+        }
+
         function getThisType(node: TypeNode): Type {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
@@ -4670,6 +4849,8 @@ namespace ts {
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
                     return anyType;
                 case SyntaxKind.StringKeyword:
                     return stringType;
@@ -4686,6 +4867,7 @@ namespace ts {
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
+                case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
                     return getTypeFromPredicateTypeNode(<TypePredicateNode>node);
@@ -4694,18 +4876,27 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
+                case SyntaxKind.JSDocArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
+                case SyntaxKind.JSDocUnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                case SyntaxKind.JSDocOptionalType:
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocRecordType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
@@ -4713,6 +4904,10 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
+                case SyntaxKind.JSDocTupleType:
+                    return getTypeFromJSDocTupleType(<JSDocTupleType>node);
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 default:
                     return unknownType;
             }
@@ -7087,23 +7282,40 @@ namespace ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
             }
 
-            // If this is a function in a JS file, it might be a class method. Check if it's the RHS
-            // of a x.prototype.y = function [name]() { .... }
-            if (isInJavaScriptFile(node) && container.kind === SyntaxKind.FunctionExpression) {
-                if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
-                    const className = (((container.parent as BinaryExpression)   // x.protoype.y = f
-                                        .left as PropertyAccessExpression)       // x.prototype.y
-                                        .expression as PropertyAccessExpression) // x.prototype
-                                        .expression;                             // x
-                    const classSymbol = checkExpression(className).symbol;
-                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        return getInferredClassType(classSymbol);
+            if (isInJavaScriptFile(node)) {
+                const type = getTypeForThisExpressionFromJSDoc(container);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+
+                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
+                // of a x.prototype.y = function [name]() { .... }
+                if (container.kind === SyntaxKind.FunctionExpression) {
+                    if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                        // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
+                        const className = (((container.parent as BinaryExpression)   // x.protoype.y = f
+                            .left as PropertyAccessExpression)       // x.prototype.y
+                            .expression as PropertyAccessExpression) // x.prototype
+                            .expression;                             // x
+                        const classSymbol = checkExpression(className).symbol;
+                        if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                            return getInferredClassType(classSymbol);
+                        }
                     }
                 }
             }
 
             return anyType;
+        }
+
+        function getTypeForThisExpressionFromJSDoc(node: Node) {
+            const typeTag = getJSDocTypeTag(node);
+            if (typeTag && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
+                const jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
+                if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
+                    return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
+                }
+            }
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
@@ -9978,7 +10190,8 @@ namespace ts {
                 if (declaration &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
-                    declaration.kind !== SyntaxKind.ConstructorType) {
+                    declaration.kind !== SyntaxKind.ConstructorType &&
+                    !isJSDocConstructSignature(declaration)) {
 
                     // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
                     // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
@@ -10095,6 +10308,13 @@ namespace ts {
                 // (inferring Base would make type argument inference inconsistent between the two
                 // overloads).
                 inferTypes(mapper.context, links.type, instantiateType(contextualType, mapper));
+            }
+        }
+
+        function getReturnTypeFromJSDocComment(func: SignatureDeclaration | FunctionDeclaration): Type {
+            const returnTag = getJSDocReturnTag(func);
+            if (returnTag) {
+                return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
         }
 
@@ -10248,7 +10468,8 @@ namespace ts {
 
         /*
          *TypeScript Specification 1.0 (6.3) - July 2014
-         * An explicitly typed function whose return type isn't the Void or the Any type
+         * An explicitly typed function whose return type isn't the Void type, 
+         * the Any type, or a union type containing the Void or Any type as a constituent
          * must have at least one return statement somewhere in its body.
          * An exception to this rule is if the function implementation consists of a single 'throw' statement.
          * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
@@ -10259,7 +10480,7 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType === voidType || isTypeAny(returnType)) {
+            if (returnType === voidType || isTypeAny(returnType) || (returnType && (returnType.flags & TypeFlags.Union) && someConstituentTypeHasKind(returnType, TypeFlags.Any | TypeFlags.Void))) {
                 return;
             }
 
