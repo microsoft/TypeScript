@@ -1,0 +1,23 @@
+=== tests/cases/compiler/nestedBlockScopedBindings13.ts ===
+for (; false;) {
+>false : boolean
+
+    let x;
+>x : any
+
+    () => x;
+>() => x : () => any
+>x : any
+}
+
+for (; false;) {
+>false : boolean
+
+    let y;
+>y : any
+
+    y = 1;
+>y = 1 : number
+>y : any
+>1 : number
+}
