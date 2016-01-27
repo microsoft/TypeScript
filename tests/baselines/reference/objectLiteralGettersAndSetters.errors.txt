@@ -79,13 +79,13 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetter
     var getter1 = { get x(): string { return undefined; } };
                         ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-    var getter1: { x: string; }
+    var getter1: { readonly x: string; }
     
     // Get accessor only, type of the property is the inferred return type of the get accessor
     var getter2 = { get x() { return ''; } };
                         ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-    var getter2: { x: string; }
+    var getter2: { readonly x: string; }
     
     // Set accessor only, type of the property is the param type of the set accessor
     var setter1 = { set x(n: number) { } };

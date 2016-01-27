@@ -28,20 +28,20 @@ var e = E1;
 var e: {
 >e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
 
-    A: E1;
+    readonly A: E1;
 >A : Symbol(A, Decl(enumBasics.ts, 12, 8))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
 
-    B: E1;
->B : Symbol(B, Decl(enumBasics.ts, 13, 10))
+    readonly B: E1;
+>B : Symbol(B, Decl(enumBasics.ts, 13, 19))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
 
-    C: E1;
->C : Symbol(C, Decl(enumBasics.ts, 14, 10))
+    readonly C: E1;
+>C : Symbol(C, Decl(enumBasics.ts, 14, 19))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
 
-    [n: number]: string;
->n : Symbol(n, Decl(enumBasics.ts, 16, 5))
+    readonly [n: number]: string;
+>n : Symbol(n, Decl(enumBasics.ts, 16, 14))
 
 };
 var e: typeof E1;

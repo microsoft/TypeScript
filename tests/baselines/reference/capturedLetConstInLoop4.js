@@ -186,7 +186,7 @@ System.register([], function(exports_1) {
                 _loop_3(x);
             }
             var _loop_4 = function() {
-                var x = void 0;
+                var x;
                 v2 = x;
                 (function () { return x + v2; });
                 (function () { return x; });
@@ -195,7 +195,7 @@ System.register([], function(exports_1) {
                 _loop_4();
             }
             var _loop_5 = function() {
-                var x = void 0;
+                var x;
                 v3 = x;
                 (function () { return x + v3; });
                 (function () { return x; });
@@ -221,7 +221,7 @@ System.register([], function(exports_1) {
                 _loop_7(x, y);
             }
             var _loop_8 = function() {
-                var x = void 0, y = void 0;
+                var x, y;
                 v6 = x;
                 (function () { return x + y + v6; });
                 (function () { return x + y; });
@@ -230,7 +230,7 @@ System.register([], function(exports_1) {
                 _loop_8();
             }
             var _loop_9 = function() {
-                var x = void 0, y = void 0;
+                var x, y;
                 v7 = x;
                 (function () { return x + y + v7; });
                 (function () { return x + y; });

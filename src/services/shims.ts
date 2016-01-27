@@ -78,6 +78,8 @@ namespace ts {
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, exclude?: string): string;
+
+        trace(s: string): void;
     }
 
     ///
@@ -946,7 +948,8 @@ namespace ts {
                         };
                     }
 
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    const normalizedFileName = normalizeSlashes(fileName);
+                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
@@ -1056,6 +1059,6 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "1.8";
+const toolsVersion = "1.9";
 
 /* tslint:enable:no-unused-variable */

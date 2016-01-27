@@ -319,17 +319,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };`;
 
         const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
-    return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
-        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
-        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
-        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
-        function step(verb, value) {
-            var result = generator[verb](value);
-            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
-        }
-        step("next", void 0);
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new P(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };`;
 
@@ -1493,11 +1488,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
-                    write("_arguments");
-                    return;
-                }
-
                 const container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -1540,7 +1530,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (languageVersion !== ScriptTarget.ES6) {
-                        const declaration = resolver.getReferencedNestedRedeclaration(node);
+                        const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                         if (declaration) {
                             write(getGeneratedNameForNode(declaration.name));
                             return;
@@ -1556,7 +1546,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function isNameOfNestedRedeclaration(node: Identifier) {
+            function isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node: Identifier) {
                 if (languageVersion < ScriptTarget.ES6) {
                     const parent = node.parent;
                     switch (parent.kind) {
@@ -1564,7 +1554,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.VariableDeclaration:
-                            return (<Declaration>parent).name === node && resolver.isNestedRedeclaration(<Declaration>parent);
+                            return (<Declaration>parent).name === node && resolver.isDeclarationWithCollidingName(<Declaration>parent);
                     }
                 }
                 return false;
@@ -1586,7 +1576,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else if (isExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
-                else if (isNameOfNestedRedeclaration(node)) {
+                else if (isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node)) {
                     write(getGeneratedNameForNode(node));
                 }
                 else if (nodeIsSynthesized(node)) {
@@ -2127,6 +2117,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    const name = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                    name.text = node.name.text;
+                    emitSuperAccessInAsyncMethod(node.expression, name);
+                    return;
+                }
+
                 emit(node.expression);
                 const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
@@ -2212,6 +2211,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
+
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    emitSuperAccessInAsyncMethod(node.expression, node.argumentExpression);
+                    return;
+                }
+
                 emit(node.expression);
                 write("[");
                 emit(node.argumentExpression);
@@ -2287,23 +2294,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(")");
             }
 
+            function isInAsyncMethodWithSuperInES6(node: Node) {
+                if (languageVersion === ScriptTarget.ES6) {
+                    const container = getSuperContainer(node, /*includeFunctions*/ false);
+                    if (container && resolver.getNodeCheckFlags(container) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function emitSuperAccessInAsyncMethod(superNode: Node, argumentExpression: Expression) {
+                const container = getSuperContainer(superNode, /*includeFunctions*/ false);
+                const isSuperBinding = resolver.getNodeCheckFlags(container) & NodeCheckFlags.AsyncMethodWithSuperBinding;
+                write("_super(");
+                emit(argumentExpression);
+                write(isSuperBinding ? ").value" : ")");
+            }
+
             function emitCallExpression(node: CallExpression) {
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
                 }
+
+                const expression = node.expression;
                 let superCall = false;
-                if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    emitSuper(node.expression);
+                let isAsyncMethodWithSuper = false;
+                if (expression.kind === SyntaxKind.SuperKeyword) {
+                    emitSuper(expression);
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
+                    superCall = isSuperPropertyOrElementAccess(expression);
+                    isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
+                    emit(expression);
                 }
-                if (superCall && languageVersion < ScriptTarget.ES6) {
+
+                if (superCall && (languageVersion < ScriptTarget.ES6 || isAsyncMethodWithSuper)) {
                     write(".call(");
-                    emitThis(node.expression);
+                    emitThis(expression);
                     if (node.arguments.length) {
                         write(", ");
                         emitCommaList(node.arguments);
@@ -2860,7 +2891,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function shouldConvertLoopBody(node: IterationStatement): boolean {
                 return languageVersion < ScriptTarget.ES6 &&
-                    (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithBlockScopedBindingCapturedInFunction) !== 0;
+                    (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
             }
 
             function emitLoop(node: IterationStatement, loopEmitter: (n: IterationStatement, convertedLoop: ConvertedLoop) => void): void {
@@ -3014,7 +3045,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function collectNames(name: Identifier | BindingPattern): void {
                     if (name.kind === SyntaxKind.Identifier) {
-                        const nameText = isNameOfNestedRedeclaration(<Identifier>name) ? getGeneratedNameForNode(name) : (<Identifier>name).text;
+                        const nameText = isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(<Identifier>name) ? getGeneratedNameForNode(name) : (<Identifier>name).text;
                         loopParameters.push(nameText);
                     }
                     else {
@@ -3858,7 +3889,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
                         index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
-                        (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
+                        // We need to unescape identifier here because when parsing an identifier prefixing with "__"
+                        // the parser need to append "_" in order to escape colliding with magic identifiers such as "__proto__"
+                        // Therefore, in order to correctly emit identifiers that are written in original TypeScript file,
+                        // we will unescapeIdentifier to remove additional underscore (if no underscore is added, the function will return original input string)
+                        (<Identifier | LiteralExpression>index).text = unescapeIdentifier((<Identifier | LiteralExpression>propName).text);
                     }
 
                     return !nameIsComputed && index.kind === SyntaxKind.Identifier
@@ -4030,22 +4065,56 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 else {
                     let initializer = node.initializer;
-                    if (!initializer && languageVersion < ScriptTarget.ES6) {
+                    if (!initializer &&
+                        languageVersion < ScriptTarget.ES6 &&
+                        // for names - binding patterns that lack initializer there is no point to emit explicit initializer 
+                        // since downlevel codegen for destructuring will fail in the absence of initializer so all binding elements will say uninitialized
+                        node.name.kind === SyntaxKind.Identifier) {
 
-                        // downlevel emit for non-initialized let bindings defined in loops
-                        // for (...) {  let x; }
-                        // should be
-                        // for (...) { var <some-uniqie-name> = void 0; }
-                        // this is necessary to preserve ES6 semantic in scenarios like
-                        // for (...) { let x; console.log(x); x = 1 } // assignment on one iteration should not affect other iterations
-                        const isLetDefinedInLoop =
-                            (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) &&
-                            (getCombinedFlagsForIdentifier(<Identifier>node.name) & NodeFlags.Let);
+                        const container = getEnclosingBlockScopeContainer(node);
+                        const flags = resolver.getNodeCheckFlags(node);
 
-                        // NOTE: default initialization should not be added to let bindings in for-in\for-of statements
-                        if (isLetDefinedInLoop &&
-                            node.parent.parent.kind !== SyntaxKind.ForInStatement &&
-                            node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
+                        // nested let bindings might need to be initialized explicitly to preserve ES6 semantic
+                        // { let x = 1; }
+                        // { let x; } // x here should be undefined. not 1
+                        // NOTES:
+                        // Top level bindings never collide with anything and thus don't require explicit initialization.
+                        // As for nested let bindings there are two cases:
+                        // - nested let bindings that were not renamed definitely should be initialized explicitly
+                        //   { let x = 1; }
+                        //   { let x; if (some-condition) { x = 1}; if (x) { /*1*/ } }
+                        //   Without explicit initialization code in /*1*/ can be executed even if some-condition is evaluated to false
+                        // - renaming introduces fresh name that should not collide with any existing names, however renamed bindings sometimes also should be
+                        //   explicitly initialized. One particular case: non-captured binding declared inside loop body (but not in loop initializer)
+                        //   let x;
+                        //   for (;;) {
+                        //       let x;  
+                        //   }
+                        //   in downlevel codegen inner 'x' will be renamed so it won't collide with outer 'x' however it will should be reset on every iteration
+                        //   as if it was declared anew. 
+                        //   * Why non-captured binding - because if loop contains block scoped binding captured in some function then loop body will be rewritten 
+                        //   to have a fresh scope on every iteration so everything will just work.
+                        //   * Why loop initializer is excluded - since we've introduced a fresh name it already will be undefined.
+                        const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
+                        const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
+
+                        const emittedAsTopLevel =
+                            isBlockScopedContainerTopLevel(container) ||
+                            (isCapturedInFunction && isDeclaredInLoop && container.kind === SyntaxKind.Block && isIterationStatement(container.parent, /*lookInLabeledStatements*/ false));
+
+                        const emittedAsNestedLetDeclaration =
+                            getCombinedNodeFlags(node) & NodeFlags.Let &&
+                            !emittedAsTopLevel;
+
+                        const emitExplicitInitializer =
+                            emittedAsNestedLetDeclaration &&
+                            container.kind !== SyntaxKind.ForInStatement &&
+                            container.kind !== SyntaxKind.ForOfStatement &&
+                            (
+                                !resolver.isDeclarationWithCollidingName(node) ||
+                                (isDeclaredInLoop && !isCapturedInFunction && !isIterationStatement(container, /*lookInLabeledStatements*/ false))
+                            );
+                        if (emitExplicitInitializer) {
                             initializer = createVoidZero();
                         }
                     }
@@ -4078,14 +4147,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else if (isBindingPattern(name)) {
                     forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
                 }
-            }
-
-            function getCombinedFlagsForIdentifier(node: Identifier): NodeFlags {
-                if (!node.parent || (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
-                    return 0;
-                }
-
-                return getCombinedNodeFlags(node.parent);
             }
 
             function isES6ExportedDeclaration(node: Node) {
@@ -4475,6 +4536,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(" {");
                     increaseIndent();
                     writeLine();
+
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                        writeLines(`
+const _super = (function (geti, seti) {
+    const cache = Object.create(null);
+    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+})(name => super[name], (name, value) => super[name] = value);`);
+                        writeLine();
+                    }
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                        write(`const _super = name => super[name];`);
+                        writeLine();
+                    }
+
                     write("return");
                 }
 
@@ -4494,12 +4569,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 // Emit the call to __awaiter.
-                if (hasLexicalArguments) {
-                    write(", function* (_arguments)");
-                }
-                else {
-                    write(", function* ()");
-                }
+                write(", function* ()");
 
                 // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);
@@ -6105,6 +6175,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (contains(externalImports, node)) {
                     const isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     const namespaceDeclaration = getNamespaceDeclarationNode(node);
+                    const varOrConst = (languageVersion <= ScriptTarget.ES5) ? "var " : "const ";
 
                     if (modulekind !== ModuleKind.AMD) {
                         emitLeadingComments(node);
@@ -6112,7 +6183,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (namespaceDeclaration && !isDefaultImport(node)) {
                             // import x = require("foo")
                             // import * as x from "foo"
-                            if (!isExportedImport) write("var ");
+                            if (!isExportedImport) {
+                                write(varOrConst);
+                            };
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                         }
@@ -6124,7 +6197,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // import d, { x, y } from "foo"
                             const isNakedImport = SyntaxKind.ImportDeclaration && !(<ImportDeclaration>node).importClause;
                             if (!isNakedImport) {
-                                write("var ");
+                                write(varOrConst);
                                 write(getGeneratedNameForNode(<ImportDeclaration>node));
                                 write(" = ");
                             }
@@ -6151,7 +6224,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         else if (namespaceDeclaration && isDefaultImport(node)) {
                             // import d, * as x from "foo"
-                            write("var ");
+                            write(varOrConst);
                             emitModuleMemberName(namespaceDeclaration);
                             write(" = ");
                             write(getGeneratedNameForNode(<ImportDeclaration>node));
@@ -7354,12 +7427,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!compilerOptions.noEmitHelpers) {
                     // Only Emit __extends function when target ES5.
                     // For target ES6 and above, we can emit classDeclaration as is.
-                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
+                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
                         writeLines(extendsHelper);
                         extendsEmitted = true;
                     }
 
-                    if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
+                    if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
                         writeLines(decorateHelper);
                         if (compilerOptions.emitDecoratorMetadata) {
                             writeLines(metadataHelper);
@@ -7367,12 +7440,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         decorateEmitted = true;
                     }
 
-                    if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
+                    if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
 
-                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                    if (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions) {
                         writeLines(awaiterHelper);
                         awaiterEmitted = true;
                     }

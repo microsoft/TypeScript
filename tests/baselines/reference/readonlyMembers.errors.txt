@@ -1,0 +1,114 @@
+tests/cases/compiler/readonlyMembers.ts(7,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(8,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(17,9): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(19,13): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(20,13): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(21,13): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(25,9): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(26,9): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(27,9): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(36,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(40,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(49,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(56,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(62,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/readonlyMembers.ts(65,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+
+
+==== tests/cases/compiler/readonlyMembers.ts (15 errors) ====
+    
+    interface X {
+        readonly a: number;
+        readonly b?: number;
+    }
+    var x: X = { a: 0 };
+    x.a = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    x.b = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    
+    class C {
+        readonly a: number;
+        readonly b = 1;
+        get c() { return 1 }
+        constructor() {
+            this.a = 1;  // Ok
+            this.b = 1;  // Ok
+            this.c = 1;  // Error
+            ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+            const f = () => {
+                this.a = 1;  // Error
+                ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+                this.b = 1;  // Error
+                ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+                this.c = 1;  // Error
+                ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+            }
+        }
+        foo() {
+            this.a = 1;  // Error
+            ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+            this.b = 1;  // Error
+            ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+            this.c = 1;  // Error
+            ~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+        }
+    }
+    
+    var o = {
+        get a() { return 1 },
+        get b() { return 1 },
+        set b(value) { }
+    };
+    o.a = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    o.b = 1;
+    
+    var p: { readonly a: number, b: number } = { a: 1, b: 1 };
+    p.a = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    p.b = 1;
+    var q: { a: number, b: number } = p;
+    q.a = 1;
+    q.b = 1;
+    
+    enum E {
+        A, B, C
+    }
+    E.A = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    
+    namespace N {
+        export const a = 1;
+        export let b = 1;
+        export var c = 1;
+    }
+    N.a = 1;  // Error
+    ~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    N.b = 1;
+    N.c = 1;
+    
+    let xx: { readonly [x: string]: string };
+    let s = xx["foo"];
+    xx["foo"] = "abc";  // Error
+    ~~~~~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    
+    let yy: { readonly [x: number]: string, [x: string]: string };
+    yy[1] = "abc";  // Error
+    ~~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    yy["foo"] = "abc";
