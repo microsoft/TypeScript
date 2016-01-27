@@ -12511,6 +12511,9 @@ namespace ts {
         /**
          * Checks that the return type provided is an instantiation of the global Promise<T> type
          * and returns the awaited type of the return type.
+         *
+         * @param returnType The return type of a FunctionLikeDeclaration
+         * @param location The node on which to report the error.
          */
         function checkCorrectPromiseType(returnType: Type, location: Node) {
             if (returnType === unknownType) {
@@ -12967,7 +12970,7 @@ namespace ts {
             // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
             const parent = getDeclarationContainer(node);
             if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent) && parent.flags & NodeFlags.HasAsyncFunctions) {
-                // If the declaration happens to be in external module, report error that require and exports are reserved keywords
+                // If the declaration happens to be in external module, report error that Promise is a reserved identifier.
                 error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
                     declarationNameToString(name), declarationNameToString(name));
             }
