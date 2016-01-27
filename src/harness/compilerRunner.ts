@@ -49,7 +49,6 @@ class CompilerBaselineRunner extends RunnerBase {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
-
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let harnessSettings: Harness.TestCaseParser.CompilerSettings;
             let hasNonDtsFiles: boolean;
@@ -64,17 +63,31 @@ class CompilerBaselineRunner extends RunnerBase {
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
                 const content = Harness.IO.readFile(fileName);
-                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
+                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName, rootDir);
                 const units = testCaseContent.testUnitData;
                 harnessSettings = testCaseContent.settings;
+                let tsConfigOptions: ts.CompilerOptions;
+                if (testCaseContent.tsConfig) {
+                    assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
+
+                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                }
+                else {
+                    const baseUrl = harnessSettings["baseUrl"];
+                    if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
+                        harnessSettings["baseUrl"] = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                    }
+                }
+
                 lastUnit = units[units.length - 1];
                 hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
-                const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
+
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
@@ -90,7 +103,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
 
                 options = output.options;
                 result = output.result;
@@ -122,6 +135,14 @@ class CompilerBaselineRunner extends RunnerBase {
                     Harness.Baseline.runBaseline("Correct errors for " + fileName, justName.replace(/\.tsx?$/, ".errors.txt"), (): string => {
                         if (result.errors.length === 0) return null;
                         return getErrorBaseline(toBeCompiled, otherFiles, result);
+                    });
+                }
+            });
+
+            it (`Correct module resolution tracing for ${fileName}`, () => {
+                if (options.traceModuleResolution) {
+                    Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
+                        return JSON.stringify(result.traceResults || [], undefined, 4);
                     });
                 }
             });

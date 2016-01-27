@@ -163,6 +163,7 @@ namespace ts {
         IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
+        ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -369,32 +370,33 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None =              0,
-        Export =            1 << 1,  // Declarations
-        Ambient =           1 << 2,  // Declarations
-        Public =            1 << 3,  // Property/Method
-        Private =           1 << 4,  // Property/Method
-        Protected =         1 << 5,  // Property/Method
-        Static =            1 << 6,  // Property/Method
-        Abstract =          1 << 7,  // Class/Method/ConstructSignature
-        Async =             1 << 8,  // Property/Method/Function
-        Default =           1 << 9,  // Function/Class (export default declaration)
-        MultiLine =         1 << 10,  // Multi-line array or object literal
-        Synthetic =         1 << 11,  // Synthetic node (for full fidelity)
-        DeclarationFile =   1 << 12,  // Node is a .d.ts file
-        Let =               1 << 13,  // Variable declaration
-        Const =             1 << 14,  // Variable declaration
-        OctalLiteral =      1 << 15,  // Octal numeric literal
-        Namespace =         1 << 16,  // Namespace declaration
-        ExportContext =     1 << 17,  // Export context (initialized by binding)
-        ContainsThis =      1 << 18,  // Interface contains references to "this"
-        HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation =    1 << 21,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =       1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =         1 << 23,  // If the file has decorators (initialized by binding)
-        HasParamDecorators =    1 << 24,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =     1 << 25,  // If the file has async functions (initialized by binding)
+        None =               0,
+        Export =             1 << 0,  // Declarations
+        Ambient =            1 << 1,  // Declarations
+        Public =             1 << 2,  // Property/Method
+        Private =            1 << 3,  // Property/Method
+        Protected =          1 << 4,  // Property/Method
+        Static =             1 << 5,  // Property/Method
+        Readonly =           1 << 6,  // Property/Method
+        Abstract =           1 << 7,  // Class/Method/ConstructSignature
+        Async =              1 << 8,  // Property/Method/Function
+        Default =            1 << 9,  // Function/Class (export default declaration)
+        MultiLine =          1 << 10,  // Multi-line array or object literal
+        Synthetic =          1 << 11,  // Synthetic node (for full fidelity)
+        DeclarationFile =    1 << 12,  // Node is a .d.ts file
+        Let =                1 << 13,  // Variable declaration
+        Const =              1 << 14,  // Variable declaration
+        OctalLiteral =       1 << 15,  // Octal numeric literal
+        Namespace =          1 << 16,  // Namespace declaration
+        ExportContext =      1 << 17,  // Export context (initialized by binding)
+        ContainsThis =       1 << 18,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 21,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 23,  // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 24,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 25,  // If the file has async functions (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1901,8 +1903,8 @@ namespace ts {
         hasGlobalName(name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
-        getReferencedNestedRedeclaration(node: Identifier): Declaration;
-        isNestedRedeclaration(node: Declaration): boolean;
+        getReferencedDeclarationWithCollidingName(node: Identifier): Declaration;
+        isDeclarationWithCollidingName(node: Declaration): boolean;
         isValueAliasDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
@@ -2038,7 +2040,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
-        isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        isDeclaratonWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // true if module exports some value (not just types)
     }
@@ -2058,14 +2060,16 @@ namespace ts {
         SuperInstance               = 0x00000100,  // Instance 'super' reference
         SuperStatic                 = 0x00000200,  // Static 'super' reference
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        LexicalArguments            = 0x00000800,
-        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
+        AsyncMethodWithSuper        = 0x00000800,  // An async method that reads a value from a member of 'super'.
+        AsyncMethodWithSuperBinding = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00002000,
-        BlockScopedBindingInLoop    = 0x00004000,
-        LexicalModuleMergesWithClass = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithBlockScopedBindingCapturedInFunction = 0x00010000, // Loop that contains block scoped variable captured in closure
+        EnumValuesComputed          = 0x00004000,
+        LexicalModuleMergesWithClass    = 0x00008000,    // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
     }
 
     /* @internal */
@@ -2074,6 +2078,7 @@ namespace ts {
         resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
+        resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
@@ -2181,8 +2186,8 @@ namespace ts {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
-        declaredStringIndexType: Type;             // Declared string index type
-        declaredNumberIndexType: Type;             // Declared numeric index type
+        declaredStringIndexInfo: IndexInfo;        // Declared string indexing info
+        declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
     }
 
     // Type references (TypeFlags.Reference). When a class or interface has type parameters or
@@ -2234,8 +2239,8 @@ namespace ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType?: Type;            // String index type
-        numberIndexType?: Type;            // Numeric index type
+        stringIndexInfo?: IndexInfo;       // String indexing info
+        numberIndexInfo?: IndexInfo;       // Numeric indexing info
     }
 
     /* @internal */
@@ -2296,6 +2301,12 @@ namespace ts {
     export const enum IndexKind {
         String,
         Number,
+    }
+
+    export interface IndexInfo {
+        type: Type;
+        isReadonly: boolean;
+        declaration?: SignatureDeclaration;
     }
 
     /* @internal */
@@ -2374,10 +2385,14 @@ namespace ts {
         Message,
     }
 
-    export const enum ModuleResolutionKind {
+    export enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs  = 2
+        NodeJs   = 2
     }
+
+    export type RootPaths = string[];
+    export type PathSubstitutions = Map<string[]>;
+    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
@@ -2427,6 +2442,10 @@ namespace ts {
         noImplicitReturns?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        baseUrl?: string;
+        paths?: PathSubstitutions;
+        rootDirs?: RootPaths;
+        traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
@@ -2434,10 +2453,10 @@ namespace ts {
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
 
-        [option: string]: string | number | boolean;
+        [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
-    export const enum ModuleKind {
+    export enum ModuleKind {
         None = 0,
         CommonJS = 1,
         AMD = 2,
@@ -2494,12 +2513,13 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         experimental?: boolean;
+        isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     }
 
     /* @internal */
@@ -2514,7 +2534,12 @@ namespace ts {
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+    export interface TsConfigOnlyOption extends CommandLineOptionBase {
+        type: "object";
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2658,7 +2683,7 @@ namespace ts {
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
         readFile(fileName: string): string;
-
+        trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
     }
 

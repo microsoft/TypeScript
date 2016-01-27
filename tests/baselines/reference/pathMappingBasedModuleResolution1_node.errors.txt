@@ -1,0 +1,7 @@
+error TS5060: Option 'paths' cannot be used without specifying '--baseUrl' option.
+
+
+!!! error TS5060: Option 'paths' cannot be used without specifying '--baseUrl' option.
+==== c:/root/f1.ts (0 errors) ====
+    export var x = 1;
+    

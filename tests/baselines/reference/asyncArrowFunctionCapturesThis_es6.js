@@ -9,6 +9,6 @@ class C {
 //// [asyncArrowFunctionCapturesThis_es6.js]
 class C {
     method() {
-        var fn = () => __awaiter(this, void 0, Promise, function* () { return yield this; });
+        var fn = () => __awaiter(this, void 0, void 0, function* () { return yield this; });
     }
 }

@@ -26,59 +26,59 @@ async function fn19() { await thenable; } // error
 
 //// [asyncFunctionDeclaration15_es6.js]
 function fn1() {
-    return __awaiter(this, void 0, Promise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // valid: Promise<void>
 function fn2() {
-    return __awaiter(this, void 0, Promise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn3() {
-    return __awaiter(this, void 0, Promise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn4() {
-    return __awaiter(this, void 0, Promise, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn5() {
-    return __awaiter(this, void 0, PromiseLike, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn6() {
-    return __awaiter(this, void 0, Thenable, function* () { });
+    return __awaiter(this, void 0, void 0, function* () { });
 } // error
 function fn7() {
-    return __awaiter(this, void 0, Promise, function* () { return; });
+    return __awaiter(this, void 0, void 0, function* () { return; });
 } // valid: Promise<void>
 function fn8() {
-    return __awaiter(this, void 0, Promise, function* () { return 1; });
+    return __awaiter(this, void 0, void 0, function* () { return 1; });
 } // valid: Promise<number>
 function fn9() {
-    return __awaiter(this, void 0, Promise, function* () { return null; });
+    return __awaiter(this, void 0, void 0, function* () { return null; });
 } // valid: Promise<any>
 function fn10() {
-    return __awaiter(this, void 0, Promise, function* () { return undefined; });
+    return __awaiter(this, void 0, void 0, function* () { return undefined; });
 } // valid: Promise<any>
 function fn11() {
-    return __awaiter(this, void 0, Promise, function* () { return a; });
+    return __awaiter(this, void 0, void 0, function* () { return a; });
 } // valid: Promise<any>
 function fn12() {
-    return __awaiter(this, void 0, Promise, function* () { return obj; });
+    return __awaiter(this, void 0, void 0, function* () { return obj; });
 } // valid: Promise<{ then: string; }>
 function fn13() {
-    return __awaiter(this, void 0, Promise, function* () { return thenable; });
+    return __awaiter(this, void 0, void 0, function* () { return thenable; });
 } // error
 function fn14() {
-    return __awaiter(this, void 0, Promise, function* () { yield 1; });
+    return __awaiter(this, void 0, void 0, function* () { yield 1; });
 } // valid: Promise<void>
 function fn15() {
-    return __awaiter(this, void 0, Promise, function* () { yield null; });
+    return __awaiter(this, void 0, void 0, function* () { yield null; });
 } // valid: Promise<void>
 function fn16() {
-    return __awaiter(this, void 0, Promise, function* () { yield undefined; });
+    return __awaiter(this, void 0, void 0, function* () { yield undefined; });
 } // valid: Promise<void>
 function fn17() {
-    return __awaiter(this, void 0, Promise, function* () { yield a; });
+    return __awaiter(this, void 0, void 0, function* () { yield a; });
 } // valid: Promise<void>
 function fn18() {
-    return __awaiter(this, void 0, Promise, function* () { yield obj; });
+    return __awaiter(this, void 0, void 0, function* () { yield obj; });
 } // valid: Promise<void>
 function fn19() {
-    return __awaiter(this, void 0, Promise, function* () { yield thenable; });
+    return __awaiter(this, void 0, void 0, function* () { yield thenable; });
 } // error
