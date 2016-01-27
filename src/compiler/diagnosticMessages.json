@@ -2367,7 +2367,7 @@
         "category": "Error",
         "code": 6062
     },
-    "Argument for '--moduleResolution' option must be 'node', 'classic' or 'baseUrl'.": {
+    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
         "category": "Error",
         "code": 6063
     },
@@ -2515,49 +2515,45 @@
         "category": "Message",
         "code": 6101
     },
-    "Module name '{0}' contains '!' character.": {
+    "Allow javascript files to be compiled.": {
         "category": "Message",
         "code": 6102
     },
-    "Allow javascript files to be compiled.": {
-        "category": "Message",
-        "code": 6103
-    },
     "Option '{0}' should have array of strings as a value.": {
         "category": "Error",
-        "code": 6104
+        "code": 6103
     },
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
-        "code": 6105
+        "code": 6104
     },
     "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
         "category": "Message",
-        "code": 6106
+        "code": 6105
     },
     "'baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'": {
         "category": "Message",
-        "code": 6107
+        "code": 6106
     },
     "'rootDirs' option is set, using it to resolve relative module name '{0}'": {
         "category": "Message",
-        "code": 6108
+        "code": 6107
     },
     "Longest matching prefix for '{0}' is '{1}'": {
         "category": "Message",
-        "code": 6109
+        "code": 6108
     },
     "Loading '{0}' from the root dir '{1}', candidate location '{2}'": {
         "category": "Message",
-        "code": 6110
+        "code": 6109
     },
     "Trying other entries in 'rootDirs'": {
         "category": "Message",
-        "code": 6111
+        "code": 6110
     },
     "Module resolution using 'rootDirs' has failed": {
         "category": "Message",
-        "code": 6112
+        "code": 6111
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -527,14 +527,6 @@ namespace ts {
             return createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/false, failedLookupLocations);
         }
 
-        // module names that contain '!' are used to reference resources and are not resolved to actual files on disk
-        if (moduleName.indexOf("!") != -1) {
-            if (traceEnabled) {
-                trace(host, Diagnostics.Module_name_0_contains_character, moduleName);
-            }
-            return { resolvedModule: undefined, failedLookupLocations: [] };
-        }
-
         let referencedSourceFile: string;
         while (true) {
             const searchName = normalizePath(combinePaths(containingDirectory, moduleName));

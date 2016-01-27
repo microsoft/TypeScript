@@ -258,7 +258,7 @@ namespace ts {
                 "classic": ModuleResolutionKind.Classic,
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
-            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_classic_or_baseUrl,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
             name: "allowUnusedLabels",
