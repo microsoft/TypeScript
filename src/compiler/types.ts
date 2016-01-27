@@ -312,11 +312,11 @@ namespace ts {
         // Top-level nodes
         SourceFile,
 
-        // JSDoc nodes.
+        // JSDoc nodes
         JSDocTypeExpression,
-        // The * type.
+        // The * type
         JSDocAllType,
-        // The ? type.
+        // The ? type
         JSDocUnknownType,
         JSDocArrayType,
         JSDocUnionType,
@@ -391,11 +391,17 @@ namespace ts {
         HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation =    1 << 21,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =       1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =         1 << 23,  // If the file has decorators (initialized by binding)
+        HasParamDecorators =    1 << 24,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =     1 << 25,  // If the file has async functions (initialized by binding)
+
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,
 
-        ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn
+        ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
+        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
     }
 
     /* @internal */
@@ -998,7 +1004,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.CallExpression)
-    export interface CallExpression extends LeftHandSideExpression {
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
@@ -1476,6 +1482,8 @@ namespace ts {
     export interface JSDocThisType extends JSDocType {
         type: JSDocType;
     }
+
+    export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
 
     // @kind(SyntaxKind.JSDocRecordMember)
     export interface JSDocRecordMember extends PropertySignature {
@@ -2047,23 +2055,19 @@ namespace ts {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
         CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends                 = 0x00000008,  // Emit __extends
-        EmitDecorate                = 0x00000010,  // Emit __decorate
-        EmitParam                   = 0x00000020,  // Emit __param helper for decorators
-        EmitAwaiter                 = 0x00000040,  // Emit __awaiter
-        EmitGenerator               = 0x00000080,  // Emit __generator
         SuperInstance               = 0x00000100,  // Instance 'super' reference
         SuperStatic                 = 0x00000200,  // Static 'super' reference
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        LexicalArguments            = 0x00000800,
-        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
+        AsyncMethodWithSuper        = 0x00000800,  // An async method that reads a value from a member of 'super'.
+        AsyncMethodWithSuperBinding = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00002000,
-        LexicalModuleMergesWithClass = 0x00004000,  // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding = 0x00008000, // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding   = 0x00010000,       // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop   = 0x00020000,         // Block-scoped binding with declaration nested inside iteration statement
+        EnumValuesComputed          = 0x00004000,
+        LexicalModuleMergesWithClass    = 0x00008000,    // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
     }
 
     /* @internal */
