@@ -1435,7 +1435,8 @@ namespace ts {
             // Declare a 'member' in case it turns out the container was an ES5 class
             if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
                 container.symbol.members = container.symbol.members || {};
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
         }
 
