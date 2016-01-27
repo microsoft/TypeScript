@@ -19,7 +19,7 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -158,12 +158,17 @@ namespace ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                visitDirectory(path, depth);
                 return result;
-                function visitDirectory(path: string) {
+
+                function visitDirectory(path: string, depth?: number) {
+                    if (depth !== undefined && depth <= 0) {
+                        return;
+                    }
+
                     const folder = fso.GetFolder(path || ".");
                     const files = getNames(folder.files);
                     for (const current of files) {
@@ -176,7 +181,7 @@ namespace ts {
                     for (const current of subfolders) {
                         const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
-                            visitDirectory(name);
+                            depth === undefined ? visitDirectory(path) : visitDirectory(path, depth - 1);
                         }
                     }
                 }
@@ -465,12 +470,17 @@ namespace ts {
                 return useCaseSensitiveFileNames ? path : path.toLowerCase();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                visitDirectory(path, depth);
                 return result;
-                function visitDirectory(path: string) {
+
+                function visitDirectory(path: string, depth?: number) {
+                    if (depth <= 0) {
+                        return;
+                    }
+
                     const files = _fs.readdirSync(path || ".").sort();
                     const directories: string[] = [];
                     for (const current of files) {
@@ -488,7 +498,7 @@ namespace ts {
                         }
                     }
                     for (const current of directories) {
-                        visitDirectory(current);
+                        depth === undefined ? visitDirectory(current) : visitDirectory(current, depth - 1);
                     }
                 }
             }

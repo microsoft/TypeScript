@@ -176,8 +176,28 @@ namespace ts.server {
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
+    const serverHost: ServerHost = <ServerHost>ts.sys;
+    serverHost.globalCachePath = toPath(
+        ".typingCache",
+        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
+        createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
 
-    const ioSession = new IOSession(ts.sys, logger);
+    let tsd: any;
+    serverHost.getTsd = () => {
+        if (tsd !== undefined) {
+            return tsd;
+        }
+        try {
+            tsd = require("tsd");
+            return tsd;
+        }
+        catch (e) {
+            logger.msg("Failed to require tsd.");
+        }
+        return undefined;
+    };
+
+    const ioSession = new IOSession(serverHost, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

@@ -70,14 +70,14 @@ namespace ts {
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
+    export interface CoreServicesShimHost extends Logger, TypeDefinitionResolutionHost {
         /**
          * Returns a JSON-encoded value of the type: string[]
          *
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string): string;
+        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
     }
 
     ///
@@ -229,6 +229,8 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
+        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, projectRootPath: string, compilerOptionsJson?: string, includeListJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
+        updateNotFoundTypingNames(newTypingsJson: string, cachePath: string, projectRootPath: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -410,8 +412,21 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+            // Wrap the API changes for 1.8 release. This try/catch
+            // should be removed once TypeScript 1.8 has shipped.
+            let encoded: string;
+            if (depth !== undefined) {
+                try {
+                    encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+                }
+                catch (e) {
+                    encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                }
+            }
+            else {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
             return JSON.parse(encoded);
         }
 
@@ -421,6 +436,10 @@ namespace ts {
 
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        public writeFile(fileName: string, data: string): void {
+            this.shimHost.writeFile(fileName, data);
         }
     }
 
@@ -941,6 +960,7 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
+                            typingOptions: {},
                             files: [],
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
@@ -951,6 +971,7 @@ namespace ts {
 
                     return {
                         options: configFile.options,
+                        typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
@@ -961,7 +982,36 @@ namespace ts {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
                 () => getDefaultCompilerOptions()
-            );
+                );
+        }
+
+        public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson?: string, compilerOptionsJson?: string): string {
+            const getCanonicalFileName = createGetCanonicalFileName(false);
+            return this.forwardJSONCall("resolveTypeDefinitions()", () => {
+                const cachePath = projectRootPath ? projectRootPath : globalCachePath;
+                const typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
+                // Convert the include and exclude lists from a semi-colon delimited string to a string array
+                typingOptions.include = typingOptions.include ? typingOptions.include.toString().split(";") : [];
+                typingOptions.exclude = typingOptions.exclude ? typingOptions.exclude.toString().split(";") : [];
+
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const fileNames: string[] = JSON.parse(fileNamesJson);
+                return ts.JsTyping.discoverTypings(
+                    this.host,
+                    fileNames,
+                    toPath(globalCachePath, globalCachePath, getCanonicalFileName),
+                    toPath(cachePath, cachePath, getCanonicalFileName),
+                    typingOptions,
+                    compilerOptions);
+            });
+        }
+
+        public updateNotFoundTypingNames(newTypingsJson: string, globalCachePath: string, projectRootPath: string): string {
+            return this.forwardJSONCall("updateNotFoundTypingNames()", () => {
+                const newTypingNames: string[] = JSON.parse(newTypingsJson);
+                const cachePath = projectRootPath ? projectRootPath : globalCachePath;
+                ts.JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath, this.host);
+            });
         }
     }
 

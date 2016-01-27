@@ -16,6 +16,7 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
+    const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -328,6 +329,7 @@ namespace ts.server {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
+        typingOptions?: ts.TypingOptions;
     }
 
     export class Project {
@@ -783,6 +785,10 @@ namespace ts.server {
                     this.openFileRoots = openFileRoots;
                     this.openFileRoots.push(info);
                 }
+
+                if (hasJavaScriptFileExtension(info.fileName)) {
+                    this.acquireTypingForJs(info.defaultProject);
+                }
             }
             this.updateConfiguredProjectList();
         }
@@ -1045,6 +1051,94 @@ namespace ts.server {
             return undefined;
         }
 
+        acquireTypingForJs(project: Project) {
+            const tsd = this.host.getTsd();
+            if (!project || tsd === undefined) { return; }
+
+            const projectRootPath = project.isConfiguredProject()
+                ? toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName)
+                : undefined;
+
+            // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
+            // has a default value
+            const typingOptions: TypingOptions =
+                project.projectOptions ? project.projectOptions.typingOptions : { enableAutoDiscovery: true };
+            const compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
+
+            const { cachedTypingPaths, newTypingNames } = ts.JsTyping.discoverTypings(
+                sys,
+                project.getFileNames(),
+                this.host.globalCachePath,
+                projectRootPath,
+                typingOptions,
+                compilerOptions
+            );
+
+            // Bail out when no actions are needed
+            if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            const cachePath = projectRootPath ? projectRootPath : this.host.globalCachePath;
+            if (!cachePath) {
+                return;
+            }
+
+            if (!sys.directoryExists(cachePath)) {
+                sys.createDirectory(cachePath);
+            }
+
+            const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
+            const typingsPath = ts.combinePaths(cachePath, "typings");
+            const api = tsd.getAPI(tsdJsonPath);
+
+            const options = new tsd.Options();
+            options.resolveDependencies = true;
+            options.overwriteFiles = true;
+            options.saveToConfig = true;
+
+            this.log("Cached typings include: " + cachedTypingPaths);
+            cachedTypingPaths.forEach(p => addTypingToProject(p, project));
+            project.projectService.updateProjectStructure();
+
+            this.log("New typings to download: " + newTypingNames);
+            if (newTypingNames && newTypingNames.length > 0) {
+                const query = new tsd.Query();
+                for (const newTypingName of newTypingNames) {
+                    query.addNamePattern(newTypingName);
+                }
+
+                let promise: any;
+                if (!sys.fileExists(tsdJsonPath)) {
+                    promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
+                }
+                else {
+                    promise = api.readConfig();
+                }
+
+                promise
+                    .then(() => api.select(query, options))
+                    .then((selection: any) => api.install(selection, options))
+                    .then((installResult: any) => {
+                        const keys = Object.keys(installResult.written.dict);
+                        keys.forEach(key => addTypingToProject(ts.combinePaths(typingsPath, key), project));
+                        project.projectService.updateProjectStructure();
+                        JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath, sys);
+                    })
+                    .catch((e: any) => this.log(e));
+            }
+
+            function addTypingToProject(fileName: string, project: Project) {
+                const script = project.projectService.openFile(fileName, /*openedByClient*/false);
+                if (script.defaultProject !== project) {
+                    project.addRoot(script);
+                }
+                if (project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
+                    project.projectService.openFileRootsConfigured.push(script);
+                }
+            }
+        }
+
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
@@ -1181,7 +1275,7 @@ namespace ts.server {
             // file references will be relative to dirPath (or absolute)
             const dirPath = ts.getDirectoryPath(configFilename);
             const contents = this.host.readFile(configFilename);
-            const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
+            const rawConfig: { config?: any; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
@@ -1198,7 +1292,8 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        compilerOptions: parsedCommandLine.options,
+                        typingOptions: parsedCommandLine.typingOptions
                     };
                     return { succeeded: true, projectOptions };
                 }
@@ -1232,6 +1327,12 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                // Acquire typings for JS files
+                if (projectOptions.typingOptions) {
+                    this.acquireTypingForJs(project);
+                }
+
                 return { success: true, project: project };
             }
         }
@@ -1286,6 +1387,11 @@ namespace ts.server {
 
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
+
+                    // Acquire typings for JS files
+                    if (projectOptions.typingOptions) {
+                        this.acquireTypingForJs(project);
+                    }
                 }
             }
         }

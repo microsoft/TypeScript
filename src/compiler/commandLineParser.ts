@@ -500,6 +500,7 @@ namespace ts {
         return {
             options,
             fileNames: getFileNames(),
+            typingOptions: getTypingOptions(),
             errors
         };
 
@@ -544,6 +545,32 @@ namespace ts {
                 }
             }
             return fileNames;
+        }
+
+        function getTypingOptions(): TypingOptions {
+            const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
+                ? { enableAutoDiscovery: true, include: [], exclude: [] }
+                : { enableAutoDiscovery: false, include: [], exclude: [] };
+            const jsonTypingOptions = json["typingOptions"];
+            if (jsonTypingOptions) {
+                for (const id in jsonTypingOptions) {
+                    if (id === "enableAutoDiscovery") {
+                        if (typeof jsonTypingOptions[id] === "boolean") {
+                            options.enableAutoDiscovery = jsonTypingOptions[id];
+                        }
+                    }
+                    else if (id === "include") {
+                        options.include = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else if (id === "exclude") {
+                        options.exclude = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
+                    }
+                }
+            }
+            return options;
         }
     }
 
