@@ -15370,9 +15370,9 @@ namespace ts {
                 const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
                 switch (specialPropertyAssignmentKind) {
                     case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                         return getSymbolOfNode(entityName.parent);
+                    case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                         return getSymbolOfNode(entityName.parent.parent);
                 }
