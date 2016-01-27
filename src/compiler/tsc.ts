@@ -99,15 +99,14 @@ namespace ts {
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
             const relativeFileName = getRelativeFileName(diagnostic.file.fileName, host);
-            output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
+            output += `${relativeFileName}(${line + 1},${character + 1}): `;
         }
 
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
-
 
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
@@ -185,12 +184,12 @@ namespace ts {
             }
 
             output += sys.newLine;
-            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+            output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
         }
 
         const categoryColor = categoryFormatMap[diagnostic.category];
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        output += `${formatAndReset(category, categoryColor)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}`;
         output += sys.newLine + sys.newLine;
 
         sys.write(output);
@@ -201,10 +200,10 @@ namespace ts {
 
         if (diagnostic.file) {
             const loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${diagnostic.file.fileName}(${loc.line + 1},${loc.character + 1}): `;
         }
 
-        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
@@ -538,6 +537,7 @@ namespace ts {
         emitTime = 0;
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
+
         const exitStatus = compileProgram();
 
         if (compilerOptions.listFiles) {

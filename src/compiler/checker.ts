@@ -9428,7 +9428,6 @@ namespace ts {
             return args;
         }
 
-
         /**
           * Returns the effective argument count for a node that works like a function invocation.
           * If 'node' is a Decorator, the number of arguments is derived from the decoration
@@ -15496,7 +15495,6 @@ namespace ts {
 
             return unknownType;
         }
-
 
         function getTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {

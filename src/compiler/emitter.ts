@@ -337,7 +337,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const newLine = host.getNewLine();
 
         const emitJavaScript = createFileEmitter();
-        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
+
+        forEachExpectedEmitFile(host, compilerOptions.listOutputFiles ? emitOutputFileNames : emitFile, targetSourceFile);
 
         return {
             emitSkipped,
@@ -3829,7 +3830,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emitBindingElement(<BindingElement>root, value);
                 }
 
-
                 /**
                  * Ensures that there exists a declared identifier whose value holds the given expression.
                  * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
@@ -5801,7 +5801,6 @@ const _super = (function (geti, seti) {
                 write("void 0");
             }
 
-
             function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
                 // This method emits the serialized type metadata for a decorator target.
                 // The caller should have already tested whether the node has decorators.
@@ -6241,7 +6240,6 @@ const _super = (function (geti, seti) {
                             write("var ");
                         }
                     }
-
 
                     if (isExported) {
                         write(`${exportFunctionForFile}("`);
@@ -7931,6 +7929,23 @@ const _super = (function (geti, seti) {
 
             if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+            }
+        }
+
+        /**
+         * Write the file names for the emitted files to the console, don't actually compile and emit.
+         * This helps build tools to determine if they should invoke a full compilation.
+         */
+        function emitOutputFileNames({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
+            sourceFiles: SourceFile[], isBundledEmit: boolean) {
+
+            sys.write(jsFilePath + newLine);
+            if (sourceMapFilePath) {
+                sys.write(sourceMapFilePath + newLine);
+            }
+
+            if (declarationFilePath) {
+                sys.write(declarationFilePath + newLine);
             }
         }
     }
