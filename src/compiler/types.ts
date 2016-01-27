@@ -1901,8 +1901,8 @@ namespace ts {
         hasGlobalName(name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
-        getReferencedNestedRedeclaration(node: Identifier): Declaration;
-        isNestedRedeclaration(node: Declaration): boolean;
+        getReferencedDeclarationWithCollidingName(node: Identifier): Declaration;
+        isDeclarationWithCollidingName(node: Declaration): boolean;
         isValueAliasDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
@@ -2038,7 +2038,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
-        isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        isDeclaratonWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // true if module exports some value (not just types)
     }
@@ -2064,9 +2064,10 @@ namespace ts {
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed          = 0x00004000,
-        BlockScopedBindingInLoop    = 0x00008000,
-        LexicalModuleMergesWithClass = 0x00010000,  // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithBlockScopedBindingCapturedInFunction = 0x00020000, // Loop that contains block scoped variable captured in closure
+        LexicalModuleMergesWithClass    = 0x00008000,    // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
     }
 
     /* @internal */

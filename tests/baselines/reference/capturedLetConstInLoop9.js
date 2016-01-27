@@ -140,25 +140,25 @@ function foo3 () {
 
 //// [capturedLetConstInLoop9.js]
 var _loop_1 = function(x) {
-    var x_1 = void 0;
+    var x_1;
     (function () { return x_1; });
     {
-        var x_2 = void 0;
+        var x_2;
         (function () { return x_2; });
     }
     try { }
     catch (e) {
-        var x_3 = void 0;
+        var x_3;
         (function () { return x_3; });
     }
     switch (x_1) {
         case 1:
-            var x_4 = void 0;
+            var x_4;
             (function () { return x_4; });
             break;
     }
     var _loop_2 = function() {
-        var x_5 = void 0;
+        var x_5;
         (function () { return x_5; });
     };
     while (1 == 1) {

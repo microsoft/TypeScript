@@ -1,0 +1,93 @@
+=== tests/cases/compiler/nestedBlockScopedBindings4.ts ===
+function a0() {
+>a0 : Symbol(a0, Decl(nestedBlockScopedBindings4.ts, 0, 0))
+
+    for (let x; x < 1;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 1, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 1, 12))
+
+        x = x + 1;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 1, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 1, 12))
+    }
+    for (let x;;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 4, 12))
+
+        x = x + 2;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 4, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 4, 12))
+    }
+}
+
+function a1() {
+>a1 : Symbol(a1, Decl(nestedBlockScopedBindings4.ts, 7, 1))
+
+    for (let x; x < 1;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 10, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 10, 12))
+
+        x = x + 1;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 10, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 10, 12))
+
+        () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 10, 12))
+    }
+    for (let x;;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 14, 12))
+
+        x = x + 2;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 14, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 14, 12))
+    }
+}
+
+function a2() {
+>a2 : Symbol(a2, Decl(nestedBlockScopedBindings4.ts, 17, 1))
+
+    for (let x; x < 1;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 20, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 20, 12))
+
+        x = x + 1;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 20, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 20, 12))
+    }
+    for (let x;;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 23, 12))
+
+        x = x + 2;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 23, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 23, 12))
+
+        () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 23, 12))
+    }
+}
+
+
+function a3() {
+>a3 : Symbol(a3, Decl(nestedBlockScopedBindings4.ts, 27, 1))
+
+    for (let x; x < 1;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 31, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 31, 12))
+
+        x = x + 1;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 31, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 31, 12))
+
+        () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 31, 12))
+    }
+    for (let x;;) {
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 35, 12))
+
+        x = x + 2;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 35, 12))
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 35, 12))
+
+        () => x;
+>x : Symbol(x, Decl(nestedBlockScopedBindings4.ts, 35, 12))
+    }
+}
