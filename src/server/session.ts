@@ -792,7 +792,9 @@ namespace ts.server {
         }
 
         private closeClientFile(fileName: string) {
-            if (!fileName) { return; }
+            if (!fileName) {
+                return;
+            }
             const file = ts.normalizePath(fileName);
             this.projectService.closeClientFile(file);
         }

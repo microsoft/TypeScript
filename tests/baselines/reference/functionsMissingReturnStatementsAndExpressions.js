@@ -91,6 +91,17 @@ function f18() {
     return "Okay, not type annotated.";
 }
 
+function f19(): void | number {
+    // Okay; function return type is union containing void
+}
+
+function f20(): any | number {
+    // Okay; function return type is union containing any
+}
+
+function f21(): number | string {
+    // Not okay; union does not contain void or any
+}
 
 class C {
     public get m1() {
@@ -190,6 +201,15 @@ function f17() {
 }
 function f18() {
     return "Okay, not type annotated.";
+}
+function f19() {
+    // Okay; function return type is union containing void
+}
+function f20() {
+    // Okay; function return type is union containing any
+}
+function f21() {
+    // Not okay; union does not contain void or any
 }
 var C = (function () {
     function C() {
