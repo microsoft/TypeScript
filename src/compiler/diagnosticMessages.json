@@ -2167,7 +2167,18 @@
         "category": "Error",
         "code": 5059
     },
-
+    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
+        "category": "Error",
+        "code": 5060
+    },
+    "Pattern '{0}' can have at most one '*' character": {
+        "category": "Error",
+        "code": 5061
+    },
+    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
+        "category": "Error",
+        "code": 5062
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2304,10 +2315,10 @@
         "category": "Error",
         "code": 6046
     },
-  "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-    "category": "Error",
-    "code": 6047
-  },
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
+        "category": "Error",
+        "code": 6047
+    },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
@@ -2368,7 +2379,10 @@
         "category": "Error",
         "code": 6063
     },
-
+    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+        "category": "Error",
+        "code": 6064
+    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
@@ -2433,7 +2447,7 @@
         "category": "Error",
         "code": 6082
     },
-    "Allow javascript files to be compiled.": {
+    "Base directory to resolve non-absolute module names.": {
         "category": "Message",
         "code": 6083
     },
@@ -2441,7 +2455,114 @@
         "category": "Message",
         "code": 6084
     },
-
+    "Enable tracing of the module resolution process.": {
+        "category": "Message",
+        "code": 6085
+    },
+    "======== Resolving module '{0}' from '{1}'. ========": {
+        "category": "Message",
+        "code": 6086
+    },
+    "Explicitly specified module resolution kind: '{0}'.": {
+        "category": "Message",
+        "code": 6087
+    },
+    "Module resolution kind is not specified, using '{0}'.": {
+        "category": "Message",
+        "code": 6088
+    },
+    "======== Module name '{0}' was successfully resolved to '{1}'. ========": {
+        "category": "Message",
+        "code": 6089
+    },
+    "======== Module name '{0}' was not resolved. ========": {
+        "category": "Message",
+        "code": 6090
+    },
+    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
+        "category": "Message",
+        "code": 6091
+    },
+    "Module name '{0}', matched pattern '{1}'.": {
+        "category": "Message",
+        "code": 6092
+    },
+    "Trying substitution '{0}', candidate module location: '{1}'.": {
+        "category": "Message",
+        "code": 6093
+    },
+    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
+        "category": "Message",
+        "code": 6094
+    },
+    "Loading module as file / folder, candidate module location '{0}'.": {
+        "category": "Message",
+        "code": 6095
+    },
+    "File '{0}' does not exist.": {
+        "category": "Message",
+        "code": 6096
+    },
+    "File '{0}' exist - use it as a module resolution result.": {
+        "category": "Message",
+        "code": 6097
+    },
+    "Loading module '{0}' from 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6098
+    },
+    "Found 'package.json' at '{0}'.": {
+        "category": "Message",
+        "code": 6099
+    },
+    "'package.json' does not have 'typings' field.": {
+        "category": "Message",
+        "code": 6100
+    },
+    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
+        "category": "Message",
+        "code": 6101
+    },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6102
+    },
+    "Option '{0}' should have array of strings as a value.": {
+        "category": "Error",
+        "code": 6103
+    },
+    "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
+        "category": "Message",
+        "code": 6104
+    },
+    "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
+        "category": "Message",
+        "code": 6105
+    },
+    "'baseUrl' option is set to '{0}', using this value to resolve non-relative module name '{1}'": {
+        "category": "Message",
+        "code": 6106
+    },
+    "'rootDirs' option is set, using it to resolve relative module name '{0}'": {
+        "category": "Message",
+        "code": 6107
+    },
+    "Longest matching prefix for '{0}' is '{1}'": {
+        "category": "Message",
+        "code": 6108
+    },
+    "Loading '{0}' from the root dir '{1}', candidate location '{2}'": {
+        "category": "Message",
+        "code": 6109
+    },
+    "Trying other entries in 'rootDirs'": {
+        "category": "Message",
+        "code": 6110
+    },
+    "Module resolution using 'rootDirs' has failed": {
+        "category": "Message",
+        "code": 6111
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

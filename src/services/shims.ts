@@ -78,6 +78,8 @@ namespace ts {
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, exclude?: string): string;
+
+        trace(s: string): void;
     }
 
     ///

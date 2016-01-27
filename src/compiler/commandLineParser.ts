@@ -255,7 +255,7 @@ namespace ts {
             name: "moduleResolution",
             type: {
                 "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic
+                "classic": ModuleResolutionKind.Classic,
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
@@ -286,14 +286,40 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
-            name: "allowSyntheticDefaultImports",
+            name: "baseUrl",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Base_directory_to_resolve_non_absolute_module_names
+        },
+        {
+            // this option can only be specified in tsconfig.json
+            // use type = object to copy the value as-is
+            name: "paths",
+            type: "object",
+            isTSConfigOnly: true
+        },
+        {
+            // this option can only be specified in tsconfig.json
+            // use type = object to copy the value as-is
+            name: "rootDirs",
+            type: "object",
+            isTSConfigOnly: true,
+            isFilePath: true
+        },
+        {
+            name: "traceModuleResolution",
             type: "boolean",
-            description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
+            description: Diagnostics.Enable_tracing_of_the_module_resolution_process
         },
         {
             name: "allowJs",
             type: "boolean",
             description: Diagnostics.Allow_javascript_files_to_be_compiled
+        },
+        {
+            name: "allowSyntheticDefaultImports",
+            type: "boolean",
+            description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         }
     ];
 
@@ -355,34 +381,39 @@ namespace ts {
                     if (hasProperty(optionNameMap, s)) {
                         const opt = optionNameMap[s];
 
-                        // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                        if (!args[i] && opt.type !== "boolean") {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                        if (opt.isTSConfigOnly) {
+                            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
+                        else {
+                            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
+                            if (!args[i] && opt.type !== "boolean") {
+                                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                            }
 
-                        switch (opt.type) {
-                            case "number":
-                                options[opt.name] = parseInt(args[i]);
-                                i++;
-                                break;
-                            case "boolean":
-                                options[opt.name] = true;
-                                break;
-                            case "string":
-                                options[opt.name] = args[i] || "";
-                                i++;
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            default:
-                                let map = <Map<number>>opt.type;
-                                let key = (args[i] || "").toLowerCase();
-                                i++;
-                                if (hasProperty(map, key)) {
-                                    options[opt.name] = map[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                }
+                            switch (opt.type) {
+                                case "number":
+                                    options[opt.name] = parseInt(args[i]);
+                                    i++;
+                                    break;
+                                case "boolean":
+                                    options[opt.name] = true;
+                                    break;
+                                case "string":
+                                    options[opt.name] = args[i] || "";
+                                    i++;
+                                    break;
+                                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                                default:
+                                    let map = <Map<number>>opt.type;
+                                    let key = (args[i] || "").toLowerCase();
+                                    i++;
+                                    if (hasProperty(map, key)) {
+                                        options[opt.name] = map[key];
+                                    }
+                                    else {
+                                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                                    }
+                            }
                         }
                     }
                     else {
@@ -485,7 +516,6 @@ namespace ts {
         return output;
     }
 
-
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -497,6 +527,7 @@ namespace ts {
         const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
+
         return {
             options,
             fileNames: getFileNames(),
@@ -580,7 +611,36 @@ namespace ts {
                         }
                     }
                     if (opt.isFilePath) {
-                        value = normalizePath(combinePaths(basePath, value));
+                        switch (typeof value) {
+                            case "string":
+                                value = normalizePath(combinePaths(basePath, value));
+                                break;
+                            case "object":
+                                // "object" options with 'isFilePath' = true expected to be string arrays
+                                let paths: string[] = [];
+                                let invalidOptionType = false;
+                                if (!isArray(value)) {
+                                    invalidOptionType = true;
+                                }
+                                else {
+                                    for (const element of <any[]>value) {
+                                        if (typeof element === "string") {
+                                            paths.push(normalizePath(combinePaths(basePath, element)));
+                                        }
+                                        else {
+                                            invalidOptionType = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (invalidOptionType) {
+                                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_should_have_array_of_strings_as_a_value, opt.name));
+                                }
+                                else {
+                                    value = paths;
+                                }
+                                break;
+                        }
                         if (value === "") {
                             value = ".";
                         }

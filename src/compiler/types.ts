@@ -2385,10 +2385,14 @@ namespace ts {
         Message,
     }
 
-    export const enum ModuleResolutionKind {
+    export enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs  = 2
+        NodeJs   = 2
     }
+
+    export type RootPaths = string[];
+    export type PathSubstitutions = Map<string[]>;
+    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
@@ -2438,6 +2442,10 @@ namespace ts {
         noImplicitReturns?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        baseUrl?: string;
+        paths?: PathSubstitutions;
+        rootDirs?: RootPaths;
+        traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
@@ -2445,10 +2453,10 @@ namespace ts {
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
 
-        [option: string]: string | number | boolean;
+        [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
-    export const enum ModuleKind {
+    export enum ModuleKind {
         None = 0,
         CommonJS = 1,
         AMD = 2,
@@ -2505,12 +2513,13 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         experimental?: boolean;
+        isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     }
 
     /* @internal */
@@ -2525,7 +2534,12 @@ namespace ts {
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+    export interface TsConfigOnlyOption extends CommandLineOptionBase {
+        type: "object";
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2669,7 +2683,7 @@ namespace ts {
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
         readFile(fileName: string): string;
-
+        trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
     }
 
