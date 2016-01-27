@@ -30,7 +30,7 @@
     },
     "devDependencies": {
         "jake": "latest",
-        "mocha": "latest",
+        "mocha": "2.3.4",
         "chai": "latest",
         "browserify": "latest",
         "istanbul": "latest",
