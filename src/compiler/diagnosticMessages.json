@@ -199,6 +199,10 @@
         "category": "Error",
         "code": 1063
     },
+    "The return type of an async function or method must be the global Promise<T> type.": {
+        "category": "Error",
+        "code": 1064
+    },
     "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
@@ -802,7 +806,7 @@
     "A decorator can only decorate a method implementation, not an overload.": {
         "category": "Error",
         "code": 1249
-    }, 
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1694,6 +1698,10 @@
     "A module cannot have multiple default exports.": {
         "category": "Error",
         "code": 2528
+    },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module containing async functions.": {
+        "category": "Error",
+        "code": 2529
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
