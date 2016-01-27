@@ -857,6 +857,7 @@ namespace ts {
                                 case SyntaxKind.PublicKeyword:
                                 case SyntaxKind.PrivateKeyword:
                                 case SyntaxKind.ProtectedKeyword:
+                                case SyntaxKind.ReadonlyKeyword:
                                 case SyntaxKind.DeclareKeyword:
                                     diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
                                     return true;

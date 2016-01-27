@@ -163,6 +163,7 @@ namespace ts {
         IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
+        ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -369,32 +370,33 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None =              0,
-        Export =            1 << 1,  // Declarations
-        Ambient =           1 << 2,  // Declarations
-        Public =            1 << 3,  // Property/Method
-        Private =           1 << 4,  // Property/Method
-        Protected =         1 << 5,  // Property/Method
-        Static =            1 << 6,  // Property/Method
-        Abstract =          1 << 7,  // Class/Method/ConstructSignature
-        Async =             1 << 8,  // Property/Method/Function
-        Default =           1 << 9,  // Function/Class (export default declaration)
-        MultiLine =         1 << 10,  // Multi-line array or object literal
-        Synthetic =         1 << 11,  // Synthetic node (for full fidelity)
-        DeclarationFile =   1 << 12,  // Node is a .d.ts file
-        Let =               1 << 13,  // Variable declaration
-        Const =             1 << 14,  // Variable declaration
-        OctalLiteral =      1 << 15,  // Octal numeric literal
-        Namespace =         1 << 16,  // Namespace declaration
-        ExportContext =     1 << 17,  // Export context (initialized by binding)
-        ContainsThis =      1 << 18,  // Interface contains references to "this"
-        HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation =    1 << 21,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =       1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =         1 << 23,  // If the file has decorators (initialized by binding)
-        HasParamDecorators =    1 << 24,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =     1 << 25,  // If the file has async functions (initialized by binding)
+        None =               0,
+        Export =             1 << 0,  // Declarations
+        Ambient =            1 << 1,  // Declarations
+        Public =             1 << 2,  // Property/Method
+        Private =            1 << 3,  // Property/Method
+        Protected =          1 << 4,  // Property/Method
+        Static =             1 << 5,  // Property/Method
+        Readonly =           1 << 6,  // Property/Method
+        Abstract =           1 << 7,  // Class/Method/ConstructSignature
+        Async =              1 << 8,  // Property/Method/Function
+        Default =            1 << 9,  // Function/Class (export default declaration)
+        MultiLine =          1 << 10,  // Multi-line array or object literal
+        Synthetic =          1 << 11,  // Synthetic node (for full fidelity)
+        DeclarationFile =    1 << 12,  // Node is a .d.ts file
+        Let =                1 << 13,  // Variable declaration
+        Const =              1 << 14,  // Variable declaration
+        OctalLiteral =       1 << 15,  // Octal numeric literal
+        Namespace =          1 << 16,  // Namespace declaration
+        ExportContext =      1 << 17,  // Export context (initialized by binding)
+        ContainsThis =       1 << 18,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 21,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 23,  // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 24,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 25,  // If the file has async functions (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -2075,6 +2077,7 @@ namespace ts {
         resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
+        resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
@@ -2182,8 +2185,8 @@ namespace ts {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
-        declaredStringIndexType: Type;             // Declared string index type
-        declaredNumberIndexType: Type;             // Declared numeric index type
+        declaredStringIndexInfo: IndexInfo;        // Declared string indexing info
+        declaredNumberIndexInfo: IndexInfo;        // Declared numeric indexing info
     }
 
     // Type references (TypeFlags.Reference). When a class or interface has type parameters or
@@ -2235,8 +2238,8 @@ namespace ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType?: Type;            // String index type
-        numberIndexType?: Type;            // Numeric index type
+        stringIndexInfo?: IndexInfo;       // String indexing info
+        numberIndexInfo?: IndexInfo;       // Numeric indexing info
     }
 
     /* @internal */
@@ -2297,6 +2300,12 @@ namespace ts {
     export const enum IndexKind {
         String,
         Number,
+    }
+
+    export interface IndexInfo {
+        type: Type;
+        isReadonly: boolean;
+        declaration?: SignatureDeclaration;
     }
 
     /* @internal */
