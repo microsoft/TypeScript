@@ -12534,7 +12534,7 @@ namespace ts {
 
             // The promise type was not a valid type reference to the global promise type, so we
             // report an error and return the unknown type.
-            error(location, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T);
+            error(location, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type);
             return unknownType;
         }
 
