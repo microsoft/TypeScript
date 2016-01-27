@@ -1257,26 +1257,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     // Children
                     if (children) {
-                        for (let i = 0; i < children.length; i++) {
-                            // Don't emit empty expressions
-                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
-                                continue;
-                            }
-
-                            // Don't emit empty strings
-                            if (children[i].kind === SyntaxKind.JsxText) {
-                                const text = getTextToEmit(<JsxText>children[i]);
-                                if (text !== undefined) {
-                                    write(", \"");
-                                    write(text);
-                                    write("\"");
-                                }
-                            }
-                            else {
+                        // build list of valid emittable jsx children
+                        const emittableChildren = children.filter(isJsxChildEmittable);
+                        if (emittableChildren.length > 0) {
+                            // If the only child is non-jsx element, don't put it on a new line
+                            if (emittableChildren.length == 1 && emittableChildren[0].kind !== SyntaxKind.JsxElement && emittableChildren[0].kind !== SyntaxKind.JsxSelfClosingElement) {
                                 write(", ");
-                                emit(children[i]);
+                                emit(emittableChildren[0]);
                             }
-
+                            // Otherwise build a indented comma separated list
+                            else {
+                                increaseIndent();
+                                emitList(emittableChildren, 0, emittableChildren.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ true);
+                                decreaseIndent();
+                            }
                         }
                     }
 
@@ -7251,7 +7245,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return result;
             }
 
-            function getTextToEmit(node: JsxText) {
+            function isJsxChildEmittable(child: JsxChild): boolean  {
+                if (child.kind === SyntaxKind.JsxExpression) {
+                    // Don't emit empty expressions
+                    return !!(<JsxExpression>child).expression;
+
+                }
+                else if (child.kind === SyntaxKind.JsxText) {
+                    // Don't emit empty strings
+                    return !!getTextToEmit(<JsxText>child);
+                }
+
+                return true;
+            };
+
+            function getTextToEmit(node: JsxText): string {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
                         let text = trimReactWhitespaceAndApplyEntities(node);
