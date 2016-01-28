@@ -7068,14 +7068,22 @@ const _super = (function (geti, seti) {
 
                 for (let i = 0; i < externalImports.length; i++) {
                     const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
-                    if (hasProperty(groupIndices, text)) {
+                    if (text === undefined) {
+                        continue;
+                    }
+
+                    // text should be quoted string
+                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same                     
+                    const key = text.substr(1, text.length - 2);
+
+                    if (hasProperty(groupIndices, key)) {
                         // deduplicate/group entries in dependency list by the dependency name
-                        const groupIndex = groupIndices[text];
+                        const groupIndex = groupIndices[key];
                         dependencyGroups[groupIndex].push(externalImports[i]);
                         continue;
                     }
                     else {
-                        groupIndices[text] = dependencyGroups.length;
+                        groupIndices[key] = dependencyGroups.length;
                         dependencyGroups.push([externalImports[i]]);
                     }
 
