@@ -990,7 +990,7 @@ namespace ts {
             }
 
             function collectRequireCalls(node: Node): void {
-                if (isRequireCall(node)) {
+                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
                 else {
