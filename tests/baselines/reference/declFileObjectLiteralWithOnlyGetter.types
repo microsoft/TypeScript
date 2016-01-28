@@ -1,11 +1,11 @@
 === tests/cases/compiler/declFileObjectLiteralWithOnlyGetter.ts ===
 
 function /*1*/makePoint(x: number) { 
->makePoint : (x: number) => { x: number; }
+>makePoint : (x: number) => { readonly x: number; }
 >x : number
 
     return {
->{        get x() { return x; },    } : { x: number; }
+>{        get x() { return x; },    } : { readonly x: number; }
 
         get x() { return x; },
 >x : number
@@ -14,14 +14,14 @@ function /*1*/makePoint(x: number) {
     };
 };
 var /*4*/point = makePoint(2);
->point : { x: number; }
->makePoint(2) : { x: number; }
->makePoint : (x: number) => { x: number; }
+>point : { readonly x: number; }
+>makePoint(2) : { readonly x: number; }
+>makePoint : (x: number) => { readonly x: number; }
 >2 : number
 
 var /*2*/x = point./*3*/x;
 >x : number
 >point./*3*/x : number
->point : { x: number; }
+>point : { readonly x: number; }
 >x : number
 

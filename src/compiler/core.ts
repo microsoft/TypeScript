@@ -74,8 +74,6 @@ namespace ts {
         GreaterThan = 1
     }
 
-    export interface StringSet extends Map<any> { }
-
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
@@ -439,6 +437,17 @@ namespace ts {
             category: message.category,
             code: message.code,
         };
+    }
+
+    /* internal */
+    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 2) {
+            text = formatStringFromArgs(text, arguments, 2);
+        }
+
+        return text;
     }
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;

@@ -2777,6 +2777,9 @@ namespace ts {
                     return directoryProbablyExists(directoryName, host);
                 }
             };
+            if (host.trace) {
+                compilerHost.trace = message => host.trace(message);
+            }
 
             if (host.resolveModuleNames) {
                 compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);

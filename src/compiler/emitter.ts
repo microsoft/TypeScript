@@ -320,7 +320,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
         const awaiterHelper = `
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new P(function (resolve, reject) {
+    return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
@@ -1530,7 +1530,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
 
                     if (languageVersion !== ScriptTarget.ES6) {
-                        const declaration = resolver.getReferencedNestedRedeclaration(node);
+                        const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                         if (declaration) {
                             write(getGeneratedNameForNode(declaration.name));
                             return;
@@ -1546,7 +1546,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
-            function isNameOfNestedRedeclaration(node: Identifier) {
+            function isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node: Identifier) {
                 if (languageVersion < ScriptTarget.ES6) {
                     const parent = node.parent;
                     switch (parent.kind) {
@@ -1554,7 +1554,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.EnumDeclaration:
                         case SyntaxKind.VariableDeclaration:
-                            return (<Declaration>parent).name === node && resolver.isNestedRedeclaration(<Declaration>parent);
+                            return (<Declaration>parent).name === node && resolver.isDeclarationWithCollidingName(<Declaration>parent);
                     }
                 }
                 return false;
@@ -1576,7 +1576,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else if (isExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
-                else if (isNameOfNestedRedeclaration(node)) {
+                else if (isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(node)) {
                     write(getGeneratedNameForNode(node));
                 }
                 else if (nodeIsSynthesized(node)) {
@@ -2891,7 +2891,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function shouldConvertLoopBody(node: IterationStatement): boolean {
                 return languageVersion < ScriptTarget.ES6 &&
-                    (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithBlockScopedBindingCapturedInFunction) !== 0;
+                    (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
             }
 
             function emitLoop(node: IterationStatement, loopEmitter: (n: IterationStatement, convertedLoop: ConvertedLoop) => void): void {
@@ -3045,7 +3045,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 function collectNames(name: Identifier | BindingPattern): void {
                     if (name.kind === SyntaxKind.Identifier) {
-                        const nameText = isNameOfNestedRedeclaration(<Identifier>name) ? getGeneratedNameForNode(name) : (<Identifier>name).text;
+                        const nameText = isNameOfNestedBlockScopedRedeclarationOrCapturedBinding(<Identifier>name) ? getGeneratedNameForNode(name) : (<Identifier>name).text;
                         loopParameters.push(nameText);
                     }
                     else {
@@ -3889,7 +3889,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
                         index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
-                        (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
+                        // We need to unescape identifier here because when parsing an identifier prefixing with "__"
+                        // the parser need to append "_" in order to escape colliding with magic identifiers such as "__proto__"
+                        // Therefore, in order to correctly emit identifiers that are written in original TypeScript file,
+                        // we will unescapeIdentifier to remove additional underscore (if no underscore is added, the function will return original input string)
+                        (<Identifier | LiteralExpression>index).text = unescapeIdentifier((<Identifier | LiteralExpression>propName).text);
                     }
 
                     return !nameIsComputed && index.kind === SyntaxKind.Identifier
@@ -4061,22 +4065,56 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
                 else {
                     let initializer = node.initializer;
-                    if (!initializer && languageVersion < ScriptTarget.ES6) {
+                    if (!initializer &&
+                        languageVersion < ScriptTarget.ES6 &&
+                        // for names - binding patterns that lack initializer there is no point to emit explicit initializer 
+                        // since downlevel codegen for destructuring will fail in the absence of initializer so all binding elements will say uninitialized
+                        node.name.kind === SyntaxKind.Identifier) {
 
-                        // downlevel emit for non-initialized let bindings defined in loops
-                        // for (...) {  let x; }
-                        // should be
-                        // for (...) { var <some-uniqie-name> = void 0; }
-                        // this is necessary to preserve ES6 semantic in scenarios like
-                        // for (...) { let x; console.log(x); x = 1 } // assignment on one iteration should not affect other iterations
-                        const isLetDefinedInLoop =
-                            (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) &&
-                            (getCombinedFlagsForIdentifier(<Identifier>node.name) & NodeFlags.Let);
+                        const container = getEnclosingBlockScopeContainer(node);
+                        const flags = resolver.getNodeCheckFlags(node);
 
-                        // NOTE: default initialization should not be added to let bindings in for-in\for-of statements
-                        if (isLetDefinedInLoop &&
-                            node.parent.parent.kind !== SyntaxKind.ForInStatement &&
-                            node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
+                        // nested let bindings might need to be initialized explicitly to preserve ES6 semantic
+                        // { let x = 1; }
+                        // { let x; } // x here should be undefined. not 1
+                        // NOTES:
+                        // Top level bindings never collide with anything and thus don't require explicit initialization.
+                        // As for nested let bindings there are two cases:
+                        // - nested let bindings that were not renamed definitely should be initialized explicitly
+                        //   { let x = 1; }
+                        //   { let x; if (some-condition) { x = 1}; if (x) { /*1*/ } }
+                        //   Without explicit initialization code in /*1*/ can be executed even if some-condition is evaluated to false
+                        // - renaming introduces fresh name that should not collide with any existing names, however renamed bindings sometimes also should be
+                        //   explicitly initialized. One particular case: non-captured binding declared inside loop body (but not in loop initializer)
+                        //   let x;
+                        //   for (;;) {
+                        //       let x;  
+                        //   }
+                        //   in downlevel codegen inner 'x' will be renamed so it won't collide with outer 'x' however it will should be reset on every iteration
+                        //   as if it was declared anew. 
+                        //   * Why non-captured binding - because if loop contains block scoped binding captured in some function then loop body will be rewritten 
+                        //   to have a fresh scope on every iteration so everything will just work.
+                        //   * Why loop initializer is excluded - since we've introduced a fresh name it already will be undefined.
+                        const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
+                        const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
+
+                        const emittedAsTopLevel =
+                            isBlockScopedContainerTopLevel(container) ||
+                            (isCapturedInFunction && isDeclaredInLoop && container.kind === SyntaxKind.Block && isIterationStatement(container.parent, /*lookInLabeledStatements*/ false));
+
+                        const emittedAsNestedLetDeclaration =
+                            getCombinedNodeFlags(node) & NodeFlags.Let &&
+                            !emittedAsTopLevel;
+
+                        const emitExplicitInitializer =
+                            emittedAsNestedLetDeclaration &&
+                            container.kind !== SyntaxKind.ForInStatement &&
+                            container.kind !== SyntaxKind.ForOfStatement &&
+                            (
+                                !resolver.isDeclarationWithCollidingName(node) ||
+                                (isDeclaredInLoop && !isCapturedInFunction && !isIterationStatement(container, /*lookInLabeledStatements*/ false))
+                            );
+                        if (emitExplicitInitializer) {
                             initializer = createVoidZero();
                         }
                     }
@@ -4109,14 +4147,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else if (isBindingPattern(name)) {
                     forEach((<BindingPattern>name).elements, emitExportVariableAssignments);
                 }
-            }
-
-            function getCombinedFlagsForIdentifier(node: Identifier): NodeFlags {
-                if (!node.parent || (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement)) {
-                    return 0;
-                }
-
-                return getCombinedNodeFlags(node.parent);
             }
 
             function isES6ExportedDeclaration(node: Node) {
@@ -4531,11 +4561,11 @@ const _super = (function (geti, seti) {
                     write(", void 0, ");
                 }
 
-                if (promiseConstructor) {
-                    emitEntityNameAsExpression(promiseConstructor, /*useFallback*/ false);
+                if (languageVersion >= ScriptTarget.ES6 || !promiseConstructor) {
+                    write("void 0");
                 }
                 else {
-                    write("Promise");
+                    emitEntityNameAsExpression(promiseConstructor, /*useFallback*/ false);
                 }
 
                 // Emit the call to __awaiter.

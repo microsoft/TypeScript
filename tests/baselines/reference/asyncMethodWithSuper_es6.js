@@ -59,7 +59,7 @@ class B extends A {
     // async method with only call/get on 'super' does not require a binding
     simple() {
         const _super = name => super[name];
-        return __awaiter(this, void 0, Promise, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             // call with property access
             _super("x").call(this);
             // call with element access
@@ -76,7 +76,7 @@ class B extends A {
             const cache = Object.create(null);
             return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
         })(name => super[name], (name, value) => super[name] = value);
-        return __awaiter(this, void 0, Promise, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const f = () => { };
             // call with property access
             _super("x").value.call(this);
