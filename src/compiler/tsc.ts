@@ -302,9 +302,11 @@ namespace ts {
 
             const fileOrDirectory = normalizePath(commandLine.options.project);
             if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
-                configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
+                const tsconfigFileName = combinePaths(fileOrDirectory, "tsconfig.json");
+                const jsconfigFileName = combinePaths(fileOrDirectory, "jsconfig.json");
+                configFileName = sys.fileExists(tsconfigFileName) ? tsconfigFileName : jsconfigFileName;
                 if (!sys.fileExists(configFileName)) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_or_a_jsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
             }
@@ -712,9 +714,13 @@ namespace ts {
 
     function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
         const currentDirectory = sys.getCurrentDirectory();
-        const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
-        if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* compilerHost */ undefined);
+        const tsconfigFileName = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
+        const jsconfigFileName = normalizePath(combinePaths(currentDirectory, "jsconfig.json"));
+        if (sys.fileExists(tsconfigFileName)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, tsconfigFileName), /* compilerHost */ undefined);
+        }
+        else if (sys.fileExists(jsconfigFileName)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_jsconfig_json_file_is_already_defined_at_Colon_0, jsconfigFileName), /* compilerHost */ undefined);
         }
         else {
             const compilerOptions = extend(options, defaultInitCompilerOptions);
@@ -728,7 +734,7 @@ namespace ts {
                 configurations.files = fileNames;
             }
 
-            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            sys.writeFile(tsconfigFileName, JSON.stringify(configurations, undefined, 4));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* compilerHost */ undefined);
         }
 
