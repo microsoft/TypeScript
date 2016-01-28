@@ -7165,11 +7165,33 @@ namespace ts {
                 markAliasSymbolAsReferenced(symbol);
             }
 
+            const localSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
+
+            // Due to the emit for class decorators, any reference to the class from inside of the class body
+            // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+            // behavior of class names in ES6.
+            if (languageVersion === ScriptTarget.ES6
+                && localSymbol
+                && localSymbol.valueDeclaration
+                && localSymbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration
+                && nodeIsDecorated(localSymbol.valueDeclaration)) {
+                let container = getContainingClass(node);
+                while (container !== undefined) {
+                    if (container === localSymbol.valueDeclaration && container.name !== node) {
+                        getNodeLinks(container).flags |= NodeCheckFlags.ClassWithBodyScopedClassBinding;
+                        getNodeLinks(node).flags |= NodeCheckFlags.BodyScopedClassBinding;
+                        break;
+                    }
+
+                    container = getContainingClass(container);
+                }
+            }
+
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
+            return getNarrowedTypeOfSymbol(localSymbol, node);
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -7211,7 +7233,7 @@ namespace ts {
 
             if (containedInIterationStatement) {
                 if (usedInFunction) {
-                    // mark iteration statement as containing block-scoped binding captured in some function 
+                    // mark iteration statement as containing block-scoped binding captured in some function
                     getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
                 }
                 // set 'declared inside loop' bit on the block-scoped binding
@@ -15714,7 +15736,7 @@ namespace ts {
                             // - binding is not top level - top level bindings never collide with anything
                             // AND
                             //   - binding is not declared in loop, should be renamed to avoid name reuse across siblings
-                            //     let a, b 
+                            //     let a, b
                             //     { let x = 1; a = () => x;  }
                             //     { let x = 100; b = () => x; }
                             //     console.log(a()); // should print '1'
