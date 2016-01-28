@@ -1207,7 +1207,19 @@ namespace ts {
                 node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
 
             const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
-            return variableStatementNode && variableStatementNode.jsDocComment;
+            if (variableStatementNode) {
+                return variableStatementNode.jsDocComment;
+            }
+
+            // Also recognize when the node is the RHS of an assignment expression
+            const isSourceOfAssignmentExpressionStatement =
+                node.parent && node.parent.parent &&
+                node.parent.kind === SyntaxKind.BinaryExpression &&
+                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+            if (isSourceOfAssignmentExpressionStatement) {
+                return node.parent.parent.jsDocComment;
+            }
         }
 
         return undefined;

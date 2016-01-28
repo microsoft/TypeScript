@@ -4051,7 +4051,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ true);
             }
 
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseOptionalIdentifier() {
@@ -4335,13 +4335,13 @@ namespace ts {
                 const labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
                 labeledStatement.label = <Identifier>expression;
                 labeledStatement.statement = parseStatement();
-                return finishNode(labeledStatement);
+                return addJSDocComment(finishNode(labeledStatement));
             }
             else {
                 const expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
                 expressionStatement.expression = expression;
                 parseSemicolon();
-                return finishNode(expressionStatement);
+                return addJSDocComment(finishNode(expressionStatement));
             }
         }
 
