@@ -1,5 +1,6 @@
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(14,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(22,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(28,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(36,13): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(38,25): error TS2507: Type 'any' is not a constructor function type.
@@ -8,7 +9,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalMod
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(48,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
-==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts (8 errors) ====
+==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts (9 errors) ====
     //'this' in static member initializer
     class ErrClass1 {
         static t = this; // Error
@@ -24,7 +25,9 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalMod
         t;
         //'this' in optional super call
         constructor() {
-            super(this); // OK
+            super(this); // error: "super" has to be called before "this" accessing
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
@@ -34,7 +37,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalMod
         constructor() {
             super(this); // Error
                   ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     

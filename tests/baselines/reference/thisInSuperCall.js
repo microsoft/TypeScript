@@ -5,7 +5,7 @@ class Base {
 
 class Foo extends Base {
     constructor() {
-        super(this); // no error
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 
@@ -36,7 +36,7 @@ var Base = (function () {
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        _super.call(this, this); // no error
+        _super.call(this, this); // error: "super" has to be called before "this" accessing
     }
     return Foo;
 }(Base));
