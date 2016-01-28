@@ -477,6 +477,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             // =>
             // var x;... exporter("x", x = 1)
             let exportFunctionForFile: string;
+            let contextObjectForFile: string;
 
             let generatedNameSet: Map<string>;
             let nodeToGeneratedName: string[];
@@ -557,6 +558,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentText = undefined;
                 currentLineMap = undefined;
                 exportFunctionForFile = undefined;
+                contextObjectForFile = undefined;
                 generatedNameSet = undefined;
                 nodeToGeneratedName = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
@@ -585,6 +587,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentText = sourceFile.text;
                 currentLineMap = getLineStarts(sourceFile);
                 exportFunctionForFile = undefined;
+                contextObjectForFile = undefined;
                 isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports["___esModule"];
                 renamedDependencies = sourceFile.renamedDependencies;
                 currentFileIdentifiers = sourceFile.identifiers;
@@ -7058,6 +7061,7 @@ const _super = (function (geti, seti) {
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
+                contextObjectForFile = makeUniqueName("context");
                 writeLine();
                 write("System.register(");
                 writeModuleName(node, emitRelativePathAsModuleName);
@@ -7093,10 +7097,13 @@ const _super = (function (geti, seti) {
 
                     write(text);
                 }
-                write(`], function(${exportFunctionForFile}) {`);
+                write(`], function(${exportFunctionForFile}, ${contextObjectForFile}) {`);
                 writeLine();
                 increaseIndent();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
+                writeLine();
+                write(`var __moduleName = ${contextObjectForFile} && ${contextObjectForFile}.id;`);
+                writeLine();
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
