@@ -481,6 +481,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let generatedNameSet: Map<string>;
             let nodeToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
+            let decoratedClassAliases: string[];
 
             let convertedLoopState: ConvertedLoopState;
 
@@ -531,6 +532,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
                 generatedNameSet = {};
                 nodeToGeneratedName = [];
+                decoratedClassAliases = [];
                 isOwnFileEmit = !isBundledEmit;
 
                 // Emit helpers from all the files
@@ -559,6 +561,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 exportFunctionForFile = undefined;
                 generatedNameSet = undefined;
                 nodeToGeneratedName = undefined;
+                decoratedClassAliases = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
                 convertedLoopState = undefined;
                 extendsEmitted = false;
@@ -1529,11 +1532,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                     }
 
-                    if (languageVersion !== ScriptTarget.ES6) {
+                    if (languageVersion < ScriptTarget.ES6) {
                         const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                         if (declaration) {
                             write(getGeneratedNameForNode(declaration.name));
                             return;
+                        }
+                    }
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BodyScopedClassBinding) {
+                        // Due to the emit for class decorators, any reference to the class from inside of the class body
+                        // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                        // behavior of class names in ES6.
+                        const declaration = resolver.getReferencedValueDeclaration(node);
+                        if (declaration && declaration.kind === SyntaxKind.ClassDeclaration) {
+                            const classAlias = decoratedClassAliases[getNodeId(declaration)];
+                            if (classAlias !== undefined) {
+                                write(classAlias);
+                                return;
+                            }
                         }
                     }
                 }
@@ -4067,7 +4083,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     let initializer = node.initializer;
                     if (!initializer &&
                         languageVersion < ScriptTarget.ES6 &&
-                        // for names - binding patterns that lack initializer there is no point to emit explicit initializer 
+                        // for names - binding patterns that lack initializer there is no point to emit explicit initializer
                         // since downlevel codegen for destructuring will fail in the absence of initializer so all binding elements will say uninitialized
                         node.name.kind === SyntaxKind.Identifier) {
 
@@ -4088,11 +4104,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         //   explicitly initialized. One particular case: non-captured binding declared inside loop body (but not in loop initializer)
                         //   let x;
                         //   for (;;) {
-                        //       let x;  
+                        //       let x;
                         //   }
                         //   in downlevel codegen inner 'x' will be renamed so it won't collide with outer 'x' however it will should be reset on every iteration
-                        //   as if it was declared anew. 
-                        //   * Why non-captured binding - because if loop contains block scoped binding captured in some function then loop body will be rewritten 
+                        //   as if it was declared anew.
+                        //   * Why non-captured binding - because if loop contains block scoped binding captured in some function then loop body will be rewritten
                         //   to have a fresh scope on every iteration so everything will just work.
                         //   * Why loop initializer is excluded - since we've introduced a fresh name it already will be undefined.
                         const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
@@ -5106,64 +5122,114 @@ const _super = (function (geti, seti) {
             }
 
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
+                let decoratedClassAlias: string;
                 const thisNodeIsDecorated = nodeIsDecorated(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     if (thisNodeIsDecorated) {
-                        // To preserve the correct runtime semantics when decorators are applied to the class,
-                        // the emit needs to follow one of the following rules:
+                        // When we emit an ES6 class that has a class decorator, we must tailor the
+                        // emit to certain specific cases.
                         //
-                        // * For a local class declaration:
+                        // In the simplest case, we emit the class declaration as a let declaration, and
+                        // evaluate decorators after the close of the class body:
                         //
-                        //     @dec class C {
-                        //     }
+                        //  TypeScript                      | Javascript
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let C = class C {
+                        //  class C {                       | }
+                        //  }                               | C = __decorate([dec], C);
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | export let C = class C {
+                        //  export class C {                | }
+                        //  }                               | C = __decorate([dec], C);
+                        //  ---------------------------------------------------------------------
+                        //  [Example 1]
                         //
-                        //   The emit should be:
+                        // If a class declaration contains a reference to itself *inside* of the class body,
+                        // this introduces two bindings to the class: One outside of the class body, and one
+                        // inside of the class body. If we apply decorators as in [Example 1] above, there
+                        // is the possibility that the decorator `dec` will return a new value for the
+                        // constructor, which would result in the binding inside of the class no longer
+                        // pointing to the same reference as the binding outside of the class.
                         //
-                        //     let C = class {
-                        //     };
-                        //     C = __decorate([dec], C);
+                        // As a result, we must instead rewrite all references to the class *inside* of the
+                        // class body to instead point to a local temporary alias for the class:
                         //
-                        // * For an exported class declaration:
+                        //  TypeScript                      | Javascript
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let C_1;
+                        //  class C {                       | let C = C_1 = class C {
+                        //    static x() { return C.y; }    |   static x() { return C_1.y; }
+                        //    static y = 1;                 | }
+                        //  }                               | C.y = 1;
+                        //                                  | C = C_1 = __decorate([dec], C);
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let C_1;
+                        //  export class C {                | export let C = C_1 = class C {
+                        //    static x() { return C.y; }    |   static x() { return C_1.y; }
+                        //    static y = 1;                 | }
+                        //  }                               | C.y = 1;
+                        //                                  | C = C_1 = __decorate([dec], C);
+                        //  ---------------------------------------------------------------------
+                        //  [Example 2]
                         //
-                        //     @dec export class C {
-                        //     }
+                        // If a class declaration is the default export of a module, we instead emit
+                        // the export after the decorated declaration:
                         //
-                        //   The emit should be:
+                        //  TypeScript                      | Javascript
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let default_1 = class {
+                        //  export default class {          | }
+                        //  }                               | default_1 = __decorate([dec], default_1);
+                        //                                  | export default default_1;
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let C = class C {
+                        //  export default class {          | }
+                        //  }                               | C = __decorate([dec], C);
+                        //                                  | export default C;
+                        //  ---------------------------------------------------------------------
+                        //  [Example 3]
                         //
-                        //     export let C = class {
-                        //     };
-                        //     C = __decorate([dec], C);
+                        // If the class declaration is the default export and a reference to itself
+                        // inside of the class body, we must emit both an alias for the class *and*
+                        // move the export after the declaration:
                         //
-                        // * For a default export of a class declaration with a name:
+                        //  TypeScript                      | Javascript
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let default_1 = class {
+                        //  export default class {          |   static x() { return default_1.y; }
+                        //    static x() { return C.y; }    | }
+                        //    static y = 1;                 | default_1.y = 1;
+                        //  }                               | default_1 = __decorate([dec], default_1);
+                        //                                  | export default default_1;
+                        //  --------------------------------|------------------------------------
+                        //  @dec                            | let C_1;
+                        //  export default class C {        | let C = C_1 = class C {
+                        //    static x() { return C.y; }    |   static x() { return C_1.y; }
+                        //    static y = 1;                 | }
+                        //  }                               | C.y = 1;
+                        //                                  | C = C_1 = __decorate([dec], C);
+                        //                                  | export default C;
+                        //  ---------------------------------------------------------------------
+                        //  [Example 4]
                         //
-                        //     @dec default export class C {
-                        //     }
-                        //
-                        //   The emit should be:
-                        //
-                        //     let C = class {
-                        //     }
-                        //     C = __decorate([dec], C);
-                        //     export default C;
-                        //
-                        // * For a default export of a class declaration without a name:
-                        //
-                        //     @dec default export class {
-                        //     }
-                        //
-                        //   The emit should be:
-                        //
-                        //     let _default = class {
-                        //     }
-                        //     _default = __decorate([dec], _default);
-                        //     export default _default;
-                        //
+
+                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                            decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
+                            decoratedClassAliases[getNodeId(node)] = decoratedClassAlias;
+                            write(`let ${decoratedClassAlias};`);
+                            writeLine();
+                        }
+
                         if (isES6ExportedDeclaration(node) && !(node.flags & NodeFlags.Default)) {
                             write("export ");
                         }
 
                         write("let ");
                         emitDeclarationName(node);
+                        if (decoratedClassAlias !== undefined) {
+                            write(` = ${decoratedClassAlias}`);
+                        }
+
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -5202,7 +5268,7 @@ const _super = (function (geti, seti) {
                 // emit name if
                 // - node has a name
                 // - this is default export with static initializers
-                if ((node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6))) && !thisNodeIsDecorated) {
+                if (node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6) && !thisNodeIsDecorated)) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -5222,16 +5288,8 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
 
-                // TODO(rbuckton): Need to go back to `let _a = class C {}` approach, removing the defineProperty call for now.
-
-                // For a decorated class, we need to assign its name (if it has one). This is because we emit
-                // the class as a class expression to avoid the double-binding of the identifier:
-                //
-                //   let C = class {
-                //   }
-                //   Object.defineProperty(C, "name", { value: "C", configurable: true });
-                //
                 if (thisNodeIsDecorated) {
+                    decoratedClassAliases[getNodeId(node)] = undefined;
                     write(";");
                 }
 
@@ -5256,7 +5314,7 @@ const _super = (function (geti, seti) {
                 else {
                     writeLine();
                     emitPropertyDeclarations(node, staticProperties);
-                    emitDecoratorsOfClass(node);
+                    emitDecoratorsOfClass(node, decoratedClassAlias);
                 }
 
                 if (!(node.flags & NodeFlags.Export)) {
@@ -5330,7 +5388,7 @@ const _super = (function (geti, seti) {
                 emitMemberFunctionsForES5AndLower(node);
                 emitPropertyDeclarations(node, getInitializedProperties(node, /*isStatic*/ true));
                 writeLine();
-                emitDecoratorsOfClass(node);
+                emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5372,13 +5430,13 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
+            function emitDecoratorsOfClass(node: ClassLikeDeclaration, decoratedClassAlias: string) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
-                emitDecoratorsOfConstructor(node);
+                emitDecoratorsOfConstructor(node, decoratedClassAlias);
             }
 
-            function emitDecoratorsOfConstructor(node: ClassLikeDeclaration) {
+            function emitDecoratorsOfConstructor(node: ClassLikeDeclaration, decoratedClassAlias: string) {
                 const decorators = node.decorators;
                 const constructor = getFirstConstructorWithBody(node);
                 const firstParameterDecorator = constructor && forEach(constructor.parameters, parameter => parameter.decorators);
@@ -5402,6 +5460,10 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitStart(node.decorators || firstParameterDecorator);
                 emitDeclarationName(node);
+                if (decoratedClassAlias !== undefined) {
+                    write(` = ${decoratedClassAlias}`);
+                }
+
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
