@@ -637,21 +637,21 @@ namespace ts {
             }
         }
 
-        function emitClassMemberDeclarationFlags(node: Declaration) {
-            if (node.flags & NodeFlags.Private) {
+        function emitClassMemberDeclarationFlags(flags: NodeFlags) {
+            if (flags & NodeFlags.Private) {
                 write("private ");
             }
-            else if (node.flags & NodeFlags.Protected) {
+            else if (flags & NodeFlags.Protected) {
                 write("protected ");
             }
 
-            if (node.flags & NodeFlags.Static) {
+            if (flags & NodeFlags.Static) {
                 write("static ");
             }
-            if (node.flags & NodeFlags.Readonly) {
+            if (flags & NodeFlags.Readonly) {
                 write("readonly ");
             }
-            if (node.flags & NodeFlags.Abstract) {
+            if (flags & NodeFlags.Abstract) {
                 write("abstract ");
             }
         }
@@ -1077,7 +1077,7 @@ namespace ts {
             }
 
             emitJsDocComments(node);
-            emitClassMemberDeclarationFlags(node);
+            emitClassMemberDeclarationFlags(node.flags);
             emitVariableDeclaration(<VariableDeclaration>node);
             write(";");
             writeLine();
@@ -1230,7 +1230,7 @@ namespace ts {
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
-                emitClassMemberDeclarationFlags(node);
+                emitClassMemberDeclarationFlags(node.flags | (accessors.setAccessor ? 0 : NodeFlags.Readonly));
                 writeTextOfNode(currentText, node.name);
                 if (!(node.flags & NodeFlags.Private)) {
                     accessorWithTypeAnnotation = node;
@@ -1317,7 +1317,7 @@ namespace ts {
                     emitModuleElementDeclarationFlags(node);
                 }
                 else if (node.kind === SyntaxKind.MethodDeclaration) {
-                    emitClassMemberDeclarationFlags(node);
+                    emitClassMemberDeclarationFlags(node.flags);
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
@@ -1347,7 +1347,7 @@ namespace ts {
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 // Index signature can have readonly modifier
-                emitClassMemberDeclarationFlags(node);
+                emitClassMemberDeclarationFlags(node.flags);
                 write("[");
             }
             else {
