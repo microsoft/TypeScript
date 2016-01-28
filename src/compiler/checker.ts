@@ -10356,7 +10356,7 @@ namespace ts {
 
         function getReturnTypeFromJSDocComment(func: SignatureDeclaration | FunctionDeclaration): Type {
             const returnTag = getJSDocReturnTag(func);
-            if (returnTag) {
+            if (returnTag && returnTag.typeExpression) {
                 return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
         }
