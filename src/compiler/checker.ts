@@ -10239,7 +10239,7 @@ namespace ts {
             }
 
             // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-            if (isInJavaScriptFile(node) && isRequireCall(node)) {
+            if (isInJavaScriptFile(node) && isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                 return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
