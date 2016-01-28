@@ -1,0 +1,83 @@
+=== tests/cases/compiler/readonlyInDeclarationFile.ts ===
+
+interface Foo {
+>Foo : Foo
+
+    readonly x: number;
+>x : number
+
+    readonly [x: string]: Object;
+>x : string
+>Object : Object
+}
+
+class C {
+>C : C
+
+    protected readonly y: number;
+>y : number
+
+    readonly [x: string]: Object;
+>x : string
+>Object : Object
+
+    private static readonly a = "foo"; 
+>a : string
+>"foo" : string
+
+    protected static readonly b = "foo"; 
+>b : string
+>"foo" : string
+
+    public static readonly c = "foo"; 
+>c : string
+>"foo" : string
+}
+
+var z: {
+>z : { readonly [x: string]: Object; readonly a: string; }
+
+    readonly a: string;
+>a : string
+
+    readonly [x: string]: Object;
+>x : string
+>Object : Object
+}
+
+function f() {
+>f : () => { readonly x: number; y: number; }
+
+    return {
+>{        get x() { return 1; },        get y() { return 1; },        set y(value) { }    } : { readonly x: number; y: number; }
+
+        get x() { return 1; },
+>x : number
+>1 : number
+
+        get y() { return 1; },
+>y : number
+>1 : number
+
+        set y(value) { }
+>y : number
+>value : number
+    }
+}
+
+function g() {
+>g : () => { readonly [x: string]: Object; readonly a: string; }
+
+    var x: {
+>x : { readonly [x: string]: Object; readonly a: string; }
+
+        readonly a: string;
+>a : string
+
+        readonly [x: string]: Object;
+>x : string
+>Object : Object
+    }
+    return x;
+>x : { readonly [x: string]: Object; readonly a: string; }
+}

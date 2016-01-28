@@ -1,0 +1,76 @@
+=== tests/cases/compiler/readonlyInDeclarationFile.ts ===
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(readonlyInDeclarationFile.ts, 0, 0))
+
+    readonly x: number;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 1, 15))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 3, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+class C {
+>C : Symbol(C, Decl(readonlyInDeclarationFile.ts, 4, 1))
+
+    protected readonly y: number;
+>y : Symbol(y, Decl(readonlyInDeclarationFile.ts, 6, 9))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 8, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    private static readonly a = "foo"; 
+>a : Symbol(C.a, Decl(readonlyInDeclarationFile.ts, 8, 33))
+
+    protected static readonly b = "foo"; 
+>b : Symbol(C.b, Decl(readonlyInDeclarationFile.ts, 9, 38))
+
+    public static readonly c = "foo"; 
+>c : Symbol(C.c, Decl(readonlyInDeclarationFile.ts, 10, 40))
+}
+
+var z: {
+>z : Symbol(z, Decl(readonlyInDeclarationFile.ts, 14, 3))
+
+    readonly a: string;
+>a : Symbol(a, Decl(readonlyInDeclarationFile.ts, 14, 8))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 16, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+function f() {
+>f : Symbol(f, Decl(readonlyInDeclarationFile.ts, 17, 1))
+
+    return {
+        get x() { return 1; },
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 20, 12))
+
+        get y() { return 1; },
+>y : Symbol(y, Decl(readonlyInDeclarationFile.ts, 21, 30), Decl(readonlyInDeclarationFile.ts, 22, 30))
+
+        set y(value) { }
+>y : Symbol(y, Decl(readonlyInDeclarationFile.ts, 21, 30), Decl(readonlyInDeclarationFile.ts, 22, 30))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 23, 14))
+    }
+}
+
+function g() {
+>g : Symbol(g, Decl(readonlyInDeclarationFile.ts, 25, 1))
+
+    var x: {
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 28, 7))
+
+        readonly a: string;
+>a : Symbol(a, Decl(readonlyInDeclarationFile.ts, 28, 12))
+
+        readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 30, 18))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+    }
+    return x;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 28, 7))
+}
