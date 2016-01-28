@@ -6,11 +6,31 @@ interface Foo {
 }
 
 class C {
-    protected readonly y: number;
     readonly [x: string]: Object;
-    private static readonly a = "foo"; 
-    protected static readonly b = "foo"; 
-    public static readonly c = "foo"; 
+    private readonly a1: number;
+    protected readonly a2: number;
+    public readonly a3: number;
+    private get b1() { return 1 }
+    protected get b2() { return 1 }
+    public get b3() { return 1 }
+    private get c1() { return 1 }
+    private set c1(value) { }
+    protected get c2() { return 1 }
+    protected set c2(value) { }
+    public get c3() { return 1 }
+    public set c3(value) { }
+    private static readonly s1: number;
+    protected static readonly s2: number;
+    public static readonly s3: number;
+    private static get t1() { return 1 }
+    protected static get t2() { return 1 }
+    public static get t3() { return 1 }
+    private static get u1() { return 1 }
+    private static set u1(value) { }
+    protected static get u2() { return 1 }
+    protected static set u2(value) { }
+    public static get u3() { return 1 }
+    public static set u3(value) { }
 }
 
 var z: {
@@ -38,9 +58,72 @@ function g() {
 var C = (function () {
     function C() {
     }
-    C.a = "foo";
-    C.b = "foo";
-    C.c = "foo";
+    Object.defineProperty(C.prototype, "b1", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "b2", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "b3", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "c1", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "c2", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C.prototype, "c3", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "t1", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "t2", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "t3", {
+        get: function () { return 1; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "u1", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "u2", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(C, "u3", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: true,
+        configurable: true
+    });
     return C;
 }());
 var z;
@@ -63,11 +146,25 @@ interface Foo {
     readonly [x: string]: Object;
 }
 declare class C {
-    protected readonly y: number;
     readonly [x: string]: Object;
-    private static readonly a;
-    protected static readonly b: string;
-    static readonly c: string;
+    private readonly a1;
+    protected readonly a2: number;
+    readonly a3: number;
+    private readonly b1;
+    protected readonly b2: number;
+    readonly b3: number;
+    private c1;
+    protected c2: number;
+    c3: number;
+    private static readonly s1;
+    protected static readonly s2: number;
+    static readonly s3: number;
+    private static readonly t1;
+    protected static readonly t2: number;
+    static readonly t3: number;
+    private static u1;
+    protected static u2: number;
+    static u3: number;
 }
 declare var z: {
     readonly a: string;
