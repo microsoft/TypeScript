@@ -15375,6 +15375,8 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.ModuleExports:
                         return getSymbolOfNode(entityName.parent.parent);
+                    default:
+                        // Fall through if it is not a special property assignment
                 }
             }
 
