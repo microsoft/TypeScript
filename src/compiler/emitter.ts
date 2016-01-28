@@ -1544,7 +1544,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                         // behavior of class names in ES6.
                         const declaration = resolver.getReferencedValueDeclaration(node);
-                        if (declaration && declaration.kind === SyntaxKind.ClassDeclaration) {
+                        if (declaration) {
                             const classAlias = decoratedClassAliases[getNodeId(declaration)];
                             if (classAlias !== undefined) {
                                 write(classAlias);
@@ -5194,13 +5194,6 @@ const _super = (function (geti, seti) {
                         // move the export after the declaration:
                         //
                         //  TypeScript                      | Javascript
-                        //  --------------------------------|------------------------------------
-                        //  @dec                            | let default_1 = class {
-                        //  export default class {          |   static x() { return default_1.y; }
-                        //    static x() { return C.y; }    | }
-                        //    static y = 1;                 | default_1.y = 1;
-                        //  }                               | default_1 = __decorate([dec], default_1);
-                        //                                  | export default default_1;
                         //  --------------------------------|------------------------------------
                         //  @dec                            | let C_1;
                         //  export default class C {        | let C = C_1 = class C {
