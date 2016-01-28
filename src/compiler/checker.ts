@@ -131,8 +131,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -1700,6 +1700,15 @@ namespace ts {
             return result;
         }
 
+        function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
+            const writer = getSingleLineStringWriter();
+            getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
+            const result = writer.string();
+            releaseStringWriter(writer);
+
+            return result;
+        }
+
         function getTypeAliasForTypeLiteral(type: Type): Symbol {
             if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
                 let node = type.symbol.declarations[0].parent;
@@ -1833,16 +1842,10 @@ namespace ts {
                 function writeType(type: Type, flags: TypeFormatFlags) {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
-                        if (type.flags & TypeFlags.PredicateType) {
-                            buildTypePredicateDisplay(writer, (type as PredicateType).predicate);
-                            buildTypeDisplay((type as PredicateType).predicate.type, writer, enclosingDeclaration, flags, symbolStack);
-                        }
-                        else {
-                            // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                            writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
-                                ? "any"
-                                : (<IntrinsicType>type).intrinsicName);
-                        }
+                        // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
+                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
+                            ? "any"
+                            : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.ThisType) {
                         if (inObjectTypeLiteral) {
@@ -2141,10 +2144,10 @@ namespace ts {
                 }
             }
 
-            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
+            function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) {
                 const targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface || targetSymbol.flags & SymbolFlags.TypeAlias) {
-                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaraiton, flags);
+                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaration, flags);
                 }
             }
 
@@ -2214,7 +2217,7 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
             }
 
-            function buildTypePredicateDisplay(writer: SymbolWriter, predicate: TypePredicate) {
+            function buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]): void {
                 if (isIdentifierTypePredicate(predicate)) {
                     writer.writeParameter(predicate.parameterName);
                 }
@@ -2224,6 +2227,7 @@ namespace ts {
                 writeSpace(writer);
                 writeKeyword(writer, SyntaxKind.IsKeyword);
                 writeSpace(writer);
+                buildTypeDisplay(predicate.type, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
@@ -2236,8 +2240,13 @@ namespace ts {
                 }
                 writeSpace(writer);
 
-                const returnType = getReturnTypeOfSignature(signature);
-                buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
+                if (signature.typePredicate) {
+                    buildTypePredicateDisplay(signature.typePredicate, writer, enclosingDeclaration, flags, symbolStack);
+                }
+                else {
+                    const returnType = getReturnTypeOfSignature(signature);
+                    buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
+                }
             }
 
             function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind, symbolStack?: Symbol[]) {
@@ -2256,6 +2265,7 @@ namespace ts {
                 }
 
                 buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
+
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
 
@@ -2263,6 +2273,7 @@ namespace ts {
                 buildSymbolDisplay,
                 buildTypeDisplay,
                 buildTypeParameterDisplay,
+                buildTypePredicateDisplay,
                 buildParameterDisplay,
                 buildDisplayForParametersAndDelimiters,
                 buildDisplayForTypeParametersAndDelimiters,
@@ -2799,9 +2810,6 @@ namespace ts {
                 // object literal uses a different path). We exclude widening only so that language services and type verification
                 // tools see the actual type.
                 if (declaration.kind === SyntaxKind.PropertyAssignment) {
-                    return type;
-                }
-                if (type.flags & TypeFlags.PredicateType && (declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature)) {
                     return type;
                 }
                 return getWidenedType(type);
@@ -3534,12 +3542,13 @@ namespace ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
-            resolvedReturnType: Type, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
             sig.resolvedReturnType = resolvedReturnType;
+            sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
             sig.hasStringLiterals = hasStringLiterals;
@@ -3548,14 +3557,14 @@ namespace ts {
 
         function cloneSignature(sig: Signature): Signature {
             return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType,
-                sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
+                sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
             if (baseSignatures.length === 0) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
@@ -4068,6 +4077,7 @@ namespace ts {
                 let minArgumentCount = -1;
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 let returnType: Type = undefined;
+                let typePredicate: TypePredicate = undefined;
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -4111,6 +4121,9 @@ namespace ts {
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
+                    if (declaration.type.kind === SyntaxKind.TypePredicate) {
+                        typePredicate = createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode);
+                    }
                 }
                 else {
                     if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
@@ -4132,7 +4145,7 @@ namespace ts {
                     }
                 }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -4838,25 +4851,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getPredicateType(node: TypePredicateNode): Type {
-            return createPredicateType(getSymbolOfNode(node), createTypePredicateFromTypePredicateNode(node));
-        }
-
-        function createPredicateType(symbol: Symbol, predicate: ThisTypePredicate | IdentifierTypePredicate) {
-                const type = createType(TypeFlags.Boolean | TypeFlags.PredicateType) as PredicateType;
-                type.symbol = symbol;
-                type.predicate = predicate;
-                return type;
-        }
-
-        function getTypeFromPredicateTypeNode(node: TypePredicateNode): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                links.resolvedType = getPredicateType(node);
-            }
-            return links.resolvedType;
-        }
-
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -4881,7 +4875,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
-                    return getTypeFromPredicateTypeNode(<TypePredicateNode>node);
+                    return booleanType;
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
@@ -5033,6 +5027,7 @@ namespace ts {
 
         function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
             let freshTypeParameters: TypeParameter[];
+            let freshTypePredicate: TypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
                 // First create a fresh set of type parameters, then include a mapping from the old to the
                 // new type parameters in the mapper function. Finally store this mapper in the new type
@@ -5043,9 +5038,13 @@ namespace ts {
                     tp.mapper = mapper;
                 }
             }
+            if (signature.typePredicate) {
+                freshTypePredicate = cloneTypePredicate(signature.typePredicate, mapper);
+            }
             const result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
+                freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
             result.mapper = mapper;
@@ -5114,10 +5113,6 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
-                }
-                if (type.flags & TypeFlags.PredicateType) {
-                    const predicate = (type as PredicateType).predicate;
-                    return createPredicateType(type.symbol, cloneTypePredicate(predicate, mapper));
                 }
             }
             return type;
@@ -5260,19 +5255,56 @@ namespace ts {
                 const sourceReturnType = getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
-                if (targetReturnType.flags & TypeFlags.PredicateType && (targetReturnType as PredicateType).predicate.kind === TypePredicateKind.Identifier) {
-                    if (!(sourceReturnType.flags & TypeFlags.PredicateType)) {
+                if (target.typePredicate) {
+                    if (source.typePredicate) {
+                        result &= compareTypePredicateRelatedTo(source.typePredicate, target.typePredicate, reportErrors, errorReporter, compareTypes);
+                    }
+                    else if (isIdentifierTypePredicate(target.typePredicate)) {
                         if (reportErrors) {
                             errorReporter(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
                         }
                         return Ternary.False;
                     }
                 }
+                else {
+                    result &= compareTypes(sourceReturnType, targetReturnType, reportErrors);
+                }
 
-                result &= compareTypes(sourceReturnType, targetReturnType, reportErrors);
             }
 
             return result;
+        }
+
+        function compareTypePredicateRelatedTo(source: TypePredicate,
+                                               target: TypePredicate,
+                                               reportErrors: boolean,
+                                               errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+                                               compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+            if (source.kind !== target.kind) {
+                if (reportErrors) {
+                    errorReporter(Diagnostics.A_this_based_type_guard_is_not_compatible_with_a_parameter_based_type_guard);
+                    errorReporter(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
+                }
+                return Ternary.False;
+            }
+
+            if (source.kind === TypePredicateKind.Identifier) {
+                const sourceIdentifierPredicate = source as IdentifierTypePredicate;
+                const targetIdentifierPredicate = target as IdentifierTypePredicate;
+                if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
+                    if (reportErrors) {
+                        errorReporter(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
+                        errorReporter(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
+                    }
+                    return Ternary.False;
+                }
+            }
+
+            const related = compareTypes(source.type, target.type, reportErrors);
+            if (related === Ternary.False && reportErrors) {
+                errorReporter(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
+            }
+            return related;
         }
 
         function isImplementationCompatibleWithOverload(implementation: Signature, overload: Signature): boolean {
@@ -5401,33 +5433,6 @@ namespace ts {
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                 }
                 if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
-                    if (source.flags & TypeFlags.PredicateType && target.flags & TypeFlags.PredicateType) {
-                        const sourcePredicate = source as PredicateType;
-                        const targetPredicate = target as PredicateType;
-                        if (sourcePredicate.predicate.kind !== targetPredicate.predicate.kind) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.A_this_based_type_guard_is_not_compatible_with_a_parameter_based_type_guard);
-                                reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
-                            }
-                            return Ternary.False;
-                        }
-                        if (sourcePredicate.predicate.kind === TypePredicateKind.Identifier) {
-                            const sourceIdentifierPredicate = sourcePredicate.predicate as IdentifierTypePredicate;
-                            const targetIdentifierPredicate = targetPredicate.predicate as IdentifierTypePredicate;
-                            if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
-                                    reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
-                                }
-                                return Ternary.False;
-                            }
-                        }
-                        const related = isRelatedTo(sourcePredicate.predicate.type, targetPredicate.predicate.type, reportErrors, headMessage);
-                        if (related === Ternary.False && reportErrors) {
-                            reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
-                        }
-                        return related;
-                    }
                     return Ternary.True;
                 }
 
@@ -6282,9 +6287,6 @@ namespace ts {
                 if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                     return anyType;
                 }
-                if (type.flags & TypeFlags.PredicateType) {
-                    return booleanType;
-                }
                 if (type.flags & TypeFlags.ObjectLiteral) {
                     return getWidenedTypeOfObjectLiteral(type);
                 }
@@ -6512,11 +6514,6 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
-                else if (source.flags & TypeFlags.PredicateType && target.flags & TypeFlags.PredicateType) {
-                    if ((source as PredicateType).predicate.kind === (target as PredicateType).predicate.kind) {
-                        inferFromTypes((source as PredicateType).predicate.type, (target as PredicateType).predicate.type);
-                    }
-                }
                 else if (source.flags & TypeFlags.Tuple && target.flags & TypeFlags.Tuple && (<TupleType>source).elementTypes.length === (<TupleType>target).elementTypes.length) {
                     // If source and target are tuples of the same size, infer from element types
                     const sourceTypes = (<TupleType>source).elementTypes;
@@ -6612,7 +6609,13 @@ namespace ts {
 
             function inferFromSignature(source: Signature, target: Signature) {
                 forEachMatchingParameterType(source, target, inferFromTypes);
-                inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+
+                if (source.typePredicate && target.typePredicate && source.typePredicate.kind === target.typePredicate.kind) {
+                    inferFromTypes(source.typePredicate.type, target.typePredicate.type);
+                }
+                else {
+                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                }
             }
 
             function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
@@ -7038,46 +7041,33 @@ namespace ts {
                 return originalType;
             }
 
-            function narrowTypeByTypePredicate(type: Type, expr: CallExpression, assumeTrue: boolean): Type {
+            function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
                 if (type.flags & TypeFlags.Any) {
                     return type;
                 }
-                const signature = getResolvedSignature(expr);
-                const predicateType = getReturnTypeOfSignature(signature);
-
-                if (!predicateType || !(predicateType.flags & TypeFlags.PredicateType)) {
+                const signature = getResolvedSignature(callExpression);
+                
+                const predicate = signature.typePredicate;
+                if (!predicate) {
                     return type;
                 }
-                const predicate = (predicateType as PredicateType).predicate;
+
                 if (isIdentifierTypePredicate(predicate)) {
-                    const callExpression = expr as CallExpression;
                     if (callExpression.arguments[predicate.parameterIndex] &&
                         getSymbolAtTypePredicatePosition(callExpression.arguments[predicate.parameterIndex]) === symbol) {
                         return getNarrowedType(type, predicate.type, assumeTrue);
                     }
                 }
                 else {
-                    const expression = skipParenthesizedNodes(expr.expression);
-                    return narrowTypeByThisTypePredicate(type, predicate, expression, assumeTrue);
+                    const invokedExpression = skipParenthesizedNodes(callExpression.expression);
+                    return narrowTypeByThisTypePredicate(type, predicate, invokedExpression, assumeTrue);
                 }
                 return type;
             }
 
-            function narrowTypeByTypePredicateMember(type: Type, expr: ElementAccessExpression | PropertyAccessExpression, assumeTrue: boolean): Type {
-                if (type.flags & TypeFlags.Any) {
-                    return type;
-                }
-                const memberType = getTypeOfExpression(expr);
-                if (!(memberType.flags & TypeFlags.PredicateType)) {
-                    return type;
-                }
-
-                return narrowTypeByThisTypePredicate(type, (memberType as PredicateType).predicate as ThisTypePredicate, expr, assumeTrue);
-            }
-
-            function narrowTypeByThisTypePredicate(type: Type, predicate: ThisTypePredicate, expression: Expression, assumeTrue: boolean): Type {
-                if (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.PropertyAccessExpression) {
-                    const accessExpression = expression as ElementAccessExpression | PropertyAccessExpression;
+            function narrowTypeByThisTypePredicate(type: Type, predicate: ThisTypePredicate, invokedExpression: Expression, assumeTrue: boolean): Type {
+                if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                    const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
                     const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
                     if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtTypePredicatePosition(possibleIdentifier) === symbol) {
                         return getNarrowedType(type, predicate.type, assumeTrue);
@@ -7092,6 +7082,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
+                        // TODO (drosen): Why a qualified name?
                         return getSymbolOfEntityNameOrPropertyAccessExpression(expr as Node as (EntityName | PropertyAccessExpression));
                 }
             }
@@ -7124,9 +7115,6 @@ namespace ts {
                             return narrowType(type, (<PrefixUnaryExpression>expr).operand, !assumeTrue);
                         }
                         break;
-                    case SyntaxKind.ElementAccessExpression:
-                    case SyntaxKind.PropertyAccessExpression:
-                        return narrowTypeByTypePredicateMember(type, expr as (ElementAccessExpression | PropertyAccessExpression), assumeTrue);
                 }
                 return type;
             }
@@ -10481,12 +10469,13 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        /*
-         *TypeScript Specification 1.0 (6.3) - July 2014
-         * An explicitly typed function whose return type isn't the Void type,
-         * the Any type, or a union type containing the Void or Any type as a constituent
-         * must have at least one return statement somewhere in its body.
-         * An exception to this rule is if the function implementation consists of a single 'throw' statement.
+        /**
+         * TypeScript Specification 1.0 (6.3) - July 2014
+         *   An explicitly typed function whose return type isn't the Void type,
+         *   the Any type, or a union type containing the Void or Any type as a constituent
+         *   must have at least one return statement somewhere in its body.
+         *   An exception to this rule is if the function implementation consists of a single 'throw' statement.
+         *
          * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
          */
         function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration, returnType: Type): void {
@@ -11508,16 +11497,16 @@ namespace ts {
             if (!parent) {
                 return;
             }
-            const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(parent));
-            if (!returnType || !(returnType.flags & TypeFlags.PredicateType)) {
+            const typePredicate = getSignatureFromDeclaration(parent).typePredicate;
+            if (!typePredicate) {
                 return;
             }
+
             const { parameterName } = node;
-            if (parameterName.kind === SyntaxKind.ThisType) {
+            if (isThisTypePredicate(typePredicate)) {
                 getTypeFromThisTypeNode(parameterName as ThisTypeNode);
             }
             else {
-                const typePredicate = <IdentifierTypePredicate>(<PredicateType>returnType).predicate;
                 if (typePredicate.parameterIndex >= 0) {
                     if (parent.parameters[typePredicate.parameterIndex].dotDotDotToken) {
                         error(parameterName,
@@ -11532,12 +11521,8 @@ namespace ts {
                 else if (parameterName) {
                     let hasReportedError = false;
                     for (const { name } of parent.parameters) {
-                        if ((name.kind === SyntaxKind.ObjectBindingPattern ||
-                            name.kind === SyntaxKind.ArrayBindingPattern) &&
-                            checkIfTypePredicateVariableIsDeclaredInBindingPattern(
-                                <BindingPattern>name,
-                                parameterName,
-                                typePredicate.parameterName)) {
+                        if (isBindingPattern(name) &&
+                                checkIfTypePredicateVariableIsDeclaredInBindingPattern(name, parameterName, typePredicate.parameterName)) {
                             hasReportedError = true;
                             break;
                         }
@@ -11605,8 +11590,9 @@ namespace ts {
 
             forEach(node.parameters, checkParameter);
 
-            checkSourceElement(node.type);
-
+            if (node.type) {
+                checkSourceElement(node.type);
+            }
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
@@ -13628,7 +13614,7 @@ namespace ts {
                             error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
-                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || returnType.flags & TypeFlags.PredicateType) {
+                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
                         if (isAsyncFunctionLike(func)) {
                             const promisedType = getPromisedType(returnType);
                             const awaitedType = checkAwaitedType(exprType, node.expression, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
