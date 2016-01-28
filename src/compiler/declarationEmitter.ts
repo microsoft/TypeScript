@@ -648,6 +648,9 @@ namespace ts {
             if (node.flags & NodeFlags.Static) {
                 write("static ");
             }
+            if (node.flags & NodeFlags.Readonly) {
+                write("readonly ");
+            }
             if (node.flags & NodeFlags.Abstract) {
                 write("abstract ");
             }
@@ -1342,15 +1345,17 @@ namespace ts {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
 
-            // Construct signature or constructor type write new Signature
-            if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
-                write("new ");
-            }
-            emitTypeParameters(node.typeParameters);
             if (node.kind === SyntaxKind.IndexSignature) {
+                // Index signature can have readonly modifier
+                emitClassMemberDeclarationFlags(node);
                 write("[");
             }
             else {
+                // Construct signature or constructor type write new Signature
+                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
+                    write("new ");
+                }
+                emitTypeParameters(node.typeParameters);
                 write("(");
             }
 
