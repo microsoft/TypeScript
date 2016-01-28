@@ -7192,19 +7192,18 @@ namespace ts {
                 markAliasSymbolAsReferenced(symbol);
             }
 
-            const localSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
+            const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
 
             // Due to the emit for class decorators, any reference to the class from inside of the class body
             // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
             // behavior of class names in ES6.
             if (languageVersion === ScriptTarget.ES6
-                && localSymbol
-                && localSymbol.valueDeclaration
-                && localSymbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration
-                && nodeIsDecorated(localSymbol.valueDeclaration)) {
+                && localOrExportSymbol.flags & SymbolFlags.Class
+                && localOrExportSymbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration
+                && nodeIsDecorated(localOrExportSymbol.valueDeclaration)) {
                 let container = getContainingClass(node);
                 while (container !== undefined) {
-                    if (container === localSymbol.valueDeclaration && container.name !== node) {
+                    if (container === localOrExportSymbol.valueDeclaration && container.name !== node) {
                         getNodeLinks(container).flags |= NodeCheckFlags.ClassWithBodyScopedClassBinding;
                         getNodeLinks(node).flags |= NodeCheckFlags.BodyScopedClassBinding;
                         break;
@@ -7218,7 +7217,7 @@ namespace ts {
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            return getNarrowedTypeOfSymbol(localSymbol, node);
+            return getNarrowedTypeOfSymbol(localOrExportSymbol, node);
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
