@@ -1089,10 +1089,11 @@ namespace ts {
     export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
         // of the form 'require("name")'
         const isRequire = expression.kind === SyntaxKind.CallExpression &&
-                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1;
-        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral); 
+            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+            (<CallExpression>expression).arguments.length === 1;
+
+        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
