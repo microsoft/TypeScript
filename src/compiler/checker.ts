@@ -10433,7 +10433,8 @@ namespace ts {
                     }
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                        return unknownType;
+                        // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
+                        return getUnionType(types);
                     }
                 }
 
