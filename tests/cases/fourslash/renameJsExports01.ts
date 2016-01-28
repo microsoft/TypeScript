@@ -9,4 +9,4 @@
 ////var t = mod./**/[|area|](10);
 
 goTo.marker();
-verify.renameLocations(false, false);
+verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);

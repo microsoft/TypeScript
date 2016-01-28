@@ -4,9 +4,9 @@
 // @Filename: a.js
 ////function bar() {
 ////}
-////bar.prototype.[|x|] = 10;
+////bar.prototype./**/[|x|] = 10;
 ////var t = new bar();
-////t./**/[|x|] = 11;
+////t.[|x|] = 11;
 
 goTo.marker();
-verify.renameLocations(false, false);
+verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
