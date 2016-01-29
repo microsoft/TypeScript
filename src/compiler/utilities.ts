@@ -1086,12 +1086,14 @@ namespace ts {
      * exactly one argument.
      * This function does not test if the node is in a JavaScript file or not.
     */
-    export function isRequireCall(expression: Node): expression is CallExpression {
+    export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
         // of the form 'require("name")'
-        return expression.kind === SyntaxKind.CallExpression &&
-                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1;
+        const isRequire = expression.kind === SyntaxKind.CallExpression &&
+            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+            (<CallExpression>expression).arguments.length === 1;
+
+        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -1205,7 +1207,19 @@ namespace ts {
                 node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
 
             const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
-            return variableStatementNode && variableStatementNode.jsDocComment;
+            if (variableStatementNode) {
+                return variableStatementNode.jsDocComment;
+            }
+
+            // Also recognize when the node is the RHS of an assignment expression
+            const isSourceOfAssignmentExpressionStatement =
+                node.parent && node.parent.parent &&
+                node.parent.kind === SyntaxKind.BinaryExpression &&
+                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+            if (isSourceOfAssignmentExpressionStatement) {
+                return node.parent.parent.jsDocComment;
+            }
         }
 
         return undefined;

@@ -320,7 +320,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
         const awaiterHelper = `
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new P(function (resolve, reject) {
+    return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
@@ -477,6 +477,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             // =>
             // var x;... exporter("x", x = 1)
             let exportFunctionForFile: string;
+            let contextObjectForFile: string;
 
             let generatedNameSet: Map<string>;
             let nodeToGeneratedName: string[];
@@ -557,6 +558,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentText = undefined;
                 currentLineMap = undefined;
                 exportFunctionForFile = undefined;
+                contextObjectForFile = undefined;
                 generatedNameSet = undefined;
                 nodeToGeneratedName = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
@@ -585,6 +587,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 currentText = sourceFile.text;
                 currentLineMap = getLineStarts(sourceFile);
                 exportFunctionForFile = undefined;
+                contextObjectForFile = undefined;
                 isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports["___esModule"];
                 renamedDependencies = sourceFile.renamedDependencies;
                 currentFileIdentifiers = sourceFile.identifiers;
@@ -4561,11 +4564,11 @@ const _super = (function (geti, seti) {
                     write(", void 0, ");
                 }
 
-                if (promiseConstructor) {
-                    emitEntityNameAsExpression(promiseConstructor, /*useFallback*/ false);
+                if (languageVersion >= ScriptTarget.ES6 || !promiseConstructor) {
+                    write("void 0");
                 }
                 else {
-                    write("Promise");
+                    emitEntityNameAsExpression(promiseConstructor, /*useFallback*/ false);
                 }
 
                 // Emit the call to __awaiter.
@@ -7058,6 +7061,7 @@ const _super = (function (geti, seti) {
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
+                contextObjectForFile = makeUniqueName("context");
                 writeLine();
                 write("System.register(");
                 writeModuleName(node, emitRelativePathAsModuleName);
@@ -7068,14 +7072,22 @@ const _super = (function (geti, seti) {
 
                 for (let i = 0; i < externalImports.length; i++) {
                     const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
-                    if (hasProperty(groupIndices, text)) {
+                    if (text === undefined) {
+                        continue;
+                    }
+
+                    // text should be quoted string
+                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same                     
+                    const key = text.substr(1, text.length - 2);
+
+                    if (hasProperty(groupIndices, key)) {
                         // deduplicate/group entries in dependency list by the dependency name
-                        const groupIndex = groupIndices[text];
+                        const groupIndex = groupIndices[key];
                         dependencyGroups[groupIndex].push(externalImports[i]);
                         continue;
                     }
                     else {
-                        groupIndices[text] = dependencyGroups.length;
+                        groupIndices[key] = dependencyGroups.length;
                         dependencyGroups.push([externalImports[i]]);
                     }
 
@@ -7085,10 +7097,13 @@ const _super = (function (geti, seti) {
 
                     write(text);
                 }
-                write(`], function(${exportFunctionForFile}) {`);
+                write(`], function(${exportFunctionForFile}, ${contextObjectForFile}) {`);
                 writeLine();
                 increaseIndent();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
+                writeLine();
+                write(`var __moduleName = ${contextObjectForFile} && ${contextObjectForFile}.id;`);
+                writeLine();
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);

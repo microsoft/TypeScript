@@ -568,8 +568,8 @@ declare var i1_c: typeof c1;
 declare class cProperties {
     private val;
     /** getter only property*/
-    p1: number;
-    nc_p1: number;
+    readonly p1: number;
+    readonly nc_p1: number;
     /**setter only property*/
     p2: number;
     nc_p2: number;
