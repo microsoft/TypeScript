@@ -144,8 +144,9 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     var v0, v00, v1, v2, v3, v4, v5, v6, v7, v8, v0_c, v00_c, v1_c, v2_c, v3_c, v4_c, v5_c, v6_c, v7_c, v8_c;
     //======let
     function exportedFoo() {
