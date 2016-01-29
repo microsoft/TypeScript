@@ -8776,7 +8776,7 @@ namespace ts {
          */
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationFlagsFromSymbol(prop);
-            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(prop.parent));
 
             if (left.kind === SyntaxKind.SuperKeyword) {
                 const errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
