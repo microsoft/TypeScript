@@ -11567,7 +11567,7 @@ namespace ts {
             const parent = getTypePredicateParent(node);
             if (!parent) {
                 // The parent must not be valid.
-                error(node.parent, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
                 return;
             }
 
