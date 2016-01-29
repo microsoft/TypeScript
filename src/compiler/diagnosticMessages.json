@@ -723,6 +723,10 @@
         "category": "Error",
         "code": 1227
     },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
+    },
     "A type predicate cannot reference a rest parameter.": {
         "category": "Error",
         "code": 1229
