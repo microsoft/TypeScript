@@ -1257,11 +1257,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     // Children
                     if (children) {
-                        let firstChild:JsxChild;
+                        let firstChild: JsxChild;
                         let multipleEmittableChildren = false;
 
-                        for (let i = 0, n = children.length; i < n; ++i) {
-                            let jsxChild = children[i];
+                        for (let i = 0, n = children.length; i < n; i++) {
+                            const jsxChild = children[i];
 
                             if (isJsxChildEmittable(jsxChild)) {
                                 // we need to decide whether to emit in single line or multiple lines as indented list
@@ -1272,7 +1272,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                 }
                                 else {
                                     // more than one emittable child, emit indented list
-                                    if(!multipleEmittableChildren){
+                                    if (!multipleEmittableChildren) {
                                         multipleEmittableChildren = true;
                                         increaseIndent();
                                         writeLine();
