@@ -1819,6 +1819,10 @@
         "category": "Error",
         "code": 2670
     },
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
+        "category": "Error",
+        "code": 2671
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
