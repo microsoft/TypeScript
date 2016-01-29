@@ -4436,8 +4436,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 write("(");
                 if (node) {
                     const parameters = node.parameters;
+                    const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
                     const omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameter(node) ? 1 : 0;
-                    emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
+                    emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
                 decreaseIndent();
