@@ -10442,7 +10442,8 @@ namespace ts {
                     }
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                        return unknownType;
+                        // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
+                        return getUnionType(types);
                     }
                 }
 
@@ -15377,6 +15378,20 @@ namespace ts {
         function getSymbolOfEntityNameOrPropertyAccessExpression(entityName: EntityName | PropertyAccessExpression): Symbol {
             if (isDeclarationName(entityName)) {
                 return getSymbolOfNode(entityName.parent);
+            }
+
+            if (isInJavaScriptFile(entityName) && entityName.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                const specialPropertyAssignmentKind = getSpecialPropertyAssignmentKind(entityName.parent.parent);
+                switch (specialPropertyAssignmentKind) {
+                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        return getSymbolOfNode(entityName.parent);
+                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case SpecialPropertyAssignmentKind.ModuleExports:
+                        return getSymbolOfNode(entityName.parent.parent);
+                    default:
+                        // Fall through if it is not a special property assignment
+                }
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {

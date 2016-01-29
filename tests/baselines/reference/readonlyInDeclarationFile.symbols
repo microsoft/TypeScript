@@ -1,0 +1,142 @@
+=== tests/cases/compiler/readonlyInDeclarationFile.ts ===
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(readonlyInDeclarationFile.ts, 0, 0))
+
+    readonly x: number;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 1, 15))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 3, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+class C {
+>C : Symbol(C, Decl(readonlyInDeclarationFile.ts, 4, 1))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 7, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    private readonly a1: number;
+>a1 : Symbol(a1, Decl(readonlyInDeclarationFile.ts, 7, 33))
+
+    protected readonly a2: number;
+>a2 : Symbol(a2, Decl(readonlyInDeclarationFile.ts, 8, 32))
+
+    public readonly a3: number;
+>a3 : Symbol(a3, Decl(readonlyInDeclarationFile.ts, 9, 34))
+
+    private get b1() { return 1 }
+>b1 : Symbol(b1, Decl(readonlyInDeclarationFile.ts, 10, 31))
+
+    protected get b2() { return 1 }
+>b2 : Symbol(b2, Decl(readonlyInDeclarationFile.ts, 11, 33))
+
+    public get b3() { return 1 }
+>b3 : Symbol(b3, Decl(readonlyInDeclarationFile.ts, 12, 35))
+
+    private get c1() { return 1 }
+>c1 : Symbol(c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
+
+    private set c1(value) { }
+>c1 : Symbol(c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 15, 19))
+
+    protected get c2() { return 1 }
+>c2 : Symbol(c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
+
+    protected set c2(value) { }
+>c2 : Symbol(c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 17, 21))
+
+    public get c3() { return 1 }
+>c3 : Symbol(c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
+
+    public set c3(value) { }
+>c3 : Symbol(c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 19, 18))
+
+    private static readonly s1: number;
+>s1 : Symbol(C.s1, Decl(readonlyInDeclarationFile.ts, 19, 28))
+
+    protected static readonly s2: number;
+>s2 : Symbol(C.s2, Decl(readonlyInDeclarationFile.ts, 20, 39))
+
+    public static readonly s3: number;
+>s3 : Symbol(C.s3, Decl(readonlyInDeclarationFile.ts, 21, 41))
+
+    private static get t1() { return 1 }
+>t1 : Symbol(C.t1, Decl(readonlyInDeclarationFile.ts, 22, 38))
+
+    protected static get t2() { return 1 }
+>t2 : Symbol(C.t2, Decl(readonlyInDeclarationFile.ts, 23, 40))
+
+    public static get t3() { return 1 }
+>t3 : Symbol(C.t3, Decl(readonlyInDeclarationFile.ts, 24, 42))
+
+    private static get u1() { return 1 }
+>u1 : Symbol(C.u1, Decl(readonlyInDeclarationFile.ts, 25, 39), Decl(readonlyInDeclarationFile.ts, 26, 40))
+
+    private static set u1(value) { }
+>u1 : Symbol(C.u1, Decl(readonlyInDeclarationFile.ts, 25, 39), Decl(readonlyInDeclarationFile.ts, 26, 40))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 27, 26))
+
+    protected static get u2() { return 1 }
+>u2 : Symbol(C.u2, Decl(readonlyInDeclarationFile.ts, 27, 36), Decl(readonlyInDeclarationFile.ts, 28, 42))
+
+    protected static set u2(value) { }
+>u2 : Symbol(C.u2, Decl(readonlyInDeclarationFile.ts, 27, 36), Decl(readonlyInDeclarationFile.ts, 28, 42))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 29, 28))
+
+    public static get u3() { return 1 }
+>u3 : Symbol(C.u3, Decl(readonlyInDeclarationFile.ts, 29, 38), Decl(readonlyInDeclarationFile.ts, 30, 39))
+
+    public static set u3(value) { }
+>u3 : Symbol(C.u3, Decl(readonlyInDeclarationFile.ts, 29, 38), Decl(readonlyInDeclarationFile.ts, 30, 39))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 31, 25))
+}
+
+var z: {
+>z : Symbol(z, Decl(readonlyInDeclarationFile.ts, 34, 3))
+
+    readonly a: string;
+>a : Symbol(a, Decl(readonlyInDeclarationFile.ts, 34, 8))
+
+    readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 36, 14))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+}
+
+function f() {
+>f : Symbol(f, Decl(readonlyInDeclarationFile.ts, 37, 1))
+
+    return {
+        get x() { return 1; },
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 40, 12))
+
+        get y() { return 1; },
+>y : Symbol(y, Decl(readonlyInDeclarationFile.ts, 41, 30), Decl(readonlyInDeclarationFile.ts, 42, 30))
+
+        set y(value) { }
+>y : Symbol(y, Decl(readonlyInDeclarationFile.ts, 41, 30), Decl(readonlyInDeclarationFile.ts, 42, 30))
+>value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 43, 14))
+    }
+}
+
+function g() {
+>g : Symbol(g, Decl(readonlyInDeclarationFile.ts, 45, 1))
+
+    var x: {
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 48, 7))
+
+        readonly a: string;
+>a : Symbol(a, Decl(readonlyInDeclarationFile.ts, 48, 12))
+
+        readonly [x: string]: Object;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 50, 18))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+    }
+    return x;
+>x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 48, 7))
+}
