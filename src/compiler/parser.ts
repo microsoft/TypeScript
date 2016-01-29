@@ -1722,7 +1722,7 @@ namespace ts {
         };
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const result = <NodeArray<T>>[];
@@ -1751,7 +1751,7 @@ namespace ts {
                     // parse errors.  For example, this can happen when people do things like use
                     // a semicolon to delimit object literal members.   Note: we'll have already
                     // reported an error when we called parseExpected above.
-                    if (considerSemicolonAsDelimeter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                    if (considerSemicolonAsDelimiter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                         nextToken();
                     }
                     continue;
@@ -2002,7 +2002,7 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken;
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken || token === SyntaxKind.ThisKeyword;
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -2014,15 +2014,19 @@ namespace ts {
 
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            if (token === SyntaxKind.ThisKeyword) {
+                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.type = parseParameterType();
+                return finishNode(node);
+            }
+
             node.decorators = parseDecorators();
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
-
             node.name = parseIdentifierOrPattern();
-
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
@@ -2060,11 +2064,11 @@ namespace ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldContext: boolean,
-                awaitContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldContext: boolean,
+            awaitContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
@@ -2464,7 +2468,7 @@ namespace ts {
                 // ( ...
                 return true;
             }
-            if (isIdentifier() || isModifierKind(token)) {
+            if (isIdentifier() || isModifierKind(token) || token === SyntaxKind.ThisKeyword) {
                 nextToken();
                 if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
                     token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
@@ -3981,7 +3985,7 @@ namespace ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter*/ true);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
