@@ -1257,21 +1257,66 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     // Children
                     if (children) {
-                        // build list of valid emittable jsx children
-                        const emittableChildren = children.filter(isJsxChildEmittable);
-                        if (emittableChildren.length > 0) {
-                            // If the only child is non-jsx element, don't put it on a new line
-                            if (emittableChildren.length == 1 && emittableChildren[0].kind !== SyntaxKind.JsxElement && emittableChildren[0].kind !== SyntaxKind.JsxSelfClosingElement) {
-                                write(", ");
-                                emit(emittableChildren[0]);
+                        let firstChild:JsxChild;
+                        let multipleEmittableChildren = false;
+
+                        for (let i = 0, n = children.length; i < n; ++i) {
+                            let jsxChild = children[i];
+
+                            if (isJsxChildEmittable(jsxChild)) {
+                                // we need to decide whether to emit in single line or multiple lines as indented list
+                                // store firstChild reference, if we see another emittable child, then emit accordingly
+                                if (!firstChild) {
+                                    write(", ");
+                                    firstChild = jsxChild;
+                                }
+                                else {
+                                    // more than one emittable child, emit indented list
+                                    if(!multipleEmittableChildren){
+                                        multipleEmittableChildren = true;
+                                        increaseIndent();
+                                        writeLine();
+                                        emit(firstChild);
+                                    }
+
+                                    write(", ");
+                                    writeLine();
+                                    emit(jsxChild);
+                                }
                             }
-                            // Otherwise build a indented comma separated list
+                        }
+
+                        if (multipleEmittableChildren) {
+                            decreaseIndent();
+                        }
+                        else if (firstChild) {
+                            if (firstChild.kind !== SyntaxKind.JsxElement && firstChild.kind !== SyntaxKind.JsxSelfClosingElement) {
+                                emit(firstChild);
+                            }
                             else {
+                                // If the only child is jsx element, put it on a new indented line
                                 increaseIndent();
-                                emitList(emittableChildren, 0, emittableChildren.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ true);
+                                writeLine();
+                                emit(firstChild);
+                                writeLine();
                                 decreaseIndent();
                             }
                         }
+
+                        // const emittableChildren = children.filter(isJsxChildEmittable);
+                        // if (emittableChildren.length > 0) {
+                        //     // If the only child is non-jsx element, don't put it on a new line
+                        //     if (emittableChildren.length == 1 && emittableChildren[0].kind !== SyntaxKind.JsxElement && emittableChildren[0].kind !== SyntaxKind.JsxSelfClosingElement) {
+                        //         write(", ");
+                        //         emit(emittableChildren[0]);
+                        //     }
+                        //     // Otherwise build a indented comma separated list
+                        //     else {
+                        //         increaseIndent();
+                        //         emitList(emittableChildren, 0, emittableChildren.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ true);
+                        //         decreaseIndent();
+                        //     }
+                        // }
                     }
 
                     // Closing paren
