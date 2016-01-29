@@ -818,25 +818,26 @@ namespace ts {
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
     }
 
+    // TODO: Add a 'this' parameter after I update the previous-version compiler
     function Symbol(flags: SymbolFlags, name: string) {
-        this.flags = flags;
-        this.name = name;
-        this.declarations = undefined;
+        (<any>this).flags = flags;
+        (<any>this).name = name;
+        (<any>this).declarations = undefined;
     }
 
     function Type(checker: TypeChecker, flags: TypeFlags) {
-        this.flags = flags;
+        (<any>this).flags = flags;
     }
 
     function Signature(checker: TypeChecker) {
     }
 
     function Node(kind: SyntaxKind, pos: number, end: number) {
-        this.kind = kind;
-        this.pos = pos;
-        this.end = end;
-        this.flags = NodeFlags.None;
-        this.parent = undefined;
+        (<any>this).kind = kind;
+        (<any>this).pos = pos;
+        (<any>this).end = end;
+        (<any>this).flags = NodeFlags.None;
+        (<any>this).parent = undefined;
     }
 
     export let objectAllocator: ObjectAllocator = {

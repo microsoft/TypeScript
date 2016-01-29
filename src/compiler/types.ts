@@ -1593,8 +1593,8 @@ namespace ts {
     }
 
     export interface ScriptReferenceHost {
-        getCompilerOptions(): CompilerOptions;
-        getSourceFile(fileName: string): SourceFile;
+        getCompilerOptions: () => CompilerOptions;
+        getSourceFile: (fileName: string) => SourceFile;
         getCurrentDirectory(): string;
     }
 
@@ -1625,7 +1625,7 @@ namespace ts {
         /**
          * Get a list of files in the program
          */
-        getSourceFiles(): SourceFile[];
+        getSourceFiles: () => SourceFile[];
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -1650,7 +1650,7 @@ namespace ts {
          */
         getTypeChecker(): TypeChecker;
 
-        /* @internal */ getCommonSourceDirectory(): string;
+        /* @internal */ getCommonSourceDirectory: () => string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -1781,7 +1781,7 @@ namespace ts {
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
@@ -1905,11 +1905,11 @@ namespace ts {
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedDeclarationWithCollidingName(node: Identifier): Declaration;
         isDeclarationWithCollidingName(node: Declaration): boolean;
-        isValueAliasDeclaration(node: Node): boolean;
-        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
+        isValueAliasDeclaration: (node: Node) => boolean;
+        isReferencedAliasDeclaration: (node: Node, checkChildren?: boolean) => boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
-        isDeclarationVisible(node: Declaration): boolean;
+        isDeclarationVisible: (node: Declaration) => boolean;
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -2279,6 +2279,7 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        thisType?: Type;                    // type of this-type
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -2429,6 +2430,7 @@ namespace ts {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strictThis?: boolean,
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;

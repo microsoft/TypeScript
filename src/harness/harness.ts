@@ -417,24 +417,24 @@ namespace Harness.Path {
 
 namespace Harness {
     export interface IO {
-        newLine(): string;
-        getCurrentDirectory(): string;
-        useCaseSensitiveFileNames(): boolean;
-        resolvePath(path: string): string;
-        readFile(path: string): string;
-        writeFile(path: string, contents: string): void;
-        directoryName(path: string): string;
-        createDirectory(path: string): void;
-        fileExists(fileName: string): boolean;
-        directoryExists(path: string): boolean;
-        deleteFile(fileName: string): void;
-        listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
-        log(text: string): void;
-        getMemoryUsage?(): number;
         args(): string[];
-        getExecutingFilePath(): string;
-        exit(exitCode?: number): void;
+        newLine(): string;
+        readFile(this: ts.System | IO, path: string): string;
+        writeFile(path: string, contents: string): void;
+        resolvePath(path: string): string;
+        fileExists: (fileName: string) => boolean;
+        directoryExists: (path: string) => boolean;
+        createDirectory(path: string): void;
+        getExecutingFilePath(this: ts.System | IO): string;
+        getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        getMemoryUsage?(): number;
+        exit(exitCode?: number): void;
+        deleteFile(fileName: string): void;
+        directoryName: (path: string) => string;
+        listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
+        log: (text: string) => void;
+        useCaseSensitiveFileNames(): boolean;
     }
     export var IO: IO;
 
