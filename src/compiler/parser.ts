@@ -1937,7 +1937,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+        function parseThisTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
             nextToken();
             const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
             node.parameterName = lhs;
@@ -2362,7 +2362,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword: {
                     const thisKeyword = parseThisTypeNode();
                     if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                        return parseTypePredicate(thisKeyword);
+                        return parseThisTypePredicate(thisKeyword);
                     }
                     else {
                         return thisKeyword;
