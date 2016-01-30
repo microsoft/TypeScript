@@ -7075,7 +7075,7 @@ namespace ts {
                     return type;
                 }
                 const signature = getResolvedSignature(callExpression);
-                
+
                 const predicate = signature.typePredicate;
                 if (!predicate) {
                     return type;
