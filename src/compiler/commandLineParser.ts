@@ -371,13 +371,25 @@ namespace ts {
                     parseResponseFile(s.slice(1));
                 }
                 else if (s.charCodeAt(0) === CharacterCodes.minus) {
-                    s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+                    s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
+                    if (hasProperty(shortOptionNames, s.toLowerCase())) {
                         s = shortOptionNames[s];
                     }
+                    else {
+                        // When using long-form switches, we follow standard command-line conventions and accept
+                        // "--example=VALUE", but we also accept "--example VALUE".
+                        var [ longFormSwitch ] = s.split("=", 1);
+                        if (longFormSwitch.length < s.length && hasProperty(optionNameMap, longFormSwitch.toLowerCase())) {
+                            // It's in "--example=VALUE" format.  Replace it in the arg list with the separated format.
+                            var value = s.substring(longFormSwitch.length + 1);
+                            args.splice(i - 1, 1, longFormSwitch, value);
+                            s = longFormSwitch;
+                        }
+                    }
 
+                    s = s.toLowerCase();
                     if (hasProperty(optionNameMap, s)) {
                         const opt = optionNameMap[s];
 
