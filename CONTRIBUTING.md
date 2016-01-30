@@ -30,7 +30,7 @@ You can try out the nightly build of TypeScript (`npm install typescript@next`) 
 We also accept suggestions in the issue tracker.
 Be sure to [check the FAQ](https://github.com/Microsoft/TypeScript/wiki/FAQ) and [search](https://github.com/Microsoft/TypeScript/issues?utf8=%E2%9C%93&q=is%3Aissue) first.
 
-In general, things we find useful when reviewing suggestins are:
+In general, things we find useful when reviewing suggestions are:
 * A description of the problem you're trying to solve
 * An overview of the suggested solution
 * Examples of how the suggestion would work in various places
@@ -71,7 +71,7 @@ Your pull request should:
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
     * All changed code must have 100% code coverage
-* Follow the code conventions descriped in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
+* Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Contributing `lib.d.ts` fixes
