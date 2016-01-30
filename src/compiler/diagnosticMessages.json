@@ -2642,5 +2642,9 @@
     "JSX element '{0}' has no corresponding closing tag.": {
       "category": "Error",
       "code": 17008
+    },
+    "'super' must be called before accessing 'this' in the constructor of a derived class.": {
+      "category": "Error",
+      "code": 17009
     }
 }
