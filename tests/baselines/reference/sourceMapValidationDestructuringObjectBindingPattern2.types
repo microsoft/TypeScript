@@ -1,0 +1,17 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringObjectBindingPattern2.ts ===
+
+var {x} = { x: 20 };
+>x : number
+>{ x: 20 } : { x: number; }
+>x : number
+>20 : number
+
+var { a, b } = { a: 30, b: 40 };
+>a : number
+>b : number
+>{ a: 30, b: 40 } : { a: number; b: number; }
+>a : number
+>30 : number
+>b : number
+>40 : number
+
