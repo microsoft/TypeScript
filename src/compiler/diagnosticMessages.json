@@ -2171,7 +2171,7 @@
         "category": "Error",
         "code": 5058
     },
-    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+    "Invalid value for '--reactNamespace'. '{0}' is not a valid identifier.": {
         "category": "Error",
         "code": 5059
     },
