@@ -1302,21 +1302,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                 decreaseIndent();
                             }
                         }
-
-                        // const emittableChildren = children.filter(isJsxChildEmittable);
-                        // if (emittableChildren.length > 0) {
-                        //     // If the only child is non-jsx element, don't put it on a new line
-                        //     if (emittableChildren.length == 1 && emittableChildren[0].kind !== SyntaxKind.JsxElement && emittableChildren[0].kind !== SyntaxKind.JsxSelfClosingElement) {
-                        //         write(", ");
-                        //         emit(emittableChildren[0]);
-                        //     }
-                        //     // Otherwise build a indented comma separated list
-                        //     else {
-                        //         increaseIndent();
-                        //         emitList(emittableChildren, 0, emittableChildren.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ true);
-                        //         decreaseIndent();
-                        //     }
-                        // }
                     }
 
                     // Closing paren
