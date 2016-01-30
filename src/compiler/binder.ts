@@ -1384,7 +1384,7 @@ namespace ts {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (boundExpression.kind === SyntaxKind.Identifier) {
+            else if (boundExpression.kind === SyntaxKind.Identifier && node.kind === SyntaxKind.ExportAssignment) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -1444,8 +1444,16 @@ namespace ts {
 
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
-            const funcSymbol = container.locals[classId.text];
+            const leftSideOfAssignment = node.left as PropertyAccessExpression;
+            const classPrototype = leftSideOfAssignment.expression as PropertyAccessExpression;
+            const constructorFunction = classPrototype.expression as Identifier;
+
+            // Fix up parent pointers since we're going to use these nodes before we bind into them
+            leftSideOfAssignment.parent = node;
+            constructorFunction.parent = classPrototype;
+            classPrototype.parent = leftSideOfAssignment;
+
+            const funcSymbol = container.locals[constructorFunction.text];
             if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
                 return;
             }
@@ -1456,7 +1464,7 @@ namespace ts {
             }
 
             // Declare the method/property
-            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
