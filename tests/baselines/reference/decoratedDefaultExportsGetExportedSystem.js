@@ -26,7 +26,7 @@ System.register([], function(exports_1, context_1) {
     return {
         setters:[],
         execute: function() {
-            let Foo = class {
+            let Foo = class Foo {
             };
             Foo = __decorate([
                 decorator

@@ -2054,23 +2054,23 @@ namespace ts {
 
     /* @internal */
     export const enum NodeCheckFlags {
-        TypeChecked                 = 0x00000001,  // Node has been type checked
-        LexicalThis                 = 0x00000002,  // Lexical 'this' reference
-        CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
-        SuperInstance               = 0x00000100,  // Instance 'super' reference
-        SuperStatic                 = 0x00000200,  // Static 'super' reference
-        ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper        = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding = 0x00001000,  // An async method that assigns a value to a member of 'super'.
-        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
-
-        // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00004000,
-        LexicalModuleMergesWithClass    = 0x00008000,    // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
-        HasSeenSuperCall           = 0x00080000,  // Set during the binding when encounter 'super'
+        TypeChecked                         = 0x00000001,  // Node has been type checked
+        LexicalThis                         = 0x00000002,  // Lexical 'this' reference
+        CaptureThis                         = 0x00000004,  // Lexical 'this' used in body
+        SuperInstance                       = 0x00000100,  // Instance 'super' reference
+        SuperStatic                         = 0x00000200,  // Static 'super' reference
+        ContextChecked                      = 0x00000400,  // Contextual types have been assigned
+        AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
+        AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
+        EnumValuesComputed                  = 0x00004000, // Values for enum members have been computed, and any errors have been reported for them.
+        LexicalModuleMergesWithClass        = 0x00008000, // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
+        HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
+        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
     }
 
     /* @internal */
