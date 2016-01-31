@@ -587,10 +587,7 @@ namespace ts {
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
-
-            if (contextFlags & NodeFlags.JavaScriptFile) {
-                sourceFile.parserContextFlags = NodeFlags.JavaScriptFile;
-            }
+            sourceFile.flags = contextFlags;
 
             // Prime the scanner.
             token = nextToken();
@@ -996,7 +993,7 @@ namespace ts {
             node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
-                node.parserContextFlags = contextFlags;
+                node.flags |= contextFlags;
             }
 
             // Keep track on the node if we encountered an error while parsing it.  If we did, then
@@ -1004,7 +1001,7 @@ namespace ts {
             // flag so that we don't mark any subsequent nodes.
             if (parseErrorBeforeNextFinishedNode) {
                 parseErrorBeforeNextFinishedNode = false;
-                node.parserContextFlags |= NodeFlags.ThisNodeHasError;
+                node.flags |= NodeFlags.ThisNodeHasError;
             }
 
             return node;
@@ -1453,7 +1450,7 @@ namespace ts {
             // differently depending on what mode it is in.
             //
             // This also applies to all our other context flags as well.
-            const nodeContextFlags = node.parserContextFlags & NodeFlags.ParserGeneratedFlags;
+            const nodeContextFlags = node.flags & NodeFlags.ContextFlags;
             if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }

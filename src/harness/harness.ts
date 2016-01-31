@@ -245,7 +245,6 @@ namespace Utils {
         }
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
         function serializeNode(n: ts.Node): any {
             const o: any = { kind: getKindName(n.kind) };
@@ -274,19 +273,12 @@ namespace Utils {
                         break;
 
                     case "flags":
-                        // Print out flags with their enum names.
-                        if (n.flags) {
-                            o[propertyName] = getNodeFlagName(n.flags);
-                        }
-                        break;
-
-                    case "parserContextFlags":
-                        // Clear the flag that are produced by aggregating child values..  That is ephemeral 
-                        // data we don't care about in the dump.  We only care what the parser set directly
-                        // on the ast.
-                        let value = n.parserContextFlags & ts.NodeFlags.ParserGeneratedFlags;
-                        if (value) {
-                            o[propertyName] = getParserContextFlagName(value);
+                        // Clear the flags that are produced by aggregating child values. That is ephemeral
+                        // data we don't care about in the dump. We only care what the parser set directly
+                        // on the AST.
+                        const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                        if (flags) {
+                            o[propertyName] = getNodeFlagName(flags);
                         }
                         break;
 
@@ -353,12 +345,11 @@ namespace Utils {
         assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
-        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
         // call this on both nodes to ensure all propagated flags have been set (and thus can be 
         // compared).
         assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
         ts.forEachChild(node1,
             child1 => {

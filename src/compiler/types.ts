@@ -409,8 +409,8 @@ namespace ts {
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
 
-        // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowInContext | YieldContext | DecoratorContext | ThisNodeHasError | AwaitContext,
+        // Parsing context flags
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -441,9 +441,6 @@ namespace ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        // Specific context the parser was in when this node was created.  Normally undefined.
-        // Only set when the parser was in some interesting context (like async/yield).
-        /* @internal */ parserContextFlags?: NodeFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)

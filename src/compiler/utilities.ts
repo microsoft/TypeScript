@@ -121,26 +121,26 @@ namespace ts {
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return (node.parserContextFlags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
+        return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
     }
 
     function aggregateChildData(node: Node): void {
-        if (!(node.parserContextFlags & NodeFlags.HasAggregatedChildData)) {
+        if (!(node.flags & NodeFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            const thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & NodeFlags.ThisNodeHasError) !== 0) ||
+            const thisNodeOrAnySubNodesHasError = ((node.flags & NodeFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
-                node.parserContextFlags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
+                node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.parserContextFlags |= NodeFlags.HasAggregatedChildData;
+            node.flags |= NodeFlags.HasAggregatedChildData;
         }
     }
 
@@ -1078,7 +1078,7 @@ namespace ts {
     }
 
     export function isInJavaScriptFile(node: Node): boolean {
-        return node && !!(node.parserContextFlags & NodeFlags.JavaScriptFile);
+        return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
     /**
@@ -1266,7 +1266,7 @@ namespace ts {
 
     export function isRestParameter(node: ParameterDeclaration) {
         if (node) {
-            if (node.parserContextFlags & NodeFlags.JavaScriptFile) {
+            if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
                     return true;
                 }
