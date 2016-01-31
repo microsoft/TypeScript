@@ -7183,7 +7183,7 @@ namespace ts {
                     }
                 }
 
-                if (node.parserContextFlags & NodeFlags.Await) {
+                if (node.parserContextFlags & NodeFlags.AwaitContext) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 }
             }
@@ -10783,7 +10783,7 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & NodeFlags.Await)) {
+                if (!(node.parserContextFlags & NodeFlags.AwaitContext)) {
                     grammarErrorOnFirstToken(node, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
                 }
 
@@ -11239,7 +11239,7 @@ namespace ts {
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & NodeFlags.Yield) || isYieldExpressionInClass(node)) {
+                if (!(node.parserContextFlags & NodeFlags.YieldContext) || isYieldExpressionInClass(node)) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
                 }
 
@@ -13701,7 +13701,7 @@ namespace ts {
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.parserContextFlags & NodeFlags.Await) {
+                if (node.parserContextFlags & NodeFlags.AwaitContext) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
                 }
             }

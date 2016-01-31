@@ -393,10 +393,10 @@ namespace ts {
         HasDecorators =      1 << 19,  // If the file has decorators (initialized by binding)
         HasParamDecorators = 1 << 20,  // If the file has parameter decorators (initialized by binding)
         HasAsyncFunctions =  1 << 21,  // If the file has async functions (initialized by binding)
-        DisallowIn =         1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
-        Yield =              1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
-        Decorator =          1 << 24,  // If node was parsed as part of a decorator
-        Await =              1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
+        DisallowInContext =  1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 24,  // If node was parsed as part of a decorator
+        AwaitContext =       1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
         ThisNodeHasError =   1 << 26,  // If the parser encountered an error when parsing the code that created this node
         JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
@@ -410,10 +410,10 @@ namespace ts {
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
+        ParserGeneratedFlags = DisallowInContext | YieldContext | DecoratorContext | ThisNodeHasError | AwaitContext,
 
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = Yield | Await,
+        TypeExcludesFlags = YieldContext | AwaitContext,
     }
 
     export const enum JsxFlags {

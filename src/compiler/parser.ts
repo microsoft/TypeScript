@@ -438,7 +438,7 @@ namespace ts {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-        const disallowInAndDecoratorContext = NodeFlags.DisallowIn | NodeFlags.Decorator;
+        const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -682,19 +682,19 @@ namespace ts {
         }
 
         function setDisallowInContext(val: boolean) {
-            setContextFlag(val, NodeFlags.DisallowIn);
+            setContextFlag(val, NodeFlags.DisallowInContext);
         }
 
         function setYieldContext(val: boolean) {
-            setContextFlag(val, NodeFlags.Yield);
+            setContextFlag(val, NodeFlags.YieldContext);
         }
 
         function setDecoratorContext(val: boolean) {
-            setContextFlag(val, NodeFlags.Decorator);
+            setContextFlag(val, NodeFlags.DecoratorContext);
         }
 
         function setAwaitContext(val: boolean) {
-            setContextFlag(val, NodeFlags.Await);
+            setContextFlag(val, NodeFlags.AwaitContext);
         }
 
         function doOutsideOfContext<T>(context: NodeFlags, func: () => T): T {
@@ -740,31 +740,31 @@ namespace ts {
         }
 
         function allowInAnd<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.DisallowIn, func);
+            return doOutsideOfContext(NodeFlags.DisallowInContext, func);
         }
 
         function disallowInAnd<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.DisallowIn, func);
+            return doInsideOfContext(NodeFlags.DisallowInContext, func);
         }
 
         function doInYieldContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.Yield, func);
+            return doInsideOfContext(NodeFlags.YieldContext, func);
         }
 
         function doInDecoratorContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.Decorator, func);
+            return doInsideOfContext(NodeFlags.DecoratorContext, func);
         }
 
         function doInAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.Await, func);
+            return doInsideOfContext(NodeFlags.AwaitContext, func);
         }
 
         function doOutsideOfAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.Await, func);
+            return doOutsideOfContext(NodeFlags.AwaitContext, func);
         }
 
         function doInYieldAndAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(NodeFlags.Yield | NodeFlags.Await, func);
+            return doInsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
         }
 
         function inContext(flags: NodeFlags) {
@@ -772,19 +772,19 @@ namespace ts {
         }
 
         function inYieldContext() {
-            return inContext(NodeFlags.Yield);
+            return inContext(NodeFlags.YieldContext);
         }
 
         function inDisallowInContext() {
-            return inContext(NodeFlags.DisallowIn);
+            return inContext(NodeFlags.DisallowInContext);
         }
 
         function inDecoratorContext() {
-            return inContext(NodeFlags.Decorator);
+            return inContext(NodeFlags.DecoratorContext);
         }
 
         function inAwaitContext() {
-            return inContext(NodeFlags.Await);
+            return inContext(NodeFlags.AwaitContext);
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
@@ -4785,7 +4785,7 @@ namespace ts {
             // The checker may still error in the static case to explicitly disallow the yield expression.
             property.initializer = modifiers && modifiers.flags & NodeFlags.Static
                 ? allowInAnd(parseNonParameterInitializer)
-                : doOutsideOfContext(NodeFlags.Yield | NodeFlags.DisallowIn, parseNonParameterInitializer);
+                : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseNonParameterInitializer);
 
             parseSemicolon();
             return finishNode(property);
