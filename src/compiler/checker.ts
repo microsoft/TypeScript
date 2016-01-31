@@ -404,7 +404,7 @@ namespace ts {
                     mergeSymbol(mainModule, moduleAugmentation.symbol);
                 }
                 else {
-                    error(moduleName, Diagnostics.Cannot_augment_module_0_that_resolves_to_a_non_module_entity, moduleName.text);
+                    error(moduleName, Diagnostics.Cannot_augment_module_0_because_it_resolves_to_a_non_module_entity, moduleName.text);
                 }
             }
         }

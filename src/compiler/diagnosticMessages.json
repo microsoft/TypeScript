@@ -1819,7 +1819,7 @@
         "category": "Error",
         "code": 2670
     },
-    "Cannot augment module '{0}' that resolves to a non-module entity.": {
+    "Cannot augment module '{0}' because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2671
     },
