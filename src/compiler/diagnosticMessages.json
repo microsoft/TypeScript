@@ -1811,6 +1811,10 @@
         "category": "Error",
         "code": 2670
     },
+    "Cannot augment module '{0}' because it resolves to a non-module entity.": {
+        "category": "Error",
+        "code": 2671
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
