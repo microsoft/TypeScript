@@ -2634,7 +2634,7 @@ namespace ts {
 
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.parserContextFlags & NodeFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
@@ -3981,7 +3981,7 @@ namespace ts {
         }
 
         function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.parserContextFlags & NodeFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
                 if (templateTag) {
                     return getTypeParametersFromDeclaration(templateTag.typeParameters);
@@ -4015,7 +4015,7 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (node.parserContextFlags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
@@ -4124,7 +4124,7 @@ namespace ts {
                     returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
-                    if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                    if (declaration.parserContextFlags & NodeFlags.JavaScriptFile) {
                         const type = getReturnTypeFromJSDocComment(declaration);
                         if (type && type !== unknownType) {
                             returnType = type;
@@ -7183,7 +7183,7 @@ namespace ts {
                     }
                 }
 
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.parserContextFlags & NodeFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 }
             }
@@ -10783,7 +10783,7 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                if (!(node.parserContextFlags & NodeFlags.Await)) {
                     grammarErrorOnFirstToken(node, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
                 }
 
@@ -11239,7 +11239,7 @@ namespace ts {
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Yield) || isYieldExpressionInClass(node)) {
+                if (!(node.parserContextFlags & NodeFlags.Yield) || isYieldExpressionInClass(node)) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
                 }
 
@@ -13701,7 +13701,7 @@ namespace ts {
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.parserContextFlags & NodeFlags.Await) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
                 }
             }

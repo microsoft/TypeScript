@@ -381,18 +381,26 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
-        Let =                1 << 13,  // Variable declaration
-        Const =              1 << 14,  // Variable declaration
-        Namespace =          1 << 16,  // Namespace declaration
-        ExportContext =      1 << 17,  // Export context (initialized by binding)
-        ContainsThis =       1 << 18,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 21,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =    1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =      1 << 23,  // If the file has decorators (initialized by binding)
-        HasParamDecorators = 1 << 24,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =  1 << 25,  // If the file has async functions (initialized by binding)
+        Let =                1 << 10,  // Variable declaration
+        Const =              1 << 11,  // Variable declaration
+        Namespace =          1 << 12,  // Namespace declaration
+        ExportContext =      1 << 13,  // Export context (initialized by binding)
+        ContainsThis =       1 << 14,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 15,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 16,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 17,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 18,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 19,  // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 20,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 21,  // If the file has async functions (initialized by binding)
+        DisallowIn =         1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
+        Yield =              1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
+        Decorator =          1 << 24,  // If node was parsed as part of a decorator
+        Await =              1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 26,  // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -400,47 +408,12 @@ namespace ts {
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
-    }
-
-    /* @internal */
-    export const enum ParserContextFlags {
-        None = 0,
-
-        // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 0,
-
-        // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 1,
-
-        // If this node was parsed as part of a decorator
-        Decorator = 1 << 2,
-
-        // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 3,
-
-        // If the parser encountered an error when parsing the code that created this node.  Note
-        // the parser only sets this directly on the node it creates right after encountering the
-        // error.
-        ThisNodeHasError = 1 << 4,
-
-        // This node was parsed in a JavaScript file and can be processed differently.  For example
-        // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
         ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = Yield | Await,
-
-        // Context flags computed by aggregating child flags upwards.
-
-        // Used during incremental parsing to determine if this node or any of its children had an
-        // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
-
-        // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 7
     }
 
     export const enum JsxFlags {
@@ -470,7 +443,7 @@ namespace ts {
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
-        /* @internal */ parserContextFlags?: ParserContextFlags;
+        /* @internal */ parserContextFlags?: NodeFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)

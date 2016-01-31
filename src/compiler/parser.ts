@@ -438,7 +438,7 @@ namespace ts {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-        const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
+        const disallowInAndDecoratorContext = NodeFlags.DisallowIn | NodeFlags.Decorator;
 
         // capture constructors in 'initializeState' to avoid null checks
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -502,7 +502,7 @@ namespace ts {
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        let contextFlags: ParserContextFlags;
+        let contextFlags: NodeFlags;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -562,7 +562,7 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = isJavaScriptFile ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
+            contextFlags = isJavaScriptFile ? NodeFlags.JavaScriptFile : NodeFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.
@@ -588,8 +588,8 @@ namespace ts {
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
 
-            if (contextFlags & ParserContextFlags.JavaScriptFile) {
-                sourceFile.parserContextFlags = ParserContextFlags.JavaScriptFile;
+            if (contextFlags & NodeFlags.JavaScriptFile) {
+                sourceFile.parserContextFlags = NodeFlags.JavaScriptFile;
             }
 
             // Prime the scanner.
@@ -616,7 +616,7 @@ namespace ts {
 
 
         function addJSDocComment<T extends Node>(node: T): T {
-            if (contextFlags & ParserContextFlags.JavaScriptFile) {
+            if (contextFlags & NodeFlags.JavaScriptFile) {
                 const comments = getLeadingCommentRangesOfNode(node, sourceFile);
                 if (comments) {
                     for (const comment of comments) {
@@ -672,7 +672,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function setContextFlag(val: boolean, flag: ParserContextFlags) {
+        function setContextFlag(val: boolean, flag: NodeFlags) {
             if (val) {
                 contextFlags |= flag;
             }
@@ -682,22 +682,22 @@ namespace ts {
         }
 
         function setDisallowInContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.DisallowIn);
+            setContextFlag(val, NodeFlags.DisallowIn);
         }
 
         function setYieldContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.Yield);
+            setContextFlag(val, NodeFlags.Yield);
         }
 
         function setDecoratorContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.Decorator);
+            setContextFlag(val, NodeFlags.Decorator);
         }
 
         function setAwaitContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.Await);
+            setContextFlag(val, NodeFlags.Await);
         }
 
-        function doOutsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
+        function doOutsideOfContext<T>(context: NodeFlags, func: () => T): T {
             // contextFlagsToClear will contain only the context flags that are
             // currently set that we need to temporarily clear
             // We don't just blindly reset to the previous flags to ensure
@@ -718,7 +718,7 @@ namespace ts {
             return func();
         }
 
-        function doInsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
+        function doInsideOfContext<T>(context: NodeFlags, func: () => T): T {
             // contextFlagsToSet will contain only the context flags that
             // are not currently set that we need to temporarily enable.
             // We don't just blindly reset to the previous flags to ensure
@@ -740,51 +740,51 @@ namespace ts {
         }
 
         function allowInAnd<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.DisallowIn, func);
+            return doOutsideOfContext(NodeFlags.DisallowIn, func);
         }
 
         function disallowInAnd<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.DisallowIn, func);
+            return doInsideOfContext(NodeFlags.DisallowIn, func);
         }
 
         function doInYieldContext<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.Yield, func);
+            return doInsideOfContext(NodeFlags.Yield, func);
         }
 
         function doInDecoratorContext<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.Decorator, func);
+            return doInsideOfContext(NodeFlags.Decorator, func);
         }
 
         function doInAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.Await, func);
+            return doInsideOfContext(NodeFlags.Await, func);
         }
 
         function doOutsideOfAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Await, func);
+            return doOutsideOfContext(NodeFlags.Await, func);
         }
 
         function doInYieldAndAwaitContext<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
+            return doInsideOfContext(NodeFlags.Yield | NodeFlags.Await, func);
         }
 
-        function inContext(flags: ParserContextFlags) {
+        function inContext(flags: NodeFlags) {
             return (contextFlags & flags) !== 0;
         }
 
         function inYieldContext() {
-            return inContext(ParserContextFlags.Yield);
+            return inContext(NodeFlags.Yield);
         }
 
         function inDisallowInContext() {
-            return inContext(ParserContextFlags.DisallowIn);
+            return inContext(NodeFlags.DisallowIn);
         }
 
         function inDecoratorContext() {
-            return inContext(ParserContextFlags.Decorator);
+            return inContext(NodeFlags.Decorator);
         }
 
         function inAwaitContext() {
-            return inContext(ParserContextFlags.Await);
+            return inContext(NodeFlags.Await);
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
@@ -1004,7 +1004,7 @@ namespace ts {
             // flag so that we don't mark any subsequent nodes.
             if (parseErrorBeforeNextFinishedNode) {
                 parseErrorBeforeNextFinishedNode = false;
-                node.parserContextFlags |= ParserContextFlags.ThisNodeHasError;
+                node.parserContextFlags |= NodeFlags.ThisNodeHasError;
             }
 
             return node;
@@ -1453,7 +1453,7 @@ namespace ts {
             // differently depending on what mode it is in.
             //
             // This also applies to all our other context flags as well.
-            const nodeContextFlags = node.parserContextFlags & ParserContextFlags.ParserGeneratedFlags;
+            const nodeContextFlags = node.parserContextFlags & NodeFlags.ParserGeneratedFlags;
             if (nodeContextFlags !== contextFlags) {
                 return undefined;
             }
@@ -2512,7 +2512,7 @@ namespace ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.
-            return doOutsideOfContext(ParserContextFlags.TypeExcludesFlags, parseTypeWorker);
+            return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseTypeWorker);
         }
 
         function parseTypeWorker(): TypeNode {
@@ -4785,7 +4785,7 @@ namespace ts {
             // The checker may still error in the static case to explicitly disallow the yield expression.
             property.initializer = modifiers && modifiers.flags & NodeFlags.Static
                 ? allowInAnd(parseNonParameterInitializer)
-                : doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.DisallowIn, parseNonParameterInitializer);
+                : doOutsideOfContext(NodeFlags.Yield | NodeFlags.DisallowIn, parseNonParameterInitializer);
 
             parseSemicolon();
             return finishNode(property);

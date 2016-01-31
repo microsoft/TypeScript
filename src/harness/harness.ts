@@ -284,7 +284,7 @@ namespace Utils {
                         // Clear the flag that are produced by aggregating child values..  That is ephemeral 
                         // data we don't care about in the dump.  We only care what the parser set directly
                         // on the ast.
-                        let value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
+                        let value = n.parserContextFlags & ts.NodeFlags.ParserGeneratedFlags;
                         if (value) {
                             o[propertyName] = getParserContextFlagName(value);
                         }
