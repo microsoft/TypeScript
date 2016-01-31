@@ -666,8 +666,8 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
-            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
             sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
+            sourceFile.isDeclarationFile = fileExtensionIs(sourceFile.fileName, ".d.ts");
 
             return sourceFile;
         }
@@ -1922,7 +1922,7 @@ namespace ts {
                 && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
                 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
 
-                node.flags |= NodeFlags.OctalLiteral;
+                node.isOctalLiteral = true;
             }
 
             return node;
@@ -3907,7 +3907,9 @@ namespace ts {
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
             parseExpected(SyntaxKind.OpenBracketToken);
-            if (scanner.hasPrecedingLineBreak()) node.flags |= NodeFlags.MultiLine;
+            if (scanner.hasPrecedingLineBreak()) {
+                node.multiLine = true;
+            }
             node.elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -3978,7 +3980,7 @@ namespace ts {
             const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
             parseExpected(SyntaxKind.OpenBraceToken);
             if (scanner.hasPrecedingLineBreak()) {
-                node.flags |= NodeFlags.MultiLine;
+                node.multiLine = true;
             }
 
             node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter*/ true);

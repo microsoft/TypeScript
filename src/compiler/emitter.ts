@@ -1780,7 +1780,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("]");
                 }
                 else {
-                    emitListWithSpread(elements, /*needsUniqueCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                    emitListWithSpread(elements, /*needsUniqueCopy*/ true, /*multiLine*/ node.multiLine,
                         /*trailingComma*/ elements.hasTrailingComma, /*useConcat*/ true);
                 }
             }
@@ -1803,7 +1803,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         emitLinePreservingList(node, properties, /*allowTrailingComma*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces*/ true);
                     }
                     else {
-                        const multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                        const multiLine = node.multiLine;
                         if (!multiLine) {
                             write(" ");
                         }
@@ -1826,7 +1826,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
-                const multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                const multiLine = node.multiLine;
                 const properties = node.properties;
 
                 write("(");

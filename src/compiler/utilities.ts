@@ -414,7 +414,7 @@ namespace ts {
     }
 
     export function isDeclarationFile(file: SourceFile): boolean {
-        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+        return file.isDeclarationFile;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -1309,10 +1309,9 @@ namespace ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
+            if (node.flags & NodeFlags.Ambient || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
                 return true;
             }
-
             node = node.parent;
         }
         return false;

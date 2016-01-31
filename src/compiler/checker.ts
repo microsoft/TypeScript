@@ -16749,7 +16749,7 @@ namespace ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<LiteralExpression>name);
                     }
                     currentKind = Property;
                 }
@@ -17250,9 +17250,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarNumericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: LiteralExpression): boolean {
             // Grammar checking
-            if (node.flags & NodeFlags.OctalLiteral && languageVersion >= ScriptTarget.ES5) {
+            if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
             }
         }

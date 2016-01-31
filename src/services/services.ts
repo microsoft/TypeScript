@@ -237,14 +237,14 @@ namespace ts {
             while (pos < end) {
                 const token = scanner.scan();
                 const textPos = scanner.getTextPos();
-                nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
+                nodes.push(createNode(token, pos, textPos, 0, this));
                 pos = textPos;
             }
             return pos;
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
+            const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, 0, this);
             list._children = [];
             let pos = nodes.pos;
 
@@ -797,6 +797,7 @@ namespace ts {
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
 
+        public isDeclarationFile: boolean;
         public isDefaultLib: boolean;
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module

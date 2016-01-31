@@ -381,12 +381,8 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
-        MultiLine =          1 << 10,  // Multi-line array or object literal
-        Synthetic =          1 << 11,  // Synthetic node (for full fidelity)
-        DeclarationFile =    1 << 12,  // Node is a .d.ts file
         Let =                1 << 13,  // Variable declaration
         Const =              1 << 14,  // Variable declaration
-        OctalLiteral =       1 << 15,  // Octal numeric literal
         Namespace =          1 << 16,  // Namespace declaration
         ExportContext =      1 << 17,  // Export context (initialized by binding)
         ContainsThis =       1 << 18,  // Interface contains references to "this"
@@ -938,6 +934,7 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
+        isOctalLiteral?: boolean;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -979,6 +976,7 @@ namespace ts {
     // @kind(SyntaxKind.ArrayLiteralExpression)
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
+        multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.SpreadElementExpression)
@@ -990,6 +988,7 @@ namespace ts {
     // @kind(SyntaxKind.ObjectLiteralExpression)
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
+        multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.PropertyAccessExpression)
@@ -1546,6 +1545,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        isDeclarationFile: boolean;
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */

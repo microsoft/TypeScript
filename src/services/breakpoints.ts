@@ -10,7 +10,7 @@ namespace ts.BreakpointResolver {
      */
     export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
         // Cannot set breakpoint in dts file
-        if (sourceFile.flags & NodeFlags.DeclarationFile) {
+        if (sourceFile.isDeclarationFile) {
             return undefined;
         }
 
