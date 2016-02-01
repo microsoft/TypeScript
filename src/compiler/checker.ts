@@ -2641,7 +2641,7 @@ namespace ts {
 
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
@@ -3988,7 +3988,7 @@ namespace ts {
         }
 
         function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
                 if (templateTag) {
                     return getTypeParametersFromDeclaration(templateTag.typeParameters);
@@ -4022,7 +4022,7 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
@@ -4131,7 +4131,7 @@ namespace ts {
                     returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
-                    if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                    if (declaration.flags & NodeFlags.JavaScriptFile) {
                         const type = getReturnTypeFromJSDocComment(declaration);
                         if (type && type !== unknownType) {
                             returnType = type;
@@ -7190,7 +7190,7 @@ namespace ts {
                     }
                 }
 
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.flags & NodeFlags.AwaitContext) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 }
             }
@@ -10790,7 +10790,7 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                if (!(node.flags & NodeFlags.AwaitContext)) {
                     grammarErrorOnFirstToken(node, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
                 }
 
@@ -11246,7 +11246,7 @@ namespace ts {
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Yield) || isYieldExpressionInClass(node)) {
+                if (!(node.flags & NodeFlags.YieldContext) || isYieldExpressionInClass(node)) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
                 }
 
@@ -13708,7 +13708,7 @@ namespace ts {
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.flags & NodeFlags.AwaitContext) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
                 }
             }
@@ -16756,7 +16756,7 @@ namespace ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<LiteralExpression>name);
                     }
                     currentKind = Property;
                 }
@@ -17257,9 +17257,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarNumericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: LiteralExpression): boolean {
             // Grammar checking
-            if (node.flags & NodeFlags.OctalLiteral && languageVersion >= ScriptTarget.ES5) {
+            if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
             }
         }

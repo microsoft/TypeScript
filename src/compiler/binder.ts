@@ -1110,7 +1110,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: LiteralExpression) {
-            if (inStrictMode && node.flags & NodeFlags.OctalLiteral) {
+            if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
