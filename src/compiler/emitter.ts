@@ -2583,12 +2583,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return false;
                 }
 
-                let current: Node = node;
+                let current = getRootDeclaration(node).parent;
                 while (current) {
                     if (current.kind === SyntaxKind.SourceFile) {
                         return !isExported || ((getCombinedNodeFlags(node) & NodeFlags.Export) !== 0);
                     }
-                    else if (isFunctionLike(current) || current.kind === SyntaxKind.ModuleBlock) {
+                    else if (isDeclaration(current)) {
                         return false;
                     }
                     else {
