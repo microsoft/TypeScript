@@ -2438,6 +2438,8 @@ namespace ts {
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
+        // Do not perform validation of output file name in transpile scenarios
+        /* @internal */ suppressOutputPathCheck?: boolean;
 
         [option: string]: string | number | boolean;
     }
