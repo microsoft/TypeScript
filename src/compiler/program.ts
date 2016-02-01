@@ -535,7 +535,6 @@ namespace ts {
         let referencedSourceFile: string;
         while (true) {
             const searchName = normalizePath(combinePaths(containingDirectory, moduleName));
-            const directoryName = getDirectoryPath(searchName);
             referencedSourceFile = loadModuleFromFile(searchName, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
             if (referencedSourceFile) {
                 break;
