@@ -1071,8 +1071,11 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
                             return true;
                         case SyntaxKind.ExportAssignment:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
-                            return true;
+                            if ((<ExportAssignment>node).isExportEquals) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
                         case SyntaxKind.ClassDeclaration:
                             let classDeclaration = <ClassDeclaration>node;
                             if (checkModifiers(classDeclaration.modifiers) ||
