@@ -904,6 +904,7 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
+        /* @internal */
         isOctalLiteral?: boolean;
     }
 
@@ -946,6 +947,7 @@ namespace ts {
     // @kind(SyntaxKind.ArrayLiteralExpression)
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
+        /* @internal */
         multiLine?: boolean;
     }
 
@@ -958,6 +960,7 @@ namespace ts {
     // @kind(SyntaxKind.ObjectLiteralExpression)
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
+        /* @internal */
         multiLine?: boolean;
     }
 
