@@ -1717,7 +1717,7 @@ namespace ts {
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
-            if (!options.noEmit) {
+            if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
                 forEachExpectedEmitFile(emitHost, (emitFileNames, sourceFiles, isBundledEmit) => {

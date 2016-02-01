@@ -1876,6 +1876,9 @@ namespace ts {
 
         options.isolatedModules = true;
 
+        // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths. 
+        options.suppressOutputPathCheck = true;
+
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 

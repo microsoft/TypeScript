@@ -291,5 +291,14 @@ var x = 0;`,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
             })
         });
+        it("transpile .js files", () => {
+            const input = "const a = 10;";
+            const output = `"use strict";\nvar a = 10;\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+                expectedDiagnosticCodes: []
+            });
+        })
     });
 }
