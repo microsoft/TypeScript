@@ -10359,7 +10359,7 @@ namespace ts {
             if (returnTag && returnTag.typeExpression) {
                 return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
-            
+
             return undefined;
         }
 
