@@ -3834,7 +3834,7 @@ namespace ts {
 
             const entries: CompletionEntry[] = [];
 
-            if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
                 addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
             }
