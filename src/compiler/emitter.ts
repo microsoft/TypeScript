@@ -1263,26 +1263,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     // Children
                     if (children) {
-                        for (let i = 0; i < children.length; i++) {
-                            // Don't emit empty expressions
-                            if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
-                                continue;
-                            }
+                        let firstChild: JsxChild;
+                        let multipleEmittableChildren = false;
 
-                            // Don't emit empty strings
-                            if (children[i].kind === SyntaxKind.JsxText) {
-                                const text = getTextToEmit(<JsxText>children[i]);
-                                if (text !== undefined) {
-                                    write(", \"");
-                                    write(text);
-                                    write("\"");
+                        for (let i = 0, n = children.length; i < n; i++) {
+                            const jsxChild = children[i];
+
+                            if (isJsxChildEmittable(jsxChild)) {
+                                // we need to decide whether to emit in single line or multiple lines as indented list
+                                // store firstChild reference, if we see another emittable child, then emit accordingly
+                                if (!firstChild) {
+                                    write(", ");
+                                    firstChild = jsxChild;
+                                }
+                                else {
+                                    // more than one emittable child, emit indented list
+                                    if (!multipleEmittableChildren) {
+                                        multipleEmittableChildren = true;
+                                        increaseIndent();
+                                        writeLine();
+                                        emit(firstChild);
+                                    }
+
+                                    write(", ");
+                                    writeLine();
+                                    emit(jsxChild);
                                 }
                             }
-                            else {
-                                write(", ");
-                                emit(children[i]);
-                            }
+                        }
 
+                        if (multipleEmittableChildren) {
+                            decreaseIndent();
+                        }
+                        else if (firstChild) {
+                            if (firstChild.kind !== SyntaxKind.JsxElement && firstChild.kind !== SyntaxKind.JsxSelfClosingElement) {
+                                emit(firstChild);
+                            }
+                            else {
+                                // If the only child is jsx element, put it on a new indented line
+                                increaseIndent();
+                                writeLine();
+                                emit(firstChild);
+                                writeLine();
+                                decreaseIndent();
+                            }
                         }
                     }
 
@@ -7399,7 +7423,21 @@ const _super = (function (geti, seti) {
                 return result;
             }
 
-            function getTextToEmit(node: JsxText) {
+            function isJsxChildEmittable(child: JsxChild): boolean  {
+                if (child.kind === SyntaxKind.JsxExpression) {
+                    // Don't emit empty expressions
+                    return !!(<JsxExpression>child).expression;
+
+                }
+                else if (child.kind === SyntaxKind.JsxText) {
+                    // Don't emit empty strings
+                    return !!getTextToEmit(<JsxText>child);
+                }
+
+                return true;
+            };
+
+            function getTextToEmit(node: JsxText): string {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
                         let text = trimReactWhitespaceAndApplyEntities(node);
