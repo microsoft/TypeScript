@@ -364,6 +364,7 @@ namespace ts {
 
         function parseStrings(args: string[]) {
             let i = 0;
+            function adjustFileName(arg: string): string { /*jshint -W110 */ return (arg[0] === "'" || arg[0] === '"') && arg[0] === arg[arg.length - 1] ? arg.substring(1, arg.length - 1) : arg; }
             while (i < args.length) {
                 let s = args[i];
                 i++;
@@ -399,7 +400,7 @@ namespace ts {
                                     options[opt.name] = true;
                                     break;
                                 case "string":
-                                    options[opt.name] = args[i] || "";
+                                    options[opt.name] = adjustFileName(args[i]) || "";
                                     i++;
                                     break;
                                 // If not a primitive, the possible types are specified in what is effectively a map of options.
@@ -421,7 +422,7 @@ namespace ts {
                     }
                 }
                 else {
-                    fileNames.push(s);
+                    fileNames.push(adjustFileName(s));
                 }
             }
         }

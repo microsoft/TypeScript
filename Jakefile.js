@@ -1,3 +1,4 @@
+/// <reference path="typings/jake.d.ts" />
 // This file contains the build logic for the public repo
 
 var fs = require("fs");
@@ -249,11 +250,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         if (outDir) {
-            options += " --outDir " + outDir;
+            options += ' --outDir "' + outDir + '"';
         }
 
         if (!noOutFile) {
-            options += " --out " + outFile;
+            options += ' --out "' + outFile + '"';
         }
         else {
             options += " --module commonjs"
@@ -264,7 +265,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         if (useDebugMode) {
-            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            options += ' -sourcemap -mapRoot "file:///' + path.resolve(path.dirname(outFile)) + '"';
         }
 
         if (stripInternal) {
@@ -272,7 +273,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
-        cmd = cmd + sources.join(" ");
+        sources = sources.join('" "');
+        cmd = cmd + (sources ? '"' + sources + '"' : sources);
         console.log(cmd + "\n");
 
         var ex = jake.createExec([cmd]);
