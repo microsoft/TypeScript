@@ -232,7 +232,7 @@ interface Function {
       * @param thisArg An object to which the this keyword can refer inside the new function.
       * @param argArray A list of arguments to be passed to the new function.
       */
-    bind<T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): (...argArray: any[]) => U;
+    bind<T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): (this: void, ...argArray: any[]) => U;
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
 
     prototype: any;
