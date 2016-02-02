@@ -386,7 +386,7 @@ namespace ts {
                             const value = s.substring(optionName.length + 1);
                             const opt = optionNameMap[optionName];
                             if (opt.type === "boolean") {
-                                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, opt.name, value));
+                                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_does_not_expect_a_parameter_but_was_given_1, opt.name, value));
                                 continue;
                             }
                             args.splice(i - 1, 1, opt.name, value);

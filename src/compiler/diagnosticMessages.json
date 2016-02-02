@@ -2187,6 +2187,10 @@
         "category": "Error",
         "code": 5062
     },
+    "Option '{0}' does not expect a parameter, but was given '{1}'.": {
+        "category": "Error",
+        "code": 5063
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
