@@ -11,12 +11,15 @@ interface Listener extends Base {
 interface Ringer {
 	ring: (times: number) => void;
 }
+interface StringLiteral {
+	literal(): "A";
+}
 
 abstract class Watcher {
 	abstract watch(e: Event): number;
 }
 
-class Alarm extends Watcher implements Listener, Ringer {
+class Alarm extends Watcher implements Listener, Ringer, StringLiteral {
 	str: string;
 	handle = e => {
 		this.str = e.time; // error
@@ -31,6 +34,9 @@ class Alarm extends Watcher implements Listener, Ringer {
 	watch(e) {
 		this.str = e.time; // error
 		return e.time;
+	}
+	literal() {
+		return "A"; // ok: "A" is assignable to "A"
 	}
 }
 
@@ -64,6 +70,9 @@ var Alarm = (function (_super) {
     Alarm.prototype.watch = function (e) {
         this.str = e.time; // error
         return e.time;
+    };
+    Alarm.prototype.literal = function () {
+        return "A"; // ok: "A" is assignable to "A"
     };
     return Alarm;
 }(Watcher));

@@ -7591,7 +7591,7 @@ namespace ts {
 
         function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
             // Only function expressions, arrow functions, and object literal methods are contextually typed.
-            return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
+            return isFunctionExpressionOrArrowFunction(node) || isMethod(node)
                 ? getContextualSignature(<FunctionExpression>node)
                 : undefined;
         }
