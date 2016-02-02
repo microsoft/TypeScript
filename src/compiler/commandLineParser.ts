@@ -380,17 +380,17 @@ namespace ts {
                     else {
                         // When using long-form switches, we follow standard command-line conventions and accept
                         // "--example=VALUE", but we also accept "--example VALUE".
-                        const longFormSwitch = s.split("=", 1).toString().toLowerCase();
-                        if (longFormSwitch.length < s.length && hasProperty(optionNameMap, longFormSwitch)) {
+                        const optionName = s.split("=", 1)[0].toLowerCase();
+                        if (optionName.length < s.length && hasProperty(optionNameMap, optionName)) {
                             // It's in "--example=VALUE" format.  Replace it in the arg list with the separated format.
-                            const value = s.substring(longFormSwitch.length + 1);
-                            const opt = optionNameMap[longFormSwitch];
+                            const value = s.substring(optionName.length + 1);
+                            const opt = optionNameMap[optionName];
                             if (opt.type === "boolean") {
-                              errors.push(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, opt.name, value));
-                              continue;
+                                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, opt.name, value));
+                                continue;
                             }
                             args.splice(i - 1, 1, opt.name, value);
-                            s = longFormSwitch;
+                            s = optionName;
                         }
                     }
 
