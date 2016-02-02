@@ -2068,9 +2068,8 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding  = 0x00020000,        // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop    = 0x00040000,        // Block-scoped binding with declaration nested inside iteration statement
-        HasSeenSuperCall           = 0x00080000,         // Set during the binding when encounter 'super'
-        ClassWithBodyScopedClassBinding = 0x00100000,    // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding      = 0x00200000,        // Binding to a decorated class inside of the class's body.
+        ClassWithBodyScopedClassBinding = 0x0080000,     // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding      = 0x00100000,        // Binding to a decorated class inside of the class's body.
     }
 
     /* @internal */
@@ -2089,6 +2088,7 @@ namespace ts {
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
+        superStatement?: ExpressionStatement;  // Cached super-statement found in the constructor. Used in checking whether super is called before this-accessing 
     }
 
     export const enum TypeFlags {
