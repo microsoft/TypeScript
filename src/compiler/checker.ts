@@ -5905,29 +5905,24 @@ namespace ts {
                 const saveErrorInfo = errorInfo;
 
                 outer: for (const t of targetSignatures) {
-                    if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
-                        // Only elaborate errors from the first failure
-                        let shouldElaborateErrors = reportErrors;
-                        for (const s of sourceSignatures) {
-                            if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                                if (related) {
-                                    result &= related;
-                                    errorInfo = saveErrorInfo;
-                                    continue outer;
-                                }
-                                shouldElaborateErrors = false;
-                            }
+                    // Only elaborate errors from the first failure
+                    let shouldElaborateErrors = reportErrors;
+                    for (const s of sourceSignatures) {
+                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                        if (related) {
+                            result &= related;
+                            errorInfo = saveErrorInfo;
+                            continue outer;
                         }
-                        // don't elaborate the primitive apparent types (like Number)
-                        // because the actual primitives will have already been reported.
-                        if (shouldElaborateErrors) {
-                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
-                                typeToString(source),
-                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
-                        }
-                        return Ternary.False;
+                        shouldElaborateErrors = false;
                     }
+
+                    if (shouldElaborateErrors) {
+                        reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                            typeToString(source),
+                            signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                    }
+                    return Ternary.False;
                 }
                 return result;
             }
@@ -11702,8 +11697,6 @@ namespace ts {
                     }
                 }
             }
-
-            checkSpecializedSignatureDeclaration(node);
         }
 
         function checkTypeForDuplicateIndexSignatures(node: Node) {
@@ -12014,48 +12007,6 @@ namespace ts {
             return (node.flags & NodeFlags.Private) && isInAmbientContext(node);
         }
 
-        function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
-            if (!produceDiagnostics) {
-                return;
-            }
-            const signature = getSignatureFromDeclaration(signatureDeclarationNode);
-            if (!signature.hasStringLiterals) {
-                return;
-            }
-
-            // TypeScript 1.0 spec (April 2014): 3.7.2.2
-            // Specialized signatures are not permitted in conjunction with a function body
-            if (nodeIsPresent((<FunctionLikeDeclaration>signatureDeclarationNode).body)) {
-                error(signatureDeclarationNode, Diagnostics.A_signature_with_an_implementation_cannot_use_a_string_literal_type);
-                return;
-            }
-
-            // TypeScript 1.0 spec (April 2014): 3.7.2.4
-            // Every specialized call or construct signature in an object type must be assignable
-            // to at least one non-specialized call or construct signature in the same object type
-            let signaturesToCheck: Signature[];
-            // Unnamed (call\construct) signatures in interfaces are inherited and not shadowed so examining just node symbol won't give complete answer.
-            // Use declaring type to obtain full list of signatures.
-            if (!signatureDeclarationNode.name && signatureDeclarationNode.parent && signatureDeclarationNode.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                Debug.assert(signatureDeclarationNode.kind === SyntaxKind.CallSignature || signatureDeclarationNode.kind === SyntaxKind.ConstructSignature);
-                const signatureKind = signatureDeclarationNode.kind === SyntaxKind.CallSignature ? SignatureKind.Call : SignatureKind.Construct;
-                const containingSymbol = getSymbolOfNode(signatureDeclarationNode.parent);
-                const containingType = getDeclaredTypeOfSymbol(containingSymbol);
-                signaturesToCheck = getSignaturesOfType(containingType, signatureKind);
-            }
-            else {
-                signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
-            }
-
-            for (const otherSignature of signaturesToCheck) {
-                if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature, /*ignoreReturnTypes*/ false)) {
-                    return;
-                }
-            }
-
-            error(signatureDeclarationNode, Diagnostics.Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature);
-        }
-
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
 
@@ -12277,28 +12228,10 @@ namespace ts {
                 if (bodyDeclaration) {
                     const signatures = getSignaturesOfSymbol(symbol);
                     const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
-                    // If the implementation signature has string literals, we will have reported an error in
-                    // checkSpecializedSignatureDeclaration
-                    if (!bodySignature.hasStringLiterals) {
-                        // TypeScript 1.0 spec (April 2014): 6.1
-                        // If a function declaration includes overloads, the overloads determine the call
-                        // signatures of the type given to the function object
-                        // and the function implementation signature must be assignable to that type
-                        //
-                        // TypeScript 1.0 spec (April 2014): 3.8.4
-                        // Note that specialized call and construct signatures (section 3.7.2.4) are not significant when determining assignment compatibility
-                        // Consider checking against specialized signatures too. Not doing so creates a type hole:
-                        //
-                        // function g(x: "hi", y: boolean);
-                        // function g(x: string, y: {});
-                        // function g(x: string, y: string) { }
-                        //
-                        // The implementation is completely unrelated to the specialized signature, yet we do not check this.
-                        for (const signature of signatures) {
-                            if (!signature.hasStringLiterals && !isImplementationCompatibleWithOverload(bodySignature, signature)) {
-                                error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
-                                break;
-                            }
+                    for (const signature of signatures) {
+                        if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
+                            error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
+                            break;
                         }
                     }
                 }
