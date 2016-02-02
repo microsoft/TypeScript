@@ -1,0 +1,8 @@
+=== c:/node_modules/test.d.ts ===
+
+No type information for this code.
+No type information for this code.// comment
+No type information for this code.
+No type information for this code.=== c:/app/main.ts ===
+import "test"
+No type information for this code.
