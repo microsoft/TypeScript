@@ -373,9 +373,6 @@ namespace ts {
                     }
                 }
 
-                /**
-                 * @param watcherPath is the path from which the watcher is triggered.
-                 */
                 function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: Path) {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                     const filePath = typeof relativeFileName !== "string"
