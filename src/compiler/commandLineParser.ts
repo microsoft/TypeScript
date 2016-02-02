@@ -364,8 +364,7 @@ namespace ts {
 
         function parseStrings(args: string[]) {
             let i = 0;
-						/*jshint -W110 */
-            function adjustFileName(arg: string): string { return (arg[0] === "'" || arg[0] === '"') && arg[0] === arg[arg.length - 1] ? arg.substring(1, arg.length - 1) : arg; }
+            function adjustFileName(arg: string): string { /*jshint -W110 */ return (arg[0] === "'" || arg[0] === '"') && arg[0] === arg[arg.length - 1] ? arg.substring(1, arg.length - 1) : arg; }
             while (i < args.length) {
                 let s = args[i];
                 i++;
