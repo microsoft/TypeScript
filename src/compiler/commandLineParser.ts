@@ -84,6 +84,7 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
                 "es2015": ModuleKind.ES2015,
+                "none": ModuleKind.None
             },
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
@@ -583,7 +584,6 @@ namespace ts {
         const errors: Diagnostic[] = [];
 
         if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
-            options.module = ModuleKind.CommonJS;
             options.allowJs = true;
         }
 

@@ -1711,9 +1711,10 @@ namespace ts {
 
     export function getDefaultCompilerOptions(): CompilerOptions {
         // Always default to "ScriptTarget.ES5" for the language service
+        // Per #6807, the default module flag is set to CommonJS 
         return {
             target: ScriptTarget.ES5,
-            module: ModuleKind.None,
+            module: ModuleKind.CommonJS,
             jsx: JsxEmit.Preserve
         };
     }
