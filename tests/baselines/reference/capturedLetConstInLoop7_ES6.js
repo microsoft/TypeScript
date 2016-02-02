@@ -22,16 +22,16 @@ l00:
 for (let x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00;
     }
 }
@@ -210,16 +210,16 @@ l00_c:
 for (const x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00_c;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00_c;
     }
 }
@@ -396,16 +396,16 @@ l0: for (let x of []) {
 l00: for (let x in []) {
     (function () { return x; });
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00;
     }
 }
@@ -563,16 +563,16 @@ l0_c: for (const x of []) {
 l00_c: for (const x in []) {
     (function () { return x; });
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00_c;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00_c;
     }
 }

@@ -1,32 +1,26 @@
-tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(5,5): error TS1131: Property or signature expected.
-tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(9,5): error TS1131: Property or signature expected.
-tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(13,5): error TS1131: Property or signature expected.
-tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(13,16): error TS2304: Cannot find name 'string'.
-tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(14,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(5,5): error TS1070: 'private' modifier cannot appear on a type member.
+tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(9,5): error TS1070: 'private' modifier cannot appear on a type member.
+tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts(13,5): error TS1070: 'private' modifier cannot appear on a type member.
 
 
-==== tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts (5 errors) ====
+==== tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts (3 errors) ====
     
     // interfaces do not permit private members, these are errors
     
     interface I {
         private x: string;
         ~~~~~~~
-!!! error TS1131: Property or signature expected.
+!!! error TS1070: 'private' modifier cannot appear on a type member.
     }
     
     interface I2<T> {
         private y: T;
         ~~~~~~~
-!!! error TS1131: Property or signature expected.
+!!! error TS1070: 'private' modifier cannot appear on a type member.
     }
     
     var x: {
         private y: string;
         ~~~~~~~
-!!! error TS1131: Property or signature expected.
-                   ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS1070: 'private' modifier cannot appear on a type member.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.

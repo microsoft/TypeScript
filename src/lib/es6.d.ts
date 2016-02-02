@@ -7,14 +7,14 @@ interface Symbol {
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
 
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "Symbol";
 }
 
 interface SymbolConstructor {
     /** 
       * A reference to the prototype. 
       */
-    prototype: Symbol;
+    readonly prototype: Symbol;
 
     /**
       * Returns a new unique Symbol value.
@@ -42,67 +42,67 @@ interface SymbolConstructor {
       * A method that determines if a constructor object recognizes an object as one of the 
       * constructor’s instances. Called by the semantics of the instanceof operator. 
       */
-    hasInstance: symbol;
+    readonly hasInstance: symbol;
 
     /** 
       * A Boolean value that if true indicates that an object should flatten to its array elements
       * by Array.prototype.concat.
       */
-    isConcatSpreadable: symbol;
+    readonly isConcatSpreadable: symbol;
 
     /** 
       * A method that returns the default iterator for an object. Called by the semantics of the 
       * for-of statement.
       */
-    iterator: symbol;
+    readonly iterator: symbol;
 
     /**
       * A regular expression method that matches the regular expression against a string. Called 
       * by the String.prototype.match method. 
       */
-    match: symbol;
+    readonly match: symbol;
 
     /** 
       * A regular expression method that replaces matched substrings of a string. Called by the 
       * String.prototype.replace method.
       */
-    replace: symbol;
+    readonly replace: symbol;
 
     /**
       * A regular expression method that returns the index within a string that matches the 
       * regular expression. Called by the String.prototype.search method.
       */
-    search: symbol;
+    readonly search: symbol;
 
     /** 
       * A function valued property that is the constructor function that is used to create 
       * derived objects.
       */
-    species: symbol;
+    readonly species: symbol;
 
     /**
       * A regular expression method that splits a string at the indices that match the regular 
       * expression. Called by the String.prototype.split method.
       */
-    split: symbol;
+    readonly split: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.
       * Called by the ToPrimitive abstract operation.
       */
-    toPrimitive: symbol;
+    readonly toPrimitive: symbol;
 
     /** 
       * A String value that is used in the creation of the default string description of an object.
       * Called by the built-in method Object.prototype.toString.
       */
-    toStringTag: symbol;
+    readonly toStringTag: symbol;
 
     /**
       * An Object whose own property names are property names that are excluded from the 'with'
       * environment bindings of the associated objects.
       */
-    unscopables: symbol;
+    readonly unscopables: symbol;
 }
 declare var Symbol: SymbolConstructor;
 
@@ -200,7 +200,7 @@ interface Function {
     /**
       * Returns the name of the function. Function names are read-only and can not be changed.
       */
-    name: string;
+    readonly name: string;
 
     /**
      * Determines whether the given value inherits from this function if this function was used
@@ -218,7 +218,7 @@ interface NumberConstructor {
       * that is representable as a Number value, which is approximately: 
       * 2.2204460492503130808472633361816 x 10‍−‍16.
       */
-    EPSILON: number;
+    readonly EPSILON: number;
 
     /**
       * Returns true if passed value is finite.
@@ -253,14 +253,14 @@ interface NumberConstructor {
       * a Number value. 
       * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
       */
-    MAX_SAFE_INTEGER: number;
+    readonly MAX_SAFE_INTEGER: number;
 
     /** 
       * The value of the smallest integer n such that n and n − 1 are both exactly representable as 
       * a Number value. 
       * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
       */
-    MIN_SAFE_INTEGER: number;
+    readonly MIN_SAFE_INTEGER: number;
 
     /**
       * Converts a string to a floating-point number. 
@@ -565,7 +565,7 @@ interface IterableIterator<T> extends Iterator<T> {
 }
 
 interface GeneratorFunction extends Function {
-
+    readonly [Symbol.toStringTag]: "GeneratorFunction";
 }
 
 interface GeneratorFunctionConstructor {
@@ -575,7 +575,7 @@ interface GeneratorFunctionConstructor {
       */
     new (...args: string[]): GeneratorFunction;
     (...args: string[]): GeneratorFunction;
-    prototype: GeneratorFunction;
+    readonly prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
 
@@ -690,7 +690,7 @@ interface Math {
       */
     cbrt(x: number): number;
 
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "Math";
 }
 
 interface Date {
@@ -776,19 +776,19 @@ interface RegExp {
       *
       * If no flags are set, the value is the empty string.
       */
-    flags: string;
+    readonly flags: string;
 
     /** 
       * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular 
       * expression. Default is false. Read-only. 
       */
-    sticky: boolean;
+    readonly sticky: boolean;
 
     /** 
       * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular 
       * expression. Default is false. Read-only. 
       */
-    unicode: boolean;
+    readonly unicode: boolean;
 }
 
 interface RegExpConstructor {
@@ -804,17 +804,17 @@ interface Map<K, V> {
     has(key: K): boolean;
     keys(): IterableIterator<K>;
     set(key: K, value?: V): Map<K, V>;
-    size: number;
+    readonly size: number;
     values(): IterableIterator<V>;
     [Symbol.iterator]():IterableIterator<[K,V]>;
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "Map";
 }
 
 interface MapConstructor {
     new (): Map<any, any>;
     new <K, V>(): Map<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
-    prototype: Map<any, any>;
+    readonly prototype: Map<any, any>;
 }
 declare var Map: MapConstructor;
 
@@ -824,14 +824,14 @@ interface WeakMap<K, V> {
     get(key: K): V;
     has(key: K): boolean;
     set(key: K, value?: V): WeakMap<K, V>;
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "WeakMap";
 }
 
 interface WeakMapConstructor {
     new (): WeakMap<any, any>;
     new <K, V>(): WeakMap<K, V>;
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
-    prototype: WeakMap<any, any>;
+    readonly prototype: WeakMap<any, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -843,17 +843,17 @@ interface Set<T> {
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     keys(): IterableIterator<T>;
-    size: number;
+    readonly size: number;
     values(): IterableIterator<T>;
     [Symbol.iterator]():IterableIterator<T>;
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "Set";
 }
 
 interface SetConstructor {
     new (): Set<any>;
     new <T>(): Set<T>;
     new <T>(iterable: Iterable<T>): Set<T>;
-    prototype: Set<any>;
+    readonly prototype: Set<any>;
 }
 declare var Set: SetConstructor;
 
@@ -862,19 +862,19 @@ interface WeakSet<T> {
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "WeakSet";
 }
 
 interface WeakSetConstructor {
     new (): WeakSet<any>;
     new <T>(): WeakSet<T>;
     new <T>(iterable: Iterable<T>): WeakSet<T>;
-    prototype: WeakSet<any>;
+    readonly prototype: WeakSet<any>;
 }
 declare var WeakSet: WeakSetConstructor;
 
 interface JSON {
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "JSON";
 }
 
 /**
@@ -884,11 +884,11 @@ interface JSON {
   * buffer as needed. 
   */
 interface ArrayBuffer {
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "ArrayBuffer";
 }
 
 interface DataView {
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "DataView";
 }
 
 /**
@@ -909,6 +909,7 @@ interface Int8Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Int8Array";
 }
 
 interface Int8ArrayConstructor {
@@ -941,6 +942,7 @@ interface Uint8Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "UInt8Array";
 }
 
 interface Uint8ArrayConstructor {
@@ -976,6 +978,7 @@ interface Uint8ClampedArray {
     values(): IterableIterator<number>;
 
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -1013,6 +1016,7 @@ interface Int16Array {
 
 
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Int16Array";
 }
 
 interface Int16ArrayConstructor {
@@ -1045,6 +1049,7 @@ interface Uint16Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
 interface Uint16ArrayConstructor {
@@ -1077,6 +1082,7 @@ interface Int32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Int32Array";
 }
 
 interface Int32ArrayConstructor {
@@ -1109,6 +1115,7 @@ interface Uint32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
 interface Uint32ArrayConstructor {
@@ -1141,6 +1148,7 @@ interface Float32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Float32Array";
 }
 
 interface Float32ArrayConstructor {
@@ -1173,6 +1181,7 @@ interface Float64Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    readonly [Symbol.toStringTag]: "Float64Array";
 }
 
 interface Float64ArrayConstructor {
@@ -1249,14 +1258,14 @@ interface Promise<T> {
     catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
     catch(onrejected?: (reason: any) => void): Promise<T>;
 
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toStringTag]: "Promise";
 }
 
 interface PromiseConstructor {
     /** 
       * A reference to the prototype. 
       */
-    prototype: Promise<any>;
+    readonly prototype: Promise<any>;
 
     /**
      * Creates a new Promise.
@@ -1272,15 +1281,15 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>;
-    all<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>;
-    all<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>]): Promise<[T1, T2, T3, T4]>;
-    all<T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>;
-    all<T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>;
-    all<T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>;
-    all<T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>;
-    all<T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
     all<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>;
+    all<T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>;
+    all<T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>;
+    all<T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>;
+    all<T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>;
+    all<T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>;
+    all<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>]): Promise<[T1, T2, T3, T4]>;
+    all<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>;
+    all<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>;
     all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
 
     /**
@@ -1318,7 +1327,7 @@ interface PromiseConstructor {
      */
     resolve(): Promise<void>;
 
-    [Symbol.species]: Function;
+    readonly [Symbol.species]: Function;
 }
 
 declare var Promise: PromiseConstructor;

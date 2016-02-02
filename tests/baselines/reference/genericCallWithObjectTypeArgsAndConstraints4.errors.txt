@@ -1,9 +1,9 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(12,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(28,19): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
+  Property 'y' is missing in type 'C'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts (3 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts (2 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class C {
@@ -16,8 +16,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     }
     
     function foo<T, U extends T>(t: T, t2: U) {
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         return (x: T) => t2;
     }
     
@@ -25,6 +23,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var d: D;
     var r = foo(c, d);
     var r2 = foo(d, c); // error because C does not extend D
+                    ~
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
+!!! error TS2345:   Property 'y' is missing in type 'C'.
     var r3 = foo(c, { x: '', foo: c });
     var r4 = foo(null, null);
     var r5 = foo({}, null);
@@ -34,8 +35,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var r9 = foo(() => { }, () => 1);
     
     function other<T, U extends T>() {
-                      ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r4 = foo(c, d);
         var r5 = foo<T, U>(c, d); // error
                            ~

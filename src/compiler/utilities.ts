@@ -92,7 +92,7 @@ namespace ts {
             return false;
         }
 
-        for (let i = 0; i < array1.length; ++i) {
+        for (let i = 0; i < array1.length; i++) {
             const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
@@ -121,26 +121,26 @@ namespace ts {
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0;
+        return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
     }
 
     function aggregateChildData(node: Node): void {
-        if (!(node.parserContextFlags & ParserContextFlags.HasAggregatedChildData)) {
+        if (!(node.flags & NodeFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            const thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
+            const thisNodeOrAnySubNodesHasError = ((node.flags & NodeFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
-                node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
+                node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.parserContextFlags |= ParserContextFlags.HasAggregatedChildData;
+            node.flags |= NodeFlags.HasAggregatedChildData;
         }
     }
 
@@ -149,6 +149,18 @@ namespace ts {
             node = node.parent;
         }
         return <SourceFile>node;
+    }
+
+    export function isStatementWithLocals(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+                return true;
+        }
+        return false;
     }
 
     export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
@@ -251,6 +263,38 @@ namespace ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    export function isAmbientModule(node: Node): boolean {
+        return node && node.kind === SyntaxKind.ModuleDeclaration &&
+            ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+    }
+
+    export function isBlockScopedContainerTopLevel(node: Node): boolean {
+        return node.kind === SyntaxKind.SourceFile ||
+            node.kind === SyntaxKind.ModuleDeclaration ||
+            isFunctionLike(node) ||
+            isFunctionBlock(node);
+    }
+
+    export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
+        return !!(module.flags & NodeFlags.GlobalAugmentation);
+    }
+
+    export function isExternalModuleAugmentation(node: Node): boolean {
+        // external module augmentation is a ambient module declaration that is either:
+        // - defined in the top level scope and source file is an external module
+        // - defined inside ambient module declaration located in the top level scope and source file not an external module
+        if (!node || !isAmbientModule(node)) {
+            return false;
+        }
+        switch (node.parent.kind) {
+            case SyntaxKind.SourceFile:
+                return isExternalModule(<SourceFile>node.parent);
+            case SyntaxKind.ModuleBlock:
+                return isAmbientModule(node.parent.parent) && !isExternalModule(<SourceFile>node.parent.parent.parent);
+        }
+        return false;
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
@@ -343,6 +387,7 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
         }
@@ -369,7 +414,7 @@ namespace ts {
     }
 
     export function isDeclarationFile(file: SourceFile): boolean {
-        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+        return file.isDeclarationFile;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -779,26 +824,38 @@ namespace ts {
         }
     }
 
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
+    /**
+      * Given an super call\property node returns a closest node where either
+      * - super call\property is legal in the node and not legal in the parent node the node.
+      *   i.e. super call is legal in constructor but not legal in the class body.
+      * - node is arrow function (so caller might need to call getSuperContainer in case it needs to climb higher)
+      * - super call\property is definitely illegal in the node (but might be legal in some subnode)
+      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+      */
+    export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
-            if (!node) return node;
+            if (!node) {
+                return node;
+            }
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
-                    // If the grandparent node is an object literal (as opposed to a class),
-                    // then the computed property is not a 'super' container.
-                    // A computed property name in a class needs to be a super container
-                    // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
-                        return node;
-                    }
-                    // If this is a computed property, then the parent should not
-                    // make it a super container. The parent might be a property
-                    // in an object literal, like a method or accessor. But in order for
-                    // such a parent to be a super container, the reference must be in
-                    // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!stopOnFunctions) {
+                        continue;
+                    }
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
@@ -812,23 +869,19 @@ namespace ts {
                         node = node.parent;
                     }
                     break;
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    if (!includeFunctions) {
-                        continue;
-                    }
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return node;
             }
         }
     }
+
+    /**
+     * Determines whether a node is a property or element access expression for super.
+     */
+    export function isSuperPropertyOrElementAccess(node: Node) {
+        return (node.kind === SyntaxKind.PropertyAccessExpression
+            || node.kind === SyntaxKind.ElementAccessExpression)
+            && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+    }
+
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
         if (node) {
@@ -865,54 +918,28 @@ namespace ts {
                 // property declarations are valid if their parent is a class declaration.
                 return node.parent.kind === SyntaxKind.ClassDeclaration;
 
-            case SyntaxKind.Parameter:
-                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
-
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
-                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node).body !== undefined
+                    && node.parent.kind === SyntaxKind.ClassDeclaration;
+
+            case SyntaxKind.Parameter:
+                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                return (<FunctionLikeDeclaration>node.parent).body !== undefined
+                    && (node.parent.kind === SyntaxKind.Constructor
+                    || node.parent.kind === SyntaxKind.MethodDeclaration
+                    || node.parent.kind === SyntaxKind.SetAccessor)
+                    && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
         }
 
         return false;
     }
 
     export function nodeIsDecorated(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ClassDeclaration:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.PropertyDeclaration:
-            case SyntaxKind.Parameter:
-                if (node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.GetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return false;
-
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.SetAccessor:
-                if ((<FunctionLikeDeclaration>node).body && node.decorators) {
-                    return true;
-                }
-
-                return false;
-        }
-
-        return false;
+        return node.decorators !== undefined
+            && nodeCanBeDecorated(node);
     }
 
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
@@ -1055,50 +1082,58 @@ namespace ts {
     }
 
     export function isInJavaScriptFile(node: Node): boolean {
-        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+        return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
-     * exactly one string literal argument.
+     * exactly one argument.
      * This function does not test if the node is in a JavaScript file or not.
     */
-    export function isRequireCall(expression: Node): expression is CallExpression {
+    export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
         // of the form 'require("name")'
-        return expression.kind === SyntaxKind.CallExpression &&
-                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1 &&
-                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
+        const isRequire = expression.kind === SyntaxKind.CallExpression &&
+            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+            (<CallExpression>expression).arguments.length === 1;
+
+        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
     }
 
-    /**
-     * Returns true if the node is an assignment to a property on the identifier 'exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isExportsPropertyAssignment(expression: Node): boolean {
-        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
-    }
+    /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
+    /// assignments we treat as special in the binder
+    export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
+        if (expression.kind !== SyntaxKind.BinaryExpression) {
+            return SpecialPropertyAssignmentKind.None;
+        }
+        const expr = <BinaryExpression>expression;
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
+            return SpecialPropertyAssignmentKind.None;
+        }
+        const lhs = <PropertyAccessExpression>expr.left;
+        if (lhs.expression.kind === SyntaxKind.Identifier) {
+            const lhsId = <Identifier>lhs.expression;
+            if (lhsId.text === "exports") {
+                // exports.name = expr
+                return SpecialPropertyAssignmentKind.ExportsProperty;
+            }
+            else if (lhsId.text === "module" && lhs.name.text === "exports") {
+                // module.exports = expr
+                return SpecialPropertyAssignmentKind.ModuleExports;
+            }
+        }
+        else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+            return SpecialPropertyAssignmentKind.ThisProperty;
+        }
+        else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
+            // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
+            const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
+            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier && innerPropertyAccess.name.text === "prototype") {
+                return SpecialPropertyAssignmentKind.PrototypeProperty;
+            }
+        }
 
-    /**
-     * Returns true if the node is an assignment to the property access expression 'module.exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isModuleExportsAssignment(expression: Node): boolean {
-        // of the form 'module.exports = expr' where 'expr' is arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
+        return SpecialPropertyAssignmentKind.None;
     }
 
     export function getExternalModuleName(node: Node): Expression {
@@ -1113,6 +1148,9 @@ namespace ts {
         }
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
+        }
+        if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+            return (<ModuleDeclaration>node).name;
         }
     }
 
@@ -1139,26 +1177,68 @@ namespace ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
-        if (node && node.jsDocComment) {
-            for (const tag of node.jsDocComment.tags) {
-                if (tag.kind === kind) {
-                    return tag;
-                }
+    function getJSDocTag(node: Node, kind: SyntaxKind, checkParentVariableStatement: boolean): JSDocTag {
+        if (!node) {
+            return undefined;
+        }
+
+        const jsDocComment = getJSDocComment(node, checkParentVariableStatement);
+        if (!jsDocComment) {
+            return undefined;
+        }
+
+        for (const tag of jsDocComment.tags) {
+            if (tag.kind === kind) {
+                return tag;
             }
         }
     }
 
+    function getJSDocComment(node: Node, checkParentVariableStatement: boolean): JSDocComment {
+        if (node.jsDocComment) {
+            return node.jsDocComment;
+        }
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement. 
+        // /** 
+        //   * @param {number} name
+        //   * @returns {number} 
+        //   */
+        // var x = function(name) { return name.length; }
+        if (checkParentVariableStatement) {
+            const isInitializerOfVariableDeclarationInStatement =
+                node.parent.kind === SyntaxKind.VariableDeclaration &&
+                (<VariableDeclaration>node.parent).initializer === node &&
+                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+
+            const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
+            if (variableStatementNode) {
+                return variableStatementNode.jsDocComment;
+            }
+
+            // Also recognize when the node is the RHS of an assignment expression
+            const isSourceOfAssignmentExpressionStatement =
+                node.parent && node.parent.parent &&
+                node.parent.kind === SyntaxKind.BinaryExpression &&
+                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+            if (isSourceOfAssignmentExpressionStatement) {
+                return node.parent.parent.jsDocComment;
+            }
+        }
+
+        return undefined;
+    }
+
     export function getJSDocTypeTag(node: Node): JSDocTypeTag {
-        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag, /*checkParentVariableStatement*/ false);
     }
 
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
-        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag, /*checkParentVariableStatement*/ true);
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
-        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag, /*checkParentVariableStatement*/ false);
     }
 
     export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
@@ -1167,19 +1247,21 @@ namespace ts {
             // annotation.
             const parameterName = (<Identifier>parameter.name).text;
 
-            const docComment = parameter.parent.jsDocComment;
-            if (docComment) {
-                return <JSDocParameterTag>forEach(docComment.tags, t => {
-                    if (t.kind === SyntaxKind.JSDocParameterTag) {
-                        const parameterTag = <JSDocParameterTag>t;
+            const jsDocComment = getJSDocComment(parameter.parent, /*checkParentVariableStatement*/ true);
+            if (jsDocComment) {
+                for (const tag of jsDocComment.tags) {
+                    if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                        const parameterTag = <JSDocParameterTag>tag;
                         const name = parameterTag.preParameterName || parameterTag.postParameterName;
                         if (name.text === parameterName) {
-                            return t;
+                            return parameterTag;
                         }
                     }
-                });
+                }
             }
         }
+
+        return undefined;
     }
 
     export function hasRestParameter(s: SignatureDeclaration): boolean {
@@ -1188,7 +1270,7 @@ namespace ts {
 
     export function isRestParameter(node: ParameterDeclaration) {
         if (node) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
                     return true;
                 }
@@ -1231,10 +1313,9 @@ namespace ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
+            if (node.flags & NodeFlags.Ambient || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
                 return true;
             }
-
             node = node.parent;
         }
         return false;
@@ -1547,6 +1628,7 @@ namespace ts {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
                 return true;
         }
@@ -1883,8 +1965,8 @@ namespace ts {
             writeTextOfNode,
             writeLiteral,
             writeLine,
-            increaseIndent: () => indent++,
-            decreaseIndent: () => indent--,
+            increaseIndent: () => { indent++; },
+            decreaseIndent: () => { indent--; },
             getIndent: () => indent,
             getTextPos: () => output.length,
             getLine: () => lineCount + 1,
@@ -2278,6 +2360,7 @@ namespace ts {
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
             case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
+            case SyntaxKind.ReadonlyKeyword: return NodeFlags.Readonly;
         }
         return 0;
     }
@@ -2744,5 +2827,9 @@ namespace ts {
                 }
             }
         }
+    }
+
+    export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
+        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 }

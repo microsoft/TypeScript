@@ -211,12 +211,12 @@ declare class a {
     pgF(): void;
     pv: any;
     d: number;
-    static p2: {
+    static readonly p2: {
         x: number;
         y: number;
     };
     private static d2();
-    private static p3;
+    private static readonly p3;
     private pv3;
     private foo(n);
     private foo(s);

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+const Foo = (props: any) => <div/>;
+>Foo : Symbol(Foo, Decl(file.tsx, 3, 5))
+>props : Symbol(props, Decl(file.tsx, 3, 13))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
+
+// Should be OK
+const foo = <Foo />;
+>foo : Symbol(foo, Decl(file.tsx, 5, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 3, 5))
+
+
+// Should be OK
+var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
+>MainMenu : Symbol(MainMenu, Decl(file.tsx, 9, 3))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 139, 5))
+>props : Symbol(props, Decl(file.tsx, 9, 46))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
+
+    <h3>Main Menu</h3>
+>h3 : Symbol(JSX.IntrinsicElements.h3, Decl(react.d.ts, 939, 48))
+>h3 : Symbol(JSX.IntrinsicElements.h3, Decl(react.d.ts, 939, 48))
+
+</div>);
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
+
+var App: React.StatelessComponent<{ children }> = ({children}) => (
+>App : Symbol(App, Decl(file.tsx, 13, 3))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 139, 5))
+>children : Symbol(children, Decl(file.tsx, 13, 35))
+>children : Symbol(children, Decl(file.tsx, 13, 52))
+
+    <div >
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
+
+        <MainMenu/>
+>MainMenu : Symbol(MainMenu, Decl(file.tsx, 9, 3))
+
+	</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
+
+);

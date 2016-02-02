@@ -334,12 +334,13 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                const configFilePath = toPath(configFileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                configFileWatcher = sys.watchFile(configFilePath, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
                 directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current direcotry; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
                     directory == "" ? "." : directory,
@@ -375,7 +376,7 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -442,7 +443,8 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -738,7 +740,9 @@ namespace ts {
 
             for (const name in options) {
                 if (hasProperty(options, name)) {
-                    const value = options[name];
+                    // tsconfig only options cannot be specified via command line,
+                    // so we can assume that only types that can appear here string | number | boolean
+                    const value = <string | number | boolean>options[name];
                     switch (name) {
                         case "init":
                         case "watch":

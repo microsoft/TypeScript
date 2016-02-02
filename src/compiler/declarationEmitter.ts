@@ -54,6 +54,7 @@ namespace ts {
         let writer = createAndSetNewTextWriterWithSymbolWriter();
 
         let enclosingDeclaration: Node;
+        let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
         let currentIdentifiers: Map<string>;
@@ -101,6 +102,7 @@ namespace ts {
                 });
             }
 
+            resultHasExternalModuleIndicator = false;
             if (!isBundledEmit || !isExternalModule(sourceFile)) {
                 noDeclare = false;
                 emitSourceFile(sourceFile);
@@ -138,6 +140,14 @@ namespace ts {
 
                 allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
                 moduleElementDeclarationEmitInfo = [];
+            }
+
+            if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
+                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
+                write("export {};");
+                writeLine();
             }
         });
 
@@ -501,7 +511,8 @@ namespace ts {
             }
             let count = 0;
             while (true) {
-                const name = baseName + "_" + (++count);
+                count++;
+                const name = baseName + "_" + count;
                 if (!hasProperty(currentIdentifiers, name)) {
                     return name;
                 }
@@ -626,18 +637,21 @@ namespace ts {
             }
         }
 
-        function emitClassMemberDeclarationFlags(node: Declaration) {
-            if (node.flags & NodeFlags.Private) {
+        function emitClassMemberDeclarationFlags(flags: NodeFlags) {
+            if (flags & NodeFlags.Private) {
                 write("private ");
             }
-            else if (node.flags & NodeFlags.Protected) {
+            else if (flags & NodeFlags.Protected) {
                 write("protected ");
             }
 
-            if (node.flags & NodeFlags.Static) {
+            if (flags & NodeFlags.Static) {
                 write("static ");
             }
-            if (node.flags & NodeFlags.Abstract) {
+            if (flags & NodeFlags.Readonly) {
+                write("readonly ");
+            }
+            if (flags & NodeFlags.Abstract) {
                 write("abstract ");
             }
         }
@@ -720,16 +734,25 @@ namespace ts {
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration) {
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
+            // emitExternalModuleSpecifier is usually called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
+            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
+            // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
+            // so compiler will treat them as external modules.
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
             let moduleSpecifier: Node;
             if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
                 const node = parent as ImportEqualsDeclaration;
                 moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
             }
+            else if (parent.kind === SyntaxKind.ModuleDeclaration) {
+                moduleSpecifier = (<ModuleDeclaration>parent).name;
+            }
             else {
                 const node = parent as (ImportDeclaration | ExportDeclaration);
                 moduleSpecifier = node.moduleSpecifier;
             }
+
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
@@ -783,13 +806,23 @@ namespace ts {
         function writeModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            if (node.flags & NodeFlags.Namespace) {
-                write("namespace ");
+            if (isGlobalScopeAugmentation(node)) {
+                write("global ");
             }
             else {
-                write("module ");
+                if (node.flags & NodeFlags.Namespace) {
+                    write("namespace ");
+                }
+                else {
+                    write("module ");
+                }
+                if (isExternalModuleAugmentation(node)) {
+                    emitExternalModuleSpecifier(node);
+                }
+                else {
+                    writeTextOfNode(currentText, node.name);
+                }
             }
-            writeTextOfNode(currentText, node.name);
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
@@ -1044,7 +1077,7 @@ namespace ts {
             }
 
             emitJsDocComments(node);
-            emitClassMemberDeclarationFlags(node);
+            emitClassMemberDeclarationFlags(node.flags);
             emitVariableDeclaration(<VariableDeclaration>node);
             write(";");
             writeLine();
@@ -1197,7 +1230,7 @@ namespace ts {
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
-                emitClassMemberDeclarationFlags(node);
+                emitClassMemberDeclarationFlags(node.flags | (accessors.setAccessor ? 0 : NodeFlags.Readonly));
                 writeTextOfNode(currentText, node.name);
                 if (!(node.flags & NodeFlags.Private)) {
                     accessorWithTypeAnnotation = node;
@@ -1284,7 +1317,7 @@ namespace ts {
                     emitModuleElementDeclarationFlags(node);
                 }
                 else if (node.kind === SyntaxKind.MethodDeclaration) {
-                    emitClassMemberDeclarationFlags(node);
+                    emitClassMemberDeclarationFlags(node.flags);
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
@@ -1309,20 +1342,22 @@ namespace ts {
         }
 
         function emitSignatureDeclaration(node: SignatureDeclaration) {
-            // Construct signature or constructor type write new Signature
-            if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
-                write("new ");
-            }
-            emitTypeParameters(node.typeParameters);
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+
             if (node.kind === SyntaxKind.IndexSignature) {
+                // Index signature can have readonly modifier
+                emitClassMemberDeclarationFlags(node.flags);
                 write("[");
             }
             else {
+                // Construct signature or constructor type write new Signature
+                if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
+                    write("new ");
+                }
+                emitTypeParameters(node.typeParameters);
                 write("(");
             }
-
-            const prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
 
             // Parameters
             emitCommaList(node.parameters, emitParameterDeclaration);
@@ -1534,14 +1569,6 @@ namespace ts {
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
-                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage,
-                        errorNode: bindingElement,
-                        typeName: bindingElement.name
-                    } : undefined;
-                }
 
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),

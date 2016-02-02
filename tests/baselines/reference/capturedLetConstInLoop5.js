@@ -20,7 +20,7 @@ function foo00(x) {
         var v = x;
         (function() { return x + v });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }
@@ -159,7 +159,7 @@ function foo00_c(x) {
         var v = x;
         (function() { return x + v });
         (() => x + v);
-        if (x == 1) {
+        if (x == "1") {
             return;
         }
     }
@@ -303,7 +303,7 @@ function foo00(x) {
         v = x_2;
         (function () { return x_2 + v; });
         (function () { return x_2 + v; });
-        if (x_2 == 1) {
+        if (x_2 == "1") {
             return { value: void 0 };
         }
     };
@@ -349,7 +349,7 @@ function foo2(x) {
 }
 function foo3(x) {
     var _loop_5 = function() {
-        var x_5 = void 0;
+        var x_5;
         (function () { return x_5 + v; });
         (function () { return x_5 + v; });
         if (x_5 == 1) {
@@ -398,7 +398,7 @@ function foo5(x) {
 }
 function foo6(x) {
     var _loop_8 = function() {
-        var x_8 = void 0, y = void 0;
+        var x_8, y;
         v = x_8;
         (function () { return x_8 + y + v; });
         (function () { return x_8 + y + v; });
@@ -416,7 +416,7 @@ function foo6(x) {
 }
 function foo7(x) {
     var _loop_9 = function() {
-        var x_9 = void 0, y = void 0;
+        var x_9, y;
         v = x_9;
         (function () { return x_9 + y + v; });
         (function () { return x_9 + y + v; });
@@ -471,7 +471,7 @@ function foo00_c(x) {
         v = x_12;
         (function () { return x_12 + v; });
         (function () { return x_12 + v; });
-        if (x_12 == 1) {
+        if (x_12 == "1") {
             return { value: void 0 };
         }
     };
