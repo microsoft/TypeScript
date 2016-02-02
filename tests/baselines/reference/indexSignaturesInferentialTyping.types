@@ -29,7 +29,7 @@ var x2 = foo({ zero: 0, one: 1 });
 >x2 : any
 >foo({ zero: 0, one: 1 }) : any
 >foo : <T>(items: { [index: number]: T; }) => T
->{ zero: 0, one: 1 } : { [x: number]: any; zero: number; one: number; }
+>{ zero: 0, one: 1 } : { [index: number]: any; zero: number; one: number; }
 >zero : number
 >0 : number
 >one : number

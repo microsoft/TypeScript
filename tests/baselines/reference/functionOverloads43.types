@@ -24,7 +24,7 @@ function foo([x]: { a:number | string }[]): string | number {
     }
     
     return undefined;
->undefined : undefined
+>undefined : string | number
 }
 
 var x = foo([{a: "str"}]);

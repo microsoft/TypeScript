@@ -32,7 +32,7 @@ function foo1([x]: { a:number | string }[]): Animal {
 >Animal : Animal
 
     return undefined;
->undefined : undefined
+>undefined : Animal
 }
 
 function foo2(bar: { a:number }[]): Cat;
@@ -55,7 +55,7 @@ function foo2([x]: { a:number | string }[]): Cat | Dog {
 >Dog : Dog
 
     return undefined;
->undefined : undefined
+>undefined : Cat | Dog
 }
 
 

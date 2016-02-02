@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(7,15): error TS2461: Type '{ [x: number]: any; }' is not an array type.
+tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(7,15): error TS2461: Type '{ [n: number]: any; }' is not an array type.
 
 
 ==== tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts (1 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(7,15
     
     function foo3([...r] = {}) {
                   ~~~~~~
-!!! error TS2461: Type '{ [x: number]: any; }' is not an array type.
+!!! error TS2461: Type '{ [n: number]: any; }' is not an array type.
     }
     
     function foo4([...r] = []) {

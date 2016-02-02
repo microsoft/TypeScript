@@ -8384,21 +8384,21 @@ namespace ts {
                     let result: Type;
                     if (!propTypes.length) {
                         const contextualType = getContextualType(node);
-                        if (isInferentialContext(contextualMapper) || !contextualType) {
-                            result = undefinedType;
-                        }
-                        else {
+                        if (!isInferentialContext(contextualMapper) && contextualType) {
                             const resolvedType = <ResolvedType>contextualType;
-                            // TODO: Actually need to propagate the whole info if it's present
-                            result = kind === IndexKind.String ? resolvedType.stringIndexInfo.type : resolvedType.numberIndexInfo.type;
-                            result = result || undefinedType;
+                            const indexInfo = kind === IndexKind.String ? resolvedType.stringIndexInfo : resolvedType.numberIndexInfo;
+                            if (indexInfo) {
+                                typeFlags |= resolvedType.flags;
+                                return indexInfo;
+                            }
                         }
+                        result = undefinedType;
                     }
                     else {
                         result = getUnionType(propTypes);
                     }
                     typeFlags |= result.flags;
-                    return createIndexInfo(result, /*isReadOnly*/ false);
+                    return createIndexInfo(result, /*isReadonly*/false);
                 }
                 return undefined;
             }

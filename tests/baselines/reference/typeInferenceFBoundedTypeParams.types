@@ -67,7 +67,7 @@ fold(
 
     [] as [string, string][],
 >[] as [string, string][] : [string, string][]
->[] : undefined[]
+>[] : [string, string][]
 
     (result, value) => append(
 >(result, value) => append(        result,        ["", ""]    ) : (result: [string, string][], value: number) => [string, string][]

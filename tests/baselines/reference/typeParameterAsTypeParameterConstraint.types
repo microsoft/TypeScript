@@ -109,7 +109,7 @@ foo2(1, []);
 >foo2(1, []) : any[]
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
 >1 : number
->[] : undefined[]
+>[] : any[]
 
 foo2(1, ['']);
 >foo2(1, ['']) : string[]

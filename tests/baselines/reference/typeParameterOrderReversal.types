@@ -30,7 +30,7 @@ function tFirst<T, U extends X<T>>(x: U) { }
 var z: X<number> = null;
 >z : X<number>
 >X : X<T>
->null : null
+>null : X<number>
 
 // Both of these should be allowed
 uFirst(z);
