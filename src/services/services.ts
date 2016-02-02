@@ -6863,21 +6863,58 @@ namespace ts {
                 }
             }
 
-            function classifyTokenOrJsxText(token: Node): void {
-                if (nodeIsMissing(token)) {
-                    return;
+            /**
+             * Returns true if node should be treated as classified and no further processing is required.
+             * False will mean that node is not classified and traverse routine should recurse into node contents.
+             */
+            function tryClassifyNode(node: Node): boolean {
+                if (nodeIsMissing(node)) {
+                    return true;
                 }
 
-                const tokenStart = token.kind === SyntaxKind.JsxText ? token.pos : classifyLeadingTriviaAndGetTokenStart(token);
+                const classifiedElementName = tryClassifyJsxElementName(node);
+                if (!isToken(node) && node.kind !== SyntaxKind.JsxText && classifiedElementName === undefined) {
+                    return false;
+                }
 
-                const tokenWidth = token.end - tokenStart;
+                const tokenStart = node.kind === SyntaxKind.JsxText ? node.pos : classifyLeadingTriviaAndGetTokenStart(node);
+
+                const tokenWidth = node.end - tokenStart;
                 Debug.assert(tokenWidth >= 0);
                 if (tokenWidth > 0) {
-                    const type = classifyTokenType(token.kind, token);
+                    const type = classifiedElementName || classifyTokenType(node.kind, node);
                     if (type) {
                         pushClassification(tokenStart, tokenWidth, type);
                     }
                 }
+
+                return true;
+            }
+
+            function tryClassifyJsxElementName(token: Node): ClassificationType {
+                switch (token.parent && token.parent.kind) {
+                    case SyntaxKind.JsxOpeningElement:
+                        if ((<JsxOpeningElement>token.parent).tagName === token) {
+                            return ClassificationType.jsxOpenTagName;
+                        }
+                        break;
+                    case SyntaxKind.JsxClosingElement:
+                        if ((<JsxClosingElement>token.parent).tagName === token) {
+                            return ClassificationType.jsxCloseTagName;
+                        }
+                        break;
+                    case SyntaxKind.JsxSelfClosingElement:
+                        if ((<JsxSelfClosingElement>token.parent).tagName === token) {
+                            return ClassificationType.jsxSelfClosingTagName;
+                        }
+                        break;
+                    case SyntaxKind.JsxAttribute:
+                        if ((<JsxAttribute>token.parent).name === token) {
+                            return ClassificationType.jsxAttribute;
+                        }
+                        break;
+                }
+                return undefined;
             }
 
             // for accurate classification, the actual token should be passed in.  however, for
@@ -6970,28 +7007,6 @@ namespace ts {
                                     return ClassificationType.parameterName;
                                 }
                                 return;
-
-                            case SyntaxKind.JsxOpeningElement:
-                                if ((<JsxOpeningElement>token.parent).tagName === token) {
-                                    return ClassificationType.jsxOpenTagName;
-                                }
-                                return;
-
-                            case SyntaxKind.JsxClosingElement:
-                                if ((<JsxClosingElement>token.parent).tagName === token) {
-                                    return ClassificationType.jsxCloseTagName;
-                                }
-                                return;
-
-                            case SyntaxKind.JsxSelfClosingElement:
-                                if ((<JsxSelfClosingElement>token.parent).tagName === token) {
-                                    return ClassificationType.jsxSelfClosingTagName;
-                                }
-                                return;
-                            case SyntaxKind.JsxAttribute:
-                                if ((<JsxAttribute>token.parent).name === token) {
-                                    return ClassificationType.jsxAttribute;
-                                }
                         }
                     }
                     return ClassificationType.identifier;
@@ -7010,10 +7025,7 @@ namespace ts {
                     const children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         const child = children[i];
-                        if (isToken(child) || child.kind === SyntaxKind.JsxText) {
-                            classifyTokenOrJsxText(child);
-                        }
-                        else {
+                        if (!tryClassifyNode(child)) {
                             // Recurse into our child nodes.
                             processElement(child);
                         }
