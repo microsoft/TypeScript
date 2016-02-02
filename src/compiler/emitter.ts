@@ -3162,7 +3162,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         }
                         else {
                             // top level converted loop - return unwrapped value
-                            write(`return ${loopResult}.value`);
+                            write(`return ${loopResult}.value;`);
                         }
                         writeLine();
                     }

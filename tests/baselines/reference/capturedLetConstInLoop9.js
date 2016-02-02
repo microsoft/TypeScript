@@ -225,7 +225,7 @@ function foo() {
     l0: for (var _f = 0, _g = []; _f < _g.length; _f++) {
         var a = _g[_f];
         var state_4 = _loop_3(a);
-        if (typeof state_4 === "object") return state_4.value
+        if (typeof state_4 === "object") return state_4.value;
         if (state_4 === "break") break;
         switch(state_4) {
             case "break-l0": break l0;
