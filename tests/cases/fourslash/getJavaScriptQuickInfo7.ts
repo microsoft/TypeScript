@@ -5,8 +5,9 @@
 //// /**
 ////  * This is a very cool function that is very nice.
 ////  * @returns something
+////  * @param p anotherthing
 ////  */
-//// function a1() {
+//// function a1(p) {
 //// 	try {
 //// 		throw new Error('x');
 //// 	} catch (x) { x--; }
