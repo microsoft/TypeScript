@@ -2827,7 +2827,7 @@ namespace ts {
                 }
                 // Handle module.exports = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    return links.type = checkExpression((<BinaryExpression>declaration).right);
+                    return links.type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)));
                 }
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
                     // Declarations only exist for property access expressions for certain
