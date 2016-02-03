@@ -375,7 +375,7 @@ namespace ts {
 
         return documentationComment;
 
-        function getCommentFromJsDocTag(tag: JSDocTag, rangeEnd: number, sourceFile: SourceFile) {
+        function getCommentFromJsDocTag(tag: JSDocTag, rangeEnd: number, sourceFile: SourceFile): SymbolDisplayPart {
             const text = sourceFile.text;
 
             const parts: string[] = [];
@@ -401,16 +401,17 @@ namespace ts {
                 const ch = text.charCodeAt(i);
                 if (isLineBreak(ch)) {
                     // Line break, push any non-empty content so far
-                    if (start !== -1 && start !== i) {
+                    if (start !== i) {
                         parts.push(text.substr(start, i - start));
                     }
 
-                    // Keep scanning until we hit either a a non-ws non-* char
+                    // Keep scanning until we hit either a non-ws/non-asterisk char
                     while (i < rangeEnd) {
                         i++;
                         const nextCh = text.charCodeAt(i);
                         if ((nextCh === CharacterCodes.asterisk) || (isWhiteSpace(nextCh) || isLineBreak(nextCh))) {
                             // Eat *s and whitespace
+                            continue;
                         }
                         else if (nextCh === CharacterCodes.at) {
                             // Abort, we're running into another malformed jsdoc tag
@@ -426,15 +427,14 @@ namespace ts {
                 }
             }
 
-            if (start !== -1 && start < rangeEnd) {
+            if (start < rangeEnd) {
                 parts.push(text.substr(start, rangeEnd - start));
             }
 
-            const result: SymbolDisplayPart = {
+            return {
                 kind: "documentation",
                 text: parts.join("\n")
             };
-            return result;
         }
 
         function getJsDocCommentsSeparatedByNewLines() {
@@ -453,7 +453,7 @@ namespace ts {
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            // Incoming function strips off leading /* and trailing */, so add those back (-2, +4 net)
+                            // getJsDocCommentTextRange removes leading /* and trailing */, so add those back (-2, +4 net)
                             const content = parseIsolatedJSDocComment(sourceFileOfDeclaration.text, jsDocCommentTextRange.pos - 2, jsDocCommentTextRange.end - jsDocCommentTextRange.pos + 4);
                             if (content && content.jsDocComment.tags) {
                                 const tags = content.jsDocComment.tags;
@@ -462,7 +462,6 @@ namespace ts {
                                     const tag = tags[i];
                                     if (tag.kind === SyntaxKind.JSDocParameterTag) {
                                         const tagParamName = (tag as JSDocParameterTag).preParameterName || (tag as JSDocParameterTag).postParameterName;
-                                        // -2 because we don't want to see the trailing */
                                         const nextTagStart = (i === tags.length - 1) ? jsDocCommentTextRange.end : tags[i + 1].pos;
                                         if (tagParamName && tagParamName.text === name) {
                                             const comment = getCommentFromJsDocTag(tag, nextTagStart, sourceFileOfDeclaration);
