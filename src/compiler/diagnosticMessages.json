@@ -1823,6 +1823,22 @@
         "category": "Error",
         "code": 2671
     },
+    "Cannot assign a '{0}' constructor type to a '{1}' constructor type.": {
+        "category": "Error",
+        "code": 2672
+    },
+    "Constructor of type '{0}' is private and only accessible within class '{1}'.": {
+        "category": "Error",
+        "code": 2673
+    },
+    "Constructor of type '{0}' is protected and only accessible within class '{1}'.": {
+        "category": "Error",
+        "code": 2674
+    },
+    "Cannot extend private class '{0}'.": {
+        "category": "Error",
+        "code": 2675
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
