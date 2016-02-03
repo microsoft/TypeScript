@@ -459,7 +459,6 @@ namespace ts {
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
 
-
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -2088,6 +2087,7 @@ namespace ts {
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
+        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
     }
 

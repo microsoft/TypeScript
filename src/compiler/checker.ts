@@ -7284,8 +7284,11 @@ namespace ts {
          */
         function getSuperCallInConstructor(constructor: ConstructorDeclaration): ExpressionStatement {
             const links = getNodeLinks(constructor);
-            if (!links.superCall) {
+
+            // Only trying to find super-call if we haven't yet tried to find one.  Once we try, we will record the result
+            if (links.hasSuperCall === undefined) {
                 links.superCall = <ExpressionStatement>findFirstSuperCall(constructor.body);
+                links.hasSuperCall = links.superCall ? true : false;
             }
             return links.superCall;
         }
