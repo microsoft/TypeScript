@@ -63,7 +63,7 @@ namespace ts {
         useCaseSensitiveFileNames?: boolean;
         echo(s: string): void;
         quit(exitCode?: number): void;
-        fileExists: (path: string) => boolean;
+        fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
         createDirectory(path: string): void;
         resolvePath(path: string): string;

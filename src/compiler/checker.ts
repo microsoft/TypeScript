@@ -4115,7 +4115,7 @@ namespace ts {
                     else {
                         parameters.push(paramSymbol);
                     }
-                    
+
                     if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
                         hasStringLiterals = true;
                     }

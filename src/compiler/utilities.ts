@@ -32,11 +32,11 @@ namespace ts {
     }
 
     export interface EmitHost extends ScriptReferenceHost {
-        getSourceFiles: () => SourceFile[];
+        getSourceFiles(): SourceFile[];
 
-        getCommonSourceDirectory: () => string;
-        getCanonicalFileName: (fileName: string) => string;
-        getNewLine: () => string;
+        getCommonSourceDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        getNewLine(): string;
 
         isEmitBlocked(emitFileName: string): boolean;
 
@@ -1869,11 +1869,11 @@ namespace ts {
     }
 
     export interface EmitTextWriter {
-        write: (s: string) => void;
-        writeTextOfNode: (text: string, node: Node) => void;
-        writeLine: () => void;
-        increaseIndent: () => void;
-        decreaseIndent: () => void;
+        write(s: string): void;
+        writeTextOfNode(text: string, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
@@ -2490,7 +2490,7 @@ namespace ts {
      * as the fallback implementation does not check for circular references by default.
      */
     export const stringify: (value: any) => string = typeof JSON !== "undefined" && JSON.stringify
-        ? <any>JSON.stringify
+        ? JSON.stringify
         : stringifyFallback;
 
     /**

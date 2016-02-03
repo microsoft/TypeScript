@@ -68,7 +68,7 @@ interface BufferConstructor {
     new (array: any[]): Buffer;
     prototype: Buffer;
     isBuffer(obj: any): boolean;
-    byteLength: (string: string, encoding?: string) => number;
+    byteLength(string: string, encoding?: string): number;
     concat(list: Buffer[], totalLength?: number): Buffer;
 }
 declare var Buffer: BufferConstructor;
@@ -190,7 +190,7 @@ declare namespace NodeJS {
         nextTick(callback: Function): void;
         umask(mask?: number): number;
         uptime(): number;
-        hrtime: (time?: number[]) => number[];
+        hrtime(time?: number[]): number[];
 
         // Worker
         send? (message: any, sendHandle?: any): void;

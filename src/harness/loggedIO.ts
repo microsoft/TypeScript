@@ -70,11 +70,11 @@ interface IOLog {
 
 interface PlaybackControl {
     startReplayFromFile(logFileName: string): void;
-    startReplayFromString(this: PlaybackControl, logContents: string): void;
-    startReplayFromData(this: PlaybackControl, log: IOLog): void;
+    startReplayFromString(logContents: string): void;
+    startReplayFromData(log: IOLog): void;
     endReplay(): void;
     startRecord(logFileName: string): void;
-    endRecord(this: PlaybackControl): void;
+    endRecord(): void;
 }
 
 namespace Playback {
@@ -127,8 +127,6 @@ namespace Playback {
     function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
-        // TODO: Define a common interface over ts.System | Harness.IO and stop passing a union type.
-        const underlyingShim: any = underlying;
         ts.forEach(Object.keys(underlying), prop => {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
@@ -156,20 +154,20 @@ namespace Playback {
         };
 
         wrapper.startReplayFromFile = logFn => {
-            wrapper.startReplayFromString(underlyingShim.readFile(logFn));
+            wrapper.startReplayFromString(underlying.readFile(logFn));
         };
         wrapper.endRecord = () => {
             if (recordLog !== undefined) {
                 let i = 0;
                 const fn = () => recordLogFileNameBase + i + ".json";
-                while (underlyingShim.fileExists(fn())) i++;
-                underlyingShim.writeFile(fn(), JSON.stringify(recordLog));
+                while (underlying.fileExists(fn())) i++;
+                underlying.writeFile(fn(), JSON.stringify(recordLog));
                 recordLog = undefined;
             }
         };
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
-            path => callAndRecord(underlyingShim.fileExists(path), recordLog.fileExists, { path }),
+            path => callAndRecord(underlying.fileExists(path), recordLog.fileExists, { path }),
             memoize(path => {
                 // If we read from the file, it must exist
                 if (findResultByPath(wrapper, replayLog.filesRead, path, null) !== null) {
@@ -186,10 +184,10 @@ namespace Playback {
                 return replayLog.executingPath;
             }
             else if (recordLog !== undefined) {
-                return recordLog.executingPath = underlyingShim.getExecutingFilePath();
+                return recordLog.executingPath = underlying.getExecutingFilePath();
             }
             else {
-                return underlyingShim.getExecutingFilePath();
+                return underlying.getExecutingFilePath();
             }
         };
 
@@ -198,20 +196,20 @@ namespace Playback {
                 return replayLog.currentDirectory || "";
             }
             else if (recordLog !== undefined) {
-                return recordLog.currentDirectory = underlyingShim.getCurrentDirectory();
+                return recordLog.currentDirectory = underlying.getCurrentDirectory();
             }
             else {
-                return underlyingShim.getCurrentDirectory();
+                return underlying.getCurrentDirectory();
             }
         };
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
-            path => callAndRecord(underlyingShim.resolvePath(path), recordLog.pathsResolved, { path }),
+            path => callAndRecord(underlying.resolvePath(path), recordLog.pathsResolved, { path }),
             memoize(path => findResultByFields(replayLog.pathsResolved, { path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog.currentDirectory ? replayLog.currentDirectory + "/" + path : ts.normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
             path => {
-                const result = underlyingShim.readFile(path);
+                const result = underlying.readFile(path);
                 const logEntry = { path, codepage: 0, result: { contents: result, codepage: 0 } };
                 recordLog.filesRead.push(logEntry);
                 return result;
@@ -228,14 +226,14 @@ namespace Playback {
             (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead.filter(d => d.extension === extension && ts.arrayIsEqualTo(d.exclude, exclude)), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
-            (path: string, contents: string) => callAndRecord(underlyingShim.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
+            (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
             (path: string, contents: string) => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {
                 wrapper.endRecord();
             }
-            underlyingShim.exit(exitCode);
+            underlying.exit(exitCode);
         };
     }
 

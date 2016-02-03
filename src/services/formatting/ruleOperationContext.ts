@@ -6,8 +6,8 @@ namespace ts.formatting {
     export class RuleOperationContext {
         private customContextChecks: { (context: FormattingContext): boolean; }[];
         
-        constructor(...funcs: { (this: typeof Rules, context: FormattingContext): boolean; }[]) {
-            this.customContextChecks = <{ (this: any, context: FormattingContext): boolean }[]>funcs;
+        constructor(...funcs: { (context: FormattingContext): boolean; }[]) {
+            this.customContextChecks = funcs;
         }
 
         static Any: RuleOperationContext = new RuleOperationContext();

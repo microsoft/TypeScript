@@ -19,15 +19,15 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        getStart(this: Node, sourceFile?: SourceFile): number;
+        getStart(sourceFile?: SourceFile): number;
         getFullStart(): number;
-        getEnd(this: Node): number;
+        getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
         getFullWidth(): number;
         getLeadingTriviaWidth(sourceFile?: SourceFile): number;
         getFullText(sourceFile?: SourceFile): string;
         getText(sourceFile?: SourceFile): string;
-        getFirstToken(this: Node, sourceFile?: SourceFile): Node;
+        getFirstToken(sourceFile?: SourceFile): Node;
         getLastToken(sourceFile?: SourceFile): Node;
     }
 
