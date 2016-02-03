@@ -2464,9 +2464,9 @@ namespace ts {
             }
             if (token === SyntaxKind.OpenBracketToken || token === SyntaxKind.OpenBraceToken) {
                 // Return true if we can parse an array or object binding pattern with no errors
-                const count = parseDiagnostics.length;
+                const previousErrorCount = parseDiagnostics.length;
                 parseIdentifierOrPattern();
-                return count === parseDiagnostics.length;
+                return previousErrorCount === parseDiagnostics.length;
             }
             return false;
         }
@@ -2492,7 +2492,7 @@ namespace ts {
                 if (token === SyntaxKind.CloseParenToken) {
                     nextToken();
                     if (token === SyntaxKind.EqualsGreaterThanToken) {
-                        // ( id ) =>
+                        // ( xxx ) =>
                         return true;
                     }
                 }
