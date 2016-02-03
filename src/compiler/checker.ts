@@ -7266,28 +7266,28 @@ namespace ts {
             return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
         }
 
+        function findFirstSuperCall(n: Node): Node {
+            if (isSuperCallExpression(n)) {
+                return n;
+            }
+            else if (isFunctionLike(n)) {
+                return undefined;
+            }
+            return forEachChild(n, findFirstSuperCall);
+        }
+
         /**
          * Return a cached result if super-statement is already found.
          * Otherwise, find a super statement in a given constructor function and cache the result in the node-links of the constructor
          *
          * @param constructor constructor-function to look for super statement
          */
-        function getSuperStatementInConstructor(constructor: ConstructorDeclaration): ExpressionStatement {
-            function getContainingSuperCall(n: Node): Node {
-                if (isSuperCallExpression(n)) {
-                    return n;
-                }
-                else if (isFunctionLike(n)) {
-                    return undefined;
-                }
-                return forEachChild(n, getContainingSuperCall);
-            }
-
+        function getSuperCallInConstructor(constructor: ConstructorDeclaration): ExpressionStatement {
             const links = getNodeLinks(constructor);
-            if (!links.superStatement) {
-                links.superStatement = <ExpressionStatement>getContainingSuperCall(constructor.body);
+            if (!links.superCall) {
+                links.superCall = <ExpressionStatement>findFirstSuperCall(constructor.body);
             }
-            return links.superStatement;
+            return links.superCall;
         }
 
         /**
@@ -7316,8 +7316,16 @@ namespace ts {
                 // If a containing class does not have extends clause or the class extends null
                 // skip checking whether super statement is called before "this" accessing.
                 if (baseTypeNode && !isClassDeclarationExtendNull(containingClassDecl)) {
-                    const superStatement = getSuperStatementInConstructor(<ConstructorDeclaration>container);
-                    if (!superStatement || (superStatement && superStatement.pos > node.pos || superStatement.end > node.pos)) {
+                    const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
+
+                    // We should give an error in the following cases:
+                    //      - No super-call
+                    //      - "this" is accessing before super-call.
+                    //          i.e super(this)
+                    //              this.x; super();
+                    // We want to make sure that super-call is done before accessing "this" so that
+                    // "this" is not accessed as a parameter of the super-call.
+                    if (!superCall || superCall.end > node.pos) {
                         // In ES6, super inside constructor of class-declaration has to precede "this" accessing
                         error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
@@ -11833,7 +11841,7 @@ namespace ts {
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
                 const isClassExtendNull = isClassDeclarationExtendNull(containingClassDecl);
 
-                if (getSuperStatementInConstructor(node)) {
+                if (getSuperCallInConstructor(node)) {
                     if (isClassExtendNull) {
                         error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
