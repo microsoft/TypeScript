@@ -1216,18 +1216,19 @@ namespace ts {
             }
 
             // Also recognize when the node is the RHS of an assignment expression
+            const parent = node.parent;
             const isSourceOfAssignmentExpressionStatement =
-                node.parent && node.parent.parent &&
-                node.parent.kind === SyntaxKind.BinaryExpression &&
-                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+                parent && parent.parent &&
+                parent.kind === SyntaxKind.BinaryExpression &&
+                (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                return node.parent.parent.jsDocComment;
+                return parent.parent.jsDocComment;
             }
 
-            const isPropertyAssignmentExpression = node.parent && node.parent.kind === SyntaxKind.PropertyAssignment;
+            const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                return node.parent.jsDocComment;
+                return parent.jsDocComment;
             }
         }
 
