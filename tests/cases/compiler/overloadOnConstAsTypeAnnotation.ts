@@ -1,3 +1,3 @@
 // @allowUnreachableCode: true
 
-var f: (x: 'hi') => number = ('hi') => { return 1; };
+var f: (x: 'hi') => number = (x: 'hi') => { return 1; };

@@ -459,6 +459,449 @@ import b = require("./moduleB.ts");
         })
     });
 
+    describe("baseUrl augmented module resolution", () => {
+
+        it("module resolution without path mappings/rootDirs", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const file1: File = { name: "/root/folder1/file1.ts" };
+                const file2: File = { name: "/root/folder2/file2.ts" };
+                const file3: File = { name: "/root/folder2/file3.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3);
+                for (const moduleResolution of [ ModuleResolutionKind.NodeJs, ModuleResolutionKind.Classic ]) {
+                    const options: CompilerOptions = { moduleResolution, baseUrl: "/root" };
+                    {
+                        const result = resolveModuleName("folder2/file2", file1.name, options, host);
+                        assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                        assert.equal(result.resolvedModule.resolvedFileName, file2.name);
+                        assert.deepEqual(result.failedLookupLocations, []);
+                    }
+                    {
+                        const result = resolveModuleName("./file3", file2.name, options, host);
+                        assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                        assert.equal(result.resolvedModule.resolvedFileName, file3.name);
+                        assert.deepEqual(result.failedLookupLocations, []);
+                    }
+                    {
+                        const result = resolveModuleName("/root/folder1/file1", file2.name, options, host);
+                        assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                        assert.equal(result.resolvedModule.resolvedFileName, file1.name);
+                        assert.deepEqual(result.failedLookupLocations, []);
+                    }
+                }
+            }
+            // add failure tests
+        });
+        
+        it("node + baseUrl", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const main: File = { name: "/root/a/b/main.ts" };
+                const m1: File = { name: "/root/m1.ts" }; // load file as module
+                const m2: File = { name: "/root/m2/index.d.ts" }; // load folder as module
+                const m3: File = { name: "/root/m3/package.json", content: JSON.stringify({ typings: "dist/typings.d.ts" }) };
+                const m3Typings: File = { name: "/root/m3/dist/typings.d.ts" }; 
+                const m4: File = { name: "/root/node_modules/m4.ts" }; // fallback to node
+
+                const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs, baseUrl: "/root" };
+                const host = createModuleResolutionHost(hasDirectoryExists, main, m1, m2, m3, m3Typings, m4);
+
+                check("m1", main, m1);
+                check("m2", main, m2);
+                check("m3", main, m3Typings);
+                check("m4", main, m4);
+                
+                function check(name: string, caller: File, expected: File) {
+                    const result = resolveModuleName(name, caller.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined);
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                }
+            } 
+        });
+
+        it("classic + baseUrl", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const main: File = { name: "/root/a/b/main.ts" };
+                const m1: File = { name: "/root/x/m1.ts" }; // load from base url
+                const m2: File = { name: "/m2.ts" }; // fallback to classic
+
+                const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.Classic, baseUrl: "/root/x", jsx: JsxEmit.React };
+                const host = createModuleResolutionHost(hasDirectoryExists, main, m1, m2);
+
+                check("m1", main, m1);
+                check("m2", main, m2);
+                
+                function check(name: string, caller: File, expected: File) {
+                    const result = resolveModuleName(name, caller.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined);
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                }
+            } 
+        })
+
+        it("node + baseUrl + path mappings", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const main: File = { name: "/root/folder1/main.ts" };
+                 
+                const file1: File = { name: "/root/folder1/file1.ts" };
+                const file2: File = { name: "/root/generated/folder1/file2.ts" } // load remapped file as module
+                const file3: File = { name: "/root/generated/folder2/file3/index.d.ts" } // load folder a module
+                const file4Typings: File = { name: "/root/generated/folder2/file4/package.json", content: JSON.stringify({ typings: "dist/types.d.ts" })};
+                const file4: File = { name: "/root/generated/folder2/file4/dist/types.d.ts" }; // load file pointed by typings
+                const file5: File = { name: "/root/someanotherfolder/file5/index.d.ts" } // load remapped module from folder
+                const file6: File = { name: "/root/node_modules/file6.ts" }; // fallback to node
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3, file4, file4Typings, file5, file6);
+                
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    baseUrl: "/root",
+                    jsx: JsxEmit.React,
+                    paths: {
+                        "*": [
+                            "*",
+                            "generated/*"
+                        ],
+                        "somefolder/*": [
+                            "someanotherfolder/*"
+                        ]
+                    }
+                };
+                check("folder1/file1", file1, []);
+                check("folder1/file2", file2, [
+                    // first try the '*'
+                    "/root/folder1/file2.ts",
+                    "/root/folder1/file2.tsx",
+                    "/root/folder1/file2.d.ts",
+                    "/root/folder1/file2/package.json",
+                    "/root/folder1/file2/index.ts",
+                    "/root/folder1/file2/index.tsx",
+                    "/root/folder1/file2/index.d.ts"
+                    // then first attempt on 'generated/*' was successful
+                ]);
+                check("folder2/file3", file3, [
+                    // first try '*'
+                    "/root/folder2/file3.ts",
+                    "/root/folder2/file3.tsx",
+                    "/root/folder2/file3.d.ts",
+                    "/root/folder2/file3/package.json",
+                    "/root/folder2/file3/index.ts",
+                    "/root/folder2/file3/index.tsx",
+                    "/root/folder2/file3/index.d.ts",
+                    // then use remapped location
+                    "/root/generated/folder2/file3.ts",
+                    "/root/generated/folder2/file3.tsx",
+                    "/root/generated/folder2/file3.d.ts",
+                    "/root/generated/folder2/file3/package.json",
+                    "/root/generated/folder2/file3/index.ts",
+                    "/root/generated/folder2/file3/index.tsx",
+                    // success on index.d.ts
+                ]);
+                check("folder2/file4", file4, [
+                    // first try '*'
+                    "/root/folder2/file4.ts",
+                    "/root/folder2/file4.tsx",
+                    "/root/folder2/file4.d.ts",
+                    "/root/folder2/file4/package.json",
+                    "/root/folder2/file4/index.ts",
+                    "/root/folder2/file4/index.tsx",
+                    "/root/folder2/file4/index.d.ts",
+                    // try to load from file from remapped location
+                    "/root/generated/folder2/file4.ts",
+                    "/root/generated/folder2/file4.tsx",
+                    "/root/generated/folder2/file4.d.ts"
+                    // success on loading as from folder
+                ]);
+                check("somefolder/file5", file5, [
+                    // load from remapped location
+                    // first load from fle
+                    "/root/someanotherfolder/file5.ts",
+                    "/root/someanotherfolder/file5.tsx",
+                    "/root/someanotherfolder/file5.d.ts",
+                    // load from folder
+                    "/root/someanotherfolder/file5/package.json",
+                    "/root/someanotherfolder/file5/index.ts",
+                    "/root/someanotherfolder/file5/index.tsx",
+                    // success on index.d.ts
+                ]);
+                check("file6", file6, [
+                    // first try *
+                    // load from file
+                    "/root/file6.ts",
+                    "/root/file6.tsx",
+                    "/root/file6.d.ts",
+                    // load from folder
+                    "/root/file6/package.json",
+                    "/root/file6/index.ts",
+                    "/root/file6/index.tsx",
+                    "/root/file6/index.d.ts",
+                    // then try 'generated/*'
+                    // load from file
+                    "/root/generated/file6.ts",
+                    "/root/generated/file6.tsx",
+                    "/root/generated/file6.d.ts",
+                    // load from folder
+                    "/root/generated/file6/package.json",
+                    "/root/generated/file6/index.ts",
+                    "/root/generated/file6/index.tsx",
+                    "/root/generated/file6/index.d.ts",
+                    // fallback to standard node behavior
+                    // load from file
+                    "/root/folder1/node_modules/file6.ts",
+                    "/root/folder1/node_modules/file6.tsx",
+                    "/root/folder1/node_modules/file6.d.ts",
+                    // load from folder
+                    "/root/folder1/node_modules/file6/package.json",
+                    "/root/folder1/node_modules/file6/index.ts",
+                    "/root/folder1/node_modules/file6/index.tsx",
+                    "/root/folder1/node_modules/file6/index.d.ts",
+                    // success on /root/node_modules/file6.ts
+                ]);
+
+                function check(name: string, expected: File, expectedFailedLookups: string[]) {
+                    const result = resolveModuleName(name, main.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                    assert.deepEqual(result.failedLookupLocations, expectedFailedLookups);
+                }
+            }
+        });
+
+        it ("classic + baseUrl + path mappings", () => {
+            // classic mode does not use directoryExists
+            test(/*hasDirectoryExists*/ false);
+
+            function test(hasDirectoryExists: boolean) {
+                const main: File = { name: "/root/folder1/main.ts" };
+                 
+                const file1: File = { name: "/root/folder1/file1.ts" };
+                const file2: File = { name: "/root/generated/folder1/file2.ts" };
+                const file3: File = { name: "/folder1/file3.ts" }; // fallback to classic
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3);
+                
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.Classic,
+                    baseUrl: "/root",
+                    jsx: JsxEmit.React,
+                    paths: {
+                        "*": [
+                            "*",
+                            "generated/*"
+                        ],
+                        "somefolder/*": [
+                            "someanotherfolder/*"
+                        ]
+                    }
+                };
+                check("folder1/file1", file1, []);
+                check("folder1/file2", file2, [
+                    // first try '*'
+                    "/root/folder1/file2.ts",
+                    "/root/folder1/file2.tsx",
+                    "/root/folder1/file2.d.ts",
+                    // success when using 'generated/*'
+                ]);
+                check("folder1/file3", file3, [
+                    // first try '*'
+                    "/root/folder1/file3.ts",
+                    "/root/folder1/file3.tsx",
+                    "/root/folder1/file3.d.ts",
+                    // then try 'generated/*'
+                    "/root/generated/folder1/file3.ts",
+                    "/root/generated/folder1/file3.tsx",
+                    "/root/generated/folder1/file3.d.ts",
+                    // fallback to classic
+                    "/root/folder1/folder1/file3.ts",
+                    "/root/folder1/folder1/file3.tsx",
+                    "/root/folder1/folder1/file3.d.ts",
+                    "/root/folder1/file3.ts",
+                    "/root/folder1/file3.tsx",
+                    "/root/folder1/file3.d.ts",
+                ]);
+
+                function check(name: string, expected: File, expectedFailedLookups: string[]) {
+                    const result = resolveModuleName(name, main.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                    assert.deepEqual(result.failedLookupLocations, expectedFailedLookups);
+                }
+            }
+        })
+
+        it ("node + rootDirs", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let file1: File = { name: "/root/folder1/file1.ts" };
+                let file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" };
+                let file2: File = { name: "/root/generated/folder1/file2.ts" };
+                let file3: File = { name: "/root/generated/folder2/file3.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file1_1, file2, file3);
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.NodeJs,
+                    rootDirs: [
+                        "/root",
+                        "/root/generated/"
+                    ]
+                };
+                check("./file2", file1, file2, [
+                    // first try current location
+                    // load from file
+                    "/root/folder1/file2.ts",
+                    "/root/folder1/file2.tsx",
+                    "/root/folder1/file2.d.ts",
+                    // load from folder
+                    "/root/folder1/file2/package.json",
+                    "/root/folder1/file2/index.ts",
+                    "/root/folder1/file2/index.tsx",
+                    "/root/folder1/file2/index.d.ts",
+                    // success after using alternative rootDir entry
+                ]);
+                check("../folder1/file1", file3, file1, [
+                    // first try current location
+                    // load from file
+                    "/root/generated/folder1/file1.ts",
+                    "/root/generated/folder1/file1.tsx",
+                    "/root/generated/folder1/file1.d.ts",
+                    // load from module
+                    "/root/generated/folder1/file1/package.json",
+                    "/root/generated/folder1/file1/index.ts",
+                    "/root/generated/folder1/file1/index.tsx",
+                    "/root/generated/folder1/file1/index.d.ts",
+                    // success after using alternative rootDir entry
+                ]);
+                check("../folder1/file1_1", file3, file1_1, [
+                    // first try current location
+                    // load from file
+                    "/root/generated/folder1/file1_1.ts",
+                    "/root/generated/folder1/file1_1.tsx",
+                    "/root/generated/folder1/file1_1.d.ts",
+                    // load from folder
+                    "/root/generated/folder1/file1_1/package.json",
+                    "/root/generated/folder1/file1_1/index.ts",
+                    "/root/generated/folder1/file1_1/index.tsx",
+                    "/root/generated/folder1/file1_1/index.d.ts",
+                    // try alternative rootDir entry
+                    // load from file
+                    "/root/folder1/file1_1.ts",
+                    "/root/folder1/file1_1.tsx",
+                    "/root/folder1/file1_1.d.ts",
+                    // load from directory
+                    "/root/folder1/file1_1/package.json",
+                    "/root/folder1/file1_1/index.ts",
+                    "/root/folder1/file1_1/index.tsx",
+                    // success on loading '/root/folder1/file1_1/index.d.ts'
+                ]);
+
+                function check(name: string, container: File, expected: File, expectedFailedLookups: string[]) {
+                    const result = resolveModuleName(name, container.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                    assert.deepEqual(result.failedLookupLocations,expectedFailedLookups);
+                }
+            }
+        });
+
+        it ("classic + rootDirs", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let file1: File = { name: "/root/folder1/file1.ts" };
+                let file2: File = { name: "/root/generated/folder1/file2.ts" };
+                let file3: File = { name: "/root/generated/folder2/file3.ts" };
+                let file4: File = { name: "/folder1/file1_1.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3, file4);
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.Classic,
+                    jsx: JsxEmit.React,
+                    rootDirs: [
+                        "/root",
+                        "/root/generated/"
+                    ]
+                };
+                check("./file2", file1, file2, [
+                    // first load from current location
+                    "/root/folder1/file2.ts",
+                    "/root/folder1/file2.tsx",
+                    "/root/folder1/file2.d.ts",
+                    // then try alternative rootDir entry
+                ]);
+                check("../folder1/file1", file3, file1, [
+                    // first load from current location
+                    "/root/generated/folder1/file1.ts",
+                    "/root/generated/folder1/file1.tsx",
+                    "/root/generated/folder1/file1.d.ts",
+                    // then try alternative rootDir entry
+                ]);
+                check("../folder1/file1_1", file3, file4, [
+                    // load from initial location
+                    "/root/generated/folder1/file1_1.ts",
+                    "/root/generated/folder1/file1_1.tsx",
+                    "/root/generated/folder1/file1_1.d.ts",
+                    // load from alternative rootDir entry
+                    "/root/folder1/file1_1.ts",
+                    "/root/folder1/file1_1.tsx",
+                    "/root/folder1/file1_1.d.ts",
+                    // fallback to classic
+                    // step1: initial location 
+                    "/root/generated/folder1/file1_1.ts",
+                    "/root/generated/folder1/file1_1.tsx",
+                    "/root/generated/folder1/file1_1.d.ts",
+                    // step2: walk 1 level up
+                    "/root/folder1/file1_1.ts",
+                    "/root/folder1/file1_1.tsx",
+                    "/root/folder1/file1_1.d.ts",
+                ]);
+
+                function check(name: string, container: File, expected: File, expectedFailedLookups: string[]) {
+                    const result = resolveModuleName(name, container.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, expected.name);
+                    assert.deepEqual(result.failedLookupLocations,expectedFailedLookups);
+                }
+            }
+        });
+
+        it ("nested node module", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const app: File = { name: "/root/src/app.ts" }
+                const libsPackage: File = { name: "/root/src/libs/guid/package.json", content: JSON.stringify({ typings: "dist/guid.d.ts" }) };
+                const libsTypings: File = { name: "/root/src/libs/guid/dist/guid.d.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, app, libsPackage, libsTypings);
+                const options: CompilerOptions = { 
+                    moduleResolution: ModuleResolutionKind.NodeJs, 
+                    baseUrl: "/root",
+                    paths: {
+                        "libs/guid": [ "src/libs/guid" ]
+                    }
+                 };
+                const result = resolveModuleName("libs/guid", app.name, options, host);
+                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                assert.equal(result.resolvedModule.resolvedFileName, libsTypings.name);
+                assert.deepEqual(result.failedLookupLocations, [
+                    // first try to load module as file
+                    "/root/src/libs/guid.ts",
+                    "/root/src/libs/guid.tsx",
+                    "/root/src/libs/guid.d.ts",
+                ]);
+            }
+        })
+    });
+
     function notImplemented(name: string): () => any {
         return () => assert(`${name} is not implemented and should not be called`);
     }

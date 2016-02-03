@@ -225,7 +225,7 @@ function foo2(x) {
 }
 function foo3(x) {
     var _loop_5 = function() {
-        var x_4 = void 0;
+        var x_4;
         var a = arguments_5.length;
         (function () { return x_4 + a; });
         (function () { return x_4 + a; });
@@ -260,7 +260,7 @@ function foo5(x) {
 }
 function foo6(x) {
     var _loop_8 = function() {
-        var x_7 = void 0, y = void 0;
+        var x_7, y;
         var a = arguments_8.length;
         (function () { return x_7 + y + a; });
         (function () { return x_7 + y + a; });
@@ -272,7 +272,7 @@ function foo6(x) {
 }
 function foo7(x) {
     var _loop_9 = function() {
-        var x_8 = void 0, y = void 0;
+        var x_8, y;
         var a = arguments_9.length;
         (function () { return x_8 + y + a; });
         (function () { return x_8 + y + a; });

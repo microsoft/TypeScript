@@ -121,26 +121,26 @@ namespace ts {
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);
-        return (node.parserContextFlags & ParserContextFlags.ThisNodeOrAnySubNodesHasError) !== 0;
+        return (node.flags & NodeFlags.ThisNodeOrAnySubNodesHasError) !== 0;
     }
 
     function aggregateChildData(node: Node): void {
-        if (!(node.parserContextFlags & ParserContextFlags.HasAggregatedChildData)) {
+        if (!(node.flags & NodeFlags.HasAggregatedChildData)) {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            const thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
+            const thisNodeOrAnySubNodesHasError = ((node.flags & NodeFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
-                node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
+                node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propogated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.parserContextFlags |= ParserContextFlags.HasAggregatedChildData;
+            node.flags |= NodeFlags.HasAggregatedChildData;
         }
     }
 
@@ -149,6 +149,18 @@ namespace ts {
             node = node.parent;
         }
         return <SourceFile>node;
+    }
+
+    export function isStatementWithLocals(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+                return true;
+        }
+        return false;
     }
 
     export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
@@ -254,6 +266,13 @@ namespace ts {
     export function isAmbientModule(node: Node): boolean {
         return node && node.kind === SyntaxKind.ModuleDeclaration &&
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
+    }
+
+    export function isBlockScopedContainerTopLevel(node: Node): boolean {
+        return node.kind === SyntaxKind.SourceFile ||
+            node.kind === SyntaxKind.ModuleDeclaration ||
+            isFunctionLike(node) ||
+            isFunctionBlock(node);
     }
 
     export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
@@ -395,7 +414,7 @@ namespace ts {
     }
 
     export function isDeclarationFile(file: SourceFile): boolean {
-        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+        return file.isDeclarationFile;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -850,6 +869,16 @@ namespace ts {
         }
     }
 
+    /**
+     * Determines whether a node is a property or element access expression for super.
+     */
+    export function isSuperPropertyOrElementAccess(node: Node) {
+        return (node.kind === SyntaxKind.PropertyAccessExpression
+            || node.kind === SyntaxKind.ElementAccessExpression)
+            && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+    }
+
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
         if (node) {
             switch (node.kind) {
@@ -1049,7 +1078,7 @@ namespace ts {
     }
 
     export function isInJavaScriptFile(node: Node): boolean {
-        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+        return node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
     /**
@@ -1057,12 +1086,14 @@ namespace ts {
      * exactly one argument.
      * This function does not test if the node is in a JavaScript file or not.
     */
-    export function isRequireCall(expression: Node): expression is CallExpression {
+    export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
         // of the form 'require("name")'
-        return expression.kind === SyntaxKind.CallExpression &&
-                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1;
+        const isRequire = expression.kind === SyntaxKind.CallExpression &&
+            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+            (<CallExpression>expression).arguments.length === 1;
+
+        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
     }
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
@@ -1176,7 +1207,19 @@ namespace ts {
                 node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
 
             const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
-            return variableStatementNode && variableStatementNode.jsDocComment;
+            if (variableStatementNode) {
+                return variableStatementNode.jsDocComment;
+            }
+
+            // Also recognize when the node is the RHS of an assignment expression
+            const isSourceOfAssignmentExpressionStatement =
+                node.parent && node.parent.parent &&
+                node.parent.kind === SyntaxKind.BinaryExpression &&
+                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+            if (isSourceOfAssignmentExpressionStatement) {
+                return node.parent.parent.jsDocComment;
+            }
         }
 
         return undefined;
@@ -1223,7 +1266,7 @@ namespace ts {
 
     export function isRestParameter(node: ParameterDeclaration) {
         if (node) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
                     return true;
                 }
@@ -1266,10 +1309,9 @@ namespace ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
+            if (node.flags & NodeFlags.Ambient || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
                 return true;
             }
-
             node = node.parent;
         }
         return false;
@@ -1582,6 +1624,7 @@ namespace ts {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
                 return true;
         }
@@ -2313,6 +2356,7 @@ namespace ts {
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
             case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
+            case SyntaxKind.ReadonlyKeyword: return NodeFlags.Readonly;
         }
         return 0;
     }
