@@ -1,4 +1,6 @@
-﻿class Base {
+﻿declare var Factory: any
+
+class Base {
     constructor(c) { }
 }
 class D extends Base {

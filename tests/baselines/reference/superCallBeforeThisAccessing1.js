@@ -1,4 +1,6 @@
 //// [superCallBeforeThisAccessing1.ts]
+declare var Factory: any
+
 class Base {
     constructor(c) { }
 }
