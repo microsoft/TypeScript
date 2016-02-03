@@ -2450,8 +2450,25 @@ namespace ts {
             if (token === SyntaxKind.LessThanToken) {
                 return true;
             }
-
             return token === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType);
+        }
+
+        function skipParameterStart(): boolean {
+            if (isModifierKind(token)) {
+                // Skip modifiers
+                parseModifiers();
+            }
+            if (isIdentifier()) {
+                nextToken();
+                return true;
+            }
+            if (token === SyntaxKind.OpenBracketToken || token === SyntaxKind.OpenBraceToken) {
+                // Return true if we can parse an array or object binding pattern with no errors
+                const previousErrorCount = parseDiagnostics.length;
+                parseIdentifierOrPattern();
+                return previousErrorCount === parseDiagnostics.length;
+            }
+            return false;
         }
 
         function isUnambiguouslyStartOfFunctionType() {
@@ -2461,22 +2478,21 @@ namespace ts {
                 // ( ...
                 return true;
             }
-            if (isIdentifier() || isModifierKind(token)) {
-                nextToken();
+            if (skipParameterStart()) {
+                // We successfully skipped modifiers (if any) and an identifier or binding pattern,
+                // now see if we have something that indicates a parameter declaration
                 if (token === SyntaxKind.ColonToken || token === SyntaxKind.CommaToken ||
-                    token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken ||
-                    isIdentifier() || isModifierKind(token)) {
-                    // ( id :
-                    // ( id ,
-                    // ( id ?
-                    // ( id =
-                    // ( modifier id
+                    token === SyntaxKind.QuestionToken || token === SyntaxKind.EqualsToken) {
+                    // ( xxx :
+                    // ( xxx ,
+                    // ( xxx ?
+                    // ( xxx =
                     return true;
                 }
                 if (token === SyntaxKind.CloseParenToken) {
                     nextToken();
                     if (token === SyntaxKind.EqualsGreaterThanToken) {
-                        // ( id ) =>
+                        // ( xxx ) =>
                         return true;
                     }
                 }
