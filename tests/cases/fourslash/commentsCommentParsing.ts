@@ -310,9 +310,9 @@ verify.quickInfoIs("(parameter) b: number", "");
 
 goTo.marker('21');
 verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
-verify.currentParameterHelpArgumentDocCommentIs("{");
+verify.currentParameterHelpArgumentDocCommentIs("");
 goTo.marker('21aq');
-verify.quickInfoIs("(parameter) c: number", "{");
+verify.quickInfoIs("(parameter) c: number", "");
 
 goTo.marker('22');
 verify.currentSignatureHelpDocCommentIs("This is multiplication function\n@anotherTag\n@anotherTag");
@@ -372,9 +372,9 @@ verify.quickInfoIs("(parameter) c: () => string", "this is optional param c");
 
 goTo.marker('31');
 verify.currentSignatureHelpDocCommentIs("This is subtract function");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.currentParameterHelpArgumentDocCommentIs("this is optional param d");
 goTo.marker('31aq');
-verify.quickInfoIs("(parameter) d: () => string", "");
+verify.quickInfoIs("(parameter) d: () => string", "this is optional param d");
 
 goTo.marker('32');
 verify.currentSignatureHelpDocCommentIs("This is subtract function");
@@ -384,9 +384,9 @@ verify.quickInfoIs("(parameter) e: () => string", "this is optional param e");
 
 goTo.marker('33');
 verify.currentSignatureHelpDocCommentIs("This is subtract function");
-verify.currentParameterHelpArgumentDocCommentIs("");
+verify.currentParameterHelpArgumentDocCommentIs("this is optional param f");
 goTo.marker('33aq');
-verify.quickInfoIs("(parameter) f: () => string", "");
+verify.quickInfoIs("(parameter) f: () => string", "this is optional param f");
 
 goTo.marker('34');
 verify.currentSignatureHelpDocCommentIs("this is square function\n@paramTag { number } a this is input number of paramTag\n@returnType { number } it is return type");
@@ -481,9 +481,9 @@ verify.quickInfoIs("(parameter) a: string", "this is info about a\nspanning on t
 
 goTo.marker('48');
 verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
-verify.currentParameterHelpArgumentDocCommentIs("this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin");
+verify.currentParameterHelpArgumentDocCommentIs("this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\nspanning another line with more margin");
 goTo.marker('48aq');
-verify.quickInfoIs("(parameter) b: any", "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin");
+verify.quickInfoIs("(parameter) b: any", "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\nspanning another line with more margin");
 
 goTo.marker('49');
 verify.currentSignatureHelpDocCommentIs("This is function comment\n    And aligned with 4 space char margin");
