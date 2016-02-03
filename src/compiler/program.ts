@@ -1168,9 +1168,6 @@ namespace ts {
                             let typeAssertionExpression = <TypeAssertion>node;
                             diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
                             return true;
-                        case SyntaxKind.Decorator:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
-                            return true;
                     }
 
                     return forEachChild(node, walk);
