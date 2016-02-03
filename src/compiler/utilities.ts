@@ -1224,6 +1224,11 @@ namespace ts {
             if (isSourceOfAssignmentExpressionStatement) {
                 return node.parent.parent.jsDocComment;
             }
+
+            const isPropertyAssignmentExpression = node.parent && node.parent.kind === SyntaxKind.PropertyAssignment;
+            if (isPropertyAssignmentExpression) {
+                return node.parent.jsDocComment;
+            }
         }
 
         return undefined;
