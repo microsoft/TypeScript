@@ -91,8 +91,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
   Types of parameters 'this' and 'this' are incompatible.
     Type 'Base1' is not assignable to type 'Base2'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(179,16): error TS2671: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(180,24): error TS2671: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(179,16): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(180,24): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(184,30): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(185,26): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(185,30): error TS1005: ',' expected.
@@ -442,10 +442,10 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(192,35): e
     }
     let voidThis = new VoidThis();
                    ~~~~~~~~~~~~~~
-!!! error TS2671: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+!!! error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
     let implicitVoidThis = new ImplicitVoidThis();
                            ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2671: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+!!! error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
     
     
     ///// parse errors /////
