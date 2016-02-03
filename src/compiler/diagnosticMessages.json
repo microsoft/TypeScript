@@ -123,7 +123,7 @@
         "category": "Error",
         "code": 1043
     },
-    "'{0}' modifier cannot appear on a module element.": {
+    "'{0}' modifier cannot appear on a module or namespace element.": {
         "category": "Error",
         "code": 1044
     },
