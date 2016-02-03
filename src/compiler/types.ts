@@ -2435,6 +2435,7 @@ namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        emitModulesInLooseMode?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

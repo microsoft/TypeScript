@@ -294,6 +294,11 @@ namespace ts {
             name: "allowJs",
             type: "boolean",
             description: Diagnostics.Allow_javascript_files_to_be_compiled
+        },
+        {
+            name: "emitModulesInLooseMode",
+            type: "boolean",
+            description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         }
     ];
 

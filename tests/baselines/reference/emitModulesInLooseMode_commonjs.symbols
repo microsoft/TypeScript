@@ -1,0 +1,5 @@
+=== tests/cases/compiler/emitModulesInLooseMode_commonjs.ts ===
+
+export var x = 0;
+>x : Symbol(x, Decl(emitModulesInLooseMode_commonjs.ts, 1, 10))
+

@@ -1,0 +1,5 @@
+=== tests/cases/compiler/emitModulesInLooseMode_amd.ts ===
+
+export var x = 0;
+>x : Symbol(x, Decl(emitModulesInLooseMode_amd.ts, 1, 10))
+
