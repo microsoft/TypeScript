@@ -294,7 +294,7 @@ function foo0(x) {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_1 = _a[_i];
         var state_1 = _loop_1(x_1);
-        if (typeof state_1 === "object") return state_1.value
+        if (typeof state_1 === "object") return state_1.value;
     }
     use(v);
 }
@@ -310,7 +310,7 @@ function foo00(x) {
     var v;
     for (var x_2 in []) {
         var state_2 = _loop_2(x_2);
-        if (typeof state_2 === "object") return state_2.value
+        if (typeof state_2 === "object") return state_2.value;
     }
     use(v);
 }
@@ -326,7 +326,7 @@ function foo1(x) {
     var v;
     for (var x_3 = 0; x_3 < 1; ++x_3) {
         var state_3 = _loop_3(x_3);
-        if (typeof state_3 === "object") return state_3.value
+        if (typeof state_3 === "object") return state_3.value;
     }
     use(v);
 }
@@ -343,7 +343,7 @@ function foo2(x) {
     var v;
     while (1 === 1) {
         var state_4 = _loop_4();
-        if (typeof state_4 === "object") return state_4.value
+        if (typeof state_4 === "object") return state_4.value;
     }
     use(v);
 }
@@ -359,7 +359,7 @@ function foo3(x) {
     var v;
     do {
         var state_5 = _loop_5();
-        if (typeof state_5 === "object") return state_5.value
+        if (typeof state_5 === "object") return state_5.value;
     } while (1 === 1);
     use(v);
 }
@@ -376,7 +376,7 @@ function foo4(x) {
     var v;
     for (var y = 0; y < 1; ++y) {
         var state_6 = _loop_6(y);
-        if (typeof state_6 === "object") return state_6.value
+        if (typeof state_6 === "object") return state_6.value;
     }
     use(v);
 }
@@ -392,7 +392,7 @@ function foo5(x) {
     var v;
     for (var x_7 = 0, y = 1; x_7 < 1; ++x_7) {
         var state_7 = _loop_7(x_7, y);
-        if (typeof state_7 === "object") return state_7.value
+        if (typeof state_7 === "object") return state_7.value;
     }
     use(v);
 }
@@ -409,7 +409,7 @@ function foo6(x) {
     var v;
     while (1 === 1) {
         var state_8 = _loop_8();
-        if (typeof state_8 === "object") return state_8.value
+        if (typeof state_8 === "object") return state_8.value;
     }
     ;
     use(v);
@@ -427,7 +427,7 @@ function foo7(x) {
     var v;
     do {
         var state_9 = _loop_9();
-        if (typeof state_9 === "object") return state_9.value
+        if (typeof state_9 === "object") return state_9.value;
     } while (1 === 1);
     use(v);
 }
@@ -444,7 +444,7 @@ function foo8(x) {
     var v;
     for (var y = 0; y < 1; ++y) {
         var state_10 = _loop_10(y);
-        if (typeof state_10 === "object") return state_10.value
+        if (typeof state_10 === "object") return state_10.value;
     }
     use(v);
 }
@@ -462,7 +462,7 @@ function foo0_c(x) {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_11 = _a[_i];
         var state_11 = _loop_11(x_11);
-        if (typeof state_11 === "object") return state_11.value
+        if (typeof state_11 === "object") return state_11.value;
     }
     use(v);
 }
@@ -478,7 +478,7 @@ function foo00_c(x) {
     var v;
     for (var x_12 in []) {
         var state_12 = _loop_12(x_12);
-        if (typeof state_12 === "object") return state_12.value
+        if (typeof state_12 === "object") return state_12.value;
     }
     use(v);
 }
@@ -494,7 +494,7 @@ function foo1_c(x) {
     var v;
     for (var x_13 = 0; x_13 < 1;) {
         var state_13 = _loop_13(x_13);
-        if (typeof state_13 === "object") return state_13.value
+        if (typeof state_13 === "object") return state_13.value;
     }
     use(v);
 }
@@ -511,7 +511,7 @@ function foo2_c(x) {
     var v;
     while (1 === 1) {
         var state_14 = _loop_14();
-        if (typeof state_14 === "object") return state_14.value
+        if (typeof state_14 === "object") return state_14.value;
     }
     use(v);
 }
@@ -527,7 +527,7 @@ function foo3_c(x) {
     var v;
     do {
         var state_15 = _loop_15();
-        if (typeof state_15 === "object") return state_15.value
+        if (typeof state_15 === "object") return state_15.value;
     } while (1 === 1);
     use(v);
 }
@@ -544,7 +544,7 @@ function foo4_c(x) {
     var v;
     for (var y = 0; y < 1;) {
         var state_16 = _loop_16(y);
-        if (typeof state_16 === "object") return state_16.value
+        if (typeof state_16 === "object") return state_16.value;
     }
     use(v);
 }
@@ -560,7 +560,7 @@ function foo5_c(x) {
     var v;
     for (var x_17 = 0, y = 1; x_17 < 1;) {
         var state_17 = _loop_17(x_17, y);
-        if (typeof state_17 === "object") return state_17.value
+        if (typeof state_17 === "object") return state_17.value;
     }
     use(v);
 }
@@ -577,7 +577,7 @@ function foo6_c(x) {
     var v;
     while (1 === 1) {
         var state_18 = _loop_18();
-        if (typeof state_18 === "object") return state_18.value
+        if (typeof state_18 === "object") return state_18.value;
     }
     use(v);
 }
@@ -594,7 +594,7 @@ function foo7_c(x) {
     var v;
     do {
         var state_19 = _loop_19();
-        if (typeof state_19 === "object") return state_19.value
+        if (typeof state_19 === "object") return state_19.value;
     } while (1 === 1);
     use(v);
 }
@@ -611,7 +611,7 @@ function foo8_c(x) {
     var v;
     for (var y = 0; y < 1;) {
         var state_20 = _loop_20(y);
-        if (typeof state_20 === "object") return state_20.value
+        if (typeof state_20 === "object") return state_20.value;
     }
     use(v);
 }

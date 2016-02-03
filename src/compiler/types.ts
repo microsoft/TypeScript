@@ -381,22 +381,26 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
-        MultiLine =          1 << 10,  // Multi-line array or object literal
-        Synthetic =          1 << 11,  // Synthetic node (for full fidelity)
-        DeclarationFile =    1 << 12,  // Node is a .d.ts file
-        Let =                1 << 13,  // Variable declaration
-        Const =              1 << 14,  // Variable declaration
-        OctalLiteral =       1 << 15,  // Octal numeric literal
-        Namespace =          1 << 16,  // Namespace declaration
-        ExportContext =      1 << 17,  // Export context (initialized by binding)
-        ContainsThis =       1 << 18,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 21,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =    1 << 22,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =      1 << 23,  // If the file has decorators (initialized by binding)
-        HasParamDecorators = 1 << 24,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =  1 << 25,  // If the file has async functions (initialized by binding)
+        Let =                1 << 10,  // Variable declaration
+        Const =              1 << 11,  // Variable declaration
+        Namespace =          1 << 12,  // Namespace declaration
+        ExportContext =      1 << 13,  // Export context (initialized by binding)
+        ContainsThis =       1 << 14,  // Interface contains references to "this"
+        HasImplicitReturn =  1 << 15,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 16,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 17,  // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 18,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 19,  // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 20,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 21,  // If the file has async functions (initialized by binding)
+        DisallowInContext =  1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
+        YieldContext =       1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
+        DecoratorContext =   1 << 24,  // If node was parsed as part of a decorator
+        AwaitContext =       1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
+        ThisNodeHasError =   1 << 26,  // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -404,47 +408,12 @@ namespace ts {
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
-    }
 
-    /* @internal */
-    export const enum ParserContextFlags {
-        None = 0,
-
-        // If this node was parsed in a context where 'in-expressions' are not allowed.
-        DisallowIn = 1 << 0,
-
-        // If this node was parsed in the 'yield' context created when parsing a generator.
-        Yield = 1 << 1,
-
-        // If this node was parsed as part of a decorator
-        Decorator = 1 << 2,
-
-        // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 3,
-
-        // If the parser encountered an error when parsing the code that created this node.  Note
-        // the parser only sets this directly on the node it creates right after encountering the
-        // error.
-        ThisNodeHasError = 1 << 4,
-
-        // This node was parsed in a JavaScript file and can be processed differently.  For example
-        // its type can be specified usign a JSDoc comment.
-        JavaScriptFile = 1 << 5,
-
-        // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
+        // Parsing context flags
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext,
 
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = Yield | Await,
-
-        // Context flags computed by aggregating child flags upwards.
-
-        // Used during incremental parsing to determine if this node or any of its children had an
-        // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
-
-        // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 7
+        TypeExcludesFlags = YieldContext | AwaitContext,
     }
 
     export const enum JsxFlags {
@@ -472,9 +441,6 @@ namespace ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        // Specific context the parser was in when this node was created.  Normally undefined.
-        // Only set when the parser was in some interesting context (like async/yield).
-        /* @internal */ parserContextFlags?: ParserContextFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
@@ -938,6 +904,8 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
+        /* @internal */
+        isOctalLiteral?: boolean;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -979,6 +947,8 @@ namespace ts {
     // @kind(SyntaxKind.ArrayLiteralExpression)
     export interface ArrayLiteralExpression extends PrimaryExpression {
         elements: NodeArray<Expression>;
+        /* @internal */
+        multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.SpreadElementExpression)
@@ -990,6 +960,8 @@ namespace ts {
     // @kind(SyntaxKind.ObjectLiteralExpression)
     export interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
+        /* @internal */
+        multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.PropertyAccessExpression)
@@ -1546,6 +1518,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+        isDeclarationFile: boolean;
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
@@ -2054,23 +2027,23 @@ namespace ts {
 
     /* @internal */
     export const enum NodeCheckFlags {
-        TypeChecked                 = 0x00000001,  // Node has been type checked
-        LexicalThis                 = 0x00000002,  // Lexical 'this' reference
-        CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
-        SuperInstance               = 0x00000100,  // Instance 'super' reference
-        SuperStatic                 = 0x00000200,  // Static 'super' reference
-        ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper        = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding = 0x00001000,  // An async method that assigns a value to a member of 'super'.
-        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
-
-        // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00004000,
-        LexicalModuleMergesWithClass    = 0x00008000,    // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
-        HasSeenSuperCall           = 0x00080000,  // Set during the binding when encounter 'super'
+        TypeChecked                         = 0x00000001,  // Node has been type checked
+        LexicalThis                         = 0x00000002,  // Lexical 'this' reference
+        CaptureThis                         = 0x00000004,  // Lexical 'this' used in body
+        SuperInstance                       = 0x00000100,  // Instance 'super' reference
+        SuperStatic                         = 0x00000200,  // Static 'super' reference
+        ContextChecked                      = 0x00000400,  // Contextual types have been assigned
+        AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
+        AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
+        EnumValuesComputed                  = 0x00004000, // Values for enum members have been computed, and any errors have been reported for them.
+        LexicalModuleMergesWithClass        = 0x00008000, // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
+        HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
+        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
     }
 
     /* @internal */
@@ -2455,6 +2428,8 @@ namespace ts {
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
+        // Do not perform validation of output file name in transpile scenarios
+        /* @internal */ suppressOutputPathCheck?: boolean;
 
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }

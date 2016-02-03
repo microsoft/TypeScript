@@ -532,7 +532,7 @@ import b = require("./moduleB.ts");
                 const m1: File = { name: "/root/x/m1.ts" }; // load from base url
                 const m2: File = { name: "/m2.ts" }; // fallback to classic
 
-                const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.Classic, baseUrl: "/root/x" };
+                const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.Classic, baseUrl: "/root/x", jsx: JsxEmit.React };
                 const host = createModuleResolutionHost(hasDirectoryExists, main, m1, m2);
 
                 check("m1", main, m1);
@@ -565,6 +565,7 @@ import b = require("./moduleB.ts");
                 const options: CompilerOptions = {
                     moduleResolution: ModuleResolutionKind.NodeJs,
                     baseUrl: "/root",
+                    jsx: JsxEmit.React,
                     paths: {
                         "*": [
                             "*",
@@ -676,8 +677,8 @@ import b = require("./moduleB.ts");
         });
 
         it ("classic + baseUrl + path mappings", () => {
+            // classic mode does not use directoryExists
             test(/*hasDirectoryExists*/ false);
-            test(/*hasDirectoryExists*/ true);
 
             function test(hasDirectoryExists: boolean) {
                 const main: File = { name: "/root/folder1/main.ts" };
@@ -690,6 +691,7 @@ import b = require("./moduleB.ts");
                 const options: CompilerOptions = {
                     moduleResolution: ModuleResolutionKind.Classic,
                     baseUrl: "/root",
+                    jsx: JsxEmit.React,
                     paths: {
                         "*": [
                             "*",
@@ -822,6 +824,7 @@ import b = require("./moduleB.ts");
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3, file4);
                 const options: CompilerOptions = {
                     moduleResolution: ModuleResolutionKind.Classic,
+                    jsx: JsxEmit.React,
                     rootDirs: [
                         "/root",
                         "/root/generated/"

@@ -395,10 +395,17 @@ namespace ts {
                 if (!mainModule) {
                     return;
                 }
-                // if module symbol has already been merged - it is safe to use it.
-                // otherwise clone it
-                mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
-                mergeSymbol(mainModule, moduleAugmentation.symbol);
+                // obtain item referenced by 'export='
+                mainModule = resolveExternalModuleSymbol(mainModule);
+                if (mainModule.flags & SymbolFlags.Namespace) {
+                    // if module symbol has already been merged - it is safe to use it.
+                    // otherwise clone it
+                    mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
+                    mergeSymbol(mainModule, moduleAugmentation.symbol);
+                }
+                else {
+                    error(moduleName, Diagnostics.Cannot_augment_module_0_because_it_resolves_to_a_non_module_entity, moduleName.text);
+                }
             }
         }
 
@@ -891,7 +898,7 @@ namespace ts {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
                 else if (!exportDefaultSymbol && allowSyntheticDefaultImports) {
-                    return resolveSymbol(moduleSymbol.exports["export="]) || resolveSymbol(moduleSymbol);
+                    return resolveExternalModuleSymbol(moduleSymbol) || resolveSymbol(moduleSymbol);
                 }
                 return exportDefaultSymbol;
             }
@@ -1182,7 +1189,7 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol): Symbol {
-            return moduleSymbol && resolveSymbol(moduleSymbol.exports["export="]) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports["export="])) || moduleSymbol;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -1197,8 +1204,8 @@ namespace ts {
             return symbol;
         }
 
-        function getExportAssignmentSymbol(moduleSymbol: Symbol): Symbol {
-            return moduleSymbol.exports["export="];
+        function hasExportAssignmentSymbol(moduleSymbol: Symbol): boolean {
+            return moduleSymbol.exports["export="] !== undefined;
         }
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
@@ -2494,7 +2501,7 @@ namespace ts {
             // Every class automatically contains a static property member named 'prototype',
             // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
             // It is an error to explicitly declare a static property member with the name 'prototype'.
-            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(prototype.parent));
+            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prototype));
             return classType.typeParameters ? createTypeReference(<GenericType>classType, map(classType.typeParameters, _ => anyType)) : classType;
         }
 
@@ -2641,7 +2648,7 @@ namespace ts {
 
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
                 // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
                 // one as its type), otherwise fallback to the below standard TS codepaths to
                 // try to figure it out.
@@ -2837,7 +2844,7 @@ namespace ts {
                 }
                 // Handle module.exports = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    return links.type = checkExpression((<BinaryExpression>declaration).right);
+                    return links.type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)));
                 }
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
                     // Declarations only exist for property access expressions for certain
@@ -3994,7 +4001,7 @@ namespace ts {
         }
 
         function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
-            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
                 if (templateTag) {
                     return getTypeParametersFromDeclaration(templateTag.typeParameters);
@@ -4028,7 +4035,7 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (node.flags & NodeFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
                 }
@@ -4161,7 +4168,7 @@ namespace ts {
                     returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
-                    if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                    if (declaration.flags & NodeFlags.JavaScriptFile) {
                         const type = getReturnTypeFromJSDocComment(declaration);
                         if (type && type !== unknownType) {
                             returnType = type;
@@ -5864,8 +5871,8 @@ namespace ts {
                             }
                             else if (targetPropFlags & NodeFlags.Protected) {
                                 const sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
-                                const sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(sourceProp.parent) : undefined;
-                                const targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
+                                const sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(sourceProp)) : undefined;
+                                const targetClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(targetProp));
                                 if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
                                     if (reportErrors) {
                                         reportError(Diagnostics.Property_0_is_protected_but_type_1_is_not_a_class_derived_from_2,
@@ -5959,29 +5966,24 @@ namespace ts {
                 const saveErrorInfo = errorInfo;
 
                 outer: for (const t of targetSignatures) {
-                    if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
-                        // Only elaborate errors from the first failure
-                        let shouldElaborateErrors = reportErrors;
-                        for (const s of sourceSignatures) {
-                            if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                                if (related) {
-                                    result &= related;
-                                    errorInfo = saveErrorInfo;
-                                    continue outer;
-                                }
-                                shouldElaborateErrors = false;
-                            }
+                    // Only elaborate errors from the first failure
+                    let shouldElaborateErrors = reportErrors;
+                    for (const s of sourceSignatures) {
+                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                        if (related) {
+                            result &= related;
+                            errorInfo = saveErrorInfo;
+                            continue outer;
                         }
-                        // don't elaborate the primitive apparent types (like Number)
-                        // because the actual primitives will have already been reported.
-                        if (shouldElaborateErrors) {
-                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
-                                typeToString(source),
-                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
-                        }
-                        return Ternary.False;
+                        shouldElaborateErrors = false;
                     }
+
+                    if (shouldElaborateErrors) {
+                        reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                            typeToString(source),
+                            signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                    }
+                    return Ternary.False;
                 }
                 return result;
             }
@@ -7242,7 +7244,7 @@ namespace ts {
                     }
                 }
 
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.flags & NodeFlags.AwaitContext) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 }
             }
@@ -7251,11 +7253,32 @@ namespace ts {
                 markAliasSymbolAsReferenced(symbol);
             }
 
+            const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
+
+            // Due to the emit for class decorators, any reference to the class from inside of the class body
+            // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+            // behavior of class names in ES6.
+            if (languageVersion === ScriptTarget.ES6
+                && localOrExportSymbol.flags & SymbolFlags.Class
+                && localOrExportSymbol.valueDeclaration.kind === SyntaxKind.ClassDeclaration
+                && nodeIsDecorated(localOrExportSymbol.valueDeclaration)) {
+                let container = getContainingClass(node);
+                while (container !== undefined) {
+                    if (container === localOrExportSymbol.valueDeclaration && container.name !== node) {
+                        getNodeLinks(container).flags |= NodeCheckFlags.ClassWithBodyScopedClassBinding;
+                        getNodeLinks(node).flags |= NodeCheckFlags.BodyScopedClassBinding;
+                        break;
+                    }
+
+                    container = getContainingClass(container);
+                }
+            }
+
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
+            return getNarrowedTypeOfSymbol(localOrExportSymbol, node);
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -7297,7 +7320,7 @@ namespace ts {
 
             if (containedInIterationStatement) {
                 if (usedInFunction) {
-                    // mark iteration statement as containing block-scoped binding captured in some function 
+                    // mark iteration statement as containing block-scoped binding captured in some function
                     getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
                 }
                 // set 'declared inside loop' bit on the block-scoped binding
@@ -8840,7 +8863,7 @@ namespace ts {
          */
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationFlagsFromSymbol(prop);
-            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
+            const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop));
 
             if (left.kind === SyntaxKind.SuperKeyword) {
                 const errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
@@ -10458,9 +10481,11 @@ namespace ts {
 
         function getReturnTypeFromJSDocComment(func: SignatureDeclaration | FunctionDeclaration): Type {
             const returnTag = getJSDocReturnTag(func);
-            if (returnTag) {
+            if (returnTag && returnTag.typeExpression) {
                 return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
+
+            return undefined;
         }
 
         function createPromiseType(promisedType: Type): Type {
@@ -10863,7 +10888,7 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                if (!(node.flags & NodeFlags.AwaitContext)) {
                     grammarErrorOnFirstToken(node, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
                 }
 
@@ -11319,7 +11344,7 @@ namespace ts {
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.parserContextFlags & ParserContextFlags.Yield) || isYieldExpressionInClass(node)) {
+                if (!(node.flags & NodeFlags.YieldContext) || isYieldExpressionInClass(node)) {
                     grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
                 }
 
@@ -11775,8 +11800,6 @@ namespace ts {
                     }
                 }
             }
-
-            checkSpecializedSignatureDeclaration(node);
         }
 
         function checkTypeForDuplicateIndexSignatures(node: Node) {
@@ -12087,48 +12110,6 @@ namespace ts {
             return (node.flags & NodeFlags.Private) && isInAmbientContext(node);
         }
 
-        function checkSpecializedSignatureDeclaration(signatureDeclarationNode: SignatureDeclaration): void {
-            if (!produceDiagnostics) {
-                return;
-            }
-            const signature = getSignatureFromDeclaration(signatureDeclarationNode);
-            if (!signature.hasStringLiterals) {
-                return;
-            }
-
-            // TypeScript 1.0 spec (April 2014): 3.7.2.2
-            // Specialized signatures are not permitted in conjunction with a function body
-            if (nodeIsPresent((<FunctionLikeDeclaration>signatureDeclarationNode).body)) {
-                error(signatureDeclarationNode, Diagnostics.A_signature_with_an_implementation_cannot_use_a_string_literal_type);
-                return;
-            }
-
-            // TypeScript 1.0 spec (April 2014): 3.7.2.4
-            // Every specialized call or construct signature in an object type must be assignable
-            // to at least one non-specialized call or construct signature in the same object type
-            let signaturesToCheck: Signature[];
-            // Unnamed (call\construct) signatures in interfaces are inherited and not shadowed so examining just node symbol won't give complete answer.
-            // Use declaring type to obtain full list of signatures.
-            if (!signatureDeclarationNode.name && signatureDeclarationNode.parent && signatureDeclarationNode.parent.kind === SyntaxKind.InterfaceDeclaration) {
-                Debug.assert(signatureDeclarationNode.kind === SyntaxKind.CallSignature || signatureDeclarationNode.kind === SyntaxKind.ConstructSignature);
-                const signatureKind = signatureDeclarationNode.kind === SyntaxKind.CallSignature ? SignatureKind.Call : SignatureKind.Construct;
-                const containingSymbol = getSymbolOfNode(signatureDeclarationNode.parent);
-                const containingType = getDeclaredTypeOfSymbol(containingSymbol);
-                signaturesToCheck = getSignaturesOfType(containingType, signatureKind);
-            }
-            else {
-                signaturesToCheck = getSignaturesOfSymbol(getSymbolOfNode(signatureDeclarationNode));
-            }
-
-            for (const otherSignature of signaturesToCheck) {
-                if (!otherSignature.hasStringLiterals && isSignatureAssignableTo(signature, otherSignature, /*ignoreReturnTypes*/ false)) {
-                    return;
-                }
-            }
-
-            error(signatureDeclarationNode, Diagnostics.Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature);
-        }
-
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
 
@@ -12350,28 +12331,10 @@ namespace ts {
                 if (bodyDeclaration) {
                     const signatures = getSignaturesOfSymbol(symbol);
                     const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
-                    // If the implementation signature has string literals, we will have reported an error in
-                    // checkSpecializedSignatureDeclaration
-                    if (!bodySignature.hasStringLiterals) {
-                        // TypeScript 1.0 spec (April 2014): 6.1
-                        // If a function declaration includes overloads, the overloads determine the call
-                        // signatures of the type given to the function object
-                        // and the function implementation signature must be assignable to that type
-                        //
-                        // TypeScript 1.0 spec (April 2014): 3.8.4
-                        // Note that specialized call and construct signatures (section 3.7.2.4) are not significant when determining assignment compatibility
-                        // Consider checking against specialized signatures too. Not doing so creates a type hole:
-                        //
-                        // function g(x: "hi", y: boolean);
-                        // function g(x: string, y: {});
-                        // function g(x: string, y: string) { }
-                        //
-                        // The implementation is completely unrelated to the specialized signature, yet we do not check this.
-                        for (const signature of signatures) {
-                            if (!signature.hasStringLiterals && !isImplementationCompatibleWithOverload(bodySignature, signature)) {
-                                error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
-                                break;
-                            }
+                    for (const signature of signatures) {
+                        if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
+                            error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
+                            break;
                         }
                     }
                 }
@@ -13781,7 +13744,7 @@ namespace ts {
         function checkWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.parserContextFlags & ParserContextFlags.Await) {
+                if (node.flags & NodeFlags.AwaitContext) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
                 }
             }
@@ -14946,7 +14909,7 @@ namespace ts {
                 else {
                     // export * from "foo"
                     const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier);
-                    if (moduleSymbol && moduleSymbol.exports["export="]) {
+                    if (moduleSymbol && hasExportAssignmentSymbol(moduleSymbol)) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
                 }
@@ -15784,7 +15747,7 @@ namespace ts {
                 return true;
             }
 
-            const hasExportAssignment = getExportAssignmentSymbol(moduleSymbol) !== undefined;
+            const hasExportAssignment = hasExportAssignmentSymbol(moduleSymbol);
             // if module has export assignment then 'resolveExternalModuleSymbol' will return resolved symbol for export assignment
             // otherwise it will return moduleSymbol itself
             moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
@@ -15859,7 +15822,7 @@ namespace ts {
                             // - binding is not top level - top level bindings never collide with anything
                             // AND
                             //   - binding is not declared in loop, should be renamed to avoid name reuse across siblings
-                            //     let a, b 
+                            //     let a, b
                             //     { let x = 1; a = () => x;  }
                             //     { let x = 100; b = () => x; }
                             //     console.log(a()); // should print '1'
@@ -16143,7 +16106,7 @@ namespace ts {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
-                if (file.moduleAugmentations) {
+                if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
                 }
             });
@@ -16829,7 +16792,7 @@ namespace ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<LiteralExpression>name);
                     }
                     currentKind = Property;
                 }
@@ -17330,9 +17293,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarNumericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: LiteralExpression): boolean {
             // Grammar checking
-            if (node.flags & NodeFlags.OctalLiteral && languageVersion >= ScriptTarget.ES5) {
+            if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);
             }
         }

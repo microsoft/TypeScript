@@ -1819,9 +1819,13 @@
         "category": "Error",
         "code": 2670
     },
-    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
+    "Cannot augment module '{0}' because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2671
+    },
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
+        "category": "Error",
+        "code": 2672
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2175,7 +2179,7 @@
         "category": "Error",
         "code": 5058
     },
-    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+    "Invalid value for '--reactNamespace'. '{0}' is not a valid identifier.": {
         "category": "Error",
         "code": 5059
     },

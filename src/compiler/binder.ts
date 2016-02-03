@@ -1110,7 +1110,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: LiteralExpression) {
-            if (inStrictMode && node.flags & NodeFlags.OctalLiteral) {
+            if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -1387,7 +1387,7 @@ namespace ts {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (boundExpression.kind === SyntaxKind.Identifier) {
+            else if (boundExpression.kind === SyntaxKind.Identifier && node.kind === SyntaxKind.ExportAssignment) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -1438,7 +1438,8 @@ namespace ts {
             // Declare a 'member' in case it turns out the container was an ES5 class
             if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
                 container.symbol.members = container.symbol.members || {};
-                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                // It's acceptable for multiple 'this' assignments of the same identifier to occur
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
         }
 
@@ -1447,8 +1448,16 @@ namespace ts {
 
             // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
-            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
-            const funcSymbol = container.locals[classId.text];
+            const leftSideOfAssignment = node.left as PropertyAccessExpression;
+            const classPrototype = leftSideOfAssignment.expression as PropertyAccessExpression;
+            const constructorFunction = classPrototype.expression as Identifier;
+
+            // Fix up parent pointers since we're going to use these nodes before we bind into them
+            leftSideOfAssignment.parent = node;
+            constructorFunction.parent = classPrototype;
+            classPrototype.parent = leftSideOfAssignment;
+
+            const funcSymbol = container.locals[constructorFunction.text];
             if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
                 return;
             }
@@ -1459,7 +1468,7 @@ namespace ts {
             }
 
             // Declare the method/property
-            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {

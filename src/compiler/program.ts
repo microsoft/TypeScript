@@ -88,6 +88,8 @@ namespace ts {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
+        // skip .tsx files if jsx is not enabled
+        skipTsx: boolean;
     }
 
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -142,17 +144,17 @@ namespace ts {
     type ResolutionKindSpecificLoader = (candidate: string, extensions: string[], failedLookupLocations: string[], onlyRecordFalures: boolean, state: ModuleResolutionState) => string;
 
     /**
-     * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'paths' and 'rootDirs' - they are used to 
-     * mitigate differences between design time structure of the project and its runtime counterpart so the same import name 
-     * can be resolved successfully by TypeScript compiler and runtime module loader. 
+     * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'paths' and 'rootDirs' - they are used to
+     * mitigate differences between design time structure of the project and its runtime counterpart so the same import name
+     * can be resolved successfully by TypeScript compiler and runtime module loader.
      * If these settings are set then loading procedure will try to use them to resolve module name and it can of failure it will
      * fallback to standard resolution routine.
-     * 
+     *
      * - baseUrl - this setting controls how non-relative module names are resolved. If this setting is specified then non-relative
      * names will be resolved relative to baseUrl: i.e. if baseUrl is '/a/b' then canditate location to resolve module name 'c/d' will
      * be '/a/b/c/d'
-     * - paths - this setting can only be used when baseUrl is specified. allows to tune how non-relative module names 
-     * will be resolved based on the content of the module name. 
+     * - paths - this setting can only be used when baseUrl is specified. allows to tune how non-relative module names
+     * will be resolved based on the content of the module name.
      * Structure of 'paths' compiler options
      * 'paths': {
      *    pattern-1: [...substitutions],
@@ -160,37 +162,37 @@ namespace ts {
      *    ...
      *    pattern-n: [...substitutions]
      * }
-     * Pattern here is a string that can contain zero or one '*' character. During module resolution module name will be matched against 
+     * Pattern here is a string that can contain zero or one '*' character. During module resolution module name will be matched against
      * all patterns in the list. Matching for patterns that don't contain '*' means that module name must be equal to pattern respecting the case.
-     * If pattern contains '*' then to match pattern "<prefix>*<suffix>" module name must start with the <prefix> and end with <suffix>. 
-     * <MatchedStar> denotes part of the module name between <prefix> and <suffix>. 
+     * If pattern contains '*' then to match pattern "<prefix>*<suffix>" module name must start with the <prefix> and end with <suffix>.
+     * <MatchedStar> denotes part of the module name between <prefix> and <suffix>.
      * If module name can be matches with multiple patterns then pattern with the longest prefix will be picked.
-     * After selecting pattern we'll use list of substitutions to get candidate locations of the module and the try to load module 
-     * from the candidate location. 
-     * Substitiution is a string that can contain zero or one '*'. To get candidate location from substitution we'll pick every 
-     * substitution in the list and replace '*' with <MatchedStar> string. If candidate location is not rooted it 
+     * After selecting pattern we'll use list of substitutions to get candidate locations of the module and the try to load module
+     * from the candidate location.
+     * Substitiution is a string that can contain zero or one '*'. To get candidate location from substitution we'll pick every
+     * substitution in the list and replace '*' with <MatchedStar> string. If candidate location is not rooted it
      * will be converted to absolute using baseUrl.
      * For example:
      * baseUrl: /a/b/c
      * "paths": {
      *     // match all module names
-     *     "*": [ 
+     *     "*": [
      *         "*",        // use matched name as is,
      *                     // <matched name> will be looked as /a/b/c/<matched name>
      *
      *         "folder1/*" // substitution will convert matched name to 'folder1/<matched name>',
-     *                     // since it is not rooted then final candidate location will be /a/b/c/folder1/<matched name> 
+     *                     // since it is not rooted then final candidate location will be /a/b/c/folder1/<matched name>
      *     ],
      *     // match module names that start with 'components/'
      *     "components/*": [ "/root/components/*" ] // substitution will convert /components/folder1/<matched name> to '/root/components/folder1/<matched name>',
      *                                              // it is rooted so it will be final candidate location
      * }
      *
-     * 'rootDirs' allows the project to be spreaded across multiple locations and resolve modules with relative names as if 
+     * 'rootDirs' allows the project to be spreaded across multiple locations and resolve modules with relative names as if
      * they were in the same location. For example lets say there are two files
      * '/local/src/content/file1.ts'
      * '/shared/components/contracts/src/content/protocols/file2.ts'
-     * After bundling content of '/shared/components/contracts/src' will be merged with '/local/src' so 
+     * After bundling content of '/shared/components/contracts/src' will be merged with '/local/src' so
      * if file1 has the following import 'import {x} from "./protocols/file2"' it will be resolved successfully in runtime.
      * 'rootDirs' provides the way to tell compiler that in order to get the whole project it should behave as if content of all
      * root dirs were merged together.
@@ -229,7 +231,7 @@ namespace ts {
         let matchedNormalizedPrefix: string;
         for (const rootDir of state.compilerOptions.rootDirs) {
             // rootDirs are expected to be absolute
-            // in case of tsconfig.json this will happen automatically - compiler will expand relative names 
+            // in case of tsconfig.json this will happen automatically - compiler will expand relative names
             // using locaton of tsconfig.json as base location
             let normalizedRoot = normalizePath(rootDir);
             if (!endsWith(normalizedRoot, directorySeparator)) {
@@ -269,7 +271,7 @@ namespace ts {
             // then try to resolve using remaining entries in rootDirs
             for (const rootDir of state.compilerOptions.rootDirs) {
                 if (rootDir === matchedRootDir) {
-                    // skip the initially matched entry 
+                    // skip the initially matched entry
                     continue;
                 }
                 const candidate = combinePaths(normalizePath(rootDir), suffix);
@@ -369,7 +371,7 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
-        const state = {compilerOptions, host, traceEnabled};
+        const state = {compilerOptions, host, traceEnabled, skipTsx: false};
         let resolvedFileName = tryLoadModuleUsingOptionalResolutionSettings(moduleName, containingDirectory, nodeLoadModuleByRelativeName,
             failedLookupLocations, supportedExtensions, state);
 
@@ -412,12 +414,15 @@ namespace ts {
 
     /**
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
-     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations. 
+     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
+            if (ext === ".tsx" && state.skipTsx) {
+                return undefined;
+            }
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
             if (!onlyRecordFailures && state.host.fileExists(fileName)) {
                 if (state.traceEnabled) {
@@ -450,7 +455,7 @@ namespace ts {
                 jsonContent = jsonText ? <{ typings?: string }>JSON.parse(jsonText) : { typings: undefined };
             }
             catch (e) {
-                // gracefully handle if readFile fails or returns not JSON 
+                // gracefully handle if readFile fails or returns not JSON
                 jsonContent = { typings: undefined };
             }
 
@@ -517,7 +522,7 @@ namespace ts {
 
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
-        const state = { compilerOptions, host, traceEnabled };
+        const state = { compilerOptions, host, traceEnabled, skipTsx: !compilerOptions.jsx };
         const failedLookupLocations: string[] = [];
         const supportedExtensions = getSupportedExtensions(compilerOptions);
         let containingDirectory = getDirectoryPath(containingFile);
@@ -530,8 +535,7 @@ namespace ts {
         let referencedSourceFile: string;
         while (true) {
             const searchName = normalizePath(combinePaths(containingDirectory, moduleName));
-            const directoryName = getDirectoryPath(searchName);
-            referencedSourceFile = loadModuleFromFile(searchName, supportedExtensions, failedLookupLocations, !directoryProbablyExists(directoryName, host), state);
+            referencedSourceFile = loadModuleFromFile(searchName, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
             if (referencedSourceFile) {
                 break;
             }
@@ -719,7 +723,7 @@ namespace ts {
 
         const filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
-        // used to track cases when two file names differ only in casing 
+        // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (oldProgram) {
@@ -1071,8 +1075,11 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
                             return true;
                         case SyntaxKind.ExportAssignment:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
-                            return true;
+                            if ((<ExportAssignment>node).isExportEquals) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
                         case SyntaxKind.ClassDeclaration:
                             let classDeclaration = <ClassDeclaration>node;
                             if (checkModifiers(classDeclaration.modifiers) ||
@@ -1295,7 +1302,7 @@ namespace ts {
                         }
 
                         // TypeScript 1.0 spec (April 2014): 12.1.6
-                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules 
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
                         // only through top - level external module names. Relative external module names are not permitted.
                         if (!inAmbientModule || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
                             (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
@@ -1313,7 +1320,7 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
-                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
@@ -1483,7 +1490,7 @@ namespace ts {
                         if (importedFile && resolution.isExternalLibraryImport) {
                             // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
                             // this check is ok. Otherwise this would be never true for javascript file
-                            if (!isExternalModule(importedFile)) {
+                            if (!isExternalModule(importedFile) && importedFile.statements.length) {
                                 const start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
@@ -1713,11 +1720,11 @@ namespace ts {
             }
 
             if (options.reactNamespace && !isIdentifier(options.reactNamespace, languageVersion)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalide_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
-            if (!options.noEmit) {
+            if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
                 const emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
                 forEachExpectedEmitFile(emitHost, (emitFileNames, sourceFiles, isBundledEmit) => {

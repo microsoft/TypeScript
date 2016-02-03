@@ -14,13 +14,10 @@
     "'baseUrl' option is set to 'c:/root', using this value to resolve non-relative module name 'file4'",
     "Resolving module name 'file4' relative to base url 'c:/root' - 'c:/root/file4'.",
     "File 'c:/root/file4.ts' does not exist.",
-    "File 'c:/root/file4.tsx' does not exist.",
     "File 'c:/root/file4.d.ts' does not exist.",
     "File 'c:/root/folder2/file4.ts' does not exist.",
-    "File 'c:/root/folder2/file4.tsx' does not exist.",
     "File 'c:/root/folder2/file4.d.ts' does not exist.",
     "File 'c:/root/file4.ts' does not exist.",
-    "File 'c:/root/file4.tsx' does not exist.",
     "File 'c:/root/file4.d.ts' does not exist.",
     "File 'c:/file4.ts' exist - use it as a module resolution result.",
     "======== Module name 'file4' was successfully resolved to 'c:/file4.ts'. ========"

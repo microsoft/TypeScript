@@ -134,7 +134,10 @@ var x = 0;`,
 
         it("Sets module name", () => {
             let output =
-                `System.register("NamedModule", [], function(exports_1) {\n    "use strict";\n    var x;\n` +
+                `System.register("NamedModule", [], function(exports_1, context_1) {\n` +
+                `    "use strict";\n` +
+                `    var __moduleName = context_1 && context_1.id;\n` +
+                `    var x;\n` +
                 `    return {\n` +
                 `        setters:[],\n` +
                 `        execute: function() {\n` +
@@ -159,8 +162,9 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `System.register(["SomeOtherName"], function(exports_1) {\n` +
+                `System.register(["SomeOtherName"], function(exports_1, context_1) {\n` +
                 `    "use strict";\n` +
+                `    var __moduleName = context_1 && context_1.id;\n` +
                 `    var SomeName_1;\n` +
                 `    return {\n` +
                 `        setters:[\n` +
@@ -287,5 +291,14 @@ var x = 0;`,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
             })
         });
+        it("transpile .js files", () => {
+            const input = "const a = 10;";
+            const output = `"use strict";\nvar a = 10;\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { newLine: NewLineKind.LineFeed, module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true },
+                expectedDiagnosticCodes: []
+            });
+        })
     });
 }
