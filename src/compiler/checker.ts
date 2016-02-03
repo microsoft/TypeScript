@@ -7328,6 +7328,50 @@ namespace ts {
             }
         }
 
+        function isSuperCallExpression(n: Node): boolean {
+            return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
+        }
+
+        function findFirstSuperCall(n: Node): Node {
+            if (isSuperCallExpression(n)) {
+                return n;
+            }
+            else if (isFunctionLike(n)) {
+                return undefined;
+            }
+            return forEachChild(n, findFirstSuperCall);
+        }
+
+        /**
+         * Return a cached result if super-statement is already found.
+         * Otherwise, find a super statement in a given constructor function and cache the result in the node-links of the constructor
+         *
+         * @param constructor constructor-function to look for super statement
+         */
+        function getSuperCallInConstructor(constructor: ConstructorDeclaration): ExpressionStatement {
+            const links = getNodeLinks(constructor);
+
+            // Only trying to find super-call if we haven't yet tried to find one.  Once we try, we will record the result
+            if (links.hasSuperCall === undefined) {
+                links.superCall = <ExpressionStatement>findFirstSuperCall(constructor.body);
+                links.hasSuperCall = links.superCall ? true : false;
+            }
+            return links.superCall;
+        }
+
+        /**
+         * Check if the given class-declaration extends null then return true.
+         * Otherwise, return false
+         * @param classDecl a class declaration to check if it extends null
+         */
+        function classDeclarationExtendsNull(classDecl: ClassDeclaration): boolean {
+            const classSymbol = getSymbolOfNode(classDecl);
+            const classInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(classSymbol);
+            const baseConstructorType = getBaseConstructorTypeOfClass(classInstanceType);
+
+            return baseConstructorType === nullType;
+        }
+
         function checkThisExpression(node: Node): Type {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
@@ -7335,10 +7379,25 @@ namespace ts {
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
-                const baseTypeNode = getClassExtendsHeritageClauseElement(<ClassLikeDeclaration>container.parent);
-                if (baseTypeNode && !(getNodeCheckFlags(container) & NodeCheckFlags.HasSeenSuperCall)) {
-                    // In ES6, super inside constructor of class-declaration has to precede "this" accessing
-                    error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
+                const containingClassDecl = <ClassDeclaration>container.parent;
+                const baseTypeNode = getClassExtendsHeritageClauseElement(containingClassDecl);
+
+                // If a containing class does not have extends clause or the class extends null
+                // skip checking whether super statement is called before "this" accessing.
+                if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
+                    const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
+
+                    // We should give an error in the following cases:
+                    //      - No super-call
+                    //      - "this" is accessing before super-call.
+                    //          i.e super(this)
+                    //              this.x; super();
+                    // We want to make sure that super-call is done before accessing "this" so that
+                    // "this" is not accessed as a parameter of the super-call.
+                    if (!superCall || superCall.end > node.pos) {
+                        // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                        error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
+                    }
                 }
             }
 
@@ -10287,14 +10346,11 @@ namespace ts {
             checkGrammarTypeArguments(node, node.typeArguments) || checkGrammarArguments(node, node.arguments);
 
             const signature = getResolvedSignature(node);
-            if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                const containingFunction = getContainingFunction(node.expression);
 
-                if (containingFunction && containingFunction.kind === SyntaxKind.Constructor) {
-                    getNodeLinks(containingFunction).flags |= NodeCheckFlags.HasSeenSuperCall;
-                }
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
             }
+
             if (node.kind === SyntaxKind.NewExpression) {
                 const declaration = signature.declaration;
 
@@ -11875,17 +11931,15 @@ namespace ts {
             }
 
             // TS 1.0 spec (April 2014): 8.3.2
-            // Constructors of classes with no extends clause may not contain super calls, whereas
-            // constructors of derived classes must contain at least one super call somewhere in their function body.
+            // Constructors of classes with no extends clause and constructors of classes that extends null may not contain super calls,
+            // whereas constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
-                const containingClassSymbol = getSymbolOfNode(containingClassDecl);
-                const containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
-                const baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
-
-                if (containsSuperCall(node.body)) {
-                    if (baseConstructorType === nullType) {
-                        error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
+                const superCall = getSuperCallInConstructor(node);
+                if (superCall) {
+                    if (classExtendsNull) {
+                        error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
                     // The first statement in the body of a constructor (excluding prologue directives) must be a super call
@@ -11902,6 +11956,7 @@ namespace ts {
                     if (superCallShouldBeFirst) {
                         const statements = (<Block>node.body).statements;
                         let superCallStatement: ExpressionStatement;
+
                         for (const statement of statements) {
                             if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
                                 superCallStatement = <ExpressionStatement>statement;
@@ -11916,7 +11971,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (baseConstructorType !== nullType) {
+                else if (!classExtendsNull) {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
