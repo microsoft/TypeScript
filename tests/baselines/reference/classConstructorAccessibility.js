@@ -1,19 +1,20 @@
 //// [classConstructorAccessibility.ts]
+
 class C {
     public constructor(public x: number) { }
 }
 
 class D {
-    private constructor(public x: number) { } // error
+    private constructor(public x: number) { }
 }
 
 class E {
-    protected constructor(public x: number) { } // error
+    protected constructor(public x: number) { }
 }
 
 var c = new C(1);
-var d = new D(1);
-var e = new E(1);
+var d = new D(1); // error
+var e = new E(1); // error
 
 module Generic {
     class C<T> {
@@ -21,16 +22,16 @@ module Generic {
     }
 
     class D<T> {
-        private constructor(public x: T) { } // error
+        private constructor(public x: T) { }
     }
 
     class E<T> {
-        protected constructor(public x: T) { } // error
+        protected constructor(public x: T) { }
     }
 
     var c = new C(1);
-    var d = new D(1);
-    var e = new E(1);
+    var d = new D(1); // error
+    var e = new E(1); // error
 }
 
 
@@ -44,18 +45,18 @@ var C = (function () {
 var D = (function () {
     function D(x) {
         this.x = x;
-    } // error
+    }
     return D;
 }());
 var E = (function () {
     function E(x) {
         this.x = x;
-    } // error
+    }
     return E;
 }());
 var c = new C(1);
-var d = new D(1);
-var e = new E(1);
+var d = new D(1); // error
+var e = new E(1); // error
 var Generic;
 (function (Generic) {
     var C = (function () {
@@ -67,16 +68,36 @@ var Generic;
     var D = (function () {
         function D(x) {
             this.x = x;
-        } // error
+        }
         return D;
     }());
     var E = (function () {
         function E(x) {
             this.x = x;
-        } // error
+        }
         return E;
     }());
     var c = new C(1);
-    var d = new D(1);
-    var e = new E(1);
+    var d = new D(1); // error
+    var e = new E(1); // error
 })(Generic || (Generic = {}));
+
+
+//// [classConstructorAccessibility.d.ts]
+declare class C {
+    x: number;
+    constructor(x: number);
+}
+declare class D {
+    x: number;
+    constructor(x);
+}
+declare class E {
+    x: number;
+    constructor(x: number);
+}
+declare var c: C;
+declare var d: any;
+declare var e: any;
+declare module Generic {
+}
