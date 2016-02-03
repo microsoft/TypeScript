@@ -1,3 +1,5 @@
+# Read This!
+
 This directory contains miscellaneous documentation such as the TypeScript language specification and logo.
 If you are looking for more introductory material, you might want to take a look at the [TypeScript Handbook](https://github.com/Microsoft/TypeScript-Handbook).
 
