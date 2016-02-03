@@ -1,4 +1,4 @@
- {
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -2187,6 +2187,7 @@
         "category": "Error",
         "code": 5062
     },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2231,10 +2232,10 @@
         "category": "Message",
         "code": 6011
     },
-  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
-    "category": "Message",
-    "code": 6015
-  },
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+        "category": "Message",
+        "code": 6015
+    },
     "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
@@ -2571,6 +2572,11 @@
         "category": "Message",
         "code": 6111
     },
+    "Do not emit 'use strict' directives in module output.": {
+        "category": "Message",
+        "code": 6112
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2757,23 +2763,23 @@
         "code": 17004
     },
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
-      "category": "Error",
-      "code": 17005
+        "category": "Error",
+        "code": 17005
     },
     "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17006
+        "category": "Error",
+        "code": 17006
     },
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17007
+        "category": "Error",
+        "code": 17007
     },
     "JSX element '{0}' has no corresponding closing tag.": {
-      "category": "Error",
-      "code": 17008
+        "category": "Error",
+        "code": 17008
     },
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
-      "category": "Error",
-      "code": 17009
+        "category": "Error",
+        "code": 17009
     }
 }
