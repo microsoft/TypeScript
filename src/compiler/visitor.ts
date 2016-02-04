@@ -650,15 +650,6 @@ namespace ts {
     }
 
     /**
-     * Gets a mutable Node for updates, setting the `original` pointer on the Node.
-     */
-    function updateNode<T extends Node>(node: T, flags: NodeFlags) {
-        const updated = cloneNode(node, /*location*/ node, flags, /*parent*/ undefined, /*original*/ node);
-        updated.original = node;
-        return updated;
-    }
-
-    /**
      * Merge generated declarations of a lexical environment.
      */
     function mergeLexicalEnvironment(node: Node, declarations: Statement[], nodeIsMutable: boolean) {
