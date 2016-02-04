@@ -1,5 +1,5 @@
 /// <reference path="checker.ts" />
-/// <reference path="factory.ts" />
+
 /* @internal */
 namespace ts {
     /** Additional context provided to `visitEachChild` */
@@ -15,9 +15,6 @@ namespace ts {
      * Describes an edge of a Node, used when traversing a syntax tree.
      */
     interface NodeEdge {
-        /** Indicates that the edge is a NodeArray. */
-        array?: boolean;
-
         /** Indicates that the result is optional. */
         optional?: boolean;
 
@@ -25,7 +22,7 @@ namespace ts {
         test?: (node: Node) => node is Node;
 
         /** A callback used to lift a NodeArrayNode into a valid node. */
-        lift?: (nodes: NodeArrayNode<Node>) => Node;
+        lift?: (nodes: NodeArray<Node>) => Node;
     };
 
     /**
@@ -55,8 +52,8 @@ namespace ts {
             expression: { test: isExpressionNode },
         },
         [SyntaxKind.Parameter]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isBindingPatternOrIdentifier },
             type: { test: isTypeNodeNode, optional: true },
             initializer: { test: isExpressionNode, optional: true },
@@ -65,52 +62,52 @@ namespace ts {
             expression: { test: isLeftHandSideExpression },
         },
         [SyntaxKind.PropertyDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isPropertyName },
             type: { test: isTypeNodeNode, optional: true },
             initializer: { test: isExpressionNode, optional: true },
         },
         [SyntaxKind.MethodDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isPropertyName },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.Constructor]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.GetAccessor]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isPropertyName },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.SetAccessor]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isPropertyName },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.ObjectBindingPattern]: {
-            elements: { test: isBindingElement, array: true },
+            elements: { test: isBindingElement },
         },
         [SyntaxKind.ArrayBindingPattern]: {
-            elements: { test: isBindingElement, array: true },
+            elements: { test: isBindingElement },
         },
         [SyntaxKind.BindingElement]: {
             propertyName: { test: isPropertyName, optional: true },
@@ -118,10 +115,10 @@ namespace ts {
             initializer: { test: isExpressionNode, optional: true },
         },
         [SyntaxKind.ArrayLiteralExpression]: {
-            elements: { test: isExpressionNode, array: true },
+            elements: { test: isExpressionNode },
         },
         [SyntaxKind.ObjectLiteralExpression]: {
-            properties: { test: isObjectLiteralElement, array: true },
+            properties: { test: isObjectLiteralElement },
         },
         [SyntaxKind.PropertyAccessExpression]: {
             expression: { test: isLeftHandSideExpression },
@@ -133,13 +130,13 @@ namespace ts {
         },
         [SyntaxKind.CallExpression]: {
             expression: { test: isLeftHandSideExpression },
-            typeArguments: { test: isTypeNodeNode, array: true },
-            arguments: { test: isExpressionNode, array: true },
+            typeArguments: { test: isTypeNodeNode },
+            arguments: { test: isExpressionNode },
         },
         [SyntaxKind.NewExpression]: {
             expression: { test: isLeftHandSideExpression },
-            typeArguments: { test: isTypeNodeNode, array: true },
-            arguments: { test: isExpressionNode, array: true },
+            typeArguments: { test: isTypeNodeNode },
+            arguments: { test: isExpressionNode },
         },
         [SyntaxKind.TaggedTemplateExpression]: {
             tag: { test: isLeftHandSideExpression },
@@ -153,19 +150,19 @@ namespace ts {
             expression: { test: isExpressionNode },
         },
         [SyntaxKind.FunctionExpression]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode, optional: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.ArrowFunction]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isConciseBody, lift: liftToBlock },
         },
@@ -198,7 +195,7 @@ namespace ts {
         },
         [SyntaxKind.TemplateExpression]: {
             head: { test: isTemplateLiteralFragment },
-            templateSpans: { test: isTemplateSpan, array: true },
+            templateSpans: { test: isTemplateSpan },
         },
         [SyntaxKind.YieldExpression]: {
             expression: { test: isExpressionNode, optional: true },
@@ -207,16 +204,16 @@ namespace ts {
             expression: { test: isExpressionNode },
         },
         [SyntaxKind.ClassExpression]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode, optional: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            heritageClauses: { test: isHeritageClause, array: true },
-            members: { test: isClassElement, array: true },
+            typeParameters: { test: isTypeParameter },
+            heritageClauses: { test: isHeritageClause },
+            members: { test: isClassElement },
         },
         [SyntaxKind.ExpressionWithTypeArguments]: {
             expression: { test: isLeftHandSideExpression },
-            typeArguments: { test: isTypeNodeNode, array: true },
+            typeArguments: { test: isTypeNodeNode },
         },
         [SyntaxKind.AsExpression]: {
             expression: { test: isExpressionNode },
@@ -227,11 +224,11 @@ namespace ts {
             literal: { test: isTemplateLiteralFragment },
         },
         [SyntaxKind.Block]: {
-            statements: { test: isStatementNode, array: true },
+            statements: { test: isStatementNode },
         },
         [SyntaxKind.VariableStatement]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             declarationList: { test: isVariableDeclarationList },
         },
         [SyntaxKind.ExpressionStatement]: {
@@ -301,52 +298,52 @@ namespace ts {
             initializer: { test: isExpressionNode, optional: true },
         },
         [SyntaxKind.VariableDeclarationList]: {
-            declarations: { test: isVariableDeclaration, array: true },
+            declarations: { test: isVariableDeclaration },
         },
         [SyntaxKind.FunctionDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode, optional: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            parameters: { test: isParameter, array: true },
+            typeParameters: { test: isTypeParameter },
+            parameters: { test: isParameter },
             type: { test: isTypeNodeNode, optional: true },
             body: { test: isBlock, optional: true },
         },
         [SyntaxKind.ClassDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode, optional: true },
-            typeParameters: { test: isTypeParameter, array: true },
-            heritageClauses: { test: isHeritageClause, array: true },
-            members: { test: isClassElement, array: true },
+            typeParameters: { test: isTypeParameter },
+            heritageClauses: { test: isHeritageClause },
+            members: { test: isClassElement },
         },
         [SyntaxKind.EnumDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode },
-            members: { test: isEnumMember, array: true },
+            members: { test: isEnumMember },
         },
         [SyntaxKind.ModuleDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isModuleName },
             body: { test: isModuleBody },
         },
         [SyntaxKind.ModuleBlock]: {
-            statements: { test: isStatementNode, array: true },
+            statements: { test: isStatementNode },
         },
         [SyntaxKind.CaseBlock]: {
-            clauses: { test: isCaseOrDefaultClause, array: true },
+            clauses: { test: isCaseOrDefaultClause },
         },
         [SyntaxKind.ImportEqualsDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             name: { test: isIdentifierNode },
             moduleReference: { test: isModuleReference },
         },
         [SyntaxKind.ImportDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             importClause: { test: isImportClause, optional: true },
             moduleSpecifier: { test: isExpressionNode },
         },
@@ -358,25 +355,25 @@ namespace ts {
             name: { test: isIdentifierNode },
         },
         [SyntaxKind.NamedImports]: {
-            elements: { test: isImportSpecifier, array: true },
+            elements: { test: isImportSpecifier },
         },
         [SyntaxKind.ImportSpecifier]: {
             propertyName: { test: isIdentifierNode, optional: true },
             name: { test: isIdentifierNode },
         },
         [SyntaxKind.ExportAssignment]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             expression: { test: isExpressionNode },
         },
         [SyntaxKind.ExportDeclaration]: {
-            decorators: { test: isDecorator, array: true },
-            modifiers: { test: isModifier, array: true },
+            decorators: { test: isDecorator },
+            modifiers: { test: isModifier },
             exportClause: { test: isNamedExports, optional: true },
             moduleSpecifier: { test: isExpressionNode, optional: true },
         },
         [SyntaxKind.NamedExports]: {
-            elements: { test: isExportSpecifier, array: true },
+            elements: { test: isExportSpecifier },
         },
         [SyntaxKind.ExportSpecifier]: {
             propertyName: { test: isIdentifierNode, optional: true },
@@ -387,16 +384,16 @@ namespace ts {
         },
         [SyntaxKind.JsxElement]: {
             openingElement: { test: isJsxOpeningElement },
-            children: { test: isJsxChild, array: true },
+            children: { test: isJsxChild },
             closingElement: { test: isJsxClosingElement },
         },
         [SyntaxKind.JsxSelfClosingElement]: {
             tagName: { test: isEntityName },
-            attributes: { test: isJsxAttributeOrJsxSpreadAttribute, array: true },
+            attributes: { test: isJsxAttributeOrJsxSpreadAttribute },
         },
         [SyntaxKind.JsxOpeningElement]: {
             tagName: { test: isEntityName },
-            attributes: { test: isJsxAttributeOrJsxSpreadAttribute, array: true },
+            attributes: { test: isJsxAttributeOrJsxSpreadAttribute },
         },
         [SyntaxKind.JsxClosingElement]: {
             tagName: { test: isEntityName },
@@ -413,13 +410,13 @@ namespace ts {
         },
         [SyntaxKind.CaseClause]: {
             expression: { test: isExpressionNode },
-            statements: { test: isStatementNode, array: true },
+            statements: { test: isStatementNode },
         },
         [SyntaxKind.DefaultClause]: {
-            statements: { test: isStatementNode, array: true },
+            statements: { test: isStatementNode },
         },
         [SyntaxKind.HeritageClause]: {
-            types: { test: isExpressionWithTypeArguments, array: true },
+            types: { test: isExpressionWithTypeArguments },
         },
         [SyntaxKind.CatchClause]: {
             variableDeclaration: { test: isVariableDeclaration },
@@ -438,7 +435,7 @@ namespace ts {
             initializer: { test: isExpressionNode, optional: true },
         },
         [SyntaxKind.SourceFile]: {
-            statements: { test: isStatementNode, array: true },
+            statements: { test: isStatementNode },
         },
     };
 
@@ -462,13 +459,9 @@ namespace ts {
             for (const propertyName in edgeTraversalPath) {
                 const value = (<Map<any>>node)[propertyName];
                 if (value !== undefined) {
-                    const edge = edgeTraversalPath[propertyName];
-                    if (edge.array) {
-                        result = reduceLeft(<NodeArray<Node>>value, f, result);
-                    }
-                    else {
-                        result = f(result, <Node>value);
-                    }
+                    result = isArray(value)
+                        ? reduceLeft(<NodeArray<Node>>value, f, result)
+                        : f(result, <Node>value);
                 }
             }
         }
@@ -485,7 +478,7 @@ namespace ts {
      * @param lift A callback to execute to lift a NodeArrayNode into a valid Node.
      * @param optional A value indicating whether the Node is optional.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test?: (node: Node) => boolean, lift?: (node: NodeArrayNode<T>) => T, optional?: boolean): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T, optional?: boolean): T {
         if (node === undefined) {
             return undefined;
         }
@@ -501,10 +494,7 @@ namespace ts {
             return undefined;
         }
 
-        if (test !== undefined) {
-            Debug.assert(test(visited), "Wrong node type after visit.");
-        }
-
+        Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
         return <T>visited;
     }
 
@@ -520,7 +510,7 @@ namespace ts {
             return undefined;
         }
 
-        let updated: TArray;
+        let updated: NodeArray<T> | ModifiersArray;
         for (let i = 0, len = nodes.length; i < len; i++) {
             const node = nodes[i];
             if (node === undefined) {
@@ -530,7 +520,9 @@ namespace ts {
             const visited = visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
-                    updated = <TArray>createNodeArray(nodes.slice(0, i), /*location*/ nodes);
+                    updated = isModifiersArray(nodes)
+                        ? createModifiersArray(nodes.slice(0, i), nodes.pos, nodes.end)
+                        : createNodeArray<T>(nodes.slice(0, i), nodes.pos, nodes.end);
                 }
 
                 if (visited === undefined) {
@@ -541,22 +533,22 @@ namespace ts {
                     spreadNodeArrayNode(visited, updated, test);
                 }
                 else if (visited !== undefined) {
-                    Debug.assert(test(visited), "Wrong node type after visit.");
+                    Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
                     updated.push(<T>visited);
                 }
             }
         }
 
-        if (updated && isModifiersArray(nodes)) {
+        if (updated && isModifiersArray(updated)) {
             let flags: NodeFlags = 0;
             for (const node of updated) {
                 flags |= modifierToFlag(node.kind);
             }
 
-            (<ModifiersArray><NodeArray<Node>>updated).flags = flags;
+            updated.flags = flags;
         }
 
-        return updated || nodes;
+        return <TArray>updated || nodes;
     }
 
     /**
@@ -592,8 +584,8 @@ namespace ts {
                         updated[propertyName] = visited;
                     }
 
-                    if (visited && edge.array && isModifiersArray(<NodeArray<Node>>visited)) {
-                        updated.flags |= (<ModifiersArray>visited).flags;
+                    if (visited && isArray(visited) && isModifiersArray(visited)) {
+                        updated.flags |= visited.flags;
                     }
                 }
             }
@@ -621,7 +613,7 @@ namespace ts {
      * @param visitor A callback used to visit the node.
      */
     function visitEdge(edge: NodeEdge, value: Node | NodeArray<Node>, visitor: (node: Node) => Node) {
-        return edge.array
+        return isArray(value)
             ? visitNodes(<NodeArray<Node>>value, visitor, edge.test)
             : visitNode(<Node>value, visitor, edge.test, edge.lift, edge.optional);
     }
@@ -634,18 +626,13 @@ namespace ts {
      * @param test The node test used to validate each node.
      */
     function spreadNodeArrayNode<T extends Node>(source: NodeArrayNode<T>, dest: NodeArray<T>, test: (node: Node) => boolean) {
-        for (const element of source) {
+        for (const element of source.nodes) {
             if (element === undefined) {
                 continue;
             }
 
-            if (isNodeArrayNode<T>(element)) {
-                spreadNodeArrayNode(element, dest, test);
-            }
-            else {
-                Debug.assert(test === undefined || test(element), "Wrong node type after visit.");
-                dest.push(element);
-            }
+            Debug.assert(test === undefined || test(element), "Wrong node type after visit.");
+            dest.push(element);
         }
     }
 
@@ -724,7 +711,7 @@ namespace ts {
      * Merge generated declarations of a lexical environment into a NodeArray of Statement.
      */
     function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
-        return createNodeArray(statements.concat(declarations), /*location*/ statements);
+        return createNodeArray(statements.concat(declarations), statements.pos, statements.end);
     }
 
     /**
@@ -734,13 +721,13 @@ namespace ts {
      * @param node The visited Node.
      * @param options Options used to control lift behavior.
      */
-    function liftNode(node: Node, lifter: (nodes: NodeArrayNode<Node>) => Node): Node {
+    function liftNode(node: Node, lifter: (nodes: NodeArray<Node>) => Node): Node {
         if (node === undefined) {
             return undefined;
         }
         else if (isNodeArrayNode(node)) {
             const lift = lifter || extractSingleNode;
-            return lift(node);
+            return lift(node.nodes);
         }
         else {
             return node;

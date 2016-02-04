@@ -866,6 +866,7 @@ namespace ts {
         this.end = end;
         this.flags = NodeFlags.None;
         this.parent = undefined;
+        this.original = undefined;
     }
 
     export let objectAllocator: ObjectAllocator = {

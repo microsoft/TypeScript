@@ -454,12 +454,27 @@ namespace ts {
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export interface NodeArray<T> extends Array<T>, TextRange {
+    export const enum ArrayKind {
+        NodeArray = 1,
+        ModifiersArray = 2,
+    }
+
+    export interface NodeArray<T extends Node> extends Array<T>, TextRange {
+        arrayKind: ArrayKind;
         hasTrailingComma?: boolean;
     }
 
+    /**
+     * A NodeArrayNode is a transient node used during transformations to indicate that more than
+     * one node will substitute a single node in the source. When the source is a NodeArray (as
+     * part of a call to `visitNodes`), the nodes of a NodeArrayNode will be spread into the
+     * result array. When the source is a Node (as part of a call to `visitNode`), the NodeArrayNode
+     * must be converted into a compatible node via the `lift` callback.
+     */
+    /* @internal */
     // @kind(SyntaxKind.NodeArrayNode)
-    export interface NodeArrayNode<T> extends Node, NodeArray<T | NodeArrayNode<T>> {
+    export interface NodeArrayNode<T extends Node> extends Node {
+        nodes: NodeArray<T>;
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
