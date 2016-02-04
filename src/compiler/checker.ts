@@ -7298,7 +7298,7 @@ namespace ts {
          * Otherwise, return false
          * @param classDecl a class declaration to check if it extends null
          */
-        function isClassDeclarationExtendNull(classDecl: ClassDeclaration): boolean {
+        function classDeclarationExtendsNull(classDecl: ClassDeclaration): boolean {
             const classSymbol = getSymbolOfNode(classDecl);
             const classInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(classSymbol);
             const baseConstructorType = getBaseConstructorTypeOfClass(classInstanceType);
@@ -7318,7 +7318,7 @@ namespace ts {
 
                 // If a containing class does not have extends clause or the class extends null
                 // skip checking whether super statement is called before "this" accessing.
-                if (baseTypeNode && !isClassDeclarationExtendNull(containingClassDecl)) {
+                if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
                     const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
 
                     // We should give an error in the following cases:
@@ -11842,7 +11842,7 @@ namespace ts {
             // whereas constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
-                const isClassExtendNull = isClassDeclarationExtendNull(containingClassDecl);
+                const isClassExtendNull = classDeclarationExtendsNull(containingClassDecl);
 
                 if (getSuperCallInConstructor(node)) {
                     if (isClassExtendNull) {
