@@ -585,7 +585,7 @@ c.explicitThis = function(this: C, m: number) { return this.n + m };
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 138, 34))
 
 // this:any compatibility
-c.explicitC = function(m: number) { return this.n + m };
+c.explicitC = function(m) { return this.n + m };
 >c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 77, 3))
 >explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
@@ -595,7 +595,7 @@ c.explicitC = function(m: number) { return this.n + m };
 >n : Symbol(C.n, Decl(thisTypeInFunctions.ts, 1, 9))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 141, 23))
 
-c.explicitProperty = function(m: number) { return this.n + m };
+c.explicitProperty = function(m) { return this.n + m };
 >c.explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 77, 3))
 >explicitProperty : Symbol(C.explicitProperty, Decl(thisTypeInFunctions.ts, 11, 5))
@@ -605,7 +605,7 @@ c.explicitProperty = function(m: number) { return this.n + m };
 >n : Symbol(n, Decl(thisTypeInFunctions.ts, 12, 28))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 142, 30))
 
-c.explicitThis = function(m: number) { return this.n + m };
+c.explicitThis = function(m) { return this.n + m };
 >c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 2, 14))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 77, 3))
 >explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 2, 14))
@@ -615,7 +615,7 @@ c.explicitThis = function(m: number) { return this.n + m };
 >n : Symbol(C.n, Decl(thisTypeInFunctions.ts, 1, 9))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 143, 26))
 
-c.implicitThis = function(m: number) { return this.n + m };
+c.implicitThis = function(m) { return this.n + m };
 >c.implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctions.ts, 5, 5))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 77, 3))
 >implicitThis : Symbol(C.implicitThis, Decl(thisTypeInFunctions.ts, 5, 5))

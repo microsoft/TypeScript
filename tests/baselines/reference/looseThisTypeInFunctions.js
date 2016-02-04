@@ -1,5 +1,6 @@
 //// [looseThisTypeInFunctions.ts]
 interface I {
+    n: number;
     explicitThis(this: this, m: number): number;
 }
 interface Unused {
@@ -20,10 +21,19 @@ class C implements I {
 let c = new C();
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
 let o = { 
-    explicitThis: function (m) { return m },
-	implicitThis(m: number): number { return m } 
+    n: 101,
+    explicitThis: function (m: number) { 
+        return m + this.n.length; // ok, this.n: any
+    },
+    implicitThis(m: number): number { return m; } 
 };
 let i: I = o;
+let o2: I = {
+    n: 1001
+    explicitThis: function (m) {
+        return m + this.n.length;  // error, this.n: number, no member 'length'
+    },
+}
 let x = i.explicitThis;
 let n = x(12); // callee:void doesn't match this:I
 let u: Unused;
@@ -33,6 +43,9 @@ c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 o.implicitThis = i.explicitThis;
+i.explicitThis = function(m) {
+    return this.n.length;  // error, this.n: number
+}
 
 
 //// [looseThisTypeInFunctions.js]
@@ -53,10 +66,19 @@ var C = (function () {
 var c = new C();
 c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
 var o = {
-    explicitThis: function (m) { return m; },
+    n: 101,
+    explicitThis: function (m) {
+        return m + this.n.length; // ok, this.n: any
+    },
     implicitThis: function (m) { return m; }
 };
 var i = o;
+var o2 = {
+    n: 1001,
+    explicitThis: function (m) {
+        return m + this.n.length; // error, this.n: number, no member 'length'
+    }
+};
 var x = i.explicitThis;
 var n = x(12); // callee:void doesn't match this:I
 var u;
@@ -66,3 +88,6 @@ c.explicitVoid = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 o.implicitThis = i.explicitThis;
+i.explicitThis = function (m) {
+    return this.n.length; // error, this.n: number
+};

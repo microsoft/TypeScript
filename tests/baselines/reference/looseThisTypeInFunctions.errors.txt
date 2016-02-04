@@ -1,11 +1,15 @@
-tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(20,1): error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(m: number) => number'.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(21,1): error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(m: number) => number'.
   Types of parameters 'this' and 'this' are incompatible.
     Type 'void' is not assignable to type 'C'.
-tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(27,9): error TS2345: Argument of type 'void' is not assignable to parameter of type 'I'.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(32,5): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(33,27): error TS2339: Property 'length' does not exist on type 'number'.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(37,9): error TS2345: Argument of type 'void' is not assignable to parameter of type 'I'.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(46,19): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts (2 errors) ====
+==== tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts (5 errors) ====
     interface I {
+        n: number;
         explicitThis(this: this, m: number): number;
     }
     interface Unused {
@@ -30,10 +34,23 @@ tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(27,9): error 
 !!! error TS2322:   Types of parameters 'this' and 'this' are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type 'C'.
     let o = { 
-        explicitThis: function (m) { return m },
-    	implicitThis(m: number): number { return m } 
+        n: 101,
+        explicitThis: function (m: number) { 
+            return m + this.n.length; // ok, this.n: any
+        },
+        implicitThis(m: number): number { return m; } 
     };
     let i: I = o;
+    let o2: I = {
+        n: 1001
+        explicitThis: function (m) {
+        ~~~~~~~~~~~~
+!!! error TS1005: ',' expected.
+            return m + this.n.length;  // error, this.n: number, no member 'length'
+                              ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+        },
+    }
     let x = i.explicitThis;
     let n = x(12); // callee:void doesn't match this:I
             ~~~~~
@@ -45,4 +62,9 @@ tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(27,9): error 
     o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
     o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
     o.implicitThis = i.explicitThis;
+    i.explicitThis = function(m) {
+        return this.n.length;  // error, this.n: number
+                      ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    }
     

@@ -94,6 +94,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(179,16): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(180,24): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(184,30): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(184,61): error TS2339: Property 'n' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(185,26): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(185,30): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(185,57): error TS2339: Property 'n' does not exist on type 'void'.
@@ -103,7 +104,6 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(186,27): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(186,54): error TS2339: Property 'n' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,23): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,24): error TS1138: Parameter declaration expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,51): error TS2339: Property 'n' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(188,28): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(188,32): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(188,59): error TS2339: Property 'n' does not exist on type 'void'.
@@ -452,6 +452,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(192,35): e
     function notFirst(a: number, this: C): number { return this.n; }
                                  ~~~~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
+                                                                ~
+!!! error TS2339: Property 'n' does not exist on type 'void'.
     function modifiers(async this: C): number { return this.n; }
                              ~~~~
 !!! error TS1003: Identifier expected.
@@ -473,8 +475,6 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(192,35): e
 !!! error TS1005: ',' expected.
                            ~
 !!! error TS1138: Parameter declaration expected.
-                                                      ~
-!!! error TS2339: Property 'n' does not exist on type 'void'.
     function decorated(@deco() this: C): number { return this.n; }
                                ~~~~
 !!! error TS1003: Identifier expected.

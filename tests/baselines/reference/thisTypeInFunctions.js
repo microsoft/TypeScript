@@ -140,10 +140,10 @@ c.explicitThis = explicitCFunction;
 c.explicitThis = function(this: C, m: number) { return this.n + m };
 
 // this:any compatibility
-c.explicitC = function(m: number) { return this.n + m };
-c.explicitProperty = function(m: number) { return this.n + m };
-c.explicitThis = function(m: number) { return this.n + m };
-c.implicitThis = function(m: number) { return this.n + m };
+c.explicitC = function(m) { return this.n + m };
+c.explicitProperty = function(m) { return this.n + m };
+c.explicitThis = function(m) { return this.n + m };
+c.implicitThis = function(m) { return this.n + m };
 c.implicitThis = reconstructed.implicitThis;
 
 c.explicitC = function(this: B, m: number) { return this.n + m };
