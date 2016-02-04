@@ -178,6 +178,10 @@ var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
 });
 
+// utilize undocumented Node option for processing quotes in command line parameters correctly on Windows
+function createJakeExec(cmd) {
+    return jake.createExec([cmd], { windowsVerbatimArguments: true }); }
+
 // Prepends the contents of prefixFile to destinationFile
 function prependFile(prefixFile, destinationFile) {
     if (!fs.existsSync(prefixFile)) {
@@ -249,11 +253,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         if (outDir) {
-            options += " --outDir " + outDir;
+            options += ' --outDir "' + outDir + '"';
         }
 
         if (!noOutFile) {
-            options += " --out " + outFile;
+            options += ' --out "' + outFile + '"';
         }
         else {
             options += " --module commonjs"
@@ -264,7 +268,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         if (useDebugMode) {
-            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            options += ' -sourcemap -mapRoot "file:///' + path.resolve(path.dirname(outFile)) + '"';
         }
 
         if (stripInternal) {
@@ -272,10 +276,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
-        cmd = cmd + sources.join(" ");
+        sources = sources.join('" "');
+        cmd = cmd + (sources ? '"' + sources + '"' : sources);
         console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd]);
+        var ex = createJakeExec(cmd);
         // Add listeners for output and error
         ex.addListener("stdout", function(output) {
             process.stdout.write(output);
@@ -346,7 +351,7 @@ compileFile(processDiagnosticMessagesJs,
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = host + " " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
+    var ex = createJakeExec(cmd);
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
         process.stdout.write(output);
@@ -592,7 +597,7 @@ desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
 function exec(cmd, completeHandler, errorHandler) {
-    var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
+    var ex = createJakeExec(cmd);
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
         process.stdout.write(output);
@@ -832,7 +837,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
     var options = "--outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
     console.log(cmd + "\n");
-    var ex = jake.createExec([cmd]);
+    var ex = createJakeExec(cmd);
     ex.addListener("cmdEnd", function() {
         fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
         jake.rmRf(temp);
@@ -849,7 +854,7 @@ desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
+    var ex = createJakeExec(cmd);
     ex.addListener("cmdEnd", function() {
         complete();
     });
