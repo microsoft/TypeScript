@@ -57,7 +57,6 @@ function a1() {
     };
     var out_x_1;
     for (var x = void 0; x < 1;) {
-        out_x_1 = x;
         _loop_1(x);
         x = out_x_1;
     }
@@ -76,7 +75,6 @@ function a2() {
     };
     var out_x_2;
     for (var x = void 0;;) {
-        out_x_2 = x;
         _loop_2(x);
         x = out_x_2;
     }
@@ -89,7 +87,6 @@ function a3() {
     };
     var out_x_3;
     for (var x = void 0; x < 1;) {
-        out_x_3 = x;
         _loop_3(x);
         x = out_x_3;
     }
@@ -100,7 +97,6 @@ function a3() {
     };
     var out_x_4;
     for (var x = void 0;;) {
-        out_x_4 = x;
         _loop_4(x);
         x = out_x_4;
     }

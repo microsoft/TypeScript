@@ -44,8 +44,6 @@ function f1() {
     };
     var out_x_1, out_y_1;
     for (var _a = [1, 2], x = _a[0], y = _a[1]; x < y; ++x, --y) {
-        out_x_1 = x;
-        out_y_1 = y;
         var state_1 = _loop_1(x, y);
         x = out_x_1;
         y = out_y_1;
@@ -67,8 +65,6 @@ function f2() {
     };
     var out_x_2, out_y_2;
     for (var _a = [{ a: 1, b: { c: 2 } }][0], x = _a.a, y = _a.b.c; x < y; ++x, --y) {
-        out_x_2 = x;
-        out_y_2 = y;
         var state_2 = _loop_2(x, y);
         x = out_x_2;
         y = out_y_2;

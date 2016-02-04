@@ -16,7 +16,6 @@ declare function use(n: number): void;
     };
     var out_i_1;
     for (var i = 0; i < 9; ++i) {
-        out_i_1 = i;
         _loop_1(i);
         i = out_i_1;
     }

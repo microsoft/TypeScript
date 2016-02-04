@@ -127,7 +127,6 @@ function a4() {
     };
     var out_x_1;
     for (var x = void 0; x < 1;) {
-        out_x_1 = x;
         _loop_5(x);
         x = out_x_1;
     }
@@ -145,7 +144,6 @@ function a5() {
     };
     var out_x_2;
     for (var x = void 0; x < 1;) {
-        out_x_2 = x;
         _loop_6(x);
         x = out_x_2;
     }

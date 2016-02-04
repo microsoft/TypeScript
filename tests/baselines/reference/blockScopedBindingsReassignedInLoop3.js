@@ -112,7 +112,6 @@ var _loop_1 = function(x, y) {
         };
         var out_a_1_1;
         for (var a_1 = 1; a_1 < 5; --a_1) {
-            out_a_1_1 = a_1;
             var state_1 = _loop_2(a_1);
             a_1 = out_a_1_1;
             if (state_1 === "break") break;
@@ -124,8 +123,6 @@ var _loop_1 = function(x, y) {
 };
 var out_x_1, out_y_1;
 for (var x = 1, y = 2; x < y; ++x, --y) {
-    out_x_1 = x;
-    out_y_1 = y;
     var state_2 = _loop_1(x, y);
     x = out_x_1;
     y = out_y_1;
@@ -150,7 +147,6 @@ var _loop_3 = function(x, y) {
         };
         var out_a_2_1;
         for (var a_2 = 1; a_2 < 5; --a_2) {
-            out_a_2_1 = a_2;
             var state_3 = _loop_4(a_2);
             a_2 = out_a_2_1;
             if (state_3 === "continue") continue;
@@ -162,8 +158,6 @@ var _loop_3 = function(x, y) {
 };
 var out_x_2, out_y_2;
 for (var x = 1, y = 2; x < y; ++x, --y) {
-    out_x_2 = x;
-    out_y_2 = y;
     var state_4 = _loop_3(x, y);
     x = out_x_2;
     y = out_y_2;
@@ -189,7 +183,6 @@ var _loop_5 = function(x, y) {
         };
         var out_a_3_1;
         loop1: for (var a_3 = 1; a_3 < 5; --a_3) {
-            out_a_3_1 = a_3;
             var state_5 = _loop_6(a_3);
             a_3 = out_a_3_1;
             switch(state_5) {
@@ -204,8 +197,6 @@ var _loop_5 = function(x, y) {
 };
 var out_x_3, out_y_3;
 loop2: for (var x = 1, y = 2; x < y; ++x, --y) {
-    out_x_3 = x;
-    out_y_3 = y;
     var state_6 = _loop_5(x, y);
     x = out_x_3;
     y = out_y_3;
@@ -233,7 +224,6 @@ var _loop_7 = function(x, y) {
         };
         var out_a_4_1;
         loop1: for (var a_4 = 1; a_4 < 5; --a_4) {
-            out_a_4_1 = a_4;
             var state_7 = _loop_8(a_4);
             a_4 = out_a_4_1;
             switch(state_7) {
@@ -248,8 +238,6 @@ var _loop_7 = function(x, y) {
 };
 var out_x_4, out_y_4;
 loop2: for (var x = 1, y = 2; x < y; ++x, --y) {
-    out_x_4 = x;
-    out_y_4 = y;
     var state_8 = _loop_7(x, y);
     x = out_x_4;
     y = out_y_4;

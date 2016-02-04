@@ -3237,9 +3237,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     !loop.state.labeledNonLocalBreaks &&
                     !loop.state.labeledNonLocalContinues;
 
-                copyLoopOutParameters(loop.state, CopyDirection.ToOutParameter, /*emitAsStatements*/ true);
-                writeLine();
-
                 const loopResult = makeUniqueName("state");
                 if (!isSimpleLoop) {
                     write(`var ${loopResult} = `);
