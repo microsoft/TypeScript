@@ -341,6 +341,7 @@ namespace ts {
 
         // Synthesized list
         SyntaxList,
+        NodeArrayNode,
         // Enum value count
         Count,
         // Markers
@@ -444,7 +445,8 @@ namespace ts {
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding
+        parent?: Node;                                  // Parent node (initialized by binding)
+        /* @internal */ original?: Node;                // The original node if this is an updated node.
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
@@ -454,6 +456,10 @@ namespace ts {
 
     export interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
+    }
+
+    // @kind(SyntaxKind.NodeArrayNode)
+    export interface NodeArrayNode<T> extends Node, NodeArray<T | NodeArrayNode<T>> {
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
@@ -1287,13 +1293,15 @@ namespace ts {
         statements: NodeArray<Statement>;
     }
 
+    export type ModuleReference = EntityName | ExternalModuleReference;
+
     // @kind(SyntaxKind.ImportEqualsDeclaration)
     export interface ImportEqualsDeclaration extends DeclarationStatement {
         name: Identifier;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
         // module reference.
-        moduleReference: EntityName | ExternalModuleReference;
+        moduleReference: ModuleReference;
     }
 
     // @kind(SyntaxKind.ExternalModuleReference)

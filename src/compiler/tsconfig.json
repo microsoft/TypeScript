@@ -17,6 +17,8 @@
         "utilities.ts",
         "binder.ts",
         "checker.ts",
+        "factory.ts",
+        "visitor.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
