@@ -4051,7 +4051,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ true);
             }
 
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseOptionalIdentifier() {
@@ -4335,13 +4335,13 @@ namespace ts {
                 const labeledStatement = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, fullStart);
                 labeledStatement.label = <Identifier>expression;
                 labeledStatement.statement = parseStatement();
-                return finishNode(labeledStatement);
+                return addJSDocComment(finishNode(labeledStatement));
             }
             else {
                 const expressionStatement = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, fullStart);
                 expressionStatement.expression = expression;
                 parseSemicolon();
-                return finishNode(expressionStatement);
+                return addJSDocComment(finishNode(expressionStatement));
             }
         }
 
@@ -4778,7 +4778,7 @@ namespace ts {
             parseExpected(SyntaxKind.ConstructorKeyword);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false, Diagnostics.or_expected);
-            return finishNode(node);
+            return addJSDocComment(finishNode(node));
         }
 
         function parseMethodDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, asteriskToken: Node, name: PropertyName, questionToken: Node, diagnosticMessage?: DiagnosticMessage): MethodDeclaration {
@@ -4792,7 +4792,7 @@ namespace ts {
             const isAsync = !!(method.flags & NodeFlags.Async);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
-            return finishNode(method);
+            return addJSDocComment(finishNode(method));
         }
 
         function parsePropertyDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, name: PropertyName, questionToken: Node): ClassElement {

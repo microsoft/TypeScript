@@ -4,10 +4,8 @@
 
 // @allowJs: true
 // @Filename: myMod.js
-//// if (true) {
-////     module.exports = { a: 10 };
-//// }
-//// var invisible = true;
+//// var x = { a: 10 };
+//// module.exports = x;
 
 // @Filename: isGlobal.js
 //// var y = 10;

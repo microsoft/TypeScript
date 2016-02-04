@@ -2845,7 +2845,7 @@ namespace ts {
                 }
                 // Handle module.exports = expr
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
-                    return links.type = checkExpression((<BinaryExpression>declaration).right);
+                    return links.type = getUnionType(map(symbol.declarations, (decl: BinaryExpression) => checkExpressionCached(decl.right)));
                 }
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
                     // Declarations only exist for property access expressions for certain
@@ -10356,9 +10356,11 @@ namespace ts {
 
         function getReturnTypeFromJSDocComment(func: SignatureDeclaration | FunctionDeclaration): Type {
             const returnTag = getJSDocReturnTag(func);
-            if (returnTag) {
+            if (returnTag && returnTag.typeExpression) {
                 return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
+
+            return undefined;
         }
 
         function createPromiseType(promisedType: Type): Type {
@@ -10433,7 +10435,8 @@ namespace ts {
                     }
                     else {
                         error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                        return unknownType;
+                        // Defer to unioning the return types so we get a) downstream errors earlier and b) better Salsa experience
+                        return getUnionType(types);
                     }
                 }
 
