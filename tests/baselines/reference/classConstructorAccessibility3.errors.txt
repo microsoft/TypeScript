@@ -2,21 +2,11 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
   Cannot assign a 'protected' constructor type to a 'public' constructor type.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(22,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
   Cannot assign a 'private' constructor type to a 'public' constructor type.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(26,1): error TS2322: Type 'typeof Foo' is not assignable to type 'typeof Baz'.
-  Cannot assign a 'public' constructor type to a 'protected' constructor type.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(27,1): error TS2322: Type 'typeof Bar' is not assignable to type 'typeof Baz'.
-  Cannot assign a 'public' constructor type to a 'protected' constructor type.
 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(28,1): error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
   Cannot assign a 'private' constructor type to a 'protected' constructor type.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(32,1): error TS2322: Type 'typeof Foo' is not assignable to type 'typeof Qux'.
-  Cannot assign a 'public' constructor type to a 'private' constructor type.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(33,1): error TS2322: Type 'typeof Bar' is not assignable to type 'typeof Qux'.
-  Cannot assign a 'public' constructor type to a 'private' constructor type.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts(34,1): error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Qux'.
-  Cannot assign a 'protected' constructor type to a 'private' constructor type.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts (8 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts (3 errors) ====
     
     class Foo {
          constructor(public x: number) { }
@@ -48,14 +38,8 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     
     // b is protected
     let b = Baz;
-    b = Foo; // error Foo is public
-    ~
-!!! error TS2322: Type 'typeof Foo' is not assignable to type 'typeof Baz'.
-!!! error TS2322:   Cannot assign a 'public' constructor type to a 'protected' constructor type.
-    b = Bar; // error Baz is public
-    ~
-!!! error TS2322: Type 'typeof Bar' is not assignable to type 'typeof Baz'.
-!!! error TS2322:   Cannot assign a 'public' constructor type to a 'protected' constructor type.
+    b = Foo;
+    b = Bar;
     b = Qux; // error Qux is private
     ~
 !!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
@@ -63,15 +47,6 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     
     // c is private
     let c = Qux;
-    c = Foo; // error Foo is public
-    ~
-!!! error TS2322: Type 'typeof Foo' is not assignable to type 'typeof Qux'.
-!!! error TS2322:   Cannot assign a 'public' constructor type to a 'private' constructor type.
-    c = Bar; // error Bar is public
-    ~
-!!! error TS2322: Type 'typeof Bar' is not assignable to type 'typeof Qux'.
-!!! error TS2322:   Cannot assign a 'public' constructor type to a 'private' constructor type.
-    c = Baz; // error Baz is protected
-    ~
-!!! error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Qux'.
-!!! error TS2322:   Cannot assign a 'protected' constructor type to a 'private' constructor type.
+    c = Foo;
+    c = Bar;
+    c = Baz;

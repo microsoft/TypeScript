@@ -24,12 +24,12 @@ a = Qux; // error Qux is private
 
 // b is protected
 let b = Baz;
-b = Foo; // error Foo is public
-b = Bar; // error Baz is public
+b = Foo;
+b = Bar;
 b = Qux; // error Qux is private
 
 // c is private
 let c = Qux;
-c = Foo; // error Foo is public
-c = Bar; // error Bar is public
-c = Baz; // error Baz is protected
+c = Foo;
+c = Bar;
+c = Baz;
