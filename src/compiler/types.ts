@@ -2071,6 +2071,7 @@ namespace ts {
         HasSeenSuperCall           = 0x00080000,         // Set during the binding when encounter 'super'
         ClassWithBodyScopedClassBinding = 0x00100000,    // Decorated class that contains a binding to itself inside of the class body.
         BodyScopedClassBinding      = 0x00200000,        // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00400000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
     /* @internal */
