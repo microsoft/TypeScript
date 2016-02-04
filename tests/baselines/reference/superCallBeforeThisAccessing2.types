@@ -1,4 +1,4 @@
-=== tests/cases/conformance/classes/superCallBeforeThisAccessing2.ts ===
+=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing2.ts ===
 class Base {
 >Base : Base
 

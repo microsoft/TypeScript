@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/superCallBeforeThisAccessing4.ts(3,5): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'
-tests/cases/conformance/classes/superCallBeforeThisAccessing4.ts(11,5): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'
+tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts(3,5): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'
+tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts(11,5): error TS17005: A constructor cannot contain a 'super' call when its class extends 'null'
 
 
-==== tests/cases/conformance/classes/superCallBeforeThisAccessing4.ts (2 errors) ====
+==== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing4.ts (2 errors) ====
     class D extends null {
         private _t;
         constructor() {
