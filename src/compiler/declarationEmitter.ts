@@ -698,10 +698,6 @@ namespace ts {
         }
 
         function writeImportDeclaration(node: ImportDeclaration) {
-            if (!node.importClause && !(node.flags & NodeFlags.Export)) {
-                // do not write non-exported import declarations that don't have import clauses
-                return;
-            }
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
                 write("export ");

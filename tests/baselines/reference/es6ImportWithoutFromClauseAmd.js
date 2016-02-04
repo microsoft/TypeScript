@@ -36,3 +36,5 @@ export declare var a: number;
 //// [es6ImportWithoutFromClauseAmd_1.d.ts]
 export declare var b: number;
 //// [es6ImportWithoutFromClauseAmd_2.d.ts]
+import "es6ImportWithoutFromClauseAmd_0";
+import "es6ImportWithoutFromClauseAmd_2";
