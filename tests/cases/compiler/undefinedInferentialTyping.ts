@@ -1,4 +1,4 @@
-function f<T>(arr: T[], elemnt: T): T {
+function f<T>(arr: T[], element: T): T {
     return null;
 }
 

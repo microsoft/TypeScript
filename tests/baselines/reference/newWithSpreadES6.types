@@ -184,7 +184,7 @@ new b.f(1, 2, ...a, "string");
 >a : string[]
 >"string" : string
 
-// Parenthesised expression
+// Parenthesized expression
 new (b.f)(1, 2, "string");
 >new (b.f)(1, 2, "string") : any
 >(b.f) : new (x: number, y: number, ...z: string[]) => any
@@ -348,7 +348,7 @@ new c["a-b"](1, 2, ...a, "string");
 >a : string[]
 >"string" : string
 
-// Parenthesised expression
+// Parenthesized expression
 new (c["a-b"])(1, 2, "string");
 >new (c["a-b"])(1, 2, "string") : B
 >(c["a-b"]) : typeof B

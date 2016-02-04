@@ -29,7 +29,7 @@ export function fooWithSingleOverload(a: any) {
 export function fooWithTypePredicate(a: any): a is number {
     return true;
 }
-export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+export function fooWithTypePredicateAndMultipleParams(a: any, b: any, c: any): a is number {
     return true;
 }
 export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
@@ -110,10 +110,10 @@ function fooWithTypePredicate(a) {
     return true;
 }
 exports.fooWithTypePredicate = fooWithTypePredicate;
-function fooWithTypePredicateAndMulitpleParams(a, b, c) {
+function fooWithTypePredicateAndMultipleParams(a, b, c) {
     return true;
 }
-exports.fooWithTypePredicateAndMulitpleParams = fooWithTypePredicateAndMulitpleParams;
+exports.fooWithTypePredicateAndMultipleParams = fooWithTypePredicateAndMultipleParams;
 function fooWithTypeTypePredicateAndGeneric(a) {
     return true;
 }
@@ -179,7 +179,7 @@ export declare function fooWithOverloads(a: string): string;
 export declare function fooWithOverloads(a: number): number;
 export declare function fooWithSingleOverload(a: string): string;
 export declare function fooWithTypePredicate(a: any): a is number;
-export declare function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number;
+export declare function fooWithTypePredicateAndMultipleParams(a: any, b: any, c: any): a is number;
 export declare function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T;
 export declare function fooWithTypeTypePredicateAndRestParam(a: any, ...rest: any[]): a is number;
 //// [declFileFunctions_1.d.ts]

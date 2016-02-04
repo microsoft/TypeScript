@@ -91,7 +91,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo2' is missing in type 'C'.
-    unionDE = c; // error since C is not assinable to either D or E
+    unionDE = c; // error since C is not assignable to either D or E
     ~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'D | E'.
 !!! error TS2322:   Type 'C' is not assignable to type 'E'.

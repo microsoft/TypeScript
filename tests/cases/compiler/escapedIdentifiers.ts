@@ -91,7 +91,7 @@ constructorTestObject.arg2 = 'string';
 constructorTestObject.arg\u0033 = true;
 constructorTestObject.arg4 = 2;
 
-// Lables
+// Labels
 
 l\u0061bel1: 
     while (false)

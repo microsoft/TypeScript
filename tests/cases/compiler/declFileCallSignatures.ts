@@ -30,7 +30,7 @@ export interface ICallSignatureWithTypeParameters<T> {
     (a: T): string;
 }
 
-export interface ICallSignatureWithOwnTypeParametes {
+export interface ICallSignatureWithOwnTypeParameters {
     <T extends ICallSignature>(a: T): string;
 }
 
@@ -63,6 +63,6 @@ interface IGlobalCallSignatureWithTypeParameters<T> {
     (a: T): string;
 }
 
-interface IGlobalCallSignatureWithOwnTypeParametes {
+interface IGlobalCallSignatureWithOwnTypeParameters {
     <T extends IGlobalCallSignature>(a: T): string;
 }

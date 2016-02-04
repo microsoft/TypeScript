@@ -313,7 +313,7 @@ class c {
 >prop5 : { (a: number): number; (b: string): number; }
 >b : string
 
-    /** Prop5 implementaion*/
+    /** Prop5 implementation*/
     public prop5(aorb: any) {
 >prop5 : { (a: number): number; (b: string): number; }
 >aorb : any

@@ -13,7 +13,7 @@ declare var declaredVar;
 declare var declareVar2
 
 declare var declaredVar3;
-declare var deckareVarWithType: number;
+declare var declareVarWithType: number;
 
 var arrayVar: string[] = ['a', 'b'];
 
@@ -182,7 +182,7 @@ declare var withComplicatedValue: {
 declare var declaredVar: any;
 declare var declareVar2: any;
 declare var declaredVar3: any;
-declare var deckareVarWithType: number;
+declare var declareVarWithType: number;
 declare var arrayVar: string[];
 declare var complicatedArrayVar: {
     x: number;

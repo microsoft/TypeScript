@@ -9,7 +9,7 @@ module Events {
 }
 
 module Consumer {
-    class EventEmitterConsummer {
+    class EventEmitterConsumer {
         constructor (private emitter: Events.EventEmitter) { }
 
         private register() {

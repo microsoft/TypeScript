@@ -51,7 +51,7 @@ new b.f(1, 2, "string");
 new b.f(1, 2, ...a);
 new b.f(1, 2, ...a, "string"); 
 
-// Parenthesised expression
+// Parenthesized expression
 new (b.f)(1, 2, "string");
 new (b.f)(1, 2, ...a);
 new (b.f)(1, 2, ...a, "string"); 
@@ -76,7 +76,7 @@ new c["a-b"](1, 2, "string");
 new c["a-b"](1, 2, ...a);
 new c["a-b"](1, 2, ...a, "string");
 
-// Parenthesised expression
+// Parenthesized expression
 new (c["a-b"])(1, 2, "string");
 new (c["a-b"])(1, 2, ...a);
 new (c["a-b"])(1, 2, ...a, "string");
@@ -141,7 +141,7 @@ new (f.bind.apply(f, [void 0].concat([1, 2], a, ["string"])))()();
 new b.f(1, 2, "string");
 new ((_a = b.f).bind.apply(_a, [void 0].concat([1, 2], a)))();
 new ((_b = b.f).bind.apply(_b, [void 0].concat([1, 2], a, ["string"])))();
-// Parenthesised expression
+// Parenthesized expression
 new (b.f)(1, 2, "string");
 new ((_c = (b.f)).bind.apply(_c, [void 0].concat([1, 2], a)))();
 new ((_d = (b.f)).bind.apply(_d, [void 0].concat([1, 2], a, ["string"])))();
@@ -161,7 +161,7 @@ new (B.bind.apply(B, [void 0].concat([1, 2], a, ["string"])))();
 new c["a-b"](1, 2, "string");
 new ((_j = c["a-b"]).bind.apply(_j, [void 0].concat([1, 2], a)))();
 new ((_k = c["a-b"]).bind.apply(_k, [void 0].concat([1, 2], a, ["string"])))();
-// Parenthesised expression
+// Parenthesized expression
 new (c["a-b"])(1, 2, "string");
 new ((_l = (c["a-b"])).bind.apply(_l, [void 0].concat([1, 2], a)))();
 new ((_m = (c["a-b"])).bind.apply(_m, [void 0].concat([1, 2], a, ["string"])))();

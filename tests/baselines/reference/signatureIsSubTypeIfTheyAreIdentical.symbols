@@ -1,0 +1,24 @@
+=== tests/cases/compiler/signatureIsSubTypeIfTheyAreIdentical.ts ===
+interface ICache {
+>ICache : Symbol(ICache, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+
+    get<T>(key: string): T;
+>get : Symbol(get, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
+>T : Symbol(T, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
+>key : Symbol(key, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 1, 11))
+>T : Symbol(T, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
+}
+class CacheService implements ICache { // Should not error that property type of get are incompatible
+>CacheService : Symbol(CacheService, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 2, 1))
+>ICache : Symbol(ICache, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+
+    get<T>(key: string): T {
+>get : Symbol(get, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
+>T : Symbol(T, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
+>key : Symbol(key, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 4, 11))
+>T : Symbol(T, Decl(signatureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}

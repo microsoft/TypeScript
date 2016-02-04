@@ -8,7 +8,7 @@ module ts {
             assert.equal(actual, expected, "Encoded string using convertToBase64 does not match buffer.toString('base64')");
         }
 
-        it("Converts ASCII charaters correctly", () => {
+        it("Converts ASCII characters correctly", () => {
             runTest(" !\"#$ %&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
         });
 

@@ -3,7 +3,7 @@ function foo<T,U>() {
     var x: (item) => U;
     var y: (item) => T;
     x = y;  // Should be an error
-    y = x;  // Shound be an error
+    y = x;  // Should be an error
 }
 
 
@@ -12,5 +12,5 @@ function foo() {
     var x;
     var y;
     x = y; // Should be an error
-    y = x; // Shound be an error
+    y = x; // Should be an error
 }

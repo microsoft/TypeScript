@@ -3,12 +3,12 @@ interface Contextual {
     p?: number;
 }
 
-interface Ellement {
+interface Element {
     dummy;
     p: any;
 }
 
 var c: Contextual;
-var e: Ellement;
+var e: Element;
 
 (c || e).dummy;

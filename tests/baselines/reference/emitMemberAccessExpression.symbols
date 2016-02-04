@@ -9,8 +9,8 @@ module Microsoft.PeopleAtWork.Model {
 >PeopleAtWork : Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 17), Decl(emitMemberAccessExpression_file3.ts, 3, 17))
 >Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
 
-    export class KnockoutExtentions {
->KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+    export class KnockoutExtensions {
+>KnockoutExtensions : Symbol(KnockoutExtensions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
     }
 }
 === tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
@@ -32,11 +32,11 @@ module Microsoft.PeopleAtWork.Model {
 >populate : Symbol(populate, Decl(emitMemberAccessExpression_file2.ts, 3, 26))
 >raw : Symbol(raw, Decl(emitMemberAccessExpression_file2.ts, 4, 24))
 
-            var res = Model.KnockoutExtentions;
+            var res = Model.KnockoutExtensions;
 >res : Symbol(res, Decl(emitMemberAccessExpression_file2.ts, 5, 15))
->Model.KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+>Model.KnockoutExtensions : Symbol(KnockoutExtensions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
 >Model : Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
->KnockoutExtentions : Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+>KnockoutExtensions : Symbol(KnockoutExtensions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
         }
     }
 }

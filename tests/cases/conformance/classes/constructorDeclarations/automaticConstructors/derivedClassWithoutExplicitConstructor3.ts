@@ -1,4 +1,4 @@
-// automatic constructors with a class hieararchy of depth > 2
+// automatic constructors with a class hierarchy of depth > 2
 
 class Base {
     a = 1;

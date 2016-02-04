@@ -4,7 +4,7 @@
 //// type jamming<A> = (new <A>() => jamming<A>) & { constructor: /*2*/A };
 //// type jamming<A> = new <A>() => jamming<A> & { constructor: /*3*/A };
 
-let typeAliashDisplayParts = [{ text: "type", kind: "keyword" }, { text: " ", kind: "space" }, { text: "jamming", kind: "aliasName" },
+let typeAliasDisplayParts = [{ text: "type", kind: "keyword" }, { text: " ", kind: "space" }, { text: "jamming", kind: "aliasName" },
     { text: "<", kind: "punctuation" }, { text: "A", kind: "typeParameterName" }, { text: ">", kind: "punctuation" }];
 
 let typeParameterDisplayParts = [{ text: "(", kind: "punctuation" }, { text: "type parameter", kind: "text" }, { text: ")", kind: "punctuation" }, { text: " ", kind: "space" },
@@ -34,7 +34,7 @@ verify.verifyQuickInfoDisplayParts("type parameter", "", { start: test.markerByN
 
 goTo.marker('2');
 verify.verifyQuickInfoDisplayParts("type parameter", "", { start: test.markerByName("2").position, length: "A".length },
-    typeParameterDisplayParts.concat(typeAliashDisplayParts), []);
+    typeParameterDisplayParts.concat(typeAliasDisplayParts), []);
 
 goTo.marker('3');
 verify.verifyQuickInfoDisplayParts("type parameter", "", { start: test.markerByName("3").position, length: "A".length },

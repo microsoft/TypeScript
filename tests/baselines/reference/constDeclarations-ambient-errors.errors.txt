@@ -9,7 +9,7 @@ tests/cases/compiler/constDeclarations-ambient-errors.ts(9,22): error TS1039: In
 
 ==== tests/cases/compiler/constDeclarations-ambient-errors.ts (7 errors) ====
     
-    // error: no intialization expected in ambient declarations
+    // error: no initialization expected in ambient declarations
     declare const c1: boolean = true;
                               ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.

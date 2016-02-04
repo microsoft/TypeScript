@@ -7,17 +7,17 @@ enum package { }
 enum foo {
     public,
     private,
-    pacakge
+    package
 }
 
 const enum private {
     public,
     private,
-    pacakge
+    package
 }
 
 const enum bar {
     public,
     private,
-    pacakge
+    package
 }

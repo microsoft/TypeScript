@@ -57,7 +57,7 @@
 //// }
 //// var cookie = new Cookie("Chocolate Chip", false);
 //// var cookieMonster = new GenericMonster<Cookie, string>("Cookie Monster", 50, true, cookie, "hello");
-//// var sesameStreet = new GenericPlanet<GenericMonster<Cookie, string>>("Sesame Street", "Alpha Centuri", cookieMonster);
+//// var sesameStreet = new GenericPlanet<GenericMonster<Cookie, string>>("Sesame Street", "Alpha Centauri", cookieMonster);
 //// class GenericPlanet2<T extends Food, V>{
 ////     constructor(public name: string, public solarSystem: string, public species: GenericMonster<T, V>) { }
 //// }

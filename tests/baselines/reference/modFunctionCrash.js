@@ -1,6 +1,6 @@
 //// [modFunctionCrash.ts]
 declare module Q {
-    function f(fn:()=>void); // typechecking the function type shouldnot crash the compiler
+    function f(fn:()=>void); // typechecking the function type should not crash the compiler
 }
 
 

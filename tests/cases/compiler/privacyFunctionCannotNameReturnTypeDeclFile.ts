@@ -53,7 +53,7 @@ export function createExportedWidget4() {
 
 // @Filename:privacyFunctionReturnTypeDeclFile_consumer.ts
 import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
-export class publicClassWithWithPrivateParmeterTypes {
+export class publicClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod() { // Error
         return exporter.createExportedWidget1();
     }
@@ -80,7 +80,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     }
 }
 
-class privateClassWithWithPrivateParmeterTypes {
+class privateClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod() { 
         return exporter.createExportedWidget1();
     }
@@ -107,16 +107,16 @@ class privateClassWithWithPrivateParmeterTypes {
     }
 }
 
-export function publicFunctionWithPrivateParmeterTypes() { // Error
+export function publicFunctionWithPrivateParameterTypes() { // Error
     return exporter.createExportedWidget1();
 }
-function privateFunctionWithPrivateParmeterTypes()   {
+function privateFunctionWithPrivateParameterTypes()   {
     return exporter.createExportedWidget1();
 }
-export function publicFunctionWithPrivateParmeterTypes1() { // Error
+export function publicFunctionWithPrivateParameterTypes1() { // Error
     return exporter.createExportedWidget3();
 }
-function privateFunctionWithPrivateParmeterTypes1() {
+function privateFunctionWithPrivateParameterTypes1() {
     return exporter.createExportedWidget3();
 }
 

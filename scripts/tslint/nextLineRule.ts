@@ -5,8 +5,8 @@ const OPTION_CATCH = "check-catch";
 const OPTION_ELSE = "check-else";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static CATCH_FAILURE_STRING = "'catch' should not be on the same line as the preceeding block's curly brace";
-    public static ELSE_FAILURE_STRING = "'else' should not be on the same line as the preceeding block's curly brace";
+    public static CATCH_FAILURE_STRING = "'catch' should not be on the same line as the preceding block's curly brace";
+    public static ELSE_FAILURE_STRING = "'else' should not be on the same line as the preceding block's curly brace";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new NextLineWalker(sourceFile, this.getOptions()));

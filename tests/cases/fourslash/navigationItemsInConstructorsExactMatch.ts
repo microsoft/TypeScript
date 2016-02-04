@@ -6,7 +6,7 @@
 ////    }
 ////}
 
-// Search for properties defined in the constructor, but not other constructor paramters
+// Search for properties defined in the constructor, but not other constructor parameters
 var searchValue = "search";
 verify.navigationItemsListContains("search1", "property", searchValue, "prefix");
 verify.navigationItemsListContains("search2", "property", searchValue, "prefix");

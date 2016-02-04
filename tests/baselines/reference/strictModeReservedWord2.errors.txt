@@ -26,7 +26,7 @@ tests/cases/compiler/strictModeReservedWord2.ts(13,12): error TS1212: Identifier
     enum foo {
         public,
         private,
-        pacakge
+        package
     }
     
     const enum private {
@@ -34,12 +34,12 @@ tests/cases/compiler/strictModeReservedWord2.ts(13,12): error TS1212: Identifier
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode
         public,
         private,
-        pacakge
+        package
     }
     
     const enum bar {
         public,
         private,
-        pacakge
+        package
     }
     

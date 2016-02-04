@@ -41,8 +41,8 @@ declare var declareVar2
 declare var declaredVar;
 >declaredVar : Symbol(declaredVar, Decl(withExportDecl.ts, 13, 11), Decl(withExportDecl.ts, 16, 11))
 
-declare var deckareVarWithType: number;
->deckareVarWithType : Symbol(deckareVarWithType, Decl(withExportDecl.ts, 17, 11))
+declare var declareVarWithType: number;
+>declareVarWithType : Symbol(declareVarWithType, Decl(withExportDecl.ts, 17, 11))
 
 export declare var exportedDeclaredVar: number;
 >exportedDeclaredVar : Symbol(exportedDeclaredVar, Decl(withExportDecl.ts, 18, 18))

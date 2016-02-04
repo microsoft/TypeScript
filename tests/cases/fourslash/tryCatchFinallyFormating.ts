@@ -7,14 +7,14 @@
 /////*catchInTryCatchFinally*/    // comment
 ////}
 ////finally {
-/////*finalyInTryCatchFinally*/    // comment
+/////*finallyInTryCatchFinally*/    // comment
 ////}
 ////
 ////try {
 /////*tryInTryFinally*/    // comment
 ////}
 ////finally {
-/////*finalyInTryFinally*/    // comment
+/////*finallyInTryFinally*/    // comment
 ////}
 ////
 ////try {
@@ -29,9 +29,9 @@ format.document();
 var markers = [
     "tryInTryCatchFinally",
     "catchInTryCatchFinally",
-    "finalyInTryCatchFinally",
+    "finallyInTryCatchFinally",
     "tryInTryFinally",
-    "finalyInTryFinally",
+    "finallyInTryFinally",
     "tryInTryCatch",
     "catchInTryCatch"
 ];

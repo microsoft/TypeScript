@@ -76,14 +76,14 @@ module Commands {
                 fs.mkdirSync(directoryPath);
             }
         }
-        function transalatePath(outputFolder:string, path: string): string {
+        function translatePath(outputFolder:string, path: string): string {
             return outputFolder + directorySeparator + path.replace(":", "");
         }
         function fileExists(path: string): boolean {
             return fs.existsSync(path);
         }
         obj.filesRead.forEach(f => {
-            var filename = transalatePath(outputFolder, f.path);
+            var filename = translatePath(outputFolder, f.path);
             ensureDirectoriesExist(getDirectoryPath(filename));
             console.log("writing filename:   " + filename);
             fs.writeFile(filename, f.result.contents, (err) => { });
@@ -92,7 +92,7 @@ module Commands {
         console.log("Command:   tsc ");
         obj.arguments.forEach(a => {
             if (getRootLength(a) > 0) {
-                console.log(transalatePath(outputFolder, a));
+                console.log(translatePath(outputFolder, a));
             }
             else {
                 console.log(a);

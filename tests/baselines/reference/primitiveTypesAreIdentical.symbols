@@ -1,0 +1,97 @@
+=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/primitiveTypesAreIdentical.ts ===
+// primitive types are identical to themselves so these overloads will all cause errors
+
+function foo1(x: number);
+>foo1 : Symbol(foo1, Decl(primitiveTypesAreIdentical.ts, 0, 0), Decl(primitiveTypesAreIdentical.ts, 2, 25), Decl(primitiveTypesAreIdentical.ts, 3, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 2, 14))
+
+function foo1(x: number);
+>foo1 : Symbol(foo1, Decl(primitiveTypesAreIdentical.ts, 0, 0), Decl(primitiveTypesAreIdentical.ts, 2, 25), Decl(primitiveTypesAreIdentical.ts, 3, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 3, 14))
+
+function foo1(x: any) { }
+>foo1 : Symbol(foo1, Decl(primitiveTypesAreIdentical.ts, 0, 0), Decl(primitiveTypesAreIdentical.ts, 2, 25), Decl(primitiveTypesAreIdentical.ts, 3, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 4, 14))
+
+function foo2(x: string);
+>foo2 : Symbol(foo2, Decl(primitiveTypesAreIdentical.ts, 4, 25), Decl(primitiveTypesAreIdentical.ts, 6, 25), Decl(primitiveTypesAreIdentical.ts, 7, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 6, 14))
+
+function foo2(x: string);
+>foo2 : Symbol(foo2, Decl(primitiveTypesAreIdentical.ts, 4, 25), Decl(primitiveTypesAreIdentical.ts, 6, 25), Decl(primitiveTypesAreIdentical.ts, 7, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 7, 14))
+
+function foo2(x: any) { }
+>foo2 : Symbol(foo2, Decl(primitiveTypesAreIdentical.ts, 4, 25), Decl(primitiveTypesAreIdentical.ts, 6, 25), Decl(primitiveTypesAreIdentical.ts, 7, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 8, 14))
+
+function foo3(x: boolean);
+>foo3 : Symbol(foo3, Decl(primitiveTypesAreIdentical.ts, 8, 25), Decl(primitiveTypesAreIdentical.ts, 10, 26), Decl(primitiveTypesAreIdentical.ts, 11, 26))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 10, 14))
+
+function foo3(x: boolean);
+>foo3 : Symbol(foo3, Decl(primitiveTypesAreIdentical.ts, 8, 25), Decl(primitiveTypesAreIdentical.ts, 10, 26), Decl(primitiveTypesAreIdentical.ts, 11, 26))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 11, 14))
+
+function foo3(x: any) { }
+>foo3 : Symbol(foo3, Decl(primitiveTypesAreIdentical.ts, 8, 25), Decl(primitiveTypesAreIdentical.ts, 10, 26), Decl(primitiveTypesAreIdentical.ts, 11, 26))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 12, 14))
+
+function foo4(x: any);
+>foo4 : Symbol(foo4, Decl(primitiveTypesAreIdentical.ts, 12, 25), Decl(primitiveTypesAreIdentical.ts, 14, 22), Decl(primitiveTypesAreIdentical.ts, 15, 22))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 14, 14))
+
+function foo4(x: any);
+>foo4 : Symbol(foo4, Decl(primitiveTypesAreIdentical.ts, 12, 25), Decl(primitiveTypesAreIdentical.ts, 14, 22), Decl(primitiveTypesAreIdentical.ts, 15, 22))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 15, 14))
+
+function foo4(x: any) { }
+>foo4 : Symbol(foo4, Decl(primitiveTypesAreIdentical.ts, 12, 25), Decl(primitiveTypesAreIdentical.ts, 14, 22), Decl(primitiveTypesAreIdentical.ts, 15, 22))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 16, 14))
+
+function foo5(x: 'a');
+>foo5 : Symbol(foo5, Decl(primitiveTypesAreIdentical.ts, 16, 25), Decl(primitiveTypesAreIdentical.ts, 18, 22), Decl(primitiveTypesAreIdentical.ts, 19, 22), Decl(primitiveTypesAreIdentical.ts, 20, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 18, 14))
+
+function foo5(x: 'a');
+>foo5 : Symbol(foo5, Decl(primitiveTypesAreIdentical.ts, 16, 25), Decl(primitiveTypesAreIdentical.ts, 18, 22), Decl(primitiveTypesAreIdentical.ts, 19, 22), Decl(primitiveTypesAreIdentical.ts, 20, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 19, 14))
+
+function foo5(x: string);
+>foo5 : Symbol(foo5, Decl(primitiveTypesAreIdentical.ts, 16, 25), Decl(primitiveTypesAreIdentical.ts, 18, 22), Decl(primitiveTypesAreIdentical.ts, 19, 22), Decl(primitiveTypesAreIdentical.ts, 20, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 20, 14))
+
+function foo5(x: any) { }
+>foo5 : Symbol(foo5, Decl(primitiveTypesAreIdentical.ts, 16, 25), Decl(primitiveTypesAreIdentical.ts, 18, 22), Decl(primitiveTypesAreIdentical.ts, 19, 22), Decl(primitiveTypesAreIdentical.ts, 20, 25))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 21, 14))
+
+enum E { A }
+>E : Symbol(E, Decl(primitiveTypesAreIdentical.ts, 21, 25))
+>A : Symbol(E.A, Decl(primitiveTypesAreIdentical.ts, 23, 8))
+
+function foo6(x: E);
+>foo6 : Symbol(foo6, Decl(primitiveTypesAreIdentical.ts, 23, 12), Decl(primitiveTypesAreIdentical.ts, 24, 20), Decl(primitiveTypesAreIdentical.ts, 25, 20))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 24, 14))
+>E : Symbol(E, Decl(primitiveTypesAreIdentical.ts, 21, 25))
+
+function foo6(x: E);
+>foo6 : Symbol(foo6, Decl(primitiveTypesAreIdentical.ts, 23, 12), Decl(primitiveTypesAreIdentical.ts, 24, 20), Decl(primitiveTypesAreIdentical.ts, 25, 20))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 25, 14))
+>E : Symbol(E, Decl(primitiveTypesAreIdentical.ts, 21, 25))
+
+function foo6(x: any) { }
+>foo6 : Symbol(foo6, Decl(primitiveTypesAreIdentical.ts, 23, 12), Decl(primitiveTypesAreIdentical.ts, 24, 20), Decl(primitiveTypesAreIdentical.ts, 25, 20))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 26, 14))
+
+function foo7(x: void);
+>foo7 : Symbol(foo7, Decl(primitiveTypesAreIdentical.ts, 26, 25), Decl(primitiveTypesAreIdentical.ts, 28, 23), Decl(primitiveTypesAreIdentical.ts, 29, 23))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 28, 14))
+
+function foo7(x: void);
+>foo7 : Symbol(foo7, Decl(primitiveTypesAreIdentical.ts, 26, 25), Decl(primitiveTypesAreIdentical.ts, 28, 23), Decl(primitiveTypesAreIdentical.ts, 29, 23))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 29, 14))
+
+function foo7(x: any) { }
+>foo7 : Symbol(foo7, Decl(primitiveTypesAreIdentical.ts, 26, 25), Decl(primitiveTypesAreIdentical.ts, 28, 23), Decl(primitiveTypesAreIdentical.ts, 29, 23))
+>x : Symbol(x, Decl(primitiveTypesAreIdentical.ts, 30, 14))
+

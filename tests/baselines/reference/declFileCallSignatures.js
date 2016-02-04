@@ -28,7 +28,7 @@ export interface ICallSignatureWithTypeParameters<T> {
     (a: T): string;
 }
 
-export interface ICallSignatureWithOwnTypeParametes {
+export interface ICallSignatureWithOwnTypeParameters {
     <T extends ICallSignature>(a: T): string;
 }
 
@@ -61,7 +61,7 @@ interface IGlobalCallSignatureWithTypeParameters<T> {
     (a: T): string;
 }
 
-interface IGlobalCallSignatureWithOwnTypeParametes {
+interface IGlobalCallSignatureWithOwnTypeParameters {
     <T extends IGlobalCallSignature>(a: T): string;
 }
 
@@ -92,7 +92,7 @@ export interface ICallSignatureWithTypeParameters<T> {
     /** This comment should appear for foo*/
     (a: T): string;
 }
-export interface ICallSignatureWithOwnTypeParametes {
+export interface ICallSignatureWithOwnTypeParameters {
     <T extends ICallSignature>(a: T): string;
 }
 //// [declFileCallSignatures_1.d.ts]
@@ -117,6 +117,6 @@ interface IGlobalCallSignatureWithTypeParameters<T> {
     /** This comment should appear for foo*/
     (a: T): string;
 }
-interface IGlobalCallSignatureWithOwnTypeParametes {
+interface IGlobalCallSignatureWithOwnTypeParameters {
     <T extends IGlobalCallSignature>(a: T): string;
 }

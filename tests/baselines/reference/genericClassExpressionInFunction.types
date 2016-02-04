@@ -44,8 +44,8 @@ class K extends B1<number>() {
 >B1<number>() : B1<number>.(Anonymous class)
 >B1 : <U>() => typeof (Anonymous class)
 
-    namae: string;
->namae : string
+    name: string;
+>name : string
 }
 class C extends (new B2<number>().anon) {
 >C : C

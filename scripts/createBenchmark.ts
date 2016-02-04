@@ -30,15 +30,15 @@ var rawCompilerSources = "";
 sourceFiles.forEach(f=> {
     rawCompilerSources += "\r\n" + fs.readFileSync(path.join(tsSourceDir, f)).toString();
 });
-var compilerSoruces = `var compilerSources = ${JSON.stringify(rawCompilerSources) };`;
+var compilerSources = `var compilerSources = ${JSON.stringify(rawCompilerSources) };`;
 
-// .js code for the compiler, what we are actuallty testing
+// .js code for the compiler, what we are actually testing
 var rawCompilerJavaScript = fs.readFileSync(path.join(tsBuildDir, "tsc.js")).toString();
 rawCompilerJavaScript = rawCompilerJavaScript.replace("ts.executeCommandLine(ts.sys.args);", "");
 
 // lib.d.ts sources
 var rawLibSources = fs.readFileSync(path.join(tsBuildDir, "lib.d.ts")).toString();
-var libSoruces = `var libSources = ${JSON.stringify(rawLibSources) };`;
+var libSources = `var libSources = ${JSON.stringify(rawLibSources) };`;
 
 // write test output
 if (!fs.existsSync(testOutputDir)) {
@@ -48,7 +48,7 @@ if (!fs.existsSync(testOutputDir)) {
 // 1. compiler ts sources, used to test
 fs.writeFileSync(
     path.join(testOutputDir, "compilerSources.js"),
-    `${ compilerSoruces } \r\n ${ libSoruces }`);
+    `${ compilerSources } \r\n ${ libSources }`);
 
 // 2. the compiler js sources + a call the compiler
 fs.writeFileSync(

@@ -33,7 +33,7 @@ class D extends C {
     }
 }
 
-// if D is a valid class definition than E is now not safe tranisitively through C
+// if D is a valid class definition than E is now not safe transitively through C
 class E extends D {
     x: string;
     get X(): string{ return ''; }
@@ -115,7 +115,7 @@ var D = (function (_super) {
     };
     return D;
 }(C));
-// if D is a valid class definition than E is now not safe tranisitively through C
+// if D is a valid class definition than E is now not safe transitively through C
 var E = (function (_super) {
     __extends(E, _super);
     function E() {

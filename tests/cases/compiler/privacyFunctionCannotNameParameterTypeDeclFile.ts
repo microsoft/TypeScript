@@ -53,7 +53,7 @@ export function createExportedWidget4() {
 
 // @Filename:privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts
 import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-export class publicClassWithWithPrivateParmeterTypes {
+export class publicClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
@@ -65,7 +65,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) { // Error
     }
 }
-export class publicClassWithWithPrivateParmeterTypes1 {
+export class publicClassWithWithPrivateParameterTypes1 {
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
@@ -78,7 +78,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
     }
 }
 
-class privateClassWithWithPrivateParmeterTypes {
+class privateClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
@@ -90,7 +90,7 @@ class privateClassWithWithPrivateParmeterTypes {
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) {
     }
 }
-class privateClassWithWithPrivateParmeterTypes2 {
+class privateClassWithWithPrivateParameterTypes2 {
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
@@ -103,13 +103,13 @@ class privateClassWithWithPrivateParmeterTypes2 {
     }
 }
 
-export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
+export function publicFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) { // Error
 }
-function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
+function privateFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) {
 }
-export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
+export function publicFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) { // Error
 }
-function privateFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) {
+function privateFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) {
 }
 
 

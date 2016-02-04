@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// Ensure kind is set correctelly on completions of a generic symbol
+// Ensure kind is set correctly on completions of a generic symbol
 
 ////var a = [1,2,3];
 ////a./**/

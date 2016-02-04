@@ -48,7 +48,7 @@ sourceFile:sourceMapValidationClasses.ts
   >           }
   >       
   >           var b = foo2("Hello", "World", "!");
-  >           // This is simple signle line comment
+  >           // This is simple single line comment
   >           for (var j = 0; j < b.length; j++) {
   >               b[j].greet();
   >           }
@@ -109,7 +109,7 @@ sourceFile:sourceMapValidationClasses.ts
   >               }
   >           
   >               var b = foo2("Hello", "World", "!");
-  >               // This is simple signle line comment
+  >               // This is simple single line comment
   >               for (var j = 0; j < b.length; j++) {
   >                   b[j].greet();
   >               }
@@ -732,12 +732,12 @@ sourceFile:sourceMapValidationClasses.ts
 12>Emitted(32, 44) Source(31, 40) + SourceIndex(0)
 13>Emitted(32, 45) Source(31, 41) + SourceIndex(0)
 ---
->>>        // This is simple signle line comment
+>>>        // This is simple single line comment
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    
-2 >        // This is simple signle line comment
+2 >        // This is simple single line comment
 1->Emitted(33, 9) Source(32, 5) + SourceIndex(0)
 2 >Emitted(33, 46) Source(32, 42) + SourceIndex(0)
 ---
@@ -891,7 +891,7 @@ sourceFile:sourceMapValidationClasses.ts
   >                                    }
   >                                
   >                                    var b = foo2("Hello", "World", "!");
-  >                                    // This is simple signle line comment
+  >                                    // This is simple single line comment
   >                                    for (var j = 0; j < b.length; j++) {
   >                                        b[j].greet();
   >                                    }
@@ -952,7 +952,7 @@ sourceFile:sourceMapValidationClasses.ts
   >                  }
   >              
   >                  var b = foo2("Hello", "World", "!");
-  >                  // This is simple signle line comment
+  >                  // This is simple single line comment
   >                  for (var j = 0; j < b.length; j++) {
   >                      b[j].greet();
   >                  }

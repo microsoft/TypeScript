@@ -8,7 +8,7 @@ class C {
         return null;
     }
 
-    underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
+    undefinedWidenFuncOfC() {  // error at "undefinedWidenFuncOfC"
         return undefined;
     }
 }

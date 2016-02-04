@@ -1,21 +1,21 @@
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2322: Type 'A | B' is not assignable to type 'A'.
+tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts(15,5): error TS2322: Type 'A | B' is not assignable to type 'A'.
   Type 'B' is not assignable to type 'A'.
     Property 'propertyA' is missing in type 'B'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type 'A | B' is not assignable to type 'B'.
+tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts(16,5): error TS2322: Type 'A | B' is not assignable to type 'B'.
   Type 'A' is not assignable to type 'B'.
     Property 'propertyB' is missing in type 'A'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number'.
+tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts(19,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => number'.
   Type '(n: X) => string' is not assignable to type '(t: X) => number'.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string'.
+tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts(20,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => string'.
   Type '(m: X) => number' is not assignable to type '(t: X) => string'.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts(21,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean'.
+tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts(21,5): error TS2322: Type '((m: X) => number) | ((n: X) => string)' is not assignable to type '(t: X) => boolean'.
   Type '(m: X) => number' is not assignable to type '(t: X) => boolean'.
     Type 'number' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithoutIdenticalBCT.ts (5 errors) ====
+==== tests/cases/conformance/expressions/conditionalOperator/conditionalOperatorWithoutIdenticalBCT.ts (5 errors) ====
     //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
     class X { propertyX: any; propertyX1: number; propertyX2: string };
     class A extends X { propertyA: number };

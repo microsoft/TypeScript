@@ -57,7 +57,7 @@ describe('PatternMatcher', function () {
     });
 
     describe("BreakIntoWordSpans", function () {
-        it("VarbatimIdentifier", () => {
+        it("VerbatimIdentifier", () => {
             verifyBreakIntoWordSpans("@int:", "int");
         });
 

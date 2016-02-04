@@ -82,7 +82,7 @@ module Foo.Bar {
 >b : Symbol(b, Decl(sourceMapValidationClasses.ts, 30, 7))
 >foo2 : Symbol(foo2, Decl(sourceMapValidationClasses.ts, 18, 30))
 
-    // This is simple signle line comment
+    // This is simple single line comment
     for (var j = 0; j < b.length; j++) {
 >j : Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
 >j : Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))

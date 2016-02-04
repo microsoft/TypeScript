@@ -18,7 +18,7 @@ interface I2 {
 
 interface I3 {
     [x: string]: string;
-    foo: string | number; // error numer is not subtype of string
+    foo: string | number; // error number is not subtype of string
     foo2: e | number; // error e and number both not subtype of string
 }
 

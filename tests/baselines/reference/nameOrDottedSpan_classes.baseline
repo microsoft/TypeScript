@@ -444,7 +444,7 @@
 
                                            ~~     => Pos: (767 to 768)  SpanInfo: undefined
 --------------------------------
-32 >    // This is simple signle line comment
+32 >    // This is simple single line comment
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (769 to 810)  SpanInfo: undefined
 --------------------------------

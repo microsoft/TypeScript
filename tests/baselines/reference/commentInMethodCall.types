@@ -1,5 +1,5 @@
 === tests/cases/compiler/commentInMethodCall.ts ===
-//commment here
+//comment here
 var s: string[];
 >s : string[]
 

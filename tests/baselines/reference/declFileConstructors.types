@@ -24,8 +24,8 @@ export class ConstructorWithParameters {
     }
 }
 
-export class ConstructorWithRestParamters {
->ConstructorWithRestParamters : ConstructorWithRestParamters
+export class ConstructorWithRestParameters {
+>ConstructorWithRestParameters : ConstructorWithRestParameters
 
     constructor(a: string, ...rests: string[]) {
 >a : string
@@ -114,8 +114,8 @@ class GlobalConstructorWithParameters {
     }
 }
 
-class GlobalConstructorWithRestParamters {
->GlobalConstructorWithRestParamters : GlobalConstructorWithRestParamters
+class GlobalConstructorWithRestParameters {
+>GlobalConstructorWithRestParameters : GlobalConstructorWithRestParameters
 
     constructor(a: string, ...rests: string[]) {
 >a : string

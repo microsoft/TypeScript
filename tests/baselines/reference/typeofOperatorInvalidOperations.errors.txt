@@ -6,7 +6,7 @@ tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperator
 ==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts (3 errors) ====
     // Unary operator typeof
     
-    // opreand before typeof
+    // operand before typeof
     var ANY = ANY typeof ;    //expect error
                   ~~~~~~
 !!! error TS1005: ',' expected.

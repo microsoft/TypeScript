@@ -34,7 +34,7 @@ module B {
 }
 
 var fn: () => { x: number; y: number };
-var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignable as expected
 
 var cl: { x: number; y: number; }
 var cl = B.Point();

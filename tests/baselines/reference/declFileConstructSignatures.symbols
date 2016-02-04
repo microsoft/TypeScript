@@ -48,8 +48,8 @@ export interface IConstructSignatureWithTypeParameters<T> {
 >T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 22, 55))
 }
 
-export interface IConstructSignatureWithOwnTypeParametes {
->IConstructSignatureWithOwnTypeParametes : Symbol(IConstructSignatureWithOwnTypeParametes, Decl(declFileConstructSignatures_0.ts, 25, 1))
+export interface IConstructSignatureWithOwnTypeParameters {
+>IConstructSignatureWithOwnTypeParameters : Symbol(IConstructSignatureWithOwnTypeParameters, Decl(declFileConstructSignatures_0.ts, 25, 1))
 
     new <T extends IConstructSignature>(a: T): T;
 >T : Symbol(T, Decl(declFileConstructSignatures_0.ts, 28, 9))
@@ -109,8 +109,8 @@ interface IGlobalConstructSignatureWithTypeParameters<T> {
 >T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 23, 54))
 }
 
-interface IGlobalConstructSignatureWithOwnTypeParametes {
->IGlobalConstructSignatureWithOwnTypeParametes : Symbol(IGlobalConstructSignatureWithOwnTypeParametes, Decl(declFileConstructSignatures_1.ts, 26, 1))
+interface IGlobalConstructSignatureWithOwnTypeParameters {
+>IGlobalConstructSignatureWithOwnTypeParameters : Symbol(IGlobalConstructSignatureWithOwnTypeParameters, Decl(declFileConstructSignatures_1.ts, 26, 1))
 
     new <T extends IGlobalConstructSignature>(a: T): T;
 >T : Symbol(T, Decl(declFileConstructSignatures_1.ts, 29, 9))

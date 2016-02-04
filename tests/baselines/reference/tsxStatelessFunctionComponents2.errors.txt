@@ -48,7 +48,7 @@ tests/cases/conformance/jsx/file.tsx(36,26): error TS2339: Property 'propertyNot
     
     // OK - contextually typed intrinsic ref callback parameter
     let h = <div ref={x => x.innerText} />;
-    // Error - property not on ontextually typed intrinsic ref callback parameter
+    // Error - property not contextually typed intrinsic ref callback parameter
     let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.

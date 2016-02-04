@@ -53,7 +53,7 @@ function bar() { } = value;
 // function calls
 foo() = value;
 
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) = value;
 (M) = value;
 (C) = value;

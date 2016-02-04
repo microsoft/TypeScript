@@ -14,7 +14,7 @@ function B3<W>() {
 }
 // extends can call B
 class K extends B1<number>() {
-    namae: string;
+    name: string;
 }
 class C extends (new B2<number>().anon) {
     name: string;

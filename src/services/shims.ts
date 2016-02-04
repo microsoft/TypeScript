@@ -744,7 +744,7 @@ namespace ts {
                 `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
-                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    // workaround for VS document highlighting issue - keep only items from the initial file
                     const normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });

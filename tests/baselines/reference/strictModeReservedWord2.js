@@ -8,19 +8,19 @@ enum package { }
 enum foo {
     public,
     private,
-    pacakge
+    package
 }
 
 const enum private {
     public,
     private,
-    pacakge
+    package
 }
 
 const enum bar {
     public,
     private,
-    pacakge
+    package
 }
 
 
@@ -33,5 +33,5 @@ var foo;
 (function (foo) {
     foo[foo["public"] = 0] = "public";
     foo[foo["private"] = 1] = "private";
-    foo[foo["pacakge"] = 2] = "pacakge";
+    foo[foo["package"] = 2] = "package";
 })(foo || (foo = {}));

@@ -11,7 +11,7 @@ class Foo {
 class Foo2 {
 
     get bar() {
-        return 0; // should be an error - can't coerce infered return type to match setter annotated type
+        return 0; // should be an error - can't coerce inferred return type to match setter annotated type
     }
     set bar(n:string) {
     }
@@ -38,7 +38,7 @@ var Foo2 = (function () {
     }
     Object.defineProperty(Foo2.prototype, "bar", {
         get: function () {
-            return 0; // should be an error - can't coerce infered return type to match setter annotated type
+            return 0; // should be an error - can't coerce inferred return type to match setter annotated type
         },
         set: function (n) {
         },

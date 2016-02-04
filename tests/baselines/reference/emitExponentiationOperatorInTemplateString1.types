@@ -11,7 +11,7 @@ var t2 = 10;
 var s;
 >s : any
 
-// TempateHead & TemplateTail are empty
+// TemplateHead & TemplateTail are empty
 `${t1 ** t2}`;
 >`${t1 ** t2}` : string
 >t1 ** t2 : number

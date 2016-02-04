@@ -6,7 +6,7 @@
 ////    }
 ////}/*end*/
 
-// Edit to invalidate the intial typeCheck state
+// Edit to invalidate the initial typeCheck state
 goTo.eof();
 edit.insertLine("");
 

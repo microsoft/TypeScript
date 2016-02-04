@@ -5,7 +5,7 @@ module Foo {
     }
     
     class Inner {}
-    // Inner should show up in intellisense
+    // Inner should show up in Intellisense
     
     export var Outer=0;
 }
@@ -18,7 +18,7 @@ module Foo {
 
     }
     
-    // Inner should not show up in intellisense
-    // Outer should show up in intellisense
+    // Inner should not show up in Intellisense
+    // Outer should show up in Intellisense
 
 }

@@ -286,7 +286,7 @@ function f(s) {
 }
 ```
 
-In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emiting JavaScript.
+In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emitting JavaScript.
 
 ## <a name="1.1"/>1.1 Ambient Declarations
 
@@ -731,7 +731,7 @@ This example illustrates the two essential elements of the module pattern: a *mo
 
 The example assumes that an outer lexical scope defines the functions 'generateSecretKey' and 'sendSecureMessage'; it also assumes that the outer scope has assigned the module object to the variable 'MessageModule'.
 
-TypeScript namespaces provide a mechanism for succinctly expressing the module pattern. In TypeScript, programmers can combine the module pattern with the class pattern by nesting namespaces and classes within an outer namespace.
+TypeScript namespaces provide a mechanism for succinctly expressiong the module pattern. In TypeScript, programmers can combine the module pattern with the class pattern by nesting namespaces and classes within an outer namespace.
 
 The following example shows the definition and use of a simple namespace.
 
@@ -1900,7 +1900,7 @@ An object type containing call signatures is said to be a ***function type***.
 
 #### <a name="3.9.2.1"/>3.9.2.1 Type Parameters
 
-Type parameters (section [3.6.1](#3.6.1)) in call signatures provide a mechanism for expressing the relationships of parameter and return types in call operations. For example, a signature might introduce a type parameter and use it as both a parameter type and a return type, in effect describing a function that returns a value of the same type as its argument.
+Type parameters (section [3.6.1](#3.6.1)) in call signatures provide a mechanism for expressiong the relationships of parameter and return types in call operations. For example, a signature might introduce a type parameter and use it as both a parameter type and a return type, in effect describing a function that returns a value of the same type as its argument.
 
 Type parameters may be referenced in parameter types and return type annotations, but not in type parameter constraints, of the call signature in which they are introduced.
 
@@ -3178,7 +3178,7 @@ These operators require their operands to be of type Any, the Number primitive t
 |String||||||
 |Other||||||
 
-*TODO: Document the [exponentation operator](https://github.com/Microsoft/TypeScript/issues/4812)*.
+*TODO: Document the [exponentiation operator](https://github.com/Microsoft/TypeScript/issues/4812)*.
 
 ### <a name="4.19.2"/>4.19.2 The + operator
 
@@ -3715,7 +3715,7 @@ the array literal initializer expression is contextually typed by the implied ty
 
 ## <a name="5.3"/>5.3 Let and Const Declarations
 
-Let and const declarations are exended to include optional type annotations.
+Let and const declarations are extended to include optional type annotations.
 
 &emsp;&emsp;*LexicalBinding:*  *( Modified )*  
 &emsp;&emsp;&emsp;*SimpleLexicalBinding*  
@@ -3983,7 +3983,7 @@ function drawText({ text, location: [x, y], bold }: DrawTextInfo) {
 
 ## <a name="6.5"/>6.5 Generic Functions
 
-A function implementation may include type parameters in its signature (section [3.9.2.1](#3.9.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
+A function implementation may include type parameters in its signature (section [3.9.2.1](#3.9.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressiong relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
 
 Type parameters declared in the signature of a function implementation are in scope in the signature and body of that function implementation.
 
@@ -4910,7 +4910,7 @@ Object.defineProperty(<ClassName>, "<MemberName>", {
 };
 ```
 
-where *MemberName* is the name of the member accessor, *GetAccessorStatements* is the code generated for the statements in the get acessor's function body, *ParameterName* is the name of the set accessor parameter, and *SetAccessorStatements* is the code generated for the statements in the set accessor's function body. The 'get' property is included only if a get accessor is declared and the 'set' property is included only if a set accessor is declared.
+where *MemberName* is the name of the member accessor, *GetAccessorStatements* is the code generated for the statements in the get accessor's function body, *ParameterName* is the name of the set accessor parameter, and *SetAccessorStatements* is the code generated for the statements in the set accessor's function body. The 'get' property is included only if a get accessor is declared and the 'set' property is included only if a set accessor is declared.
 
 *StaticVariableAssignments* is a sequence of statements, one for each static member variable declaration with an initializer, in the order they are declared, of the form
 
@@ -5520,7 +5520,7 @@ The TypeScript compiler automatically determines a source file's dependencies an
 * A module import declaration that specifies a relative module name (section [11.3.1](#11.3.1)) resolves the name relative to the directory of the containing source file. If a source file with the resulting path and file extension '.ts' exists, that file is added as a dependency. Otherwise, if a source file with the resulting path and file extension '.d.ts' exists, that file is added as a dependency.
 * A module import declaration that specifies a top-level module name (section [11.3.1](#11.3.1)) resolves the name in a host dependent manner (typically by resolving the name relative to a module name space root or searching for the name in a series of directories). If a source file with extension '.ts' or '.d.ts' corresponding to the reference is located, that file is added as a dependency.
 
-Any files included as dependencies in turn have their references analyzed in a transitive manner until all dependencies have been determined.
+Any files included as dependencies in turn have their references analysed in a transitive manner until all dependencies have been determined.
 
 ## <a name="11.2"/>11.2 Scripts
 

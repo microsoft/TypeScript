@@ -106,7 +106,7 @@ module Foo.Bar {
 >"World" : string
 >"!" : string
 
-    // This is simple signle line comment
+    // This is simple single line comment
     for (var j = 0; j < b.length; j++) {
 >j : number
 >0 : number

@@ -110,7 +110,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
         // When you just want to test the script out on one or two files,
         // just add a line like the following:
         //
-        //   .filter(d => d.indexOf("sipml") >= 0 )
+        //   .filter(d => d.indexOf("simple") >= 0 )
         subDirectories
             .filter(d => ["_infrastructure", "node_modules", ".git"].indexOf(d) < 0)
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())

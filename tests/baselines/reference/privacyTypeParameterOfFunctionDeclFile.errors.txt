@@ -180,7 +180,7 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
     function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
     }
     
-    export interface publicInterfaceWithPrivatModuleTypeParameters {
+    export interface publicInterfaceWithPrivateModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
                        ~~~~~~~~~~~~~
 !!! error TS4006: Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateModule'.
@@ -213,7 +213,7 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
     }
     
     
-    interface privateInterfaceWithPrivatModuleTypeParameters {
+    interface privateInterfaceWithPrivateModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;
         <T extends privateModule.publicClass>(): privateModule.publicClass;
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
@@ -372,7 +372,7 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
         function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
         }
     
-        export interface publicInterfaceWithPrivatModuleTypeParameters {
+        export interface publicInterfaceWithPrivateModuleTypeParameters {
             new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
                            ~~~~~~~~~~~~~
 !!! error TS4006: Type parameter 'T' of constructor signature from exported interface has or is using private name 'privateModule'.
@@ -405,7 +405,7 @@ tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts(293,78): error TS
         }
     
     
-        interface privateInterfaceWithPrivatModuleTypeParameters {
+        interface privateInterfaceWithPrivateModuleTypeParameters {
             new <T extends privateModule.publicClass>(): privateModule.publicClass;  
             <T extends privateModule.publicClass>(): privateModule.publicClass;  
             myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  

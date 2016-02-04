@@ -32,7 +32,7 @@ class D extends C {
     }
 }
 
-// if D is a valid class definition than E is now not safe tranisitively through C
+// if D is a valid class definition than E is now not safe transitively through C
 class E extends D {
     x: string;
     get X(): string{ return ''; }

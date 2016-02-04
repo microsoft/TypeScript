@@ -47,7 +47,7 @@
 ////
 ////class BaseWrapper<T extends Base> {
 ////    public test(value: T) {
-////        value./*publicOnlyMemebers*/
+////        value./*publicOnlyMembers*/
 ////    }
 ////}
 
@@ -68,7 +68,7 @@ verify.memberListContains("apply");
 verify.memberListContains("call");
 verify.memberListContains("bind");
 
-goTo.marker("publicOnlyMemebers");
+goTo.marker("publicOnlyMembers");
 verify.memberListContains("publicProperty");
 verify.memberListContains("publicMethod");
 verify.not.memberListContains("privateProperty");

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/noImplicitAnyInContextuallyTypesFunctionParamter.ts ===
+=== tests/cases/compiler/noImplicitAnyInContextuallyTypesFunctionParameter.ts ===
 
 var regexMatchList = ['', ''];
 >regexMatchList : string[]

@@ -53,7 +53,7 @@ export function createExportedWidget4() {
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts]
 import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-export class publicClassWithWithPrivateParmeterTypes {
+export class publicClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
@@ -65,7 +65,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) { // Error
     }
 }
-export class publicClassWithWithPrivateParmeterTypes1 {
+export class publicClassWithWithPrivateParameterTypes1 {
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
@@ -78,7 +78,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
     }
 }
 
-class privateClassWithWithPrivateParmeterTypes {
+class privateClassWithWithPrivateParameterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
@@ -90,7 +90,7 @@ class privateClassWithWithPrivateParmeterTypes {
     constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) {
     }
 }
-class privateClassWithWithPrivateParmeterTypes2 {
+class privateClassWithWithPrivateParameterTypes2 {
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
@@ -103,13 +103,13 @@ class privateClassWithWithPrivateParmeterTypes2 {
     }
 }
 
-export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
+export function publicFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) { // Error
 }
-function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
+function privateFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) {
 }
-export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
+export function publicFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) { // Error
 }
-function privateFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) {
+function privateFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) {
 }
 
 
@@ -208,108 +208,108 @@ exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.js]
 "use strict";
 var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-var publicClassWithWithPrivateParmeterTypes = (function () {
-    function publicClassWithWithPrivateParmeterTypes(param, param1, param2) {
+var publicClassWithWithPrivateParameterTypes = (function () {
+    function publicClassWithWithPrivateParameterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget1(); }
         if (param2 === void 0) { param2 = exporter.createExportedWidget1(); }
         this.param1 = param1;
         this.param2 = param2;
     }
-    publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes.myPublicStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes.myPrivateStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes.prototype.myPublicMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes.prototype.myPrivateMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    return publicClassWithWithPrivateParmeterTypes;
+    return publicClassWithWithPrivateParameterTypes;
 }());
-exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-var publicClassWithWithPrivateParmeterTypes1 = (function () {
-    function publicClassWithWithPrivateParmeterTypes1(param, param1, param2) {
+exports.publicClassWithWithPrivateParameterTypes = publicClassWithWithPrivateParameterTypes;
+var publicClassWithWithPrivateParameterTypes1 = (function () {
+    function publicClassWithWithPrivateParameterTypes1(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget3(); }
         if (param2 === void 0) { param2 = exporter.createExportedWidget3(); }
         this.param1 = param1;
         this.param2 = param2;
     }
-    publicClassWithWithPrivateParmeterTypes1.myPublicStaticMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes1.myPublicStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    publicClassWithWithPrivateParmeterTypes1.myPrivateStaticMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes1.myPrivateStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    publicClassWithWithPrivateParmeterTypes1.prototype.myPublicMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes1.prototype.myPublicMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    publicClassWithWithPrivateParmeterTypes1.prototype.myPrivateMethod = function (param) {
+    publicClassWithWithPrivateParameterTypes1.prototype.myPrivateMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    return publicClassWithWithPrivateParmeterTypes1;
+    return publicClassWithWithPrivateParameterTypes1;
 }());
-exports.publicClassWithWithPrivateParmeterTypes1 = publicClassWithWithPrivateParmeterTypes1;
-var privateClassWithWithPrivateParmeterTypes = (function () {
-    function privateClassWithWithPrivateParmeterTypes(param, param1, param2) {
+exports.publicClassWithWithPrivateParameterTypes1 = publicClassWithWithPrivateParameterTypes1;
+var privateClassWithWithPrivateParameterTypes = (function () {
+    function privateClassWithWithPrivateParameterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget1(); }
         if (param2 === void 0) { param2 = exporter.createExportedWidget1(); }
         this.param1 = param1;
         this.param2 = param2;
     }
-    privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes.myPublicStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes.myPrivateStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes.prototype.myPublicMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes.prototype.myPrivateMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
-    return privateClassWithWithPrivateParmeterTypes;
+    return privateClassWithWithPrivateParameterTypes;
 }());
-var privateClassWithWithPrivateParmeterTypes2 = (function () {
-    function privateClassWithWithPrivateParmeterTypes2(param, param1, param2) {
+var privateClassWithWithPrivateParameterTypes2 = (function () {
+    function privateClassWithWithPrivateParameterTypes2(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget3(); }
         if (param2 === void 0) { param2 = exporter.createExportedWidget3(); }
         this.param1 = param1;
         this.param2 = param2;
     }
-    privateClassWithWithPrivateParmeterTypes2.myPublicStaticMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes2.myPublicStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    privateClassWithWithPrivateParmeterTypes2.myPrivateStaticMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes2.myPrivateStaticMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    privateClassWithWithPrivateParmeterTypes2.prototype.myPublicMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes2.prototype.myPublicMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    privateClassWithWithPrivateParmeterTypes2.prototype.myPrivateMethod = function (param) {
+    privateClassWithWithPrivateParameterTypes2.prototype.myPrivateMethod = function (param) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
-    return privateClassWithWithPrivateParmeterTypes2;
+    return privateClassWithWithPrivateParameterTypes2;
 }());
-function publicFunctionWithPrivateParmeterTypes(param) {
+function publicFunctionWithPrivateParameterTypes(param) {
     if (param === void 0) { param = exporter.createExportedWidget1(); }
 }
-exports.publicFunctionWithPrivateParmeterTypes = publicFunctionWithPrivateParmeterTypes;
-function privateFunctionWithPrivateParmeterTypes(param) {
+exports.publicFunctionWithPrivateParameterTypes = publicFunctionWithPrivateParameterTypes;
+function privateFunctionWithPrivateParameterTypes(param) {
     if (param === void 0) { param = exporter.createExportedWidget1(); }
 }
-function publicFunctionWithPrivateParmeterTypes1(param) {
+function publicFunctionWithPrivateParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget3(); }
 }
-exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
-function privateFunctionWithPrivateParmeterTypes1(param) {
+exports.publicFunctionWithPrivateParameterTypes1 = publicFunctionWithPrivateParameterTypes1;
+function privateFunctionWithPrivateParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget3(); }
 }
 var publicClassWithPrivateModuleParameterTypes = (function () {

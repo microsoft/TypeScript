@@ -1,5 +1,5 @@
 //// [genericCallWithObjectTypeArgsAndConstraints4.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 
 class C {
     x: string;
@@ -34,7 +34,7 @@ function other<T, U extends T>() {
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints4.js]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 var C = (function () {
     function C() {
     }

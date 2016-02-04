@@ -1,5 +1,5 @@
 //// [genericCallWithObjectTypeArgsAndConstraints.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 
 class C {
@@ -34,7 +34,7 @@ var r = foo2(c1, d1);
 var r2 = foo2(c1, c1);
 
 //// [genericCallWithObjectTypeArgsAndConstraints.js]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 var C = (function () {
     function C() {

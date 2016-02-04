@@ -8,7 +8,7 @@
 module Microsoft.PeopleAtWork.Model {
     export class _Person {
         public populate(raw: any) {
-            var res = Model.KnockoutExtentions;
+            var res = Model.KnockoutExtensions;
         }
     }
 }
@@ -18,6 +18,6 @@ module Microsoft.PeopleAtWork.Model {
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
 module Microsoft.PeopleAtWork.Model {
-    export class KnockoutExtentions {
+    export class KnockoutExtensions {
     }
 }

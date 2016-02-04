@@ -15,7 +15,7 @@
 
 
 goTo.marker("1");
-edit.insert("\r\n"); // edit will trigger formatting - should succeeed
+edit.insert("\r\n"); // edit will trigger formatting - should succeed
 
 goTo.marker("2");
 edit.insert("\r\n");

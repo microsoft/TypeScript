@@ -261,7 +261,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     ~~~~~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     
-    // parentheses, the containted expression is value
+    // parentheses, the contained expression is value
     (this) *= value;
     ~~~~~~
 !!! error TS2364: Invalid left-hand side of assignment expression.

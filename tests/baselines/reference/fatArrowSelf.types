@@ -23,8 +23,8 @@ module Events {
 module Consumer {
 >Consumer : typeof Consumer
 
-    class EventEmitterConsummer {
->EventEmitterConsummer : EventEmitterConsummer
+    class EventEmitterConsumer {
+>EventEmitterConsumer : EventEmitterConsumer
 
         constructor (private emitter: Events.EventEmitter) { }
 >emitter : Events.EventEmitter

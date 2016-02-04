@@ -1,9 +1,9 @@
-//// [noImplicitAnyInContextuallyTypesFunctionParamter.ts]
+//// [noImplicitAnyInContextuallyTypesFunctionParameter.ts]
 
 var regexMatchList = ['', ''];
 regexMatchList.forEach(match => ''.replace(match, ''));
 
 
-//// [noImplicitAnyInContextuallyTypesFunctionParamter.js]
+//// [noImplicitAnyInContextuallyTypesFunctionParameter.js]
 var regexMatchList = ['', ''];
 regexMatchList.forEach(function (match) { return ''.replace(match, ''); });

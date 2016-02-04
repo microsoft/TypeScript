@@ -19,7 +19,7 @@ declare var declaredVar;
 declare var declareVar2
 
 declare var declaredVar;
-declare var deckareVarWithType: number;
+declare var declareVarWithType: number;
 
 var arrayVar: string[] = ['a', 'b'];
 

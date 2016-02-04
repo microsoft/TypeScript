@@ -33,7 +33,7 @@
 ////// in multiple paren
 ////    (            (            (            (            (        arg )           =>    { return 32  ;    } )     )     )     )      ;/*26*/
 ////
-////// in ternary exression
+////// in ternary expression
 ////      false        ?            (         )           =>    41     :    null  ;/*27*/
 ////   false        ?            (        arg )           =>    42     :    null  ;/*28*/
 ////    false        ?            (        arg     = 1 )           =>    43     :    null  ;/*29*/
@@ -43,7 +43,7 @@
 ////      false        ?            (        arg    ?           :    number     = 0 )           =>    47     :    null  ;/*33*/
 ////   false        ?            (                 ...     arg    :    number   [      ]    )           =>    48     :    null  ;/*34*/
 ////
-////// in ternary exression within paren
+////// in ternary expression within paren
 ////   false        ?            (            (         )           =>    51 )         :    null  ;/*35*/
 ////    false        ?            (            (        arg )           =>    52 )         :    null  ;/*36*/
 ////    false        ?            (            (        arg     = 1 )           =>    53 )         :    null  ;/*37*/
@@ -53,7 +53,7 @@
 ////    false        ?            (            (        arg    ?           :    number     = 0 )           =>    57 )         :    null  ;/*41*/
 ////   false        ?            (            (                 ...     arg    :    number   [      ]    )           =>    58 )         :    null  ;/*42*/
 ////
-////// ternary exression's else clause
+////// ternary expression's else clause
 ////   false        ?        null     :        (         )           =>    61  ;/*43*/
 ////        false        ?        null     :        (        arg )           =>    62  ;/*44*/
 ////   false        ?        null     :        (        arg     = 1 )           =>    63  ;/*45*/

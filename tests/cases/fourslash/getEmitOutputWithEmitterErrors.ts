@@ -11,5 +11,5 @@
 ////}
 
 
-// Only generate javscript file. The semantic error should not affect it
+// Only generate javascript file. The semantic error should not affect it
 verify.baselineGetEmitOutput();

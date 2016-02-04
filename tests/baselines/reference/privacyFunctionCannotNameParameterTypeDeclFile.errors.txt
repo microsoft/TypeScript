@@ -26,7 +26,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
 
 ==== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts (24 errors) ====
     import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-    export class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
@@ -48,7 +48,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
 !!! error TS4061: Parameter 'param2' of constructor from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
         }
     }
-    export class publicClassWithWithPrivateParmeterTypes1 {
+    export class publicClassWithWithPrivateParameterTypes1 {
         static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4068: Parameter 'param' of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
@@ -71,7 +71,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
         }
     }
     
-    class privateClassWithWithPrivateParmeterTypes {
+    class privateClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
         }
         private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
@@ -83,7 +83,7 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
         constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) {
         }
     }
-    class privateClassWithWithPrivateParmeterTypes2 {
+    class privateClassWithWithPrivateParameterTypes2 {
         static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
         }
         private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
@@ -96,17 +96,17 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
         }
     }
     
-    export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
+    export function publicFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) { // Error
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4076: Parameter 'param' of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_Widgets" but cannot be named.
     }
-    function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
+    function privateFunctionWithPrivateParameterTypes(param = exporter.createExportedWidget1()) {
     }
-    export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
+    export function publicFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) { // Error
                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4076: Parameter 'param' of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
     }
-    function privateFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) {
+    function privateFunctionWithPrivateParameterTypes1(param = exporter.createExportedWidget3()) {
     }
     
     

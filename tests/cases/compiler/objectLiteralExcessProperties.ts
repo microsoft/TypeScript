@@ -6,7 +6,7 @@ interface Cover {
     color?: string;
 }
 
-var b1: Book = { forword: "oops" };
+var b1: Book = { forward: "oops" };
 
 var b2: Book | string = { foreward: "nope" };
 

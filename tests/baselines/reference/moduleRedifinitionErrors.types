@@ -1,8 +1,0 @@
-=== tests/cases/compiler/moduleRedifinitionErrors.ts ===
-class A {
->A : A
-}
-module A {
->A : typeof A
-}
-

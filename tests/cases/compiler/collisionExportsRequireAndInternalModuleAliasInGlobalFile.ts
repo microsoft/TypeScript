@@ -1,22 +1,22 @@
-module mOfGloalFile {
+module mOfGlobalFile {
     export class c {
     }
 }
-import exports = mOfGloalFile.c;
-import require = mOfGloalFile.c;
+import exports = mOfGlobalFile.c;
+import require = mOfGlobalFile.c;
 new exports();
 new require();
 
 module m1 {
-    import exports = mOfGloalFile.c;
-    import require = mOfGloalFile.c;
+    import exports = mOfGlobalFile.c;
+    import require = mOfGlobalFile.c;
     new exports();
     new require();
 }
 
 module m2 {
-    export import exports = mOfGloalFile.c;
-    export import require = mOfGloalFile.c;
+    export import exports = mOfGlobalFile.c;
+    export import require = mOfGlobalFile.c;
     new exports();
     new require();
 }

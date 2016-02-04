@@ -458,7 +458,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
                 prependFile(copyright, standaloneDefinitionsFile);
 
-                // Stanalone/web definition file using global 'ts' namespace
+                // Standalone/web definition file using global 'ts' namespace
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
                 definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
@@ -710,7 +710,7 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
 }, {async: true});
 
-desc("Generates code coverage data via instanbul");
+desc("Generates code coverage data via istanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
@@ -947,7 +947,7 @@ task("lint", ["build-rules"], function() {
 
 /**
  * This is required because file watches on Windows get fires _twice_
- * when a file changes on some node/windows version configuations
+ * when a file changes on some node/windows version configurations
  * (node v4 and win 10, for example). By not running a lint for a file
  * which already has a pending lint, we avoid duplicating our work.
  * (And avoid printing duplicate results!)

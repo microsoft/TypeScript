@@ -353,8 +353,8 @@ declare function CreateTypedArrayTypes(): [typeof Int8Array, typeof Uint8Array, 
 declare function CreateTypedArrayInstances(obj: any): [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array, Uint8ClampedArray];
 declare function CreateIntegerTypedArrayTypes(): [typeof Int8Array, typeof Uint8Array, typeof Int16Array, typeof Uint16Array, typeof Int32Array, typeof Uint32Array, typeof Uint8ClampedArray];
 declare function CreateIntegerTypedArrays(obj: any): [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Uint8ClampedArray];
-declare function CreateTypedRedcuedSetOfArrayTypes(): [typeof Float64Array];
-declare function CreateTypedRedcuedSetOfArrays(obj: any): [Float64Array];
+declare function CreateTypedReducedSetOfArrayTypes(): [typeof Float64Array];
+declare function CreateTypedReducedSetOfArrays(obj: any): [Float64Array];
 declare function CreateTypedArraysFrom(obj: any): [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array, Uint8ClampedArray];
 declare function CreateTypedArraysOf(obj: any): [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array, Uint8ClampedArray];
 declare function CreateTypedArraysFromMapFn(obj: any, mapFn: any): [Int8Array, Uint8Array, Int16Array, Uint16Array, Int32Array, Uint32Array, Float32Array, Float64Array, Uint8ClampedArray];

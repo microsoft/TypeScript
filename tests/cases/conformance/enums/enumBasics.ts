@@ -61,7 +61,7 @@ enum E8 {
     B = 'foo'['foo']
 }
 
-//Enum with computed member intializer of same enum type
+//Enum with computed member initializer of same enum type
 enum E9 {
     A,
     B = A

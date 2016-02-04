@@ -256,7 +256,7 @@ namespace ts.formatting {
             return enclosingNode.pos;
         }
 
-        // preceding token ends after the start of original range (i.e when originaRange.pos falls in the middle of literal)
+        // preceding token ends after the start of original range (i.e when originalRange.pos falls in the middle of literal)
         // start from the beginning of enclosingNode to handle the entire 'originalRange'
         if (precedingToken.end >= originalRange.pos) {
             return enclosingNode.pos;

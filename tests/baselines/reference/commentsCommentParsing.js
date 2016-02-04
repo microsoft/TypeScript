@@ -19,17 +19,17 @@ function jsDocSingleLine() {
 jsDocSingleLine();
 
 
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
 function jsDocMultiLine() {
 }
 jsDocMultiLine();
 
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
-/** Shoul mege this line as well
+/** Should merge this line as well
 * and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
 }
@@ -78,12 +78,12 @@ function jsDocMixedComments6() {
 }
 jsDocMixedComments6();
 
-// This shoulnot be help comment
+// This should not be help comment
 function noHelpComment1() {
 }
 noHelpComment1();
 
-/* This shoulnot be help comment */
+/* This should not be help comment */
 function noHelpComment2() {
 }
 noHelpComment2();
@@ -169,16 +169,16 @@ multiLine();
 function jsDocSingleLine() {
 }
 jsDocSingleLine();
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
 function jsDocMultiLine() {
 }
 jsDocMultiLine();
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
-/** Shoul mege this line as well
+/** Should merge this line as well
 * and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
 }
@@ -219,11 +219,11 @@ jsDocMixedComments5();
 function jsDocMixedComments6() {
 }
 jsDocMixedComments6();
-// This shoulnot be help comment
+// This should not be help comment
 function noHelpComment1() {
 }
 noHelpComment1();
-/* This shoulnot be help comment */
+/* This should not be help comment */
 function noHelpComment2() {
 }
 noHelpComment2();
@@ -296,14 +296,14 @@ declare function simple(): void;
 declare function multiLine(): void;
 /** this is eg of single line jsdoc style comment */
 declare function jsDocSingleLine(): void;
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
 declare function jsDocMultiLine(): void;
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
-/** Shoul mege this line as well
+/** Should merge this line as well
 * and this too*/ /** Another this one too*/
 declare function jsDocMultiLineMerge(): void;
 /** jsdoc comment */

@@ -71,7 +71,7 @@ f2(function(p1: A): p1 is C {
     return true;
 });
 
-// Evaluations are asssignable to boolean.
+// Evaluations are assignable to boolean.
 declare function acceptingBoolean(a: boolean);
 acceptingBoolean(isA(a));
 

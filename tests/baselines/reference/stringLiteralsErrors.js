@@ -1,5 +1,5 @@
 //// [stringLiteralsErrors.ts]
-// Srtings missing line terminator
+// Strings missing line terminator
 var es1 = "line 1
 ";
 var es2 = 'line 1
@@ -29,7 +29,7 @@ var es12 = "\xmm";
 var es13 = " 
 
 //// [stringLiteralsErrors.js]
-// Srtings missing line terminator
+// Strings missing line terminator
 var es1 = "line 1;
 ";;
 var es2 = 'line 1;

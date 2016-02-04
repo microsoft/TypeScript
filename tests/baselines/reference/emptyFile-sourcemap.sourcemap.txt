@@ -1,0 +1,7 @@
+===================================================================
+JsFile: emptyFile-sourcemap.js
+mapUrl: emptyFile-sourcemap.js.map
+sourceRoot: 
+sources: emptyFile-sourcemap.ts
+===================================================================
+>>>//# sourceMappingURL=emptyFile-sourcemap.js.map

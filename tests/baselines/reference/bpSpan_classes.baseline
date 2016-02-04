@@ -33,7 +33,7 @@
     >    }
     >
     >    var b = foo2("Hello", "World", "!");
-    >    // This is simple signle line comment
+    >    // This is simple single line comment
     >    for (var j = 0; j < b.length; j++) {
     >        b[j].greet();
     >    }
@@ -73,7 +73,7 @@
     >    }
     >
     >    var b = foo2("Hello", "World", "!");
-    >    // This is simple signle line comment
+    >    // This is simple single line comment
     >    for (var j = 0; j < b.length; j++) {
     >        b[j].greet();
     >    }
@@ -283,7 +283,7 @@
     >var b = foo2("Hello", "World", "!")
     >:=> (line 31, col 4) to (line 31, col 39)
 --------------------------------
-32 >    // This is simple signle line comment
+32 >    // This is simple single line comment
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (769 to 810)  SpanInfo: undefined
 --------------------------------

@@ -8,7 +8,7 @@ class Derived extends Base { private b: string; }
 >Base : Base
 >b : string
 
-// Note - commmenting "extends Foo" prevents the error
+// Note - commenting "extends Foo" prevents the error
 interface Foo {
 >Foo : Foo
 

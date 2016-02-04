@@ -1,6 +1,6 @@
 {
     "scenario": "Visibility of type used across modules",
-    "projectRoot": "tests/cases/projects/VisibilityOfCrosssModuleTypeUsage",
+    "projectRoot": "tests/cases/projects/VisibilityOfCrossModuleTypeUsage",
     "inputFiles": [
         "commands.ts"
     ],

@@ -6,7 +6,7 @@
  * Syntax constructions of switch statement
  *
  * @path ch12/12.11/S12.11_A3_T4.js
- * @description Using "case" that has no Expresson after it. "CaseClause: case Expression : [StatementList]"
+ * @description Using "case" that has no Expression after it. "CaseClause: case Expression : [StatementList]"
  * @negative
  */
 
@@ -35,7 +35,7 @@ var x = SwitchTest(0);
  * Syntax constructions of switch statement
  *
  * @path ch12/12.11/S12.11_A3_T4.js
- * @description Using "case" that has no Expresson after it. "CaseClause: case Expression : [StatementList]"
+ * @description Using "case" that has no Expression after it. "CaseClause: case Expression : [StatementList]"
  * @negative
  */
 function SwitchTest(value) {

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// class and instanciated module
+// class and instantiated module
 
 ////class testClass {
 ////    static staticMethod() { }
@@ -22,7 +22,7 @@
 /////*6*/testClass.s;
 ////new /*7*/testClass();
 
-// Instanciated Module and class intersect in the value space, so we consider them all one group
+// Instantiated Module and class intersect in the value space, so we consider them all one group
 test.markers().forEach(m => {
     goTo.position(m.position, m.fileName);
     verify.referencesCountIs(9);

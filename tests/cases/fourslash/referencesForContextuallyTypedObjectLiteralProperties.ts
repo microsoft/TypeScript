@@ -22,7 +22,7 @@
 ////// Widened type
 ////var w: IFoo = { /*4*/xy: undefined };
 ////
-////// Untped -- should not be included
+////// Untyped -- should not be included
 ////var u = { xy: 0 };
 
 

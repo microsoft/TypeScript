@@ -33,7 +33,7 @@ var ResultIsNumber11 = obj.y++;
 var ResultIsNumber12 = objA.a++;
 var ResultIsNumber13 = M.n++;
 
-// miss assignment opertors
+// miss assignment operators
 ++ANY;
 ++ANY1;
 ++ANY2[0];
@@ -79,7 +79,7 @@ var ResultIsNumber10 = obj.x++;
 var ResultIsNumber11 = obj.y++;
 var ResultIsNumber12 = objA.a++;
 var ResultIsNumber13 = M.n++;
-// miss assignment opertors
+// miss assignment operators
 ++ANY;
 ++ANY1;
 ++ANY2[0];

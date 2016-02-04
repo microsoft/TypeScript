@@ -2,7 +2,7 @@
 var tokens = [{ startIndex: deltaOffset }];
 
 var functions = [function() {
-    [1, 2, 3].NonexistantMethod();
+    [1, 2, 3].NonexistentMethod();
     anotherNonExistingMethod();
 }];
 
@@ -11,6 +11,6 @@ var functions = [function() {
 //// [undefinedSymbolReferencedInArrayLiteral1.js]
 var tokens = [{ startIndex: deltaOffset }];
 var functions = [function () {
-        [1, 2, 3].NonexistantMethod();
+        [1, 2, 3].NonexistentMethod();
         anotherNonExistingMethod();
     }];

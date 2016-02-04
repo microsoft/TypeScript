@@ -1,5 +1,5 @@
 //// [genericClassWithObjectTypeArgsAndConstraints.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 
 class C {
@@ -61,7 +61,7 @@ module Interface {
 }
 
 //// [genericClassWithObjectTypeArgsAndConstraints.js]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 var C = (function () {
     function C() {

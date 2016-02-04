@@ -16,7 +16,7 @@ export class ConstructorWithParameters {
     }
 }
 
-export class ConstructorWithRestParamters {
+export class ConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]) {
         return a + rests.join("");
     }
@@ -64,7 +64,7 @@ class GlobalConstructorWithParameters {
     }
 }
 
-class GlobalConstructorWithRestParamters {
+class GlobalConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]) {
         return a + rests.join("");
     }
@@ -116,17 +116,17 @@ var ConstructorWithParameters = (function () {
     return ConstructorWithParameters;
 }());
 exports.ConstructorWithParameters = ConstructorWithParameters;
-var ConstructorWithRestParamters = (function () {
-    function ConstructorWithRestParamters(a) {
+var ConstructorWithRestParameters = (function () {
+    function ConstructorWithRestParameters(a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     }
-    return ConstructorWithRestParamters;
+    return ConstructorWithRestParameters;
 }());
-exports.ConstructorWithRestParamters = ConstructorWithRestParamters;
+exports.ConstructorWithRestParameters = ConstructorWithRestParameters;
 var ConstructorWithOverloads = (function () {
     function ConstructorWithOverloads(a) {
     }
@@ -178,15 +178,15 @@ var GlobalConstructorWithParameters = (function () {
     }
     return GlobalConstructorWithParameters;
 }());
-var GlobalConstructorWithRestParamters = (function () {
-    function GlobalConstructorWithRestParamters(a) {
+var GlobalConstructorWithRestParameters = (function () {
+    function GlobalConstructorWithRestParameters(a) {
         var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
         return a + rests.join("");
     }
-    return GlobalConstructorWithRestParamters;
+    return GlobalConstructorWithRestParameters;
 }());
 var GlobalConstructorWithOverloads = (function () {
     function GlobalConstructorWithOverloads(a) {
@@ -231,7 +231,7 @@ export declare class ConstructorWithParameters {
         /** this is comment for b*/
         b: number);
 }
-export declare class ConstructorWithRestParamters {
+export declare class ConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]);
 }
 export declare class ConstructorWithOverloads {
@@ -265,7 +265,7 @@ declare class GlobalConstructorWithParameters {
         /** this is comment for b*/
         b: number);
 }
-declare class GlobalConstructorWithRestParamters {
+declare class GlobalConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]);
 }
 declare class GlobalConstructorWithOverloads {

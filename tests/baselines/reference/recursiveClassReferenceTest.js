@@ -1,5 +1,5 @@
 //// [recursiveClassReferenceTest.ts]
-// Scenario 1: Test reqursive function call with "this" parameter
+// Scenario 1: Test recursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
 
 
@@ -103,7 +103,7 @@ module Sample.Thing.Languages.PlainText {
 
 
 //// [recursiveClassReferenceTest.js]
-// Scenario 1: Test reqursive function call with "this" parameter
+// Scenario 1: Test recursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

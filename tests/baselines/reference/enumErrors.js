@@ -15,14 +15,14 @@ enum E9 {
     B = A
 }
 
-//Enum with computed member intializer of different enum type
+//Enum with computed member initializer of different enum type
 // Bug 707850: This should be allowed
 enum E10 {
     A = E9.A,
     B = E9.B
 }
 
-// Enum with computed member intializer of other types
+// Enum with computed member initializer of other types
 enum E11 {
     A = '',
     B = new Date(),
@@ -55,14 +55,14 @@ var E9;
     E9[E9["A"] = 0] = "A";
     E9[E9["B"] = 0] = "B";
 })(E9 || (E9 = {}));
-//Enum with computed member intializer of different enum type
+//Enum with computed member initializer of different enum type
 // Bug 707850: This should be allowed
 var E10;
 (function (E10) {
     E10[E10["A"] = 0] = "A";
     E10[E10["B"] = 0] = "B";
 })(E10 || (E10 = {}));
-// Enum with computed member intializer of other types
+// Enum with computed member initializer of other types
 var E11;
 (function (E11) {
     E11[E11["A"] = ''] = "A";

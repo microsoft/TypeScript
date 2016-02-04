@@ -159,7 +159,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 8 >Emitted(5, 97) Source(10, 45) + SourceIndex(0)
 9 >Emitted(5, 98) Source(10, 62) + SourceIndex(0)
 ---
->>>var nameMC = ["roomba", ["vaccum", "mopping"]][0];
+>>>var nameMC = ["Roomba", ["vacuum", "mopping"]][0];
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                 ^
@@ -168,12 +168,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
   >
   >let [
 2 >nameMC
-3 >                                                 ] = ["roomba", ["vaccum", "mopping"]];
+3 >                                                 ] = ["Roomba", ["vacuum", "mopping"]];
 1 >Emitted(6, 1) Source(12, 6) + SourceIndex(0)
 2 >Emitted(6, 50) Source(12, 12) + SourceIndex(0)
 3 >Emitted(6, 51) Source(12, 50) + SourceIndex(0)
 ---
->>>var _b = ["roomba", ["vaccum", "mopping"]], nameMC2 = _b[0], _c = _b[1], primarySkillC = _c[0], secondarySkillC = _c[1];
+>>>var _b = ["Roomba", ["vacuum", "mopping"]], nameMC2 = _b[0], _c = _b[1], primarySkillC = _c[0], secondarySkillC = _c[1];
 1->
 2 >^^^^
 3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -189,7 +189,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 1->
   >
 2 >
-3 >    let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
+3 >    let [nameMC2, [primarySkillC, secondarySkillC]] = ["Roomba", ["vacuum", "mopping"]]
 4 >                                          
 5 >                                            nameMC2
 6 >                                                           , 
@@ -198,7 +198,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 9 >                                                                         primarySkillC
 10>                                                                                              , 
 11>                                                                                                secondarySkillC
-12>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
+12>                                                                                                                       ]] = ["Roomba", ["vacuum", "mopping"]];
 1->Emitted(7, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 1) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)

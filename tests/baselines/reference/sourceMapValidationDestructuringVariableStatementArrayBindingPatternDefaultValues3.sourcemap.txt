@@ -397,7 +397,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 6 >Emitted(13, 73) Source(22, 20) + SourceIndex(0)
 7 >Emitted(13, 74) Source(22, 41) + SourceIndex(0)
 ---
->>>_j = ["roomba", ["vaccum", "mopping"]], _k = _j[1], multiSkillB = _k === void 0 ? [] : _k;
+>>>_j = ["Roomba", ["vacuum", "mopping"]], _k = _j[1], multiSkillB = _k === void 0 ? [] : _k;
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                      ^^
@@ -407,12 +407,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 7 >                                                                                         ^
 1->
   >
-2 >[, multiSkillB = []] = ["roomba", ["vaccum", "mopping"]]
+2 >[, multiSkillB = []] = ["Roomba", ["vacuum", "mopping"]]
 3 >                                      
 4 >                                        multiSkillB = []
 5 >                                                  
 6 >                                                    multiSkillB = []
-7 >                                                                                         ] = ["roomba", ["vaccum", "mopping"]];
+7 >                                                                                         ] = ["Roomba", ["vacuum", "mopping"]];
 1->Emitted(14, 1) Source(23, 1) + SourceIndex(0)
 2 >Emitted(14, 39) Source(23, 57) + SourceIndex(0)
 3 >Emitted(14, 41) Source(23, 4) + SourceIndex(0)

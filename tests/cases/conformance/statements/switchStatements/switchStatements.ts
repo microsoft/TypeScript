@@ -26,7 +26,7 @@ switch (x) {
     default:
 }
 
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 class C { id: number; }
 class D extends C { name: string }
 

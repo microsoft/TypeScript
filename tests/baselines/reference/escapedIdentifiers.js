@@ -90,7 +90,7 @@ constructorTestObject.arg2 = 'string';
 constructorTestObject.arg\u0033 = true;
 constructorTestObject.arg4 = 2;
 
-// Lables
+// Labels
 
 l\u0061bel1: 
     while (false)
@@ -203,7 +203,7 @@ constructorTestObject.arg\u0031 = 1;
 constructorTestObject.arg2 = 'string';
 constructorTestObject.arg\u0033 = true;
 constructorTestObject.arg4 = 2;
-// Lables
+// Labels
 l\u0061bel1: while (false) {
     while (false)
         continue label1; // it will go to next iteration of outer loop 

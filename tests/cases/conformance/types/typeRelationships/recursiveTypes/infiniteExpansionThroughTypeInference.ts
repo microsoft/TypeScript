@@ -4,6 +4,6 @@ interface G<T> {
 }
 
 function ff<T>(g: G<T>): void {
-    ff(g) // when infering T here we need to make sure to not descend into the structure of G<T> infinitely
+    ff(g) // when inferring T here we need to make sure to not descend into the structure of G<T> infinitely
 }
 

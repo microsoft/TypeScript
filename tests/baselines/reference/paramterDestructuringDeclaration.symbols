@@ -1,0 +1,14 @@
+=== tests/cases/compiler/parameterDestructuringDeclaration.ts ===
+
+interface C {
+>C : Symbol(C, Decl(parameterDestructuringDeclaration.ts, 0, 0))
+
+    ({p: name}): any;
+>p : Symbol(p)
+>name : Symbol(name, Decl(parameterDestructuringDeclaration.ts, 2, 6))
+
+    new ({p: boolean}): any;
+>p : Symbol(p)
+>boolean : Symbol(boolean, Decl(parameterDestructuringDeclaration.ts, 3, 10))
+}
+

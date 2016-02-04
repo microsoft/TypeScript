@@ -9,8 +9,8 @@
  *      Elision<opt>   AssignmentElement
  *      AssignmentElementList, Elisionopt   AssignmentElement
  * AssignmentElement:
- *      LeftHandSideExpression   Initialiseropt
- *      AssignmentPattern   Initialiseropt
+ *      LeftHandSideExpression   Initializeropt
+ *      AssignmentPattern   Initializeropt
  * AssignmentRestElement:
  *      ...   LeftHandSideExpression
  */

@@ -195,7 +195,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 16>Emitted(5, 257) Source(10, 80) + SourceIndex(0)
 17>Emitted(5, 258) Source(10, 122) + SourceIndex(0)
 ---
->>>var _h = ["roomba", ["vaccum", "mopping"]][0], nameMC = _h === void 0 ? "noName" : _h;
+>>>var _h = ["Roomba", ["vacuum", "mopping"]][0], nameMC = _h === void 0 ? "noName" : _h;
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                             ^^
@@ -208,14 +208,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 2 >nameMC = "noName"
 3 >                                             
 4 >                                               nameMC = "noName"
-5 >                                                                                      ] = ["roomba", ["vaccum", "mopping"]];
+5 >                                                                                      ] = ["Roomba", ["vacuum", "mopping"]];
 1 >Emitted(6, 1) Source(12, 6) + SourceIndex(0)
 2 >Emitted(6, 46) Source(12, 23) + SourceIndex(0)
 3 >Emitted(6, 48) Source(12, 6) + SourceIndex(0)
 4 >Emitted(6, 86) Source(12, 23) + SourceIndex(0)
 5 >Emitted(6, 87) Source(12, 62) + SourceIndex(0)
 ---
->>>var _j = ["roomba", ["vaccum", "mopping"]], _k = _j[0], nameMC2 = _k === void 0 ? "noName" : _k, _l = _j[1], _m = _l === void 0 ? ["noSkill", "noSkill"] : _l, _o = _m[0], primarySkillC = _o === void 0 ? "noSkill" : _o, _p = _m[1], secondarySkillC = _p === void 0 ? "noSkill" : _p;
+>>>var _j = ["Roomba", ["vacuum", "mopping"]], _k = _j[0], nameMC2 = _k === void 0 ? "noName" : _k, _l = _j[1], _m = _l === void 0 ? ["noSkill", "noSkill"] : _l, _o = _m[0], primarySkillC = _o === void 0 ? "noSkill" : _o, _p = _m[1], secondarySkillC = _p === void 0 ? "noSkill" : _p;
 1->
 2 >^^^^
 3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,7 +239,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 1->
   >
 2 >
-3 >    let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]]
+3 >    let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["Roomba", ["vacuum", "mopping"]]
 4 >                                          
 5 >                                            nameMC2 = "noName"
 6 >                                                      
@@ -256,7 +256,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 17>                                                                                                                                                                                                                           secondarySkillC = "noSkill"
 18>                                                                                                                                                                                                                                     
 19>                                                                                                                                                                                                                                       secondarySkillC = "noSkill"
-20>                                                                                                                                                                                                                                                                                       ] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+20>                                                                                                                                                                                                                                                                                       ] = ["noSkill", "noSkill"]] = ["Roomba", ["vacuum", "mopping"]];
 1->Emitted(7, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 1) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 144) + SourceIndex(0)

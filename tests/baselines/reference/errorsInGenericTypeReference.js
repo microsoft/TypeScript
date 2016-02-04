@@ -32,7 +32,7 @@ class testClass3 {
 function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
 
 
-// in paramter types
+// in parameter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
 
 
@@ -115,7 +115,7 @@ var testClass3 = (function () {
 }());
 // in function return type annotation
 function testFunction1() { return null; } // error: could not find symbol V
-// in paramter types
+// in parameter types
 function testFunction2(p) { } // error: could not find symbol V
 // in var type annotation
 var f; // error: could not find symbol V

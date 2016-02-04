@@ -52,7 +52,7 @@ module Editor {
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
         }
 
         public push(data: T): void {
@@ -62,7 +62,7 @@ module Editor {
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;  // entry.next.prev does not show Intellisense, but entry.prev.prev does
         }
 
         public popEntry(head: List<T>): List<T> {
@@ -88,7 +88,7 @@ module Editor {
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;// entry.next.prev does not show Intellisense, but entry.prev.prev does
             return entry;
         }
 
@@ -183,7 +183,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
         };
         List.prototype.push = function (data) {
             var entry = this.listFactory.MakeEntry(data);
@@ -192,7 +192,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
         };
         List.prototype.popEntry = function (head) {
             if (this.next.isHead) {
@@ -215,7 +215,7 @@ var Editor;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
             return entry;
         };
         List.prototype.insertEntryBefore = function (entry) {

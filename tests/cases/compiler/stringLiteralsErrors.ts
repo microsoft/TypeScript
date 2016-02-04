@@ -1,4 +1,4 @@
-// Srtings missing line terminator
+// Strings missing line terminator
 var es1 = "line 1
 ";
 var es2 = 'line 1
