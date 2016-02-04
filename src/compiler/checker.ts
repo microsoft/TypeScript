@@ -16269,16 +16269,12 @@ namespace ts {
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PrivateKeyword:
-                        let text: string;
-                        if (modifier.kind === SyntaxKind.PublicKeyword) {
-                            text = "public";
-                        }
-                        else if (modifier.kind === SyntaxKind.ProtectedKeyword) {
-                            text = "protected";
+                        let text = visibilityToString(modifierToFlag(modifier.kind));
+
+                        if (modifier.kind === SyntaxKind.ProtectedKeyword) {
                             lastProtected = modifier;
                         }
-                        else {
-                            text = "private";
+                        else if (modifier.kind === SyntaxKind.PrivateKeyword) {
                             lastPrivate = modifier;
                         }
 
