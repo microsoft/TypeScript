@@ -554,6 +554,11 @@ namespace ts {
                 for (const extension of supportedExtensions) {
                     const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
                     for (const fileName of filesInDirWithExtension) {
+                        // skip hidden file on unixy platform
+                        if (isHiddenFile(fileName)) {
+                            continue;
+                        }
+
                         // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
