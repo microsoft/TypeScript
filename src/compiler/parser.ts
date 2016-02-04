@@ -3976,7 +3976,7 @@ namespace ts {
                     shorthandDeclaration.equalsToken = equalsToken;
                     shorthandDeclaration.objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
                 }
-                return finishNode(shorthandDeclaration);
+                return addJSDocComment(finishNode(shorthandDeclaration));
             }
             else {
                 const propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
@@ -3985,7 +3985,7 @@ namespace ts {
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
                 propertyAssignment.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
-                return finishNode(propertyAssignment);
+                return addJSDocComment(finishNode(propertyAssignment));
             }
         }
 
