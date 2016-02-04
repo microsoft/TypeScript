@@ -769,6 +769,10 @@ namespace ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
+    export function isHiddenFile(path: string): boolean {
+        return getBaseFileName(path)[0] === ".";
+    }
+
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
@@ -781,7 +785,7 @@ namespace ts {
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
-        if (!fileName) { return false; }
+        if (!fileName || isHiddenFile(fileName)) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions)) {
             if (fileExtensionIs(fileName, extension)) {
