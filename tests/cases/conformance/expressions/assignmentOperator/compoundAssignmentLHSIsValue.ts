@@ -93,7 +93,7 @@ function bar2() { } += value;
 foo() *= value;
 foo() += value;
 
-// parentheses, the containted expression is value
+// parentheses, the contained expression is value
 (this) *= value;
 (this) += value;
 (M) *= value;

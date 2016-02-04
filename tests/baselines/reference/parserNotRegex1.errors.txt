@@ -3,7 +3,7 @@ tests/cases/conformance/parser/ecmascript5/parserNotRegex1.ts(3,5): error TS1108
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parserNotRegex1.ts (2 errors) ====
-      if (a.indexOf(-(4/3)))      // We should not get a regex here becuase of the / in the comment.
+      if (a.indexOf(-(4/3)))      // We should not get a regex here because of the / in the comment.
           ~
 !!! error TS2304: Cannot find name 'a'.
       {

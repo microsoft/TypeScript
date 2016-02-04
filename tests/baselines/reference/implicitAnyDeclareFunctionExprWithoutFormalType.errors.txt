@@ -13,13 +13,13 @@ tests/cases/compiler/implicitAnyDeclareFunctionExprWithoutFormalType.ts(11,15): 
     var lambda = (l1) => { };       // Error at "l1"
                   ~~
 !!! error TS7006: Parameter 'l1' implicitly has an 'any' type.
-    var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
+    var lambda2 = (ll1, ll2: string) => { }  // Error at "ll1"
                   ~~~
 !!! error TS7006: Parameter 'll1' implicitly has an 'any' type.
-    var lamda3 = function myLambda3(myParam) { }
+    var lambda3 = function myLambda3(myParam) { }
                                     ~~~~~~~
 !!! error TS7006: Parameter 'myParam' implicitly has an 'any' type.
-    var lamda4 = () => { return null };
+    var lambda4 = () => { return null };
                  ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7011: Function expression, which lacks return-type annotation, implicitly has an 'any' return type.
     

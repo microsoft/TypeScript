@@ -169,13 +169,13 @@
 ////var r6 = false;
 ////var r7 = RT_VarArgs.result;
 
-// Indexes propertly
+// Indexes properly
 verify.eval('r1', 'a');
 
 // Calls static methods properly
 verify.eval('r2', '25wow: 17wow: 66');
 
-// Generates string indicies propertly
+// Generates string indices properly
 verify.eval('r3', '5');
 
 // Calls super methods correctly (#1)

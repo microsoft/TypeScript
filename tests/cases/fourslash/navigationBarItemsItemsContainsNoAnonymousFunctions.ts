@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts"/>
-// @Filename: scriptLexicalStructureItemsContainsNoAnonymouseFunctions_0.ts
+// @Filename: scriptLexicalStructureItemsContainsNoAnonymousFunctions_0.ts
 /////*file1*/
 ////(function() {
 ////    // this should not be included
@@ -11,7 +11,7 @@
 ////    }
 ////})();
 ////
-// @Filename: scriptLexicalStructureItemsContainsNoAnonymouseFunctions_1.ts
+// @Filename: scriptLexicalStructureItemsContainsNoAnonymousFunctions_1.ts
 /////*file2*/
 ////var x = function() {
 ////    // this should not be included
@@ -21,7 +21,7 @@
 ////    function foo() {
 ////};
 ////
-// @Filename: scriptLexicalStructureItemsContainsNoAnonymouseFunctions_2.ts
+// @Filename: scriptLexicalStructureItemsContainsNoAnonymousFunctions_2.ts
 ////// Named functions should still show up
 /////*file3*/
 ////function foo() {

@@ -28,7 +28,7 @@ jsDocSingleLine();
 >jsDocSingleLine : () => void
 
 
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
 function jsDocMultiLine() {
@@ -38,10 +38,10 @@ jsDocMultiLine();
 >jsDocMultiLine() : void
 >jsDocMultiLine : () => void
 
-/** this is multiple line jsdoc stule comment
+/** this is multiple line jsdoc style comment
 *New line1
 *New Line2*/
-/** Shoul mege this line as well
+/** Should merge this line as well
 * and this too*/ /** Another this one too*/
 function jsDocMultiLineMerge() {
 >jsDocMultiLineMerge : () => void
@@ -111,7 +111,7 @@ jsDocMixedComments6();
 >jsDocMixedComments6() : void
 >jsDocMixedComments6 : () => void
 
-// This shoulnot be help comment
+// This should not be help comment
 function noHelpComment1() {
 >noHelpComment1 : () => void
 }
@@ -119,7 +119,7 @@ noHelpComment1();
 >noHelpComment1() : void
 >noHelpComment1 : () => void
 
-/* This shoulnot be help comment */
+/* This should not be help comment */
 function noHelpComment2() {
 >noHelpComment2 : () => void
 }

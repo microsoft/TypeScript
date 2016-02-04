@@ -1,9 +1,9 @@
 //// [implicitAnyDeclareFunctionExprWithoutFormalType.ts]
 // these should be errors for implicit any parameter
 var lambda = (l1) => { };       // Error at "l1"
-var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
-var lamda3 = function myLambda3(myParam) { }
-var lamda4 = () => { return null };
+var lambda2 = (ll1, ll2: string) => { }  // Error at "ll1"
+var lambda3 = function myLambda3(myParam) { }
+var lambda4 = () => { return null };
 
 // these should be error for implicit any return type
 var lambda5 = function temp() { return null; }
@@ -20,9 +20,9 @@ var lambda10 = function temp1() { return 5; }
 //// [implicitAnyDeclareFunctionExprWithoutFormalType.js]
 // these should be errors for implicit any parameter
 var lambda = function (l1) { }; // Error at "l1"
-var lambd2 = function (ll1, ll2) { }; // Error at "ll1"
-var lamda3 = function myLambda3(myParam) { };
-var lamda4 = function () { return null; };
+var lambda2 = function (ll1, ll2) { }; // Error at "ll1"
+var lambda3 = function myLambda3(myParam) { };
+var lambda4 = function () { return null; };
 // these should be error for implicit any return type
 var lambda5 = function temp() { return null; };
 var lambda6 = function () { return null; };

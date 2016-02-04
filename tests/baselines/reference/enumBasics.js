@@ -62,7 +62,7 @@ enum E8 {
     B = 'foo'['foo']
 }
 
-//Enum with computed member intializer of same enum type
+//Enum with computed member initializer of same enum type
 enum E9 {
     A,
     B = A
@@ -141,7 +141,7 @@ var E8;
 (function (E8) {
     E8[E8["B"] = 'foo'['foo']] = "B";
 })(E8 || (E8 = {}));
-//Enum with computed member intializer of same enum type
+//Enum with computed member initializer of same enum type
 var E9;
 (function (E9) {
     E9[E9["A"] = 0] = "A";

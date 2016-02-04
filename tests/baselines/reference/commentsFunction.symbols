@@ -45,8 +45,8 @@ var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*
 >a : Symbol(a, Decl(commentsFunction.ts, 20, 46))
 >b : Symbol(b, Decl(commentsFunction.ts, 20, 68))
 
-var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
->lambddaNoVarComment : Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 21, 3))
+var lambdaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+>lambdaNoVarComment : Symbol(lambdaNoVarComment, Decl(commentsFunction.ts, 21, 3))
 >a : Symbol(a, Decl(commentsFunction.ts, 21, 63))
 >b : Symbol(b, Decl(commentsFunction.ts, 21, 85))
 >a : Symbol(a, Decl(commentsFunction.ts, 21, 63))
@@ -55,8 +55,8 @@ var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: nu
 lambdaFoo(10, 20);
 >lambdaFoo : Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
 
-lambddaNoVarComment(10, 20);
->lambddaNoVarComment : Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 21, 3))
+lambdaNoVarComment(10, 20);
+>lambdaNoVarComment : Symbol(lambdaNoVarComment, Decl(commentsFunction.ts, 21, 3))
 
 function blah(a: string /* multiline trailing comment 
 >blah : Symbol(blah, Decl(commentsFunction.ts, 23, 28))
@@ -70,7 +70,7 @@ function blah2(a: string /* single line multiple trailing comments */ /* second 
 >a : Symbol(a, Decl(commentsFunction.ts, 29, 15))
 }
 
-function blah3(a: string // trailing commen single line
+function blah3(a: string // trailing comment single line
 >blah3 : Symbol(blah3, Decl(commentsFunction.ts, 30, 1))
 >a : Symbol(a, Decl(commentsFunction.ts, 32, 15))
 

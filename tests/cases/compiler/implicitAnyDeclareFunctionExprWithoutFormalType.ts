@@ -1,9 +1,9 @@
 // @noimplicitany: true
 // these should be errors for implicit any parameter
 var lambda = (l1) => { };       // Error at "l1"
-var lambd2 = (ll1, ll2: string) => { }  // Error at "ll1"
-var lamda3 = function myLambda3(myParam) { }
-var lamda4 = () => { return null };
+var lambda2 = (ll1, ll2: string) => { }  // Error at "ll1"
+var lambda3 = function myLambda3(myParam) { }
+var lambda4 = () => { return null };
 
 // these should be error for implicit any return type
 var lambda5 = function temp() { return null; }

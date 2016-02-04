@@ -18,7 +18,7 @@ tests/cases/compiler/stringLiteralsErrors.ts(28,14): error TS1002: Unterminated 
 
 
 ==== tests/cases/compiler/stringLiteralsErrors.ts (17 errors) ====
-    // Srtings missing line terminator
+    // Strings missing line terminator
     var es1 = "line 1
                      
 !!! error TS1002: Unterminated string literal.

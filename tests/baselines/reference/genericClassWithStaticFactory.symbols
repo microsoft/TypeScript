@@ -180,7 +180,7 @@ module Editor {
 >next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
 
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
@@ -234,7 +234,7 @@ module Editor {
 >next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 
-            entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;  // entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
@@ -356,7 +356,7 @@ module Editor {
 >next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
 
-            entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;// entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 >entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))

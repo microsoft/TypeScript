@@ -47,8 +47,8 @@ export interface ICallSignatureWithTypeParameters<T> {
 >T : Symbol(T, Decl(declFileCallSignatures_0.ts, 22, 50))
 }
 
-export interface ICallSignatureWithOwnTypeParametes {
->ICallSignatureWithOwnTypeParametes : Symbol(ICallSignatureWithOwnTypeParametes, Decl(declFileCallSignatures_0.ts, 25, 1))
+export interface ICallSignatureWithOwnTypeParameters {
+>ICallSignatureWithOwnTypeParameters : Symbol(ICallSignatureWithOwnTypeParameters, Decl(declFileCallSignatures_0.ts, 25, 1))
 
     <T extends ICallSignature>(a: T): string;
 >T : Symbol(T, Decl(declFileCallSignatures_0.ts, 28, 5))
@@ -106,8 +106,8 @@ interface IGlobalCallSignatureWithTypeParameters<T> {
 >T : Symbol(T, Decl(declFileCallSignatures_1.ts, 23, 49))
 }
 
-interface IGlobalCallSignatureWithOwnTypeParametes {
->IGlobalCallSignatureWithOwnTypeParametes : Symbol(IGlobalCallSignatureWithOwnTypeParametes, Decl(declFileCallSignatures_1.ts, 26, 1))
+interface IGlobalCallSignatureWithOwnTypeParameters {
+>IGlobalCallSignatureWithOwnTypeParameters : Symbol(IGlobalCallSignatureWithOwnTypeParameters, Decl(declFileCallSignatures_1.ts, 26, 1))
 
     <T extends IGlobalCallSignature>(a: T): string;
 >T : Symbol(T, Decl(declFileCallSignatures_1.ts, 29, 5))

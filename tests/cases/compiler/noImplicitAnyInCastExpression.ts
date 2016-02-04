@@ -1,6 +1,6 @@
 ﻿//@noImplicitAny: true
 
-// verify no noImplictAny errors reported with cast expression
+// verify no noImplicitAny errors reported with cast expression
 
 interface IFoo {
     a: number;

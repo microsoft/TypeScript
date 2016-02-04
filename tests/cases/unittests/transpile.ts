@@ -15,9 +15,9 @@ module ts {
             }
             
             for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
-                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expected diagnostic.`);
             }
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");            
+            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resulting diagnostics count does not match expected");            
         }
         
         function test(input: string, testSettings: TranspileTestSettings): void {

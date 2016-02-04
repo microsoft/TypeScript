@@ -125,7 +125,7 @@ export function publicFunctionWithPublicTypeParametersWithoutExtends<T>() {
 function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 }
 
-export interface publicInterfaceWithPrivatModuleTypeParameters {
+export interface publicInterfaceWithPrivateModuleTypeParameters {
     new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
     <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
@@ -140,7 +140,7 @@ export function publicFunctionWithPrivateMopduleTypeParameters<T extends private
 }
 
 
-interface privateInterfaceWithPrivatModuleTypeParameters {
+interface privateInterfaceWithPrivateModuleTypeParameters {
     new <T extends privateModule.publicClass>(): privateModule.publicClass;
     <T extends privateModule.publicClass>(): privateModule.publicClass;
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
@@ -281,7 +281,7 @@ export module publicModule {
     function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
     }
 
-    export interface publicInterfaceWithPrivatModuleTypeParameters {
+    export interface publicInterfaceWithPrivateModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
@@ -296,7 +296,7 @@ export module publicModule {
     }
 
 
-    interface privateInterfaceWithPrivatModuleTypeParameters {
+    interface privateInterfaceWithPrivateModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  
         <T extends privateModule.publicClass>(): privateModule.publicClass;  
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  

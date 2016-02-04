@@ -6,7 +6,7 @@ var i1_i: i1;
 interface nc_i1 {
 }
 var nc_i1_i: nc_i1;
-/** this is interface 2 with memebers*/
+/** this is interface 2 with members*/
 interface i2 {
     /** this is x*/
     x: number;
@@ -111,7 +111,7 @@ declare var i1_i: i1;
 interface nc_i1 {
 }
 declare var nc_i1_i: nc_i1;
-/** this is interface 2 with memebers*/
+/** this is interface 2 with members*/
 interface i2 {
     /** this is x*/
     x: number;

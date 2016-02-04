@@ -301,7 +301,7 @@ and grew 1cm per day`;
                 let lp = lineIndex.charOffsetToLineNumberAndPos(rsa[i]);
                 let lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
                 assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
-                assert.equal(lac.character, (lp.offset), "Charachter offset mismatch " + lac.character + " " + lp.offset + " " + i);
+                assert.equal(lac.character, (lp.offset), "Character offset mismatch " + lac.character + " " + lp.offset + " " + i);
             }
         });
 

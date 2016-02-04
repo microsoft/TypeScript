@@ -71,7 +71,7 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
 !!! error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         }
     
-        public pulbic() { } // No Error;
+        public Public() { } // No Error;
     }
     
     class D<public, private>{ }

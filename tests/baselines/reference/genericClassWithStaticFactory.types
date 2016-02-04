@@ -204,7 +204,7 @@ module Editor {
 >next : List<T>
 >entry : List<T>
 
-            entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry; // entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
 >entry.next.prev : List<T>
 >entry.next : List<T>
@@ -266,7 +266,7 @@ module Editor {
 >next : List<T>
 >entry : List<T>
 
-            entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;  // entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
 >entry.next.prev : List<T>
 >entry.next : List<T>
@@ -401,7 +401,7 @@ module Editor {
 >next : List<T>
 >entry : List<T>
 
-            entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
+            entry.next.prev = entry;// entry.next.prev does not show Intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
 >entry.next.prev : List<T>
 >entry.next : List<T>

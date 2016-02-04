@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-////class SuperOverloadlBase {
+////class SuperOverLoadBase {
 ////    constructor();
 ////    constructor(test: string);
 ////    constructor(test?: string) {
 ////    }
 ////}
-////class SuperOverLoad1 extends SuperOverloadlBase {
+////class SuperOverLoad1 extends SuperOverLoadBase {
 ////    constructor() {
 ////        super(/*superOverload1*/);
 ////    }
 ////}
-////class SuperOverLoad2 extends SuperOverloadlBase {
+////class SuperOverLoad2 extends SuperOverLoadBase {
 ////    constructor() {
 ////        super(""/*superOverload2*/);
 ////    }
@@ -19,10 +19,10 @@
 
 goTo.marker('superOverload1');
 verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("SuperOverloadlBase(): SuperOverloadlBase");
+verify.currentSignatureHelpIs("SuperOverLoadBase(): SuperOverLoadBase");
 verify.currentSignatureParameterCountIs(0);
 goTo.marker('superOverload2');
 verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs("SuperOverloadlBase(test: string): SuperOverloadlBase");
+verify.currentSignatureHelpIs("SuperOverLoadBase(test: string): SuperOverLoadBase");
 verify.currentParameterHelpArgumentNameIs("test");
 verify.currentParameterSpanIs("test: string");

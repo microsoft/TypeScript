@@ -108,19 +108,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'E' is not assignable to type 'D'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
     
-        e = a; // errror
+        e = a; // error
         ~
 !!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
-        e = b; // errror
+        e = b; // error
         ~
 !!! error TS2322: Type 'Base' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'Base'.
-        e = i; // errror
+        e = i; // error
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'I'.
-        e = d; // errror
+        e = d; // error
         ~
 !!! error TS2322: Type 'D' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
@@ -211,19 +211,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'E' is not assignable to type 'D'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
     
-        e = a; // errror
+        e = a; // error
         ~
 !!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
-        e = b; // errror
+        e = b; // error
         ~
 !!! error TS2322: Type 'Base' is not assignable to type 'E'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
-        e = i; // errror
+        e = i; // error
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'E'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
-        e = d; // errror
+        e = d; // error
         ~
 !!! error TS2322: Type 'D' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.

@@ -10,7 +10,7 @@
 module Microsoft.PeopleAtWork.Model {
     export class _Person {
         public populate(raw: any) {
-            var res = Model.KnockoutExtentions;
+            var res = Model.KnockoutExtensions;
         }
     }
 }
@@ -20,7 +20,7 @@ module Microsoft.PeopleAtWork.Model {
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
 module Microsoft.PeopleAtWork.Model {
-    export class KnockoutExtentions {
+    export class KnockoutExtensions {
     }
 }
 
@@ -37,7 +37,7 @@ var Microsoft;
                 function _Person() {
                 }
                 _Person.prototype.populate = function (raw) {
-                    var res = Model.KnockoutExtentions;
+                    var res = Model.KnockoutExtensions;
                 };
                 return _Person;
             }());
@@ -57,12 +57,12 @@ var Microsoft;
     (function (PeopleAtWork) {
         var Model;
         (function (Model) {
-            var KnockoutExtentions = (function () {
-                function KnockoutExtentions() {
+            var KnockoutExtensions = (function () {
+                function KnockoutExtensions() {
                 }
-                return KnockoutExtentions;
+                return KnockoutExtensions;
             }());
-            Model.KnockoutExtentions = KnockoutExtentions;
+            Model.KnockoutExtensions = KnockoutExtensions;
         })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
     })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
 })(Microsoft || (Microsoft = {}));

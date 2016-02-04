@@ -1,0 +1,7 @@
+=== tests/cases/compiler/wrappedInvocations1.ts ===
+var v = this
+>v : Symbol(v, Decl(wrappedInvocations1.ts, 0, 3))
+
+  .foo()
+  .bar()
+  .baz();

@@ -62,7 +62,7 @@ verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("7").po
 
 verifyInterfaceInstanceVar("8", "anotherInstance");
 
-// Cosntruct signature
+// Construct signature
 goTo.marker("9");
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9").position, length: "iInstance".length },
     [{ text: "var", kind: "keyword" },

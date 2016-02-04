@@ -46,10 +46,10 @@ module TargetIsPublic {
     d = i;
     d = e; // error
 
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e; 
 
 }
@@ -101,10 +101,10 @@ module TargetIsPublic {
     d = i; // error
     d = e; // error
 
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e;
 
 }
@@ -151,10 +151,10 @@ var TargetIsPublic;
     d = b;
     d = i;
     d = e; // error
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e;
 })(TargetIsPublic || (TargetIsPublic = {}));
 var TargetIsPublic;
@@ -199,9 +199,9 @@ var TargetIsPublic;
     d = b; // error
     d = i; // error
     d = e; // error
-    e = a; // errror
-    e = b; // errror
-    e = i; // errror
-    e = d; // errror
+    e = a; // error
+    e = b; // error
+    e = i; // error
+    e = d; // error
     e = e;
 })(TargetIsPublic || (TargetIsPublic = {}));

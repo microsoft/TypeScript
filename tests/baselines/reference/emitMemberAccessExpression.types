@@ -9,8 +9,8 @@ module Microsoft.PeopleAtWork.Model {
 >PeopleAtWork : typeof PeopleAtWork
 >Model : typeof Model
 
-    export class KnockoutExtentions {
->KnockoutExtentions : KnockoutExtentions
+    export class KnockoutExtensions {
+>KnockoutExtensions : KnockoutExtensions
     }
 }
 === tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
@@ -35,11 +35,11 @@ module Microsoft.PeopleAtWork.Model {
 >populate : (raw: any) => void
 >raw : any
 
-            var res = Model.KnockoutExtentions;
->res : typeof KnockoutExtentions
->Model.KnockoutExtentions : typeof KnockoutExtentions
+            var res = Model.KnockoutExtensions;
+>res : typeof KnockoutExtensions
+>Model.KnockoutExtensions : typeof KnockoutExtensions
 >Model : typeof Model
->KnockoutExtentions : typeof KnockoutExtentions
+>KnockoutExtensions : typeof KnockoutExtensions
         }
     }
 }

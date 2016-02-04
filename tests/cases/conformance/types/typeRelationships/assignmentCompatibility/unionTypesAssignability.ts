@@ -30,7 +30,7 @@ str = unionNumberString; // error since number is not assignable to string
 // A type T is assignable to a union type U if T is assignable to any type in U
 d = c;
 e = c;
-unionDE = c; // error since C is not assinable to either D or E
+unionDE = c; // error since C is not assignable to either D or E
 d = d;
 e = d;
 unionDE = d; // ok

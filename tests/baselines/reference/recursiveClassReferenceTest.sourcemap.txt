@@ -8,12 +8,12 @@ sources: recursiveClassReferenceTest.ts
 emittedFile:tests/cases/compiler/recursiveClassReferenceTest.js
 sourceFile:recursiveClassReferenceTest.ts
 -------------------------------------------------------------------
->>>// Scenario 1: Test reqursive function call with "this" parameter
+>>>// Scenario 1: Test recursive function call with "this" parameter
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                                                                 ^^^^^^^^^^->
 1 >
-2 >// Scenario 1: Test reqursive function call with "this" parameter
+2 >// Scenario 1: Test recursive function call with "this" parameter
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 66) Source(1, 66) + SourceIndex(0)
 ---

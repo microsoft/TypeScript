@@ -1,4 +1,4 @@
-// @filename: file.tsx
+@filename: file.tsx
 // @jsx: preserve
 // @noLib: true
 // @libFiles: react.d.ts,lib.d.ts
@@ -36,6 +36,6 @@ let g = <BigGreeter key={100} />;
 
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;
-// Error - property not on ontextually typed intrinsic ref callback parameter
+// Error - property not contextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 

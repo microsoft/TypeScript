@@ -47,8 +47,8 @@ export interface ICallSignatureWithTypeParameters<T> {
 >T : T
 }
 
-export interface ICallSignatureWithOwnTypeParametes {
->ICallSignatureWithOwnTypeParametes : ICallSignatureWithOwnTypeParametes
+export interface ICallSignatureWithOwnTypeParameters {
+>ICallSignatureWithOwnTypeParameters : ICallSignatureWithOwnTypeParameters
 
     <T extends ICallSignature>(a: T): string;
 >T : T
@@ -106,8 +106,8 @@ interface IGlobalCallSignatureWithTypeParameters<T> {
 >T : T
 }
 
-interface IGlobalCallSignatureWithOwnTypeParametes {
->IGlobalCallSignatureWithOwnTypeParametes : IGlobalCallSignatureWithOwnTypeParametes
+interface IGlobalCallSignatureWithOwnTypeParameters {
+>IGlobalCallSignatureWithOwnTypeParameters : IGlobalCallSignatureWithOwnTypeParameters
 
     <T extends IGlobalCallSignature>(a: T): string;
 >T : T

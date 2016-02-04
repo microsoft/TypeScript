@@ -1,0 +1,24 @@
+=== tests/cases/compiler/signatureIsSubTypeIfTheyAreIdentical.ts ===
+interface ICache {
+>ICache : ICache
+
+    get<T>(key: string): T;
+>get : <T>(key: string) => T
+>T : T
+>key : string
+>T : T
+}
+class CacheService implements ICache { // Should not error that property type of get are incompatible
+>CacheService : CacheService
+>ICache : ICache
+
+    get<T>(key: string): T {
+>get : <T>(key: string) => T
+>T : T
+>key : string
+>T : T
+
+        return undefined;
+>undefined : undefined
+    }
+}

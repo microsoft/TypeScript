@@ -130,7 +130,7 @@ var ResultIsNumber13 = M.n++;
 >M : typeof M
 >n : any
 
-// miss assignment opertors
+// miss assignment operators
 ++ANY;
 >++ANY : number
 >ANY : any

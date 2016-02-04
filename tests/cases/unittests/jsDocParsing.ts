@@ -949,7 +949,7 @@ module ts {
                     parsesIncorrectly("{() => string}");
                 });
 
-                it("tsConstructoType", () => {
+                it("tsConstructorType", () => {
                     parsesIncorrectly("{new () => string}");
                 });
 

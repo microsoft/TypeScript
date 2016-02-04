@@ -7,7 +7,7 @@ interface Cover {
     color?: string;
 }
 
-var b1: Book = { forword: "oops" };
+var b1: Book = { forward: "oops" };
 
 var b2: Book | string = { foreward: "nope" };
 
@@ -23,7 +23,7 @@ var b7: Book & number = { foreword: "hi", price: 10.99 };
 
 
 //// [objectLiteralExcessProperties.js]
-var b1 = { forword: "oops" };
+var b1 = { forward: "oops" };
 var b2 = { foreward: "nope" };
 var b3 = [{ foreword: "hello" }, { forwards: "back" }];
 var b4 = { foreword: "hi", colour: "blue" };

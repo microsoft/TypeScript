@@ -14,7 +14,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
 
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts (12 errors) ====
     import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
-    export class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
 !!! error TS4050: Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
@@ -49,7 +49,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
     }
     
-    class privateClassWithWithPrivateParmeterTypes {
+    class privateClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod() { 
             return exporter.createExportedWidget1();
         }
@@ -76,20 +76,20 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
     }
     
-    export function publicFunctionWithPrivateParmeterTypes() { // Error
+    export function publicFunctionWithPrivateParameterTypes() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4058: Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
         return exporter.createExportedWidget1();
     }
-    function privateFunctionWithPrivateParmeterTypes()   {
+    function privateFunctionWithPrivateParameterTypes()   {
         return exporter.createExportedWidget1();
     }
-    export function publicFunctionWithPrivateParmeterTypes1() { // Error
+    export function publicFunctionWithPrivateParameterTypes1() { // Error
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4058: Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
         return exporter.createExportedWidget3();
     }
-    function privateFunctionWithPrivateParmeterTypes1() {
+    function privateFunctionWithPrivateParameterTypes1() {
         return exporter.createExportedWidget3();
     }
     

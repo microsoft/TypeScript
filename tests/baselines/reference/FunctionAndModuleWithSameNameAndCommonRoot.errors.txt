@@ -43,7 +43,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/test.ts(2,5): error T
     }
     
     var fn: () => { x: number; y: number };
-    var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignalbe as expected
+    var fn = B.Point;  // not expected to be an error. bug 840000: [corelang] Function of fundule not assignable as expected
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'fn' must be of type '() => { x: number; y: number; }', but here has type 'typeof Point'.
     

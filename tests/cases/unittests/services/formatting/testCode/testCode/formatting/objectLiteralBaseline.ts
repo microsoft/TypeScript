@@ -17,7 +17,7 @@ function Foo() {
     }
 }
 
-// Rule for object literal members for the "value" of the memebr to follow the indent
+// Rule for object literal members for the "value" of the member to follow the indent
 // of the member, i.e. the relative position of the value is maintained when the member
 // is indented.
 var x2 = {

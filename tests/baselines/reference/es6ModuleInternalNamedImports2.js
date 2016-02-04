@@ -5,7 +5,7 @@ export module M {
     export var M_V = 0;
     // interface
     export interface M_I { }
-    //calss
+    //class
     export class M_C { }
     // instantiated module
     export module M_M { var x; }
@@ -39,7 +39,7 @@ export var M;
 (function (M) {
     // variable
     M.M_V = 0;
-    //calss
+    //class
     class M_C {
     }
     M.M_C = M_C;

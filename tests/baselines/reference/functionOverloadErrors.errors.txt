@@ -67,7 +67,7 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     function fn10() { }
     // (actually OK)
     
-    //Function overloads that differ only by type parameter constraints where constraints are structually identical
+    //Function overloads that differ only by type parameter constraints where constraints are structurally identical
     function fn11<T extends Window>();
                             ~~~~~~
 !!! error TS2304: Cannot find name 'Window'.

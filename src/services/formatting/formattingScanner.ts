@@ -181,7 +181,7 @@ namespace ts.formatting {
                 // readTokenInfo was called before with the same expected scan action.
                 // No need to re-scan text, return existing 'lastTokenInfo'
                 // it is ok to call fixTokenKind here since it does not affect
-                // what portion of text is consumed. In opposize rescanning can change it,
+                // what portion of text is consumed. In opposize (sic) rescanning can change it,
                 // i.e. for '>=' when originally scanner eats just one character
                 // and rescanning forces it to consume more.
                 return fixTokenKind(lastTokenInfo, n);

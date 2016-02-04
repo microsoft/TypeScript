@@ -500,7 +500,7 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (filePath, callback) => {
-                    // Node 4.0 stablized the `fs.watch` function on Windows which avoids polling
+                    // Node 4.0 stabilized the `fs.watch` function on Windows which avoids polling
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.

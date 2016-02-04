@@ -1,0 +1,21 @@
+tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file3.ts(4,7): error TS2339: Property 'bar' does not exist on type 'typeof "tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file1"'.
+
+
+==== tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file3.ts (1 errors) ====
+    ///<reference path='externalModuleReferenceResolutionOrderInImportDeclaration_file2.ts'/>
+    import file1 = require('./externalModuleReferenceResolutionOrderInImportDeclaration_file1');
+    file1.foo();
+    file1.bar();
+          ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'typeof "tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file1"'.
+    
+    
+==== tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file1.ts (0 errors) ====
+    export function foo() { };
+    
+==== tests/cases/compiler/externalModuleReferenceResolutionOrderInImportDeclaration_file2.ts (0 errors) ====
+    declare module "externalModuleReferenceResolutionOrderInImportDeclaration_file1" {
+        export function bar();
+    }
+    
+    

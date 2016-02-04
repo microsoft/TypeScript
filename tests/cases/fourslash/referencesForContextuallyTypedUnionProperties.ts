@@ -30,7 +30,7 @@
 ////// Widened type
 ////var w: A|B = { a:0, /*8*/common: undefined };
 ////
-////// Untped -- should not be included
+////// Untyped -- should not be included
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 

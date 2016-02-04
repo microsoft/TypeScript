@@ -51,7 +51,7 @@ arg => 2;
 // in multiple paren
 (((((arg) => { return 32; }))));
 
-// in ternary exression
+// in ternary expression
 false ? () => 41 : null;
 false ? (arg) => 42 : null;
 false ? (arg = 1) => 43 : null;
@@ -61,7 +61,7 @@ false ? (arg?: number) => 46 : null;
 false ? (arg?: number = 0) => 47 : null;
 false ? (...arg: number[]) => 48 : null;
 
-// in ternary exression within paren
+// in ternary expression within paren
 false ? (() => 51) : null;
 false ? ((arg) => 52) : null;
 false ? ((arg = 1) => 53) : null;
@@ -71,7 +71,7 @@ false ? ((arg?: number) => 56) : null;
 false ? ((arg?: number = 0) => 57) : null;
 false ? ((...arg: number[]) => 58) : null;
 
-// ternary exression's else clause
+// ternary expression's else clause
 false ? null : () => 61;
 false ? null : (arg) => 62;
 false ? null : (arg = 1) => 63;
@@ -209,7 +209,7 @@ foo(
 });
 // in multiple paren
 ((((function (arg) { return 32; }))));
-// in ternary exression
+// in ternary expression
 false ? function () { return 41; } : null;
 false ? function (arg) { return 42; } : null;
 false ? function (arg) {
@@ -230,7 +230,7 @@ false ? function () {
     }
     return 48;
 } : null;
-// in ternary exression within paren
+// in ternary expression within paren
 false ? (function () { return 51; }) : null;
 false ? (function (arg) { return 52; }) : null;
 false ? (function (arg) {
@@ -251,7 +251,7 @@ false ? (function () {
     }
     return 58;
 }) : null;
-// ternary exression's else clause
+// ternary expression's else clause
 false ? null : function () { return 61; };
 false ? null : function (arg) { return 62; };
 false ? null : function (arg) {

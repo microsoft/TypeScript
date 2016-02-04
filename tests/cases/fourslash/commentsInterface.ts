@@ -7,7 +7,7 @@
 ////interface nc_/*3*/i1 {
 ////}
 ////var nc_/*4*/i1_i: nc_i1;
-/////** this is interface 2 with memebers*/
+/////** this is interface 2 with members*/
 ////interface i/*5*/2 {
 ////    /** this is x*/
 ////    x: number;
@@ -81,7 +81,7 @@ goTo.marker('4');
 verify.quickInfoIs("var nc_i1_i: nc_i1", "");
 
 goTo.marker('5');
-verify.quickInfoIs("interface i2", "this is interface 2 with memebers");
+verify.quickInfoIs("interface i2", "this is interface 2 with members");
 
 goTo.marker('6');
 verify.quickInfoIs("var i2_i: i2", "");
@@ -201,7 +201,7 @@ verify.completionListContains("i1", "interface i1", "this is interface 1");
 verify.completionListContains("i1_i", "var i1_i: i1", "");
 verify.completionListContains("nc_i1", "interface nc_i1", "");
 verify.completionListContains("nc_i1_i", "var nc_i1_i: nc_i1", "");
-verify.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
+verify.completionListContains("i2", "interface i2", "this is interface 2 with members");
 verify.completionListContains("i2_i", "var i2_i: i2", "");
 verify.completionListContains("i2_i_x", "var i2_i_x: number", "");
 verify.completionListContains("i2_i_foo", "var i2_i_foo: (b: number) => string", "");
@@ -221,7 +221,7 @@ verify.completionListContains("i2_i_nc_fnfoo_r", "var i2_i_nc_fnfoo_r: string", 
 goTo.marker('34i');
 verify.completionListContains("i1", "interface i1", "this is interface 1");
 verify.completionListContains("nc_i1", "interface nc_i1", "");
-verify.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
+verify.completionListContains("i2", "interface i2", "this is interface 2 with members");
 
 goTo.marker('36');
 verify.completionListContains("a", "(parameter) a: number", "i3_i a");

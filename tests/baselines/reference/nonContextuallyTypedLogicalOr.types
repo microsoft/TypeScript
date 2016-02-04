@@ -9,8 +9,8 @@ interface Contextual {
 >p : number
 }
 
-interface Ellement {
->Ellement : Ellement
+interface Element {
+>Element : Element
 
     dummy;
 >dummy : any
@@ -23,15 +23,15 @@ var c: Contextual;
 >c : Contextual
 >Contextual : Contextual
 
-var e: Ellement;
->e : Ellement
->Ellement : Ellement
+var e: Element;
+>e : Element
+>Element : Element
 
 (c || e).dummy;
 >(c || e).dummy : any
->(c || e) : Contextual | Ellement
->c || e : Contextual | Ellement
+>(c || e) : Contextual | Element
+>c || e : Contextual | Element
 >c : Contextual
->e : Ellement
+>e : Element
 >dummy : any
 

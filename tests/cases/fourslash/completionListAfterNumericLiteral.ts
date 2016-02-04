@@ -1,43 +1,43 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: f1.ts
-////0./*dotOnNumberExrpressions1*/
+////0./*dotOnNumberExpressions1*/
 
 // @Filename: f2.ts
-////0.0./*dotOnNumberExrpressions2*/
+////0.0./*dotOnNumberExpressions2*/
 
 // @Filename: f3.ts
-////0.0.0./*dotOnNumberExrpressions3*/
+////0.0.0./*dotOnNumberExpressions3*/
 
 // @Filename: f4.ts
-////0./** comment *//*dotOnNumberExrpressions4*/
+////0./** comment *//*dotOnNumberExpressions4*/
 
 // @Filename: f5.ts
-////(0)./*validDotOnNumberExrpressions1*/
+////(0)./*validDotOnNumberExpressions1*/
 
 // @Filename: f6.ts
-////(0.)./*validDotOnNumberExrpressions2*/
+////(0.)./*validDotOnNumberExpressions2*/
 
 // @Filename: f7.ts
-////(0.0)./*validDotOnNumberExrpressions3*/
+////(0.0)./*validDotOnNumberExpressions3*/
 
-goTo.marker("dotOnNumberExrpressions1");
+goTo.marker("dotOnNumberExpressions1");
 verify.completionListIsEmpty();
 
-goTo.marker("dotOnNumberExrpressions2");
+goTo.marker("dotOnNumberExpressions2");
 verify.completionListContains("toExponential");
 
-goTo.marker("dotOnNumberExrpressions3");
+goTo.marker("dotOnNumberExpressions3");
 verify.completionListContains("toExponential");
 
-goTo.marker("dotOnNumberExrpressions4");
+goTo.marker("dotOnNumberExpressions4");
 verify.completionListIsEmpty();
 
-goTo.marker("validDotOnNumberExrpressions1");
+goTo.marker("validDotOnNumberExpressions1");
 verify.completionListContains("toExponential");
 
-goTo.marker("validDotOnNumberExrpressions2");
+goTo.marker("validDotOnNumberExpressions2");
 verify.completionListContains("toExponential");
 
-goTo.marker("validDotOnNumberExrpressions3");
+goTo.marker("validDotOnNumberExpressions3");
 verify.completionListContains("toExponential");

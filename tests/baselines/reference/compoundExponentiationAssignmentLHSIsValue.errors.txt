@@ -157,7 +157,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     ~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
-    // parentheses, the containted expression is value
+    // parentheses, the contained expression is value
     (this) **= value;
     ~~~~~~
 !!! error TS2364: Invalid left-hand side of assignment expression.

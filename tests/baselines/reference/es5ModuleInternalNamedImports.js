@@ -5,7 +5,7 @@ export module M {
     export var M_V = 0;
     // interface
     export interface M_I { }
-    //calss
+    //class
     export class M_C { }
     // instantiated module
     export module M_M { var x; }
@@ -39,7 +39,7 @@ define(["require", "exports"], function (require, exports) {
     (function (M) {
         // variable
         M.M_V = 0;
-        //calss
+        //class
         var M_C = (function () {
             function M_C() {
             }

@@ -1,5 +1,5 @@
 //Expect to have compiler errors
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x: number, y: string) {
     return x, y;
 }

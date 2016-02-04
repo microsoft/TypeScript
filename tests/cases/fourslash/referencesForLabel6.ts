@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// References to lable wiht close names
+// References to label with close names
 
 /////*1*/labela: while (true) {
 /////*2*/labelb:     while (false) { break labelb; }

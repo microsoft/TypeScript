@@ -121,7 +121,7 @@ module m {
        var b2: boolean = l;
     }
 
-    lable: let l2 = 0;
+    label: let l2 = 0;
 }
 
 // methods

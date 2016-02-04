@@ -27,7 +27,7 @@ switch (x) {
     default:
 }
 
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 class C { id: number; }
 class D extends C { name: string }
 
@@ -89,7 +89,7 @@ switch (x) {
     case (function (x) { return ''; })(2):
     default:
 }
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 var C = (function () {
     function C() {
     }

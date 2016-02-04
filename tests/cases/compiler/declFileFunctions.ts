@@ -31,7 +31,7 @@ export function fooWithSingleOverload(a: any) {
 export function fooWithTypePredicate(a: any): a is number {
     return true;
 }
-export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+export function fooWithTypePredicateAndMultipleParams(a: any, b: any, c: any): a is number {
     return true;
 }
 export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {

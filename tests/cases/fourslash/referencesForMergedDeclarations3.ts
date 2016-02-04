@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// class and uninstanciated module
+// class and uninstantiated module
 
 ////class testClass {
 ////    static staticMethod() { }

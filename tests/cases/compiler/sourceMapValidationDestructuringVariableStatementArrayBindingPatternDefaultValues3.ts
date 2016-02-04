@@ -21,7 +21,7 @@ let multiRobotAInfo: (string | string[])[];
 [, nameB = "helloNoName"] = [2, "trimmer", "trimming"];
 [, multiSkillB = []] = multiRobotB;
 [, multiSkillB = []] = getMultiRobotB();
-[, multiSkillB = []] = ["roomba", ["vaccum", "mopping"]];
+[, multiSkillB = []] = ["Roomba", ["vacuum", "mopping"]];
 
 [numberB = -1] = robotB;
 [numberB = -1] = getRobotB();

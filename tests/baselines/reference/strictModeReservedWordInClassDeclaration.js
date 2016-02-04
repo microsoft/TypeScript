@@ -16,7 +16,7 @@ class C {
         var z = function let() { };
     }
 
-    public pulbic() { } // No Error;
+    public Public() { } // No Error;
 }
 
 class D<public, private>{ }
@@ -49,7 +49,7 @@ var C = (function () {
         function let() { }
         var z = function let() { };
     };
-    C.prototype.pulbic = function () { }; // No Error;
+    C.prototype.Public = function () { }; // No Error;
     return C;
 }());
 var D = (function () {

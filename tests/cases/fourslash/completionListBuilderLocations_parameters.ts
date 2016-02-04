@@ -2,17 +2,17 @@
 
 ////var aa = 1;
 
-////class bar1{ constructor(/*constructorParamter1*/
+////class bar1{ constructor(/*constructorParameter1*/
 
-////class bar2{ constructor(a/*constructorParamter2*/
+////class bar2{ constructor(a/*constructorParameter2*/
 
-////class bar3{ constructor(a, /*constructorParamter3*/
+////class bar3{ constructor(a, /*constructorParameter3*/
 
-////class bar4{ constructor(a, b/*constructorParamter4*/
+////class bar4{ constructor(a, b/*constructorParameter4*/
 
-////class bar6{ constructor(public a, /*constructorParamter5*/
+////class bar6{ constructor(public a, /*constructorParameter5*/
 
-////class bar7{ constructor(private a, /*constructorParamter6*/
+////class bar7{ constructor(private a, /*constructorParameter6*/
 
 
 test.markers().forEach((m) => {

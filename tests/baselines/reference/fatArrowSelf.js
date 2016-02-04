@@ -10,7 +10,7 @@ module Events {
 }
 
 module Consumer {
-    class EventEmitterConsummer {
+    class EventEmitterConsumer {
         constructor (private emitter: Events.EventEmitter) { }
 
         private register() {
@@ -38,18 +38,18 @@ var Events;
 })(Events || (Events = {}));
 var Consumer;
 (function (Consumer) {
-    var EventEmitterConsummer = (function () {
-        function EventEmitterConsummer(emitter) {
+    var EventEmitterConsumer = (function () {
+        function EventEmitterConsumer(emitter) {
             this.emitter = emitter;
         }
-        EventEmitterConsummer.prototype.register = function () {
+        EventEmitterConsumer.prototype.register = function () {
             var _this = this;
             this.emitter.addListener('change', function (e) {
                 _this.changed();
             });
         };
-        EventEmitterConsummer.prototype.changed = function () {
+        EventEmitterConsumer.prototype.changed = function () {
         };
-        return EventEmitterConsummer;
+        return EventEmitterConsumer;
     }());
 })(Consumer || (Consumer = {}));

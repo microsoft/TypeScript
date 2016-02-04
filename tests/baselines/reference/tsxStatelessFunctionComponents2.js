@@ -1,4 +1,4 @@
-//// [file.tsx]
+/ [file.tsx]
 
 import React = require('react');
 
@@ -33,7 +33,7 @@ let g = <BigGreeter key={100} />;
 
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;
-// Error - property not on ontextually typed intrinsic ref callback parameter
+// Error - property not contextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 
 
@@ -75,5 +75,5 @@ var f = <BigGreeter ref={function (x) { return x.notARealProperty; }}/>;
 var g = <BigGreeter key={100}/>;
 // OK - contextually typed intrinsic ref callback parameter
 var h = <div ref={function (x) { return x.innerText; }}/>;
-// Error - property not on ontextually typed intrinsic ref callback parameter
+// Error - property not contextually typed intrinsic ref callback parameter
 var i = <div ref={function (x) { return x.propertyNotOnHtmlDivElement; }}/>;

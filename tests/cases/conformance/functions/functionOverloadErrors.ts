@@ -46,7 +46,7 @@ function fn10<S extends Date>();
 function fn10() { }
 // (actually OK)
 
-//Function overloads that differ only by type parameter constraints where constraints are structually identical
+//Function overloads that differ only by type parameter constraints where constraints are structurally identical
 function fn11<T extends Window>();
 function fn11<S extends typeof window>();
 function fn11() { }

@@ -262,7 +262,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     // different order with 'pull' operations, and thus can produce slightly differing
                     // output.
                     //
-                    // For example, with a full type check, we may see a type outputed as: number | string
+                    // For example, with a full type check, we may see a type displayed as: number | string
                     // But with a pull type check, we may see it as:                       string | number
                     //
                     // These types are equivalent, but depend on what order the compiler observed

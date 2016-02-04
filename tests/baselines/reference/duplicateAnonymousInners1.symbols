@@ -10,7 +10,7 @@ module Foo {
     class Inner {}
 >Inner : Symbol(Inner, Decl(duplicateAnonymousInners1.ts, 4, 5))
 
-    // Inner should show up in intellisense
+    // Inner should show up in Intellisense
     
     export var Outer=0;
 >Outer : Symbol(Outer, Decl(duplicateAnonymousInners1.ts, 9, 14))
@@ -26,8 +26,8 @@ module Foo {
 
     }
     
-    // Inner should not show up in intellisense
-    // Outer should show up in intellisense
+    // Inner should not show up in Intellisense
+    // Outer should show up in Intellisense
 
 }
 

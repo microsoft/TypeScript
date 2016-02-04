@@ -23,7 +23,7 @@ var f4 = function () {
     }
 }
 
-// Function implemetnation with non -void return type annotation with no return
+// Function implementation with non -void return type annotation with no return
 function f5(): number {
 }
 

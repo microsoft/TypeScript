@@ -51,7 +51,7 @@ new b.f(1, 2, "string");
 new b.f(1, 2, ...a);
 new b.f(1, 2, ...a, "string"); 
 
-// Parenthesised expression
+// Parenthesized expression
 new (b.f)(1, 2, "string");
 new (b.f)(1, 2, ...a);
 new (b.f)(1, 2, ...a, "string"); 
@@ -76,7 +76,7 @@ new c["a-b"](1, 2, "string");
 new c["a-b"](1, 2, ...a);
 new c["a-b"](1, 2, ...a, "string");
 
-// Parenthesised expression
+// Parenthesized expression
 new (c["a-b"])(1, 2, "string");
 new (c["a-b"])(1, 2, ...a);
 new (c["a-b"])(1, 2, ...a, "string");

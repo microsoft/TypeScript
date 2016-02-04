@@ -29,8 +29,8 @@ declare var declareVar2
 declare var declaredVar3;
 >declaredVar3 : Symbol(declaredVar3, Decl(vardecl.ts, 13, 11))
 
-declare var deckareVarWithType: number;
->deckareVarWithType : Symbol(deckareVarWithType, Decl(vardecl.ts, 14, 11))
+declare var declareVarWithType: number;
+>declareVarWithType : Symbol(declareVarWithType, Decl(vardecl.ts, 14, 11))
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : Symbol(arrayVar, Decl(vardecl.ts, 16, 3))

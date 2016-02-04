@@ -9,7 +9,7 @@ var t2 = 10;
 var s;
 >s : Symbol(s, Decl(emitExponentiationOperatorInTemplateString1.ts, 3, 3))
 
-// TempateHead & TemplateTail are empty
+// TemplateHead & TemplateTail are empty
 `${t1 ** t2}`;
 >t1 : Symbol(t1, Decl(emitExponentiationOperatorInTemplateString1.ts, 1, 3))
 >t2 : Symbol(t2, Decl(emitExponentiationOperatorInTemplateString1.ts, 2, 3))

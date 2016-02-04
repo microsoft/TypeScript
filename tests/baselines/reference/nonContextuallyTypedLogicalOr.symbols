@@ -9,8 +9,8 @@ interface Contextual {
 >p : Symbol(p, Decl(nonContextuallyTypedLogicalOr.ts, 1, 10))
 }
 
-interface Ellement {
->Ellement : Symbol(Ellement, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
+interface Element {
+>Element : Symbol(Element, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
 
     dummy;
 >dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))
@@ -23,9 +23,9 @@ var c: Contextual;
 >c : Symbol(c, Decl(nonContextuallyTypedLogicalOr.ts, 10, 3))
 >Contextual : Symbol(Contextual, Decl(nonContextuallyTypedLogicalOr.ts, 0, 0))
 
-var e: Ellement;
+var e: Element;
 >e : Symbol(e, Decl(nonContextuallyTypedLogicalOr.ts, 11, 3))
->Ellement : Symbol(Ellement, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
+>Element : Symbol(Element, Decl(nonContextuallyTypedLogicalOr.ts, 3, 1))
 
 (c || e).dummy;
 >(c || e).dummy : Symbol(dummy, Decl(nonContextuallyTypedLogicalOr.ts, 0, 22), Decl(nonContextuallyTypedLogicalOr.ts, 5, 20))

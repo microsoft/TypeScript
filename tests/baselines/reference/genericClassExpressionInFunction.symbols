@@ -40,8 +40,8 @@ class K extends B1<number>() {
 >K : Symbol(K, Decl(genericClassExpressionInFunction.ts, 12, 1))
 >B1 : Symbol(B1, Decl(genericClassExpressionInFunction.ts, 2, 1))
 
-    namae: string;
->namae : Symbol(namae, Decl(genericClassExpressionInFunction.ts, 14, 30))
+    name: string;
+>name : Symbol(name, Decl(genericClassExpressionInFunction.ts, 14, 30))
 }
 class C extends (new B2<number>().anon) {
 >C : Symbol(C, Decl(genericClassExpressionInFunction.ts, 16, 1))

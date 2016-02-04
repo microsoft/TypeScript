@@ -17,7 +17,7 @@ goTo.marker('2');
 goTo.definition();
 verify.caretAtMarker('label2Definition');
 
-// labels accross function bounderies
+// labels across function boundaries
 goTo.marker('3');
 goTo.definition();
 verify.caretAtMarker('label1Definition');

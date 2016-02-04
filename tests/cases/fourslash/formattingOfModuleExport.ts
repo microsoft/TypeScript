@@ -1,5 +1,5 @@
 /// <reference path="fourslash.ts"/>
-////module MemoryAnalyzer {
+////module MemoryAnalyser {
 ////    export module Foo.Charting { }
 ////    /**/
 

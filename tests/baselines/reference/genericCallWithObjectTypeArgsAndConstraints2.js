@@ -1,5 +1,5 @@
 //// [genericCallWithObjectTypeArgsAndConstraints2.ts]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 
 class Base {
@@ -39,7 +39,7 @@ var r7 = f3(null, x => x); // any
 
 
 //// [genericCallWithObjectTypeArgsAndConstraints2.js]
-// Generic call with constraints infering type parameter from object member properties
+// Generic call with constraints inferring type parameter from object member properties
 // No errors expected
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];

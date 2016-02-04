@@ -19,17 +19,17 @@
 ////jsDoc/*3q*/SingleLine(/*3*/);
 ////
 ////
-/////** this is multiple line jsdoc stule comment
+/////** this is multiple line jsdoc style comment
 ////*New line1
 ////*New Line2*/
 ////function jsDocMultiLine() {
 ////}
 ////jsDocM/*4q*/ultiLine(/*4*/);
 ////
-/////** this is multiple line jsdoc stule comment
+/////** this is multiple line jsdoc style comment
 ////*New line1
 ////*New Line2*/
-/////** Shoul mege this line as well
+/////** Should merge this line as well
 ////* and this too*/ /** Another this one too*/
 ////function jsDocMultiLineMerge() {
 ////}
@@ -78,12 +78,12 @@
 ////}
 ////jsDocMix/*11q*/edComments6(/*11*/);
 ////
-////// This shoulnot be help comment
+////// This should not be help comment
 ////function noHelpComment1() {
 ////}
 ////noHel/*12q*/pComment1(/*12*/);
 ////
-/////* This shoulnot be help comment */
+/////* This should not be help comment */
 ////function noHelpComment2() {
 ////}
 ////noHelpC/*13q*/omment2(/*13*/);
@@ -218,14 +218,14 @@ goTo.marker('3q');
 verify.quickInfoIs("function jsDocSingleLine(): void", "this is eg of single line jsdoc style comment ");
 
 goTo.marker('4');
-verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc stule comment\nNew line1\nNew Line2");
+verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc style comment\nNew line1\nNew Line2");
 goTo.marker('4q');
-verify.quickInfoIs("function jsDocMultiLine(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2");
+verify.quickInfoIs("function jsDocMultiLine(): void", "this is multiple line jsdoc style comment\nNew line1\nNew Line2");
 
 goTo.marker('5');
-verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too");
+verify.currentSignatureHelpDocCommentIs("this is multiple line jsdoc style comment\nNew line1\nNew Line2\nShould merge this line as well\nand this too\nAnother this one too");
 goTo.marker('5q');
-verify.quickInfoIs("function jsDocMultiLineMerge(): void", "this is multiple line jsdoc stule comment\nNew line1\nNew Line2\nShoul mege this line as well\nand this too\nAnother this one too");
+verify.quickInfoIs("function jsDocMultiLineMerge(): void", "this is multiple line jsdoc style comment\nNew line1\nNew Line2\nShould merge this line as well\nand this too\nAnother this one too");
 
 goTo.marker('6');
 verify.currentSignatureHelpDocCommentIs("jsdoc comment ");

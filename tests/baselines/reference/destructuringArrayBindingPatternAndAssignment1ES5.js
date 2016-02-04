@@ -10,8 +10,8 @@
  *      Elision<opt>   AssignmentElement
  *      AssignmentElementList, Elisionopt   AssignmentElement
  * AssignmentElement:
- *      LeftHandSideExpression   Initialiseropt
- *      AssignmentPattern   Initialiseropt
+ *      LeftHandSideExpression   Initializeropt
+ *      AssignmentPattern   Initializeropt
  * AssignmentRestElement:
  *      ...   LeftHandSideExpression
  */
@@ -65,8 +65,8 @@ var [c14, c15, c16] = [1, 2, "string"];
  *      Elision<opt>   AssignmentElement
  *      AssignmentElementList, Elisionopt   AssignmentElement
  * AssignmentElement:
- *      LeftHandSideExpression   Initialiseropt
- *      AssignmentPattern   Initialiseropt
+ *      LeftHandSideExpression   Initializeropt
+ *      AssignmentPattern   Initializeropt
  * AssignmentRestElement:
  *      ...   LeftHandSideExpression
  */

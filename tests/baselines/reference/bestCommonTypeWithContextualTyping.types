@@ -9,8 +9,8 @@ interface Contextual {
 >p : number
 }
 
-interface Ellement {
->Ellement : Ellement
+interface Element {
+>Element : Element
 
     dummy;
 >dummy : any
@@ -19,39 +19,39 @@ interface Ellement {
 >p : any
 }
 
-var e: Ellement;
->e : Ellement
->Ellement : Ellement
+var e: Element;
+>e : Element
+>Element : Element
 
 // All of these should pass. Neither type is a supertype of the other, but the RHS should
-// always use Ellement in these examples (not Contextual). Because Ellement is assignable
+// always use Element in these examples (not Contextual). Because Element is assignable
 // to Contextual, no errors.
-var arr: Contextual[] = [e]; // Ellement[]
+var arr: Contextual[] = [e]; // Element[]
 >arr : Contextual[]
 >Contextual : Contextual
->[e] : Ellement[]
->e : Ellement
+>[e] : Element[]
+>e : Element
 
-var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: Ellement }
+var obj: { [s: string]: Contextual } = { s: e }; // { s: Element; [s: string]: Element }
 >obj : { [s: string]: Contextual; }
 >s : string
 >Contextual : Contextual
->{ s: e } : { [x: string]: Ellement; s: Ellement; }
->s : Ellement
->e : Ellement
+>{ s: e } : { [x: string]: Element; s: Element; }
+>s : Element
+>e : Element
 
-var conditional: Contextual = null ? e : e; // Ellement
+var conditional: Contextual = null ? e : e; // Element
 >conditional : Contextual
 >Contextual : Contextual
->null ? e : e : Ellement
+>null ? e : e : Element
 >null : null
->e : Ellement
->e : Ellement
+>e : Element
+>e : Element
 
-var contextualOr: Contextual = e || e; // Ellement
+var contextualOr: Contextual = e || e; // Element
 >contextualOr : Contextual
 >Contextual : Contextual
->e || e : Ellement
->e : Ellement
->e : Ellement
+>e || e : Element
+>e : Element
+>e : Element
 

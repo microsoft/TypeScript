@@ -1,5 +1,5 @@
 tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(1,29): error TS2304: Cannot find name 'deltaOffset'.
-tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(4,15): error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
+tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(4,15): error TS2339: Property 'NonexistentMethod' does not exist on type 'number[]'.
 tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(5,5): error TS2304: Cannot find name 'anotherNonExistingMethod'.
 
 
@@ -9,9 +9,9 @@ tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts(5,5): error TS2
 !!! error TS2304: Cannot find name 'deltaOffset'.
     
     var functions = [function() {
-        [1, 2, 3].NonexistantMethod();
+        [1, 2, 3].NonexistentMethod();
                   ~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.
+!!! error TS2339: Property 'NonexistentMethod' does not exist on type 'number[]'.
         anotherNonExistingMethod();
         ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'anotherNonExistingMethod'.

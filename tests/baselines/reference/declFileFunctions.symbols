@@ -64,8 +64,8 @@ export function fooWithTypePredicate(a: any): a is number {
 
     return true;
 }
-export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
->fooWithTypePredicateAndMulitpleParams : Symbol(fooWithTypePredicateAndMulitpleParams, Decl(declFileFunctions_0.ts, 27, 1))
+export function fooWithTypePredicateAndMultipleParams(a: any, b: any, c: any): a is number {
+>fooWithTypePredicateAndMultipleParams : Symbol(fooWithTypePredicateAndMultipleParams, Decl(declFileFunctions_0.ts, 27, 1))
 >a : Symbol(a, Decl(declFileFunctions_0.ts, 28, 54))
 >b : Symbol(b, Decl(declFileFunctions_0.ts, 28, 61))
 >c : Symbol(c, Decl(declFileFunctions_0.ts, 28, 69))

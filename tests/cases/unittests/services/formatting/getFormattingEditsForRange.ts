@@ -40,7 +40,7 @@ describe('getFormattingEditsForRange', function() {
         it("formats on semicolon properly", function() {
             getFormattingEditsForRange('onSemiColon');
         });
-        it("formats enum with trailling tab characters properly", function() {
+        it("formats enum with trailing tab characters properly", function() {
             getFormattingEditsForRange('tabAfterCloseCurly');
         });
         it("formats object literal", function() {
@@ -66,19 +66,19 @@ describe('getFormattingEditsForRange', function() {
                 TypeScript.moduleGenTarget = svGenTarget;
             }
         });
-        it("formats constructor statements correctelly", function() {
+        it("formats constructor statements correctly", function() {
             getFormattingEditsForRange('spaceAfterConstructor');
         });
-        it("formats classes and interfaces correctelly", function() {
+        it("formats classes and interfaces correctly", function() {
             getFormattingEditsForRange('classes');
         });
         it("formats modules correctly", function() {
             getFormattingEditsForRange('modules');
         });
-        it("formats fat arrow expressions correctelly", function() {
+        it("formats fat arrow expressions correctly", function() {
             getFormattingEditsForRange('fatArrowFunctions');
         });
-        it("formats empty object/interface literals correctelly", function() {
+        it("formats empty object/interface literals correctly", function() {
             getFormattingEditsForRange('emptyInterfaceLiteral');
         });
         it("formats variable declaration lists", function() {

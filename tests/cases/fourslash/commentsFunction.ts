@@ -13,9 +13,9 @@
 ////fooWithParam/*9*/eters/*5*/(/*2*/"a",/*3*/10);
 /////** lamdaFoo var comment*/
 ////var lamb/*11*/daFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => /*18*/a + b;
-////var lambddaN/*12*/oVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+////var lambdaN/*12*/oVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
 /////*13*/lambdaFoo(/*14*/10, /*15*/20);
-////lambddaNoVarComment(/*16*/10, /*17*/20);
+////lambdaNoVarComment(/*16*/10, /*17*/20);
 /////**
 ////* Does something
 ////* @param a a string
@@ -71,11 +71,11 @@ goTo.marker('11');
 verify.quickInfoIs("var lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment");
 
 goTo.marker('12');
-verify.quickInfoIs("var lambddaNoVarComment: (a: number, b: number) => number", "");
+verify.quickInfoIs("var lambdaNoVarComment: (a: number, b: number) => number", "");
 
 goTo.marker('13');
 verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', '');
-verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', '');
+verify.completionListContains('lambdaNoVarComment', 'var lambdaNoVarComment: (a: number, b: number) => number', '');
 
 goTo.marker('14');
 verify.currentParameterHelpArgumentDocCommentIs("param a");

@@ -134,7 +134,7 @@ new b.f(1, 2, ...a, "string");
 >f : Symbol(A.f, Decl(newWithSpreadES6.ts, 7, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
-// Parenthesised expression
+// Parenthesized expression
 new (b.f)(1, 2, "string");
 >b.f : Symbol(A.f, Decl(newWithSpreadES6.ts, 7, 13))
 >b : Symbol(b, Decl(newWithSpreadES6.ts, 26, 3))
@@ -215,7 +215,7 @@ new c["a-b"](1, 2, ...a, "string");
 >"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
-// Parenthesised expression
+// Parenthesized expression
 new (c["a-b"])(1, 2, "string");
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
 >"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))

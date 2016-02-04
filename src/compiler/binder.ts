@@ -12,7 +12,7 @@ namespace ts {
     }
 
     const enum Reachability {
-        Unintialized        = 1 << 0,
+        Uninitialized        = 1 << 0,
         Reachable           = 1 << 1,
         Unreachable         = 1 << 2,
         ReportedUnreachable = 1 << 3
@@ -393,7 +393,7 @@ namespace ts {
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
         function bindChildren(node: Node) {
-            // Before we recurse into a node's chilren, we first save the existing parent, container
+            // Before we recurse into a node's children, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
             const saveParent = parent;
@@ -418,7 +418,7 @@ namespace ts {
             // Finally, if this is a block-container, then we clear out any existing .locals object
             // it may contain within it.  This happens in incremental scenarios.  Because we can be
             // reusing a node from a previous compilation, that node may have had 'locals' created
-            // for it.  We must clear this so we don't accidently move any stale data forward from
+            // for it.  We must clear this so we don't accidentally move any stale data forward from
             // a previous compilation.
             const containerFlags = getContainerFlags(node);
             if (containerFlags & ContainerFlags.IsContainer) {
@@ -699,7 +699,7 @@ namespace ts {
 
             const hasDefault = forEach(n.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
 
-            // post switch state is unreachable if switch is exaustive (has a default case ) and does not have fallthrough from the last case
+            // post switch state is unreachable if switch is exhaustive (has a default case ) and does not have fallthrough from the last case
             const postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
 
             popImplicitLabel(postSwitchLabel, postSwitchState);
@@ -766,7 +766,7 @@ namespace ts {
 
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.
-                    // Locals that reside in this block should go to the function locals. Othewise 'x'
+                    // Locals that reside in this block should go to the function locals. Otherwise 'x'
                     // would not appear to be a redeclaration of a block scoped local in the following
                     // example:
                     //
@@ -956,7 +956,7 @@ namespace ts {
 
                     const identifier = <Identifier>prop.name;
 
-                    // ECMA-262 11.1.5 Object Initialiser
+                    // ECMA-262 11.1.5 Object Initializer
                     // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
                     // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
                     // IsDataDescriptor(propId.descriptor) is true.
@@ -1629,14 +1629,14 @@ namespace ts {
             if (hasProperty(labelIndexMap, name.text)) {
                 return false;
             }
-            labelIndexMap[name.text] = labelStack.push(Reachability.Unintialized) - 1;
+            labelIndexMap[name.text] = labelStack.push(Reachability.Uninitialized) - 1;
             return true;
         }
 
         function pushImplicitLabel(): number {
             initializeReachabilityStateIfNecessary();
 
-            const index = labelStack.push(Reachability.Unintialized) - 1;
+            const index = labelStack.push(Reachability.Uninitialized) - 1;
             implicitLabels.push(index);
             return index;
         }
@@ -1666,7 +1666,7 @@ namespace ts {
         }
 
         function setCurrentStateAtLabel(innerMergedState: Reachability, outerState: Reachability, label: Identifier): void {
-            if (innerMergedState === Reachability.Unintialized) {
+            if (innerMergedState === Reachability.Uninitialized) {
                 if (label && !options.allowUnusedLabels) {
                     file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
                 }
@@ -1687,7 +1687,7 @@ namespace ts {
                 return false;
             }
             const stateAtLabel = labelStack[index];
-            labelStack[index] = stateAtLabel === Reachability.Unintialized ? outerState : or(stateAtLabel, outerState);
+            labelStack[index] = stateAtLabel === Reachability.Uninitialized ? outerState : or(stateAtLabel, outerState);
             return true;
         }
 

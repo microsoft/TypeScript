@@ -18,7 +18,7 @@ export class ConstructorWithParameters {
     }
 }
 
-export class ConstructorWithRestParamters {
+export class ConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]) {
         return a + rests.join("");
     }
@@ -66,7 +66,7 @@ class GlobalConstructorWithParameters {
     }
 }
 
-class GlobalConstructorWithRestParamters {
+class GlobalConstructorWithRestParameters {
     constructor(a: string, ...rests: string[]) {
         return a + rests.join("");
     }

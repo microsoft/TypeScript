@@ -8,7 +8,7 @@ class C {
         return null;
     }
 
-    underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
+    undefinedWidenFuncOfC() {  // error at "undefinedWidenFuncOfC"
         return undefined;
     }
 }
@@ -34,7 +34,7 @@ var C = (function () {
     C.prototype.nullWidenFuncOfC = function () {
         return null;
     };
-    C.prototype.underfinedWidenFuncOfC = function () {
+    C.prototype.undefinedWidenFuncOfC = function () {
         return undefined;
     };
     return C;

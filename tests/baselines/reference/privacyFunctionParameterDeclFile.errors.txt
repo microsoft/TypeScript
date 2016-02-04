@@ -68,7 +68,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
     export class publicClass {
     }
     
-    export interface publicInterfaceWithPrivateParmeterTypes {
+    export interface publicInterfaceWithPrivateParameterTypes {
         new (param: privateClass): publicClass; // Error
                     ~~~~~~~~~~~~
 !!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
@@ -80,25 +80,25 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
 !!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
     }
     
-    export interface publicInterfaceWithPublicParmeterTypes {
+    export interface publicInterfaceWithPublicParameterTypes {
         new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
     
-    interface privateInterfaceWithPrivateParmeterTypes {
+    interface privateInterfaceWithPrivateParameterTypes {
         new (param: privateClass): privateClass;
         (param: privateClass): privateClass;
         myMethod(param: privateClass): void;
     }
     
-    interface privateInterfaceWithPublicParmeterTypes {
+    interface privateInterfaceWithPublicParameterTypes {
         new (param: publicClass): publicClass;
         (param: publicClass): publicClass;
         myMethod(param: publicClass): void;
     }
     
-    export class publicClassWithWithPrivateParmeterTypes {
+    export class publicClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod(param: privateClass) { // Error
                                            ~~~~~~~~~~~~
 !!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
@@ -121,7 +121,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         }
     }
     
-    export class publicClassWithWithPublicParmeterTypes {
+    export class publicClassWithWithPublicParameterTypes {
         static myPublicStaticMethod(param: publicClass) {
         }
         private static myPrivateStaticMethod(param: publicClass) {
@@ -134,7 +134,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         }
     }
     
-    class privateClassWithWithPrivateParmeterTypes {
+    class privateClassWithWithPrivateParameterTypes {
         static myPublicStaticMethod(param: privateClass) {
         }
         private static myPrivateStaticMethod(param: privateClass) {
@@ -147,7 +147,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         }
     }
     
-    class privateClassWithWithPublicParmeterTypes {
+    class privateClassWithWithPublicParameterTypes {
         static myPublicStaticMethod(param: publicClass) {
         }
         private static myPrivateStaticMethod(param: publicClass) {
@@ -160,23 +160,23 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         }
     }
     
-    export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+    export function publicFunctionWithPrivateParameterTypes(param: privateClass) { // Error
                                                                   ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
     }
-    export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+    export function publicFunctionWithPublicParameterTypes(param: publicClass) {
     }
-    function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+    function privateFunctionWithPrivateParameterTypes(param: privateClass) {
     }
-    function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+    function privateFunctionWithPublicParameterTypes(param: publicClass) {
     }
     
-    export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+    export declare function publicAmbientFunctionWithPrivateParameterTypes(param: privateClass): void; // Error
                                                                                  ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
-    export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-    declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-    declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+    export declare function publicAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
+    declare function privateAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+    declare function privateAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
     
     export interface publicInterfaceWithPrivateModuleParameterTypes {
         new (param: privateModule.publicClass): publicClass; // Error
@@ -240,7 +240,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         }
     
     
-        export interface publicInterfaceWithPrivateParmeterTypes {
+        export interface publicInterfaceWithPrivateParameterTypes {
             new (param: privateClass): publicClass; // Error
                         ~~~~~~~~~~~~
 !!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
@@ -252,25 +252,25 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
 !!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
         }
     
-        export interface publicInterfaceWithPublicParmeterTypes {
+        export interface publicInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        interface privateInterfaceWithPrivateParmeterTypes {
+        interface privateInterfaceWithPrivateParameterTypes {
             new (param: privateClass): privateClass;
             (param: privateClass): privateClass;
             myMethod(param: privateClass): void;
         }
     
-        interface privateInterfaceWithPublicParmeterTypes {
+        interface privateInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        export class publicClassWithWithPrivateParmeterTypes {
+        export class publicClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) { // Error
                                                ~~~~~~~~~~~~
 !!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
@@ -293,7 +293,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export class publicClassWithWithPublicParmeterTypes {
+        export class publicClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -306,7 +306,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPrivateParmeterTypes {
+        class privateClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) {
             }
             private static myPrivateStaticMethod(param: privateClass) {
@@ -319,7 +319,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPublicParmeterTypes {
+        class privateClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -332,23 +332,23 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+        export function publicFunctionWithPrivateParameterTypes(param: privateClass) { // Error
                                                                       ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         }
-        export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+        export function publicFunctionWithPublicParameterTypes(param: publicClass) {
         }
-        function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+        function privateFunctionWithPrivateParameterTypes(param: privateClass) {
         }
-        function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+        function privateFunctionWithPublicParameterTypes(param: publicClass) {
         }
     
-        export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+        export declare function publicAmbientFunctionWithPrivateParameterTypes(param: privateClass): void; // Error
                                                                                      ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
-        export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-        declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+        export declare function publicAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
+        declare function privateAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+        declare function privateAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass; // Error
@@ -413,31 +413,31 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         export class publicClass {
         }
     
-        export interface publicInterfaceWithPrivateParmeterTypes {
+        export interface publicInterfaceWithPrivateParameterTypes {
             new (param: privateClass): publicClass;
             (param: privateClass): publicClass;
             myMethod(param: privateClass): void;
         }
     
-        export interface publicInterfaceWithPublicParmeterTypes {
+        export interface publicInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        interface privateInterfaceWithPrivateParmeterTypes {
+        interface privateInterfaceWithPrivateParameterTypes {
             new (param: privateClass): privateClass;
             (param: privateClass): privateClass;
             myMethod(param: privateClass): void;
         }
     
-        interface privateInterfaceWithPublicParmeterTypes {
+        interface privateInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        export class publicClassWithWithPrivateParmeterTypes {
+        export class publicClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) {
             }
             private static myPrivateStaticMethod(param: privateClass) {
@@ -450,7 +450,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export class publicClassWithWithPublicParmeterTypes {
+        export class publicClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -463,7 +463,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPrivateParmeterTypes {
+        class privateClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) {
             }
             private static myPrivateStaticMethod(param: privateClass) {
@@ -476,7 +476,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPublicParmeterTypes {
+        class privateClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -489,19 +489,19 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
+        export function publicFunctionWithPrivateParameterTypes(param: privateClass) {
         }
-        export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+        export function publicFunctionWithPublicParameterTypes(param: publicClass) {
         }
-        function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+        function privateFunctionWithPrivateParameterTypes(param: privateClass) {
         }
-        function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+        function privateFunctionWithPublicParameterTypes(param: publicClass) {
         }
     
-        export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-        declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+        export declare function publicAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+        export declare function publicAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
+        declare function privateAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+        declare function privateAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass;
@@ -541,12 +541,12 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
 ==== tests/cases/compiler/privacyFunctionParameterDeclFile_GlobalFile.ts (20 errors) ====
     class publicClassInGlobal {
     }
-    interface publicInterfaceWithPublicParmeterTypesInGlobal {
+    interface publicInterfaceWithPublicParameterTypesInGlobal {
         new (param: publicClassInGlobal): publicClassInGlobal;
         (param: publicClassInGlobal): publicClassInGlobal;
         myMethod(param: publicClassInGlobal): void;
     }
-    class publicClassWithWithPublicParmeterTypesInGlobal {
+    class publicClassWithWithPublicParameterTypesInGlobal {
         static myPublicStaticMethod(param: publicClassInGlobal) {
         }
         private static myPrivateStaticMethod(param: publicClassInGlobal) {
@@ -558,9 +558,9 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
         constructor(param: publicClassInGlobal, private param1: publicClassInGlobal, public param2: publicClassInGlobal) {
         }
     }
-    function publicFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal) {
+    function publicFunctionWithPublicParameterTypesInGlobal(param: publicClassInGlobal) {
     }
-    declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
+    declare function publicAmbientFunctionWithPublicParameterTypesInGlobal(param: publicClassInGlobal): void;
     
     module publicModuleInGlobal {
         class privateClass {
@@ -576,31 +576,31 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             export class publicClass {
             }
     
-            export interface publicInterfaceWithPrivateParmeterTypes {
+            export interface publicInterfaceWithPrivateParameterTypes {
                 new (param: privateClass): publicClass;
                 (param: privateClass): publicClass;
                 myMethod(param: privateClass): void;
             }
     
-            export interface publicInterfaceWithPublicParmeterTypes {
+            export interface publicInterfaceWithPublicParameterTypes {
                 new (param: publicClass): publicClass;
                 (param: publicClass): publicClass;
                 myMethod(param: publicClass): void;
             }
     
-            interface privateInterfaceWithPrivateParmeterTypes {
+            interface privateInterfaceWithPrivateParameterTypes {
                 new (param: privateClass): privateClass;
                 (param: privateClass): privateClass;
                 myMethod(param: privateClass): void;
             }
     
-            interface privateInterfaceWithPublicParmeterTypes {
+            interface privateInterfaceWithPublicParameterTypes {
                 new (param: publicClass): publicClass;
                 (param: publicClass): publicClass;
                 myMethod(param: publicClass): void;
             }
     
-            export class publicClassWithWithPrivateParmeterTypes {
+            export class publicClassWithWithPrivateParameterTypes {
                 static myPublicStaticMethod(param: privateClass) {
                 }
                 private static myPrivateStaticMethod(param: privateClass) {
@@ -613,7 +613,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
                 }
             }
     
-            export class publicClassWithWithPublicParmeterTypes {
+            export class publicClassWithWithPublicParameterTypes {
                 static myPublicStaticMethod(param: publicClass) {
                 }
                 private static myPrivateStaticMethod(param: publicClass) {
@@ -626,7 +626,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
                 }
             }
     
-            class privateClassWithWithPrivateParmeterTypes {
+            class privateClassWithWithPrivateParameterTypes {
                 static myPublicStaticMethod(param: privateClass) {
                 }
                 private static myPrivateStaticMethod(param: privateClass) {
@@ -639,7 +639,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
                 }
             }
     
-            class privateClassWithWithPublicParmeterTypes {
+            class privateClassWithWithPublicParameterTypes {
                 static myPublicStaticMethod(param: publicClass) {
                 }
                 private static myPrivateStaticMethod(param: publicClass) {
@@ -652,19 +652,19 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
                 }
             }
     
-            export function publicFunctionWithPrivateParmeterTypes(param: privateClass) {
+            export function publicFunctionWithPrivateParameterTypes(param: privateClass) {
             }
-            export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+            export function publicFunctionWithPublicParameterTypes(param: publicClass) {
             }
-            function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+            function privateFunctionWithPrivateParameterTypes(param: privateClass) {
             }
-            function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+            function privateFunctionWithPublicParameterTypes(param: publicClass) {
             }
     
-            export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-            export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-            declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-            declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+            export declare function publicAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+            export declare function publicAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
+            declare function privateAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+            declare function privateAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
     
             export interface publicInterfaceWithPrivateModuleParameterTypes {
                 new (param: privateModule.publicClass): publicClass;
@@ -701,7 +701,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
         }
     
-        export interface publicInterfaceWithPrivateParmeterTypes {
+        export interface publicInterfaceWithPrivateParameterTypes {
             new (param: privateClass): publicClass; // Error
                         ~~~~~~~~~~~~
 !!! error TS4065: Parameter 'param' of constructor signature from exported interface has or is using private name 'privateClass'.
@@ -713,25 +713,25 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
 !!! error TS4075: Parameter 'param' of method from exported interface has or is using private name 'privateClass'.
         }
     
-        export interface publicInterfaceWithPublicParmeterTypes {
+        export interface publicInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        interface privateInterfaceWithPrivateParmeterTypes {
+        interface privateInterfaceWithPrivateParameterTypes {
             new (param: privateClass): privateClass;
             (param: privateClass): privateClass;
             myMethod(param: privateClass): void;
         }
     
-        interface privateInterfaceWithPublicParmeterTypes {
+        interface privateInterfaceWithPublicParameterTypes {
             new (param: publicClass): publicClass;
             (param: publicClass): publicClass;
             myMethod(param: publicClass): void;
         }
     
-        export class publicClassWithWithPrivateParmeterTypes {
+        export class publicClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) { // Error
                                                ~~~~~~~~~~~~
 !!! error TS4070: Parameter 'param' of public static method from exported class has or is using private name 'privateClass'.
@@ -754,7 +754,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export class publicClassWithWithPublicParmeterTypes {
+        export class publicClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -767,7 +767,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPrivateParmeterTypes {
+        class privateClassWithWithPrivateParameterTypes {
             static myPublicStaticMethod(param: privateClass) {
             }
             private static myPrivateStaticMethod(param: privateClass) {
@@ -780,7 +780,7 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        class privateClassWithWithPublicParmeterTypes {
+        class privateClassWithWithPublicParameterTypes {
             static myPublicStaticMethod(param: publicClass) {
             }
             private static myPrivateStaticMethod(param: publicClass) {
@@ -793,23 +793,23 @@ tests/cases/compiler/privacyFunctionParameterDeclFile_externalModule.ts(245,89):
             }
         }
     
-        export function publicFunctionWithPrivateParmeterTypes(param: privateClass) { // Error
+        export function publicFunctionWithPrivateParameterTypes(param: privateClass) { // Error
                                                                       ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
         }
-        export function publicFunctionWithPublicParmeterTypes(param: publicClass) {
+        export function publicFunctionWithPublicParameterTypes(param: publicClass) {
         }
-        function privateFunctionWithPrivateParmeterTypes(param: privateClass) {
+        function privateFunctionWithPrivateParameterTypes(param: privateClass) {
         }
-        function privateFunctionWithPublicParmeterTypes(param: publicClass) {
+        function privateFunctionWithPublicParameterTypes(param: publicClass) {
         }
     
-        export declare function publicAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void; // Error
+        export declare function publicAmbientFunctionWithPrivateParameterTypes(param: privateClass): void; // Error
                                                                                      ~~~~~~~~~~~~
 !!! error TS4078: Parameter 'param' of exported function has or is using private name 'privateClass'.
-        export declare function publicAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
-        declare function privateAmbientFunctionWithPrivateParmeterTypes(param: privateClass): void;
-        declare function privateAmbientFunctionWithPublicParmeterTypes(param: publicClass): void;
+        export declare function publicAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
+        declare function privateAmbientFunctionWithPrivateParameterTypes(param: privateClass): void;
+        declare function privateAmbientFunctionWithPublicParameterTypes(param: publicClass): void;
     
         export interface publicInterfaceWithPrivateModuleParameterTypes {
             new (param: privateModule.publicClass): publicClass; // Error

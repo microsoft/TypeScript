@@ -49,7 +49,7 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(70,11): error 
         }
     }
     
-    // Function implemetnation with non -void return type annotation with no return
+    // Function implementation with non -void return type annotation with no return
     function f5(): number {
                    ~~~~~~
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.

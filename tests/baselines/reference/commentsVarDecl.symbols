@@ -24,7 +24,7 @@ var x = 70; /* multiline trailing comment
 >x : Symbol(x, Decl(commentsVarDecl.ts, 17, 3))
 
 this is multiline trailing comment */
-/** Triple slash comment on the assignement shouldnt be in .d.ts file*/
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
 x = myVariable;
 >x : Symbol(x, Decl(commentsVarDecl.ts, 17, 3))
 >myVariable : Symbol(myVariable, Decl(commentsVarDecl.ts, 2, 3))
@@ -34,11 +34,11 @@ x = myVariable;
 var n = 30;
 >n : Symbol(n, Decl(commentsVarDecl.ts, 24, 3))
 
-/** var deckaration with comment on type as well*/
+/** var declaration with comment on type as well*/
 var y = /** value comment */ 20;
 >y : Symbol(y, Decl(commentsVarDecl.ts, 27, 3))
 
-/// var deckaration with comment on type as well
+/// var declaration with comment on type as well
 var yy =
 >yy : Symbol(yy, Decl(commentsVarDecl.ts, 30, 3))
 

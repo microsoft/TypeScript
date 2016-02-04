@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(16,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndentationResolver'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(27,28): error TS2503: Cannot find namespace 'TypeScript'.
@@ -150,9 +150,9 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
     
     module Formatting {
-        export class Indenter implements ILineIndenationResolver  {
+        export class Indenter implements ILineIndentationResolver  {
                                          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ILineIndenationResolver'.
+!!! error TS2304: Cannot find name 'ILineIndentationResolver'.
     
             private indentationBag: IndentationBag;
                                     ~~~~~~~~~~~~~~
@@ -189,7 +189,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
                                                    ~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Dictionary_int_int'.
     
-                // by default the root (program) has zero indendation
+                // by default the root (program) has zero indentation
                 this.tree.Root.SetIndentationOverride("");
     
                 this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
@@ -494,7 +494,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
                     return null;
                 }
     
-                // effective identation of the block
+                // effective indentation of the block
                 indentationInfo = node.GetEffectiveIndentation(this);
                 return indentationInfo;
             }
@@ -515,7 +515,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
                     return indentationInfo;
                 }
                 else {
-                    // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
+                    // Indent all semicolons except the ones that belong to the for statement parts (initializer, condition, increment)
                     if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
                                                         ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'AuthorParseNodeKind'.

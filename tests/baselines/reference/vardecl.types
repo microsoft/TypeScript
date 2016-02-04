@@ -34,8 +34,8 @@ declare var declareVar2
 declare var declaredVar3;
 >declaredVar3 : any
 
-declare var deckareVarWithType: number;
->deckareVarWithType : number
+declare var declareVarWithType: number;
+>declareVarWithType : number
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]

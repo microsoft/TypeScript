@@ -30,7 +30,7 @@ module Foo.Bar {
     }
 
     var b = foo2("Hello", "World", "!");
-    // This is simple signle line comment
+    // This is simple single line comment
     for (var j = 0; j < b.length; j++) {
         b[j].greet();
     }

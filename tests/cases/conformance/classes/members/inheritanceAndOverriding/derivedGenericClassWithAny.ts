@@ -24,7 +24,7 @@ class D extends C<number> {
     }
 }
 
-// if D is a valid class definition than E is now not safe tranisitively through C
+// if D is a valid class definition than E is now not safe transitively through C
 class E<T extends string> extends D {
     x: T;
     get X(): T { return ''; } // error

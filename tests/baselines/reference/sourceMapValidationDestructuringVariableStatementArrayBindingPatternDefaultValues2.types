@@ -52,16 +52,16 @@ let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"]
 >"noSkill" : string
 >multiRobotA : [string, string[]]
 
-let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC = "noName" ] = ["Roomba", ["vacuum", "mopping"]];
 >nameMC : string
 >"noName" : string
->["roomba", ["vaccum", "mopping"]] : [string, string[]]
->"roomba" : string
->["vaccum", "mopping"] : string[]
->"vaccum" : string
+>["Roomba", ["vacuum", "mopping"]] : [string, string[]]
+>"Roomba" : string
+>["vacuum", "mopping"] : string[]
+>"vacuum" : string
 >"mopping" : string
 
-let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["Roomba", ["vacuum", "mopping"]];
 >nameMC2 : string
 >"noName" : string
 >primarySkillC : string
@@ -71,10 +71,10 @@ let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : string
 >"noSkill" : string
->["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
->"roomba" : string
->["vaccum", "mopping"] : [string, string]
->"vaccum" : string
+>["Roomba", ["vacuum", "mopping"]] : [string, [string, string]]
+>"Roomba" : string
+>["vacuum", "mopping"] : [string, string]
+>"vacuum" : string
 >"mopping" : string
 
 if (nameMB == nameMA) {

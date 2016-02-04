@@ -451,7 +451,7 @@ module TypeScript {
         // If we ask for the AST at the position after the "r" character, we won't see we are 
         // inside a comment, because the "class" AST node has a limChar corresponding to the position of 
         // the "{" character, meaning we don't traverse the tree down to the stmt list of the class, meaning
-        // we don't find the "precomment" attached to the errorneous empty stmt.
+        // we don't find the "precomment" attached to the erroroneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         DontPruneSearchBasedOnPosition = 1 << 1,
     }

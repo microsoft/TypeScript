@@ -24,8 +24,8 @@ export class ConstructorWithParameters {
     }
 }
 
-export class ConstructorWithRestParamters {
->ConstructorWithRestParamters : Symbol(ConstructorWithRestParamters, Decl(declFileConstructors_0.ts, 13, 1))
+export class ConstructorWithRestParameters {
+>ConstructorWithRestParameters : Symbol(ConstructorWithRestParameters, Decl(declFileConstructors_0.ts, 13, 1))
 
     constructor(a: string, ...rests: string[]) {
 >a : Symbol(a, Decl(declFileConstructors_0.ts, 16, 16))
@@ -110,8 +110,8 @@ class GlobalConstructorWithParameters {
     }
 }
 
-class GlobalConstructorWithRestParamters {
->GlobalConstructorWithRestParamters : Symbol(GlobalConstructorWithRestParamters, Decl(declFileConstructors_1.ts, 12, 1))
+class GlobalConstructorWithRestParameters {
+>GlobalConstructorWithRestParameters : Symbol(GlobalConstructorWithRestParameters, Decl(declFileConstructors_1.ts, 12, 1))
 
     constructor(a: string, ...rests: string[]) {
 >a : Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))

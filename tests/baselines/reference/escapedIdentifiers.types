@@ -297,7 +297,7 @@ constructorTestObject.arg4 = 2;
 >arg4 : number
 >2 : number
 
-// Lables
+// Labels
 
 l\u0061bel1: 
 >l\u0061bel1 : any

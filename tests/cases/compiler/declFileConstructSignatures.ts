@@ -30,7 +30,7 @@ export interface IConstructSignatureWithTypeParameters<T> {
     new (a: T): T;
 }
 
-export interface IConstructSignatureWithOwnTypeParametes {
+export interface IConstructSignatureWithOwnTypeParameters {
     new <T extends IConstructSignature>(a: T): T;
 }
 
@@ -63,6 +63,6 @@ interface IGlobalConstructSignatureWithTypeParameters<T> {
     new (a: T): T;
 }
 
-interface IGlobalConstructSignatureWithOwnTypeParametes {
+interface IGlobalConstructSignatureWithOwnTypeParameters {
     new <T extends IGlobalConstructSignature>(a: T): T;
 }

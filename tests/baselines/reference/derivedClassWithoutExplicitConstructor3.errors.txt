@@ -5,7 +5,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts (4 errors) ====
-    // automatic constructors with a class hieararchy of depth > 2
+    // automatic constructors with a class hierarchy of depth > 2
     
     class Base {
         a = 1;

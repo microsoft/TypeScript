@@ -1100,7 +1100,7 @@ module Harness {
 
         /** Generates a .d.ts file for the given code
           * @param verifyNoDeclFile pass true when the given code should generate no decl file, false otherwise
-          * @param unitName add the given code under thie name, else use '0.ts'
+          * @param unitName add the given code under this name, else use '0.ts'
           * @param compilationContext a set of functions to be run before and after compiling this code for doing things like adding dependencies first
           * @param references the set of referenced files used by the given code
           */
@@ -1412,7 +1412,7 @@ module Harness {
      *  extracts options and individual files in a multifile test
      */
     export module TestCaseParser {
-        /** all the necesarry information to set the right compiler settings */
+        /** all the necessary information to set the right compiler settings */
         export interface CompilerSetting {
             flag: string;
             value: string;
@@ -1873,7 +1873,7 @@ module Harness {
         }
 
         export function runJSString(code: string, callback: (error: Error, result: any) => void ) {
-            // List of names that get overriden by various test code we eval
+            // List of names that get overridden by various test code we eval
             var dangerNames: any = ['Array'];
 
             var globalBackup: any = {};

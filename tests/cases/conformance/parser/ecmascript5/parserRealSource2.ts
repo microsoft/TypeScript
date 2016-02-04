@@ -77,8 +77,8 @@ module TypeScript {
 
     export enum ASTFlags {
         None = 0,
-        ExplicitSemicolon = 1, // statment terminated by an explicit semicolon
-        AutomaticSemicolon = 1 << 1, // statment terminated by an automatic semicolon
+        ExplicitSemicolon = 1, // statement terminated by an explicit semicolon
+        AutomaticSemicolon = 1 << 1, // statement terminated by an automatic semicolon
         Writeable = 1 << 2,  // node is lhs that can be modified
         Error = 1 << 3, // node has an error
         DotLHSPartial = 1 << 4, // node is the lhs of an incomplete dot expr at cursor

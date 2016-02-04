@@ -1,12 +1,12 @@
 //// [commentInMethodCall.ts]
-//commment here
+//comment here
 var s: string[];
 s.map(// do something
     function () { });
 
 
 //// [commentInMethodCall.js]
-//commment here
+//comment here
 var s;
 s.map(// do something
 function () { });
