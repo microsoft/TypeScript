@@ -375,6 +375,68 @@ namespace ts {
 
         return documentationComment;
 
+        function getCommentFromJsDocTag(tag: JSDocTag, rangeEnd: number, sourceFile: SourceFile): SymbolDisplayPart {
+            const text = sourceFile.text;
+
+            const parts: string[] = [];
+            let start = tag.end + 1;
+
+            // Eat any leading ignored characters
+            while (start < rangeEnd) {
+                const ch = text.charCodeAt(start);
+                if (ch === CharacterCodes.asterisk || isWhiteSpace(ch)) {
+                    start++;
+                }
+                else if (ch === CharacterCodes.at) {
+                    // Most likely a malformed tag
+                    return undefined;
+                }
+                else {
+                    break;
+                }
+            }
+
+            let i: number;
+            for (i = start; i < rangeEnd; i++) {
+                const ch = text.charCodeAt(i);
+                if (isLineBreak(ch)) {
+                    // Line break, push any non-empty content so far
+                    if (start !== i) {
+                        parts.push(text.substr(start, i - start));
+                    }
+
+                    // Keep scanning until we hit either a non-ws/non-asterisk char
+                    while (i < rangeEnd) {
+                        i++;
+                        const nextCh = text.charCodeAt(i);
+                        if ((nextCh === CharacterCodes.asterisk) || (isWhiteSpace(nextCh) || isLineBreak(nextCh))) {
+                            // Eat *s and whitespace
+                            continue;
+                        }
+                        else if (nextCh === CharacterCodes.at) {
+                            // Abort, we're running into another malformed jsdoc tag
+                            i = rangeEnd;
+                            break;
+                        }
+                        else {
+                            // Scan this
+                            break;
+                        }
+                    }
+                    start = i;
+                }
+            }
+
+            if (start < rangeEnd) {
+                parts.push(text.substr(start, rangeEnd - start));
+            }
+
+            return {
+                kind: "documentation",
+                text: parts.join("\n")
+            };
+        }
+
         function getJsDocCommentsSeparatedByNewLines() {
             const paramTag = "@param";
             const jsDocCommentParts: SymbolDisplayPart[] = [];
@@ -391,9 +453,24 @@ namespace ts {
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
-                            if (cleanedParamJsDocComment) {
-                                addRange(jsDocCommentParts, cleanedParamJsDocComment);
+                            // getJsDocCommentTextRange removes leading /* and trailing */, so add those back (-2, +4 net)
+                            const content = parseIsolatedJSDocComment(sourceFileOfDeclaration.text, jsDocCommentTextRange.pos - 2, jsDocCommentTextRange.end - jsDocCommentTextRange.pos + 4);
+                            if (content && content.jsDocComment.tags) {
+                                const tags = content.jsDocComment.tags;
+
+                                for (let i = 0; i < tags.length; i++) {
+                                    const tag = tags[i];
+                                    if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                                        const tagParamName = (tag as JSDocParameterTag).preParameterName || (tag as JSDocParameterTag).postParameterName;
+                                        const nextTagStart = (i === tags.length - 1) ? jsDocCommentTextRange.end : tags[i + 1].pos;
+                                        if (tagParamName && tagParamName.text === name) {
+                                            const comment = getCommentFromJsDocTag(tag, nextTagStart, sourceFileOfDeclaration);
+                                            if (comment) {
+                                                jsDocCommentParts.push(comment);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         });
                     }
@@ -539,155 +616,6 @@ namespace ts {
                 }
 
                 return docComments;
-            }
-
-            function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
-                let paramHelpStringMargin: number;
-                const paramDocComments: SymbolDisplayPart[] = [];
-                while (pos < end) {
-                    if (isParamTag(pos, end, sourceFile)) {
-                        let blankLineCount = 0;
-                        let recordedParamTag = false;
-                        // Consume leading spaces
-                        pos = consumeWhiteSpaces(pos + paramTag.length);
-                        if (pos >= end) {
-                            break;
-                        }
-
-                        // Ignore type expression
-                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                            pos++;
-                            for (let curlies = 1; pos < end; pos++) {
-                                const charCode = sourceFile.text.charCodeAt(pos);
-
-                                // { character means we need to find another } to match the found one
-                                if (charCode === CharacterCodes.openBrace) {
-                                    curlies++;
-                                    continue;
-                                }
-
-                                // } char
-                                if (charCode === CharacterCodes.closeBrace) {
-                                    curlies--;
-                                    if (curlies === 0) {
-                                        // We do not have any more } to match the type expression is ignored completely
-                                        pos++;
-                                        break;
-                                    }
-                                    else {
-                                        // there are more { to be matched with }
-                                        continue;
-                                    }
-                                }
-
-                                // Found start of another tag
-                                if (charCode === CharacterCodes.at) {
-                                    break;
-                                }
-                            }
-
-                            // Consume white spaces
-                            pos = consumeWhiteSpaces(pos);
-                            if (pos >= end) {
-                                break;
-                            }
-                        }
-
-                        // Parameter name
-                        if (isName(pos, end, sourceFile, name)) {
-                            // Found the parameter we are looking for consume white spaces
-                            pos = consumeWhiteSpaces(pos + name.length);
-                            if (pos >= end) {
-                                break;
-                            }
-
-                            let paramHelpString = "";
-                            const firstLineParamHelpStringPos = pos;
-                            while (pos < end) {
-                                const ch = sourceFile.text.charCodeAt(pos);
-
-                                // at line break, set this comment line text and go to next line
-                                if (isLineBreak(ch)) {
-                                    if (paramHelpString) {
-                                        pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
-                                        paramHelpString = "";
-                                        blankLineCount = 0;
-                                        recordedParamTag = true;
-                                    }
-                                    else if (recordedParamTag) {
-                                        blankLineCount++;
-                                    }
-
-                                    // Get the pos after cleaning start of the line
-                                    setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos);
-                                    continue;
-                                }
-
-                                // Done scanning param help string - next tag found
-                                if (ch === CharacterCodes.at) {
-                                    break;
-                                }
-
-                                paramHelpString += sourceFile.text.charAt(pos);
-
-                                // Go to next character
-                                pos++;
-                            }
-
-                            // If there is param help text, add it top the doc comments
-                            if (paramHelpString) {
-                                pushDocCommentLineText(paramDocComments, paramHelpString, blankLineCount);
-                            }
-                            paramHelpStringMargin = undefined;
-                        }
-
-                        // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
-                        if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
-                            continue;
-                        }
-                    }
-
-                    // Next character
-                    pos++;
-                }
-
-                return paramDocComments;
-
-                function consumeWhiteSpaces(pos: number) {
-                    while (pos < end && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
-                        pos++;
-                    }
-
-                    return pos;
-                }
-
-                function setPosForParamHelpStringOnNextLine(firstLineParamHelpStringPos: number) {
-                    // Get the pos after consuming line breaks
-                    pos = consumeLineBreaks(pos, end, sourceFile);
-                    if (pos >= end) {
-                        return;
-                    }
-
-                    if (paramHelpStringMargin === undefined) {
-                        paramHelpStringMargin = sourceFile.getLineAndCharacterOfPosition(firstLineParamHelpStringPos).character;
-                    }
-
-                    // Now consume white spaces max
-                    const startOfLinePos = pos;
-                    pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
-                    if (pos >= end) {
-                        return;
-                    }
-
-                    const consumedSpaces = pos - startOfLinePos;
-                    if (consumedSpaces < paramHelpStringMargin) {
-                        const ch = sourceFile.text.charCodeAt(pos);
-                        if (ch === CharacterCodes.asterisk) {
-                            // Consume more spaces after asterisk
-                            pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
-                        }
-                    }
-                }
             }
         }
     }
