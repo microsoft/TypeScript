@@ -123,9 +123,13 @@ function a4() {
     var _loop_5 = function(x) {
         x = x + 1;
         (function () { return x; });
+        out_x_1 = x;
     };
+    var out_x_1;
     for (var x = void 0; x < 1;) {
+        out_x_1 = x;
         _loop_5(x);
+        x = out_x_1;
     }
     switch (1) {
         case 1:
@@ -137,9 +141,13 @@ function a5() {
     var _loop_6 = function(x) {
         x = x + 1;
         (function () { return x; });
+        out_x_2 = x;
     };
+    var out_x_2;
     for (var x = void 0; x < 1;) {
+        out_x_2 = x;
         _loop_6(x);
+        x = out_x_2;
     }
     switch (1) {
         case 1:
