@@ -2023,8 +2023,7 @@ namespace ts {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
                     }
                     else if (type.flags & TypeFlags.NumericLiteral) {
-                        // TODO (weswig): Preserve input number formatting
-                        writer.writeNumericLiteral((type as NumericLiteralType).number.toString());
+                        writer.writeNumericLiteral((type as NumericLiteralType).text);
                     }
                     else {
                         // Should never get here
@@ -5103,16 +5102,18 @@ namespace ts {
         }
 
         function getNumericLiteralTypeForText(text: string): NumericLiteralType {
-            const num = parseFloat(text);
+            // Use +(string) rather than Number(string) to be consistient with what we use in the parser
+            const num = +(text);
             if (typeof num !== "number") {
                 return NaNLiteralType;
             }
-            if (hasProperty(numericLiteralTypes, num.toString())) {
-                return numericLiteralTypes[num];
+            if (hasProperty(numericLiteralTypes, text)) {
+                return numericLiteralTypes[text];
             }
 
-            const type = numericLiteralTypes[num] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+            const type = numericLiteralTypes[text] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
             type.number = num;
+            type.text = text;
             return type;
         }
 
@@ -5848,7 +5849,11 @@ namespace ts {
                 }
 
                 if (isStringLiteralType(source) && target === stringType) return Ternary.True;
-                if (isNumericLiteralType(source) && (target === numberType || target.flags & TypeFlags.Enum)) return Ternary.True;
+
+                if (isNumericLiteralType(source)) {
+                    if (isNumericLiteralType(target)) return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
+                    if (target === numberType || target.flags & TypeFlags.Enum) return Ternary.True;
+                }
                 if (relation === assignableRelation || relation === comparableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
@@ -5985,7 +5990,14 @@ namespace ts {
                         }
                     }
                 }
+                if (isNumericLiteralType(source) && isNumericLiteralType(target)) {
+                    return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
+                }
                 return Ternary.False;
+            }
+
+            function isNumericLiteralEquivalentTo(source: NumericLiteralType, target: NumericLiteralType) {
+                return source.number === target.number ? Ternary.True : Ternary.False;
             }
 
             // Check if a property with the given name is known anywhere in the given type. In an object type, a property

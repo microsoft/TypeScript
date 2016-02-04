@@ -1895,10 +1895,6 @@ namespace ts {
             return <StringLiteralTypeNode>parseLiteralLikeNode(SyntaxKind.StringLiteralType, /*internName*/ true);
         }
 
-        function parseNumericLiteralTypeNode(): NumericLiteralTypeNode {
-            return parseLiteralLikeNode(SyntaxKind.NumericLiteralType, /*internName*/false) as NumericLiteralTypeNode;
-        }
-
         function parseLiteralNode(internName?: boolean): LiteralExpression {
             return <LiteralExpression>parseLiteralLikeNode(token, internName);
         }
@@ -1907,11 +1903,22 @@ namespace ts {
             return <TemplateLiteralFragment>parseLiteralLikeNode(token, /*internName*/ false);
         }
 
+        function parseNumericLiteralTypeNode(): NumericLiteralTypeNode {
+            const node = createNode(SyntaxKind.NumericLiteralType) as NumericLiteralTypeNode;
+            // Get token text rather than value, this way number formatting is preserved
+            const text = scanner.getTokenText();
+            node.text = text;
+            return finishLiteralLikeNode(node);
+        }
+
         function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
+            return finishLiteralLikeNode(node);
+        }
 
+        function finishLiteralLikeNode<T extends LiteralLikeNode>(node: T) {
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
             }
@@ -2366,7 +2373,7 @@ namespace ts {
 
         function parseSignedNumericLiteral(): NumericLiteralTypeNode {
             nextToken();
-            parseExpected(SyntaxKind.NumericLiteral, undefined, /*shouldAdvance*/false);
+            parseExpected(SyntaxKind.NumericLiteral, Diagnostics.Numeric_literal_expected, /*shouldAdvance*/false);
             return parseNumericLiteralTypeNode();
         }
 

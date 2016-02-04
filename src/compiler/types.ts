@@ -2214,6 +2214,7 @@ namespace ts {
     // Numeric literal types (TypeFlags.NumericLiteral)
     export interface NumericLiteralType extends Type {
         number: number;
+        text: string;
     }
 
     // Object types (TypeFlags.ObjectType)

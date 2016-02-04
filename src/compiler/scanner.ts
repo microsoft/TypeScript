@@ -176,7 +176,7 @@ namespace ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
-        "@": SyntaxKind.AtToken,
+        "@": SyntaxKind.AtToken
     };
 
     /*
