@@ -34,12 +34,12 @@ var r2 = c2.constructor;
 
 //// [typesWithPrivateConstructor.d.ts]
 declare class C {
-    constructor();
+    private constructor();
 }
 declare var c: any;
 declare var r: () => void;
 declare class C2 {
-    constructor(x);
+    private constructor(x);
 }
 declare var c2: any;
 declare var r2: (x: number) => void;

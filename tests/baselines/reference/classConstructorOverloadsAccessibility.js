@@ -59,16 +59,16 @@ var D = (function () {
 //// [classConstructorOverloadsAccessibility.d.ts]
 declare class A {
     constructor(a: boolean);
-    constructor(a: number);
-    constructor(a);
+    protected constructor(a: number);
+    private constructor(a);
 }
 declare class B {
-    constructor(a: number);
+    protected constructor(a: number);
     constructor(a: string);
 }
 declare class C {
-    constructor(a: number);
-    constructor(a: string);
+    protected constructor(a: number);
+    protected constructor(a: string);
 }
 declare class D {
     constructor(a: number);

@@ -114,12 +114,12 @@ declare class BaseA {
 }
 declare class BaseB {
     x: number;
-    constructor(x: number);
+    protected constructor(x: number);
     createInstance(): void;
 }
 declare class BaseC {
     x: number;
-    constructor(x);
+    private constructor(x);
     createInstance(): void;
 }
 declare class DerivedA extends BaseA {

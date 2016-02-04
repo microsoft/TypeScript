@@ -87,11 +87,11 @@ declare class Bar {
 }
 declare class Baz {
     x: number;
-    constructor(x: number);
+    protected constructor(x: number);
 }
 declare class Qux {
     x: number;
-    constructor(x);
+    private constructor(x);
 }
 declare let a: typeof Foo;
 declare let b: typeof Baz;

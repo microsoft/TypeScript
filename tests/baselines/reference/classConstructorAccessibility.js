@@ -90,11 +90,11 @@ declare class C {
 }
 declare class D {
     x: number;
-    constructor(x);
+    private constructor(x);
 }
 declare class E {
     x: number;
-    constructor(x: number);
+    protected constructor(x: number);
 }
 declare var c: C;
 declare var d: any;
