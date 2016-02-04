@@ -139,4 +139,6 @@ declare module "m4" {
     }
 }
 declare module "test" {
+    import "m2";
+    import "m4";
 }
