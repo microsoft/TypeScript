@@ -1,4 +1,4 @@
 // @module: umd
-// @emitModulesInLooseMode: true
+// @emitNonStrictModules: true
 
 export var x = 0;

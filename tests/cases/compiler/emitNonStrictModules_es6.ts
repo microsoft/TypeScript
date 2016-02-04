@@ -1,5 +1,5 @@
 // @module: es6
 // @target: es6
-// @emitModulesInLooseMode: true
+// @emitNonStrictModules: true
 
 export var x = 0;
