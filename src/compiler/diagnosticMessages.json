@@ -123,7 +123,7 @@
         "category": "Error",
         "code": 1043
     },
-    "'{0}' modifier cannot appear on a module element.": {
+    "'{0}' modifier cannot appear on a module or namespace element.": {
         "category": "Error",
         "code": 1044
     },
@@ -1278,10 +1278,6 @@
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
-    },
-    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
-        "category": "Error",
-        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",

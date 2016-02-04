@@ -1,0 +1,24 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js
+mapUrl: sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js
+sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.ts
+-------------------------------------------------------------------
+>>>var x = [1, 2][0];
+1 >
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^
+4 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >var [
+2 >x
+3 >                 ] = [1, 2];
+1 >Emitted(1, 1) Source(2, 6) + SourceIndex(0)
+2 >Emitted(1, 18) Source(2, 7) + SourceIndex(0)
+3 >Emitted(1, 19) Source(2, 18) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js.map
