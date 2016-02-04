@@ -65,7 +65,7 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, host);
+            return loadModuleFromNodeModules(moduleName, containingDirectory, host, compilerOptions);
         }
     }
 
@@ -77,7 +77,7 @@ namespace ts {
 
     /**
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
-     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations. 
+     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, host: ModuleResolutionHost): string {
         return forEach(extensions, tryLoad);
@@ -99,20 +99,27 @@ namespace ts {
         const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, host);
         if (directoryExists && host.fileExists(packageJsonPath)) {
 
-            let jsonContent: { typings?: string };
+            let jsonContent: { typings?: string; main?: string };
 
             try {
                 const jsonText = host.readFile(packageJsonPath);
-                jsonContent = jsonText ? <{ typings?: string }>JSON.parse(jsonText) : { typings: undefined };
+                jsonContent = jsonText ? <{ typings?: string; main?: string }>JSON.parse(jsonText) : { typings: undefined };
             }
             catch (e) {
-                // gracefully handle if readFile fails or returns not JSON 
+                // gracefully handle if readFile fails or returns not JSON
                 jsonContent = { typings: undefined };
             }
 
             if (typeof jsonContent.typings === "string") {
                 const path = normalizePath(combinePaths(candidate, jsonContent.typings));
-                const result = loadNodeModuleFromFile(extensions, path, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(path), host), host);
+                const result = loadNodeModuleFromFile(/*don't add extension*/[""], path, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(path), host), host);
+                if (result) {
+                    return result;
+                }
+            }
+            if (typeof jsonContent.main === "string") {
+                const path = normalizePath(combinePaths(candidate, jsonContent.main));
+                const result = loadNodeModuleFromFile(/*don't add extension*/[""], path, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(path), host), host);
                 if (result) {
                     return result;
                 }
@@ -126,7 +133,7 @@ namespace ts {
         return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, !directoryExists, host);
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost, compilerOptions: CompilerOptions): ResolvedModuleWithFailedLookupLocations {
         const failedLookupLocations: string[] = [];
         directory = normalizeSlashes(directory);
         while (true) {
@@ -135,13 +142,14 @@ namespace ts {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, host);
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                // Load only typescript files irrespective of allowJs option if loading from node modules
-                let result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
+
+                let supportedExtensions = getSupportedExtensions(compilerOptions);
+                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
+                result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -181,7 +189,7 @@ namespace ts {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
             referencedSourceFile = forEach(supportedExtensions, extension => {
                 if (extension === ".tsx" && !compilerOptions.jsx) {
-                    // resolve .tsx files only if jsx support is enabled 
+                    // resolve .tsx files only if jsx support is enabled
                     // 'logical not' handles both undefined and None cases
                     return undefined;
                 }
@@ -382,7 +390,7 @@ namespace ts {
 
         const filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
-        // used to track cases when two file names differ only in casing 
+        // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (oldProgram) {
@@ -960,7 +968,7 @@ namespace ts {
                         }
 
                         // TypeScript 1.0 spec (April 2014): 12.1.6
-                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules 
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
                         // only through top - level external module names. Relative external module names are not permitted.
                         if (!inAmbientModule || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
                             (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
@@ -978,7 +986,7 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
-                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
@@ -1145,9 +1153,7 @@ namespace ts {
                     if (shouldAddFile) {
                         const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
-                            // this check is ok. Otherwise this would be never true for javascript file
+                        if (importedFile && resolution.isExternalLibraryImport && fileExtensionIs(importedFile.fileName, ".ts")) {
                             if (!isExternalModule(importedFile) && importedFile.statements.length) {
                                 const start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
