@@ -5743,6 +5743,9 @@ namespace ts {
             function parseJSDocParameter(): ParameterDeclaration {
                 const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
                 parameter.type = parseJSDocType();
+                if (parseOptional(SyntaxKind.EqualsToken)) {
+                    parameter.questionToken = createNode(SyntaxKind.EqualsToken);
+                }
                 return finishNode(parameter);
             }
 
