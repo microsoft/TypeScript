@@ -7264,6 +7264,15 @@ namespace ts {
                     // mark iteration statement as containing block-scoped binding captured in some function
                     getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
                 }
+
+                // mark variables that are declared in loop initializer and reassigned inside the body of ForStatement.
+                // if body of ForStatement will be converted to function then we'll need a extra machinery to propagate reassigned values back.
+                if (container.kind === SyntaxKind.ForStatement &&
+                    getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList).parent === container &&
+                    isAssignedInBodyOfForStatement(node, <ForStatement>container)) {
+                    getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.NeedsLoopOutParameter;
+                }
+
                 // set 'declared inside loop' bit on the block-scoped binding
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
             }
@@ -7271,6 +7280,41 @@ namespace ts {
             if (usedInFunction) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
+        }
+
+        function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
+            let current: Node = node;
+            // skip parenthesized nodes
+            while (current.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                current = current.parent;
+            }
+
+            // check if node is used as LHS in some assignment expression
+            let isAssigned = false;
+            if (current.parent.kind === SyntaxKind.BinaryExpression) {
+                isAssigned = (<BinaryExpression>current.parent).left === current && isAssignmentOperator((<BinaryExpression>current.parent).operatorToken.kind);
+            }
+
+            if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
+                const expr = <PrefixUnaryExpression | PostfixUnaryExpression>current.parent;
+                isAssigned = expr.operator === SyntaxKind.PlusPlusToken || expr.operator === SyntaxKind.MinusMinusToken;
+            }
+
+            if (!isAssigned) {
+                return false;
+            }
+
+            // at this point we know that node is the target of assignment
+            // now check that modification happens inside the statement part of the ForStatement
+            while (current !== container) {
+                if (current === container.statement) {
+                    return true;
+                }
+                else {
+                    current = current.parent;
+                }
+            }
+            return false;
         }
 
         function captureLexicalThis(node: Node, container: Node): void {
