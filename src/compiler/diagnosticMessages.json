@@ -1827,15 +1827,15 @@
         "category": "Error",
         "code": 2672
     },
-    "Constructor of type '{0}' is private and only accessible within class '{1}'.": {
+    "Constructor of class '{0}' is private and only accessible within the class declaration.": {
         "category": "Error",
         "code": 2673
     },
-    "Constructor of type '{0}' is protected and only accessible within class '{1}'.": {
+    "Constructor of class '{0}' is protected and only accessible within the class declaration.": {
         "category": "Error",
         "code": 2674
     },
-    "Cannot extend private class '{0}'.": {
+    "Cannot extend a class '{0}'. Class constructor is marked as private.": {
         "category": "Error",
         "code": 2675
     },

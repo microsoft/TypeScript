@@ -10182,10 +10182,10 @@ namespace ts {
             // A private or protected constructor can only be instantiated within it's own class 
             if (declaringClass !== enclosingClass) {
                 if (flags & NodeFlags.Private) {
-                    error(node, Diagnostics.Constructor_of_type_0_is_private_and_only_accessible_within_class_1, signatureToString(signature), typeToString(declaringClass));
+                    error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
                 }
                 if (flags & NodeFlags.Protected) {
-                    error(node, Diagnostics.Constructor_of_type_0_is_protected_and_only_accessible_within_class_1, signatureToString(signature), typeToString(declaringClass));
+                    error(node, Diagnostics.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
                 }
                 return false;
             }
@@ -14059,7 +14059,7 @@ namespace ts {
             if (signatures.length) {
                 const declaration = signatures[0].declaration;
                 if (declaration && declaration.flags & NodeFlags.Private) {
-                    error(node, Diagnostics.Cannot_extend_private_class_0, (<Identifier>node.expression).text);
+                    error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, (<Identifier>node.expression).text);
                 }
             }
         }
