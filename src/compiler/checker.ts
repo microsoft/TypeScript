@@ -1711,6 +1711,16 @@ namespace ts {
             return result;
         }
 
+        function visibilityToString(flags: NodeFlags) {
+            if (flags === NodeFlags.Private) {
+                return "private";
+            }
+            if (flags === NodeFlags.Protected) {
+                return "protected";
+            }
+            return "public";
+        }
+
         function getTypeAliasForTypeLiteral(type: Type): Symbol {
             if (type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral) {
                 let node = type.symbol.declarations[0].parent;
@@ -6059,28 +6069,24 @@ namespace ts {
 
             function constructorRelatedTo(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
                 if (sourceSignature && targetSignature && sourceSignature.declaration && targetSignature.declaration) {
+                    // A public, protected and private signature is assignable to a private signature.
+                    // A public and protected signature is assignable to a protected signature.
+                    // And only a public signature is assignable to public signature.
                     const sourceAccessibility = sourceSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
                     const targetAccessibility = targetSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
 
-                    const isRelated = sourceAccessibility === targetAccessibility;
+                    const isRelated = targetAccessibility === NodeFlags.Private
+                    || (targetAccessibility === NodeFlags.Protected && sourceAccessibility !== NodeFlags.Private)
+                    || (targetAccessibility !== NodeFlags.Protected && !(sourceAccessibility & (NodeFlags.Private | NodeFlags.Protected)));
+
                     if (!isRelated && reportErrors) {
-                        reportError(Diagnostics.Cannot_assign_a_0_constructor_type_to_a_1_constructor_type, flagsToString(sourceAccessibility), flagsToString(targetAccessibility));
+                        reportError(Diagnostics.Cannot_assign_a_0_constructor_type_to_a_1_constructor_type, visibilityToString(sourceAccessibility), visibilityToString(targetAccessibility));
                     }
 
                     return isRelated;
                 }
 
                 return true;
-
-                function flagsToString(flags: NodeFlags) {
-                    if (flags === NodeFlags.Private) {
-                        return "private";
-                    }
-                    if (flags === NodeFlags.Protected) {
-                        return "protected";
-                    }
-                    return "public";
-                }
             }
         }
 
