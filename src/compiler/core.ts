@@ -865,6 +865,8 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.flags = NodeFlags.None;
+        this.transformFlags = undefined;
+        this.excludeTransformFlags = undefined;
         this.parent = undefined;
     }
 

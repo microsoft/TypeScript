@@ -186,6 +186,8 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
+        public transformFlags: TransformFlags;
+        public excludeTransformFlags: TransformFlags;
         private _children: Node[];
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -193,6 +195,8 @@ namespace ts {
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.transformFlags = undefined;
+            this.excludeTransformFlags = undefined;
             this.parent = undefined;
         }
 
@@ -1876,7 +1880,7 @@ namespace ts {
 
         options.isolatedModules = true;
 
-        // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths. 
+        // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths.
         options.suppressOutputPathCheck = true;
 
         // Filename can be non-ts file.
@@ -6102,7 +6106,7 @@ namespace ts {
                     }
                 }
 
-                // For export specifiers, it can be a local symbol, e.g. 
+                // For export specifiers, it can be a local symbol, e.g.
                 //     import {a} from "mod";
                 //     export {a as somethingElse}
                 // We want the local target of the export (i.e. the import symbol) and not the final target (i.e. "mod".a)

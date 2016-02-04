@@ -442,6 +442,8 @@ namespace ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        /* @internal */ transformFlags?: TransformFlags;
+        /* @internal */ excludeTransformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
@@ -2705,6 +2707,52 @@ namespace ts {
          * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+    }
+
+    /* @internal */
+    export const enum TransformFlags {
+        // Facts
+        // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
+        TypeScript = 1 << 0,
+        ContainsTypeScript = 1 << 1,
+        Jsx = 1 << 2,
+        ContainsJsx = 1 << 3,
+        ES7 = 1 << 4,
+        ContainsES7 = 1 << 5,
+        ES6 = 1 << 6,
+        ContainsES6 = 1 << 7,
+
+        // Assertions
+        // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
+        AssertTypeScript = TypeScript | ContainsTypeScript,
+        AssertJsx = Jsx | ContainsJsx,
+        AssertES7 = ES7 | ContainsES7,
+        AssertES6 = ES6 | ContainsES6,
+
+        // Markers
+        // - Flags used to indicate that a subtree contains a specific transformation.
+        ContainsDecorators = 1 << 8,
+        ContainsPropertyInitializer = 1 << 9,
+        ContainsLexicalThis = 1 << 10,
+        ContainsCapturedLexicalThis = 1 << 11,
+        ContainsDefaultValueAssignments = 1 << 12,
+        ContainsParameterPropertyAssignments = 1 << 13,
+        ContainsSpreadElementExpression = 1 << 14,
+        ContainsComputedPropertyName = 1 << 15,
+
+        // Scope Exclusions
+        // - Bitmasks that exclude flags from propagating out of a specific context
+        //   into the subtree flags of their container.
+        NodeExcludes = TypeScript | Jsx | ES7 | ES6,
+        ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments,
+        FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments,
+        ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsParameterPropertyAssignments,
+        MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis,
+        ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments,
+        ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis,
+        TypeExcludes = ~ContainsTypeScript,
+        ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName,
+        ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
     }
 
     export interface TextSpan {

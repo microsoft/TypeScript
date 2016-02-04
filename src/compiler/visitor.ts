@@ -505,6 +505,7 @@ namespace ts {
             Debug.assert(test(visited), "Wrong node type after visit.");
         }
 
+        aggregateTransformFlags(visited);
         return <T>visited;
     }
 
@@ -542,6 +543,10 @@ namespace ts {
                 }
                 else if (visited !== undefined) {
                     Debug.assert(test(visited), "Wrong node type after visit.");
+                    if (visited !== node) {
+                        aggregateTransformFlags(visited);
+                    }
+
                     updated.push(<T>visited);
                 }
             }
@@ -606,8 +611,12 @@ namespace ts {
         if (isNewLexicalEnvironment) {
             const declarations = environment.endLexicalEnvironment();
             if (declarations !== undefined && declarations.length > 0) {
-                return <T>mergeLexicalEnvironment(updated, declarations, /*nodeIsMutable*/ updated !== node);
+                updated = <T>mergeLexicalEnvironment(updated, declarations, /*nodeIsMutable*/ updated !== node);
             }
+        }
+
+        if (updated !== node) {
+            aggregateTransformFlags(updated);
         }
 
         return updated;
@@ -765,5 +774,54 @@ namespace ts {
     function extractSingleNode(nodes: NodeArray<Node>) {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
         return nodes.length > 0 ? nodes[0] : undefined;
+    }
+
+    /**
+     * Aggregates the TransformFlags for a Node and its subtree.
+     */
+    export function aggregateTransformFlags(node: Node): void {
+        aggregateTransformFlagsForNode(node);
+    }
+
+    /**
+     * Aggregates the TransformFlags for a Node and its subtree. The flags for the subtree are
+     * computed first, then the transform flags for the current node are computed from the subtree
+     * flags and the state of the current node. Finally, the transform flags of the node are
+     * returned, excluding any flags that should not be included in its parent node's subtree
+     * flags.
+     */
+    function aggregateTransformFlagsForNode(node: Node): TransformFlags {
+        if (node === undefined) {
+            return <TransformFlags>0;
+        }
+
+        if (node.transformFlags === undefined) {
+            const subtreeFlags = aggregateTransformFlagsForSubtree(node);
+            return computeTransformFlagsForNode(node, subtreeFlags);
+        }
+
+        return node.transformFlags & ~node.excludeTransformFlags;
+    }
+
+    /**
+     * Aggregates the transform flags for the subtree of a node.
+     */
+    function aggregateTransformFlagsForSubtree(node: Node): TransformFlags {
+        // We do not transform ambient declarations or types, so there is no need to
+        // recursively aggregate transform flags.
+        if (node.flags & NodeFlags.Ambient || isTypeNodeNode(node)) {
+            return <TransformFlags>0;
+        }
+
+        // Aggregate the transform flags of each child.
+        return reduceEachChild<TransformFlags>(node, aggregateTransformFlagsForChildNode, 0);
+    }
+
+    /**
+     * Aggregates the TransformFlags of a child node with the TransformFlags of its
+     * siblings.
+     */
+    function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
+        return transformFlags | aggregateTransformFlagsForNode(child);
     }
 }

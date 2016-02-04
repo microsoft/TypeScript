@@ -872,12 +872,20 @@ namespace ts {
     /**
      * Determines whether a node is a property or element access expression for super.
      */
-    export function isSuperPropertyOrElementAccess(node: Node) {
+    export function isSuperPropertyOrElementAccess(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
         return (node.kind === SyntaxKind.PropertyAccessExpression
             || node.kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
+    /**
+     * Determines whether a node is a call to either `super`, or a super property or element access.
+     */
+    export function isSuperCall(node: Node): node is CallExpression {
+        return node.kind === SyntaxKind.CallExpression
+            && ((<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword
+                || isSuperPropertyOrElementAccess((<CallExpression>node).expression));
+    }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
         if (node) {
@@ -1666,7 +1674,7 @@ namespace ts {
             : <T>createSynthesizedNode(node.kind);
 
         for (const key in node) {
-            if (key === "parent" || key === "flags" || clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+            if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
                 continue;
             }
 
@@ -2692,6 +2700,18 @@ namespace ts {
     export function isBindingPatternOrIdentifier(node: Node): node is (BindingPattern | Identifier) {
         return isBindingPattern(node)
             || isIdentifierNode(node);
+    }
+
+    export function isDestructuringAssignment(node: Node): node is BinaryExpression {
+        if (isBinaryExpression(node)) {
+            if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
+                const kind = node.left.kind;
+                return kind === SyntaxKind.ObjectLiteralExpression
+                    || kind === SyntaxKind.ArrayLiteralExpression;
+            }
+        }
+
+        return false;
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
