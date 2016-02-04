@@ -1895,6 +1895,10 @@ namespace ts {
             return <StringLiteralTypeNode>parseLiteralLikeNode(SyntaxKind.StringLiteralType, /*internName*/ true);
         }
 
+        function parseNumericLiteralTypeNode(): NumericLiteralTypeNode {
+            return parseLiteralLikeNode(SyntaxKind.NumericLiteralType, /*internName*/false) as NumericLiteralTypeNode;
+        }
+
         function parseLiteralNode(internName?: boolean): LiteralExpression {
             return <LiteralExpression>parseLiteralLikeNode(token, internName);
         }
@@ -1926,7 +1930,7 @@ namespace ts {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
+            if ((node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.NumericLiteralType)
                 && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
                 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
 
@@ -2360,6 +2364,18 @@ namespace ts {
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
+        function parseSignedNumericLiteral(): NumericLiteralTypeNode {
+            nextToken();
+            parseExpected(SyntaxKind.NumericLiteral, undefined, /*shouldAdvance*/false);
+            return parseNumericLiteralTypeNode();
+        }
+
+        function parseMinusSignedNumericLiteral(): NumericLiteralTypeNode {
+            const node = parseSignedNumericLiteral();
+            node.text = `-${node.text}`;
+            return node;
+        }
+
         function parseNonArrayType(): TypeNode {
             switch (token) {
                 case SyntaxKind.AnyKeyword:
@@ -2373,6 +2389,8 @@ namespace ts {
                     return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
+                case SyntaxKind.NumericLiteral:
+                    return parseNumericLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2393,6 +2411,10 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.PlusToken:
+                    return parseSignedNumericLiteral();
+                case SyntaxKind.MinusToken:
+                    return parseMinusSignedNumericLiteral();
                 default:
                     return parseTypeReference();
             }

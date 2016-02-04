@@ -675,6 +675,7 @@ namespace ts {
             writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
+            writeNumericLiteral: text => writeKind(text, SymbolDisplayPartKind.numericLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeSymbol,
             writeLine,

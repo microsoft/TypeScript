@@ -188,6 +188,9 @@ namespace ts {
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<StringLiteralType> = {};
+        const numericLiteralTypes: Map<NumericLiteralType> = {};
+        const NaNLiteralType = numericLiteralTypes[NaN] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+        NaNLiteralType.number = NaN;
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -2018,6 +2021,10 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
+                    }
+                    else if (type.flags & TypeFlags.NumericLiteral) {
+                        // TODO (weswig): Preserve input number formatting
+                        writer.writeNumericLiteral((type as NumericLiteralType).number.toString());
                     }
                     else {
                         // Should never get here
@@ -5095,10 +5102,32 @@ namespace ts {
             return type;
         }
 
+        function getNumericLiteralTypeForText(text: string): NumericLiteralType {
+            const num = parseFloat(text);
+            if (typeof num !== "number") {
+                return NaNLiteralType;
+            }
+            if (hasProperty(numericLiteralTypes, num.toString())) {
+                return numericLiteralTypes[num];
+            }
+
+            const type = numericLiteralTypes[num] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+            type.number = num;
+            return type;
+        }
+
         function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getStringLiteralTypeForText(node.text);
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromNumericLiteralTypeNode(node: NumericLiteralTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getNumericLiteralTypeForText(node.text);
             }
             return links.resolvedType;
         }
@@ -5166,6 +5195,8 @@ namespace ts {
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
+                case SyntaxKind.NumericLiteralType:
+                    return getTypeFromNumericLiteralTypeNode(node as NumericLiteralTypeNode);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
@@ -5815,8 +5846,9 @@ namespace ts {
                         return result;
                     }
                 }
-                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
 
+                if (isStringLiteralType(source) && target === stringType) return Ternary.True;
+                if (isNumericLiteralType(source) && (target === numberType || target.flags & TypeFlags.Enum)) return Ternary.True;
                 if (relation === assignableRelation || relation === comparableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
@@ -6714,6 +6746,10 @@ namespace ts {
 
         function isStringLiteralType(type: Type) {
             return type.flags & TypeFlags.StringLiteral;
+        }
+
+        function isNumericLiteralType(type: Type) {
+            return type.flags & TypeFlags.NumericLiteral;
         }
 
         /**
@@ -8686,6 +8722,10 @@ namespace ts {
 
         function contextualTypeIsStringLiteralType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
+        }
+        
+        function contextualTypeIsNumericLiteralType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isNumericLiteralType) : isNumericLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -12411,6 +12451,10 @@ namespace ts {
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
             checkGrammarNumericLiteral(node);
+            const contextualType = getContextualType(node);
+            if (contextualType && contextualTypeIsNumericLiteralType(contextualType)) {
+                return getNumericLiteralTypeForText(node.text);
+            }
             return numberType;
         }
 

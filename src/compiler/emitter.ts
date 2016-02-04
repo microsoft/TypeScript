@@ -5939,6 +5939,7 @@ const _super = (function (geti, seti) {
                             return;
 
                         case SyntaxKind.NumberKeyword:
+                        case SyntaxKind.NumericLiteralType:
                             write("Number");
                             return;
 

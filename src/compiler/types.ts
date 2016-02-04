@@ -210,6 +210,7 @@ namespace ts {
         ParenthesizedType,
         ThisType,
         StringLiteralType,
+        NumericLiteralType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -780,6 +781,11 @@ namespace ts {
     // @kind(SyntaxKind.StringLiteralType)
     export interface StringLiteralTypeNode extends LiteralLikeNode, TypeNode {
         _stringLiteralTypeBrand: any;
+    }
+
+    // @kind(SyntaxKind.NumericLiteralTypeNode)
+    export interface NumericLiteralTypeNode extends LiteralLikeNode, TypeNode {
+        _numericLiteralTypeBrand: any;
     }
 
     // @kind(SyntaxKind.StringLiteral)
@@ -1826,6 +1832,7 @@ namespace ts {
         writePunctuation(text: string): void;
         writeSpace(text: string): void;
         writeStringLiteral(text: string): void;
+        writeNumericLiteral(text: string): void;
         writeParameter(text: string): void;
         writeSymbol(text: string, symbol: Symbol): void;
         writeLine(): void;
@@ -2163,6 +2170,7 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
+        NumericLiteral          = 0x80000000,  // Numeric literal types are specific numbers - just as string literal types are specific strings
 
         /* @internal */
         Nullable = Undefined | Null,
@@ -2171,7 +2179,7 @@ namespace ts {
         /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
-        NumberLike = Number | Enum,
+        NumberLike = Number | Enum | NumericLiteral,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
@@ -2201,6 +2209,11 @@ namespace ts {
     // String literal types (TypeFlags.StringLiteral)
     export interface StringLiteralType extends Type {
         text: string;  // Text of string literal
+    }
+
+    // Numeric literal types (TypeFlags.NumericLiteral)
+    export interface NumericLiteralType extends Type {
+        number: number;
     }
 
     // Object types (TypeFlags.ObjectType)
