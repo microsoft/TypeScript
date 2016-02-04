@@ -1,4 +1,4 @@
 // @module: commonjs
-// @emitModulesInLooseMode: true
+// @emitNonStrictModules: true
 
 export var x = 0;

@@ -1,4 +1,4 @@
 // @module: system
-// @emitModulesInLooseMode: true
+// @emitNonStrictModules: true
 
 export var x = 0;

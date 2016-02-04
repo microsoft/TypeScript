@@ -1,0 +1,5 @@
+=== tests/cases/compiler/emitNonStrictModules_amd.ts ===
+
+export var x = 0;
+>x : Symbol(x, Decl(emitNonStrictModules_amd.ts, 1, 10))
+
