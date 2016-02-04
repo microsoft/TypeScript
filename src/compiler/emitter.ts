@@ -4766,9 +4766,14 @@ const _super = (function (geti, seti) {
                 emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
             }
 
-            function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
+            /**
+             * Return the statement at a given index if it is a super-call statement
+             * @param ctor constructor declaration
+             * @param index an index to constructor's body to check
+             */
+            function getSuperCallAtGivenIndex(ctor: ConstructorDeclaration, index: number): ExpressionStatement {
                 if (ctor.body) {
-                    const statement = (<Block>ctor.body).statements[0];
+                    const statement = (<Block>ctor.body).statements[index];
                     if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
                         const expr = (<ExpressionStatement>statement).expression;
                         if (expr && expr.kind === SyntaxKind.CallExpression) {
@@ -5061,13 +5066,15 @@ const _super = (function (geti, seti) {
                 if (ctor) {
                     emitDefaultValueAssignments(ctor);
                     emitRestParameter(ctor);
+
                     if (baseTypeElement) {
-                        superCall = findInitialSuperCall(ctor);
+                        superCall = getSuperCallAtGivenIndex(ctor, startIndex);
                         if (superCall) {
                             writeLine();
                             emit(superCall);
                         }
                     }
+
                     emitParameterPropertyAssignments(ctor);
                 }
                 else {
