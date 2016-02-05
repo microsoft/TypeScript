@@ -180,9 +180,14 @@ function ImplicitVoidThis() {
 let voidThis = new VoidThis();
 let implicitVoidThis = new ImplicitVoidThis();
 
+///// syntax-ish errors /////
+class ThisConstructor {
+    constructor(this: ThisConstructor, private n: number) {
+    }
+}
+function notFirst(a: number, this: C): number { return this.n; }
 
 ///// parse errors /////
-function notFirst(a: number, this: C): number { return this.n; }
 function modifiers(async this: C): number { return this.n; }
 function restParam(...this: C): number { return this.n; }
 function optional(this?: C): number { return this.n; }
@@ -364,8 +369,15 @@ function ImplicitVoidThis() {
 }
 var voidThis = new VoidThis();
 var implicitVoidThis = new ImplicitVoidThis();
-///// parse errors /////
+///// syntax-ish errors /////
+var ThisConstructor = (function () {
+    function ThisConstructor(n) {
+        this.n = n;
+    }
+    return ThisConstructor;
+}());
 function notFirst(a, this) { return this.n; }
+///// parse errors /////
 function modifiers(, C) {
     if ( === void 0) {  = this; }
     return this.n;

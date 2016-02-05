@@ -1827,6 +1827,14 @@
         "category": "Error",
         "code": 2672
     },
+    "'this' parameter must be the first parameter.": {
+        "category": "Error",
+        "code": 2673
+    },
+    "A constructor cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2674
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

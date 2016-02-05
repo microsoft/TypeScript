@@ -11624,8 +11624,11 @@ namespace ts {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if ((<Identifier>node.name).text === "this") {
-                if(indexOf(func.parameters, node) !== 0 || func.kind === SyntaxKind.Constructor) {
-                    error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
+                if (indexOf(func.parameters, node) !== 0) {
+                    error(node, Diagnostics.this_parameter_must_be_the_first_parameter);
+                }
+                if (func.kind === SyntaxKind.Constructor) {
+                    error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
                 }
             }
 
