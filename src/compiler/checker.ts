@@ -5910,7 +5910,7 @@ namespace ts {
                         }
                         return Ternary.False;
                     }
-                    if (!constructorRelatedTo(sourceSignatures[0], targetSignatures[0], reportErrors)) {
+                    if (!constructorVisibilitiesAreCompatible(sourceSignatures[0], targetSignatures[0], reportErrors)) {
                         return Ternary.False;
                     }
                 }
@@ -6067,26 +6067,34 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function constructorRelatedTo(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
-                if (sourceSignature && targetSignature && sourceSignature.declaration && targetSignature.declaration) {
-                    // A public, protected and private signature is assignable to a private signature.
-                    // A public and protected signature is assignable to a protected signature.
-                    // And only a public signature is assignable to public signature.
-                    const sourceAccessibility = sourceSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
-                    const targetAccessibility = targetSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
-
-                    const isRelated = targetAccessibility === NodeFlags.Private
-                    || (targetAccessibility === NodeFlags.Protected && sourceAccessibility !== NodeFlags.Private)
-                    || (targetAccessibility !== NodeFlags.Protected && !(sourceAccessibility & (NodeFlags.Private | NodeFlags.Protected)));
-
-                    if (!isRelated && reportErrors) {
-                        reportError(Diagnostics.Cannot_assign_a_0_constructor_type_to_a_1_constructor_type, visibilityToString(sourceAccessibility), visibilityToString(targetAccessibility));
-                    }
-
-                    return isRelated;
+            function constructorVisibilitiesAreCompatible(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
+                if (!sourceSignature.declaration || !targetSignature.declaration) {
+                    return true;
                 }
 
-                return true;
+                const sourceAccessibility = sourceSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
+                const targetAccessibility = targetSignature.declaration.flags & (NodeFlags.Private | NodeFlags.Protected);
+
+                // A public, protected and private signature is assignable to a private signature.
+                if (targetAccessibility === NodeFlags.Private) {
+                    return true;
+                }
+
+                // A public and protected signature is assignable to a protected signature.
+                if (targetAccessibility === NodeFlags.Protected && sourceAccessibility !== NodeFlags.Private) {
+                    return true;
+                }
+
+                // Only a public signature is assignable to public signature.
+                if (targetAccessibility !== NodeFlags.Protected && !sourceAccessibility) {
+                    return true;
+                }
+
+                if (reportErrors) {
+                    reportError(Diagnostics.Cannot_assign_a_0_constructor_type_to_a_1_constructor_type, visibilityToString(sourceAccessibility), visibilityToString(targetAccessibility));
+                }
+
+                return false;
             }
         }
 
