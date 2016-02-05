@@ -4768,21 +4768,22 @@ const _super = (function (geti, seti) {
 
             /**
              * Return the statement at a given index if it is a super-call statement
-             * @param ctor constructor declaration
+             * @param ctor a constructor declaration
              * @param index an index to constructor's body to check
              */
             function getSuperCallAtGivenIndex(ctor: ConstructorDeclaration, index: number): ExpressionStatement {
-                if (ctor.body) {
-                    const statement = (<Block>ctor.body).statements[index];
-                    if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
-                        const expr = (<ExpressionStatement>statement).expression;
-                        if (expr && expr.kind === SyntaxKind.CallExpression) {
-                            const func = (<CallExpression>expr).expression;
-                            if (func && func.kind === SyntaxKind.SuperKeyword) {
-                                return <ExpressionStatement>statement;
-                            }
-                        }
-                    }
+                if (!ctor.body) {
+                    return undefined;
+                }
+                const statements = ctor.body.statements;
+
+                if (!statements || index >= statements.length) {
+                    return undefined;
+                }
+
+                const statement = statements[index];
+                if (statement.kind === SyntaxKind.ExpressionStatement) {
+                    return isSuperCallExpression((<ExpressionStatement>statement).expression) ? <ExpressionStatement>statement : undefined;
                 }
             }
 

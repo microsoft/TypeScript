@@ -11766,10 +11766,6 @@ namespace ts {
                 return;
             }
 
-            function isSuperCallExpression(n: Node): boolean {
-                return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
-            }
-
             function containsSuperCallAsComputedPropertyName(n: Declaration): boolean {
                 return n.name && containsSuperCall(n.name);
             }
