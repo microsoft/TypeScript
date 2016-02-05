@@ -1607,6 +1607,202 @@ namespace ts {
         return node ? getNodeId(node) : 0;
     }
 
+    export const enum Associativity {
+        Left,
+        Right
+    }
+
+    export function getExpressionAssociativity(expression: Expression) {
+        const operator = getOperator(expression);
+        const hasArguments = expression.kind === SyntaxKind.NewExpression && (<NewExpression>expression).arguments !== undefined;
+        return getOperatorAssociativity(expression.kind, operator, hasArguments);
+    }
+
+    export function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind, hasArguments?: boolean) {
+        switch (kind) {
+            case SyntaxKind.NewExpression:
+                return hasArguments ? Associativity.Left : Associativity.Right;
+
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.YieldExpression:
+                return Associativity.Right;
+
+            case SyntaxKind.BinaryExpression:
+                switch (operator) {
+                    case SyntaxKind.AsteriskAsteriskToken:
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return Associativity.Right;
+                }
+        }
+
+        return Associativity.Left;
+    }
+
+    export function getExpressionPrecedence(expression: Expression) {
+        const operator = getOperator(expression);
+        const hasArguments = expression.kind === SyntaxKind.NewExpression && (<NewExpression>expression).arguments !== undefined;
+        return getOperatorPrecedence(expression.kind, operator, hasArguments);
+    }
+
+    function getOperator(expression: Expression) {
+        if (expression.kind === SyntaxKind.BinaryExpression) {
+            return (<BinaryExpression>expression).operatorToken.kind;
+        }
+        else if (expression.kind === SyntaxKind.PrefixUnaryExpression || expression.kind === SyntaxKind.PostfixUnaryExpression) {
+            return (<PrefixUnaryExpression | PostfixUnaryExpression>expression).operator;
+        }
+        else {
+            return expression.kind;
+        }
+    }
+
+    export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean) {
+        switch (nodeKind) {
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.SuperKeyword:
+            case SyntaxKind.Identifier:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.RegularExpressionLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.ParenthesizedExpression:
+                return 19;
+
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ElementAccessExpression:
+                return 18;
+
+            case SyntaxKind.NewExpression:
+                return hasArguments ? 18 : 17;
+
+            case SyntaxKind.CallExpression:
+                return 17;
+
+            case SyntaxKind.PostfixUnaryExpression:
+                return 16;
+
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+                return 15;
+
+            case SyntaxKind.BinaryExpression:
+                switch (operatorKind) {
+                    case SyntaxKind.ExclamationToken:
+                    case SyntaxKind.TildeToken:
+                        return 15;
+
+                    case SyntaxKind.AsteriskAsteriskToken:
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.PercentToken:
+                        return 14;
+
+                    case SyntaxKind.PlusToken:
+                    case SyntaxKind.MinusToken:
+                        return 13;
+
+                    case SyntaxKind.LessThanLessThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                        return 12;
+
+                    case SyntaxKind.LessThanToken:
+                    case SyntaxKind.LessThanEqualsToken:
+                    case SyntaxKind.GreaterThanToken:
+                    case SyntaxKind.GreaterThanEqualsToken:
+                    case SyntaxKind.InKeyword:
+                    case SyntaxKind.InstanceOfKeyword:
+                        return 11;
+
+                    case SyntaxKind.EqualsEqualsToken:
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                        return 10;
+
+                    case SyntaxKind.AmpersandToken:
+                        return 9;
+
+                    case SyntaxKind.CaretToken:
+                        return 8;
+
+                    case SyntaxKind.BarToken:
+                        return 7;
+
+                    case SyntaxKind.AmpersandAmpersandToken:
+                        return 6;
+
+                    case SyntaxKind.BarBarToken:
+                        return 5;
+
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return 3;
+
+                    case SyntaxKind.CommaToken:
+                        return 0;
+
+                    default:
+                        return -1;
+                }
+
+            case SyntaxKind.ConditionalExpression:
+                return 4;
+
+            case SyntaxKind.YieldExpression:
+                return 2;
+
+            case SyntaxKind.SpreadElementExpression:
+                return 1;
+
+            default:
+                return -1;
+        }
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         const fileDiagnostics: Map<Diagnostic[]> = {};

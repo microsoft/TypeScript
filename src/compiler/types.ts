@@ -495,9 +495,15 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
+    export const enum TempVariableKind {
+        Auto,   // Automatically generated identifier
+        Loop,   // Automatically generated identifier with a preference for '_i'
+    }
+
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
+        tempKind?: TempVariableKind;                   // Specifies whether to auto-generate the text for an identifier.
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
     }
 
@@ -2781,6 +2787,34 @@ namespace ts {
         ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
     }
+
+    /* @internal */
+    export const enum NodeEmitFlags {
+        EmitHelpers = 1 << 0,
+        EmitExportStar = 1 << 1,
+        UMDDefine = 1 << 2,
+        NoLexicalEnvironment = 1 << 3,
+        SingleLine = 1 << 4,
+    }
+
+    /* @internal */
+    export interface TransformationContext extends LexicalEnvironment {
+        getCompilerOptions(): CompilerOptions;
+        getEmitResolver(): EmitResolver;
+        getNodeEmitFlags(node: Node): NodeEmitFlags;
+        setNodeEmitFlags(node: Node, flags: NodeEmitFlags): void;
+        hoistFunctionDeclaration(node: FunctionDeclaration): void;
+        hoistVariableDeclaration(node: Identifier): void;
+        isUniqueName(name: string): boolean;
+        getGeneratedNameForNode(node: Node): Identifier;
+        nodeHasGeneratedName(node: Node): boolean;
+        makeUniqueName(baseName: string): Identifier;
+        identifierSubstitution?: (node: Identifier) => Identifier;
+        expressionSubstitution?: (node: Expression) => Expression;
+    }
+
+    /* @internal */
+    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
 
     export interface TextSpan {
         start: number;

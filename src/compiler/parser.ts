@@ -5,6 +5,18 @@
 namespace ts {
     /* @internal */ export let parseTime = 0;
 
+    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+
+    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
+        if (kind === SyntaxKind.SourceFile) {
+            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
+        }
+        else {
+            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
+        }
+    }
+
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
         if (node) {
             return cbNode(node);
