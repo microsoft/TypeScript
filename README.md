@@ -16,6 +16,12 @@ For the latest stable version:
 npm install -g typescript
 ```
 
+For the beta version:
+
+```
+npm install -g typescript@beta
+```
+
 For our nightly builds:
 
 ```
