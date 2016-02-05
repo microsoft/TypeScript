@@ -3819,7 +3819,7 @@ namespace ts {
                 return undefined;
             }
 
-            const { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
+            const { symbols, isMemberCompletion, isNewIdentifierLocation, location, isJsDocTagName } = completionData;
 
             if (isJsDocTagName) {
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
@@ -3830,7 +3830,7 @@ namespace ts {
 
             const entries: CompletionEntry[] = [];
 
-            if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
                 addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames));
             }
