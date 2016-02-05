@@ -1,20 +1,9 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scanner.ts"/>
+/// <reference path="factory.ts"/>
 
 namespace ts {
     /* @internal */ export let parseTime = 0;
-
-    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-
-    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        if (kind === SyntaxKind.SourceFile) {
-            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
-        }
-        else {
-            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
-        }
-    }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
         if (node) {
@@ -875,7 +864,7 @@ namespace ts {
 
         /** Invokes the provided callback then unconditionally restores the parser to the state it
          * was in immediately prior to invoking the callback.  The result of invoking the callback
-         * is returned from this function. 
+         * is returned from this function.
          */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
@@ -987,6 +976,29 @@ namespace ts {
             }
 
             return new NodeConstructor(kind, pos, pos);
+        }
+
+        function createNodeArray<T extends Node>(elements?: T[], pos?: number): NodeArray<T> {
+            const array = <NodeArray<T>>(elements || []);
+            if (!(pos >= 0)) {
+                pos = getNodePos();
+            }
+            array.pos = pos;
+            array.end = pos;
+            array.arrayKind = ArrayKind.NodeArray;
+            return array;
+        }
+
+        function createModifiersArray(elements?: Modifier[], pos?: number): ModifiersArray {
+            const array = <ModifiersArray>(elements || []);
+            if (!(pos >= 0)) {
+                pos = getNodePos();
+            }
+            array.pos = pos;
+            array.end = pos;
+            array.arrayKind = ArrayKind.ModifiersArray;
+            array.flags = 0;
+            return array;
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
@@ -1374,8 +1386,7 @@ namespace ts {
         function parseList<T extends Node>(kind: ParsingContext, parseElement: () => T): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            const result = createNodeArray<T>();
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
@@ -1722,8 +1733,7 @@ namespace ts {
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const result = <NodeArray<T>>[];
-            result.pos = getNodePos();
+            const result = createNodeArray<T>();
 
             let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
@@ -1778,12 +1788,8 @@ namespace ts {
             return result;
         }
 
-        function createMissingList<T>(): NodeArray<T> {
-            const pos = getNodePos();
-            const result = <NodeArray<T>>[];
-            result.pos = pos;
-            result.end = pos;
-            return result;
+        function createMissingList<T extends Node>(): NodeArray<T> {
+            return createNodeArray<T>();
         }
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
@@ -1848,8 +1854,7 @@ namespace ts {
             template.head = parseTemplateLiteralFragment();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
-            const templateSpans = <NodeArray<TemplateSpan>>[];
-            templateSpans.pos = getNodePos();
+            const templateSpans = createNodeArray<TemplateSpan>();
 
             do {
                 templateSpans.push(parseTemplateSpan());
@@ -2425,8 +2430,7 @@ namespace ts {
         function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
             let type = parseConstituentType();
             if (token === operator) {
-                const types = <NodeArray<TypeNode>>[type];
-                types.pos = type.pos;
+                const types = createNodeArray<TypeNode>([type], type.pos);
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
@@ -2781,8 +2785,7 @@ namespace ts {
             parameter.name = identifier;
             finishNode(parameter);
 
-            node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
-            node.parameters.pos = parameter.pos;
+            node.parameters = createNodeArray<ParameterDeclaration>([parameter], parameter.pos);
             node.parameters.end = parameter.end;
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
@@ -3557,8 +3560,7 @@ namespace ts {
         }
 
         function parseJsxChildren(openingTagName: EntityName): NodeArray<JsxChild> {
-            const result = <NodeArray<JsxChild>>[];
-            result.pos = scanner.getStartPos();
+            const result = createNodeArray<JsxChild>();
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << ParsingContext.JsxChildren;
 
@@ -4922,14 +4924,15 @@ namespace ts {
                     break;
                 }
 
-                if (!decorators) {
-                    decorators = <NodeArray<Decorator>>[];
-                    decorators.pos = decoratorStart;
-                }
-
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
                 decorator.expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
-                decorators.push(finishNode(decorator));
+                finishNode(decorator);
+                if (!decorators) {
+                    decorators = createNodeArray<Decorator>([decorator], decoratorStart);
+                }
+                else {
+                    decorators.push(decorator);
+                }
             }
             if (decorators) {
                 decorators.end = getNodeEnd();
@@ -4953,7 +4956,7 @@ namespace ts {
 
                 if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
                     // We need to ensure that any subsequent modifiers appear on the same line
-                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    // so that when 'const' is a standalone declaration, we don't issue an error.
                     if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                         break;
                     }
@@ -4964,13 +4967,14 @@ namespace ts {
                     }
                 }
 
-                if (!modifiers) {
-                    modifiers = <ModifiersArray>[];
-                    modifiers.pos = modifierStart;
-                }
-
                 flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                const modifier = finishNode(createNode(modifierKind, modifierStart));
+                if (!modifiers) {
+                    modifiers = createModifiersArray([modifier], modifierStart);
+                }
+                else {
+                    modifiers.push(modifier);
+                }
             }
             if (modifiers) {
                 modifiers.flags = flags;
@@ -4980,17 +4984,14 @@ namespace ts {
         }
 
         function parseModifiersForArrowFunction(): ModifiersArray {
-            let flags = 0;
             let modifiers: ModifiersArray;
             if (token === SyntaxKind.AsyncKeyword) {
                 const modifierStart = scanner.getStartPos();
                 const modifierKind = token;
                 nextToken();
-                modifiers = <ModifiersArray>[];
-                modifiers.pos = modifierStart;
-                flags |= modifierToFlag(modifierKind);
-                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
-                modifiers.flags = flags;
+                const modifier = finishNode(createNode(modifierKind, modifierStart));
+                modifiers = createModifiersArray([modifier], modifierStart);
+                modifiers.flags = modifierToFlag(modifierKind);
                 modifiers.end = scanner.getStartPos();
             }
 
@@ -5216,7 +5217,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (token === SyntaxKind.GlobalKeyword) {
-                // parse 'global' as name of global scope augmentation 
+                // parse 'global' as name of global scope augmentation
                 node.name = parseIdentifier();
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
@@ -5848,10 +5849,8 @@ namespace ts {
             function parseJSDocTypeList(firstType: JSDocType) {
                 Debug.assert(!!firstType);
 
-                const types = <NodeArray<JSDocType>>[];
-                types.pos = firstType.pos;
+                const types = createNodeArray([firstType], firstType.pos);
 
-                types.push(firstType);
                 while (parseOptional(SyntaxKind.BarToken)) {
                     types.push(parseJSDocType());
                 }
@@ -6059,11 +6058,11 @@ namespace ts {
                 function addTag(tag: JSDocTag): void {
                     if (tag) {
                         if (!tags) {
-                            tags = <NodeArray<JSDocTag>>[];
-                            tags.pos = tag.pos;
+                            tags = createNodeArray([tag], tag.pos);
                         }
-
-                        tags.push(tag);
+                        else {
+                            tags.push(tag);
+                        }
                         tags.end = tag.end;
                     }
                 }
@@ -6156,8 +6155,7 @@ namespace ts {
                     }
 
                     // Type parameter list looks like '@template T,U,V'
-                    const typeParameters = <NodeArray<TypeParameterDeclaration>>[];
-                    typeParameters.pos = scanner.getStartPos();
+                    const typeParameters = createNodeArray<TypeParameterDeclaration>();
 
                     while (true) {
                         const name = parseJSDocIdentifier();

@@ -186,6 +186,7 @@ namespace ts {
         public end: number;
         public flags: NodeFlags;
         public parent: Node;
+        public original: Node;
         public transformFlags: TransformFlags;
         public excludeTransformFlags: TransformFlags;
         private _children: Node[];
@@ -198,6 +199,7 @@ namespace ts {
             this.transformFlags = undefined;
             this.excludeTransformFlags = undefined;
             this.parent = undefined;
+            this.original = undefined;
         }
 
         public getSourceFile(): SourceFile {
@@ -2988,7 +2990,7 @@ namespace ts {
             // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
             // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifier(name, target)) {
+                if (!isIdentifierText(name, target)) {
                     return undefined;
                 }
             }
@@ -6344,7 +6346,7 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                (node.kind === SyntaxKind.ThisKeyword && !isPartOfExpression(node)) ||
                 node.kind === SyntaxKind.ThisType;
         }
 

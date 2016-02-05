@@ -868,6 +868,7 @@ namespace ts {
         this.transformFlags = undefined;
         this.excludeTransformFlags = undefined;
         this.parent = undefined;
+        this.original = undefined;
     }
 
     export let objectAllocator: ObjectAllocator = {

@@ -696,7 +696,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function isIdentifier(name: string, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierText(name: string, languageVersion: ScriptTarget): boolean {
         if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
             return false;
         }
