@@ -1152,7 +1152,7 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
-            const maxJsNodeModuleSearchDistance = 1; // TODO (billti): Make a compiler option
+            let maxJsNodeModuleSearchDistance = options.maxNodeSearchJsDepth || 0;
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};

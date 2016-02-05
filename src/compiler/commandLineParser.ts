@@ -299,6 +299,11 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "maxNodeSearchJsDepth",
+            type: "number",
+            description: Diagnostics.The_maximum_depth_of_JavaScript_modules_to_load_by_searching_node_modules
         }
     ];
 
