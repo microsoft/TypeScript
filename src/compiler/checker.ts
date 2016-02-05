@@ -3559,10 +3559,6 @@ namespace ts {
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
-        function getParameterTypeAtIndex(signature: Signature, i: number, max: number, outOfRangeType?: Type): Type {
-            return i < max ? getTypeOfSymbol(signature.parameters[i]) : (outOfRangeType || getRestTypeOfSignature(signature));
-        }
-
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -5301,14 +5297,12 @@ namespace ts {
             target = getErasedSignature(target);
 
             let result = Ternary.True;
-            if (source.thisType || target.thisType) {
+            if (source.thisType && target.thisType) {
                 if (source.thisType !== voidType) {
-                    const s = source.thisType ? getApparentType(source.thisType) : anyType;
-                    const t = target.thisType ? getApparentType(target.thisType) : anyType;
                     // void sources are assignable to anything.
-                    let related = compareTypes(t, s, reportErrors);
+                    let related = compareTypes(target.thisType, source.thisType, reportErrors);
                     if (!related) {
-                        related = compareTypes(s, t, /*reportErrors*/ false);
+                        related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false);
                         if (!related) {
                             errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
                             return Ternary.False;
@@ -6474,27 +6468,23 @@ namespace ts {
         }
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
-            let sourceMax = source.parameters.length;
-            let targetMax = target.parameters.length;
+            const sourceMax = source.parameters.length;
+            const targetMax = target.parameters.length;
             let count: number;
             if (source.hasRestParameter && target.hasRestParameter) {
-                count = sourceMax > targetMax ? sourceMax : targetMax;
-                sourceMax--;
-                targetMax--;
+                count = Math.max(sourceMax, targetMax);
             }
             else if (source.hasRestParameter) {
-                sourceMax--;
                 count = targetMax;
             }
             else if (target.hasRestParameter) {
-                targetMax--;
                 count = sourceMax;
             }
             else {
-                count = sourceMax < targetMax ? sourceMax : targetMax;
+                count = Math.min(sourceMax, targetMax);
             }
             for (let i = 0; i < count; i++) {
-                callback(getParameterTypeAtIndex(source, i, sourceMax), getParameterTypeAtIndex(target, i, targetMax));
+                callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
         }
 
@@ -9416,7 +9406,7 @@ namespace ts {
                 context.failedTypeParameterIndex = undefined;
             }
 
-            const calleeNode = node.kind === SyntaxKind.CallExpression && (<PropertyAccessExpression>(<CallExpression>node).expression).expression;
+            const calleeNode = getThisArgumentOfCall(node);
             if (signature.thisType) {
                 const mapper = excludeCallee !== undefined ? identityMapper : inferenceMapper;
                 const calleeType: Type = calleeNode ? checkExpressionWithContextualType(calleeNode, signature.thisType, mapper) : voidType;
@@ -9503,13 +9493,13 @@ namespace ts {
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             if (signature.thisType && signature.thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
-                // If the source is not of the form `x.f`, then sourceType = voidType
-                // If the target is voidType, then the check is skipped -- anything is compatible.
-                // If the the expression is a new expression, then the check is skipped.
-                const calleeNode = node.kind === SyntaxKind.CallExpression && (<PropertyAccessExpression>(<CallExpression>node).expression).expression;
-                const calleeType: Type = calleeNode ? checkExpressionWithContextualType(calleeNode, signature.thisType, undefined) : voidType;
+                // If the source's this is not of the form `x.f` or `x[f]`, then sourceType = voidType
+                // If the target's this is voidType, then the check is skipped -- anything is compatible.
+                // If the expression is a new expression, then the check is skipped.
+                const calleeNode = getThisArgumentOfCall(node);
+                const calleeType = calleeNode ? checkExpression(calleeNode) : voidType;
                 const errorNode = reportErrors ? (calleeNode || node) : undefined;
-                if (!checkTypeRelatedTo(calleeType, getApparentType(signature.thisType), relation, errorNode, headMessage)) {
+                if (!checkTypeRelatedTo(calleeType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
             }
@@ -9539,6 +9529,21 @@ namespace ts {
             }
 
             return true;
+        }
+
+        /**
+         * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
+         */
+        function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
+            if (node.kind === SyntaxKind.CallExpression) {
+                const callee = (<CallExpression>node).expression;
+                if (callee.kind === SyntaxKind.PropertyAccessExpression) {
+                    return (callee as PropertyAccessExpression).expression;
+                }
+                else if (callee.kind === SyntaxKind.ElementAccessExpression) {
+                    return (callee as ElementAccessExpression).expression;
+                }
+            }
         }
 
         /**
@@ -9888,7 +9893,7 @@ namespace ts {
             let excludeCallee: boolean;
             let excludeArgument: boolean[];
             if (!isDecorator) {
-                const calleeNode = node.kind === SyntaxKind.CallExpression && (<PropertyAccessExpression>(<CallExpression>node).expression).expression;
+                const calleeNode = getThisArgumentOfCall(node);
                 if (calleeNode && isContextSensitive(calleeNode)) {
                     excludeCallee = true;
                 }
@@ -10397,8 +10402,8 @@ namespace ts {
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
-                getParameterTypeAtIndex(signature, pos, signature.parameters.length - 1) :
-                getParameterTypeAtIndex(signature, pos, signature.parameters.length, anyType);
+                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
