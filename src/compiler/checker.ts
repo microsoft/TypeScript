@@ -9380,7 +9380,7 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeCallee: boolean, excludeArgument: boolean[], context: InferenceContext): void {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
             const typeParameters = signature.typeParameters;
             const inferenceMapper = getInferenceMapper(context);
 
@@ -9406,11 +9406,10 @@ namespace ts {
                 context.failedTypeParameterIndex = undefined;
             }
 
-            const calleeNode = getThisArgumentOfCall(node);
             if (signature.thisType) {
-                const mapper = excludeCallee !== undefined ? identityMapper : inferenceMapper;
-                const calleeType: Type = calleeNode ? checkExpressionWithContextualType(calleeNode, signature.thisType, mapper) : voidType;
-                inferTypes(context, calleeType, signature.thisType);
+                const thisArgumentNode = getThisArgumentOfCall(node);
+                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                inferTypes(context, thisArgumentType, signature.thisType);
             }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
@@ -9442,11 +9441,6 @@ namespace ts {
             // Decorators will not have `excludeArgument`, as their arguments cannot be contextually typed.
             // Tagged template expressions will always have `undefined` for `excludeArgument[0]`.
             if (excludeArgument) {
-                if (signature.thisType && calleeNode) {
-                    if (excludeCallee === false) {
-                        inferTypes(context, checkExpressionWithContextualType(calleeNode, signature.thisType, inferenceMapper), signature.thisType);
-                    }
-                }
                 for (let i = 0; i < argCount; i++) {
                     // No need to check for omitted args and template expressions, their exclusion value is always undefined
                     if (excludeArgument[i] === false) {
@@ -9496,10 +9490,10 @@ namespace ts {
                 // If the source's this is not of the form `x.f` or `x[f]`, then sourceType = voidType
                 // If the target's this is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
-                const calleeNode = getThisArgumentOfCall(node);
-                const calleeType = calleeNode ? checkExpression(calleeNode) : voidType;
-                const errorNode = reportErrors ? (calleeNode || node) : undefined;
-                if (!checkTypeRelatedTo(calleeType, signature.thisType, relation, errorNode, headMessage)) {
+                const thisArgumentNode = getThisArgumentOfCall(node);
+                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
+                if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
             }
@@ -9890,13 +9884,8 @@ namespace ts {
             //
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
-            let excludeCallee: boolean;
             let excludeArgument: boolean[];
             if (!isDecorator) {
-                const calleeNode = getThisArgumentOfCall(node);
-                if (calleeNode && isContextSensitive(calleeNode)) {
-                    excludeCallee = true;
-                }
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
@@ -10045,7 +10034,7 @@ namespace ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
-                                inferTypeArguments(node, candidate, args, excludeCallee, excludeArgument, inferenceContext);
+                                inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
                             }
