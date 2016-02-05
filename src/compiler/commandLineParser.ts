@@ -349,6 +349,12 @@ namespace ts {
         return optionNameMapCache;
     }
 
+    interface ArgumentStream {
+        synthesizedArgs: string[];
+        commandLineArgs: string[];
+        cliPosition: number;
+    }
+
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
@@ -363,21 +369,42 @@ namespace ts {
         };
 
         function parseStrings(args: string[]) {
-            let i = 0;
-            while (i < args.length) {
-                let s = args[i];
-                i++;
+            const strings: ArgumentStream = {
+                synthesizedArgs: [],
+                commandLineArgs: args,
+                cliPosition: 0
+            };
+            let s = getNextString(strings);
+            while (s !== undefined) {
                 if (s.charCodeAt(0) === CharacterCodes.at) {
                     parseResponseFile(s.slice(1));
                 }
                 else if (s.charCodeAt(0) === CharacterCodes.minus) {
-                    s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+                    s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1);
 
                     // Try to translate short option names to their full equivalents.
-                    if (hasProperty(shortOptionNames, s)) {
-                        s = shortOptionNames[s];
+                    if (hasProperty(shortOptionNames, s.toLowerCase())) {
+                        s = shortOptionNames[s.toLowerCase()];
+                    }
+                    else {
+                        // When using long-form switches, we follow standard command-line conventions and accept
+                        // "--example=VALUE", but we also accept "--example VALUE".
+                        const optionName = s.split("=", 1)[0].toLowerCase();
+                        if (optionName.length < s.length && hasProperty(optionNameMap, optionName)) {
+                            // It's in "--example=VALUE" format.  Separate the value and inject it into the arg stream
+                            // so it's present for the next read.
+                            const value = s.substring(optionName.length + 1);
+                            const opt = optionNameMap[optionName];
+                            if (opt.type === "boolean") {
+                                errors.push(createCompilerDiagnostic(Diagnostics.Option_0_does_not_expect_a_parameter_but_was_given_1, opt.name, value));
+                                continue;
+                            }
+                            strings.synthesizedArgs.unshift(value);
+                            s = optionName;
+                        }
                     }
 
+                    s = s.toLowerCase();
                     if (hasProperty(optionNameMap, s)) {
                         const opt = optionNameMap[s];
 
@@ -386,27 +413,24 @@ namespace ts {
                         }
                         else {
                             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                            if (!args[i] && opt.type !== "boolean") {
+                            if (!getNextString(strings, /*holdPosition*/ true) && opt.type !== "boolean") {
                                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
                             }
 
                             switch (opt.type) {
                                 case "number":
-                                    options[opt.name] = parseInt(args[i]);
-                                    i++;
+                                    options[opt.name] = parseInt(getNextString(strings));
                                     break;
                                 case "boolean":
                                     options[opt.name] = true;
                                     break;
                                 case "string":
-                                    options[opt.name] = args[i] || "";
-                                    i++;
+                                    options[opt.name] = getNextString(strings) || "";
                                     break;
                                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                                 default:
                                     let map = <Map<number>>opt.type;
-                                    let key = (args[i] || "").toLowerCase();
-                                    i++;
+                                    let key = (getNextString(strings) || "").toLowerCase();
                                     if (hasProperty(map, key)) {
                                         options[opt.name] = map[key];
                                     }
@@ -423,7 +447,27 @@ namespace ts {
                 else {
                     fileNames.push(s);
                 }
+
+                s = getNextString(strings);
             }
+        }
+
+        function getNextString(stream: ArgumentStream, holdPosition = false) {
+            if (stream.synthesizedArgs.length > 0) {
+                const next = stream.synthesizedArgs[0];
+                if (!holdPosition) {
+                    stream.synthesizedArgs.shift();
+                }
+
+                return next;
+            }
+
+            const next = stream.commandLineArgs[stream.cliPosition];
+            if (!holdPosition) {
+                stream.cliPosition++;
+            }
+
+            return next;
         }
 
         function parseResponseFile(fileName: string) {
