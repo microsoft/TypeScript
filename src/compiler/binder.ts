@@ -1696,7 +1696,7 @@ namespace ts {
                 case Reachability.Unreachable:
                     const reportError =
                         // report error on all statements except empty ones
-                        (isStatement(node) && node.kind !== SyntaxKind.EmptyStatement) ||
+                        (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                         // report error on class declarations
                         node.kind === SyntaxKind.ClassDeclaration ||
                         // report error on instantiated modules or const-enums only modules if preserveConstEnums is set

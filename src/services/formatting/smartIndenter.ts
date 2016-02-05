@@ -467,7 +467,7 @@ namespace ts.formatting {
             }
             return false;
         }
-        
+
         /* @internal */
         export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
             let childKind = child ? child.kind : SyntaxKind.Unknown;
@@ -497,7 +497,7 @@ namespace ts.formatting {
         Function returns true when the parent node should indent the given child by an explicit rule
         */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false); 
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false);
         }
     }
 }

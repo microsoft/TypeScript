@@ -2986,7 +2986,7 @@ namespace ts {
             // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
             // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifier(name, target)) {
+                if (!isIdentifierText(name, target)) {
                     return undefined;
                 }
             }
@@ -6342,7 +6342,7 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                (node.kind === SyntaxKind.ThisKeyword && !isPartOfExpression(node)) ||
                 node.kind === SyntaxKind.ThisType;
         }
 

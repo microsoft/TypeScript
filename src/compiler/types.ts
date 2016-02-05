@@ -553,10 +553,12 @@ namespace ts {
     // @kind(SyntaxKind.ConstructSignature)
     export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement { }
 
+    export type BindingName = Identifier | ObjectBindingPattern | ArrayBindingPattern;
+
     // @kind(SyntaxKind.VariableDeclaration)
     export interface VariableDeclaration extends Declaration {
         parent?: VariableDeclarationList;
-        name: Identifier | BindingPattern;  // Declared variable name
+        name: BindingName;                  // Declared variable name
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
     }
@@ -569,7 +571,7 @@ namespace ts {
     // @kind(SyntaxKind.Parameter)
     export interface ParameterDeclaration extends Declaration {
         dotDotDotToken?: Node;              // Present on rest parameter
-        name: Identifier | BindingPattern;  // Declared parameter name
+        name: BindingName;                  // Declared parameter name
         questionToken?: Node;               // Present on optional parameter
         type?: TypeNode;                    // Optional type annotation
         initializer?: Expression;           // Optional initializer
@@ -579,7 +581,7 @@ namespace ts {
     export interface BindingElement extends Declaration {
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: Node;              // Present on rest binding element
-        name: Identifier | BindingPattern;  // Declared binding element name
+        name: BindingName;                  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
 
@@ -946,6 +948,8 @@ namespace ts {
         _templateLiteralFragmentBrand: any;
     }
 
+    export type Template = TemplateExpression | LiteralExpression;
+
     // @kind(SyntaxKind.TemplateExpression)
     export interface TemplateExpression extends PrimaryExpression {
         head: TemplateLiteralFragment;
@@ -1017,7 +1021,7 @@ namespace ts {
     // @kind(SyntaxKind.TaggedTemplateExpression)
     export interface TaggedTemplateExpression extends MemberExpression {
         tag: LeftHandSideExpression;
-        template: LiteralExpression | TemplateExpression;
+        template: Template;
     }
 
     export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator;
@@ -1049,7 +1053,7 @@ namespace ts {
     export interface JsxOpeningElement extends Expression {
         _openingElementBrand?: any;
         tagName: EntityName;
-        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
+        attributes: NodeArray<JsxAttributeLike>;
     }
 
     /// A JSX expression of the form <TagName attrs />
@@ -1060,6 +1064,8 @@ namespace ts {
 
     /// Either the opening tag in a <Tag>...</Tag> pair, or the lone <Tag /> in a self-closing form
     export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+
+    export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
 
     // @kind(SyntaxKind.JsxAttribute)
     export interface JsxAttribute extends Node {
@@ -1143,22 +1149,24 @@ namespace ts {
         expression: Expression;
     }
 
+    export type ForInitializer = VariableDeclarationList | Expression;
+
     // @kind(SyntaxKind.ForStatement)
     export interface ForStatement extends IterationStatement {
-        initializer?: VariableDeclarationList | Expression;
+        initializer?: ForInitializer;
         condition?: Expression;
         incrementor?: Expression;
     }
 
     // @kind(SyntaxKind.ForInStatement)
     export interface ForInStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
 
     // @kind(SyntaxKind.ForOfStatement)
     export interface ForOfStatement extends IterationStatement {
-        initializer: VariableDeclarationList | Expression;
+        initializer: ForInitializer;
         expression: Expression;
     }
 
@@ -1297,9 +1305,11 @@ namespace ts {
 
     export type ModuleBody = ModuleBlock | ModuleDeclaration;
 
+    export type ModuleName = Identifier | StringLiteral;
+
     // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
-        name: Identifier | LiteralExpression;
+        name: ModuleName;
         body: ModuleBlock | ModuleDeclaration;
     }
 
@@ -1334,6 +1344,8 @@ namespace ts {
         moduleSpecifier: Expression;
     }
 
+    export type NamedImportBindings = NamespaceImport | NamedImports;
+
     // In case of:
     // import d from "mod" => name = d, namedBinding = undefined
     // import * as ns from "mod" => name = undefined, namedBinding: NamespaceImport = { name: ns }
@@ -1343,7 +1355,7 @@ namespace ts {
     // @kind(SyntaxKind.ImportClause)
     export interface ImportClause extends Declaration {
         name?: Identifier; // Default binding
-        namedBindings?: NamespaceImport | NamedImports;
+        namedBindings?: NamedImportBindings;
     }
 
     // @kind(SyntaxKind.NamespaceImport)

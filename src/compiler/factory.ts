@@ -134,4 +134,5 @@ namespace ts {
         block.statements = createNodeArray(statements);
         return block;
     }
+
 }

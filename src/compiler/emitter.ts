@@ -1020,7 +1020,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                const emitOuterParens = isExpression(node.parent)
+                const emitOuterParens = isPartOfExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
                 if (emitOuterParens) {
@@ -5788,7 +5788,7 @@ const _super = (function (geti, seti) {
             /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
             function emitSerializedTypeReferenceNode(node: TypeReferenceNode) {
                 let location: Node = node.parent;
-                while (isDeclaration(location) || isTypeNode(location)) {
+                while (isDeclaration(location) || isPartOfTypeNode(location)) {
                     location = location.parent;
                 }
 
@@ -7156,7 +7156,7 @@ const _super = (function (geti, seti) {
                     }
 
                     // text should be quoted string
-                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same                     
+                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
                     if (hasProperty(groupIndices, key)) {
