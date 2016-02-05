@@ -5765,15 +5765,21 @@ namespace ts {
                 const result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
                 result.name = parseSimplePropertyName();
 
-                while (parseOptional(SyntaxKind.DotToken)) {
-                    if (token === SyntaxKind.LessThanToken) {
-                        result.typeArguments = parseTypeArguments();
-                        break;
-                    }
-                    else {
-                        result.name = parseQualifiedName(result.name);
+                if (token === SyntaxKind.LessThanToken) {
+                    result.typeArguments = parseTypeArguments();
+                }
+                else {
+                    while (parseOptional(SyntaxKind.DotToken)) {
+                        if (token === SyntaxKind.LessThanToken) {
+                            result.typeArguments = parseTypeArguments();
+                            break;
+                        }
+                        else {
+                            result.name = parseQualifiedName(result.name);
+                        }
                     }
                 }
+
 
                 return finishNode(result);
             }
