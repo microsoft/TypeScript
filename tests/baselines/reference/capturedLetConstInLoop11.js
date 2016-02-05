@@ -30,6 +30,6 @@ function foo() {
     };
     for (;;) {
         var state_2 = _loop_2();
-        if (typeof state_2 === "object") return state_2.value
+        if (typeof state_2 === "object") return state_2.value;
     }
 }
