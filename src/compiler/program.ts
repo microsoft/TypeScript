@@ -65,7 +65,14 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, host, compilerOptions);
+            let result = loadModuleFromNodeModules(moduleName, containingDirectory, host, compilerOptions);
+            if(result && result.resolvedModule && result.resolvedModule.resolvedFileName){
+                if(!fileExtensionIs(result.resolvedModule.resolvedFileName, ".ts")){
+                    // Loaded a non-TypeScript file from a node modules search
+                    result.resolvedModule.isJsFileFromNodeSearch = true;
+                }
+            }
+            return result;
         }
     }
 
@@ -1063,13 +1070,20 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, isJsFileFromNodeSearch?: boolean): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                }
+
+                // If this was a JavaScript file found by a node_modules search, set the depth to parent + 1.
+                // Note: If already found closer to root files, don't overwrite.
+                if(isJsFileFromNodeSearch){
+                    const newDistance = (refFile && refFile.jsNodeModuleSearchDistance || 0) + 1;
+                    file.jsNodeModuleSearchDistance = Math.min(file.jsNodeModuleSearchDistance || newDistance, newDistance)
                 }
 
                 return file;
@@ -1089,6 +1103,10 @@ namespace ts {
             filesByName.set(path, file);
             if (file) {
                 file.path = path;
+
+                if(isJsFileFromNodeSearch){
+                    file.jsNodeModuleSearchDistance = (refFile && refFile.jsNodeModuleSearchDistance || 0) + 1;
+                }
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
@@ -1134,11 +1152,13 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
+            const maxJsNodeModuleSearchDistance = 1; // TODO (billti): Make a compiler option
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
+                file.jsNodeModuleSearchDistance = file.jsNodeModuleSearchDistance || 0;
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
@@ -1146,12 +1166,15 @@ namespace ts {
                     // - resolution was successfull
                     // - noResolve is falsy
                     // - module name come from the list fo imports
+                    // - it's not a top level JavaScript module that exceeded the search max
+                    const exceedsJsSearchDepth = resolution && resolution.isJsFileFromNodeSearch && file.jsNodeModuleSearchDistance >= maxJsNodeModuleSearchDistance;
                     const shouldAddFile = resolution &&
                         !options.noResolve &&
-                        i < file.imports.length;
+                        i < file.imports.length &&
+                        !exceedsJsSearchDepth;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, resolution.isJsFileFromNodeSearch);
 
                         if (importedFile && resolution.isExternalLibraryImport && fileExtensionIs(importedFile.fileName, ".ts")) {
                             if (!isExternalModule(importedFile) && importedFile.statements.length) {
