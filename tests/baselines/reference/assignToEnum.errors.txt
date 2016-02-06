@@ -1,7 +1,7 @@
 tests/cases/compiler/assignToEnum.ts(2,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/compiler/assignToEnum.ts(3,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/compiler/assignToEnum.ts(4,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/compiler/assignToEnum.ts(5,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/compiler/assignToEnum.ts(4,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/compiler/assignToEnum.ts(5,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
 
 
 ==== tests/cases/compiler/assignToEnum.ts (4 errors) ====
@@ -14,9 +14,9 @@ tests/cases/compiler/assignToEnum.ts(5,1): error TS2364: Invalid left-hand side 
 !!! error TS2364: Invalid left-hand side of assignment expression.
     A.foo = 1;      // invalid LHS
     ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
     A.foo = A.bar;  // invalid LHS
     ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
     
     

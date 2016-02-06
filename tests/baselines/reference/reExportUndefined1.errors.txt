@@ -1,0 +1,8 @@
+tests/cases/compiler/a.ts(2,10): error TS2661: Cannot re-export name that is not defined in the module.
+
+
+==== tests/cases/compiler/a.ts (1 errors) ====
+    
+    export { undefined };
+             ~~~~~~~~~
+!!! error TS2661: Cannot re-export name that is not defined in the module.

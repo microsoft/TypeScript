@@ -1,0 +1,51 @@
+=== tests/cases/compiler/prefixUnaryOperatorsOnExportedVariables.ts ===
+
+export var x = false;
+>x : boolean
+>false : boolean
+
+export var y = 1;
+>y : number
+>1 : number
+
+if (!x) {
+>!x : boolean
+>x : boolean
+    
+}
+
+if (+x) {
+>+x : number
+>x : boolean
+    
+}
+
+if (-x) {
+>-x : number
+>x : boolean
+    
+}
+
+if (~x) {
+>~x : number
+>x : boolean
+    
+}
+
+if (void x) {
+>void x : undefined
+>x : boolean
+    
+}
+
+if (typeof x) {
+>typeof x : string
+>x : boolean
+    
+}
+
+if (++y) {
+>++y : number
+>y : number
+    
+}

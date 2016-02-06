@@ -317,14 +317,10 @@ namespace FourSlash {
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
-
-            this.testData.files.forEach(file => {
-                const fileName = file.fileName.replace(Harness.IO.directoryName(file.fileName), "").substr(1);
-                const fileNameWithoutExtension = fileName.substr(0, fileName.lastIndexOf("."));
-            });
 
             // Open the first file by default
             this.openFile(0);
@@ -576,6 +572,31 @@ namespace FourSlash {
             }
         }
 
+        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
+            if (items.length === 0) {
+                return;
+            }
+
+            const entries = this.getCompletionListAtCaret().entries;
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            for (let i = 0; i < items.length; i++) {
+                assert.equal(entries[i].name, items[i], `Unexpected item in completion list`);
+            }
+        }
+
+        public noItemsWithSameNameButDifferentKind(): void {
+            const completions = this.getCompletionListAtCaret();
+            const uniqueItems: ts.Map<string> = {};
+            for (const item of completions.entries) {
+                if (!ts.hasProperty(uniqueItems, item.name)) {
+                    uniqueItems[item.name] = item.kind;
+                }
+                else {
+                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                }
+            }
+        }
+
         public verifyMemberListIsEmpty(negative: boolean) {
             const members = this.getMemberListAtCaret();
             if ((!members || members.entries.length === 0) && negative) {
@@ -732,7 +753,7 @@ namespace FourSlash {
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
                     if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        ++referencesCount;
+                        referencesCount++;
                     }
                 });
             }
@@ -760,10 +781,6 @@ namespace FourSlash {
 
         private getReferencesAtCaret() {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        }
-
-        private assertionMessage(name: string, actualValue: any, expectedValue: any) {
-            return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
         }
 
         public getSyntacticDiagnostics(expected: string) {
@@ -910,7 +927,6 @@ namespace FourSlash {
         }
 
         public verifyCurrentParameterSpanIs(parameter: string) {
-            const activeSignature = this.getActiveSignatureHelpItem();
             const activeParameter = this.getActiveParameter();
             assert.equal(ts.displayPartsToString(activeParameter.displayParts), parameter);
         }
@@ -1089,9 +1105,15 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
+                baselineFile = baselineFile.replace(".ts", ".baseline");
+
+            }
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
@@ -1103,7 +1125,7 @@ namespace FourSlash {
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
             const allFourSlashFiles = this.testData.files;
-            for (let idx = 0; idx < allFourSlashFiles.length; ++idx) {
+            for (let idx = 0; idx < allFourSlashFiles.length; idx++) {
                 const file = allFourSlashFiles[idx];
                 if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
@@ -1162,7 +1184,7 @@ namespace FourSlash {
 
         public printCurrentQuickInfo() {
             const quickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            Harness.IO.log(JSON.stringify(quickInfo));
+            Harness.IO.log("Quick Info: " + quickInfo.displayParts.map(part => part.text).join(""));
         }
 
         public printErrorList() {
@@ -1204,12 +1226,26 @@ namespace FourSlash {
 
         public printMemberListMembers() {
             const members = this.getMemberListAtCaret();
-            Harness.IO.log(JSON.stringify(members));
+            this.printMembersOrCompletions(members);
         }
 
         public printCompletionListMembers() {
             const completions = this.getCompletionListAtCaret();
-            Harness.IO.log(JSON.stringify(completions));
+            this.printMembersOrCompletions(completions);
+        }
+
+        private printMembersOrCompletions(info: ts.CompletionInfo) {
+            function pad(s: string, length: number) {
+                return s + new Array(length - s.length + 1).join(" ");
+            }
+            function max<T>(arr: T[], selector: (x: T) => number): number {
+                return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
+            }
+            const longestNameLength = max(info.entries, m => m.name.length);
+            const longestKindLength = max(info.entries, m => m.kind.length);
+            info.entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
+            const membersString = info.entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers}`).join("\n");
+            Harness.IO.log(membersString);
         }
 
         public printReferences() {
@@ -1849,7 +1885,7 @@ namespace FourSlash {
             let item: ts.NavigateToItem = null;
 
             // Count only the match that match the same MatchKind
-            for (let i = 0; i < items.length; ++i) {
+            for (let i = 0; i < items.length; i++) {
                 item = items[i];
                 if (!matchKind || item.matchKind === matchKind) {
                     actual++;
@@ -2175,9 +2211,6 @@ namespace FourSlash {
         }
     }
 
-    // TOOD: should these just use the Harness's stdout/stderr?
-    const fsOutput = new Harness.Compiler.WriterAggregator();
-    const fsErrors = new Harness.Compiler.WriterAggregator();
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
         const content = Harness.IO.readFile(fileName);
         runFourSlashTestContent(basePath, testType, content, fileName);
@@ -2768,6 +2801,10 @@ namespace FourSlashInterface {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
         }
 
+        public assertHasRanges(ranges: FourSlash.Range[]) {
+            assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
+        }
+
         public completionListIsEmpty() {
             this.state.verifyCompletionListIsEmpty(this.negative);
         }
@@ -3277,6 +3314,30 @@ namespace FourSlashInterface {
 
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
+        }
+
+        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxOpenTagName", text, position);
+        }
+
+        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxCloseTagName", text, position);
+        }
+
+        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxSelfClosingTagName", text, position);
+        }
+
+        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttribute", text, position);
+        }
+
+        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxText", text, position);
+        }
+
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttributeStringLiteralValue", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {

@@ -9,7 +9,6 @@ tests/cases/compiler/intTypeCheck.ts(101,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
-  Property 'p' is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(106,21): error TS2304: Cannot find name 'i1'.
 tests/cases/compiler/intTypeCheck.ts(107,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -38,7 +37,6 @@ tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
-  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2304: Cannot find name 'i4'.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -52,7 +50,6 @@ tests/cases/compiler/intTypeCheck.ts(157,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
   Property 'p' is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
-  Property 'p' is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(162,22): error TS2304: Cannot find name 'i5'.
 tests/cases/compiler/intTypeCheck.ts(163,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -83,7 +80,6 @@ tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
-  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2304: Cannot find name 'i8'.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -215,7 +211,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj9: i1 = new <i1> anyVar;
         ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i1'.
-!!! error TS2322:   Property 'p' is missing in type 'Boolean'.
                        ~
 !!! error TS1109: Expression expected.
                         ~~
@@ -307,7 +302,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj42: i4 = new <i4> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i4'.
-!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -344,7 +338,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj53: i5 = new <i5> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i5'.
-!!! error TS2322:   Property 'p' is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -439,7 +432,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj86: i8 = new <i8> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i8'.
-!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~

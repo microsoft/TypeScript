@@ -5,4 +5,4 @@
 
 goTo.marker();
 
-verify.quickInfoIs('var p: any', "");
+verify.quickInfoIs('var p: string', "");

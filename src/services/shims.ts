@@ -16,7 +16,11 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-var debugObjectHost = (<any>this);
+let debugObjectHost = (<any>this);
+
+// We need to use 'null' to interface with the managed side.
+/* tslint:disable:no-null */
+/* tslint:disable:no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -60,8 +64,9 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
-        
+
         getModuleResolutionsForFile?(fileName: string): string;
+        directoryExists(directoryName: string): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -73,6 +78,8 @@ namespace ts {
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, exclude?: string): string;
+
+        trace(s: string): void;
     }
 
     ///
@@ -233,8 +240,6 @@ namespace ts {
     }
 
     class ScriptSnapshotShimAdapter implements IScriptSnapshot {
-        private lineStartPositions: number[] = null;
-
         constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
         }
 
@@ -247,14 +252,14 @@ namespace ts {
         }
 
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-            var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
-            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
+            const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
 
-            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
@@ -272,20 +277,24 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-        
+
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
-        
+        public directoryExists: (directoryName: string) => boolean;
+
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect. 
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
-                    let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    const resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = lookUp(resolutionsInFile, name);
                         return result ? { resolvedFileName: result } : undefined;
                     });
                 };
+            }
+            if ("directoryExists" in this.shimHost) {
+                this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
         }
 
@@ -319,7 +328,7 @@ namespace ts {
         }
 
         public getCompilationSettings(): CompilerOptions {
-            var settingsJson = this.shimHost.getCompilationSettings();
+            const settingsJson = this.shimHost.getCompilationSettings();
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
@@ -328,17 +337,12 @@ namespace ts {
         }
 
         public getScriptFileNames(): string[] {
-            var encoded = this.shimHost.getScriptFileNames();
+            const encoded = this.shimHost.getScriptFileNames();
             return this.files = JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            // Shim the API changes for 1.5 release. This should be removed once
-            // TypeScript 1.5 has shipped.
-            if (this.files && this.files.indexOf(fileName) < 0) {
-                return undefined;
-            }
-            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            const scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
@@ -347,7 +351,7 @@ namespace ts {
         }
 
         public getLocalizedDiagnosticMessages(): any {
-            var diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
+            const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
@@ -362,7 +366,7 @@ namespace ts {
         }
 
         public getCancellationToken(): HostCancellationToken {
-            var hostCancellationToken = this.shimHost.getCancellationToken();
+            const hostCancellationToken = this.shimHost.getCancellationToken();
             return new ThrottledCancellationToken(hostCancellationToken);
         }
 
@@ -371,14 +375,7 @@ namespace ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            // Wrap the API changes for 1.5 release. This try/catch
-            // should be removed once TypeScript 1.5 has shipped.
-            try {
-                return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
-            }
-            catch (e) {
-                return "";
-            }
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -393,8 +390,8 @@ namespace ts {
         }
 
         public isCancellationRequested(): boolean {
-            var time = Date.now();
-            var duration = Math.abs(time - this.lastCancellationCheckTime);
+            const time = Date.now();
+            const duration = Math.abs(time - this.lastCancellationCheckTime);
             if (duration > 10) {
                 // Check no more than once every 10 ms.
                 this.lastCancellationCheckTime = time;
@@ -405,52 +402,48 @@ namespace ts {
         }
     }
 
-    export class CoreServicesShimHostAdapter implements ParseConfigHost {
+    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
+
+        public directoryExists: (directoryName: string) => boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
+            if ("directoryExists" in this.shimHost) {
+                this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
+            }
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            // Wrap the API changes for 1.5 release. This try/catch
-            // should be removed once TypeScript 1.5 has shipped.
-            // Also consider removing the optional designation for
-            // the exclude param at this time.
-            var encoded: string;
-            try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
-            }
-            catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension);
-            }
+            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
             return JSON.parse(encoded);
         }
-        
+
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
-        
+
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
         }
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+        let start: number;
         if (logPerformance) {
             logger.log(actionDescription);
-            var start = Date.now();
+            start = Date.now();
         }
 
-        var result = action();
+        const result = action();
 
         if (logPerformance) {
-            var end = Date.now();
-            logger.log(actionDescription + " completed in " + (end - start) + " msec");
-            if (typeof (result) === "string") {
-                var str = <string>result;
+            const end = Date.now();
+            logger.log(`${actionDescription} completed in ${end - start} msec`);
+            if (typeof result === "string") {
+                let str = result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";
                 }
-                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+                logger.log(`  result.length=${str.length}, result='${JSON.stringify(str)}'`);
             }
         }
 
@@ -459,8 +452,8 @@ namespace ts {
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return JSON.stringify({ result: result });
+            const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
+            return JSON.stringify({ result });
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -481,7 +474,7 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; } []{
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -540,10 +533,9 @@ namespace ts {
          */
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
-                "refresh(" + throwOnError + ")",
-                () => {
-                    return <any>null;
-                });
+                `refresh(${throwOnError})`,
+                () => <any>null
+            );
         }
 
         public cleanupSemanticCache(): void {
@@ -555,63 +547,57 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = getNewLineOrDefaultFromHost(this.host);
+        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+            const newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
-                () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
-                    return classifications;
-                });
+                `getSyntacticClassifications('${fileName}', ${start}, ${length})`,
+                () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length))
+            );
         }
 
         public getSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
-                () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
-                    return classifications;
-                });
+                `getSemanticClassifications('${fileName}', ${start}, ${length})`,
+                () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length))
+            );
         }
 
         public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getEncodedSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
-                () => {
-                    // directly serialize the spans out to a string.  This is much faster to decode
-                    // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)));
-                });
+                `getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`,
+                // directly serialize the spans out to a string.  This is much faster to decode
+                // on the managed side versus a full JSON array.
+                () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)))
+            );
         }
 
         public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getEncodedSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
-                () => {
-                    // directly serialize the spans out to a string.  This is much faster to decode
-                    // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
-                });
+                `getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`,
+                // directly serialize the spans out to a string.  This is much faster to decode
+                // on the managed side versus a full JSON array.
+                () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)))
+            );
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSyntacticDiagnostics('" + fileName + "')",
+                `getSyntacticDiagnostics('${fileName}')`,
                 () => {
-                    var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    const diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
 
         public getSemanticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSemanticDiagnostics('" + fileName + "')",
+                `getSemanticDiagnostics('${fileName}')`,
                 () => {
-                    var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -620,7 +606,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -633,11 +619,9 @@ namespace ts {
          */
         public getQuickInfoAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getQuickInfoAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var quickInfo = this.languageService.getQuickInfoAtPosition(fileName, position);
-                    return quickInfo;
-                });
+                `getQuickInfoAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getQuickInfoAtPosition(fileName, position)
+            );
         }
 
 
@@ -649,11 +633,9 @@ namespace ts {
          */
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
-                "getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")",
-                () => {
-                    var spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
-                    return spanInfo;
-                });
+                `getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`,
+                () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos)
+            );
         }
 
         /**
@@ -662,22 +644,18 @@ namespace ts {
          */
         public getBreakpointStatementAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBreakpointStatementAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var spanInfo = this.languageService.getBreakpointStatementAtPosition(fileName, position);
-                    return spanInfo;
-                });
+                `getBreakpointStatementAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getBreakpointStatementAtPosition(fileName, position)
+            );
         }
 
         /// SIGNATUREHELP
 
         public getSignatureHelpItems(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getSignatureHelpItems('" + fileName + "', " + position + ")",
-                () => {
-                    var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
-                    return signatureInfo;
-                });
+                `getSignatureHelpItems('${fileName}', ${position})`,
+                () => this.languageService.getSignatureHelpItems(fileName, position)
+            );
         }
 
         /// GOTO DEFINITION
@@ -688,10 +666,9 @@ namespace ts {
          */
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDefinitionAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getDefinitionAtPosition(fileName, position);
-                });
+                `getDefinitionAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getDefinitionAtPosition(fileName, position)
+            );
         }
 
         /// GOTO Type
@@ -702,44 +679,39 @@ namespace ts {
          */
         public getTypeDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getTypeDefinitionAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
-                });
+                `getTypeDefinitionAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getTypeDefinitionAtPosition(fileName, position)
+            );
         }
 
         public getRenameInfo(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getRenameInfo('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getRenameInfo(fileName, position);
-                });
+                `getRenameInfo('${fileName}', ${position})`,
+                () => this.languageService.getRenameInfo(fileName, position)
+            );
         }
 
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
             return this.forwardJSONCall(
-                "findRenameLocations('" + fileName + "', " + position + ", " + findInStrings + ", " + findInComments + ")",
-                () => {
-                    return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
-                });
+                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
+                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments)
+            );
         }
 
         /// GET BRACE MATCHING
         public getBraceMatchingAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBraceMatchingAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var textRanges = this.languageService.getBraceMatchingAtPosition(fileName, position);
-                    return textRanges;
-                });
+                `getBraceMatchingAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getBraceMatchingAtPosition(fileName, position)
+            );
         }
 
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
-                "getIndentationAtPosition('" + fileName + "', " + position + ")",
+                `getIndentationAtPosition('${fileName}', ${position})`,
                 () => {
-                    var localOptions: EditorOptions = JSON.parse(options);
+                    const localOptions: EditorOptions = JSON.parse(options);
                     return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
                 });
         }
@@ -748,35 +720,32 @@ namespace ts {
 
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getReferencesAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getReferencesAtPosition(fileName, position);
-                });
+                `getReferencesAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getReferencesAtPosition(fileName, position)
+            );
         }
 
         public findReferences(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "findReferences('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.findReferences(fileName, position);
-                });
+                `findReferences('${fileName}', ${position})`,
+                () => this.languageService.findReferences(fileName, position)
+            );
         }
 
         public getOccurrencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getOccurrencesAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    return this.languageService.getOccurrencesAtPosition(fileName, position);
-                });
+                `getOccurrencesAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getOccurrencesAtPosition(fileName, position)
+            );
         }
 
         public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
             return this.forwardJSONCall(
-                "getDocumentHighlights('" + fileName + "', " + position + ")",
+                `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
-                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document higlighting issue - keep only items from the initial file
-                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    const normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
@@ -790,56 +759,49 @@ namespace ts {
          */
         public getCompletionsAtPosition(fileName: string, position: number) {
             return this.forwardJSONCall(
-                "getCompletionsAtPosition('" + fileName + "', " + position + ")",
-                () => {
-                    var completion = this.languageService.getCompletionsAtPosition(fileName, position);
-                    return completion;
-                });
+                `getCompletionsAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getCompletionsAtPosition(fileName, position)
+            );
         }
 
         /** Get a string based representation of a completion list entry details */
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
-                "getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")",
-                () => {
-                    var details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
-                    return details;
-                });
+                `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
+                () => this.languageService.getCompletionEntryDetails(fileName, position, entryName)
+            );
         }
 
         public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForRange('" + fileName + "', " + start + ", " + end + ")",
+                `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 });
         }
 
         public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForDocument('" + fileName + "')",
+                `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 });
         }
 
         public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsAfterKeystroke('" + fileName + "', " + position + ", '" + key + "')",
+                `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 });
         }
 
         public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
             );
         }
@@ -849,51 +811,38 @@ namespace ts {
         /** Return a list of symbols that are interesting to navigate to */
         public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
-                "getNavigateToItems('" + searchValue + "', " + maxResultCount+ ")",
-                () => {
-                    var items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
-                    return items;
-                });
+                `getNavigateToItems('${searchValue}', ${maxResultCount})`,
+                () => this.languageService.getNavigateToItems(searchValue, maxResultCount)
+            );
         }
 
         public getNavigationBarItems(fileName: string): string {
             return this.forwardJSONCall(
-                "getNavigationBarItems('" + fileName + "')",
-                () => {
-                    var items = this.languageService.getNavigationBarItems(fileName);
-                    return items;
-                });
+                `getNavigationBarItems('${fileName}')`,
+                () => this.languageService.getNavigationBarItems(fileName)
+            );
         }
 
         public getOutliningSpans(fileName: string): string {
             return this.forwardJSONCall(
-                "getOutliningSpans('" + fileName + "')",
-                () => {
-                    var items = this.languageService.getOutliningSpans(fileName);
-                    return items;
-                });
+                `getOutliningSpans('${fileName}')`,
+                () => this.languageService.getOutliningSpans(fileName)
+            );
         }
 
         public getTodoComments(fileName: string, descriptors: string): string {
             return this.forwardJSONCall(
-                "getTodoComments('" + fileName + "')",
-                () => {
-                    var items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
-                    return items;
-                });
+                `getTodoComments('${fileName}')`,
+                () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
+            );
         }
 
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
-                "getEmitOutput('" + fileName + "')",
-                () => {
-                    var output = this.languageService.getEmitOutput(fileName);
-                    // Shim the API changes for 1.5 release. This should be removed once
-                    // TypeScript 1.5 has shipped.
-                    (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
-                    return output;
-                });
+                `getEmitOutput('${fileName}')`,
+                () => this.languageService.getEmitOutput(fileName)
+            );
         }
     }
 
@@ -918,12 +867,11 @@ namespace ts {
 
         /// COLORIZATION
         public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
-            var items = classification.entries;
-            var result = "";
-            for (var i = 0; i < items.length; i++) {
-                result += items[i].length + "\n";
-                result += items[i].classification + "\n";
+            const classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
+            let result = "";
+            for (const item of classification.entries) {
+                result += item.length + "\n";
+                result += item.classification + "\n";
             }
             result += classification.finalLexState;
             return result;
@@ -940,16 +888,16 @@ namespace ts {
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
-        
+
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
-                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 return {
-                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
+                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
                     failedLookupLocations: result.failedLookupLocations
                 };
-            }); 
+            });
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -957,8 +905,8 @@ namespace ts {
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
-                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
-                    var convertResult = {
+                    const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
                         ambientExternalModules: result.ambientExternalModules,
@@ -986,26 +934,27 @@ namespace ts {
 
         public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
-                "getTSConfigFileInfo('" + fileName + "')",
+                `getTSConfigFileInfo('${fileName}')`,
                 () => {
-                    let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
+                    const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileTextToJson(fileName, text);
+                    const result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
                             options: {},
                             files: [],
-                            errors: [realizeDiagnostic(result.error, '\r\n')]
+                            errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
 
-                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    const normalizedFileName = normalizeSlashes(fileName);
+                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
                         files: configFile.fileNames,
-                        errors: realizeDiagnostics(configFile.errors, '\r\n')
+                        errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
                 });
         }
@@ -1013,9 +962,8 @@ namespace ts {
         public getDefaultCompilationSettings(): string {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
-                () => {
-                    return getDefaultCompilerOptions();
-                });
+                () => getDefaultCompilerOptions()
+            );
         }
     }
 
@@ -1035,8 +983,8 @@ namespace ts {
                 if (this.documentRegistry === undefined) {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
-                var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                const hostAdapter = new LanguageServiceShimHostAdapter(host);
+                const languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
@@ -1057,7 +1005,7 @@ namespace ts {
 
         public createCoreServicesShim(host: CoreServicesShimHost): CoreServicesShim {
             try {
-                var adapter = new CoreServicesShimHostAdapter(host);
+                const adapter = new CoreServicesShimHostAdapter(host);
                 return new CoreServicesShimObject(this, <Logger>host, adapter);
             }
             catch (err) {
@@ -1077,7 +1025,7 @@ namespace ts {
         }
 
         public unregisterShim(shim: Shim): void {
-            for (var i = 0, n = this._shims.length; i < n; i++) {
+            for (let i = 0, n = this._shims.length; i < n; i++) {
                 if (this._shims[i] === shim) {
                     delete this._shims[i];
                     return;
@@ -1096,12 +1044,21 @@ namespace ts {
     }
 }
 
+/* tslint:enable:no-in-operator */
+/* tslint:enable:no-null */
+
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
 /* @internal */
-module TypeScript.Services {
-    export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
+namespace TypeScript.Services {
+    export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
+/* tslint:disable:no-unused-variable */
+// 'toolsVersion' gets consumed by the managed side, so it's not unused.
+// TODO: it should be moved into a namespace though.
+
 /* @internal */
-const toolsVersion = "1.6";
+const toolsVersion = "1.9";
+
+/* tslint:enable:no-unused-variable */

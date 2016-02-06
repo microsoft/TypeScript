@@ -193,7 +193,7 @@ declare module schema {
 }
 declare module schema {
     class T {
-        createValidator9: <T>(data: T) => T;
+        readonly createValidator9: <T>(data: T) => T;
         createValidator10: <T>(data: T) => T;
     }
 }
