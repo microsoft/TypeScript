@@ -1,8 +1,8 @@
-//// [emitNonStrictModules_system.ts]
+//// [noImplicitUseStrict_system.ts]
 
 export var x = 0;
 
-//// [emitNonStrictModules_system.js]
+//// [noImplicitUseStrict_system.js]
 System.register([], function(exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     var x;

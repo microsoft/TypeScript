@@ -296,7 +296,7 @@ namespace ts {
             description: Diagnostics.Allow_javascript_files_to_be_compiled
         },
         {
-            name: "emitNonStrictModules",
+            name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         }

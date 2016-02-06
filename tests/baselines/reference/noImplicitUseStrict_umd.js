@@ -1,8 +1,8 @@
-//// [emitNonStrictModules_umd.ts]
+//// [noImplicitUseStrict_umd.ts]
 
 export var x = 0;
 
-//// [emitNonStrictModules_umd.js]
+//// [noImplicitUseStrict_umd.js]
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;

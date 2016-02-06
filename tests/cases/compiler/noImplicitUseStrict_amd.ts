@@ -1,4 +1,4 @@
 // @module: amd
-// @emitNonStrictModules: true
+// @noImplicitUseStrict: true
 
 export var x = 0;
