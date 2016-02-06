@@ -7383,6 +7383,10 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
             if (isFunctionLike(container)) {
+                const type = getContextuallyTypedThisType(container);
+                if (type) {
+                    return type;
+                }
                 const signature = getSignatureFromDeclaration(container);
                 if (signature.thisType) {
                     return signature.thisType;
@@ -7631,6 +7635,19 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
+            if ((isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+                isContextSensitive(func) &&
+                func.kind !== SyntaxKind.ArrowFunction) {
+                const contextualSignature = getContextualSignature(func);
+                if (contextualSignature) {
+                    return contextualSignature.thisType;
+                }
+            }
+
+            return undefined;
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
@@ -10396,12 +10413,6 @@ namespace ts {
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
-            if (context.thisType) {
-                if (signature.declaration.kind !== SyntaxKind.ArrowFunction) {
-                    // do not contextually type thisType for ArrowFunction. 
-                    signature.thisType = context.thisType;
-                }
-            }
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];

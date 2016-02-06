@@ -42,6 +42,17 @@
 ////function explicitLiteral(th/*14*/is: { n: number }): void {
 ////    console.log(th/*15*/is);
 ////}
+////
+//// interface ContextualInterface {
+////    m: number;
+////    method(this: this, n: number);
+//// }
+//// let o: ContextualInterface = {
+////    m: 12,
+////    method(n) {
+////        let x = this/*16*/.m;
+////    }
+//// }
 
 goTo.marker('1');
 verify.quickInfoIs('void');
@@ -74,3 +85,6 @@ goTo.marker('14');
 verify.quickInfoIs('(parameter) this: {\n    n: number;\n}');
 goTo.marker('15');
 verify.quickInfoIs('this: {\n    n: number;\n}');
+
+goTo.marker('16');
+verify.quickInfoIs('this: ContextualInterface');
