@@ -809,8 +809,9 @@ namespace Harness {
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
-        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        // TODO (yuisu): we should not use the lib.full.es6.d.ts. We will fix this when all the work for library modularization is in
+        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.full.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
@@ -1606,7 +1607,7 @@ namespace Harness {
     }
 
     export function isLibraryFile(filePath: string): boolean {
-        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.core.d.ts");
+        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.es5.d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
