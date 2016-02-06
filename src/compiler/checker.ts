@@ -5591,7 +5591,7 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                if (!(target.flags & TypeFlags.ObjectLiteralPatternWithComputedProperties) && someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
+                if (!(target.flags & TypeFlags.ObjectLiteralPatternWithComputedProperties) && maybeTypeOfKind(target, TypeFlags.ObjectType)) {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name)) {
                             if (reportErrors) {
@@ -8178,7 +8178,7 @@ namespace ts {
         }
 
         function isTypeAnyOrAllConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
-            return isTypeAny(type) || allConstituentTypesHaveKind(type, kind);
+            return isTypeAny(type) || isTypeOfKind(type, kind);
         }
 
         function isNumericLiteralName(name: string) {
@@ -9684,7 +9684,7 @@ namespace ts {
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                        if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
+                        if (isTypeOfKind(nameType, TypeFlags.ESSymbol)) {
                             return nameType;
                         }
                         else {
@@ -10337,8 +10337,8 @@ namespace ts {
                 const widenedType = getWidenedType(exprType);
 
                 // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike = someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
-                    someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
+                const bothAreStringLike = maybeTypeOfKind(targetType, TypeFlags.StringLike) &&
+                    maybeTypeOfKind(widenedType, TypeFlags.StringLike);
                 if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
@@ -10593,7 +10593,7 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType && someConstituentTypeHasKind(returnType, TypeFlags.Any | TypeFlags.Void)) {
+            if (returnType && maybeTypeOfKind(returnType, TypeFlags.Any | TypeFlags.Void)) {
                 return;
             }
 
@@ -10849,7 +10849,7 @@ namespace ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
-                    if (someConstituentTypeHasKind(operandType, TypeFlags.ESSymbol)) {
+                    if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
                     return numberType;
@@ -10883,14 +10883,14 @@ namespace ts {
 
         // Return true if type might be of the given kind. A union or intersection type might be of a given
         // kind if at least one constituent type is of the given kind.
-        function someConstituentTypeHasKind(type: Type, kind: TypeFlags): boolean {
+        function maybeTypeOfKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 const types = (<UnionOrIntersectionType>type).types;
                 for (const t of types) {
-                    if (someConstituentTypeHasKind(t, kind)) {
+                    if (maybeTypeOfKind(t, kind)) {
                         return true;
                     }
                 }
@@ -10901,14 +10901,14 @@ namespace ts {
         // Return true if type is of the given kind. A union type is of a given kind if all constituent types
         // are of the given kind. An intersection type is of a given kind if at least one constituent type is
         // of the given kind.
-        function allConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
+        function isTypeOfKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionOrIntersectionType>type).types;
                 for (const t of types) {
-                    if (!allConstituentTypesHaveKind(t, kind)) {
+                    if (!isTypeOfKind(t, kind)) {
                         return false;
                     }
                 }
@@ -10917,7 +10917,7 @@ namespace ts {
             if (type.flags & TypeFlags.Intersection) {
                 const types = (<UnionOrIntersectionType>type).types;
                 for (const t of types) {
-                    if (allConstituentTypesHaveKind(t, kind)) {
+                    if (isTypeOfKind(t, kind)) {
                         return true;
                     }
                 }
@@ -10939,7 +10939,7 @@ namespace ts {
             // and the right operand to be of type Any or a subtype of the 'Function' interface type.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
-            if (allConstituentTypesHaveKind(leftType, TypeFlags.Primitive)) {
+            if (isTypeOfKind(leftType, TypeFlags.Primitive)) {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
@@ -11154,13 +11154,13 @@ namespace ts {
                     if (rightType.flags & (TypeFlags.Undefined | TypeFlags.Null)) rightType = leftType;
 
                     let resultType: Type;
-                    if (allConstituentTypesHaveKind(leftType, TypeFlags.NumberLike) && allConstituentTypesHaveKind(rightType, TypeFlags.NumberLike)) {
+                    if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
                         // Operands of an enum type are treated as having the primitive type Number.
                         // If both operands are of the Number primitive type, the result is of the Number primitive type.
                         resultType = numberType;
                     }
                     else {
-                        if (allConstituentTypesHaveKind(leftType, TypeFlags.StringLike) || allConstituentTypesHaveKind(rightType, TypeFlags.StringLike)) {
+                        if (isTypeOfKind(leftType, TypeFlags.StringLike) || isTypeOfKind(rightType, TypeFlags.StringLike)) {
                             // If one or both operands are of the String primitive type, the result is of the String primitive type.
                             resultType = stringType;
                         }
@@ -11198,7 +11198,7 @@ namespace ts {
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
                     // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (someConstituentTypeHasKind(leftType, TypeFlags.StringLike) && someConstituentTypeHasKind(rightType, TypeFlags.StringLike)) {
+                    if (maybeTypeOfKind(leftType, TypeFlags.StringLike) && maybeTypeOfKind(rightType, TypeFlags.StringLike)) {
                         return booleanType;
                     }
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
@@ -11223,8 +11223,8 @@ namespace ts {
             // Return true if there was no error, false if there was an error.
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 const offendingSymbolOperand =
-                    someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? left :
-                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? right :
+                    maybeTypeOfKind(leftType, TypeFlags.ESSymbol) ? left :
+                        maybeTypeOfKind(rightType, TypeFlags.ESSymbol) ? right :
                             undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
@@ -13712,7 +13712,7 @@ namespace ts {
             let hasDuplicateDefaultClause = false;
 
             const expressionType = checkExpression(node.expression);
-            const expressionTypeIsStringLike = someConstituentTypeHasKind(expressionType, TypeFlags.StringLike);
+            const expressionTypeIsStringLike = maybeTypeOfKind(expressionType, TypeFlags.StringLike);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -13736,7 +13736,7 @@ namespace ts {
 
                     const expressionTypeIsAssignableToCaseType =
                         // Permit 'number[] | "foo"' to be asserted to 'string'.
-                        (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) ||
+                        (expressionTypeIsStringLike && maybeTypeOfKind(caseType, TypeFlags.StringLike)) ||
                         isTypeAssignableTo(expressionType, caseType);
 
                     if (!expressionTypeIsAssignableToCaseType) {
@@ -15942,22 +15942,22 @@ namespace ts {
             else if (type.flags & TypeFlags.Any) {
                 return TypeReferenceSerializationKind.ObjectType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.Void)) {
+            else if (isTypeOfKind(type, TypeFlags.Void)) {
                 return TypeReferenceSerializationKind.VoidType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.Boolean)) {
+            else if (isTypeOfKind(type, TypeFlags.Boolean)) {
                 return TypeReferenceSerializationKind.BooleanType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
+            else if (isTypeOfKind(type, TypeFlags.NumberLike)) {
                 return TypeReferenceSerializationKind.NumberLikeType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.StringLike)) {
+            else if (isTypeOfKind(type, TypeFlags.StringLike)) {
                 return TypeReferenceSerializationKind.StringLikeType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.Tuple)) {
+            else if (isTypeOfKind(type, TypeFlags.Tuple)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
-            else if (allConstituentTypesHaveKind(type, TypeFlags.ESSymbol)) {
+            else if (isTypeOfKind(type, TypeFlags.ESSymbol)) {
                 return TypeReferenceSerializationKind.ESSymbolType;
             }
             else if (isFunctionType(type)) {
