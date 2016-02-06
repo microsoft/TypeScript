@@ -2422,7 +2422,7 @@ namespace ts {
         traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
-        emitNonStrictModules?: boolean;
+        noImplicitUseStrict?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

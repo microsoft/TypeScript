@@ -1,5 +1,0 @@
-=== tests/cases/compiler/emitNonStrictModules_system.ts ===
-
-export var x = 0;
->x : Symbol(x, Decl(emitNonStrictModules_system.ts, 1, 10))
-

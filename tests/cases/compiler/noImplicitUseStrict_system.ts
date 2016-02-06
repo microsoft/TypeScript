@@ -1,4 +1,4 @@
 // @module: system
-// @emitNonStrictModules: true
+// @noImplicitUseStrict: true
 
 export var x = 0;
