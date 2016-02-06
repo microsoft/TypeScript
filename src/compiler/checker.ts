@@ -6931,7 +6931,6 @@ namespace ts {
             }
             const visited: FlowMarkerTarget[] = [];
 
-            let previousFlowIndex = Infinity;
             const narrowedType = getType(location, false);
             if (saveLocalType) {
                 if ((<Identifier>location).narrowingState === NarrowingState.Failed) {
@@ -6950,19 +6949,13 @@ namespace ts {
                 if (isIdentifier && after) {
                     const assignment = getAssignedTypeAtLocation(<Identifier>where);
                     if (assignment) {
-                        if (where.flowIndex > previousFlowIndex) {
-                            return initialType;
-                        }
-                        return narrowTypeByAssignment(assignment());
+                        return narrowTypeByAssignment(assignment);
                     }
                 }
-                const savePreviousFlowIndex = previousFlowIndex;
-                if (where.flowIndex < previousFlowIndex) previousFlowIndex = where.flowIndex;
                 let types: Type[] = [];
                 visited.push(where);
                 const fallback = getPreviousOccurencies(symbol, where, handleGuards);
                 visited.pop();
-                previousFlowIndex = savePreviousFlowIndex;
                 if (fallback) {
                     return initialType;
                 }
@@ -7224,26 +7217,26 @@ namespace ts {
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
                     if ((<VariableDeclaration>parent).initializer) {
-                        return () => getTypeOfExpression((<VariableDeclaration>parent).initializer);
+                        return getTypeOfExpression((<VariableDeclaration>parent).initializer);
                     }
                     else {
                         // This catches these constructs:
                         // - let x: string
                         // - for (let y in z) {}
                         // - for (let y of z) {}
-                        return () => initialType;
+                        return initialType;
                     }
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    return () => getTypeOfExpression((<BinaryExpression>parent).right);
+                    return getTypeOfExpression((<BinaryExpression>parent).right);
                 }
                 if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
                     // for (x in z) {}
-                    return () => globalStringType;
+                    return globalStringType;
                 }
                 if (parent.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>parent).initializer === node) {
                     // for (x of z) {}
-                    return () => checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
                 }
             }
             function narrowTypeByAssignment(type: Type) {
