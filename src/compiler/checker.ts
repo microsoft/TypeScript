@@ -2528,7 +2528,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
+                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, true);
                 if (!declaration.dotDotDotToken) {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const propName = "" + indexOf(pattern.elements, declaration);
@@ -2565,7 +2565,7 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
+                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression, true) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -6560,39 +6560,47 @@ namespace ts {
         function getPreviousOccurencies(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
-            const visitedGuards: { [id: number]: BranchFlow } = {};
+            const guards: BranchFlow[] = [];
 
-            worker(where, [], 1);
+            worker(where);
             return stop;
 
-            function worker(location: FlowMarkerTarget, guards: BranchFlow[], level: number) {
+            function worker(location: FlowMarkerTarget) {
                 if (stop) return;
                 let isGuard = false;
+                let nodeFlowIndex: number;
                 if ((<Node> location).kind !== undefined) {
-                    if (visited[location.id]) return;
-                    visited[location.id] = true;
+                    nodeFlowIndex = (<Node>location).flowIndex;
+                    if (visited[nodeFlowIndex]) return;
+
                     const otherSymbol = getSymbolAtLocation(<Identifier> location);
                     if (location !== where && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
                         stop = callback(<Identifier> location, guards);
                         return;
                     }
+                    visited[nodeFlowIndex] = true;
                 }
                 else {
-                    if (visitedGuards[location.id]) return;
+                    if (guards.indexOf(<BranchFlow> location) !== -1) return;
                     isGuard = true;
                     guards.push(<BranchFlow> location);
                 }
                 if (location.previous === undefined) {
                     // We cannot do analysis in a catch or finally block
                     stop = callback(undefined, guards);
+                    if (!isGuard) visited[nodeFlowIndex] = false;
                     return;
                 }
                 for (const item of location.previous) {
-                    worker(item, guards, level + 1);
+                    worker(item);
                 }
                 if (isGuard) {
                     guards.pop();
                 }
+                else {
+                    visited[nodeFlowIndex] = false;
+                }
+                return;
             }
         }
 
@@ -6607,21 +6615,31 @@ namespace ts {
 
             let saveLocalType = false;
             if (location.kind === SyntaxKind.Identifier) {
-                const locationSymbol = getSymbolOfNode(location);
+                const locationSymbol = getSymbolAtLocation(location);
                 if (locationSymbol && locationSymbol.id === symbol.id) {
-                    if ((<Identifier>location).localType) return (<Identifier>location).localType;
+                    if ((<Identifier>location).narrowingState === NarrowingState.Done) return (<Identifier>location).localType;
+                    if ((<Identifier>location).narrowingState === NarrowingState.Narrowing) {
+                        (<Identifier>location).narrowingState = NarrowingState.Failed;
+                        return (<Identifier>location).localType = initialType;
+                    }
                     saveLocalType = true;
+                    (<Identifier>location).narrowingState = NarrowingState.Narrowing;
                 }
             }
-
             if (!symbol.declarations) return initialType;
             for (const declaration of symbol.declarations) {
                 if (getSourceFile(declaration) !== getSourceFile(location)) return initialType;
             }
             const visited: FlowMarkerTarget[] = [];
 
+            let previousFlowIndex = Infinity;
             const narrowedType = getType(location, false);
             if (saveLocalType) {
+                if ((<Identifier>location).narrowingState === NarrowingState.Failed) {
+                    // During recursion, the narrowing of this node failed.
+                    return initialType;
+                }
+                (<Identifier>location).narrowingState = NarrowingState.Done;
                 (<Identifier>location).localType = narrowedType;
             }
             return narrowedType;
@@ -6629,17 +6647,23 @@ namespace ts {
             function getType(where: Node, after: boolean) {
                 if (where === undefined) return initialType;
                 if (visited.indexOf(where) !== -1) return undefined;
-
                 const isIdentifier = where.kind === SyntaxKind.Identifier;
                 if (isIdentifier && after) {
-                    const assignment = getAssignmentAtLocation(<Identifier>where);
-                    if (assignment) return narrowTypeByAssignment(assignment);
+                    const assignment = getAssignedTypeAtLocation(<Identifier>where);
+                    if (assignment) {
+                        if (where.flowIndex > previousFlowIndex) {
+                            return initialType;
+                        }
+                        return narrowTypeByAssignment(assignment());
+                    }
                 }
-
+                const savePreviousFlowIndex = previousFlowIndex;
+                if (where.flowIndex < previousFlowIndex) previousFlowIndex = where.flowIndex;
                 let types: Type[] = [];
                 visited.push(where);
                 const fallback = getPreviousOccurencies(symbol, where, handleGuards);
                 visited.pop();
+                previousFlowIndex = savePreviousFlowIndex;
                 if (fallback) {
                     return initialType;
                 }
@@ -6657,7 +6681,9 @@ namespace ts {
                         const { expression, trueBranch } = guards[i];
                         type = narrowType(type, expression, trueBranch);
                     }
-                    if (type === initialType) return true;
+                    if (type === initialType) {
+                        return true;
+                    }
                     types.push(type);
                     return false;
                 }
@@ -6895,19 +6921,35 @@ namespace ts {
                 }
                 return type;
             }
-            function getAssignmentAtLocation(node: Identifier) {
+            function getAssignedTypeAtLocation(node: Identifier) {
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
-                    return (<VariableDeclaration>parent).initializer;
+                    if ((<VariableDeclaration>parent).initializer) {
+                        return () => getTypeOfExpression((<VariableDeclaration>parent).initializer);
+                    }
+                    else {
+                        // This catches these constructs:
+                        // - let x: string
+                        // - for (let y in z) {}
+                        // - for (let y of z) {}
+                        return () => initialType;
+                    }
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    return (<BinaryExpression>parent).right;
+                    return () => getTypeOfExpression((<BinaryExpression>parent).right);
+                }
+                if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
+                    // for (x in z) {}
+                    return () => globalStringType;
+                }
+                if (parent.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>parent).initializer === node) {
+                    // for (x of z) {}
+                    return () => checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
                 }
             }
-            function narrowTypeByAssignment(expression: Expression) {
+            function narrowTypeByAssignment(type: Type) {
                 // Narrow union types only
                 if (!(initialType.flags & TypeFlags.Union)) return initialType;
-                const type = getTypeOfNode(expression);
                 const constituentTypes = (<UnionType> initialType).types;
                 const assignableTypes: Type[] = [];
                 for (const constituentType of constituentTypes) {
@@ -7664,7 +7706,7 @@ namespace ts {
             // So the fact that contextualMapper is passed is not important, because the operand of a spread
             // element is not contextually typed.
             const arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, true);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -10514,7 +10556,7 @@ namespace ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, true) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 const e = elements[i];
@@ -11191,6 +11233,7 @@ namespace ts {
                         }
                         else if (typePredicateNode.parameterName) {
                             let hasReportedError = false;
+                            const parameterName = typePredicate.parameterName;
                             for (var param of node.parameters) {
                                 if (hasReportedError) {
                                     break;
@@ -11201,11 +11244,11 @@ namespace ts {
                                     (function checkBindingPattern(pattern: BindingPattern) {
                                         for (const element of pattern.elements) {
                                             if (element.name.kind === SyntaxKind.Identifier &&
-                                                (<Identifier>element.name).text === typePredicate.parameterName) {
+                                                (<Identifier>element.name).text === parameterName) {
 
                                                 error(typePredicateNode.parameterName,
                                                     Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                    typePredicate.parameterName);
+                                                    parameterName);
                                                 hasReportedError = true;
                                                 break;
                                             }
@@ -11221,7 +11264,7 @@ namespace ts {
                             if (!hasReportedError) {
                                 error(typePredicateNode.parameterName,
                                     Diagnostics.Cannot_find_parameter_0,
-                                    typePredicate.parameterName);
+                                    parameterName);
                             }
                         }
                     }
@@ -12824,7 +12867,7 @@ namespace ts {
             }
             else {
                 const varExpr = <Expression>node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression);
+                const iteratedType = checkRightHandSideOfForOf(node.expression, true);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -12906,12 +12949,12 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, showError: boolean): Type {
             const expressionType = getTypeOfExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, showError);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, showError: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
@@ -12931,7 +12974,7 @@ namespace ts {
                 }
             }
 
-            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            if (showError) error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
             return unknownType;
         }
 
