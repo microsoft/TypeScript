@@ -11352,7 +11352,7 @@ namespace ts {
                     if (ok) {
                         let leftOriginalType = leftType;
                         if (left.kind === SyntaxKind.Identifier) {
-                            const symbol = getSymbolOfNode(left);
+                            const symbol = getSymbolAtLocation(left);
                             if (!symbol) {
                                 leftOriginalType = anyType;
                             } else {
