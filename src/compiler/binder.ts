@@ -21,6 +21,11 @@ namespace ts {
         reachability: Reachability;
         previous: FlowMarkerTarget[];
     }
+    interface Label {
+        node: Node;
+        continueFlow: Flow;
+        breakFlow: Flow;
+    }
 
     function or(state1: Flow, state2: Flow): Flow {
         let reachable = false;
@@ -152,9 +157,11 @@ namespace ts {
         // state used by reachability checks
         let hasExplicitReturn: boolean;
         let currentReachabilityState: Flow = defaultReachable;
-        let labelStack: [Flow, Node][];
+        let labelStack: Label[];
+        let lastImplicitLabel: [Label, Node];
         let labelIndexMap: Map<number>;
         let implicitLabels: number[];
+        let flowIndex: number;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -172,6 +179,7 @@ namespace ts {
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
             Symbol = objectAllocator.getSymbolConstructor();
+            flowIndex = 0;
 
             if (!file.locals) {
                 bind(file);
@@ -439,7 +447,7 @@ namespace ts {
             }
 
             let savedReachabilityState: Flow;
-            let savedLabelStack: [Flow, Node][];
+            let savedLabelStack: Label[];
             let savedLabels: Map<number>;
             let savedImplicitLabels: number[];
             let savedHasExplicitReturn: boolean;
@@ -570,62 +578,78 @@ namespace ts {
             bindBranchFlow(n, n.expression, true);
             bind(n.statement);
 
+            const postBodyState = currentReachabilityState;
+            bindIterationFlowMarkerEnd(n);
+            
             currentReachabilityState = postWhileState;
             bindBranchFlow(n, n.expression, false);
 
-            popImplicitLabel(postWhileLabel, currentReachabilityState);
-            bindIterationFlowMarkerEnd(n);
+            popImplicitLabel(postWhileLabel, currentReachabilityState, n);
         }
 
         function bindDoStatement(n: DoStatement): void {
             bindFlowMarker(n);
 
-            const preDoState = currentReachabilityState;
-
             const postDoLabel = pushImplicitLabel(n);
             bind(n.statement);
-            const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? defaultUnreachable : preDoState;
-            popImplicitLabel(postDoLabel, postDoState);
 
             // bind expressions (don't affect reachability)
-            bind(n.expression);
+            bind(n.expression, true);
+            bindFlowMarker(n.expression);
+
+            const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? defaultUnreachable : currentReachabilityState;
+
+            bindBranchFlow(n, n.expression, true);
             bindIterationFlowMarkerEnd(n);
+
+            currentReachabilityState = postDoState;
+            bindBranchFlow(n, n.expression, false);
+            popImplicitLabel(postDoLabel, currentReachabilityState, n.expression);
         }
 
         function bindForStatement(n: ForStatement): void {
             // bind expressions (don't affect reachability, do affect identifier flow)
             bind(n.initializer);
-            bindFlowMarker(n);
-            bind(n.condition);
-            bind(n.incrementor);
+            const postInitializer = currentReachabilityState;
+            const loopStartNode = n.condition || n.statement;
+
+            bind(n.condition, loopStartNode === n.condition);
+            if (loopStartNode === n.condition) bindFlowMarker(loopStartNode);
 
             const preForState = currentReachabilityState;
             const postForLabel = pushImplicitLabel(n);
 
-            bind(n.statement);
+            if (n.condition) bindBranchFlow(n, n.condition, true);
+            bind(n.statement, loopStartNode === n.statement);
+            if (loopStartNode === n.statement) bindFlowMarker(loopStartNode);
+
+            if (n.incrementor) {
+                bind(n.incrementor, true);
+                bindFlowMarker(n.incrementor);
+            }
+            bindIterationFlowMarkerEnd(loopStartNode);
 
             // for statement is considered infinite when it condition is either omitted or is true keyword
             // - for(..;;..)
             // - for(..;true;..)
             const isInfiniteLoop = (!n.condition || n.condition.kind === SyntaxKind.TrueKeyword);
-            const postForState = isInfiniteLoop ? defaultUnreachable : preForState;
-            popImplicitLabel(postForLabel, postForState);
-            bindIterationFlowMarkerEnd(n);
+            currentReachabilityState = isInfiniteLoop ? defaultUnreachable : preForState;
+            if (n.condition) bindBranchFlow(n, n.condition, false);
+            popImplicitLabel(postForLabel, currentReachabilityState, n.incrementor || loopStartNode);
         }
 
         function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): void {
             // bind expressions (don't affect reachability, do affect identfier flow)
-            bind(n.initializer);
             bind(n.expression);
-
-            bindFlowMarker(n);
+            bind(n.initializer, true);
+            bindFlowMarker(n.initializer);
 
             const preStatementState = currentReachabilityState;
             const postStatementLabel = pushImplicitLabel(n);
 
             bind(n.statement);
-            popImplicitLabel(postStatementLabel, preStatementState);
-            bindIterationFlowMarkerEnd(n);
+            bindIterationFlowMarkerEnd(n.initializer);
+            popImplicitLabel(postStatementLabel, preStatementState, n.initializer);
         }
 
         function bindIfStatement(n: IfStatement): void {
@@ -1196,13 +1220,17 @@ namespace ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node): void {
+        function bind(node: Node, flowMarker?: boolean): void {
             if (!node) {
                 return;
             }
 
             node.parent = parent;
             node.previous = currentReachabilityState.previous;
+            node.flowIndex = flowIndex++;
+            if (flowMarker) {
+                bindFlowMarker(node);
+            }
 
             const savedInStrictMode = inStrictMode;
             if (!savedInStrictMode) {
@@ -1581,9 +1609,14 @@ namespace ts {
                 previous: [node]
             };
         }
-        function bindIterationFlowMarkerEnd(node: IterationStatement) {
-            if (node.previous) {
-                node.previous = [...node.previous, ...currentReachabilityState.previous];
+        function bindIterationFlowMarkerEnd(node: Node) {
+            if (node.previous !== undefined && currentReachabilityState.reachability === Reachability.Reachable) {
+                if (currentReachabilityState.previous === undefined) {
+                    node.previous = undefined;
+                }
+                else {
+                    node.previous = [...node.previous, ...currentReachabilityState.previous];
+                }
             }
         }
         function bindBranchFlow(node: BranchFlowNode, expression: Expression, trueBranch: boolean) {
@@ -1602,20 +1635,23 @@ namespace ts {
 
         // reachability checks
 
-        function pushNamedLabel(name: Identifier, node: Node): boolean {
+        function pushLabel(node: Node) {
+            return labelStack.push({ continueFlow: defaultUnintialized, breakFlow: defaultUnintialized, node }) - 1;
+        }
+        function pushNamedLabel(name: Identifier, node: LabeledStatement): boolean {
             initializeReachabilityStateIfNecessary();
 
             if (hasProperty(labelIndexMap, name.text)) {
                 return false;
             }
-            labelIndexMap[name.text] = labelStack.push([defaultUnintialized, node]) - 1;
+            labelIndexMap[name.text] = pushLabel(node);
             return true;
         }
 
         function pushImplicitLabel(node: Node): number {
             initializeReachabilityStateIfNecessary();
 
-            const index = labelStack.push([defaultUnintialized, node]) - 1;
+            const index = pushLabel(node);
             implicitLabels.push(index);
             return index;
         }
@@ -1627,11 +1663,21 @@ namespace ts {
 
             labelIndexMap[label.text] = undefined;
 
-            const [state] = labelStack.pop();
-            setCurrentStateAtLabel(state, outerState, label);
+            const labelState = labelStack.pop();
+            if (!options.allowUnusedLabels
+                && labelState.breakFlow.reachability === Reachability.Unintialized
+                && labelState.continueFlow.reachability === Reachability.Unintialized) {
+
+                file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
+            }
+            let continueToNode: Node = undefined;
+            if (lastImplicitLabel !== undefined && lastImplicitLabel[0].node === (<LabeledStatement>labelState.node).statement) {
+                continueToNode = lastImplicitLabel[1];
+            }
+            setCurrentStateAtLabel(labelState, outerState, continueToNode);
         }
 
-        function popImplicitLabel(implicitLabelIndex: number, outerState: Flow): void {
+        function popImplicitLabel(implicitLabelIndex: number, outerState: Flow, continueToNode?: Node): void {
             if (labelStack.length !== implicitLabelIndex + 1) {
                 Debug.assert(false, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
             }
@@ -1642,19 +1688,19 @@ namespace ts {
                 Debug.assert(false, `i: ${i}, index: ${implicitLabelIndex}`);
             }
 
-            const [state] = labelStack.pop();
-            setCurrentStateAtLabel(state, outerState, /*name*/ undefined);
+            const labelState = labelStack.pop();
+            setCurrentStateAtLabel(labelState, outerState, continueToNode);
+            lastImplicitLabel = [labelState, continueToNode];
         }
 
-        function setCurrentStateAtLabel(innerMergedState: Flow, outerState: Flow, label: Identifier): void {
-            if (innerMergedState.reachability === Reachability.Unintialized) {
-                if (label && !options.allowUnusedLabels) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
+        function setCurrentStateAtLabel(label: Label, outerState: Flow, continueToNode?: Node) {
+            currentReachabilityState = or(label.breakFlow, outerState);
+            if (label.continueFlow.reachability === Reachability.Reachable && continueToNode !== undefined && continueToNode.previous !== undefined) {
+                if (label.continueFlow.previous === undefined) {
+                    continueToNode.previous = undefined;
+                } else {
+                    continueToNode.previous = [...continueToNode.previous, ...label.continueFlow.previous];
                 }
-                currentReachabilityState = outerState;
-            }
-            else {
-                currentReachabilityState = or(innerMergedState, outerState);
             }
         }
 
@@ -1667,12 +1713,13 @@ namespace ts {
                 // break/continue used outside of loops
                 return false;
             }
-            const [stateAtLabel, node] = labelStack[index];
-            if (isContinue && node.previous !== undefined) {
+            const state = labelStack[index];
+            if (isContinue) {
                 // node is iteration
-                node.previous = [...node.previous, ...currentReachabilityState.previous];
+                state.continueFlow = or(state.continueFlow, currentReachabilityState);
+            } else {
+                state.breakFlow = or(state.breakFlow, currentReachabilityState);
             }
-            labelStack[index] = [stateAtLabel.reachability === Reachability.Unintialized ? outerState : or(stateAtLabel, outerState), node];
             return true;
         }
 
@@ -1733,7 +1780,7 @@ namespace ts {
             if (labelIndexMap) {
                 return;
             }
-            currentReachabilityState = defaultReachable;
+            currentReachabilityState = currentReachabilityState || defaultReachable;
             labelIndexMap = {};
             labelStack = [];
             implicitLabels = [];
