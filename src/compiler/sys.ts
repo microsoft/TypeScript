@@ -39,6 +39,15 @@ namespace ts {
         referenceCount: number;
     }
 
+    interface OutputFingerprint {
+        hash: string;
+        mtime: Date;
+    }
+
+    interface OutputFingerprintMap {
+        [fileName: string]: OutputFingerprint;
+    }
+
     declare var require: any;
     declare var module: any;
     declare var process: any;
@@ -226,6 +235,7 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _crypto = require("crypto");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -439,10 +449,24 @@ namespace ts {
                 return buffer.toString("utf8");
             }
 
+            const outputFingerprintMap: OutputFingerprintMap = {};
+
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
                     data = "\uFEFF" + data;
+                }
+
+                const md5 = getMd5(data);
+                const mtimeBefore = _fs.existsSync(fileName) && _fs.statSync(fileName).mtime;
+
+                if (mtimeBefore && outputFingerprintMap.hasOwnProperty(fileName)) {
+                    const fingerprint = outputFingerprintMap[fileName];
+
+                    // If output has not been changed, and the file has no external modification
+                    if (fingerprint.hash === md5 && fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                        return;
+                    }
                 }
 
                 let fd: number;
@@ -456,6 +480,19 @@ namespace ts {
                         _fs.closeSync(fd);
                     }
                 }
+
+                const mtimeAfter = _fs.statSync(fileName).mtime;
+
+                outputFingerprintMap[fileName] = {
+                    hash: md5,
+                    mtime: mtimeAfter
+                };
+            }
+
+            function getMd5(data: string): string {
+                const hash = _crypto.createHash("md5");
+                hash.update(data);
+                return hash.digest("hex");
             }
 
             function getCanonicalPath(path: string): string {
