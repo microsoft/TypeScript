@@ -10337,9 +10337,8 @@ namespace ts {
                 const widenedType = getWidenedType(exprType);
 
                 // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike =
-                    someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
-                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
+                const bothAreStringLike = someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
+                    someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
                 if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
@@ -10594,7 +10593,7 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType === voidType || isTypeAny(returnType) || (returnType && (returnType.flags & TypeFlags.Union) && someConstituentTypeHasKind(returnType, TypeFlags.Any | TypeFlags.Void))) {
+            if (returnType && someConstituentTypeHasKind(returnType, TypeFlags.Any | TypeFlags.Void)) {
                 return;
             }
 
@@ -10882,37 +10881,46 @@ namespace ts {
             return numberType;
         }
 
-        // Just like isTypeOfKind below, except that it returns true if *any* constituent
-        // has this kind.
+        // Return true if type might be of the given kind. A union or intersection type might be of a given
+        // kind if at least one constituent type is of the given kind.
         function someConstituentTypeHasKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 const types = (<UnionOrIntersectionType>type).types;
-                for (const current of types) {
-                    if (current.flags & kind) {
+                for (const t of types) {
+                    if (someConstituentTypeHasKind(t, kind)) {
                         return true;
                     }
                 }
-                return false;
             }
             return false;
         }
 
-        // Return true if type has the given flags, or is a union or intersection type composed of types that all have those flags.
+        // Return true if type is of the given kind. A union type is of a given kind if all constituent types
+        // are of the given kind. An intersection type is of a given kind if at least one constituent type is
+        // of the given kind.
         function allConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
             if (type.flags & kind) {
                 return true;
             }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
+            if (type.flags & TypeFlags.Union) {
                 const types = (<UnionOrIntersectionType>type).types;
-                for (const current of types) {
-                    if (!(current.flags & kind)) {
+                for (const t of types) {
+                    if (!allConstituentTypesHaveKind(t, kind)) {
                         return false;
                     }
                 }
                 return true;
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                const types = (<UnionOrIntersectionType>type).types;
+                for (const t of types) {
+                    if (allConstituentTypesHaveKind(t, kind)) {
+                        return true;
+                    }
+                }
             }
             return false;
         }
