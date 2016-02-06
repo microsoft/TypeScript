@@ -823,15 +823,6 @@ namespace ts {
             const isAnd = node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken;
             const isOr = node.operatorToken.kind === SyntaxKind.BarBarToken;
 
-            if (isInJavaScriptFile(node)) {
-                if (isExportsPropertyAssignment(node)) {
-                    bindExportsPropertyAssignment(<BinaryExpression>node);
-                }
-                else if (isModuleExportsAssignment(node)) {
-                    bindModuleExportsAssignment(<BinaryExpression>node);
-                }
-            }
-
             if (isAnd || isOr) {
                 bind(node.left);
                 const preRightState = currentReachabilityState;

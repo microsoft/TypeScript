@@ -6927,7 +6927,7 @@ namespace ts {
             }
             if (!symbol.declarations) return initialType;
             for (const declaration of symbol.declarations) {
-                if (getSourceFile(declaration) !== getSourceFile(location)) return initialType;
+                if (getSourceFileOfNode(declaration) !== getSourceFileOfNode(location)) return initialType;
             }
             const visited: FlowMarkerTarget[] = [];
 
