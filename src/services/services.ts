@@ -1713,7 +1713,7 @@ namespace ts {
         // Always default to "ScriptTarget.ES5" for the language service
         return {
             target: ScriptTarget.ES5,
-            module: ModuleKind.None,
+            module: ModuleKind.CommonJS,
             jsx: JsxEmit.Preserve
         };
     }
