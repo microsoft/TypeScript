@@ -2040,8 +2040,22 @@ namespace ts {
         }
 
         function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
-            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
-                sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+            // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
+            // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
+            // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
+            let extension = ".js";
+            if (options.jsx === JsxEmit.Preserve) {
+                if (isSourceFileJavaScript(sourceFile)) {
+                    if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
+                        extension = ".jsx";
+                    }
+                }
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    // TypeScript source file preserving JSX syntax
+                    extension = ".jsx";
+                }
+            }
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const emitFileNames: EmitFileNames = {
                 jsFilePath,
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
