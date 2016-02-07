@@ -525,7 +525,21 @@ namespace ts {
             }
             else {
                 const filesSeen: Map<boolean> = {};
-                const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+
+                let exclude: string[] = [];
+                if(json["exclude"] instanceof Array){
+                    exclude = json["exclude"];
+                }
+                else {
+                    // by default exclude node_modules, and any specificied output directory
+                    exclude = ["./node_modules"]
+                    let outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                    if(outDir) {
+                        exclude.push(outDir);
+                    }
+                }
+                exclude = map(exclude, normalizeSlashes);
+
                 const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
