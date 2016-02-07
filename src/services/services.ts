@@ -4639,7 +4639,13 @@ namespace ts {
             // to jump to the implementation directly.
             if (symbol.flags & SymbolFlags.Alias) {
                 const declaration = symbol.declarations[0];
-                if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
+
+                // We want go to the original declaration if the aliased symbol was declared in the location's parent node.
+                // Except for cases when the aliased symbol is originating from a named import.
+                if (node.kind === SyntaxKind.Identifier &&
+                    (node.parent === declaration ||
+                    (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
+
                     symbol = typeChecker.getAliasedSymbol(symbol);
                 }
             }
