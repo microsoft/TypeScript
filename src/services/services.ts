@@ -4642,7 +4642,7 @@ namespace ts {
 
                 // Go to the original declaration for cases:
                 //
-                //   (1) when the aliased symbol was declared in location(parent).
+                //   (1) when the aliased symbol was declared in the location(parent).
                 //   (2) when the aliased symbol is originating from a named import.
                 //
                 if (node.kind === SyntaxKind.Identifier &&
