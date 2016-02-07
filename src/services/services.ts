@@ -4640,8 +4640,11 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Alias) {
                 const declaration = symbol.declarations[0];
 
-                // We want go to the original declaration if the aliased symbol was declared in the location's parent node.
-                // Except for cases when the aliased symbol is originating from a named import.
+                // Go to the original declaration for cases:
+                //
+                //   (1) when the aliased symbol was declared in location(parent).
+                //   (2) when the aliased symbol is originating from a named import.
+                //
                 if (node.kind === SyntaxKind.Identifier &&
                     (node.parent === declaration ||
                     (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
