@@ -446,7 +446,6 @@ namespace ts {
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         previous?: FlowMarkerTarget[];                  // Previous occurencies of flowmarkers (initialized by binding)
-        flowIndex?: number;                             // Index in which this item was visited in flow analysis in binder.
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)

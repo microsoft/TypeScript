@@ -6867,17 +6867,17 @@ namespace ts {
             function worker(location: FlowMarkerTarget) {
                 if (stop) return;
                 let isGuard = false;
-                let nodeFlowIndex: number;
+                let nodeId: number;
                 if ((<Node> location).kind !== undefined) {
-                    nodeFlowIndex = (<Node>location).flowIndex;
-                    if (visited[nodeFlowIndex]) return;
+                    nodeId = getNodeId(<Node>location);
+                    if (visited[nodeId]) return;
 
                     const otherSymbol = getSymbolAtLocation(<Identifier> location);
                     if (location !== where && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
                         stop = callback(<Identifier> location, guards);
                         return;
                     }
-                    visited[nodeFlowIndex] = true;
+                    visited[nodeId] = true;
                 }
                 else {
                     if (guards.indexOf(<BranchFlow> location) !== -1) return;
@@ -6887,7 +6887,7 @@ namespace ts {
                 if (location.previous === undefined) {
                     // We cannot do analysis in a catch or finally block
                     stop = callback(undefined, guards);
-                    if (!isGuard) visited[nodeFlowIndex] = false;
+                    if (!isGuard) visited[nodeId] = false;
                     return;
                 }
                 for (const item of location.previous) {
@@ -6897,7 +6897,7 @@ namespace ts {
                     guards.pop();
                 }
                 else {
-                    visited[nodeFlowIndex] = false;
+                    visited[nodeId] = false;
                 }
                 return;
             }

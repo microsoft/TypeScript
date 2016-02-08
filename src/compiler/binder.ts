@@ -161,7 +161,6 @@ namespace ts {
         let lastImplicitLabel: [Label, Node];
         let labelIndexMap: Map<number>;
         let implicitLabels: number[];
-        let flowIndex: number;
 
         // state used for emit helpers
         let hasClassExtends: boolean;
@@ -186,7 +185,6 @@ namespace ts {
             classifiableNames = {};
 
             Symbol = objectAllocator.getSymbolConstructor();
-            flowIndex = 0;
 
             if (!file.locals) {
                 bind(file);
@@ -1283,7 +1281,6 @@ namespace ts {
 
             node.parent = parent;
             node.previous = currentReachabilityState.previous;
-            node.flowIndex = flowIndex++;
             if (flowMarker) {
                 bindFlowMarker(node);
             }
