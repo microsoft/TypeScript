@@ -6852,10 +6852,6 @@ namespace ts {
             }
         }
 
-        interface PreviousOccurency {
-            node: Identifier;
-            guards: BranchFlow[];
-        }
         function getPreviousOccurencies(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
