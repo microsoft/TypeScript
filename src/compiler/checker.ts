@@ -5305,7 +5305,9 @@ namespace ts {
                     if (!related) {
                         related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false);
                         if (!related) {
-                            errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
+                            if (reportErrors) {
+                                errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
+                            }
                             return Ternary.False;
                         }
                     }
@@ -9511,7 +9513,13 @@ namespace ts {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
-                if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
+                if (thisArgumentType.flags & TypeFlags.UnionOrIntersection) {
+                    const u = <UnionType>thisArgumentType;
+                    if (!forEach(u.types, t => checkTypeRelatedTo(t, signature.thisType, relation, errorNode, headMessage))) {
+                        return false;
+                    }
+                }
+                else if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
             }

@@ -1,5 +1,8 @@
 //// [thisTypeInFunctions.ts]
 // body checking
+class B {
+    n: number;
+}
 class C {
     n: number;
     explicitThis(this: this, m: number): number {
@@ -19,9 +22,6 @@ class C {
     }
 }
 class D extends C { }
-class B {
-    n: number;
-}
 interface I {
     a: number;
     explicitVoid1(this: void): number;
@@ -185,6 +185,11 @@ d2.implicit = d1.explicit // ok, 'y' in { x, y } (c assignable to f)
 b1.implicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f) 
 b1.explicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f)
 
+// union assignability
+
+let b1b2: Base1 | Base2;
+b1b2.implicit();
+
 ////// use this-type for construction with new ////
 function InterfaceThis(this: I) {
     this.a = 12;
@@ -216,6 +221,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var _this = this;
 // body checking
+var B = (function () {
+    function B() {
+    }
+    return B;
+}());
 var C = (function () {
     function C() {
     }
@@ -243,11 +253,6 @@ var D = (function (_super) {
     }
     return D;
 }(C));
-var B = (function () {
-    function B() {
-    }
-    return B;
-}());
 function explicitStructural(x) {
     return x + this.y;
 }
@@ -390,6 +395,9 @@ d1.implicit = b2.implicit; // ok, 'y' in D: { x, y } (d assignable e)
 d2.implicit = d1.explicit; // ok, 'y' in { x, y } (c assignable to f)
 b1.implicit = d2.implicit; // ok, 'x' and 'y' not in C: { x } (c assignable to f) 
 b1.explicit = d2.implicit; // ok, 'x' and 'y' not in C: { x } (c assignable to f)
+// union assignability
+var b1b2;
+b1b2.implicit();
 ////// use this-type for construction with new ////
 function InterfaceThis() {
     this.a = 12;

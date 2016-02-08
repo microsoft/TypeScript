@@ -1,5 +1,11 @@
 === tests/cases/conformance/types/thisType/thisTypeInFunctions.ts ===
 // body checking
+class B {
+>B : B
+
+    n: number;
+>n : number
+}
 class C {
 >C : C
 
@@ -70,12 +76,6 @@ class D extends C { }
 >D : D
 >C : C
 
-class B {
->B : B
-
-    n: number;
->n : number
-}
 interface I {
 >I : I
 
@@ -951,6 +951,19 @@ b1.explicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f)
 >d2.implicit : (this: Derived2) => number
 >d2 : Derived2
 >implicit : (this: Derived2) => number
+
+// union assignability
+
+let b1b2: Base1 | Base2;
+>b1b2 : Base1 | Base2
+>Base1 : Base1
+>Base2 : Base2
+
+b1b2.implicit();
+>b1b2.implicit() : number
+>b1b2.implicit : ((this: Base1) => number) | ((this: Base2) => number)
+>b1b2 : Base1 | Base2
+>implicit : ((this: Base1) => number) | ((this: Base2) => number)
 
 ////// use this-type for construction with new ////
 function InterfaceThis(this: I) {
