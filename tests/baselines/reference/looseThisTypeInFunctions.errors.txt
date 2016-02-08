@@ -1,4 +1,4 @@
-tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(21,1): error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(m: number) => number'.
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(21,1): error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
   Types of parameters 'this' and 'this' are incompatible.
     Type 'void' is not assignable to type 'C'.
 tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(32,5): error TS1005: ',' expected.
@@ -30,7 +30,7 @@ tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(46,19): error
     let c = new C();
     c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(m: number) => number'.
+!!! error TS2322: Type '(this: C, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
 !!! error TS2322:   Types of parameters 'this' and 'this' are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type 'C'.
     let o = { 

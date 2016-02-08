@@ -2203,15 +2203,14 @@ namespace ts {
 
             function buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
-                const useThisType = thisType && thisType.symbol;
-                if (useThisType) {
+                if (thisType) {
                     writeKeyword(writer, SyntaxKind.ThisKeyword);
                     writePunctuation(writer, SyntaxKind.ColonToken);
                     writeSpace(writer);
                     buildTypeDisplay(thisType, writer, enclosingDeclaration, flags, symbolStack);
                 }
                 for (let i = 0; i < parameters.length; i++) {
-                    if (i > 0 || useThisType) {
+                    if (i > 0 || thisType) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
@@ -2690,7 +2689,9 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                const type = declaration.symbol.name === "this"
+                    ? getContextuallyTypedThisType(func)
+                    : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
                     return type;
                 }

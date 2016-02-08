@@ -43,16 +43,20 @@
 ////    console.log(th/*15*/is);
 ////}
 ////
-//// interface ContextualInterface {
+////interface ContextualInterface {
 ////    m: number;
 ////    method(this: this, n: number);
-//// }
-//// let o: ContextualInterface = {
+////}
+////let o: ContextualInterface = {
 ////    m: 12,
 ////    method(n) {
 ////        let x = this/*16*/.m;
 ////    }
-//// }
+////}
+////interface ContextualInterface2 {
+////    (this: void, n: number): void;
+////}
+////let contextualInterface2: ContextualInterface2 = function (th/*17*/is, n) { }
 
 goTo.marker('1');
 verify.quickInfoIs('void');
@@ -88,3 +92,5 @@ verify.quickInfoIs('this: {\n    n: number;\n}');
 
 goTo.marker('16');
 verify.quickInfoIs('this: ContextualInterface');
+goTo.marker('17');
+verify.quickInfoIs('(parameter) this: void');
