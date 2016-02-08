@@ -299,6 +299,11 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "noCustomAsyncPromise",
+            type: "boolean",
+            experimental: true
         }
     ];
 

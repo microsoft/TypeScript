@@ -50,7 +50,7 @@ let x = function () {
 };
 // async function with which promised type is void - return can be omitted
 function f2() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, Promise, function* () {
     });
 }
 function f3(x) {
@@ -60,7 +60,7 @@ function f3(x) {
     });
 }
 function f4() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, Promise, function* () {
     });
 }
 function voidFunc() {

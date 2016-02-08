@@ -7,8 +7,8 @@ var bar = async (): Promise<void> => {
 }
 
 //// [asyncArrowFunction7_es6.js]
-var bar = () => __awaiter(this, void 0, void 0, function* () {
+var bar = () => __awaiter(this, void 0, Promise, function* () {
     // 'await' here is an identifier, and not an await expression.
-    var foo = (a = yield ) => __awaiter(this, void 0, void 0, function* () {
+    var foo = (a = yield ) => __awaiter(this, void 0, Promise, function* () {
     });
 });
