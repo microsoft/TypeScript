@@ -1,20 +1,21 @@
 /// <reference path="core.ts"/>
 /// <reference path="utilities.ts"/>
 
+/* @internal */
 namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        if (kind === SyntaxKind.SourceFile) {
-            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
-        }
-        else {
-            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
-        }
+    function createNode(kind: SyntaxKind, location?: TextRange): Node {
+        const ConstructorForKind = kind === SyntaxKind.SourceFile
+            ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
+            : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
+
+        return location
+            ? new ConstructorForKind(kind, location.pos, location.end)
+            : new ConstructorForKind(kind, /*pos*/ -1, /*end*/ -1);
     }
 
-    /* @internal */
     export function createNodeArray<T extends Node>(elements?: T[], pos?: number, end?: number): NodeArray<T> {
         const array = <NodeArray<T>>(elements || []);
         array.pos = pos;
@@ -23,7 +24,6 @@ namespace ts {
         return array;
     }
 
-    /* @internal */
     export function createModifiersArray(elements?: Modifier[], pos?: number, end?: number): ModifiersArray {
         const array = <ModifiersArray>(elements || []);
         array.pos = pos;
@@ -33,19 +33,16 @@ namespace ts {
         return array;
     }
 
-    /* @internal */
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        const node = <SynthesizedNode>createNode(kind, /*pos*/ -1, /*end*/ -1);
+        const node = <SynthesizedNode>createNode(kind, /*location*/ undefined);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
 
-    /* @internal */
     export function createSynthesizedNodeArray<T extends Node>(elements?: T[]): NodeArray<T> {
         return createNodeArray(elements, /*pos*/ -1, /*end*/ -1);
     }
 
-    /* @internal */
     export function createSynthesizedModifiersArray(elements?: Modifier[]): ModifiersArray {
         return createModifiersArray(elements, /*pos*/ -1, /*end*/ -1);
     }
@@ -61,14 +58,11 @@ namespace ts {
      * @param parent The parent for the new node.
      * @param original An optional pointer to the original source tree node.
      */
-    /* @internal */
     export function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags, parent?: Node, original?: Node): T {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = location !== undefined
-            ? <T>createNode(node.kind, location.pos, location.end)
-            : <T>createSynthesizedNode(node.kind);
+        const clone = <T>createNode(node.kind, location);
 
         for (const key in node) {
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
@@ -93,46 +87,39 @@ namespace ts {
         return clone;
     }
 
-    /* @internal */
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
         const node = <NodeArrayNode<T>>createSynthesizedNode(SyntaxKind.NodeArrayNode);
         node.nodes = createNodeArray(elements);
         return node;
     }
 
-    /* @internal */
     export function createReturn(expression?: Expression): ReturnStatement {
         const node = <ReturnStatement>createSynthesizedNode(SyntaxKind.ReturnStatement);
         node.expression = expression;
         return node;
     }
 
-    /* @internal */
     export function createStatement(expression: Expression): ExpressionStatement {
         const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
         node.expression = expression;
         return node;
     }
 
-    /* @internal */
     export function createVariableStatement(declarationList: VariableDeclarationList): VariableStatement {
         const node = <VariableStatement>createSynthesizedNode(SyntaxKind.VariableStatement);
         node.declarationList = declarationList;
         return node;
     }
 
-    /* @internal */
     export function createVariableDeclarationList(declarations: VariableDeclaration[]): VariableDeclarationList {
         const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
         node.declarations = createNodeArray(declarations);
         return node;
     }
 
-    /* @internal */
     export function createBlock(statements: Statement[]): Block {
         const block = <Block>createSynthesizedNode(SyntaxKind.Block);
         block.statements = createNodeArray(statements);
         return block;
     }
-
 }
