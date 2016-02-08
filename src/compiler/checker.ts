@@ -6852,7 +6852,7 @@ namespace ts {
             }
         }
 
-        function getPreviousOccurencies(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
+        function getPreviousOccurences(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
             const guards: BranchFlow[] = [];
@@ -6950,7 +6950,7 @@ namespace ts {
                 }
                 let types: Type[] = [];
                 visited.push(where);
-                const fallback = getPreviousOccurencies(symbol, where, handleGuards);
+                const fallback = getPreviousOccurences(symbol, where, handleGuards);
                 visited.pop();
                 if (fallback) {
                     return initialType;
