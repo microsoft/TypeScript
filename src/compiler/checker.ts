@@ -7306,10 +7306,6 @@ namespace ts {
             }
         }
 
-        function isSuperCallExpression(n: Node): boolean {
-            return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
-        }
-
         function findFirstSuperCall(n: Node): Node {
             if (isSuperCallExpression(n)) {
                 return n;
@@ -11885,14 +11881,14 @@ namespace ts {
             }
 
             // TS 1.0 spec (April 2014): 8.3.2
-            // Constructors of classes with no extends clause and constructors of classes that extends null may not contain super calls,
-            // whereas constructors of derived classes must contain at least one super call somewhere in their function body.
+            // Constructors of classes with no extends clause may not contain super calls, whereas
+            // constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
-                const isClassExtendNull = classDeclarationExtendsNull(containingClassDecl);
+                const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
 
                 if (getSuperCallInConstructor(node)) {
-                    if (isClassExtendNull) {
+                    if (classExtendsNull) {
                         error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
@@ -11925,7 +11921,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (!isClassExtendNull) {
+                else if (!classExtendsNull) {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
