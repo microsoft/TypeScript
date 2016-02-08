@@ -678,7 +678,6 @@ namespace ts {
 
             if (n.condition) bindBranchFlow(n, n.condition, true);
             bind(n.statement, loopStartNode === n.statement);
-            if (loopStartNode === n.statement) bindFlowMarker(loopStartNode);
 
             if (n.incrementor) {
                 bind(n.incrementor, true);
