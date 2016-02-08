@@ -2068,7 +2068,8 @@ namespace ts {
         CapturedBlockScopedBinding  = 0x00020000,        // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop    = 0x00040000,        // Block-scoped binding with declaration nested inside iteration statement
         ClassWithBodyScopedClassBinding = 0x0080000,     // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding      = 0x00100000,        // Binding to a decorated class inside of the class's body.
+        BodyScopedClassBinding      = 0x00100000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter       = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
     /* @internal */
@@ -2434,6 +2435,7 @@ namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        noImplicitUseStrict?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
