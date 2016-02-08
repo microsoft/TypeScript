@@ -6,17 +6,14 @@ namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        if (kind === SyntaxKind.SourceFile) {
-            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
-        }
-        else {
-            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
-        }
-    }
+    function createNode(kind: SyntaxKind, location?: TextRange): Node {
+        const ConstructorForKind = kind === SyntaxKind.SourceFile
+            ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
+            : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
 
-    function allocateNode(kind: SyntaxKind, location?: TextRange) {
-        return location ? createNode(kind, location.pos, location.end) : createSynthesizedNode(kind);
+        return location
+            ? new ConstructorForKind(kind, location.pos, location.end)
+            : new ConstructorForKind(kind, /*pos*/ -1, /*end*/ -1);
     }
 
     export function createNodeArray<T extends Node>(elements?: T[], pos?: number, end?: number): NodeArray<T> {
@@ -37,7 +34,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        const node = <SynthesizedNode>createNode(kind, /*pos*/ -1, /*end*/ -1);
+        const node = <SynthesizedNode>createNode(kind, /*location*/ undefined);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -65,9 +62,7 @@ namespace ts {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = location !== undefined
-            ? <T>createNode(node.kind, location.pos, location.end)
-            : <T>createSynthesizedNode(node.kind);
+        const clone = <T>createNode(node.kind, location);
 
         for (const key in node) {
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
@@ -127,22 +122,21 @@ namespace ts {
         block.statements = createNodeArray(statements);
         return block;
     }
-
     export function createVariableDeclaration(name: BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
-        const node = <VariableDeclaration>allocateNode(SyntaxKind.VariableDeclaration, location);
+        const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
         node.name = name;
         node.initializer = initializer;
         return node;
     }
 
     export function createIdentifier(text: string): Identifier {
-        const node = <Identifier>allocateNode(SyntaxKind.Identifier);
+        const node = <Identifier>createNode(SyntaxKind.Identifier);
         node.text = text;
         return node;
     }
 
     export function createTempVariable(tempKind: TempVariableKind): Identifier {
-        const name = <Identifier>allocateNode(SyntaxKind.Identifier);
+        const name = <Identifier>createNode(SyntaxKind.Identifier);
         name.tempKind = tempKind;
         getNodeId(name);
         return name;
@@ -153,25 +147,25 @@ namespace ts {
     export function createLiteral(value: string | number | boolean | void): PrimaryExpression;
     export function createLiteral<T extends PrimaryExpression>(value: string | number | boolean | void): T {
         if (typeof value === "string") {
-            const node = <T & StringLiteral>allocateNode(SyntaxKind.StringLiteral);
+            const node = <T & StringLiteral>createNode(SyntaxKind.StringLiteral);
             node.text = value;
             return node;
         }
         else if (typeof value === "number") {
-            const node = <T & LiteralExpression>allocateNode(SyntaxKind.NumericLiteral);
+            const node = <T & LiteralExpression>createNode(SyntaxKind.NumericLiteral);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <T>allocateNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
+            return <T>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
         }
         else if (value === null) {
-            return <T>allocateNode(SyntaxKind.NullKeyword);
+            return <T>createNode(SyntaxKind.NullKeyword);
         }
     }
 
     export function createVoid(expression: UnaryExpression) {
-        const node = <VoidExpression>allocateNode(SyntaxKind.VoidExpression);
+        const node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
         node.expression = expression;
         return node;
     }
@@ -181,7 +175,7 @@ namespace ts {
     }
 
     export function createPropertyAccess(expression: Expression, name: string | Identifier) {
-        const node = <PropertyAccessExpression>allocateNode(SyntaxKind.PropertyAccessExpression);
+        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
         node.name = coerceIdentifier(name);
@@ -189,14 +183,14 @@ namespace ts {
     }
 
     export function createElementAccess(expression: Expression, index: string | number | Expression) {
-        const node = <ElementAccessExpression>allocateNode(SyntaxKind.ElementAccessExpression);
+        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = coerceExpression(index);
         return node;
     }
 
     export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression) {
-        const node = <ConditionalExpression>allocateNode(SyntaxKind.ConditionalExpression);
+        const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression);
         node.condition = condition;
         node.questionToken = createSynthesizedNode(SyntaxKind.QualifiedName);
         node.whenTrue = whenTrue;
@@ -206,7 +200,7 @@ namespace ts {
     }
 
     export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
-        const node = <BinaryExpression>allocateNode(SyntaxKind.BinaryExpression, location);
+        const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
         node.left = parenthesizeForBinary(left, operator, BinaryOperand.Left);
         node.operatorToken = createSynthesizedNode(operator);
         node.right = parenthesizeForBinary(right, operator, BinaryOperand.Right);
@@ -226,7 +220,7 @@ namespace ts {
     }
 
     export function createCall(expression: Expression, argumentsArray: Expression[]) {
-        const node = <CallExpression>allocateNode(SyntaxKind.CallExpression);
+        const node = <CallExpression>createNode(SyntaxKind.CallExpression);
         node.expression = parenthesizeForAccess(expression);
         node.arguments = createNodeArray(argumentsArray);
         return node;
@@ -238,7 +232,7 @@ namespace ts {
     }
 
     export function parenthesizeExpression(expression: Expression) {
-        const node = <ParenthesizedExpression>allocateNode(SyntaxKind.ParenthesizedExpression);
+        const node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
         node.expression = expression;
         return node;
     }
