@@ -8288,6 +8288,7 @@ namespace ts {
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             let typeFlags: TypeFlags = 0;
+            let hasDynamicProperties = false;
 
             let patternWithComputedProperties = false;
             for (const memberDecl of node.properties) {
@@ -8353,7 +8354,10 @@ namespace ts {
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                 }
 
-                if (!hasDynamicName(memberDecl)) {
+                if (hasDynamicName(memberDecl)) {
+                    hasDynamicProperties = true;
+                }
+                else {
                     propertiesTable[member.name] = member;
                 }
                 propertiesArray.push(member);
@@ -8385,7 +8389,7 @@ namespace ts {
             return result;
 
             function getIndexInfo(kind: IndexKind) {
-                if (contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
+                if (hasDynamicProperties && contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
                     const propTypes: Type[] = [];
                     for (let i = 0; i < propertiesArray.length; i++) {
                         const propertyDecl = node.properties[i];
