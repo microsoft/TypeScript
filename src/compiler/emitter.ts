@@ -895,7 +895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitLiteral(node: LiteralExpression | TemplateLiteralFragment) {
-                const text = getLiteralText(node);
+                const text = getLiteralText(node, currentSourceFile, languageVersion);
 
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -907,43 +907,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 else {
                     write(text);
                 }
-            }
-
-            function getLiteralText(node: LiteralExpression | TemplateLiteralFragment) {
-                // Any template literal or string literal with an extended escape
-                // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-                if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-                    return getQuotedEscapedLiteralText("\"", node.text, "\"");
-                }
-
-                // If we don't need to downlevel and we can reach the original source text using
-                // the node's parent reference, then simply get the text as it was originally written.
-                if (node.parent) {
-                    return getTextOfNodeFromSourceText(currentText, node);
-                }
-
-                // If we can't reach the original source text, use the canonical form if it's a number,
-                // or an escaped quoted form of the original text if it's string-like.
-                switch (node.kind) {
-                    case SyntaxKind.StringLiteral:
-                        return getQuotedEscapedLiteralText("\"", node.text, "\"");
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return getQuotedEscapedLiteralText("`", node.text, "`");
-                    case SyntaxKind.TemplateHead:
-                        return getQuotedEscapedLiteralText("`", node.text, "${");
-                    case SyntaxKind.TemplateMiddle:
-                        return getQuotedEscapedLiteralText("}", node.text, "${");
-                    case SyntaxKind.TemplateTail:
-                        return getQuotedEscapedLiteralText("}", node.text, "`");
-                    case SyntaxKind.NumericLiteral:
-                        return node.text;
-                }
-
-                Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-            }
-
-            function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
-                return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
             }
 
             function emitDownlevelRawTemplateLiteral(node: LiteralExpression) {
@@ -6590,7 +6553,8 @@ const _super = (function (geti, seti) {
                 }
                 const moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
-                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
+                    return tryRenameExternalModule(<LiteralExpression>moduleName)
+                        || getLiteralText(<LiteralExpression>moduleName, currentSourceFile, languageVersion);
                 }
 
                 return undefined;

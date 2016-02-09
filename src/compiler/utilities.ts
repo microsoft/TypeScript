@@ -102,6 +102,22 @@ namespace ts {
         return true;
     }
 
+    export function getLanguageVersion(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getModuleKind(compilerOptions: CompilerOptions) {
+        if (compilerOptions.module) {
+            return compilerOptions.module;
+        }
+
+        if (getLanguageVersion(compilerOptions) === ScriptTarget.ES6) {
+            return ModuleKind.ES6;
+        }
+
+        return ModuleKind.None;
+    }
+
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
@@ -240,6 +256,60 @@ namespace ts {
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
+    }
+
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
+        // Any template literal or string literal with an extended escape
+        // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
+        if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+            return getQuotedEscapedLiteralText("\"", node.text, "\"");
+        }
+
+        // If we don't need to downlevel and we can reach the original source text using
+        // the node's parent reference, then simply get the text as it was originally written.
+        if (!nodeIsSynthesized(node) && node.parent) {
+            const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
+            if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
+                return node.text;
+            }
+            return text;
+        }
+
+        // If we can't reach the original source text, use the canonical form if it's a number,
+        // or an escaped quoted form of the original text if it's string-like.
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+                return getQuotedEscapedLiteralText("\"", node.text, "\"");
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return getQuotedEscapedLiteralText("`", node.text, "`");
+            case SyntaxKind.TemplateHead:
+                return getQuotedEscapedLiteralText("`", node.text, "${");
+            case SyntaxKind.TemplateMiddle:
+                return getQuotedEscapedLiteralText("}", node.text, "${");
+            case SyntaxKind.TemplateTail:
+                return getQuotedEscapedLiteralText("}", node.text, "`");
+            case SyntaxKind.NumericLiteral:
+                return node.text;
+        }
+
+        Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+    }
+
+    export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
+        if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+            switch (text.charCodeAt(1)) {
+                case CharacterCodes.b:
+                case CharacterCodes.B:
+                case CharacterCodes.o:
+                case CharacterCodes.O:
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
+        return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -2765,7 +2835,7 @@ namespace ts {
         return isUnaryExpressionKind(node.kind);
     }
 
-    function isExpressionKind(kind: SyntaxKind): boolean {
+    export function isExpressionKind(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction

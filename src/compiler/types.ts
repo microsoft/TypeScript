@@ -2795,6 +2795,7 @@ namespace ts {
         UMDDefine = 1 << 2,             // This node should be replaced with the UMD define helper.
         NoLexicalEnvironment = 1 << 3,  // A new LexicalEnvironment should *not* be introduced when emitting this node.
         SingleLine = 1 << 4,            // The contents of this node should be emit on a single line.
+        MultiLine = 1 << 5,             // The contents of this node should be emit on multiple lines.
     }
 
     /** Additional context provided to `visitEachChild` */

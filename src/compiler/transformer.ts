@@ -2,6 +2,12 @@
 
 /* @internal */
 namespace ts {
+    export function getTransformers(compilerOptions: CompilerOptions) {
+        const transformers: Transformer[] = [];
+        // TODO(rbuckton): Add transformers
+        return transformers;
+    }
+
     /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *

@@ -144,14 +144,9 @@ namespace ts {
 
     export function createLiteral(value: string): StringLiteral;
     export function createLiteral(value: number): LiteralExpression;
-    export function createLiteral(value: string | number | boolean | void): PrimaryExpression;
-    export function createLiteral<T extends PrimaryExpression>(value: string | number | boolean | void): T {
-        if (typeof value === "string") {
-            const node = <T & StringLiteral>createNode(SyntaxKind.StringLiteral);
-            node.text = value;
-            return node;
-        }
-        else if (typeof value === "number") {
+    export function createLiteral(value: string | number | boolean): PrimaryExpression;
+    export function createLiteral<T extends PrimaryExpression>(value: string | number | boolean): T {
+        if (typeof value === "number") {
             const node = <T & LiteralExpression>createNode(SyntaxKind.NumericLiteral);
             node.text = value.toString();
             return node;
@@ -159,8 +154,10 @@ namespace ts {
         else if (typeof value === "boolean") {
             return <T>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
         }
-        else if (value === null) {
-            return <T>createNode(SyntaxKind.NullKeyword);
+        else {
+            const node = <T & StringLiteral>createNode(SyntaxKind.StringLiteral);
+            node.text = String(value);
+            return node;
         }
     }
 
@@ -253,9 +250,6 @@ namespace ts {
     function coerceExpression(value: string | number | boolean | Expression): Expression {
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
             return createLiteral(value);
-        }
-        else if (value === null) {
-            return createLiteral(null);
         }
         else {
             return value;
