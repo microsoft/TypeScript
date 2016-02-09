@@ -755,7 +755,7 @@ namespace ts {
      * @param nodes The NodeArray.
      */
     function liftToBlock(nodes: NodeArray<Node>) {
-        Debug.assert(trueForAll(nodes, isStatement), "Cannot lift nodes to a Block.");
+        Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }
 
