@@ -1565,6 +1565,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
+        // The number of times node_modules was searched to locate the package containing this file
+        /* @internal */ nodeModuleSearchDistance?: number;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -2436,6 +2438,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        maxNodeSearchJsDepth?: number;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
