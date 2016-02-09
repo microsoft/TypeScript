@@ -3987,6 +3987,19 @@ namespace ts {
             return getIndexTypeOfStructuredType(getApparentType(type), kind);
         }
 
+        function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type {
+            if (isObjectLiteralType(type)) {
+                const propTypes: Type[] = [];
+                for (const prop of getPropertiesOfType(type)) {
+                    if (kind === IndexKind.String || isNumericLiteralName(prop.name)) {
+                        propTypes.push(getTypeOfSymbol(prop));
+                    }
+                }
+                return getUnionType(propTypes);
+            }
+            return undefined;
+        }
+
         function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameter[] {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
@@ -5951,6 +5964,23 @@ namespace ts {
                 return result;
             }
 
+            function eachPropertyRelatedTo(source: Type, target: Type, numericPropertiesOnly: boolean, reportErrors: boolean): Ternary {
+                let result = Ternary.True;
+                for (const prop of getPropertiesOfObjectType(source)) {
+                    if (!numericPropertiesOnly || isNumericLiteralName(prop.name)) {
+                        const related = isRelatedTo(getTypeOfSymbol(prop), target, reportErrors);
+                        if (!related) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
+                            }
+                            return Ternary.False;
+                        }
+                        result &= related;
+                    }
+                }
+                return result;
+            }
+
             function stringIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
@@ -5964,6 +5994,9 @@ namespace ts {
                     }
                     const sourceInfo = getIndexInfoOfType(source, IndexKind.String);
                     if (!sourceInfo) {
+                        if (isObjectLiteralType(source)) {
+                            return eachPropertyRelatedTo(source, targetInfo.type, /* numericPropertiesOnly*/ false, reportErrors);
+                        }
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
@@ -5995,6 +6028,9 @@ namespace ts {
                     const sourceStringInfo = getIndexInfoOfType(source, IndexKind.String);
                     const sourceNumberInfo = getIndexInfoOfType(source, IndexKind.Number);
                     if (!(sourceStringInfo || sourceNumberInfo)) {
+                        if (isObjectLiteralType(source)) {
+                            return eachPropertyRelatedTo(source, targetInfo.type, /* numericPropertiesOnly*/ true, reportErrors);
+                        }
                         if (reportErrors) {
                             reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
                         }
@@ -6261,6 +6297,15 @@ namespace ts {
          */
         function isTupleType(type: Type): type is TupleType {
             return !!(type.flags & TypeFlags.Tuple);
+        }
+
+        /**
+         * Return true if type was inferred from an object literal or written as an object type literal
+         */
+        function isObjectLiteralType(type: Type) {
+            return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral)) !== 0 &&
+                getSignaturesOfType(type, SignatureKind.Call).length === 0 &&
+                getSignaturesOfType(type, SignatureKind.Construct).length === 0;
         }
 
         function getRegularTypeOfObjectLiteral(type: Type): Type {
@@ -6610,9 +6655,7 @@ namespace ts {
                         inferFromProperties(source, target);
                         inferFromSignatures(source, target, SignatureKind.Call);
                         inferFromSignatures(source, target, SignatureKind.Construct);
-                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
-                        inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
-                        inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
+                        inferFromIndexTypes(source, target);
                         depth--;
                     }
                 }
@@ -6644,12 +6687,22 @@ namespace ts {
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
-            function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
-                const targetIndexType = getIndexTypeOfType(target, targetKind);
-                if (targetIndexType) {
-                    const sourceIndexType = getIndexTypeOfType(source, sourceKind);
+            function inferFromIndexTypes(source: Type, target: Type) {
+                const targetStringIndexType = getIndexTypeOfType(target, IndexKind.String);
+                if (targetStringIndexType) {
+                    const sourceIndexType = getIndexTypeOfType(source, IndexKind.String) ||
+                        getImplicitIndexTypeOfType(source, IndexKind.String);
                     if (sourceIndexType) {
-                        inferFromTypes(sourceIndexType, targetIndexType);
+                        inferFromTypes(sourceIndexType, targetStringIndexType);
+                    }
+                }
+                const targetNumberIndexType = getIndexTypeOfType(target, IndexKind.Number);
+                if (targetNumberIndexType) {
+                    const sourceIndexType = getIndexTypeOfType(source, IndexKind.Number) ||
+                        getIndexTypeOfType(source, IndexKind.String) ||
+                        getImplicitIndexTypeOfType(source, IndexKind.Number);
+                    if (sourceIndexType) {
+                        inferFromTypes(sourceIndexType, targetNumberIndexType);
                     }
                 }
             }

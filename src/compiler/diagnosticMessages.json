@@ -1699,6 +1699,10 @@
         "category": "Error",
         "code": 2529
     },
+    "Property '{0}' is incompatible with index signature.": {
+        "category": "Error",
+        "code": 2530
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
