@@ -1,0 +1,10 @@
+tests/cases/conformance/async/es6/asyncAliasReturnType_es6.ts(3,16): error TS1055: Type 'PromiseAlias' is not a valid async function return type.
+
+
+==== tests/cases/conformance/async/es6/asyncAliasReturnType_es6.ts (1 errors) ====
+    type PromiseAlias<T> = Promise<T>;
+    
+    async function f(): PromiseAlias<void> {
+                   ~
+!!! error TS1055: Type 'PromiseAlias' is not a valid async function return type.
+    }

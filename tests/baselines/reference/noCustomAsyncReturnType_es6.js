@@ -1,21 +1,13 @@
-//// [tests/cases/conformance/async/es6/asyncImportedPromise_es6.ts] ////
+//// [noCustomAsyncReturnType_es6.ts]
 
-//// [task.ts]
-export class Task<T> extends Promise<T> { }
+interface Promise<T> extends PromiseLike<T> {}
+var Promise: PromiseConstructorLike;
 
-//// [test.ts]
-import { Task } from "./task";
-class Test {
-    async example<T>(): Task<T> { return; }
+export async function f(): Promise<void> {
 }
 
-//// [task.js]
-"use strict";
-class Task extends Promise {
-}
-exports.Task = Task;
-//// [test.js]
-"use strict";
+
+//// [noCustomAsyncReturnType_es6.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -24,9 +16,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const task_1 = require("./task");
-class Test {
-    example() {
-        return __awaiter(this, void 0, task_1.Task, function* () { return; });
-    }
+var Promise;
+export function f() {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
 }

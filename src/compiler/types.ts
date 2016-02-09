@@ -2442,6 +2442,8 @@ namespace ts {
         /* @internal */ skipDefaultLibCheck?: boolean;
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
+        // Disallow custom promise return types in async functions.
+        /* @internal */ noCustomAsyncPromise?: boolean;
 
         [option: string]: string | number | boolean;
     }

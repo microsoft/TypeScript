@@ -1,0 +1,16 @@
+tests/cases/conformance/async/es6/noCustomAsyncReturnType_es6.ts(3,5): error TS2529: Duplicate identifier 'Promise'. Compiler reserves name 'Promise' in top level scope of a module containing async functions.
+tests/cases/conformance/async/es6/noCustomAsyncReturnType_es6.ts(5,28): error TS1064: The return type of an async function or method must be the global Promise<T> type.
+
+
+==== tests/cases/conformance/async/es6/noCustomAsyncReturnType_es6.ts (2 errors) ====
+    
+    interface Promise<T> extends PromiseLike<T> {}
+    var Promise: PromiseConstructorLike;
+        ~~~~~~~
+!!! error TS2529: Duplicate identifier 'Promise'. Compiler reserves name 'Promise' in top level scope of a module containing async functions.
+    
+    export async function f(): Promise<void> {
+                               ~~~~~~~~~~~~~
+!!! error TS1064: The return type of an async function or method must be the global Promise<T> type.
+    }
+    

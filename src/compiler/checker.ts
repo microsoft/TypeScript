@@ -12623,7 +12623,7 @@ namespace ts {
           * callable `then` signature.
           */
         function checkAsyncFunctionReturnType(node: FunctionLikeDeclaration): Type {
-            if (languageVersion >= ScriptTarget.ES6) {
+            if (compilerOptions.noCustomAsyncPromise && languageVersion >= ScriptTarget.ES6) {
                 const returnType = getTypeFromTypeNode(node.type);
                 return checkCorrectPromiseType(returnType, node.type);
             }
@@ -13029,6 +13029,10 @@ namespace ts {
         }
 
         function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
+            if (!compilerOptions.noCustomAsyncPromise) {
+                return;
+            }
+
             if (!needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
