@@ -162,17 +162,47 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
+var es6LibrarySources = [
+    "es6.core.d.ts",
+    "es6.array.d.ts",
+    "es6.collection.d.ts",
+    "es6.math.d.ts",
+    "es6.number.d.ts",
+    "es6.object.d.ts",
+    "es6.promise.d.ts",
+    "es6.proxy.d.ts",
+    "es6.reflect.d.ts",
+    "es6.string.d.ts"
+];
+
+var es6LibrarySourceMap = es6LibrarySources.map(function(source) {
+   return  { target: "lib." + source, sources: ["header.d.ts", source ] };
+});
+
+var es7LibrarySource = [ "es7.array-include.d.ts" ];
+
+var es7LibrarySourceMap = es7LibrarySource.map(function(source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+})
+
+var hostsLibrarySources = [ "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]
+
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
         { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
-        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
-];
+        
+        // JavaScript library
+        { target: "lib.core.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es6LibrarySources) },
+        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es6LibrarySources, es7LibrarySource) },
+        
+        // JavaScript + all host library
+        { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es6LibrarySources, hostsLibrarySources), },
+        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es6LibrarySources, es7LibrarySource, hostsLibrarySources), },
+].concat(es6LibrarySourceMap, es7LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
