@@ -2749,13 +2749,6 @@ namespace ts {
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
 
-        // Assertions
-        // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
-        AssertTypeScript = TypeScript | ContainsTypeScript,
-        AssertJsx = Jsx | ContainsJsx,
-        AssertES7 = ES7 | ContainsES7,
-        AssertES6 = ES6 | ContainsES6,
-
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
         ContainsDecorators = 1 << 8,
@@ -2766,6 +2759,13 @@ namespace ts {
         ContainsParameterPropertyAssignments = 1 << 13,
         ContainsSpreadElementExpression = 1 << 14,
         ContainsComputedPropertyName = 1 << 15,
+
+        // Assertions
+        // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
+        AssertTypeScript = TypeScript | ContainsTypeScript,
+        AssertJsx = Jsx | ContainsJsx,
+        AssertES7 = ES7 | ContainsES7,
+        AssertES6 = ES6 | ContainsES6,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
