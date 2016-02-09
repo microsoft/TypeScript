@@ -2033,7 +2033,7 @@ namespace ts {
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
             for (const sourceFile of sourceFiles) {
-                if (!isDeclarationFile(sourceFile)) {
+                if (!isDeclarationFile(sourceFile) && !sourceFile.nodeModuleSearchDistance) {
                     onSingleFileEmit(host, sourceFile);
                 }
             }
@@ -2068,6 +2068,7 @@ namespace ts {
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             const bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !isDeclarationFile(sourceFile) && // Not a declaration file
+                    !sourceFile.nodeModuleSearchDistance &&     // Not loaded from searching under node_modules
                     (!isExternalModule(sourceFile) || // non module file
                         (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted
             if (bundledSources.length) {

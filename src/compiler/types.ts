@@ -1565,8 +1565,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
-        // The number of times node_modules was searched and loaded a non-TypeScript file on the path to this one
-        /* @internal */ jsNodeModuleSearchDistance?: number;
+        // The number of times node_modules was searched to locate the package containing this file
+        /* @internal */ nodeModuleSearchDistance?: number;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -2683,7 +2683,6 @@ namespace ts {
          * - don't use tripleslash references
          */
         isExternalLibraryImport?: boolean;
-        isJsFileFromNodeSearch?: boolean;
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
