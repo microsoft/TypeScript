@@ -2,12 +2,14 @@
 
 /* @internal */
 namespace ts {
-    export function getTransformers(compilerOptions: CompilerOptions) {
-        const transformers: Transformer[] = [];
-        // TODO(rbuckton): Add transformers
-        return transformers;
-    }
-
+    /**
+     * Transforms an array of SourceFiles by passing them through each transformer.
+     *
+     * @param resolver The emit resolver provided by the checker.
+     * @param host The emit host.
+     * @param sourceFiles An array of source files
+     * @param transforms An array of Transformers.
+     */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
         const nodeToGeneratedName: Identifier[] = [];
         const generatedNameSet: Map<string> = {};
@@ -19,6 +21,8 @@ namespace ts {
         let hoistedFunctionDeclarations: FunctionDeclaration[];
         let currentSourceFile: SourceFile;
 
+        // The transformation context is provided to each transformer as part of transformer
+        // initialization.
         const context: TransformationContext = {
             getCompilerOptions: () => host.getCompilerOptions(),
             getEmitResolver: () => resolver,
@@ -42,6 +46,7 @@ namespace ts {
 
         /**
          * Transforms a source file.
+         *
          * @param sourceFile The source file to transform.
          */
         function transformSourceFile(sourceFile: SourceFile) {
@@ -161,9 +166,7 @@ namespace ts {
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
                     return generateNameForClassExpression();
-                case SyntaxKind.ComputedPropertyName:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.TaggedTemplateExpression:
+                default:
                     return createTempVariable(TempVariableKind.Auto);
             }
         }

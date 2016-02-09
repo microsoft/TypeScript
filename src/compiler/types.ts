@@ -2790,11 +2790,20 @@ namespace ts {
 
     /* @internal */
     export const enum NodeEmitFlags {
-        EmitHelpers = 1 << 0,
-        EmitExportStar = 1 << 1,
-        UMDDefine = 1 << 2,
-        NoLexicalEnvironment = 1 << 3,
-        SingleLine = 1 << 4,
+        EmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
+        EmitExportStar = 1 << 1,        // The export * helper should be written to this node.
+        UMDDefine = 1 << 2,             // This node should be replaced with the UMD define helper.
+        NoLexicalEnvironment = 1 << 3,  // A new LexicalEnvironment should *not* be introduced when emitting this node.
+        SingleLine = 1 << 4,            // The contents of this node should be emit on a single line.
+    }
+
+    /** Additional context provided to `visitEachChild` */
+    export interface LexicalEnvironment {
+        /** Starts a new lexical environment. */
+        startLexicalEnvironment(): void;
+
+        /** Ends a lexical environment, returning any declarations. */
+        endLexicalEnvironment(): Statement[];
     }
 
     /* @internal */
