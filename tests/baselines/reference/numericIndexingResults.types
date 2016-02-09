@@ -151,7 +151,7 @@ var r6 = a[3];
 var b: { [x: number]: string } = { 1: '', "2": '' }
 >b : { [x: number]: string; }
 >x : number
->{ 1: '', "2": '' } : { [x: number]: string; 1: string; "2": string; }
+>{ 1: '', "2": '' } : { 1: string; "2": string; }
 >'' : string
 >'' : string
 
@@ -194,7 +194,7 @@ var r6 = b[3];
 var b2: { [x: number]: string; 1: string; "2": string; } = { 1: '', "2": '' }
 >b2 : { [x: number]: string; 1: string; "2": string; }
 >x : number
->{ 1: '', "2": '' } : { [x: number]: string; 1: string; "2": string; }
+>{ 1: '', "2": '' } : { 1: string; "2": string; }
 >'' : string
 >'' : string
 

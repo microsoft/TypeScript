@@ -10,9 +10,9 @@ var obj2 = {x: ""};
 >"" : string
 
 obj1 = {}; // Ok
->obj1 = {} : { [x: string]: undefined; }
+>obj1 = {} : {}
 >obj1 : { [x: string]: string; }
->{} : { [x: string]: undefined; }
+>{} : {}
 
 obj1 = obj2; // Error - indexer doesn't match
 >obj1 = obj2 : { x: string; }
@@ -27,7 +27,7 @@ function f(x: { [s: string]: string }) { }
 f({}); // Ok
 >f({}) : void
 >f : (x: { [s: string]: string; }) => void
->{} : { [x: string]: undefined; }
+>{} : {}
 
 f(obj1); // Ok
 >f(obj1) : void

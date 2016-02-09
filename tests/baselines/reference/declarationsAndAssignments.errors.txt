@@ -11,8 +11,8 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
@@ -122,10 +122,10 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     function f9() {
         var [a, b] = {};                // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+!!! error TS2461: Type '{}' is not an array type.
         var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
+!!! error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
         var [e, f] = [10, 20];
     }
     
