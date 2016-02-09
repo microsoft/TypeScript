@@ -559,6 +559,12 @@ namespace ts {
         sourceMap: false,
     };
 
+    interface OutputFingerprint {
+        hash: string;
+        byteOrderMark: boolean;
+        mtime: Date;
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         const existingDirectories: Map<boolean> = {};
 
@@ -609,11 +615,42 @@ namespace ts {
             }
         }
 
+        const outputFingerprints: Map<OutputFingerprint> =
+            options.watch && sys.createHash && sys.getModifiedTime ? {} : undefined;
+
+        const fileWriter: typeof sys.writeFile = outputFingerprints ?
+            (fileName, data, writeByteOrderMark) => {
+                const hash = sys.createHash(data);
+                const mtimeBefore = sys.getModifiedTime(fileName);
+
+                if (mtimeBefore && outputFingerprints.hasOwnProperty(fileName)) {
+                    const fingerprint = outputFingerprints[fileName];
+
+                    // If output has not been changed, and the file has no external modification
+                    if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                        fingerprint.hash === hash &&
+                        fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                        return;
+                    }
+                }
+
+                sys.writeFile(fileName, data, writeByteOrderMark);
+
+                const mtimeAfter = sys.getModifiedTime(fileName);
+
+                outputFingerprints[fileName] = {
+                    hash,
+                    byteOrderMark: writeByteOrderMark,
+                    mtime: mtimeAfter
+                };
+            } :
+            (fileName, data, writeByteOrderMark) => sys.writeFile(fileName, data, writeByteOrderMark);
+
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                sys.writeFile(fileName, data, writeByteOrderMark);
+                fileWriter(fileName, data, writeByteOrderMark);
                 ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
