@@ -65,8 +65,7 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            let result = loadModuleFromNodeModules(moduleName, containingDirectory, host, compilerOptions);
-            return result;
+            return loadModuleFromNodeModules(moduleName, containingDirectory, host, compilerOptions);
         }
     }
 
@@ -145,7 +144,7 @@ namespace ts {
                 const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, host);
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
 
-                let supportedExtensions = getSupportedExtensions(compilerOptions);
+                const supportedExtensions = getSupportedExtensions(compilerOptions);
                 let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
@@ -1075,10 +1074,10 @@ namespace ts {
                 }
 
                 // If this was a file found by a node_modules search, set the nodeModuleSearchDistance to parent distance + 1.
-                if(isFileFromNodeSearch){
+                if (isFileFromNodeSearch) {
                     const newDistance = (refFile && refFile.nodeModuleSearchDistance) === undefined ? 1 : refFile.nodeModuleSearchDistance + 1;
                     // If already set on the file, don't overwrite if it was already found closer (which may be '0' if added as a root file)
-                    file.nodeModuleSearchDistance = (typeof file.nodeModuleSearchDistance === 'number') ? Math.min(file.nodeModuleSearchDistance, newDistance) : newDistance;
+                    file.nodeModuleSearchDistance = (typeof file.nodeModuleSearchDistance === "number") ? Math.min(file.nodeModuleSearchDistance, newDistance) : newDistance;
                 }
 
                 return file;
@@ -1101,7 +1100,7 @@ namespace ts {
 
                 // Default to same distance as parent. Add one if found by a search.
                 file.nodeModuleSearchDistance = (refFile && refFile.nodeModuleSearchDistance) || 0;
-                if(isFileFromNodeSearch){
+                if (isFileFromNodeSearch) {
                     file.nodeModuleSearchDistance++;
                 }
 
@@ -1149,7 +1148,7 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
-            let maxJsNodeModuleSearchDistance = options.maxNodeSearchJsDepth || 0;
+            const maxJsNodeModuleSearchDistance = options.maxNodeSearchJsDepth || 0;
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
