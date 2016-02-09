@@ -11,7 +11,8 @@ namespace ts {
     export interface SynthesizedNode extends Node {
         leadingCommentRanges?: CommentRange[];
         trailingCommentRanges?: CommentRange[];
-        startsOnNewLine: boolean;
+        startsOnNewLine?: boolean;
+        disableSourceMap?: boolean;
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
@@ -2722,6 +2723,68 @@ namespace ts {
             return sys.newLine;
         }
         return carriageReturnLineFeed;
+    }
+
+    /**
+     * Tests whether a node and its subtree is simple enough to have its position
+     * information ignored when emitting source maps in a destructuring assignment.
+     *
+     * @param node The expression to test.
+     */
+    export function isSimpleExpression(node: Expression): boolean {
+        return isSimpleExpressionWorker(node, 0);
+    }
+
+    function isSimpleExpressionWorker(node: Expression, depth: number): boolean {
+        if (depth <= 5) {
+            const kind = node.kind;
+            if (kind === SyntaxKind.StringLiteral
+                || kind === SyntaxKind.NumericLiteral
+                || kind === SyntaxKind.RegularExpressionLiteral
+                || kind === SyntaxKind.NoSubstitutionTemplateLiteral
+                || kind === SyntaxKind.Identifier
+                || kind === SyntaxKind.ThisKeyword
+                || kind === SyntaxKind.SuperKeyword
+                || kind === SyntaxKind.TrueKeyword
+                || kind === SyntaxKind.FalseKeyword
+                || kind === SyntaxKind.NullKeyword) {
+                return true;
+            }
+            else if (kind === SyntaxKind.PropertyAccessExpression) {
+                return isSimpleExpressionWorker((<PropertyAccessExpression>node).expression, depth + 1);
+            }
+            else if (kind === SyntaxKind.ElementAccessExpression) {
+                return isSimpleExpressionWorker((<ElementAccessExpression>node).expression, depth + 1)
+                    && isSimpleExpressionWorker((<ElementAccessExpression>node).argumentExpression, depth + 1);
+            }
+            else if (kind === SyntaxKind.PrefixUnaryExpression
+                || kind === SyntaxKind.PostfixUnaryExpression) {
+                return isSimpleExpressionWorker((<PrefixUnaryExpression | PostfixUnaryExpression>node).operand, depth + 1);
+            }
+            else if (kind === SyntaxKind.BinaryExpression) {
+                return (<BinaryExpression>node).operatorToken.kind !== SyntaxKind.AsteriskAsteriskToken
+                    && isSimpleExpressionWorker((<BinaryExpression>node).left, depth + 1)
+                    && isSimpleExpressionWorker((<BinaryExpression>node).right, depth + 1);
+            }
+            else if (kind === SyntaxKind.ConditionalExpression) {
+                return isSimpleExpressionWorker((<ConditionalExpression>node).condition, depth + 1)
+                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenTrue, depth + 1)
+                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenFalse, depth + 1)
+            }
+            else if (kind === SyntaxKind.VoidExpression
+                || kind === SyntaxKind.TypeOfExpression
+                || kind === SyntaxKind.DeleteExpression) {
+                return isSimpleExpressionWorker((<VoidExpression | TypeOfExpression | DeleteExpression>node).expression, depth + 1);
+            }
+            else if (kind === SyntaxKind.ArrayLiteralExpression) {
+                return (<ArrayLiteralExpression>node).elements.length === 0;
+            }
+            else if (kind === SyntaxKind.ObjectLiteralExpression) {
+                return (<ObjectLiteralExpression>node).properties.length === 0;
+            }
+        }
+
+        return false;
     }
 
     // Node tests

@@ -2508,8 +2508,10 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES7 = 3,
         ES2015 = ES6,
-        Latest = ES6,
+        ES2016 = ES7,
+        Latest = ES7,
     }
 
     export const enum LanguageVariant {

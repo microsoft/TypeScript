@@ -135,9 +135,18 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(tempKind: TempVariableKind): Identifier {
+    export function createTempVariable(): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.tempKind = tempKind;
+        name.text = undefined;
+        name.tempKind = TempVariableKind.Auto;
+        getNodeId(name);
+        return name;
+    }
+
+    export function createLoopVariable(): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier);
+        name.text = undefined;
+        name.tempKind = TempVariableKind.Loop;
         getNodeId(name);
         return name;
     }
@@ -171,16 +180,16 @@ namespace ts {
         return createVoid(createLiteral(0));
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
-        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression);
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
+        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
         node.name = coerceIdentifier(name);
         return node;
     }
 
-    export function createElementAccess(expression: Expression, index: string | number | Expression) {
-        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression);
+    export function createElementAccess(expression: Expression, index: string | number | Expression, location?: TextRange) {
+        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = coerceExpression(index);
         return node;
@@ -216,8 +225,8 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
     }
 
-    export function createCall(expression: Expression, argumentsArray: Expression[]) {
-        const node = <CallExpression>createNode(SyntaxKind.CallExpression);
+    export function createCall(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
+        const node = <CallExpression>createNode(SyntaxKind.CallExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.arguments = createNodeArray(argumentsArray);
         return node;
@@ -226,6 +235,14 @@ namespace ts {
     export function createArraySlice(array: Expression, start?: number | Expression) {
         const argumentsList: Expression[] = start !== undefined ? [coerceExpression(start)] : [];
         return createCall(createPropertyAccess(array, "slice"), argumentsList);
+    }
+
+    export function createMathPow(left: Expression, right: Expression, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(createIdentifier("Math"), "pow"),
+            [left, right],
+            location
+        );
     }
 
     export function parenthesizeExpression(expression: Expression) {
