@@ -28,9 +28,9 @@ let o = {
 };
 let i: I = o;
 let o2: I = {
-    n: 1001
+    n: 1001,
     explicitThis: function (m) {
-        return m + this.n.length;  // error, this.n: number, no member 'length'
+         return m + this.n.length;  // error, this.n: number, no member 'length'
     },
 }
 let x = i.explicitThis;
@@ -43,5 +43,5 @@ o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 o.implicitThis = i.explicitThis;
 i.explicitThis = function(m) {
-    return this.n.length;  // error, this.n: number
+     return this.n.length;  // error, this.n: number
 }

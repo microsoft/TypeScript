@@ -185,11 +185,6 @@ d2.implicit = d1.explicit // ok, 'y' in { x, y } (c assignable to f)
 b1.implicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f) 
 b1.explicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f)
 
-// union assignability
-
-let b1b2: Base1 | Base2;
-b1b2.implicit();
-
 ////// use this-type for construction with new ////
 function InterfaceThis(this: I) {
     this.a = 12;

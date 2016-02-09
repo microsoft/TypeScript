@@ -9513,13 +9513,7 @@ namespace ts {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
-                if (thisArgumentType.flags & TypeFlags.UnionOrIntersection) {
-                    const u = <UnionType>thisArgumentType;
-                    if (!forEach(u.types, t => checkTypeRelatedTo(t, signature.thisType, relation, errorNode, headMessage))) {
-                        return false;
-                    }
-                }
-                else if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
+                if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
             }

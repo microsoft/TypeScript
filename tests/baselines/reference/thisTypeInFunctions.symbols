@@ -791,22 +791,10 @@ b1.explicit = d2.implicit // ok, 'x' and 'y' not in C: { x } (c assignable to f)
 >d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 176, 3))
 >implicit : Symbol(Base2.implicit, Decl(thisTypeInFunctions.ts, 166, 13))
 
-// union assignability
-
-let b1b2: Base1 | Base2;
->b1b2 : Symbol(b1b2, Decl(thisTypeInFunctions.ts, 188, 3))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 150, 24))
->Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 164, 1))
-
-b1b2.implicit();
->b1b2.implicit : Symbol(implicit, Decl(thisTypeInFunctions.ts, 154, 14), Decl(thisTypeInFunctions.ts, 166, 13))
->b1b2 : Symbol(b1b2, Decl(thisTypeInFunctions.ts, 188, 3))
->implicit : Symbol(implicit, Decl(thisTypeInFunctions.ts, 154, 14), Decl(thisTypeInFunctions.ts, 166, 13))
-
 ////// use this-type for construction with new ////
 function InterfaceThis(this: I) {
->InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 189, 16))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 192, 23))
+>InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 184, 25))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 187, 23))
 >I : Symbol(I, Decl(thisTypeInFunctions.ts, 22, 21))
 
     this.a = 12;
@@ -815,60 +803,60 @@ function InterfaceThis(this: I) {
 >a : Symbol(I.a, Decl(thisTypeInFunctions.ts, 23, 13))
 }
 function LiteralTypeThis(this: {x: string}) {
->LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 194, 1))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 195, 25))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 195, 32))
+>LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 189, 1))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 190, 25))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 190, 32))
 
     this.x = "ok";
->this.x : Symbol(x, Decl(thisTypeInFunctions.ts, 195, 32))
->this : Symbol(, Decl(thisTypeInFunctions.ts, 195, 30))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 195, 32))
+>this.x : Symbol(x, Decl(thisTypeInFunctions.ts, 190, 32))
+>this : Symbol(, Decl(thisTypeInFunctions.ts, 190, 30))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 190, 32))
 }
 function AnyThis(this: any) {
->AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 197, 1))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 198, 17))
+>AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 192, 1))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 193, 17))
 
     this.x = "ok";
 }
 let interfaceThis = new InterfaceThis();
->interfaceThis : Symbol(interfaceThis, Decl(thisTypeInFunctions.ts, 201, 3))
->InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 189, 16))
+>interfaceThis : Symbol(interfaceThis, Decl(thisTypeInFunctions.ts, 196, 3))
+>InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 184, 25))
 
 let literalTypeThis = new LiteralTypeThis();
->literalTypeThis : Symbol(literalTypeThis, Decl(thisTypeInFunctions.ts, 202, 3))
->LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 194, 1))
+>literalTypeThis : Symbol(literalTypeThis, Decl(thisTypeInFunctions.ts, 197, 3))
+>LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 189, 1))
 
 let anyThis = new AnyThis();
->anyThis : Symbol(anyThis, Decl(thisTypeInFunctions.ts, 203, 3))
->AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 197, 1))
+>anyThis : Symbol(anyThis, Decl(thisTypeInFunctions.ts, 198, 3))
+>AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 192, 1))
 
 //// type parameter inference ////
 declare var f: { 
->f : Symbol(f, Decl(thisTypeInFunctions.ts, 206, 11))
+>f : Symbol(f, Decl(thisTypeInFunctions.ts, 201, 11))
 
     (this: void, x: number): number, 
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 207, 5))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 207, 16))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 202, 5))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 202, 16))
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
->call : Symbol(call, Decl(thisTypeInFunctions.ts, 207, 36))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 208, 9))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 208, 12))
->argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 208, 19))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 208, 9))
->argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 208, 44))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 208, 9))
+>call : Symbol(call, Decl(thisTypeInFunctions.ts, 202, 36))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 203, 9))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 203, 12))
+>argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 203, 19))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 203, 9))
+>argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 203, 44))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 203, 9))
 
 };
 let n: number = f.call(12);
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 210, 3))
->f.call : Symbol(call, Decl(thisTypeInFunctions.ts, 207, 36))
->f : Symbol(f, Decl(thisTypeInFunctions.ts, 206, 11))
->call : Symbol(call, Decl(thisTypeInFunctions.ts, 207, 36))
+>n : Symbol(n, Decl(thisTypeInFunctions.ts, 205, 3))
+>f.call : Symbol(call, Decl(thisTypeInFunctions.ts, 202, 36))
+>f : Symbol(f, Decl(thisTypeInFunctions.ts, 201, 11))
+>call : Symbol(call, Decl(thisTypeInFunctions.ts, 202, 36))
 
 function missingTypeIsImplicitAny(this, a: number) { return a; } 
->missingTypeIsImplicitAny : Symbol(missingTypeIsImplicitAny, Decl(thisTypeInFunctions.ts, 210, 27))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 212, 34))
->a : Symbol(a, Decl(thisTypeInFunctions.ts, 212, 39))
->a : Symbol(a, Decl(thisTypeInFunctions.ts, 212, 39))
+>missingTypeIsImplicitAny : Symbol(missingTypeIsImplicitAny, Decl(thisTypeInFunctions.ts, 205, 27))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 207, 34))
+>a : Symbol(a, Decl(thisTypeInFunctions.ts, 207, 39))
+>a : Symbol(a, Decl(thisTypeInFunctions.ts, 207, 39))
 
