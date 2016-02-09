@@ -96,7 +96,7 @@ namespace ts {
      * returns a falsey value, then returns false.
      * If no such value is found, the callback is applied to each element of array and `true` is returned.
      */
-    export function trueForAll<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
+    export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
                 if (!callback(array[i], i)) {
@@ -252,14 +252,14 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T): T;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
         if (array) {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result: T | U;
+                let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
                     pos++;
@@ -268,22 +268,22 @@ namespace ts {
                     result = initial;
                 }
                 while (pos < count) {
-                    result = f(<U>result, array[pos]);
+                    result = f(result, array[pos]);
                     pos++;
                 }
-                return <U>result;
+                return result;
             }
         }
         return initial;
     }
 
-    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T): T;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result: T | U;
+                let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
                     pos--;
@@ -292,10 +292,10 @@ namespace ts {
                     result = initial;
                 }
                 while (pos >= 0) {
-                    result = f(<U>result, array[pos]);
+                    result = f(result, array[pos]);
                     pos--;
                 }
-                return <U>result;
+                return result;
             }
         }
         return initial;
