@@ -938,7 +938,7 @@ namespace Harness {
                                 }
                         }
                     }
-                    else if (name === 'suppressOutputPathCheck') {
+                    else if (name === "suppressOutputPathCheck") {
                         options.suppressOutputPathCheck = true;
                     }
                     else {
