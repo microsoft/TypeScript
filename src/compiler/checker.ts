@@ -7110,9 +7110,7 @@ namespace ts {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.QualifiedName:
-                        // TODO (drosen): Why a qualified name?
-                        return getSymbolOfEntityNameOrPropertyAccessExpression(expr as Node as (EntityName | PropertyAccessExpression));
+                        return getSymbolOfEntityNameOrPropertyAccessExpression(expr as (Identifier | PropertyAccessExpression));
                 }
             }
 
