@@ -895,7 +895,8 @@ namespace Harness {
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean" }
+            { name: "noErrorTruncation", type: "boolean" },
+            { name: "suppressOutputPathCheck", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -937,9 +938,6 @@ namespace Harness {
                                     throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                                 }
                         }
-                    }
-                    else if (name === "suppressOutputPathCheck") {
-                        options.suppressOutputPathCheck = true;
                     }
                     else {
                         throw new Error(`Unknown compiler option '${name}'.`);
