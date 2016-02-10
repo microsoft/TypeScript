@@ -1940,7 +1940,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseThisTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+        function parseThisTypePredicate(lhs: ThisTypeNode): TypePredicateNode {
             nextToken();
             const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
             node.parameterName = lhs;
