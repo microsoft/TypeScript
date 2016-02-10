@@ -7414,7 +7414,7 @@ namespace ts {
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
             const typeTag = getJSDocTypeTag(node);
-            if (typeTag && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
+            if (typeTag && typeTag.typeExpression && typeTag.typeExpression.type && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
                 const jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
                 if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
