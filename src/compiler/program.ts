@@ -623,7 +623,7 @@ namespace ts {
                 const hash = sys.createHash(data);
                 const mtimeBefore = sys.getModifiedTime(fileName);
 
-                if (mtimeBefore && outputFingerprints.hasOwnProperty(fileName)) {
+                if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
                     const fingerprint = outputFingerprints[fileName];
 
                     // If output has not been changed, and the file has no external modification
