@@ -947,6 +947,9 @@ namespace Harness {
                                 }
                         }
                     }
+                    else if (name === 'suppressOutputPathCheck') {
+                        options.suppressOutputPathCheck = true;
+                    }
                     else {
                         throw new Error(`Unknown compiler option '${name}'.`);
                     }

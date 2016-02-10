@@ -2621,7 +2621,7 @@ namespace ts {
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
             // First, see if this node has an @type annotation on it directly.
             const typeTag = getJSDocTypeTag(declaration);
-            if (typeTag) {
+            if (typeTag && typeTag.typeExpression) {
                 return typeTag.typeExpression.type;
             }
 
@@ -2631,7 +2631,7 @@ namespace ts {
 
                 // @type annotation might have been on the variable statement, try that instead.
                 const annotation = getJSDocTypeTag(declaration.parent.parent);
-                if (annotation) {
+                if (annotation && annotation.typeExpression) {
                     return annotation.typeExpression.type;
                 }
             }
