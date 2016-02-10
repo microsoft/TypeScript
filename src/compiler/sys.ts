@@ -229,7 +229,6 @@ namespace ts {
             const _path = require("path");
             const _os = require("os");
             const _crypto = require("crypto");
-            let hash: any;
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -569,10 +568,7 @@ namespace ts {
                     }
                 },
                 createHash(data) {
-                    if (!hash) {
-                        hash = _crypto.createHash("md5");
-                    }
-
+                    const hash = _crypto.createHash("md5");
                     hash.update(data);
                     return hash.digest("hex");
                 },
