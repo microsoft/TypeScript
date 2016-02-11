@@ -65,8 +65,8 @@ namespace ts {
         reachability: Reachability.Reachable,
         previous: undefined
     };
-    const defaultUnintialized: Flow = {
-        reachability: Reachability.Unintialized,
+    const defaultUninitialized: Flow = {
+        reachability: Reachability.Uninitialized,
         previous: undefined
     };
 
@@ -1793,7 +1793,7 @@ namespace ts {
         // reachability checks
 
         function pushLabel(node: Node) {
-            return labelStack.push({ continueFlow: defaultUnintialized, breakFlow: defaultUnintialized, node }) - 1;
+            return labelStack.push({ continueFlow: defaultUninitialized, breakFlow: defaultUninitialized, node }) - 1;
         }
         function pushNamedLabel(name: Identifier, node: LabeledStatement): boolean {
             initializeReachabilityStateIfNecessary();
@@ -1822,8 +1822,8 @@ namespace ts {
 
             const labelState = labelStack.pop();
             if (!options.allowUnusedLabels
-                && labelState.breakFlow.reachability === Reachability.Unintialized
-                && labelState.continueFlow.reachability === Reachability.Unintialized) {
+                && labelState.breakFlow.reachability === Reachability.Uninitialized
+                && labelState.continueFlow.reachability === Reachability.Uninitialized) {
 
                 file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
             }
