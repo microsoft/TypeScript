@@ -51,7 +51,9 @@ namespace ts {
         let decreaseIndent: () => void;
         let writeTextOfNode: (text: string, node: Node) => void;
 
-        let writer = createAndSetNewTextWriterWithSymbolWriter();
+        let writer: EmitTextWriterWithSymbolWriter;
+
+        createAndSetNewTextWriterWithSymbolWriter();
 
         let enclosingDeclaration: Node;
         let resultHasExternalModuleIndicator: boolean;
@@ -174,7 +176,7 @@ namespace ts {
             }
         }
 
-        function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
+        function createAndSetNewTextWriterWithSymbolWriter(): void {
             const writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
             writer.reportInaccessibleThisError = reportInaccessibleThisError;
@@ -186,7 +188,6 @@ namespace ts {
             writer.writeParameter = writer.write;
             writer.writeSymbol = writer.write;
             setWriter(writer);
-            return writer;
         }
 
         function setWriter(newWriter: EmitTextWriterWithSymbolWriter) {
