@@ -11886,10 +11886,10 @@ namespace ts {
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
-
-                if (getSuperCallInConstructor(node)) {
+                const superCall = getSuperCallInConstructor(node);
+                if (superCall) {
                     if (classExtendsNull) {
-                        error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+                        error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
                     // The first statement in the body of a constructor (excluding prologue directives) must be a super call
