@@ -4,14 +4,14 @@ interface ProxyHandler<T> {
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
-    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor;
-    has? (target: T, p: PropertyKey): boolean;
-    get? (target: T, p: PropertyKey, receiver: any): any;
-    set? (target: T, p: PropertyKey, value: any, receiver: any): boolean;
-    deleteProperty? (target: T, p: PropertyKey): boolean;
-    defineProperty? (target: T, p: PropertyKey, attributes: PropertyDescriptor): boolean;
-    enumerate? (target: T): PropertyKey[];
-    ownKeys? (target: T): PropertyKey[];
+    getOwnPropertyDescriptor? (target: T, p: string | number): PropertyDescriptor;
+    has? (target: T, p: string | number): boolean;
+    get? (target: T, p: string | number, receiver: any): any;
+    set? (target: T, p: string | number, value: any, receiver: any): boolean;
+    deleteProperty? (target: T, p: string | number): boolean;
+    defineProperty? (target: T, p: string | number, attributes: PropertyDescriptor): boolean;
+    enumerate? (target: T): (string | number)[];
+    ownKeys? (target: T): (string | number)[];
     apply? (target: T, thisArg: any, argArray?: any): any;
     construct? (target: T, thisArg: any, argArray?: any): any;
 }
