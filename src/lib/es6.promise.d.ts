@@ -19,8 +19,6 @@ interface Promise<T> {
      */
     catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
     catch(onrejected?: (reason: any) => void): Promise<T>;
-
-    readonly [Symbol.toStringTag]: "Promise";
 }
 
 interface PromiseConstructor {
@@ -52,15 +50,6 @@ interface PromiseConstructor {
     all<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike <T4>]): Promise<[T1, T2, T3, T4]>;
     all<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>;
     all<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>;
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
-
-    /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
-     * or rejected.
-     * @param values An array of Promises.
-     * @returns A new Promise.
-     */
-    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
 
     /**
      * Creates a new rejected promise for the provided reason.
@@ -88,8 +77,6 @@ interface PromiseConstructor {
      * @returns A resolved promise.
      */
     resolve(): Promise<void>;
-
-    readonly [Symbol.species]: Function;
 }
 
 declare var Promise: PromiseConstructor;
