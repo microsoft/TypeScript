@@ -1750,7 +1750,7 @@ namespace ts {
 
         function bindIdentifier(node: Identifier) {
             checkStrictModeIdentifier(node);
-            if (isExpression(node)) {
+            if (isExpression(node) || (node.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node.parent).name === node)) {
                 if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression> node.parent).name === node) {
                     return;
                 }

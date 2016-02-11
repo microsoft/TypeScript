@@ -6902,11 +6902,14 @@ namespace ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, location: Node) {
             const initialType = getTypeOfSymbol(symbol);
+            const isUnion = (initialType.flags & TypeFlags.Union) !== 0;
             Debug.assert(location.kind === SyntaxKind.Identifier, "node in getNarrowedTypeOfSymbol should be an identifier");
 
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (!location || !(symbol.flags & SymbolFlags.Variable)) return initialType;
             if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+
+            if (location.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration> location.parent).name === location) return initialType;
 
             let saveLocalType = false;
             if (location.kind === SyntaxKind.Identifier) {
@@ -7210,34 +7213,41 @@ namespace ts {
                 return type;
             }
             function getAssignedTypeAtLocation(node: Identifier) {
+                // Only union types can be narrowed by assignments.
+                // Other types will always fall back to their initial type.
+
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
-                    if ((<VariableDeclaration>parent).initializer) {
+                    if ((<VariableDeclaration>parent).initializer && !isUnion) {
                         return getTypeOfExpression((<VariableDeclaration>parent).initializer);
                     }
                     else {
                         // This catches these constructs:
-                        // - let x: string
+                        // - let x: T
                         // - for (let y in z) {}
                         // - for (let y of z) {}
+                        // - Other cases where `initialType` is not a union type
                         return initialType;
                     }
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    if (!isUnion) return initialType;
                     return getTypeOfExpression((<BinaryExpression>parent).right);
                 }
                 if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
                     // for (x in z) {}
+                    if (!isUnion) return initialType;
                     return globalStringType;
                 }
                 if (parent.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>parent).initializer === node) {
                     // for (x of z) {}
+                    if (!isUnion) return initialType;
                     return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
                 }
             }
             function narrowTypeByAssignment(type: Type) {
                 // Narrow union types only
-                if (!(initialType.flags & TypeFlags.Union)) return initialType;
+                if (!isUnion) return initialType;
                 const constituentTypes = (<UnionType> initialType).types;
                 const assignableTypes: Type[] = [];
                 for (const constituentType of constituentTypes) {
