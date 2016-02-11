@@ -8481,7 +8481,7 @@ namespace ts {
                 return getIntrinsicTagSymbol(node);
             }
             else {
-                return resolveEntityName(node.tagName, SymbolFlags.Value);
+                return checkExpression(node.tagName).symbol;
             }
         }
 

@@ -13,7 +13,6 @@ import Route = ReactRouter.Route;
 
 var routes1 = <Route />;
 >routes1 : Symbol(routes1, Decl(test.tsx, 6, 3))
->Route : Symbol(ReactRouter.Route, Decl(react.d.ts, 7, 4))
 
 module M {
 >M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))
@@ -27,8 +26,6 @@ module M {
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
 >y : Symbol(y, Decl(test.tsx, 13, 4))
->X : Symbol(X, Decl(test.tsx, 9, 11))
->X : Symbol(X, Decl(test.tsx, 9, 11))
 }
 
 === tests/cases/conformance/jsx/react.d.ts ===
