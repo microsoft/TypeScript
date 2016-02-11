@@ -8243,6 +8243,17 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, properties: Symbol[], kind: IndexKind): IndexInfo {
+            const propTypes: Type[] = [];
+            for (let i = 0; i < properties.length; i++) {
+                if (kind === IndexKind.String || isNumericName(node.properties[i].name)) {
+                    propTypes.push(getTypeOfSymbol(properties[i]));
+                }
+            }
+            const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
+            return createIndexInfo(unionType, /*isReadonly*/ false);
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
@@ -8254,9 +8265,10 @@ namespace ts {
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             let typeFlags: TypeFlags = 0;
-            let hasDynamicProperties = false;
-
             let patternWithComputedProperties = false;
+            let hasComputedStringProperty = false;
+            let hasComputedNumberProperty = false;
+
             for (const memberDecl of node.properties) {
                 let member = memberDecl.symbol;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
@@ -8321,7 +8333,12 @@ namespace ts {
                 }
 
                 if (hasDynamicName(memberDecl)) {
-                    hasDynamicProperties = true;
+                    if (isNumericName(memberDecl.name)) {
+                        hasComputedNumberProperty = true;
+                    }
+                    else {
+                        hasComputedStringProperty = true;
+                    }
                 }
                 else {
                     propertiesTable[member.name] = member;
@@ -8344,8 +8361,8 @@ namespace ts {
                 }
             }
 
-            const stringIndexInfo = getIndexInfo(IndexKind.String);
-            const numberIndexInfo = getIndexInfo(IndexKind.Number);
+            const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) : undefined;
+            const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) : undefined;
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);
@@ -8353,29 +8370,6 @@ namespace ts {
                 result.pattern = node;
             }
             return result;
-
-            function getIndexInfo(kind: IndexKind) {
-                if (hasDynamicProperties && contextualType && contextualTypeHasIndexSignature(contextualType, kind)) {
-                    const propTypes: Type[] = [];
-                    for (let i = 0; i < propertiesArray.length; i++) {
-                        const propertyDecl = node.properties[i];
-                        if (kind === IndexKind.String || isNumericName(propertyDecl.name)) {
-                            // Do not call getSymbolOfNode(propertyDecl), as that will get the
-                            // original symbol for the node. We actually want to get the symbol
-                            // created by checkObjectLiteral, since that will be appropriately
-                            // contextually typed and resolved.
-                            const type = getTypeOfSymbol(propertiesArray[i]);
-                            if (!contains(propTypes, type)) {
-                                propTypes.push(type);
-                            }
-                        }
-                    }
-                    const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
-                    typeFlags |= unionType.flags;
-                    return createIndexInfo(unionType, /*isReadonly*/ false);
-                }
-                return undefined;
-            }
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement) {
