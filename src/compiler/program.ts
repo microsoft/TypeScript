@@ -1288,7 +1288,6 @@ namespace ts {
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
-            const firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
                 const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
