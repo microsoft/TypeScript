@@ -580,7 +580,6 @@ namespace ts {
         const options: CompilerOptions = {};
         const errors: Diagnostic[] = [];
 
-        options.module = ModuleKind.CommonJS;
         if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
             options.allowJs = true;
         }
