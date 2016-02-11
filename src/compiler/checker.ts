@@ -7328,10 +7328,6 @@ namespace ts {
             }
         }
 
-        function isSuperCallExpression(n: Node): boolean {
-            return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
-        }
-
         function findFirstSuperCall(n: Node): Node {
             if (isSuperCallExpression(n)) {
                 return n;
