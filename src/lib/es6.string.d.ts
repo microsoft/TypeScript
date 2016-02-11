@@ -1,8 +1,5 @@
 
 interface String {
-    /** Iterator */
-    [Symbol.iterator](): IterableIterator<string>;
-
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
       * value of the UTF-16 encoded code point starting at the string element at position pos in 
@@ -49,41 +46,6 @@ interface String {
       * position. Otherwise returns false.
       */
     startsWith(searchString: string, position?: number): boolean;
-
-    // Overloads for objects with methods of well-known symbols.
-
-    /**
-      * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
-      * @param matcher An object that supports being matched against.
-      */
-    match(matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
-
-    /**
-      * Replaces text in a string, using an object that supports replacement within a string.
-      * @param searchValue A object can search for and replace matches within a string.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
-    replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
-
-    /**
-      * Replaces text in a string, using an object that supports replacement within a string.
-      * @param searchValue A object can search for and replace matches within a string.
-      * @param replacer A function that returns the replacement text.
-      */
-    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param searcher An object which supports searching within a string.
-      */
-    search(searcher: { [Symbol.search](string: string): number; }): number;
-
-    /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param splitter An object that can split a string.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
-    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
 
     /**
       * Returns an <a> HTML anchor element and sets the name attribute to the text value
