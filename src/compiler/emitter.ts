@@ -407,14 +407,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         interface ConvertedLoopState {
             /*
-             * set of labels that occured inside the converted loop
+             * set of labels that occurred inside the converted loop
              * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
              */
             labels?: Map<string>;
             /*
              * collection of labeled jumps that transfer control outside the converted loop.
              * maps store association 'label -> labelMarker' where
-             * - label - value of label as it apprear in code
+             * - label - value of label as it appear in code
              * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
              */
             labeledNonLocalBreaks?: Map<string>;
@@ -437,7 +437,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
              * i.e.
              * for (let x;;) <statement that captures x in closure and uses 'arguments'>
              * should be converted to
-             * var loop = function(x) { <code where 'arguments' is replaced witg 'arguments_1'> }
+             * var loop = function(x) { <code where 'arguments' is replaced with 'arguments_1'> }
              * var arguments_1 = arguments
              * for (var x;;) loop(x);
              * otherwise semantics of the code will be different since 'arguments' inside converted loop body
@@ -1005,7 +1005,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
                 let text = getTextOfNodeFromSourceText(currentText, node);
 
-                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+                // text contains the original source, it will also contain quotes ("`"), dollar signs and braces ("${" and "}"),
                 // thus we need to remove those characters.
                 // First template piece starts with "`", others with "}"
                 // Last template piece ends with "`", others with "${"
@@ -4064,14 +4064,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                        // When doing so we want to highlight the passed in source map node since thats the one needing this temp assignment
                         value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, sourceMapNode);
                     }
                     for (const p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                             const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                            // Assignment for target = value.propName should highligh whole property, hence use p as source map node
+                            // Assignment for target = value.propName should highlight whole property, hence use p as source map node
                             emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), p);
                         }
                     }
@@ -4082,13 +4082,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                        // When doing so we want to highlight the passed in source map node since thats the one needing this temp assignment
                         value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, sourceMapNode);
                     }
                     for (let i = 0; i < elements.length; i++) {
                         const e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
-                            // Assignment for target = value.propName should highligh whole property, hence use e as source map node
+                            // Assignment for target = value.propName should highlight whole property, hence use e as source map node
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
                                 emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)), e);
                             }
@@ -6746,7 +6746,7 @@ const _super = (function (geti, seti) {
                 // when resolving exports local exported entries/indirect exported entries in the module
                 // should always win over entries with similar names that were added via star exports
                 // to support this we store names of local/indirect exported entries in a set.
-                // this set is used to filter names brought by star expors.
+                // this set is used to filter names brought by star exports.
                 if (!hasExportStarsToExportValues) {
                     // local names set is needed only in presence of star exports
                     return undefined;
@@ -8077,7 +8077,7 @@ const _super = (function (geti, seti) {
                     //      declare var x;
                     //      /// <reference-path ...>
                     //      interface F {}
-                    //  The first /// will NOT be removed while the second one will be removed eventhough both node will not be emitted
+                    //  The first /// will NOT be removed while the second one will be removed even though both node will not be emitted
                     if (node.pos === 0) {
                         leadingComments = filter(getLeadingCommentsToEmit(node), isTripleSlashComment);
                     }
