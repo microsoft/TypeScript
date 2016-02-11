@@ -8476,7 +8476,6 @@ namespace ts {
         }
 
         function getJsxTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
-            const links = getNodeLinks(node);
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 return getIntrinsicTagSymbol(node);
             }
