@@ -13,7 +13,7 @@ import Route = ReactRouter.Route;
 
 var routes1 = <Route />;
 >routes1 : Symbol(routes1, Decl(test.tsx, 6, 3))
->Route : Symbol(Route, Decl(test.tsx, 2, 45))
+>Route : Symbol(ReactRouter.Route, Decl(react.d.ts, 7, 4))
 
 module M {
 >M : Symbol(M, Decl(test.tsx, 6, 24), Decl(test.tsx, 10, 1))

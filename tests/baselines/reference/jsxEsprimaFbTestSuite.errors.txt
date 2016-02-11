@@ -4,10 +4,12 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,29): error TS1005: '{' 
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,57): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,8): error TS2503: Cannot find namespace 'a'.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX expressions must have one parent element
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(43,10): error TS2503: Cannot find namespace 'a'.
 
 
-==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (7 errors) ====
+==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (9 errors) ====
     declare var React: any;
     declare var 日本語;
     declare var AbC_def;
@@ -61,10 +63,14 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX 
     <a.b></a.b>;
     ~
 !!! error TS1003: Identifier expected.
+           ~
+!!! error TS2503: Cannot find namespace 'a'.
                ~
 !!! error TS2657: JSX expressions must have one parent element
     
     <a.b.c></a.b.c>;
+             ~
+!!! error TS2503: Cannot find namespace 'a'.
     
     (<div />) < x;
     

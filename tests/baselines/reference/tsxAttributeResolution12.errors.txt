@@ -1,4 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(26,10): error TS2324: Property 'reqd' is missing in type 'IntrinsicAttributes & { reqd: any; }'.
+tests/cases/conformance/jsx/file.tsx(29,10): error TS2324: Property 'reqd' is missing in type 'IntrinsicAttributes & { reqd: any; }'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
@@ -15,7 +16,7 @@ tests/cases/conformance/jsx/file.tsx(26,10): error TS2324: Property 'reqd' is mi
     	}
     }
     
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     
     declare class Component<P, S>  {
     	constructor(props?: P, context?: any);
@@ -47,5 +48,7 @@ tests/cases/conformance/jsx/file.tsx(26,10): error TS2324: Property 'reqd' is mi
     
     // Should error
     var t2 = <TestMod.Test />;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2324: Property 'reqd' is missing in type 'IntrinsicAttributes & { reqd: any; }'.
     
     
