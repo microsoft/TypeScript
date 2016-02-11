@@ -78,6 +78,7 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: {
+                "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
@@ -87,7 +88,7 @@ namespace ts {
             },
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es2015
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_es2015_or_none
         },
         {
             name: "newLine",
