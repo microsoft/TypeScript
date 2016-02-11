@@ -11927,8 +11927,8 @@ namespace ts {
             }
 
             // TS 1.0 spec (April 2014): 8.3.2
-            // Constructors of classes with no extends clause and constructors of classes that extends null may not contain super calls,
-            // whereas constructors of derived classes must contain at least one super call somewhere in their function body.
+            // Constructors of classes with no extends clause may not contain super calls, whereas
+            // constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
             if (getClassExtendsHeritageClauseElement(containingClassDecl)) {
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
