@@ -141,7 +141,7 @@ namespace ts {
      * 'typings' entry or file 'index' with some supported extension
      * - Classic loader will only try to interpret '/a/b/c' as file.
      */
-    type ResolutionKindSpecificLoader = (candidate: string, extensions: string[], failedLookupLocations: string[], onlyRecordFalures: boolean, state: ModuleResolutionState) => string;
+    type ResolutionKindSpecificLoader = (candidate: string, extensions: string[], failedLookupLocations: string[], onlyRecordFailures: boolean, state: ModuleResolutionState) => string;
 
     /**
      * Any module resolution kind can be augmented with optional settings: 'baseUrl', 'paths' and 'rootDirs' - they are used to
@@ -151,7 +151,7 @@ namespace ts {
      * fallback to standard resolution routine.
      *
      * - baseUrl - this setting controls how non-relative module names are resolved. If this setting is specified then non-relative
-     * names will be resolved relative to baseUrl: i.e. if baseUrl is '/a/b' then canditate location to resolve module name 'c/d' will
+     * names will be resolved relative to baseUrl: i.e. if baseUrl is '/a/b' then candidate location to resolve module name 'c/d' will
      * be '/a/b/c/d'
      * - paths - this setting can only be used when baseUrl is specified. allows to tune how non-relative module names
      * will be resolved based on the content of the module name.
@@ -169,7 +169,7 @@ namespace ts {
      * If module name can be matches with multiple patterns then pattern with the longest prefix will be picked.
      * After selecting pattern we'll use list of substitutions to get candidate locations of the module and the try to load module
      * from the candidate location.
-     * Substitiution is a string that can contain zero or one '*'. To get candidate location from substitution we'll pick every
+     * Substitution is a string that can contain zero or one '*'. To get candidate location from substitution we'll pick every
      * substitution in the list and replace '*' with <MatchedStar> string. If candidate location is not rooted it
      * will be converted to absolute using baseUrl.
      * For example:
@@ -197,10 +197,10 @@ namespace ts {
      * 'rootDirs' provides the way to tell compiler that in order to get the whole project it should behave as if content of all
      * root dirs were merged together.
      * I.e. for the example above 'rootDirs' will have two entries: [ '/local/src', '/shared/components/contracts/src' ].
-     * Compiler wil first convert './protocols/file2' into absolute path relative to the location of containing file:
+     * Compiler will first convert './protocols/file2' into absolute path relative to the location of containing file:
      * '/local/src/content/protocols/file2' and try to load it - failure.
      * Then it will search 'rootDirs' looking for a longest matching prefix of this absolute path and if such prefix is found - absolute path will
-     * be converted to a path relative to found rootDir entry './content/protocols/file2' (*). As a last step compiler will check all remainining
+     * be converted to a path relative to found rootDir entry './content/protocols/file2' (*). As a last step compiler will check all remaining
      * entries in 'rootDirs', use them to build absolute path out of (*) and try to resolve module from this location.
      */
     function tryLoadModuleUsingOptionalResolutionSettings(moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
@@ -232,7 +232,7 @@ namespace ts {
         for (const rootDir of state.compilerOptions.rootDirs) {
             // rootDirs are expected to be absolute
             // in case of tsconfig.json this will happen automatically - compiler will expand relative names
-            // using locaton of tsconfig.json as base location
+            // using location of tsconfig.json as base location
             let normalizedRoot = normalizePath(rootDir);
             if (!endsWith(normalizedRoot, directorySeparator)) {
                 normalizedRoot += directorySeparator;
@@ -329,7 +329,7 @@ namespace ts {
                     }
                 }
                 else if (pattern === moduleName) {
-                    // pattern was matched as is - no need to seatch further
+                    // pattern was matched as is - no need to search further
                     matchedPattern = pattern;
                     matchedStar = undefined;
                     break;
@@ -1025,7 +1025,7 @@ namespace ts {
                     // We were canceled while performing the operation.  Because our type checker
                     // might be a bad state, we need to throw it away.
                     //
-                    // Note: we are overly agressive here.  We do not actually *have* to throw away
+                    // Note: we are overly aggressive here.  We do not actually *have* to throw away
                     // the "noDiagnosticsTypeChecker".  However, for simplicity, i'd like to keep
                     // the lifetimes of these two TypeCheckers the same.  Also, we generally only
                     // cancel when the user has made a change anyways.  And, in that case, we (the
@@ -1477,7 +1477,7 @@ namespace ts {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     // add file to program only if:
-                    // - resolution was successfull
+                    // - resolution was successful
                     // - noResolve is falsy
                     // - module name come from the list fo imports
                     const shouldAddFile = resolution &&

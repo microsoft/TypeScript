@@ -115,7 +115,7 @@ namespace ts {
     const gutterStyleSequence = "\u001b[100;30m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
-    const elipsis = "...";
+    const ellipsis = "...";
     const categoryFormatMap: Map<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
@@ -139,7 +139,7 @@ namespace ts {
             const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;
             if (hasMoreThanFiveLines) {
-                gutterWidth = Math.max(elipsis.length, gutterWidth);
+                gutterWidth = Math.max(ellipsis.length, gutterWidth);
             }
 
             output += sys.newLine;
@@ -147,7 +147,7 @@ namespace ts {
                 // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                 // so we'll skip ahead to the second-to-last line.
                 if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += formatAndReset(padLeft(elipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                    output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
                     i = lastLine - 1;
                 }
 
@@ -341,7 +341,7 @@ namespace ts {
                 const directory = ts.getDirectoryPath(configFileName);
                 directoryWatcher = sys.watchDirectory(
                     // When the configFileName is just "tsconfig.json", the watched directory should be
-                    // the current direcotry; if there is a given "project" parameter, then the configFileName
+                    // the current directory; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
                     directory == "" ? "." : directory,
                     watchedDirectoryChanged, /*recursive*/ true);
