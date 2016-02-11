@@ -527,14 +527,14 @@ namespace ts {
                 const filesSeen: Map<boolean> = {};
 
                 let exclude: string[] = [];
-                if(json["exclude"] instanceof Array){
+                if (json["exclude"] instanceof Array) {
                     exclude = json["exclude"];
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"]
-                    let outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if(outDir) {
+                    exclude = ["node_modules"];
+                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                    if (outDir) {
                         exclude.push(outDir);
                     }
                 }
