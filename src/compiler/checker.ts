@@ -13484,12 +13484,12 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression, showError: boolean): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, reportError: boolean): Type {
             const expressionType = getTypeOfExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, showError);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, reportError);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, showError: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, reportError: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
@@ -13509,7 +13509,7 @@ namespace ts {
                 }
             }
 
-            if (showError) error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            if (reportError) error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
             return unknownType;
         }
 
