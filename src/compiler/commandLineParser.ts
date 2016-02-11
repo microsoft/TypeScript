@@ -553,6 +553,11 @@ namespace ts {
                             continue;
                         }
 
+                        // Skip over any minified JavaScript files (ending in ".min.js")
+                        if (/\.min\.js$/.test(fileName)) {
+                            continue;
+                        }
+
                         // If this is one of the output extension (which would be .d.ts and .js if we are allowing compilation of js files)
                         // do not include this file if we included .ts or .tsx file with same base name as it could be output of the earlier compilation
                         if (extension === ".d.ts" || (options.allowJs && contains(supportedJavascriptExtensions, extension))) {
