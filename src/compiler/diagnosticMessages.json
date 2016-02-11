@@ -439,10 +439,6 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
-        "category": "Error",
-        "code": 1148
-    },
     "File name '{0}' differs from already included file name '{1}' only in casing": {
         "category": "Error",
         "code": 1149
@@ -2130,10 +2126,6 @@
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
-    },
-    "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
-        "category": "Error",
-        "code": 5047
     },
     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
