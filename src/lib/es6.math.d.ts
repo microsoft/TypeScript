@@ -109,6 +109,4 @@ interface Math {
       * @param x A numeric expression.
       */
     cbrt(x: number): number;
-
-    readonly [Symbol.toStringTag]: "Math";
 }
