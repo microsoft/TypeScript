@@ -615,42 +615,50 @@ namespace ts {
             }
         }
 
-        const outputFingerprints: Map<OutputFingerprint> =
-            options.watch && sys.createHash && sys.getModifiedTime ? {} : undefined;
+        let outputFingerprints: Map<OutputFingerprint>;
 
-        const fileWriter: typeof sys.writeFile = outputFingerprints ?
-            (fileName, data, writeByteOrderMark) => {
-                const hash = sys.createHash(data);
-                const mtimeBefore = sys.getModifiedTime(fileName);
+        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
+            if (!outputFingerprints) {
+                outputFingerprints = {};
+            }
 
-                if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
-                    const fingerprint = outputFingerprints[fileName];
+            const hash = sys.createHash(data);
+            const mtimeBefore = sys.getModifiedTime(fileName);
 
-                    // If output has not been changed, and the file has no external modification
-                    if (fingerprint.byteOrderMark === writeByteOrderMark &&
-                        fingerprint.hash === hash &&
-                        fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
-                        return;
-                    }
+            if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
+                const fingerprint = outputFingerprints[fileName];
+
+                // If output has not been changed, and the file has no external modification
+                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                    fingerprint.hash === hash &&
+                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                    return;
                 }
+            }
 
-                sys.writeFile(fileName, data, writeByteOrderMark);
+            sys.writeFile(fileName, data, writeByteOrderMark);
 
-                const mtimeAfter = sys.getModifiedTime(fileName);
+            const mtimeAfter = sys.getModifiedTime(fileName);
 
-                outputFingerprints[fileName] = {
-                    hash,
-                    byteOrderMark: writeByteOrderMark,
-                    mtime: mtimeAfter
-                };
-            } :
-            (fileName, data, writeByteOrderMark) => sys.writeFile(fileName, data, writeByteOrderMark);
+            outputFingerprints[fileName] = {
+                hash,
+                byteOrderMark: writeByteOrderMark,
+                mtime: mtimeAfter
+            };
+        }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                fileWriter(fileName, data, writeByteOrderMark);
+
+                if (options.watch && sys.createHash && sys.getModifiedTime) {
+                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                }
+                else {
+                    sys.writeFile(fileName, data, writeByteOrderMark);
+                }
+
                 ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
