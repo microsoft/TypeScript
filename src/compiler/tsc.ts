@@ -376,7 +376,7 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options, configFileName);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
