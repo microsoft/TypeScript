@@ -502,7 +502,7 @@ namespace ts {
                         spacesToRemoveAfterAsterisk = 0;
                     }
 
-                    // Analyse text on this line
+                    // Analyze text on this line
                     while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
                         const ch = sourceFile.text.charAt(pos);
                         if (ch === "@") {
@@ -641,7 +641,7 @@ namespace ts {
                             paramHelpStringMargin = undefined;
                         }
 
-                        // If this is the start of another tag, continue with the loop in seach of param tag with symbol name
+                        // If this is the start of another tag, continue with the loop in search of param tag with symbol name
                         if (sourceFile.text.charCodeAt(pos) === CharacterCodes.at) {
                             continue;
                         }
@@ -2822,7 +2822,7 @@ namespace ts {
                 }
 
                 // Check if the language version has changed since we last created a program; if they are the same,
-                // it is safe to reuse the souceFiles; if not, then the shape of the AST can change, and the oldSourceFile
+                // it is safe to reuse the sourceFiles; if not, then the shape of the AST can change, and the oldSourceFile
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
                     // Check if the old program had this file already
@@ -2916,7 +2916,7 @@ namespace ts {
         }
 
         /**
-         * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
+         * getSemanticDiagnostics return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors
          */
         function getSemanticDiagnostics(fileName: string): Diagnostic[] {
@@ -3725,7 +3725,7 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const exisingImportsOrExports: Map<boolean> = {};
+                const existingImportsOrExports: Map<boolean> = {};
 
                 for (const element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
@@ -3734,14 +3734,14 @@ namespace ts {
                     }
 
                     const name = element.propertyName || element.name;
-                    exisingImportsOrExports[name.text] = true;
+                    existingImportsOrExports[name.text] = true;
                 }
 
-                if (isEmpty(exisingImportsOrExports)) {
+                if (isEmpty(existingImportsOrExports)) {
                     return exportsOfModule;
                 }
 
-                return filter(exportsOfModule, e => !lookUp(exisingImportsOrExports, e.name));
+                return filter(exportsOfModule, e => !lookUp(existingImportsOrExports, e.name));
             }
 
             /**
@@ -4639,7 +4639,16 @@ namespace ts {
             // to jump to the implementation directly.
             if (symbol.flags & SymbolFlags.Alias) {
                 const declaration = symbol.declarations[0];
-                if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
+
+                // Go to the original declaration for cases:
+                //
+                //   (1) when the aliased symbol was declared in the location(parent).
+                //   (2) when the aliased symbol is originating from a named import.
+                //
+                if (node.kind === SyntaxKind.Identifier &&
+                    (node.parent === declaration ||
+                    (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
+
                     symbol = typeChecker.getAliasedSymbol(symbol);
                 }
             }
@@ -5565,7 +5574,7 @@ namespace ts {
                 }
 
                 // If the symbol is an import we would like to find it if we are looking for what it imports.
-                // So consider it visibile outside its declaration scope.
+                // So consider it visible outside its declaration scope.
                 if (symbol.flags & SymbolFlags.Alias) {
                     return undefined;
                 }
@@ -5965,12 +5974,12 @@ namespace ts {
                 // The search set contains at least the current symbol
                 let result = [symbol];
 
-                // If the symbol is an alias, add what it alaises to the list
+                // If the symbol is an alias, add what it aliases to the list
                 if (isImportSpecifierSymbol(symbol)) {
                      result.push(typeChecker.getAliasedSymbol(symbol));
                 }
 
-                // For export specifiers, the exported name can be refering to a local symbol, e.g.:
+                // For export specifiers, the exported name can be referring to a local symbol, e.g.:
                 //     import {a} from "mod";
                 //     export {a as somethingElse}
                 // We want the *local* declaration of 'a' as declared in the import,
@@ -6006,7 +6015,7 @@ namespace ts {
 
                 // If the symbol.valueDeclaration is a property parameter declaration,
                 // we should include both parameter declaration symbol and property declaration symbol
-                // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in contructor.locals.
+                // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in constructor.locals.
                 // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
                 if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
                     isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
@@ -6032,9 +6041,9 @@ namespace ts {
             /**
              * Find symbol of the given property-name and add the symbol to the given result array
              * @param symbol a symbol to start searching for the given propertyName
-             * @param propertyName a name of property to serach for
+             * @param propertyName a name of property to search for
              * @param result an array of symbol of found property symbols
-             * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisitng of the same symbol.
+             * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
              *                                The value of previousIterationSymbol is undefined when the function is first called.
              */
             function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
@@ -7377,12 +7386,12 @@ namespace ts {
                 // comment portion.
                 const singleLineCommentStart = /(?:\/\/+\s*)/.source;
                 const multiLineCommentStart = /(?:\/\*+\s*)/.source;
-                const anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+                const anyNumberOfSpacesAndAsterisksAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 
                 // Match any of the above three TODO comment start regexps.
                 // Note that the outermost group *is* a capture group.  We want to capture the preamble
                 // so that we can determine the starting position of the TODO comment match.
-                const preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+                const preamble = "(" + anyNumberOfSpacesAndAsterisksAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
 
                 // Takes the descriptors and forms a regexp that matches them as if they were literals.
                 // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
