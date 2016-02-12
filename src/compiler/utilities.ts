@@ -2640,6 +2640,10 @@ namespace ts {
         return node.kind === SyntaxKind.BinaryExpression;
     }
 
+    export function isCallExpression(node: Node): node is CallExpression {
+        return node.kind === SyntaxKind.CallExpression;
+    }
+
     export function isTemplate(node: Node): node is Template {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateExpression
