@@ -163,23 +163,27 @@ var harnessSources = harnessCoreSources.concat([
 }));
 
 var es6LibrarySources = [
-    "es6.core.d.ts",
     "es6.array.d.ts",
     "es6.collection.d.ts",
+    "es6.function.d.ts",
+    "es6.iterable.d.ts",
     "es6.math.d.ts",
     "es6.number.d.ts",
     "es6.object.d.ts",
     "es6.promise.d.ts",
     "es6.proxy.d.ts",
     "es6.reflect.d.ts",
-    "es6.string.d.ts"
+    "es6.regexp.d.ts",
+    "es6.string.d.ts",
+    "es6.symbol.d.ts",
+    "es6.symbol.wellknown.d.ts",
 ];
 
 var es6LibrarySourceMap = es6LibrarySources.map(function(source) {
    return  { target: "lib." + source, sources: ["header.d.ts", source ] };
 });
 
-var es7LibrarySource = [ "es7.array-include.d.ts" ];
+var es7LibrarySource = [ "es7.array.include.d.ts" ];
 
 var es7LibrarySourceMap = es7LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
