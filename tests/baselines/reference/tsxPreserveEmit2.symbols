@@ -6,5 +6,4 @@ var Route: any;
 
 var routes1 = <Route />;
 >routes1 : Symbol(routes1, Decl(test.tsx, 3, 3))
->Route : Symbol(Route, Decl(test.tsx, 2, 3))
 

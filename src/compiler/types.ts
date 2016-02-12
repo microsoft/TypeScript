@@ -422,10 +422,6 @@ namespace ts {
         IntrinsicNamedElement = 1 << 0,
         /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 1 << 1,
-        /** An element backed by a class, class-like, or function value */
-        ValueElement = 1 << 2,
-        /** Element resolution failed */
-        UnknownElement = 1 << 4,
 
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
