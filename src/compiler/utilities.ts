@@ -746,6 +746,10 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.Identifier;
     }
 
+    export function isThisTypePredicate(predicate: TypePredicate): predicate is ThisTypePredicate {
+        return predicate && predicate.kind === TypePredicateKind.This;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
