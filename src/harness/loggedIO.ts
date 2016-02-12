@@ -225,7 +225,7 @@ namespace Playback {
             },
             (path, extension, exclude) => findResultByPath(wrapper,
                     replayLog.directoriesRead.filter(
-                        (d) => {
+                        d => {
                             if (d.extension === extension) {
                                 if (d.exclude) {
                                     return ts.arrayIsEqualTo(d.exclude, exclude);
