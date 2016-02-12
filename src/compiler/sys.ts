@@ -466,6 +466,7 @@ namespace ts {
                 File,
                 Directory
             }
+
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
                 try {
                     const stat = _fs.statSync(path);
