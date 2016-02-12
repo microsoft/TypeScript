@@ -904,7 +904,8 @@ namespace Harness {
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean" }
+            { name: "noErrorTruncation", type: "boolean" },
+            { name: "suppressOutputPathCheck", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
