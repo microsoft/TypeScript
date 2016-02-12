@@ -1,4 +1,4 @@
- {
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -123,7 +123,7 @@
         "category": "Error",
         "code": 1043
     },
-    "'{0}' modifier cannot appear on a module element.": {
+    "'{0}' modifier cannot appear on a module or namespace element.": {
         "category": "Error",
         "code": 1044
     },
@@ -447,7 +447,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -1278,10 +1278,6 @@
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
-    },
-    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
-        "category": "Error",
-        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2207,6 +2203,7 @@
         "category": "Error",
         "code": 5062
     },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2251,10 +2248,10 @@
         "category": "Message",
         "code": 6011
     },
-  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
-    "category": "Message",
-    "code": 6015
-  },
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+        "category": "Message",
+        "code": 6015
+    },
     "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
@@ -2339,7 +2336,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
         "category": "Error",
         "code": 6046
     },
@@ -2591,6 +2588,11 @@
         "category": "Message",
         "code": 6111
     },
+    "Do not emit 'use strict' directives in module output.": {
+        "category": "Message",
+        "code": 6112
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2777,23 +2779,23 @@
         "code": 17004
     },
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
-      "category": "Error",
-      "code": 17005
+        "category": "Error",
+        "code": 17005
     },
     "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17006
+        "category": "Error",
+        "code": 17006
     },
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17007
+        "category": "Error",
+        "code": 17007
     },
     "JSX element '{0}' has no corresponding closing tag.": {
-      "category": "Error",
-      "code": 17008
+        "category": "Error",
+        "code": 17008
     },
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
-      "category": "Error",
-      "code": 17009
+        "category": "Error",
+        "code": 17009
     }
 }

@@ -137,7 +137,7 @@ namespace ts {
                 node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
-            // Also mark that we've propogated the child information to this node.  This way we can
+            // Also mark that we've propagated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
             node.flags |= NodeFlags.HasAggregatedChildData;
@@ -462,6 +462,10 @@ namespace ts {
 
     export function isLet(node: Node): boolean {
         return !!(getCombinedNodeFlags(node) & NodeFlags.Let);
+    }
+
+    export function isSuperCallExpression(n: Node): boolean {
+        return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
     export function isPrologueDirective(node: Node): boolean {
@@ -1212,13 +1216,19 @@ namespace ts {
             }
 
             // Also recognize when the node is the RHS of an assignment expression
+            const parent = node.parent;
             const isSourceOfAssignmentExpressionStatement =
-                node.parent && node.parent.parent &&
-                node.parent.kind === SyntaxKind.BinaryExpression &&
-                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-                node.parent.parent.kind === SyntaxKind.ExpressionStatement;
+                parent && parent.parent &&
+                parent.kind === SyntaxKind.BinaryExpression &&
+                (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
+                parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                return node.parent.parent.jsDocComment;
+                return parent.parent.jsDocComment;
+            }
+
+            const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
+            if (isPropertyAssignmentExpression) {
+                return parent.jsDocComment;
             }
         }
 
@@ -2001,9 +2011,9 @@ namespace ts {
     }
 
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {
-        return compilerOptions.module ?
+        return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
-            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.CommonJS;
     }
 
     export interface EmitFileNames {
@@ -2030,8 +2040,22 @@ namespace ts {
         }
 
         function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
-            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
-                sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+            // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
+            // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
+            // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
+            let extension = ".js";
+            if (options.jsx === JsxEmit.Preserve) {
+                if (isSourceFileJavaScript(sourceFile)) {
+                    if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
+                        extension = ".jsx";
+                    }
+                }
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    // TypeScript source file preserving JSX syntax
+                    extension = ".jsx";
+                }
+            }
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, extension);
             const emitFileNames: EmitFileNames = {
                 jsFilePath,
                 sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
@@ -2562,7 +2586,7 @@ namespace ts {
                 byte4 = 64;
             }
 
-            // Write to the ouput
+            // Write to the output
             result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
 
             i += 3;
@@ -2757,9 +2781,9 @@ namespace ts {
             //                .                    |                                      \
             //      ----------------------------------------------------------------------*--------------------------------
             //
-            // (Note the dots represent the newly inferrred start.
+            // (Note the dots represent the newly inferred start.
             // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
-            // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
+            // absolute positions at the asterisks, and the relative change between the dollar signs. Basically, we see
             // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
             // means:
             //
@@ -2782,8 +2806,8 @@ namespace ts {
             // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
             // that's the same as if we started at char 80 instead of 60.
             //
-            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
-            // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
+            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rather
+            // than pushing the first edit forward to match the second, we'll push the second edit forward to match the
             // first.
             //
             // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange

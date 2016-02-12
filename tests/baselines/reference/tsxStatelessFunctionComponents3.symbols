@@ -11,7 +11,7 @@ const Foo = (props: any) => <div/>;
 // Should be OK
 const foo = <Foo />;
 >foo : Symbol(foo, Decl(file.tsx, 5, 5))
->Foo : Symbol(Foo, Decl(file.tsx, 3, 5))
+>Foo : Symbol((Anonymous function), Decl(file.tsx, 3, 11))
 
 
 // Should be OK
@@ -40,7 +40,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))
 
         <MainMenu/>
->MainMenu : Symbol(MainMenu, Decl(file.tsx, 9, 3))
+>MainMenu : Symbol(React.StatelessComponent, Decl(react.d.ts, 139, 5))
 
 	</div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 927, 45))

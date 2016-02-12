@@ -422,10 +422,6 @@ namespace ts {
         IntrinsicNamedElement = 1 << 0,
         /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 1 << 1,
-        /** An element backed by a class, class-like, or function value */
-        ValueElement = 1 << 2,
-        /** Element resolution failed */
-        UnknownElement = 1 << 4,
 
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
@@ -1559,7 +1555,7 @@ namespace ts {
         /* @internal */ classifiableNames?: Map<string>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
-        // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
@@ -1753,7 +1749,7 @@ namespace ts {
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1846,7 +1842,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
+    export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
@@ -1888,7 +1884,7 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
@@ -2013,7 +2009,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
-        isDeclaratonWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
+        isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // true if module exports some value (not just types)
     }
@@ -2044,6 +2040,7 @@ namespace ts {
         HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
         ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
         BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00400000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
     /* @internal */
@@ -2061,7 +2058,7 @@ namespace ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
-        jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+        jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
     }
 
@@ -2166,7 +2163,7 @@ namespace ts {
 
     // Type references (TypeFlags.Reference). When a class or interface has type parameters or
     // a "this" type, references to the class or interface are made using type references. The
-    // typeArguments property specififes the types to substitute for the type parameters of the
+    // typeArguments property specifies the types to substitute for the type parameters of the
     // class or interface and optionally includes an extra element that specifies the type to
     // substitute for "this" in the resulting instantiation. When no extra argument is present,
     // the type reference itself is substituted for "this". The typeArguments property is undefined
@@ -2422,6 +2419,7 @@ namespace ts {
         traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        noImplicitUseStrict?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2692,7 +2690,7 @@ namespace ts {
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
          * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
-         * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
+         * will apply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
@@ -2718,7 +2716,7 @@ namespace ts {
         getGlobalDiagnostics(): Diagnostic[];
 
         // If fileName is provided, gets all the diagnostics associated with that file name.
-        // Otherwise, returns all the diagnostics (global and file associated) in this colletion.
+        // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(fileName?: string): Diagnostic[];
 
         // Gets a count of how many times this collection has been modified.  This value changes
