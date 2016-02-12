@@ -6903,7 +6903,6 @@ namespace ts {
         function getNarrowedTypeOfSymbol(symbol: Symbol, location: Node) {
             const initialType = getTypeOfSymbol(symbol);
             const isUnion = (initialType.flags & TypeFlags.Union) !== 0;
-            Debug.assert(location.kind === SyntaxKind.Identifier, "node in getNarrowedTypeOfSymbol should be an identifier");
 
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (!location || !(symbol.flags & SymbolFlags.Variable)) return initialType;
