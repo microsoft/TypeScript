@@ -378,7 +378,8 @@ namespace ts {
                     const filePath = typeof relativeFileName !== "string"
                         ? undefined
                         : toPath(relativeFileName, baseDirPath, createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
-                    if (eventName === "change" && fileWatcherCallbacks.contains(filePath)) {
+                    // Some applications save a working file via rename operations
+                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks.contains(filePath)) {
                         for (const fileCallback of fileWatcherCallbacks.get(filePath)) {
                             fileCallback(filePath);
                         }
