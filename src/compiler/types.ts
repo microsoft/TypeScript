@@ -2782,6 +2782,15 @@ namespace ts {
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
     }
 
+    /** Additional context provided to `visitEachChild` */
+    export interface LexicalEnvironment {
+        /** Starts a new lexical environment. */
+        startLexicalEnvironment(): void;
+
+        /** Ends a lexical environment, returning any declarations. */
+        endLexicalEnvironment(): Statement[];
+    }
+
     export interface TextSpan {
         start: number;
         length: number;

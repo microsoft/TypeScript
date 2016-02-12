@@ -6,31 +6,89 @@ namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    function createNode(kind: SyntaxKind, location?: TextRange): Node {
+    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
         const ConstructorForKind = kind === SyntaxKind.SourceFile
             ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
             : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
 
-        return location
+        const node = location
             ? new ConstructorForKind(kind, location.pos, location.end)
             : new ConstructorForKind(kind, /*pos*/ -1, /*end*/ -1);
+
+        if (flags) {
+            node.flags = flags;
+        }
+
+        return node;
     }
 
-    export function createNodeArray<T extends Node>(elements?: T[], pos?: number, end?: number): NodeArray<T> {
-        const array = <NodeArray<T>>(elements || []);
-        array.pos = pos;
-        array.end = end;
+    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange): NodeArray<T> {
+        if (elements !== undefined) {
+            if (isNodeArray(elements)) {
+                return elements;
+            }
+        }
+        else {
+            elements = [];
+        }
+
+        const array = <NodeArray<T>>elements;
+        if (location !== undefined) {
+            array.pos = location.pos;
+            array.end = location.end;
+        }
+        else {
+            array.pos = -1;
+            array.end = -1;
+        }
+
         array.arrayKind = ArrayKind.NodeArray;
         return array;
     }
 
-    export function createModifiersArray(elements?: Modifier[], pos?: number, end?: number): ModifiersArray {
-        const array = <ModifiersArray>(elements || []);
-        array.pos = pos;
-        array.end = end;
+    export function createModifiersArray(elements?: Modifier[], location?: TextRange): ModifiersArray {
+        let flags: NodeFlags;
+        if (elements !== undefined) {
+            if (isModifiersArray(elements)) {
+                return elements;
+            }
+
+            flags = 0;
+            for (const modifier of elements) {
+                flags |= modifierToFlag(modifier.kind);
+            }
+        }
+        else {
+            elements = [];
+            flags = 0;
+        }
+
+        const array = <ModifiersArray>elements;
+        if (location !== undefined) {
+            array.pos = location.pos;
+            array.end = location.end;
+        }
+        else {
+            array.pos = -1;
+            array.end = -1;
+        }
+
         array.arrayKind = ArrayKind.ModifiersArray;
-        array.flags = 0;
+        array.flags = flags;
         return array;
+    }
+
+    export function setModifiers<T extends Node>(node: T, modifiers: Modifier[]) {
+        if (modifiers !== undefined) {
+            const array = createModifiersArray(modifiers);
+            node.modifiers = array;
+            node.flags |= array.flags;
+        }
+        else {
+            node.modifiers = undefined;
+        }
+
+        return node;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
@@ -40,11 +98,11 @@ namespace ts {
     }
 
     export function createSynthesizedNodeArray<T extends Node>(elements?: T[]): NodeArray<T> {
-        return createNodeArray(elements, /*pos*/ -1, /*end*/ -1);
+        return createNodeArray(elements, /*location*/ undefined);
     }
 
     export function createSynthesizedModifiersArray(elements?: Modifier[]): ModifiersArray {
-        return createModifiersArray(elements, /*pos*/ -1, /*end*/ -1);
+        return createModifiersArray(elements, /*location*/ undefined);
     }
 
     /**
