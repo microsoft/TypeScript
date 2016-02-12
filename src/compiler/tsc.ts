@@ -486,7 +486,7 @@ namespace ts {
         }
 
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, commandLine.options)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
                 return;
             }
 
