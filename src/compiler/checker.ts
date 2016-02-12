@@ -6957,7 +6957,7 @@ namespace ts {
                 if (fallback) {
                     return initialType;
                 }
-                return types.length === 0 ? initialType : getUnionType(types);
+                return getUnionType(types);
 
                 function handleGuards(node: Identifier, guards: BranchFlow[]) {
                     if (!node && guards.length === 0) {
@@ -6965,7 +6965,7 @@ namespace ts {
                     }
                     let type = getType(node, true);
                     if (type === undefined) {
-                        type = initialType;
+                        return false;
                     }
                     for (let i = guards.length - 1; i >= 0; i--) {
                         const { expression, trueBranch } = guards[i];
@@ -6974,7 +6974,9 @@ namespace ts {
                     if (type === initialType) {
                         return true;
                     }
-                    types.push(type);
+                    if (type !== emptyUnionType) {
+                        types.push(type);
+                    }
                     return false;
                 }
             }
