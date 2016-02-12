@@ -667,7 +667,7 @@ namespace ts {
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {
-        // Get root length of http://www.website.com/folder1/foler2/
+        // Get root length of http://www.website.com/folder1/folder2/
         // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
@@ -695,7 +695,7 @@ namespace ts {
         const indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
             // Found the "/" after the website.com so the root is length of http://www.website.com/
-            // and get components afetr the root normally like any other folder components
+            // and get components after the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
             return normalizedPathComponents(url, rootLength);
         }
