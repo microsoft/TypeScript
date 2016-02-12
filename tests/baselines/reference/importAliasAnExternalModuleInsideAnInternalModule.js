@@ -6,7 +6,7 @@ export module m {
 }
 
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.ts]
-import r = require('importAliasAnExternalModuleInsideAnInternalModule_file0');
+import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 module m_private {
     //import r2 = require('m'); // would be error
     export import C = r; // no error
@@ -23,7 +23,7 @@ var m;
 })(m = exports.m || (exports.m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
-var r = require('importAliasAnExternalModuleInsideAnInternalModule_file0');
+var r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 var m_private;
 (function (m_private) {
     //import r2 = require('m'); // would be error

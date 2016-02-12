@@ -7,7 +7,7 @@
 ////export = Foo;
 
 // @Filename: quickInfoExportAssignmentOfGenericInterface_1.ts
-////import a = require('quickInfoExportAssignmentOfGenericInterface_0');
+////import a = require('./quickInfoExportAssignmentOfGenericInterface_0');
 ////export var /*1*/x: a<a<string>>;
 ////x.a;
 
