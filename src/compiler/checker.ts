@@ -6267,6 +6267,7 @@ namespace ts {
 
         /**
          * Return true if type was inferred from an object literal or written as an object type literal
+         * with no call or construct signatures.
          */
         function isObjectLiteralType(type: Type) {
             return type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral)) !== 0 &&
