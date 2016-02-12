@@ -28,9 +28,9 @@ build.json
 *.actual
 tests/webhost/*.d.ts
 tests/webhost/webtsc.js
-tests/*.js
-tests/*.js.map
-tests/*.d.ts
+tests/**/*.js
+tests/**/*.js.map
+tests/**/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
