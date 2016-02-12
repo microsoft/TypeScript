@@ -142,25 +142,44 @@ namespace ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
+    export function filter<T, U extends T>(array: T[], f: (x: T, i: number) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (f(v, i)) {
+                    result.push(v);
                 }
             }
         }
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
+    export function map<T, U>(array: T[], f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
-            for (const v of array) {
-                result.push(f(v));
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                result.push(f(v, i));
+            }
+        }
+        return result;
+    }
+
+    export function flatMap<T, U>(array: T[], f: (x: T, i: number) => U[]): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                const ar = f(v, i);
+                if (ar) {
+                    result = result.concat(ar);
+                }
             }
         }
         return result;
@@ -212,15 +231,25 @@ namespace ts {
         return true;
     }
 
+    export function firstOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[0]
+            : undefined;
+    }
+
+    export function singleOrUndefined<T>(array: T[]): T {
+        return array && array.length === 1
+            ? array[0]
+            : undefined;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
     export function lastOrUndefined<T>(array: T[]): T {
-        if (array.length === 0) {
-            return undefined;
-        }
-
-        return array[array.length - 1];
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
     }
 
     /**

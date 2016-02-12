@@ -1018,6 +1018,20 @@ namespace ts {
             && nodeCanBeDecorated(node);
     }
 
+    export function nodeOrChildIsDecorated(node: Node): boolean {
+        return nodeIsDecorated(node) || childIsDecorated(node);
+    }
+
+    export function childIsDecorated(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.SetAccessor:
+                return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
+        }
+    }
+
     export function isPartOfExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
@@ -2252,7 +2266,14 @@ namespace ts {
         return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
     }
 
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
+    export interface AllAccessorDeclarations {
+        firstAccessor: AccessorDeclaration;
+        secondAccessor: AccessorDeclaration;
+        getAccessor: AccessorDeclaration;
+        setAccessor: AccessorDeclaration;
+    }
+
+    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration): AllAccessorDeclarations {
         let firstAccessor: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration;
         let getAccessor: AccessorDeclaration;
@@ -2816,7 +2837,6 @@ namespace ts {
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.IndexSignature;
     }
 
@@ -2847,6 +2867,10 @@ namespace ts {
 
     export function isBinaryExpression(node: Node): node is BinaryExpression {
         return node.kind === SyntaxKind.BinaryExpression;
+    }
+
+    export function isConditionalExpression(node: Node): node is ConditionalExpression {
+        return node.kind === SyntaxKind.ConditionalExpression;
     }
 
     export function isShortHandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
@@ -3241,8 +3265,12 @@ namespace ts {
         return node.kind === SyntaxKind.NodeArrayNode;
     }
 
-    export function isModifiersArray(array: NodeArray<Node>): array is ModifiersArray {
-        return array.arrayKind === ArrayKind.ModifiersArray;
+    export function isNodeArray<T extends Node>(array: T[]): array is NodeArray<T> {
+        return (<NodeArray<T>>array).arrayKind === ArrayKind.ModifiersArray;
+    }
+
+    export function isModifiersArray(array: Modifier[]): array is ModifiersArray {
+        return (<ModifiersArray>array).arrayKind === ArrayKind.ModifiersArray;
     }
 }
 

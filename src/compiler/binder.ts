@@ -1838,6 +1838,12 @@ namespace ts {
                 transformFlags |= TransformFlags.AssertJsx;
                 break;
 
+            case SyntaxKind.ExportKeyword:
+                // This node is both ES6 and TypeScript syntax.
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.TypeScript;
+                break;
+
+            case SyntaxKind.DefaultKeyword:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateHead:
             case SyntaxKind.TemplateMiddle:

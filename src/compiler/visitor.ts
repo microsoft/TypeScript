@@ -2,6 +2,8 @@
 
 /* @internal */
 namespace ts {
+    export type OneOrMore<T extends Node> = T | NodeArrayNode<T>;
+
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
      */
@@ -472,7 +474,7 @@ namespace ts {
      * @param lift A callback to execute to lift a NodeArrayNode into a valid Node.
      * @param optional A value indicating whether the Node is optional.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T, optional?: boolean): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         if (node === undefined) {
             return undefined;
         }
@@ -490,6 +492,7 @@ namespace ts {
 
         Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
         aggregateTransformFlags(visited);
+        visited.original = node;
         return <T>visited;
     }
 
@@ -500,54 +503,55 @@ namespace ts {
      * @param visitor The callback used to visit a Node.
      * @param test A node test to execute for each node.
      */
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test?: (node: Node) => boolean): TArray {
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): TArray;
+    export function visitNodes<T extends Node, U extends Node>(nodes: T[], visitor: (node: T) => U): NodeArray<U>;
+    export function visitNodes<T extends Node>(nodes: T[], visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): TArray {
         if (nodes === undefined) {
             return undefined;
         }
 
-        let updated: NodeArray<T> | ModifiersArray;
-        for (let i = 0, len = nodes.length; i < len; i++) {
-            const node = nodes[i];
+        const len = nodes.length;
+        start = start !== undefined ? Math.max(start, 0) : 0;
+        count = count !== undefined ? Math.min(count, len - start) : len - start;
+
+        let updated: T[];
+        if (start > 0 || count < len) {
+            updated = [];
+        }
+
+        for (let i = 0; i < count; i++) {
+            const node = nodes[i + start];
             if (node === undefined) {
                 continue;
             }
 
-            const visited = visitor(node);
+            const visited = <OneOrMore<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
-                    updated = isModifiersArray(nodes)
-                        ? createModifiersArray(nodes.slice(0, i), nodes.pos, nodes.end)
-                        : createNodeArray<T>(nodes.slice(0, i), nodes.pos, nodes.end);
+                    updated = nodes.slice(0, i);
                 }
 
                 if (visited === undefined) {
                     continue;
                 }
 
-                if (isNodeArrayNode<T>(visited)) {
-                    spreadNodeArrayNode(visited, updated, test);
+                if (visited !== node) {
+                    aggregateTransformFlags(visited);
+                    visited.original = node;
                 }
-                else if (visited !== undefined) {
-                    Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
-                    if (visited !== node) {
-                        aggregateTransformFlags(visited);
-                    }
 
-                    updated.push(<T>visited);
-                }
+                addNode(updated, visited, test);
             }
         }
 
-        if (updated && isModifiersArray(updated)) {
-            let flags: NodeFlags = 0;
-            for (const node of updated) {
-                flags |= modifierToFlag(node.kind);
-            }
-
-            updated.flags = flags;
+        if (updated) {
+            return <TArray>(isModifiersArray(nodes)
+                ? createModifiersArray(updated, /*location*/ nodes)
+                : createNodeArray(updated, /*location*/ nodes));
         }
 
-        return <TArray>updated || nodes;
+        return nodes;
     }
 
     /**
@@ -606,6 +610,7 @@ namespace ts {
 
         if (updated !== node) {
             aggregateTransformFlags(updated);
+            updated.original = node;
         }
 
         return updated;
@@ -621,24 +626,40 @@ namespace ts {
     function visitEdge(edge: NodeEdge, value: Node | NodeArray<Node>, visitor: (node: Node) => Node) {
         return isArray(value)
             ? visitNodes(<NodeArray<Node>>value, visitor, edge.test)
-            : visitNode(<Node>value, visitor, edge.test, edge.lift, edge.optional);
+            : visitNode(<Node>value, visitor, edge.test, edge.optional, edge.lift);
     }
 
     /**
-     * Spreads a NodeArrayNode into a NodeArray.
+     * Appends a node to an array.
      *
-     * @param source The source NodeArrayNode.
-     * @param dest The destination NodeArray.
+     * @param to The destination array.
+     * @param from The source Node or NodeArrayNode.
      * @param test The node test used to validate each node.
      */
-    function spreadNodeArrayNode<T extends Node>(source: NodeArrayNode<T>, dest: NodeArray<T>, test: (node: Node) => boolean) {
-        for (const element of source.nodes) {
-            if (element === undefined) {
-                continue;
+    export function addNode<T extends Node>(to: T[], from: OneOrMore<T>, test?: (node: Node) => boolean) {
+        if (to && from) {
+            if (isNodeArrayNode(from)) {
+                addNodes(to, from.nodes, test);
             }
+            else {
+                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+                to.push(from);
+            }
+        }
+    }
 
-            Debug.assert(test === undefined || test(element), "Wrong node type after visit.");
-            dest.push(element);
+    /**
+     * Appends an array of nodes to an array.
+     *
+     * @param to The destination NodeArray.
+     * @param from The source array of Node or NodeArrayNode.
+     * @param test The node test used to validate each node.
+     */
+    export function addNodes<T extends Node>(to: T[], from: OneOrMore<T>[], test?: (node: Node) => boolean) {
+        if (to && from) {
+            for (const node of from) {
+                addNode(to, node, test);
+            }
         }
     }
 
@@ -695,14 +716,31 @@ namespace ts {
      */
     function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]) {
         Debug.assert(node.body !== undefined);
-        if (node.body.kind === SyntaxKind.Block) {
-            node.body = <Block>mergeLexicalEnvironment(node.body, declarations, /*nodeIsMutable*/ false);
+        node.body = mergeConciseBodyLexicalEnvironment(node.body, declarations);
+    }
+
+    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[], nodeIsMutable?: boolean): FunctionBody {
+        if (declarations && declarations.length > 0) {
+            return <Block>mergeLexicalEnvironment(body, declarations, nodeIsMutable);
+        }
+
+        return body;
+    }
+
+    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[], nodeIsMutable?: boolean): ConciseBody {
+        if (declarations && declarations.length > 0) {
+            if (isBlock(body)) {
+                return <Block>mergeLexicalEnvironment(body, declarations, nodeIsMutable);
+            }
+            else {
+                return createBlock([
+                    createReturn(body),
+                    ...declarations
+                ]);
+            }
         }
         else {
-            node.body = createBlock([
-                createReturn(<Expression>node.body),
-                ...declarations
-            ]);
+            return body;
         }
     }
 
@@ -717,7 +755,7 @@ namespace ts {
      * Merge generated declarations of a lexical environment into a NodeArray of Statement.
      */
     function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
-        return createNodeArray(statements.concat(declarations), statements.pos, statements.end);
+        return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
     }
 
     /**

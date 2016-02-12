@@ -56,6 +56,9 @@ namespace ts {
         const nodeEmitFlags: NodeEmitFlags[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        const enabledExpressionSubstitutions = new Array<boolean>(SyntaxKind.Count);
+        const enabledEmitNotifications = new Array<boolean>(SyntaxKind.Count);
+
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
@@ -75,7 +78,11 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            enableExpressionSubstitution,
+            isExpressionSubstitutionEnabled,
+            enableEmitNotification,
+            isEmitNotificationEnabled,
         };
 
         // Chain together and initialize each transformer.
@@ -98,6 +105,23 @@ namespace ts {
             const visited = transformation(sourceFile);
             currentSourceFile = undefined;
             return visited;
+        }
+
+        function enableExpressionSubstitution(kind: SyntaxKind) {
+            enabledExpressionSubstitutions[kind] = true;
+        }
+
+        function isExpressionSubstitutionEnabled(node: Node) {
+            return enabledExpressionSubstitutions[node.kind];
+        }
+
+        function enableEmitNotification(kind: SyntaxKind) {
+            enabledEmitNotifications[kind] = true;
+        }
+
+        function isEmitNotificationEnabled(node: Node) {
+            return enabledEmitNotifications[node.kind]
+                || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
@@ -207,7 +231,7 @@ namespace ts {
                 case SyntaxKind.ClassExpression:
                     return generateNameForClassExpression();
                 default:
-                    return createTempVariable(TempVariableKind.Auto);
+                    return createTempVariable();
             }
         }
 
@@ -289,6 +313,7 @@ namespace ts {
                 if (hoistedVariableDeclarations) {
                     statements.push(
                         createVariableStatement(
+                            /*modifiers*/ undefined,
                             createVariableDeclarationList(hoistedVariableDeclarations)
                         )
                     );

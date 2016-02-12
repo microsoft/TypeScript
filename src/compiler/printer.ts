@@ -75,6 +75,15 @@ function __export(m) {
     }
 })`;
 
+        const superHelper = `
+const _super = name => super[name];`;
+
+        const advancedSuperHelper = `
+const _super = (function (geti, seti) {
+    const cache = Object.create(null);
+    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+})(name => super[name], (name, value) => super[name] = value);`;
+
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getLanguageVersion(compilerOptions);
         const moduleKind = getModuleKind(compilerOptions);
@@ -122,8 +131,12 @@ function __export(m) {
             let startLexicalEnvironment: () => void;
             let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
+            let isExpressionSubstitutionEnabled: (node: Node) => boolean;
+            let isEmitNotificationEnabled: (node: Node) => boolean;
             let expressionSubstitution: (node: Expression) => Expression;
             let identifierSubstitution: (node: Identifier) => Identifier;
+            let onBeforeEmitNode: (node: Node) => void;
+            let onAfterEmitNode: (node: Node) => void;
             let isUniqueName: (name: string) => boolean;
             let temporaryVariables: string[] = [];
             let tempFlags: TempFlags;
@@ -177,8 +190,12 @@ function __export(m) {
                 startLexicalEnvironment = undefined;
                 endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
+                isExpressionSubstitutionEnabled = undefined;
+                isEmitNotificationEnabled = undefined;
                 expressionSubstitution = undefined;
                 identifierSubstitution = undefined;
+                onBeforeEmitNode = undefined;
+                onAfterEmitNode = undefined;
                 isUniqueName = undefined;
                 temporaryVariables = undefined;
                 tempFlags = 0;
@@ -196,8 +213,12 @@ function __export(m) {
                 startLexicalEnvironment = context.startLexicalEnvironment;
                 endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
+                isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
+                isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 expressionSubstitution = context.expressionSubstitution;
                 identifierSubstitution = context.identifierSubstitution;
+                onBeforeEmitNode = context.onBeforeEmitNode;
+                onAfterEmitNode = context.onAfterEmitNode;
                 isUniqueName = context.isUniqueName;
                 return printSourceFile;
             }
@@ -213,6 +234,11 @@ function __export(m) {
 
             function emit(node: Node) {
                 if (node) {
+                    const adviseOnEmit = isEmitNotificationEnabled(node);
+                    if (adviseOnEmit && onBeforeEmitNode) {
+                        onBeforeEmitNode(node);
+                    }
+
                     const leadingComments = getLeadingCommentsToEmit(node);
                     const trailingComments = getTrailingCommentsToEmit(node);
                     emitLeadingComments(node, leadingComments);
@@ -220,6 +246,10 @@ function __export(m) {
                     emitWorker(node);
                     emitEnd(node);
                     emitTrailingComments(node, trailingComments);
+
+                    if (adviseOnEmit && onAfterEmitNode) {
+                        onAfterEmitNode(node);
+                    }
                 }
             }
 
@@ -234,7 +264,11 @@ function __export(m) {
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node, identifierSubstitution);
+                        if (tryEmitSubstitute(node, identifierSubstitution)) {
+                            return;
+                        }
+
+                        return emitIdentifier(<Identifier>node);
 
                     // Reserved words
                     case SyntaxKind.ConstKeyword:
@@ -486,6 +520,10 @@ function __export(m) {
 
             function emitExpressionWorker(node: Node) {
                 const kind = node.kind;
+                if (isExpressionSubstitutionEnabled(node) && tryEmitSubstitute(node, expressionSubstitution)) {
+                    return;
+                }
+
                 switch (kind) {
                     // Literals
                     case SyntaxKind.NumericLiteral:
@@ -496,16 +534,15 @@ function __export(m) {
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node, expressionSubstitution);
+                        return emitIdentifier(<Identifier>node);
 
                     // Reserved words
                     case SyntaxKind.FalseKeyword:
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.SuperKeyword:
                     case SyntaxKind.TrueKeyword:
-                        return writeTokenNode(node);
                     case SyntaxKind.ThisKeyword:
-                        return emitThisKeyword(<PrimaryExpression>node);
+                        return writeTokenNode(node);
 
                     // Expressions
                     case SyntaxKind.ArrayLiteralExpression:
@@ -597,11 +634,8 @@ function __export(m) {
             // Identifiers
             //
 
-            function emitIdentifier(node: Identifier, substitution: (node: Node) => Node) {
-                if (tryEmitSubstitute(node, substitution)) {
-                    return;
-                }
-                else if (node.text === undefined) {
+            function emitIdentifier(node: Identifier) {
+                if (node.text === undefined) {
                     // Emit a temporary variable name for this node.
                     const nodeId = getOriginalNodeId(node);
                     const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeTempVariableName(tempKindToFlags(node.tempKind)));
@@ -617,15 +651,6 @@ function __export(m) {
                 }
                 else {
                     writeTextOfNode(currentText, node);
-                }
-            }
-
-            function emitThisKeyword(node: PrimaryExpression) {
-                if (tryEmitSubstitute(node, expressionSubstitution)) {
-                    return;
-                }
-                else {
-                    writeTokenNode(node);
                 }
             }
 
@@ -1051,19 +1076,11 @@ function __export(m) {
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                if (tryEmitSubstitute(node, expressionSubstitution)) {
-                    return;
-                }
-
                 emitExpression(node.operand);
                 writeToken(node.operator);
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
-                if (tryEmitSubstitute(node, expressionSubstitution)) {
-                    return;
-                }
-
                 const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
                 const indentBeforeOperator = needsIndentation(node, node.left, node.operatorToken);
                 const indentAfterOperator = needsIndentation(node, node.operatorToken, node.right);
@@ -1390,9 +1407,12 @@ function __export(m) {
 
             function emitBlockFunctionBody(parentNode: Node, body: Block) {
                 // Emit all the prologue directives (like "use strict").
+                increaseIndent();
                 const statements = body.statements;
-                const statementOffset = emitPrologueDirectives(statements, /*startWithNewLine*/ true, /*indented*/ true);
+                const statementOffset = emitPrologueDirectives(statements, /*startWithNewLine*/ true);
                 const helpersEmitted = emitHelpers(body);
+                decreaseIndent();
+
                 if (statementOffset === 0 && !helpersEmitted && shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)) {
                     emitList(body, statements, ListFormat.SingleLineFunctionBodyStatements);
                 }
@@ -1688,6 +1708,7 @@ function __export(m) {
 
             function emitHeritageClause(node: HeritageClause) {
                 emitStart(node);
+                write(" ");
                 writeToken(node.token);
                 write(" ");
                 emitList(node, node.types, ListFormat.HeritageClauseTypes);
@@ -1783,8 +1804,7 @@ function __export(m) {
                 }
             }
 
-            function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean, indented?: boolean) {
-                increaseIndentIf(indented);
+            function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean) {
                 for (let i = 0; i < statements.length; i++) {
                     if (isPrologueDirective(statements[i])) {
                         if (startWithNewLine || i > 0) {
@@ -1794,24 +1814,32 @@ function __export(m) {
                     }
                     else {
                         // return index of the first non prologue directive
-                        decreaseIndentIf(indented);
                         return i;
                     }
                 }
 
-                decreaseIndentIf(indented);
                 return statements.length;
             }
 
             function emitHelpers(node: Node) {
                 const emitFlags = getNodeEmitFlags(node);
                 let helpersEmitted = false;
-                if (emitFlags & NodeEmitFlags.EmitHelpers) {
+                if (emitFlags & NodeEmitFlags.EmitEmitHelpers) {
                     helpersEmitted = emitEmitHelpers(currentSourceFile);
                 }
 
                 if (emitFlags & NodeEmitFlags.EmitExportStar) {
-                    emitExportStarHelper();
+                    writeLines(exportStarHelper);
+                    helpersEmitted = true;
+                }
+
+                if (emitFlags & NodeEmitFlags.EmitSuperHelper) {
+                    writeLines(superHelper);
+                    helpersEmitted = true;
+                }
+
+                if (emitFlags & NodeEmitFlags.EmitAdvancedSuperHelper) {
+                    writeLines(advancedSuperHelper);
                     helpersEmitted = true;
                 }
 
@@ -1859,10 +1887,6 @@ function __export(m) {
                 }
 
                 return helpersEmitted;
-            }
-
-            function emitExportStarHelper() {
-                writeLines(exportStarHelper);
             }
 
             function writeLines(text: string): void {

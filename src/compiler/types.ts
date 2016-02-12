@@ -1301,7 +1301,7 @@ namespace ts {
     export interface EnumMember extends Declaration {
         // This does include ComputedPropertyName, but the parser will give an error
         // if it parses a ComputedPropertyName in an EnumMember
-        name: DeclarationName;
+        name: PropertyName;
         initializer?: Expression;
     }
 
@@ -2792,12 +2792,15 @@ namespace ts {
 
     /* @internal */
     export const enum NodeEmitFlags {
-        EmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,        // The export * helper should be written to this node.
-        UMDDefine = 1 << 2,             // This node should be replaced with the UMD define helper.
-        NoLexicalEnvironment = 1 << 3,  // A new LexicalEnvironment should *not* be introduced when emitting this node.
-        SingleLine = 1 << 4,            // The contents of this node should be emit on a single line.
-        MultiLine = 1 << 5,             // The contents of this node should be emit on multiple lines.
+        EmitEmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
+        EmitExportStar = 1 << 1,            // The export * helper should be written to this node.
+        EmitSuperHelper = 1 << 2,           // Emit the basic _super helper for async methods.
+        EmitAdvancedSuperHelper = 1 << 3,   // Emit the advanced _super helper for async methods.
+        UMDDefine = 1 << 4,                 // This node should be replaced with the UMD define helper.
+        NoLexicalEnvironment = 1 << 5,      // A new LexicalEnvironment should *not* be introduced when emitting this node.
+        SingleLine = 1 << 6,                // The contents of this node should be emit on a single line.
+        MultiLine = 1 << 7,                 // The contents of this node should be emit on multiple lines.
+        AdviseOnEmitNode = 1 << 8,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2821,8 +2824,14 @@ namespace ts {
         getGeneratedNameForNode(node: Node): Identifier;
         nodeHasGeneratedName(node: Node): boolean;
         makeUniqueName(baseName: string): Identifier;
+        enableExpressionSubstitution(kind: SyntaxKind): void;
+        isExpressionSubstitutionEnabled(node: Node): boolean;
         identifierSubstitution?: (node: Identifier) => Identifier;
         expressionSubstitution?: (node: Expression) => Expression;
+        enableEmitNotification(kind: SyntaxKind): void;
+        isEmitNotificationEnabled(node: Node): boolean;
+        onBeforeEmitNode?: (node: Node) => void;
+        onAfterEmitNode?: (node: Node) => void;
     }
 
     /* @internal */

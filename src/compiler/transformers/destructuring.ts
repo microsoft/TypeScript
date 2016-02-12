@@ -10,8 +10,14 @@ namespace ts {
      * @param needsValue Indicates whether the value from the right-hand-side of the
      *                   destructuring assignment is needed as part of a larger expression.
      * @param recordTempVariable A callback used to record new temporary variables.
+     * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenDestructuringAssignment(node: BinaryExpression, needsValue: boolean, recordTempVariable: (node: Identifier) => void) {
+    export function flattenDestructuringAssignment(
+        node: BinaryExpression,
+        needsValue: boolean,
+        recordTempVariable: (node: Identifier) => void,
+        visitor?: (node: Node) => Node) {
+
         let location: TextRange = node;
         let value = node.right;
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
@@ -31,7 +37,7 @@ namespace ts {
             location = node.right;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment);
+        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -64,11 +70,12 @@ namespace ts {
      *
      * @param node The ParameterDeclaration to flatten.
      * @param value The rhs value for the binding pattern.
+     * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression) {
+    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => Node) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -94,11 +101,12 @@ namespace ts {
      *
      * @param node The VariableDeclaration to flatten.
      * @param value An optional rhs value for the binding pattern.
+     * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression) {
+    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => Node) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment);
+        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -129,8 +137,15 @@ namespace ts {
      *
      * @param node The VariableDeclaration to flatten.
      * @param recordTempVariable A callback used to record new temporary variables.
+     * @param nameSubstitution An optional callback used to substitute binding names.
+     * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenVariableDestructuringToExpression(node: VariableDeclaration, recordTempVariable: (name: Identifier) => void) {
+    export function flattenVariableDestructuringToExpression(
+        node: VariableDeclaration,
+        recordTempVariable: (name: Identifier) => void,
+        nameSubstitution?: (name: Identifier) => Expression,
+        visitor?: (node: Node) => Node) {
+
         const pendingAssignments: Expression[] = [];
 
         flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment);
@@ -140,6 +155,18 @@ namespace ts {
         return expression;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
+            const left = nameSubstitution && nameSubstitution(name) || name;
+            emitPendingAssignment(left, value, location, original);
+        }
+
+        function emitTempVariableAssignment(value: Expression, location: TextRange) {
+            const name = createTempVariable();
+            recordTempVariable(name);
+            emitPendingAssignment(name, value, location, /*original*/ undefined);
+            return name;
+        }
+
+        function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignment(name, value, location);
             if (isSimpleExpression(value)) {
                 (<SynthesizedNode>expression).disableSourceMap = true;
@@ -147,13 +174,7 @@ namespace ts {
 
             expression.original = original;
             pendingAssignments.push(expression);
-        }
-
-        function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
-            recordTempVariable(name);
-            emitAssignment(name, value, location, /*original*/ undefined);
-            return name;
+            return expression;
         }
     }
 
@@ -162,7 +183,12 @@ namespace ts {
         value: Expression,
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
-        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier) {
+        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
+        visitor?: (node: Node) => Node) {
+        if (value && visitor) {
+            value = visitNode(value, visitor, isExpression);
+        }
+
         if (isBinaryExpression(root)) {
             emitDestructuringAssignment(root.left, value, location)
         }
@@ -174,14 +200,22 @@ namespace ts {
             // When emitting target = value use source map node to highlight, including any temporary assignments needed for this
             let target: Expression;
             if (isShortHandPropertyAssignment(bindingTarget)) {
-                if (bindingTarget.objectAssignmentInitializer) {
-                    value = createDefaultValueCheck(value, bindingTarget.objectAssignmentInitializer, location);
+                const initializer = visitor
+                    ? visitNode(bindingTarget.objectAssignmentInitializer, visitor, isExpression)
+                    : bindingTarget.objectAssignmentInitializer;
+
+                if (initializer) {
+                    value = createDefaultValueCheck(value, initializer, location);
                 }
 
                 target = bindingTarget.name;
             }
             else if (isBinaryExpression(bindingTarget) && bindingTarget.operatorToken.kind === SyntaxKind.EqualsToken) {
-                value = createDefaultValueCheck(value, bindingTarget.right, location);
+                const initializer = visitor
+                    ? visitNode(bindingTarget.right, visitor, isExpression)
+                    : bindingTarget.right;
+
+                value = createDefaultValueCheck(value, initializer, location);
                 target = bindingTarget.left;
             }
             else {
@@ -244,9 +278,10 @@ namespace ts {
 
         function emitBindingElement(target: BindingElement, value: Expression) {
             // Any temporary assignments needed to emit target = value should point to target
-            if (target.initializer) {
+            const initializer = visitor ? visitNode(target.initializer, visitor, isExpression) : target.initializer;
+            if (initializer) {
                 // Combine value and initializer
-                value = value ? createDefaultValueCheck(value, target.initializer, target) : target.initializer;
+                value = value ? createDefaultValueCheck(value, initializer, target) : initializer;
             }
             else if (!value) {
                 // Use 'void 0' in absence of value and initializer
