@@ -169,8 +169,19 @@ namespace ts {
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
+        return [...array1, ...array2];
+    }
 
-        return array1.concat(array2);
+    export function append<T>(array: T[], value: T): T[] {
+        if (value === undefined) return array;
+        if (!array || !array.length) return [value];
+        return [...array, value];
+    }
+
+    export function prepend<T>(array: T[], value: T): T[] {
+        if (value === undefined) return array;
+        if (!array || !array.length) return [value];
+        return [value, ...array];
     }
 
     export function deduplicate<T>(array: T[]): T[] {
