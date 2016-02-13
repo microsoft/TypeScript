@@ -1,0 +1,42 @@
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility4.ts(16,9): error TS2673: Constructor of class 'A' is private and only accessible within the class declaration.
+tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility4.ts(33,9): error TS2674: Constructor of class 'D' is protected and only accessible within the class declaration.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility4.ts (2 errors) ====
+    class A {
+        private constructor() { }
+    
+        method() {
+            class B {
+                method() {
+                    new A(); // OK
+                }
+            }
+    
+            class C extends A { // OK
+            }
+        }
+    }
+    
+    var a = new A(); // error
+            ~~~~~~~
+!!! error TS2673: Constructor of class 'A' is private and only accessible within the class declaration.
+    
+    class D {
+        protected constructor() { }
+    
+        method() {
+            class E {
+                method() {
+                    new D(); // OK
+                }
+            }
+    
+            class F extends D { // OK
+            }
+        }
+    }
+    
+    var d = new D(); // error
+            ~~~~~~~
+!!! error TS2674: Constructor of class 'D' is protected and only accessible within the class declaration.
