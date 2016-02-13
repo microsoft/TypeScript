@@ -7246,14 +7246,19 @@ namespace ts {
                     return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
                 }
             }
-            function narrowTypeByAssignment(type: Type) {
+            function narrowTypeByAssignment(assignedType: Type) {
                 // Narrow union types only
                 if (!isUnion) return initialType;
+
+                const assignedTypes = (assignedType.flags & TypeFlags.Union) ? (<UnionType> assignedType).types : [assignedType];
+
                 const constituentTypes = (<UnionType> initialType).types;
                 const assignableTypes: Type[] = [];
                 for (const constituentType of constituentTypes) {
-                    if (isTypeAssignableTo(type, constituentType)) {
-                        assignableTypes.push(constituentType);
+                    for (const type of assignedTypes) {
+                        if (isTypeAssignableTo(type, constituentType)) {
+                            assignableTypes.push(constituentType);
+                        }
                     }
                 }
                 if (assignableTypes.length === 0) {
