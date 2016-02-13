@@ -14075,12 +14075,12 @@ namespace ts {
         }
 
         function checkBaseTypeAccessibility(type: ObjectType, node: ExpressionWithTypeArguments) {
-            const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
-            if (!isNodeWithinClass(node, typeClassDeclaration)) {
-                const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-                if (signatures.length) {
-                    const declaration = signatures[0].declaration;
-                    if (declaration && declaration.flags & NodeFlags.Private) {
+            const signatures = getSignaturesOfType(type, SignatureKind.Construct);
+            if (signatures.length) {
+                const declaration = signatures[0].declaration;
+                if (declaration && declaration.flags & NodeFlags.Private) {
+                    const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
+                    if (!isNodeWithinClass(node, typeClassDeclaration)) {
                         error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, (<Identifier>node.expression).text);
                     }
                 }
