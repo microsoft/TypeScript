@@ -2790,11 +2790,15 @@ namespace ts {
 
     /* @internal */
     export const enum NodeEmitFlags {
-        EmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,        // The export * helper should be written to this node.
-        UMDDefine = 1 << 2,             // This node should be replaced with the UMD define helper.
-        NoLexicalEnvironment = 1 << 3,  // A new LexicalEnvironment should *not* be introduced when emitting this node.
-        SingleLine = 1 << 4,            // The contents of this node should be emit on a single line.
+        EmitEmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
+        EmitExportStar = 1 << 1,            // The export * helper should be written to this node.
+        EmitSuperHelper = 1 << 2,           // Emit the basic _super helper for async methods.
+        EmitAdvancedSuperHelper = 1 << 3,   // Emit the advanced _super helper for async methods.
+        UMDDefine = 1 << 4,                 // This node should be replaced with the UMD define helper.
+        NoLexicalEnvironment = 1 << 5,      // A new LexicalEnvironment should *not* be introduced when emitting this node.
+        SingleLine = 1 << 6,                // The contents of this node should be emit on a single line.
+        MultiLine = 1 << 7,                 // The contents of this node should be emit on multiple lines.
+        AdviseOnEmitNode = 1 << 8,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2818,8 +2822,54 @@ namespace ts {
         getGeneratedNameForNode(node: Node): Identifier;
         nodeHasGeneratedName(node: Node): boolean;
         makeUniqueName(baseName: string): Identifier;
+
+        /**
+         * Hook used by transformers to substitute non-expression identifiers
+         * just before theyare emitted by the pretty printer.
+         */
         identifierSubstitution?: (node: Identifier) => Identifier;
+
+        /**
+         * Enables expression substitutions in the pretty printer for
+         * the provided SyntaxKind.
+         */
+        enableExpressionSubstitution(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether expression substitutions are enabled for the
+         * provided node.
+         */
+        isExpressionSubstitutionEnabled(node: Node): boolean;
+
+        /**
+         * Hook used by transformers to substitute expressions just before they
+         * are emitted by the pretty printer.
+         */
         expressionSubstitution?: (node: Expression) => Expression;
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for
+         * the provided SyntaxKind.
+         */
+        enableEmitNotification(kind: SyntaxKind): void;
+
+        /**
+         * Determines whether before/after emit notifications should be raised
+         * in the pretty printer when it emits a node.
+         */
+        isEmitNotificationEnabled(node: Node): boolean;
+
+        /**
+         * Hook used to notify transformers immediately before the pretty printer
+         * emits a node.
+         */
+        onBeforeEmitNode?: (node: Node) => void;
+
+        /**
+         * Hook used to notify transformers immediately after the pretty printer
+         * emits a node.
+         */
+        onAfterEmitNode?: (node: Node) => void;
     }
 
     /* @internal */

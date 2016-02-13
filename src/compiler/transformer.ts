@@ -2,6 +2,11 @@
 
 /* @internal */
 namespace ts {
+    const enum SyntaxKindFeatureFlags {
+        ExpressionSubstitution = 1 << 0,
+        EmitNotifications = 1 << 1,
+    }
+
     /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
@@ -16,6 +21,7 @@ namespace ts {
         const nodeEmitFlags: NodeEmitFlags[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
@@ -35,7 +41,11 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            enableExpressionSubstitution,
+            isExpressionSubstitutionEnabled,
+            enableEmitNotification,
+            isEmitNotificationEnabled,
         };
 
         // Chain together and initialize each transformer.
@@ -58,6 +68,23 @@ namespace ts {
             const visited = transformation(sourceFile);
             currentSourceFile = undefined;
             return visited;
+        }
+
+        function enableExpressionSubstitution(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.ExpressionSubstitution;
+        }
+
+        function isExpressionSubstitutionEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.ExpressionSubstitution) !== 0;
+        }
+
+        function enableEmitNotification(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
+        }
+
+        function isEmitNotificationEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
+                || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
