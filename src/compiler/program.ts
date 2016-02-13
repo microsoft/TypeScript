@@ -533,18 +533,25 @@ namespace ts {
         }
 
         let referencedSourceFile: string;
-        while (true) {
-            const searchName = normalizePath(combinePaths(containingDirectory, moduleName));
-            referencedSourceFile = loadModuleFromFile(searchName, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-            if (referencedSourceFile) {
-                break;
+        if (moduleHasNonRelativeName(moduleName)) {
+            while (true) {
+                const searchName = normalizePath(combinePaths(containingDirectory, moduleName));
+                referencedSourceFile = loadModuleFromFile(searchName, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
+                if (referencedSourceFile) {
+                    break;
+                }
+                const parentPath = getDirectoryPath(containingDirectory);
+                if (parentPath === containingDirectory) {
+                    break;
+                }
+                containingDirectory = parentPath;
             }
-            const parentPath = getDirectoryPath(containingDirectory);
-            if (parentPath === containingDirectory) {
-                break;
-            }
-            containingDirectory = parentPath;
         }
+        else {
+            const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+            referencedSourceFile = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
+        }
+
 
         return referencedSourceFile
             ? { resolvedModule: { resolvedFileName: referencedSourceFile  }, failedLookupLocations }

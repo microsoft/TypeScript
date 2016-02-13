@@ -48,7 +48,7 @@ module ts {
                     return hasProperty(directories, path); 
                 },
                 fileExists: path => {
-                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), "'fileExists' request in non-existing directory");
+                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return hasProperty(map, path);
                 }
             }
@@ -814,7 +814,6 @@ import b = require("./moduleB.ts");
 
         it ("classic + rootDirs", () => {
             test(/*hasDirectoryExists*/ false);
-            test(/*hasDirectoryExists*/ true);
 
             function test(hasDirectoryExists: boolean) {
                 let file1: File = { name: "/root/folder1/file1.ts" };
@@ -844,24 +843,20 @@ import b = require("./moduleB.ts");
                     "/root/generated/folder1/file1.d.ts",
                     // then try alternative rootDir entry
                 ]);
-                check("../folder1/file1_1", file3, file4, [
-                    // load from initial location
+                check("folder1/file1_1", file3, file4, [
+                    // current location
+                    "/root/generated/folder2/folder1/file1_1.ts",
+                    "/root/generated/folder2/folder1/file1_1.tsx",
+                    "/root/generated/folder2/folder1/file1_1.d.ts",
+                    // other entry in rootDirs
                     "/root/generated/folder1/file1_1.ts",
                     "/root/generated/folder1/file1_1.tsx",
                     "/root/generated/folder1/file1_1.d.ts",
-                    // load from alternative rootDir entry
+                    // fallback
                     "/root/folder1/file1_1.ts",
                     "/root/folder1/file1_1.tsx",
                     "/root/folder1/file1_1.d.ts",
-                    // fallback to classic
-                    // step1: initial location 
-                    "/root/generated/folder1/file1_1.ts",
-                    "/root/generated/folder1/file1_1.tsx",
-                    "/root/generated/folder1/file1_1.d.ts",
-                    // step2: walk 1 level up
-                    "/root/folder1/file1_1.ts",
-                    "/root/folder1/file1_1.tsx",
-                    "/root/folder1/file1_1.d.ts",
+                    // found one
                 ]);
 
                 function check(name: string, container: File, expected: File, expectedFailedLookups: string[]) {
