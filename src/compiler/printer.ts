@@ -1806,7 +1806,7 @@ function __export(m) {
             function emitHelpers(node: Node) {
                 const emitFlags = getNodeEmitFlags(node);
                 let helpersEmitted = false;
-                if (emitFlags & NodeEmitFlags.EmitHelpers) {
+                if (emitFlags & NodeEmitFlags.EmitEmitHelpers) {
                     helpersEmitted = emitEmitHelpers(currentSourceFile);
                 }
 

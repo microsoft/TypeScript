@@ -2,6 +2,11 @@
 
 /* @internal */
 namespace ts {
+    const enum SyntaxKindFeatureFlags {
+        ExpressionSubstitution = 1 << 0,
+        EmitNotifications = 1 << 1,
+    }
+
     export function getTransformers(compilerOptions: CompilerOptions) {
         const transformers: Transformer[] = [];
         // TODO(rbuckton): Add transformers
@@ -22,6 +27,7 @@ namespace ts {
         const nodeEmitFlags: NodeEmitFlags[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
@@ -41,7 +47,11 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
-            endLexicalEnvironment
+            endLexicalEnvironment,
+            enableExpressionSubstitution,
+            isExpressionSubstitutionEnabled,
+            enableEmitNotification,
+            isEmitNotificationEnabled,
         };
 
         // Chain together and initialize each transformer.
@@ -64,6 +74,23 @@ namespace ts {
             const visited = transformation(sourceFile);
             currentSourceFile = undefined;
             return visited;
+        }
+
+        function enableExpressionSubstitution(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.ExpressionSubstitution;
+        }
+
+        function isExpressionSubstitutionEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.ExpressionSubstitution) !== 0;
+        }
+
+        function enableEmitNotification(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
+        }
+
+        function isEmitNotificationEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
+                || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
@@ -168,6 +195,8 @@ namespace ts {
                     return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
+                    Debug.assert((node.flags & NodeFlags.Default) !== 0, "Can only generate a name for a default export.");
+                    return generateNameForExportDefault();
                 case SyntaxKind.ExportAssignment:
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
@@ -233,7 +262,6 @@ namespace ts {
             lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedVariableDeclarations;
             lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedFunctionDeclarations;
             lexicalEnvironmentStackOffset++;
-
             hoistedVariableDeclarations = undefined;
             hoistedFunctionDeclarations = undefined;
         }
@@ -245,15 +273,12 @@ namespace ts {
         function endLexicalEnvironment(): Statement[] {
             let statements: Statement[];
             if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                statements = [];
                 if (hoistedFunctionDeclarations) {
-                    for (const declaration of hoistedFunctionDeclarations) {
-                        statements.push(declaration);
-                    }
+                    statements = [...hoistedFunctionDeclarations];
                 }
 
                 if (hoistedVariableDeclarations) {
-                    statements.push(
+                    statements = append(statements,
                         createVariableStatement(
                             createVariableDeclarationList(hoistedVariableDeclarations)
                         )
@@ -331,8 +356,9 @@ namespace ts {
      * Makes an array from an ArrayLike.
      */
     function arrayOf<T>(arrayLike: ArrayLike<T>) {
-        const array: T[] = [];
-        for (let i = 0; i < arrayLike.length; i++) {
+        const length = arrayLike.length;
+        const array: T[] = new Array<T>(length);
+        for (let i = 0; i < length; i++) {
             array[i] = arrayLike[i];
         }
         return array;
