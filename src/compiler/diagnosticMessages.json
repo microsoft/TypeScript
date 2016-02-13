@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set 'experimentalDecorators' to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
