@@ -10192,12 +10192,11 @@ namespace ts {
                 return true;
             }
 
+            const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(declaration.parent.symbol);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(declaration.parent.symbol);
-            const enclosingClassDeclaration = getContainingClass(node);
-            const enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
 
             // A private or protected constructor can only be instantiated within it's own class 
-            if (declaringClass !== enclosingClass) {
+            if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                 if (flags & NodeFlags.Private) {
                     error(node, Diagnostics.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration, typeToString(declaringClass));
                 }
@@ -14076,11 +14075,14 @@ namespace ts {
         }
 
         function checkBaseTypeAccessibility(type: ObjectType, node: ExpressionWithTypeArguments) {
-            const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-            if (signatures.length) {
-                const declaration = signatures[0].declaration;
-                if (declaration && declaration.flags & NodeFlags.Private) {
-                    error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, (<Identifier>node.expression).text);
+            const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
+            if (!isNodeWithinClass(node, typeClassDeclaration)) {
+                const signatures = getSignaturesOfType(type, SignatureKind.Construct);
+                if (signatures.length) {
+                    const declaration = signatures[0].declaration;
+                    if (declaration && declaration.flags & NodeFlags.Private) {
+                        error(node, Diagnostics.Cannot_extend_a_class_0_Class_constructor_is_marked_as_private, (<Identifier>node.expression).text);
+                    }
                 }
             }
         }
@@ -15406,6 +15408,19 @@ namespace ts {
             }
 
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
+        }
+
+        function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
+            while (true) {
+                const containingClass = getContainingClass(node);
+                if (!containingClass) {
+                    return false;
+                }
+                if (containingClass === classDeclaration) {
+                    return true;
+                }
+                node = containingClass;
+            }
         }
 
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment {
