@@ -1536,6 +1536,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
+        // The number of times node_modules was searched to locate the package containing this file
+        /* @internal */ nodeModuleSearchDistance?: number;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -2419,6 +2421,7 @@ namespace ts {
         traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        maxNodeModuleJsDepth?: number;
         noImplicitUseStrict?: boolean;
         /* @internal */ stripInternal?: boolean;
 

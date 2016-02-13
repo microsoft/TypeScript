@@ -9,10 +9,10 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
+    export const version = "1.9.0";
 
     const emptyArray: any[] = [];
-
-    export const version = "1.9.0";
+    const startsWithDotSlashOrDotDotSlash = /^(\.\/|\.\.\/)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         let fileName = "tsconfig.json";
@@ -79,9 +79,7 @@ namespace ts {
             return false;
         }
 
-        const i = moduleName.lastIndexOf("./", 1);
-        const startsWithDotSlashOrDotDotSlash = i === 0 || (i === 1 && moduleName.charCodeAt(0) === CharacterCodes.dot);
-        return !startsWithDotSlashOrDotDotSlash;
+        return !startsWithDotSlashOrDotDotSlash.test(moduleName);
     }
 
     interface ModuleResolutionState {
@@ -448,11 +446,11 @@ namespace ts {
                 trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
 
-            let jsonContent: { typings?: string };
+            let jsonContent: { typings?: string; main?: string };
 
             try {
                 const jsonText = state.host.readFile(packageJsonPath);
-                jsonContent = jsonText ? <{ typings?: string }>JSON.parse(jsonText) : { typings: undefined };
+                jsonContent = jsonText ? <{ typings?: string; main?: string }>JSON.parse(jsonText) : { typings: undefined, main: undefined };
             }
             catch (e) {
                 // gracefully handle if readFile fails or returns not JSON
@@ -465,7 +463,7 @@ namespace ts {
                     if (state.traceEnabled) {
                         trace(state.host, Diagnostics.package_json_has_typings_field_0_that_references_1, jsonContent.typings, typingsFile);
                     }
-                    const result = loadModuleFromFile(typingsFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typingsFile), state.host), state);
+                    const result = loadModuleFromFile(typingsFile, /* don't add extension */ [""], failedLookupLocation, !directoryProbablyExists(getDirectoryPath(typingsFile), state.host), state);
                     if (result) {
                         return result;
                     }
@@ -477,6 +475,15 @@ namespace ts {
             else {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.package_json_does_not_have_typings_field);
+                }
+            }
+            // TODO (billti): tracing as per above
+            if (typeof jsonContent.main === "string") {
+                // If 'main' points to 'foo.js', we still want to try and load 'foo.d.ts' and 'foo.ts' first (and only 'foo.js' if 'allowJs' is set).
+                const mainFile = normalizePath(combinePaths(candidate, removeFileExtension(jsonContent.main)));
+                const result = loadModuleFromFile(mainFile, extensions, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(mainFile), state.host), state);
+                if (result) {
+                    return result;
                 }
             }
         }
@@ -499,12 +506,13 @@ namespace ts {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                // Load only typescript files irrespective of allowJs option if loading from node modules
-                let result = loadModuleFromFile(candidate, supportedTypeScriptExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
+
+                const supportedExtensions = getSupportedExtensions(state.compilerOptions);
+                let result = loadModuleFromFile(candidate, supportedExtensions, failedLookupLocations, !nodeModulesFolderExists, state);
                 if (result) {
                     return result;
                 }
-                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
+                result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
                 if (result) {
                     return result;
                 }
@@ -1397,13 +1405,20 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, isFileFromNodeSearch?: boolean): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                }
+
+                // If this was a file found by a node_modules search, set the nodeModuleSearchDistance to parent distance + 1.
+                if (isFileFromNodeSearch) {
+                    const newDistance = (refFile && refFile.nodeModuleSearchDistance) === undefined ? 1 : refFile.nodeModuleSearchDistance + 1;
+                    // If already set on the file, don't overwrite if it was already found closer (which may be '0' if added as a root file)
+                    file.nodeModuleSearchDistance = (typeof file.nodeModuleSearchDistance === "number") ? Math.min(file.nodeModuleSearchDistance, newDistance) : newDistance;
                 }
 
                 return file;
@@ -1423,6 +1438,12 @@ namespace ts {
             filesByName.set(path, file);
             if (file) {
                 file.path = path;
+
+                // Default to same distance as parent. Add one if found by a search.
+                file.nodeModuleSearchDistance = (refFile && refFile.nodeModuleSearchDistance) || 0;
+                if (isFileFromNodeSearch) {
+                    file.nodeModuleSearchDistance++;
+                }
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
@@ -1468,11 +1489,13 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
+            const maxJsNodeModuleSearchDistance = options.maxNodeModuleJsDepth || 0;
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
+                file.nodeModuleSearchDistance = file.nodeModuleSearchDistance || 0;
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
@@ -1480,16 +1503,23 @@ namespace ts {
                     // - resolution was successful
                     // - noResolve is falsy
                     // - module name come from the list fo imports
-                    const shouldAddFile = resolution &&
-                        !options.noResolve &&
-                        i < file.imports.length;
+                    // - it's not a top level JavaScript module that exceeded the search max
+                    const exceedsJsSearchDepth = resolution && resolution.isExternalLibraryImport &&
+                                                 hasJavaScriptFileExtension(resolution.resolvedFileName) &&
+                                                 file.nodeModuleSearchDistance >= maxJsNodeModuleSearchDistance;
+                    const shouldAddFile = resolution && !options.noResolve && i < file.imports.length && !exceedsJsSearchDepth;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName,
+                                                            toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName),
+                                                            /*isDefaultLib*/ false,
+                                                            file,
+                                                            skipTrivia(file.text, file.imports[i].pos),
+                                                            file.imports[i].end,
+                                                            resolution.isExternalLibraryImport);
 
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
-                            // this check is ok. Otherwise this would be never true for javascript file
+                        // TODO (billti): Should we check here if a JavaScript file is a CommonJS file, or doesn't have /// references?
+                        if (importedFile && resolution.isExternalLibraryImport && !hasJavaScriptFileExtension(importedFile.fileName)) {
                             if (!isExternalModule(importedFile) && importedFile.statements.length) {
                                 const start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
