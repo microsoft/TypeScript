@@ -179,6 +179,9 @@ module ts {
                     "/a/b/foo.ts",
                     "/a/b/foo.tsx",
                     "/a/b/foo.d.ts",
+                    "/c/d.ts",
+                    "/c/d.tsx",
+                    "/c/d.d.ts",
                     "/a/b/foo/index.ts",
                     "/a/b/foo/index.tsx",
                 ]);

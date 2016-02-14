@@ -10,7 +10,11 @@
 // @Filename: node_modules/anotherMod/index.js
 //// exports.x = 3;
 //// exports.y = 'foo';
-//// exports.z = true;
+//// /**
+////   * @param {(number | boolean)} a The first param
+////   * @param {Array<string>}      b The second param
+////   */
+//// exports.z = function(a,b){ return "test"; };
 
 // @Filename: consumer.js
 //// import * as x from 'myMod';
@@ -29,3 +33,6 @@ verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documenta
 edit.backspace(4);
 edit.insert('y.');
 verify.completionListContains("toUpperCase", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+edit.backspace(2);
+edit.insert('z(');
+verify.currentSignatureHelpIs("z(a: number | boolean, b: string[]): string");
