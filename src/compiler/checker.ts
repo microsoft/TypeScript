@@ -15412,14 +15412,13 @@ namespace ts {
 
         function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
             while (true) {
-                const containingClass = getContainingClass(node);
-                if (!containingClass) {
+                node = getContainingClass(node);
+                if (!node) {
                     return false;
                 }
-                if (containingClass === classDeclaration) {
+                if (node === classDeclaration) {
                     return true;
                 }
-                node = containingClass;
             }
         }
 
