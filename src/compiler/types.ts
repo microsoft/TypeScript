@@ -2125,6 +2125,7 @@ namespace ts {
         /* @internal */ id: number;      // Unique ID
         symbol?: Symbol;                 // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
+        nullableType?: Type;             // Cached nullable form of this type
     }
 
     /* @internal */
@@ -2197,7 +2198,9 @@ namespace ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
-    export interface UnionType extends UnionOrIntersectionType { }
+    export interface UnionType extends UnionOrIntersectionType {
+        nonNullableType?: Type;  // Cached non-nullable form of type
+    }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
 

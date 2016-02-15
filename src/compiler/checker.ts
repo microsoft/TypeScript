@@ -51,6 +51,8 @@ namespace ts {
         const languageVersion = compilerOptions.target || ScriptTarget.ES3;
         const modulekind = getEmitModuleKind(compilerOptions);
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
+        const strictNullChecks = compilerOptions.strictNullChecks;
+
 
         const emitResolver = createResolver();
 
@@ -2340,6 +2342,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
+                    case SyntaxKind.NullableType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Default binding, import specifier and namespace import is visible
@@ -4664,6 +4667,14 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromNullableTypeNode(node: NullableTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getNullableType(getTypeFromTypeNode(node.type));
+            }
+            return links.resolvedType;
+        }
+
         function addTypeToSet(typeSet: Type[], type: Type, typeSetKind: TypeFlags) {
             if (type.flags & typeSetKind) {
                 addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeSetKind);
@@ -4736,8 +4747,10 @@ namespace ts {
                 return anyType;
             }
             if (noSubtypeReduction) {
-                removeAllButLast(typeSet, undefinedType);
-                removeAllButLast(typeSet, nullType);
+                if (!strictNullChecks) {
+                    removeAllButLast(typeSet, undefinedType);
+                    removeAllButLast(typeSet, nullType);
+                }
             }
             else {
                 removeSubtypes(typeSet);
@@ -4920,6 +4933,8 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
+                case SyntaxKind.NullableType:
+                    return getTypeFromNullableTypeNode(<NullableTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
@@ -5415,7 +5430,9 @@ namespace ts {
                 }
 
                 if (isTypeAny(target)) return Ternary.True;
-                if (source.flags & TypeFlags.Undefined) return Ternary.True;
+                if (source.flags & TypeFlags.Undefined) {
+                    if (!strictNullChecks || target.flags & TypeFlags.Undefined) return Ternary.True;
+                }
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
                     if (result = enumRelatedTo(source, target)) {
@@ -6260,6 +6277,41 @@ namespace ts {
          */
         function isTupleType(type: Type): type is TupleType {
             return !!(type.flags & TypeFlags.Tuple);
+        }
+
+        function isNullableType(type: Type): boolean {
+            if (type.flags & TypeFlags.Undefined) {
+                return true;
+            }
+            if (type.flags & TypeFlags.Union) {
+                for (const t of (type as UnionType).types) {
+                    if (t.flags & TypeFlags.Undefined) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getNullableType(type: Type): Type {
+            if (!strictNullChecks) {
+                return type;
+            }
+            if (!type.nullableType) {
+                type.nullableType = isNullableType(type) ? type : getUnionType([type, undefinedType]);
+            }
+            return type.nullableType;
+        }
+
+        function getNonNullableTypeFromUnionType(type: UnionType): Type {
+            if (!type.nonNullableType) {
+                type.nonNullableType = removeTypesFromUnionOrIntersection(type, [undefinedType, nullType]);
+            }
+            return type.nonNullableType;
+        }
+
+        function getNonNullableType(type: Type): Type {
+            return strictNullChecks && type.flags & TypeFlags.Union ? getNonNullableTypeFromUnionType(type as UnionType) : type;
         }
 
         function getRegularTypeOfObjectLiteral(type: Type): Type {
@@ -14988,7 +15040,8 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return checkSourceElement((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.NullableType:
+                    return checkSourceElement((<ParenthesizedTypeNode | NullableTypeNode>node).type);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
