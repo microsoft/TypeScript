@@ -2074,8 +2074,7 @@ namespace ts {
         Number                  = 0x00000004,
         Boolean                 = 0x00000008,
         Void                    = 0x00000010,
-        Undefined               = 0x00000020,
-        Null                    = 0x00000040,
+        Undefined               = 0x00000020,  // Undefined or null
         Enum                    = 0x00000080,  // Enum type
         StringLiteral           = 0x00000100,  // String literal type
         TypeParameter           = 0x00000200,  // Type parameter
@@ -2093,7 +2092,7 @@ namespace ts {
         /* @internal */
         FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        ContainsUndefined       = 0x00200000,  // Type is or contains undefined type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
@@ -2104,18 +2103,18 @@ namespace ts {
         PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
 
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined,
         /* @internal */
-        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
+        RequiresWidening = ContainsUndefined | ContainsObjectLiteral | PredicateType,
         /* @internal */
-        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
+        PropagatingFlags = ContainsUndefined | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
