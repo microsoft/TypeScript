@@ -118,6 +118,7 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "undefined");
         const nullType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "null");
+        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -5434,7 +5435,7 @@ namespace ts {
 
                 if (isTypeAny(target)) return Ternary.True;
                 if (source.flags & TypeFlags.Undefined) {
-                    if (!strictNullChecks || target.flags & TypeFlags.Undefined) return Ternary.True;
+                    if (!strictNullChecks || target.flags & TypeFlags.Undefined || source === emptyArrayElementType) return Ternary.True;
                 }
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
@@ -8222,7 +8223,7 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : undefinedType);
+            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : emptyArrayElementType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
