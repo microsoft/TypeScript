@@ -168,7 +168,7 @@ var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
 var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
 >g : any
 >g1 : any[]
->[undefined, null] : null[]
+>[undefined, null] : undefined[]
 >undefined : undefined
 >null : null
 >g : { g1: any[]; }
@@ -184,7 +184,7 @@ var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
 var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] } };
 >h : any
 >h1 : number[]
->[undefined, null] : null[]
+>[undefined, null] : undefined[]
 >undefined : undefined
 >null : null
 >h : { h1: number[]; }
