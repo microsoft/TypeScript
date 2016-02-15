@@ -5415,8 +5415,7 @@ namespace ts {
                 }
 
                 if (isTypeAny(target)) return Ternary.True;
-                if (source === undefinedType) return Ternary.True;
-                if (source === nullType && target !== undefinedType) return Ternary.True;
+                if (source.flags & TypeFlags.Undefined) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
                     if (result = enumRelatedTo(source, target)) {
