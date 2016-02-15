@@ -53,7 +53,6 @@ namespace ts {
         const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
         const strictNullChecks = compilerOptions.strictNullChecks;
 
-
         const emitResolver = createResolver();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
@@ -1872,6 +1871,10 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
+                    }
+                    else if (isNullableType(type)) {
+                        writeType(getNonNullableType(type), TypeFormatFlags.InElementType);
+                        writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
