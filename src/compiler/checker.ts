@@ -10880,7 +10880,8 @@ namespace ts {
                     return booleanType;
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
-                    const ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+                    const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+                        Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
                         // run check only if former checks succeeded to avoid reporting cascading errors
                         checkReferenceExpression(node.operand,
@@ -10894,7 +10895,8 @@ namespace ts {
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
-            const ok = checkArithmeticOperandType(node.operand, operandType, Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
+            const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
+                Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
                 // run check only if former checks succeeded to avoid reporting cascading errors
                 checkReferenceExpression(node.operand,
@@ -11148,6 +11150,9 @@ namespace ts {
                     if (leftType.flags & TypeFlags.Undefined) leftType = rightType;
                     if (rightType.flags & TypeFlags.Undefined) rightType = leftType;
 
+                    leftType = getNonNullableType(leftType);
+                    rightType = getNonNullableType(rightType);
+
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands
                     // try and return them a helpful suggestion
@@ -11175,6 +11180,9 @@ namespace ts {
                     // If one operand is the null or undefined value, it is treated as having the type of the other operand.
                     if (leftType.flags & TypeFlags.Undefined) leftType = rightType;
                     if (rightType.flags & TypeFlags.Undefined) rightType = leftType;
+
+                    leftType = getNonNullableType(leftType);
+                    rightType = getNonNullableType(rightType);
 
                     let resultType: Type;
                     if (isTypeOfKind(leftType, TypeFlags.NumberLike) && isTypeOfKind(rightType, TypeFlags.NumberLike)) {
@@ -11235,7 +11243,7 @@ namespace ts {
                 case SyntaxKind.AmpersandAmpersandToken:
                     return rightType;
                 case SyntaxKind.BarBarToken:
-                    return getUnionType([leftType, rightType]);
+                    return getUnionType([getNonNullableType(leftType), rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
                     return getRegularTypeOfObjectLiteral(rightType);
