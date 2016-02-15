@@ -208,6 +208,7 @@ namespace ts {
         ParenthesizedType,
         ThisType,
         StringLiteralType,
+        NullableType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -353,7 +354,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = StringLiteralType,
+        LastTypeNode = NullableType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -775,6 +776,11 @@ namespace ts {
     // @kind(SyntaxKind.StringLiteralType)
     export interface StringLiteralTypeNode extends LiteralLikeNode, TypeNode {
         _stringLiteralTypeBrand: any;
+    }
+
+    // @kind(SyntaxKind.NullableType)
+    export interface NullableTypeNode extends TypeNode {
+        type: TypeNode;
     }
 
     // @kind(SyntaxKind.StringLiteral)
