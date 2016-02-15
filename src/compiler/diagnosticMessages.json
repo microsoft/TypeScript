@@ -2576,6 +2576,10 @@
         "category": "Message",
         "code": 6112
     },
+    "Enable strict null checks.": {
+        "category": "Message",
+        "code": 6113
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
