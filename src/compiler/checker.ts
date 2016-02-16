@@ -2677,7 +2677,8 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return getTypeFromTypeNode(declaration.type);
+                const type = getTypeFromTypeNode(declaration.type);
+                return declaration.questionToken ? getNullableType(type) : type;
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -2692,7 +2693,7 @@ namespace ts {
                 // Use contextual parameter type if one is available
                 const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
-                    return type;
+                    return declaration.questionToken ? getNullableType(type) : type;
                 }
             }
 
