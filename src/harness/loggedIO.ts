@@ -223,7 +223,18 @@ namespace Playback {
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead.filter(d => d.extension === extension && ts.arrayIsEqualTo(d.exclude, exclude)), path));
+            (path, extension, exclude) => findResultByPath(wrapper,
+                    replayLog.directoriesRead.filter(
+                        d => {
+                            if (d.extension === extension) {
+                                if (d.exclude) {
+                                    return ts.arrayIsEqualTo(d.exclude, exclude);
+                                }
+                                return true;
+                            }
+                            return false;
+                        }
+                    ), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
