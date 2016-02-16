@@ -1748,6 +1748,7 @@ namespace ts {
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1813,21 +1814,23 @@ namespace ts {
         Identifier
     }
 
-    export interface TypePredicate {
+    export interface TypePredicateBase {
         kind: TypePredicateKind;
         type: Type;
     }
 
     // @kind (TypePredicateKind.This)
-    export interface ThisTypePredicate extends TypePredicate {
+    export interface ThisTypePredicate extends TypePredicateBase {
         _thisTypePredicateBrand: any;
     }
 
     // @kind (TypePredicateKind.Identifier)
-    export interface IdentifierTypePredicate extends TypePredicate {
+    export interface IdentifierTypePredicate extends TypePredicateBase {
         parameterName: string;
         parameterIndex: number;
     }
+
+    export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -2095,7 +2098,6 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2107,7 +2109,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
@@ -2126,11 +2128,6 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
-    }
-
-    // Predicate types (TypeFlags.Predicate)
-    export interface PredicateType extends Type {
-        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)
@@ -2267,6 +2264,8 @@ namespace ts {
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
+        /* @internal */
+        typePredicate?: TypePredicate;
     }
 
     export const enum IndexKind {
