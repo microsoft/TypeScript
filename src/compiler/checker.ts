@@ -6993,6 +6993,10 @@ namespace ts {
 
             return type;
 
+            function narrowTypeByTruthiness(type: Type, expr: Identifier, assumeTrue: boolean): Type {
+                return strictNullChecks && assumeTrue && getResolvedSymbol(expr) === symbol ? getNonNullableType(type) : type;
+            }
+
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
                 if (expr.left.kind !== SyntaxKind.TypeOfExpression || expr.right.kind !== SyntaxKind.StringLiteral) {
@@ -7195,6 +7199,8 @@ namespace ts {
             // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
+                    case SyntaxKind.Identifier:
+                        return narrowTypeByTruthiness(type, <Identifier>expr, assumeTrue)
                     case SyntaxKind.CallExpression:
                         return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
