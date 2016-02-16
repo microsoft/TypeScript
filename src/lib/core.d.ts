@@ -215,7 +215,7 @@ interface Function {
       * @param thisArg The object to be used as the this object.
       * @param argArray A set of arguments to be passed to the function.
       */
-    apply<T,U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U;
+    apply<T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U;
     apply(this: Function, thisArg: any, argArray?: any): any;
 
     /**
@@ -223,7 +223,7 @@ interface Function {
       * @param thisArg The object to be used as the current object.
       * @param argArray A list of arguments to be passed to the method.
       */
-    call<T,U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U;
+    call<T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U;
     call(this: Function, thisArg: any, ...argArray: any[]): any;
 
     /**
