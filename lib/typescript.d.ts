@@ -1178,7 +1178,8 @@ declare namespace ts {
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1218,17 +1219,18 @@ declare namespace ts {
         This = 0,
         Identifier = 1,
     }
-    interface TypePredicate {
+    interface TypePredicateBase {
         kind: TypePredicateKind;
         type: Type;
     }
-    interface ThisTypePredicate extends TypePredicate {
+    interface ThisTypePredicate extends TypePredicateBase {
         _thisTypePredicateBrand: any;
     }
-    interface IdentifierTypePredicate extends TypePredicate {
+    interface IdentifierTypePredicate extends TypePredicateBase {
         parameterName: string;
         parameterIndex: number;
     }
+    type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
     enum SymbolFlags {
         None = 0,
         FunctionScopedVariable = 1,
@@ -1329,7 +1331,6 @@ declare namespace ts {
         ESSymbol = 16777216,
         ThisType = 33554432,
         ObjectLiteralPatternWithComputedProperties = 67108864,
-        PredicateType = 134217728,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 80896,
@@ -1341,9 +1342,6 @@ declare namespace ts {
         flags: TypeFlags;
         symbol?: Symbol;
         pattern?: DestructuringPattern;
-    }
-    interface PredicateType extends Type {
-        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
     interface StringLiteralType extends Type {
         text: string;
@@ -1479,6 +1477,7 @@ declare namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        noImplicitUseStrict?: boolean;
         [option: string]: string | number | boolean;
     }
     enum ModuleKind {
