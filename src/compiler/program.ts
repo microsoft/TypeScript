@@ -1169,7 +1169,9 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
                             return true;
                         case SyntaxKind.Decorator:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
+                            if (!options.experimentalDecorators) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning));
+                            }
                             return true;
                     }
 

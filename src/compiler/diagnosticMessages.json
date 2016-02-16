@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -2729,11 +2729,6 @@
         "category": "Error",
         "code": 8016
     },
-    "'decorators' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8017
-    },
-
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
