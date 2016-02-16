@@ -7200,7 +7200,7 @@ namespace ts {
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
-                        return narrowTypeByTruthiness(type, <Identifier>expr, assumeTrue)
+                        return narrowTypeByTruthiness(type, <Identifier>expr, assumeTrue);
                     case SyntaxKind.CallExpression:
                         return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
