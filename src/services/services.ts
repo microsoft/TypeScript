@@ -2103,7 +2103,7 @@ namespace ts {
                 // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
-                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, 
+                    entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
                         scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot), /*aggressiveChecks*/ undefined, scriptKind);
                 }
             }
