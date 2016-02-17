@@ -15055,11 +15055,20 @@ namespace ts {
                         continue;
                     }
                     const { declarations, flags } = exports[id];
-                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
-                    if (!(flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) && (flags & SymbolFlags.TypeAlias ? declarations.length - 1 : declarations.length) > 1) {
-                        const exportedDeclarations: Declaration[] = filter(declarations, isNotOverload);
-                        if (exportedDeclarations.length > 1) {
-                            for (const declaration of exportedDeclarations) {
+                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. 
+                    // (TS Exceptions: namespaces, function overloads, enums, and interfaces)
+                    if (flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) {
+                        continue;
+                    }
+                    const exportedDeclarationsCount = countWhere(declarations, isNotOverload);
+                    if (flags & SymbolFlags.TypeAlias && exportedDeclarationsCount <= 2) {
+                        // it is legal to merge type alias with other values
+                        // so count should be either 1 (just type alias) or 2 (type alias + merged value)
+                        continue;
+                    }
+                    if (exportedDeclarationsCount > 1) {
+                        for (const declaration of declarations) {
+                            if (isNotOverload(declaration)) {
                                 diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
                             }
                         }
