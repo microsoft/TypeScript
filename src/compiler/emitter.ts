@@ -389,7 +389,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
         return {
             emitSkipped,
-            diagnostics: emitterDiagnostics.getDiagnostics(),
+            declarationDiagnostics: emitterDiagnostics.getDiagnostics(),
             sourceMaps: sourceMapDataList
         };
 

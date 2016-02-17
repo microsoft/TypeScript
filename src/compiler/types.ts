@@ -1680,7 +1680,7 @@ namespace ts {
 
     export interface EmitResult {
         emitSkipped: boolean;
-        diagnostics: Diagnostic[];
+        /* @internal */ declarationDiagnostics: Diagnostic[];
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 

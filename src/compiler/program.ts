@@ -953,13 +953,27 @@ namespace ts {
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
+            let declarationDiagnostics: Diagnostic[] = [];
+
+            if (options.noEmit) {
+                return { declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+            }
+
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError) {
-                const preEmitDiagnostics = getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken);
-                if (preEmitDiagnostics.length > 0) {
-                    return { diagnostics: preEmitDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
+                    program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                    program.getGlobalDiagnostics(cancellationToken),
+                    program.getSemanticDiagnostics(sourceFile, cancellationToken));
+
+                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                    declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                }
+
+                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                    return { declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
                 }
             }
 
