@@ -13,11 +13,15 @@ __________________________________________________________ -->
 
 **TypeScript Version:** 
 
+1.7.5 / 1.8.0-beta / master(<date or hash>)
+
 **Code**
+
 ```ts
 // A self-contained demonstration of the problem follows...
 
 ```
 
-**Expected behavior:** 
+**Expected behavior:**
+
 **Actual behavior:** 
