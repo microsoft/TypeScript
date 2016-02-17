@@ -536,7 +536,7 @@ namespace ts {
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
 
-            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0 || scriptKind == ScriptKind.Js;
+            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0 || scriptKind == ScriptKind.JS;
 
             initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
 

@@ -55,7 +55,7 @@ namespace ts {
 
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
-        getScriptKind(fileName: string): ScriptKind;
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -350,7 +350,8 @@ namespace ts {
         public getScriptKind(fileName: string): ScriptKind {
             try {
                 return this.shimHost.getScriptKind(fileName);
-            } catch (e) {
+            }
+            catch (e) {
                 return ScriptKind.Unknown;
             }
         }
