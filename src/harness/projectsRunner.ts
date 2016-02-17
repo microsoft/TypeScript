@@ -127,7 +127,7 @@ class ProjectRunner extends RunnerBase {
             let errors = ts.getPreEmitDiagnostics(program);
 
             const emitResult = program.emit();
-            errors = ts.concatenate(errors, emitResult.diagnostics);
+            errors = ts.concatenate(errors, emitResult.declarationDiagnostics);
             const sourceMapData = emitResult.sourceMaps;
 
             // Clean up source map data that will be used in baselining

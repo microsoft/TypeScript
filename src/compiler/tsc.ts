@@ -590,30 +590,21 @@ namespace ts {
                 }
             }
 
-            reportDiagnostics(diagnostics, compilerHost);
-
-            // If the user doesn't want us to emit, then we're done at this point.
-            if (compilerOptions.noEmit) {
-                return diagnostics.length
-                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
-                    : ExitStatus.Success;
-            }
-
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            reportDiagnostics(emitOutput.diagnostics, compilerHost);
+            diagnostics = diagnostics.concat(emitOutput.declarationDiagnostics);
 
-            // If the emitter didn't emit anything, then pass that value along.
-            if (emitOutput.emitSkipped) {
+            reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
+
+            if (emitOutput.emitSkipped && diagnostics.length > 0) {
+                // If the emitter didn't emit anything, then pass that value along.
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
-
-            // The emitter emitted something, inform the caller if that happened in the presence
-            // of diagnostics or not.
-            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+            else if (diagnostics.length > 0) {
+                // The emitter emitted something, inform the caller if that happened in the presence
+                // of diagnostics or not.
                 return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
-
             return ExitStatus.Success;
         }
     }
