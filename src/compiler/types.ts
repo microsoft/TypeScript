@@ -1,3 +1,4 @@
+
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -2457,6 +2458,14 @@ namespace ts {
          * This value denotes the character position in line and is different from the 'column' because of tab characters.
          */
         character: number;
+    }
+
+    export const enum ScriptKind {
+        Unknown = 0,
+        Js = 1,
+        Jsx = 2,
+        Ts = 3,
+        Tsx = 4
     }
 
     export const enum ScriptTarget {
