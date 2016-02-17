@@ -963,7 +963,7 @@ namespace ts {
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError) {
-                let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
+                const diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
                     program.getSyntacticDiagnostics(sourceFile, cancellationToken),
                     program.getGlobalDiagnostics(cancellationToken),
                     program.getSemanticDiagnostics(sourceFile, cancellationToken));
