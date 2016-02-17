@@ -223,14 +223,16 @@ namespace ts {
         }
 
         /**
-         * Records a hoisted variable declaration within a lexical environment.
+         * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
+            const decl = createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
-                hoistedVariableDeclarations = [];
+                hoistedVariableDeclarations = [decl];
             }
-
-            hoistedVariableDeclarations.push(createVariableDeclaration(name));
+            else {
+                hoistedVariableDeclarations.push(decl);
+            }
         }
 
         /**
@@ -238,10 +240,11 @@ namespace ts {
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             if (!hoistedFunctionDeclarations) {
-                hoistedFunctionDeclarations = [];
+                hoistedFunctionDeclarations = [func];
             }
-
-            hoistedFunctionDeclarations.push(func);
+            else {
+                hoistedFunctionDeclarations.push(func);
+            }
         }
 
         /**

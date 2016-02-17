@@ -180,6 +180,7 @@ namespace ts {
         block.statements = createNodeArray(statements);
         return block;
     }
+
     export function createVariableDeclaration(name: BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
         const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
         node.name = name;
@@ -203,17 +204,17 @@ namespace ts {
     export function createLiteral(value: string): StringLiteral;
     export function createLiteral(value: number): LiteralExpression;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral<T extends PrimaryExpression>(value: string | number | boolean): T {
+    export function createLiteral(value: string | number | boolean): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <T & LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <T>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
         }
         else {
-            const node = <T & StringLiteral>createNode(SyntaxKind.StringLiteral);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral);
             node.text = String(value);
             return node;
         }
