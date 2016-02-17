@@ -8950,9 +8950,10 @@ namespace ts {
 
             const enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
 
-            // Private property is accessible if declaring and enclosing class are the same
+            // Private property is accessible if the property is within the declaring class
             if (flags & NodeFlags.Private) {
-                if (declaringClass !== enclosingClass) {
+                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
@@ -8965,10 +8966,13 @@ namespace ts {
             if (left.kind === SyntaxKind.SuperKeyword) {
                 return true;
             }
-            // A protected property is accessible in the declaring class and classes derived from it
+            // A protected property is accessible if the property is within the declaring class or classes derived from it
+            const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
             if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
-                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
-                return false;
+                if (!isNodeWithinClass(node, typeClassDeclaration)) {
+                    error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                    return false;
+                }
             }
             // No further restrictions for static properties
             if (flags & NodeFlags.Static) {
@@ -8981,9 +8985,11 @@ namespace ts {
             }
 
             // TODO: why is the first part of this check here?
-            if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
-                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
-                return false;
+            if (getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                if (!(hasBaseType(<InterfaceType>type, enclosingClass) || isNodeWithinClass(node, typeClassDeclaration))) {
+                    error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                    return false;
+                }
             }
             return true;
         }
