@@ -2479,10 +2479,10 @@ namespace ts {
 
     export const enum ScriptKind {
         Unknown = 0,
-        Js = 1,
-        Jsx = 2,
-        Ts = 3,
-        Tsx = 4
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4
     }
 
     export const enum ScriptTarget {

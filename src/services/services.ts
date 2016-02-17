@@ -1018,7 +1018,7 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
-        getScriptKind(fileName: string): ScriptKind;
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
@@ -1749,7 +1749,7 @@ namespace ts {
 
         private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
-            const scriptKind = this.host.getScriptKind(fileName);
+            const scriptKind = this.host.getScriptKind ? this.host.getScriptKind(fileName) : ScriptKind.Unknown;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
@@ -1822,7 +1822,7 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
 
-            const scriptKind = this.host.getScriptKind(fileName);
+            const scriptKind = this.host.getScriptKind ? this.host.getScriptKind(fileName) : ScriptKind.Unknown;
             const version = this.host.getScriptVersion(fileName);
             let sourceFile: SourceFile;
 
