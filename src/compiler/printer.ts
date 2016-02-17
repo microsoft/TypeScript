@@ -76,8 +76,8 @@ function __export(m) {
 })`;
 
         const compilerOptions = host.getCompilerOptions();
-        const languageVersion = getLanguageVersion(compilerOptions);
-        const moduleKind = getModuleKind(compilerOptions);
+        const languageVersion = getEmitScriptTarget(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
 

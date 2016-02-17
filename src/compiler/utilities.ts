@@ -102,22 +102,6 @@ namespace ts {
         return true;
     }
 
-    export function getLanguageVersion(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
-    }
-
-    export function getModuleKind(compilerOptions: CompilerOptions) {
-        if (compilerOptions.module) {
-            return compilerOptions.module;
-        }
-
-        if (getLanguageVersion(compilerOptions) === ScriptTarget.ES6) {
-            return ModuleKind.ES6;
-        }
-
-        return ModuleKind.None;
-    }
-
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }

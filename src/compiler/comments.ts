@@ -140,12 +140,12 @@ namespace ts {
             function emitLeadingComments(range: TextRange, leadingComments: CommentRange[] = getLeadingCommentsToEmit(range)) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, range, leadingComments);
 
-                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+                // Leading comments are emitted as `/*leading comment1 */space/*leading comment*/space`
                 emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(range: TextRange, trailingComments = getTrailingCommentsToEmit(range)) {
-                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                // Trailing comments are emitted as `space/*trailing comment1 */space/*trailing comment*/`
                 emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
@@ -182,7 +182,7 @@ namespace ts {
             // get the leading comments from detachedPos
             const pos = lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos;
             const leadingComments = getLeadingCommentRanges(currentText, pos);
-            if (detachedCommentsInfo.length - 1) {
+            if (detachedCommentsInfo.length > 1) {
                 detachedCommentsInfo.pop();
             }
             else {
