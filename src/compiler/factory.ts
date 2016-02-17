@@ -514,6 +514,16 @@ namespace ts {
         return node;
     }
 
+    // Property assignments
+
+    export function createPropertyAssignment(name: PropertyName, initializer: Expression) {
+        const node = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment);
+        node.name = name;
+        node.questionToken = undefined;
+        node.initializer = initializer;
+        return node;
+    }
+
     // Compound nodes
 
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
@@ -570,6 +580,39 @@ namespace ts {
             createPropertyAccess(createIdentifier("Math"), "pow"),
             [left, right],
             location
+        );
+    }
+
+    export function createJsxSpread(reactNamespace: string, segments: Expression[]) {
+        return createCall(
+            createPropertyAccess(
+                createIdentifier(reactNamespace || "React"),
+                "__spread"
+            ),
+            segments
+        );
+    }
+
+    export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
+        const argumentsList = [tagName];
+        if (props) {
+            argumentsList.push(props)
+        }
+
+        if (children && children.length > 0) {
+            if (!props) {
+                argumentsList.push(createNull());
+            }
+
+            addRange(argumentsList, children);
+        }
+
+        return createCall(
+            createPropertyAccess(
+                createIdentifier(reactNamespace || "React"),
+                "createElement"
+            ),
+            argumentsList
         );
     }
 

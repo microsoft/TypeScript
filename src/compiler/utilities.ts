@@ -180,6 +180,10 @@ namespace ts {
         return node.pos;
     }
 
+    export function isDefined(value: any): boolean {
+        return value !== undefined;
+    }
+
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
     // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
     // in the tree), it is definitely missing. However, a node may be defined, but still be
@@ -3235,6 +3239,10 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.JsxAttribute
             || kind === SyntaxKind.JsxSpreadAttribute;
+    }
+
+    export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
+        return node.kind === SyntaxKind.JsxSpreadAttribute;
     }
 
     // Clauses
