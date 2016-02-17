@@ -1968,16 +1968,20 @@ namespace ts {
                         transformFlags = TransformFlags.AssertTypeScript;
                     }
                 }
+
                 break;
 
             case SyntaxKind.ExpressionStatement:
-                // if (node.flags & NodeFlags.Generated) {
-                //     let expression = (<ExpressionStatement>node).expression;
-                //     if (expression.kind === SyntaxKind.CallExpression
-                //         && (<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
-                //         transformFlags |= TransformFlags.AssertES6;
-                //     }
-                // }
+                if (nodeIsSynthesized(node)) {
+                    const expression = (<ExpressionStatement>node).expression;
+                    if (nodeIsSynthesized(expression)
+                        && isCallExpression(expression)
+                        && expression.expression.kind === SyntaxKind.SuperKeyword) {
+                        // A synthesized call to `super` should be transformed to a cleaner emit
+                        // when transpiling to ES5/3.
+                        transformFlags |= TransformFlags.AssertES6;
+                    }
+                }
 
                 break;
 
@@ -2088,17 +2092,16 @@ namespace ts {
 
             case SyntaxKind.VariableDeclarationList:
                 // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
-                if (node.flags & NodeFlags.Let
-                    || node.flags & NodeFlags.Const) {
+                if (node.flags & NodeFlags.BlockScoped) {
                     transformFlags |= TransformFlags.AssertES6;
                 }
 
                 break;
 
             case SyntaxKind.VariableStatement:
-                // If a VariableStatement is exported, then it is ES6 syntax.
+                // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
                 if (node.flags & NodeFlags.Export) {
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
                 }
 
                 break;
@@ -2120,13 +2123,13 @@ namespace ts {
                 break;
 
             case SyntaxKind.HeritageClause:
-                // An `extends` HertiageClause is ES6 syntax.
                 if ((<HeritageClause>node).token === SyntaxKind.ExtendsKeyword) {
+                    // An `extends` HeritageClause is ES6 syntax.
                     transformFlags |= TransformFlags.AssertES6;
                 }
-
-                // An `implements` HeritageClause is TypeScript syntax.
-                else if ((<HeritageClause>node).token === SyntaxKind.ImplementsKeyword) {
+                else {
+                    // An `implements` HeritageClause is TypeScript syntax.
+                    Debug.assert((<HeritageClause>node).token === SyntaxKind.ImplementsKeyword);
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 

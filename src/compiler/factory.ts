@@ -78,14 +78,17 @@ namespace ts {
         return array;
     }
 
-    function setModifiers(node: Node, modifiers: Modifier[]) {
+    export function setModifiers<T extends Node>(node: T, modifiers: Modifier[]) {
         if (modifiers) {
-            node.modifiers = createSynthesizedModifiersArray(modifiers);
-            node.flags |= node.modifiers.flags;
+            const array = createModifiersArray(modifiers);
+            node.modifiers = array;
+            node.flags |= array.flags;
         }
         else {
             node.modifiers = undefined;
         }
+
+        return node;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
@@ -153,17 +156,17 @@ namespace ts {
     export function createLiteral(value: string): StringLiteral;
     export function createLiteral(value: number): LiteralExpression;
     export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral<T extends PrimaryExpression>(value: string | number | boolean): T {
+    export function createLiteral(value: string | number | boolean): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <T & LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <T>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
         }
         else {
-            const node = <T & StringLiteral>createNode(SyntaxKind.StringLiteral);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral);
             node.text = String(value);
             return node;
         }
@@ -224,7 +227,7 @@ namespace ts {
         const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location);
         node.decorators = undefined;
         setModifiers(node, modifiers);
-        node.name = coercePropertyName(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
         node.body = body;
@@ -246,7 +249,7 @@ namespace ts {
         const node = <GetAccessorDeclaration>createNode(SyntaxKind.GetAccessor, location);
         node.decorators = undefined;
         setModifiers(node, modifiers);
-        node.name = coercePropertyName(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray<ParameterDeclaration>();
         node.body = body;
@@ -257,7 +260,7 @@ namespace ts {
         const node = <SetAccessorDeclaration>createNode(SyntaxKind.SetAccessor, location);
         node.decorators = undefined;
         setModifiers(node, modifiers);
-        node.name = coercePropertyName(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray([parameter]);
         node.body = body;
@@ -269,7 +272,7 @@ namespace ts {
         node.decorators = undefined;
         node.modifiers = undefined;
         node.dotDotDotToken = undefined;
-        node.name = coerceBindingName(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
         node.type = undefined;
         node.initializer = initializer;
@@ -295,14 +298,14 @@ namespace ts {
         const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
-        node.name = coerceIdentifier(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
 
-    export function createElementAccess(expression: Expression, index: string | number | Expression, location?: TextRange) {
+    export function createElementAccess(expression: Expression, index: number | Expression, location?: TextRange) {
         const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
-        node.argumentExpression = coerceExpression(index);
+        node.argumentExpression = typeof index === "number" ? createLiteral(index) : index;
         return node;
     }
 
@@ -323,7 +326,7 @@ namespace ts {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location);
         node.modifiers = undefined;
         node.asteriskToken = asteriskToken;
-        node.name = coerceIdentifier(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
@@ -356,9 +359,9 @@ namespace ts {
 
     export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
         const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
-        node.left = parenthesizeForBinary(left, operator, BinaryOperand.Left);
+        node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true);
         node.operatorToken = createSynthesizedNode(operator);
-        node.right = parenthesizeForBinary(right, operator, BinaryOperand.Right);
+        node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false);
         return node;
     }
 
@@ -434,7 +437,7 @@ namespace ts {
 
     export function createVariableDeclaration(name: string | BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
         const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
-        node.name = coerceBindingName(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.initializer = initializer;
         return node;
     }
@@ -456,7 +459,7 @@ namespace ts {
         node.decorators = undefined;
         setModifiers(node, modifiers);
         node.asteriskToken = asteriskToken;
-        node.name = coerceIdentifier(name);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
@@ -497,8 +500,8 @@ namespace ts {
 
     export function createExportSpecifier(name: string | Identifier, propertyName?: string | Identifier) {
         const node = <ExportSpecifier>createNode(SyntaxKind.ExportSpecifier);
-        node.name = coerceIdentifier(name);
-        node.propertyName = coerceIdentifier(propertyName);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.propertyName = typeof propertyName === "string" ? createIdentifier(propertyName) : propertyName;
         return node;
     }
 
@@ -554,7 +557,11 @@ namespace ts {
     }
 
     export function createArraySlice(array: Expression, start?: number | Expression) {
-        const argumentsList: Expression[] = start !== undefined ? [coerceExpression(start)] : [];
+        const argumentsList: Expression[] = [];
+        if (start !== undefined) {
+            argumentsList.push(typeof start === "number" ? createLiteral(start) : start);
+        }
+
         return createCall(createPropertyAccess(array, "slice"), argumentsList);
     }
 
@@ -791,111 +798,150 @@ namespace ts {
 
 
     // Utilities
-
-    function coerceIdentifier(value: string | Identifier) {
-        if (typeof value === "string") {
-            return createIdentifier(value);
-        }
-        else {
-            return value;
-        }
-    }
-
-    function coerceBindingName(value: string | BindingName) {
-        if (typeof value === "string") {
-            return createIdentifier(value);
-        }
-        else {
-            return value;
-        }
-    }
-
-    function coercePropertyName(value: string | PropertyName) {
-        if (typeof value === "string") {
-            return createIdentifier(value);
-        }
-        else {
-            return value;
-        }
-    }
-
-    function coerceExpression(value: string | number | boolean | Expression): Expression {
-        if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-            return createLiteral(value);
-        }
-        else {
-            return value;
-        }
-    }
-
-    const enum BinaryOperand {
-        Left,
-        Right
-    }
-
-    function parenthesizeForBinary(operand: Expression, operator: SyntaxKind, side: BinaryOperand) {
+    /**
+     * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
+     * order of operations.
+     *
+     * @param binaryOperator The operator for the BinaryExpression.
+     * @param operand The operand for the BinaryExpression.
+     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+     *                           BinaryExpression.
+     */
+    function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
         // When diagnosing whether the expression needs parentheses, the decision should be based
         // on the innermost expression in a chain of nested type assertions.
-        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
-            operand = (<AssertionExpression>operand).expression;
-        }
+        operand = skipAssertions(operand);
 
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
         if (operand.kind === SyntaxKind.ParenthesizedExpression) {
             return operand;
         }
 
-        return needsParenthesesForBinary(operand, operator, side)
+        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary)
             ? createParen(operand)
             : operand;
     }
 
-    function needsParenthesesForBinary(operand: Expression, operator: SyntaxKind, side: BinaryOperand) {
+    /**
+     * Determines whether the operand to a BinaryExpression needs to be parenthesized.
+     *
+     * @param binaryOperator The operator for the BinaryExpression.
+     * @param operand The operand for the BinaryExpression.
+     * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
+     *                           BinaryExpression.
+     */
+    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
+        // If the operand has lower precedence, then it needs to be parenthesized to preserve the
+        // intent of the expression. For example, if the operand is `a + b` and the operator is
+        // `*`, then we need to parenthesize the operand to preserve the intended order of
+        // operations: `(a + b) * x`.
+        //
+        // If the operand has higher precedence, then it does not need to be parenthesized. For
+        // example, if the operand is `a * b` and the operator is `+`, then we do not need to
+        // parenthesize to preserve the intended order of operations: `a * b + x`.
+        //
+        // If the operand has the same precedence, then we need to check the associativity of
+        // the operator based on whether this is the left or right operand of the expression.
+        //
+        // For example, if `a / d` is on the right of operator `*`, we need to parenthesize
+        // to preserve the intended order of operations: `x * (a / d)`
+        //
+        // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
+        // the intended order of operations: `(a ** b) ** c`
+        const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const operandPrecedence = getExpressionPrecedence(operand);
-        const operatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, operator);
-        switch (compareValues(operandPrecedence, operatorPrecedence)) {
+        switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
                 return true;
-            case Comparison.EqualTo:
-                return isRightAssociativeOperandOnLeftHandSide(operand, side)
-                    || isModuloOperandOnRightHandSide(operand, operator, side);
+
             case Comparison.GreaterThan:
                 return false;
+
+            case Comparison.EqualTo:
+                if (isLeftSideOfBinary) {
+                    // No need to parenthesize the left operand when the binary operator is
+                    // left associative:
+                    //  (a*b)/x    ->  a*b/x
+                    //  (a**b)/x   ->  a**b/x
+
+                    // Parentheses are needed for the left operand when the binary operator is
+                    // right associative:
+                    //  (a/b)**x   ->  (a/b)**x
+                    //  (a**b)**x  ->  (a**b)**x
+                    const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
+                    return binaryOperatorAssociativity === Associativity.Right;
+                }
+                else {
+                    // No need to parenthesize the right operand when the binary operator and
+                    // operand are the same and one of the following:
+                    //  x*(a*b)     => x*a*b
+                    //  x|(a|b)     => x|a|b
+                    //  x&(a&b)     => x&a&b
+                    //  x^(a^b)     => x^a^b
+                    if (isBinaryExpression(operand)
+                        && operand.operatorToken.kind === binaryOperator
+                        && isMathAssociativeOperator(binaryOperator)) {
+                        return false;
+                    }
+
+                    // No need to parenthesize the right operand when the operand is right
+                    // associative:
+                    //  x/(a**b)    -> x/a**b
+                    //  x**(a**b)   -> x**a**b
+
+                    // Parentheses are needed for the right operand when the operand is left
+                    // associative:
+                    //  x/(a*b)     -> x/(a*b)
+                    //  x**(a/b)    -> x**(a/b)
+                    const operandAssociativity = getExpressionAssociativity(operand);
+                    return operandAssociativity === Associativity.Left;
+                }
         }
     }
 
-    function isRightAssociativeOperandOnLeftHandSide(operand: Expression, side: BinaryOperand) {
-        return side === BinaryOperand.Left
-            && getExpressionAssociativity(operand) === Associativity.Right;
+    /**
+     * Determines whether a binary operator is mathematically associative.
+     *
+     * @param binaryOperator The binary operator.
+     */
+    function isMathAssociativeOperator(binaryOperator: SyntaxKind) {
+        // The following operators are associative in JavaScript:
+        //  (a*b)*c     -> a*(b*c)  -> a*b*c
+        //  (a|b)|c     -> a|(b|c)  -> a|b|c
+        //  (a&b)&c     -> a&(b&c)  -> a&b&c
+        //  (a^b)^c     -> a^(b^c)  -> a^b^c
+        //
+        // While addition is associative in mathematics, JavaScript's `+` is not
+        // guaranteed to be associative as it is overloaded with string concatenation.
+        return binaryOperator === SyntaxKind.AsteriskToken
+            || binaryOperator === SyntaxKind.BarToken
+            || binaryOperator === SyntaxKind.AmpersandToken
+            || binaryOperator === SyntaxKind.CaretToken;
     }
 
-    function isModuloOperandOnRightHandSide(operand: Expression, operator: SyntaxKind, side: BinaryOperand) {
-        return side === BinaryOperand.Right
-            && operator !== SyntaxKind.PercentToken
-            && operand.kind === SyntaxKind.BinaryExpression
-            && (<BinaryExpression>operand).operatorToken.kind === SyntaxKind.PercentToken;
-    }
-
+    /**
+     * Wraps an expression in parentheses if it is needed in order to use the expression for
+     * property or element access.
+     *
+     * @param expr The expression node.
+     */
     function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
         // When diagnosing whether the expression needs parentheses, the decision should be based
         // on the innermost expression in a chain of nested type assertions.
-        while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
-            expr = (<AssertionExpression>expr).expression;
-        }
+        expr = skipAssertions(expr);
 
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
         // to parenthesize the expression before a dot. The known exceptions are:
         //
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
-        //    NumberLiteral
+        //    NumericLiteral
         //       1.x            -> not the same as (1).x
         //
         if (isLeftHandSideExpression(expr) &&
             expr.kind !== SyntaxKind.NewExpression &&
             expr.kind !== SyntaxKind.NumericLiteral) {
-
-            return <LeftHandSideExpression>expr;
+            return expr;
         }
 
         return createParen(expr);
@@ -909,6 +955,18 @@ namespace ts {
         return createParen(operand);
     }
 
+    /**
+     * Skips past any TypeAssertionExpression or AsExpression nodes to their inner expression.
+     *
+     * @param node The expression node.
+     */
+    function skipAssertions(node: Expression) {
+        while (node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+            node = (<AssertionExpression>node).expression;
+        }
+
+        return node;
+    }
 
     export function startOnNewLine<T extends Node>(node: T): T {
         (<SynthesizedNode>node).startsOnNewLine = true;

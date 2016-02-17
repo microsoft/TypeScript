@@ -20,7 +20,7 @@ namespace ts {
 
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
-        const languageVersion = getLanguageVersion(compilerOptions);
+        const languageVersion = getEmitScriptTarget(compilerOptions);
         const decoratedClassAliases: Map<Identifier> = {};
         const currentDecoratedClassAliases: Map<Identifier> = {};
         const previousExpressionSubstitution = context.expressionSubstitution;
@@ -755,8 +755,8 @@ namespace ts {
         function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
             if (ctor.body) {
                 const statements = ctor.body.statements;
-                const statement = statements.length ? statements[0] : undefined;
-                if (statement.kind === SyntaxKind.ExpressionStatement) {
+                const statement = firstOrUndefined(statements);
+                if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
                     const expression = (<ExpressionStatement>statement).expression;
                     if (expression.kind === SyntaxKind.CallExpression) {
                         if ((<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
@@ -1853,7 +1853,7 @@ namespace ts {
             const visited = visitEachChild(body, visitor, context);
             const declarations = endLexicalEnvironment();
             currentScope = savedCurrentScope;
-            return mergeFunctionBodyLexicalEnvironment(visited, declarations, visited !== body);
+            return mergeFunctionBodyLexicalEnvironment(visited, declarations);
         }
 
         function transformConciseBody(node: ArrowFunction): ConciseBody {
@@ -1872,7 +1872,7 @@ namespace ts {
                 startLexicalEnvironment();
                 const visited: Expression | Block = visitNode(body, visitor, isConciseBody);
                 const declarations = endLexicalEnvironment();
-                const merged = mergeConciseBodyLexicalEnvironment(visited, declarations, visited !== body);
+                const merged = mergeConciseBodyLexicalEnvironment(visited, declarations);
                 if (forceBlockFunctionBody && !isBlock(merged)) {
                     return createBlock([
                         createReturn(<Expression>merged)

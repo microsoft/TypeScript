@@ -471,10 +471,10 @@ namespace ts {
      * @param node The Node to visit.
      * @param visitor The callback used to visit the Node.
      * @param test A callback to execute to verify the Node is valid.
-     * @param lift A callback to execute to lift a NodeArrayNode into a valid Node.
-     * @param optional A value indicating whether the Node is optional.
+     * @param optional An optional value indicating whether the Node is itself optional.
+     * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test?: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         if (node === undefined) {
             return undefined;
         }
@@ -502,53 +502,53 @@ namespace ts {
      * @param nodes The NodeArray to visit.
      * @param visitor The callback used to visit a Node.
      * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): TArray;
-    export function visitNodes<T extends Node, U extends Node>(nodes: T[], visitor: (node: T) => U): NodeArray<U>;
-    export function visitNodes<T extends Node>(nodes: T[], visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<T>;
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test?: (node: Node) => boolean, start?: number, count?: number): TArray {
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test: (node: Node) => boolean, start?: number, count?: number): TArray {
         if (nodes === undefined) {
             return undefined;
         }
 
-        const len = nodes.length;
-        start = start !== undefined ? Math.max(start, 0) : 0;
-        count = count !== undefined ? Math.min(count, len - start) : len - start;
-
         let updated: T[];
-        if (start > 0 || count < len) {
+
+        // Ensure start and count have valid values
+        const length = nodes.length;
+        if (start === undefined || start < 0) {
+            start = 0;
+        }
+
+        if (count === undefined || count > length - start) {
+            count = length - start;
+        }
+
+        // If we are not visiting all of the original nodes, we must always create a new array.
+        if (start > 0 || count < length) {
             updated = [];
         }
 
+        // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            if (node === undefined) {
-                continue;
-            }
-
-            const visited = <OneOrMore<T>>visitor(node);
+            const visited = node && <OneOrMore<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
+                    // Ensure we have a copy of `nodes`, up to the current index.
                     updated = nodes.slice(0, i);
-                }
-
-                if (visited === undefined) {
-                    continue;
                 }
 
                 if (visited !== node) {
                     aggregateTransformFlags(visited);
-                    visited.original = node;
                 }
 
                 addNode(updated, visited, test);
             }
         }
 
-        if (updated) {
+        if (updated !== undefined) {
             return <TArray>(isModifiersArray(nodes)
-                ? createModifiersArray(updated, /*location*/ nodes)
-                : createNodeArray(updated, /*location*/ nodes));
+                ? createModifiersArray(updated, nodes)
+                : createNodeArray(updated, nodes));
         }
 
         return nodes;
@@ -559,36 +559,40 @@ namespace ts {
      *
      * @param node The Node whose children will be visited.
      * @param visitor The callback used to visit each child.
-     * @param environment An optional lexical environment context for the visitor.
+     * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => Node, environment?: LexicalEnvironment): T {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => Node, context: LexicalEnvironment): T;
+    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => Node, context: LexicalEnvironment): T {
         if (node === undefined) {
             return undefined;
         }
 
-        const isNewLexicalEnvironment = environment !== undefined && nodeStartsNewLexicalEnvironment(node);
+        let updated: T & Map<any>;
+
+        // If this node starts a new lexical environment, start a new lexical environment on the context.
+        const isNewLexicalEnvironment = nodeStartsNewLexicalEnvironment(node);
         if (isNewLexicalEnvironment) {
-            environment.startLexicalEnvironment();
+            context.startLexicalEnvironment();
         }
 
-        let modifiers: NodeFlags;
-        let updated: T & Map<any>;
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
             for (const edge of edgeTraversalPath) {
-                const value = (<Map<any>>node)[edge.name];
+                const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     const visited = visitEdge(edge, value, visitor);
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = cloneNode(node, /*location*/ undefined, node.flags & ~NodeFlags.Modifier, /*parent*/ undefined, /*original*/ node);
+                            updated = cloneNode(node, /*location*/ node, node.flags & ~NodeFlags.Modifier, /*parent*/ undefined, /*original*/ node);
                         }
 
-                        updated[edge.name] = visited;
-                    }
-
-                    if (visited && isArray(visited) && isModifiersArray(visited)) {
-                        modifiers = visited.flags;
+                        if (visited && isArray(visited) && isModifiersArray(visited)) {
+                            updated[edge.name] = visited;
+                            updated.flags |= visited.flags;
+                        }
+                        else {
+                            updated[edge.name] = visited;
+                        }
                     }
                 }
             }
@@ -597,14 +601,11 @@ namespace ts {
         if (updated === undefined) {
             updated = node;
         }
-        else if (modifiers) {
-            updated.flags |= modifiers;
-        }
 
         if (isNewLexicalEnvironment) {
-            const declarations = environment.endLexicalEnvironment();
+            const declarations = context.endLexicalEnvironment();
             if (declarations !== undefined && declarations.length > 0) {
-                updated = <T>mergeLexicalEnvironment(updated, declarations, /*nodeIsMutable*/ updated !== node);
+                updated = <T>mergeLexicalEnvironment(updated, declarations);
             }
         }
 
@@ -625,7 +626,7 @@ namespace ts {
      */
     function visitEdge(edge: NodeEdge, value: Node | NodeArray<Node>, visitor: (node: Node) => Node) {
         return isArray(value)
-            ? visitNodes(<NodeArray<Node>>value, visitor, edge.test)
+            ? visitNodes(<NodeArray<Node>>value, visitor, edge.test, /*start*/ undefined, /*count*/ undefined)
             : visitNode(<Node>value, visitor, edge.test, edge.optional, edge.lift);
     }
 
@@ -665,72 +666,105 @@ namespace ts {
 
     /**
      * Merge generated declarations of a lexical environment.
+     *
+     * @param node The source node.
+     * @param declarations The generated lexical declarations.
      */
-    function mergeLexicalEnvironment(node: Node, declarations: Statement[], nodeIsMutable: boolean) {
-        const mutableNode = nodeIsMutable ? node : cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+    function mergeLexicalEnvironment(node: Node, declarations: Statement[]): Node {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                mergeSourceFileLexicalEnvironment(<SourceFile>mutableNode, declarations);
-                break;
+                return mergeSourceFileLexicalEnvironment(<SourceFile>node, declarations);
 
             case SyntaxKind.ModuleDeclaration:
-                mergeModuleDeclarationLexicalEnvironment(<ModuleDeclaration>mutableNode, declarations);
-                break;
+                return mergeModuleDeclarationLexicalEnvironment(<ModuleDeclaration>node, declarations);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.Constructor:
-                mergeFunctionLikeLexicalEnvironment(<FunctionLikeDeclaration>mutableNode, declarations);
-                break;
-
-            case SyntaxKind.ModuleBlock:
-            case SyntaxKind.Block:
-                mergeBlockLexicalEnvironment(<Block>mutableNode, declarations);
-                break;
+            case SyntaxKind.ArrowFunction:
+                return mergeFunctionLikeLexicalEnvironment(<FunctionLikeDeclaration>node, declarations);
         }
 
-        return mutableNode;
+        Debug.fail("Node is not a valid lexical environment.");
     }
 
     /**
      * Merge generated declarations of a lexical environment into a SourceFile.
+     *
+     * @param node The SourceFile node.
+     * @param declarations The generated lexical declarations.
      */
-    function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]) {
-        node.statements = mergeStatements(node.statements, declarations);
+    export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]) {
+        if (declarations !== undefined && declarations.length) {
+            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            mutableNode.statements = mergeStatements(mutableNode.statements, declarations);
+            return mutableNode;
+        }
+
+        return node;
     }
 
     /**
      * Merge generated declarations of a lexical environment into a ModuleDeclaration.
+     *
+     * @param node The ModuleDeclaration node.
+     * @param declarations The generated lexical declarations.
      */
-    function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]) {
+    export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]) {
         Debug.assert(node.body.kind === SyntaxKind.ModuleBlock);
-        node.body = <ModuleBlock>mergeLexicalEnvironment(node.body, declarations, /*nodeIsMutable*/ false);
+        if (declarations !== undefined && declarations.length) {
+            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            mutableNode.body = mergeBlockLexicalEnvironment(<ModuleBlock>node.body, declarations);
+            return mutableNode;
+        }
+
+        return node;
     }
 
     /**
      * Merge generated declarations of a lexical environment into a FunctionLikeDeclaration.
+     *
+     * @param node The function-like node.
+     * @param declarations The generated lexical declarations.
      */
     function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]) {
         Debug.assert(node.body !== undefined);
-        node.body = mergeConciseBodyLexicalEnvironment(node.body, declarations);
+        if (declarations !== undefined && declarations.length) {
+            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            mutableNode.body = mergeConciseBodyLexicalEnvironment(mutableNode.body, declarations);
+            return mutableNode;
+        }
+
+        return node;
     }
 
-    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[], nodeIsMutable?: boolean): FunctionBody {
-        if (declarations && declarations.length > 0) {
-            return <Block>mergeLexicalEnvironment(body, declarations, nodeIsMutable);
+    /**
+     * Merges generated lexical declarations into the FunctionBody of a non-arrow function-like declaration.
+     *
+     * @param node The ConciseBody of an arrow function.
+     * @param declarations The lexical declarations to merge.
+     */
+    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]) {
+        if (declarations !== undefined && declarations.length > 0) {
+            return mergeBlockLexicalEnvironment(body, declarations);
         }
 
         return body;
     }
 
-    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[], nodeIsMutable?: boolean): ConciseBody {
-        if (declarations && declarations.length > 0) {
+    /**
+     * Merges generated lexical declarations into the ConciseBody of an ArrowFunction.
+     *
+     * @param node The ConciseBody of an arrow function.
+     * @param declarations The lexical declarations to merge.
+     */
+    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]) {
+        if (declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
-                return <Block>mergeLexicalEnvironment(body, declarations, nodeIsMutable);
+                return mergeBlockLexicalEnvironment(body, declarations);
             }
             else {
                 return createBlock([
@@ -739,20 +773,27 @@ namespace ts {
                 ]);
             }
         }
-        else {
-            return body;
-        }
+
+        return body;
     }
 
     /**
      * Merge generated declarations of a lexical environment into a FunctionBody or ModuleBlock.
+     *
+     * @param node The block into which to merge lexical declarations.
+     * @param declarations The lexical declarations to merge.
      */
-    function mergeBlockLexicalEnvironment(node: FunctionBody | ModuleBlock, declarations: Statement[]) {
-        node.statements = mergeStatements(node.statements, declarations);
+    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]) {
+        const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+        mutableNode.statements = mergeStatements(node.statements, declarations);
+        return mutableNode;
     }
 
     /**
      * Merge generated declarations of a lexical environment into a NodeArray of Statement.
+     *
+     * @param statements The node array to concatentate with the supplied lexical declarations.
+     * @param declarations The lexical declarations to merge.
      */
     function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
         return createNodeArray(concatenate(statements, declarations), /*location*/ statements);

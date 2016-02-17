@@ -19,10 +19,16 @@ namespace ts {
         [ModuleKind.None]: transformModule
     };
 
+    const enum SyntaxKindFeatureFlags {
+        ExpressionSubstitution = 1 << 0,
+        EmitNotifications = 1 << 1,
+    }
+
+
     export function getTransformers(compilerOptions: CompilerOptions) {
         const jsx = compilerOptions.jsx;
-        const languageVersion = getLanguageVersion(compilerOptions);
-        const moduleKind = getModuleKind(compilerOptions);
+        const languageVersion = getEmitScriptTarget(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: Transformer[] = [];
 
         transformers.push(transformTypeScript);
@@ -56,8 +62,7 @@ namespace ts {
         const nodeEmitFlags: NodeEmitFlags[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
-        const enabledExpressionSubstitutions = new Array<boolean>(SyntaxKind.Count);
-        const enabledEmitNotifications = new Array<boolean>(SyntaxKind.Count);
+        const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
 
         let lexicalEnvironmentStackOffset = 0;
         let hoistedVariableDeclarations: VariableDeclaration[];
@@ -108,19 +113,19 @@ namespace ts {
         }
 
         function enableExpressionSubstitution(kind: SyntaxKind) {
-            enabledExpressionSubstitutions[kind] = true;
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.ExpressionSubstitution;
         }
 
         function isExpressionSubstitutionEnabled(node: Node) {
-            return enabledExpressionSubstitutions[node.kind];
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.ExpressionSubstitution) !== 0;
         }
 
         function enableEmitNotification(kind: SyntaxKind) {
-            enabledEmitNotifications[kind] = true;
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
         }
 
         function isEmitNotificationEnabled(node: Node) {
-            return enabledEmitNotifications[node.kind]
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
                 || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
         }
 
@@ -226,6 +231,8 @@ namespace ts {
                     return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
+                    Debug.assert((node.flags & NodeFlags.Default) !== 0, "Can only generate a name for a default export.");
+                    return generateNameForExportDefault();
                 case SyntaxKind.ExportAssignment:
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
@@ -258,14 +265,16 @@ namespace ts {
         }
 
         /**
-         * Records a hoisted variable declaration within a lexical environment.
+         * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
+            const decl = createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
-                hoistedVariableDeclarations = [];
+                hoistedVariableDeclarations = [decl];
             }
-
-            hoistedVariableDeclarations.push(createVariableDeclaration(name));
+            else {
+                hoistedVariableDeclarations.push(decl);
+            }
         }
 
         /**
@@ -273,10 +282,11 @@ namespace ts {
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             if (!hoistedFunctionDeclarations) {
-                hoistedFunctionDeclarations = [];
+                hoistedFunctionDeclarations = [func];
             }
-
-            hoistedFunctionDeclarations.push(func);
+            else {
+                hoistedFunctionDeclarations.push(func);
+            }
         }
 
         /**
@@ -291,7 +301,6 @@ namespace ts {
             lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedVariableDeclarations;
             lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedFunctionDeclarations;
             lexicalEnvironmentStackOffset++;
-
             hoistedVariableDeclarations = undefined;
             hoistedFunctionDeclarations = undefined;
         }
@@ -303,15 +312,12 @@ namespace ts {
         function endLexicalEnvironment(): Statement[] {
             let statements: Statement[];
             if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                statements = [];
                 if (hoistedFunctionDeclarations) {
-                    for (const declaration of hoistedFunctionDeclarations) {
-                        statements.push(declaration);
-                    }
+                    statements = [...hoistedFunctionDeclarations];
                 }
 
                 if (hoistedVariableDeclarations) {
-                    statements.push(
+                    statements = append(statements,
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(hoistedVariableDeclarations)
@@ -390,8 +396,9 @@ namespace ts {
      * Makes an array from an ArrayLike.
      */
     function arrayOf<T>(arrayLike: ArrayLike<T>) {
-        const array: T[] = [];
-        for (let i = 0; i < arrayLike.length; i++) {
+        const length = arrayLike.length;
+        const array: T[] = new Array<T>(length);
+        for (let i = 0; i < length; i++) {
             array[i] = arrayLike[i];
         }
         return array;
