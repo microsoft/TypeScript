@@ -609,9 +609,18 @@ namespace ts {
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError) {
-                const preEmitDiagnostics = getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken);
-                if (preEmitDiagnostics.length > 0) {
-                    return { diagnostics: preEmitDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                const diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
+                    program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+                    program.getGlobalDiagnostics(cancellationToken),
+                    program.getSemanticDiagnostics(sourceFile, cancellationToken));
+                let declarationDiagnostics: Diagnostic[] = [];
+
+                if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                    declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
+                }
+
+                if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
                 }
             }
 
