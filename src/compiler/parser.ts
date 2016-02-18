@@ -417,8 +417,8 @@ namespace ts {
     // from this SourceFile that are being held onto may change as a result (including
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
-    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean, scriptKind?: ScriptKind): SourceFile {
-        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks, scriptKind);
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
+        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
 
     /* @internal */
@@ -536,11 +536,10 @@ namespace ts {
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
 
-            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0 || scriptKind == ScriptKind.JS;
-
+            const isJavaScriptFile = scriptKind === ScriptKind.JS || hasJavaScriptFileExtension(fileName);
             initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
 
-            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 
             clearState();
 
@@ -588,8 +587,8 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
-            sourceFile = createSourceFile(fileName, languageVersion);
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind?: ScriptKind): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion, scriptKind);
             sourceFile.flags = contextFlags;
 
             // Prime the scanner.
@@ -656,7 +655,7 @@ namespace ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind?: ScriptKind): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
@@ -668,6 +667,9 @@ namespace ts {
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
             sourceFile.isDeclarationFile = fileExtensionIs(sourceFile.fileName, ".d.ts");
+
+            scriptKind = scriptKind || ScriptKind.Unknown;
+            sourceFile.scriptKind = scriptKind !== ScriptKind.Unknown ? scriptKind : ScriptKind.TS;
 
             return sourceFile;
         }
@@ -6225,7 +6227,7 @@ namespace ts {
     }
 
     namespace IncrementalParser {
-        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean, scriptKind?: ScriptKind): SourceFile {
+        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 
             checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
@@ -6237,7 +6239,7 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, scriptKind);
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -6301,7 +6303,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, scriptKind);
+            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind);
 
             return result;
         }
