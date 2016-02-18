@@ -5203,21 +5203,6 @@ namespace ts {
             return !node.typeParameters && node.parameters.length && !forEach(node.parameters, p => p.type);
         }
 
-        function getTypeWithoutSignatures(type: Type): Type {
-            if (type.flags & TypeFlags.ObjectType) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                if (resolved.constructSignatures.length) {
-                    const result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
-                    result.members = resolved.members;
-                    result.properties = resolved.properties;
-                    result.callSignatures = emptyArray;
-                    result.constructSignatures = emptyArray;
-                    type = result;
-                }
-            }
-            return type;
-        }
-
         // TYPE CHECKING
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
@@ -14061,7 +14046,6 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
-            const staticType = <ObjectType>getTypeOfSymbol(symbol);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
@@ -14080,8 +14064,6 @@ namespace ts {
                         }
                     }
                     checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
-                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
-                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
