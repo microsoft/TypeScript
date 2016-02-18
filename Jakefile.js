@@ -221,13 +221,13 @@ var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 
-/* Compiles a file from a list of sources
+  /** Compiles a file from a list of sources
     * @param outFile: the target file name
     * @param sources: an array of the names of the source files
     * @param prereqs: prerequisite tasks to compiling the file
     * @param prefixes: a list of files to prepend to the target file
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @parap {Object}  opts - property bag containing auxiliary options
+    * @param {Object}  opts - property bag containing auxiliary options
     * @param {boolean} opts.noOutFile: true to compile without using --out
     * @param {boolean} opts.generateDeclarations: true to compile using --declaration
     * @param {string}  opts.outDir: value for '--outDir' command line option
