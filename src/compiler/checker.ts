@@ -11260,7 +11260,7 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return rightType;
+                    return isNullableType(leftType) ? getNullableType(rightType) : rightType;
                 case SyntaxKind.BarBarToken:
                     return getUnionType([getNonNullableType(leftType), rightType]);
                 case SyntaxKind.EqualsToken:
