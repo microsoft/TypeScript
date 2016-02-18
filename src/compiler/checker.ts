@@ -5184,6 +5184,11 @@ namespace ts {
                         if (decl.typeParameters && decl.typeParameters.length && forEach(decl.typeParameters, p => mapper.mapsType(getSymbolOfNode(p)))) {
                             return true;
                         }
+                        if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || isIndependentInterface(getSymbolOfNode(node))) &&
+                            mapper.mapsType(getSymbolOfNode(decl))) {
+                            // mapper maps the this class type of a class
+                            return true;
+                        }
                     }
                     node = node.parent;
                 }
