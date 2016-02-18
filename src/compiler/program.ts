@@ -956,7 +956,7 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                return { declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -973,7 +973,7 @@ namespace ts {
                 }
 
                 if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return { declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                    return { diagnostics, sourceMaps: undefined, emitSkipped: true };
                 }
             }
 
