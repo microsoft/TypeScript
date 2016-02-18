@@ -4959,13 +4959,13 @@ namespace ts {
 
         function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
             const mapper = <TypeMapper>(t => t === source ? target : t);
-            mapper.mapsType = sym => sym === source.symbol;
+            mapper.mapsType = sym => sym.name === source.symbol.name;
             return mapper;
         }
 
         function createBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
             const mapper = <TypeMapper>(t => t === source1 ? target1 : t === source2 ? target2 : t);
-            mapper.mapsType = sym => sym === source1.symbol || sym === source2.symbol;
+            mapper.mapsType = sym => sym.name === source1.symbol.name || sym.name === source2.symbol.name;
             return mapper;
         }
 
@@ -4982,19 +4982,19 @@ namespace ts {
                 }
                 return t;
             });
-            mapper.mapsType = sym => forEach(sources, source => sym === source.symbol);
+            mapper.mapsType = sym => forEach(sources, source => sym.name === source.symbol.name);
             return mapper;
         }
 
         function createUnaryTypeEraser(source: Type): TypeMapper {
             const eraser = <TypeMapper>(t => t === source ? <Type>anyType : <Type>t);
-            eraser.mapsType = sym => sym === source.symbol;
+            eraser.mapsType = sym => sym.name === source.symbol.name;
             return eraser;
         }
 
         function createBinaryTypeEraser(source1: Type, source2: Type): TypeMapper {
             const eraser = <TypeMapper>(t => t === source1 || t === source2 ? <Type>anyType : <Type>t);
-            eraser.mapsType = sym => sym === source1.symbol || sym === source2.symbol;
+            eraser.mapsType = sym => sym.name === source1.symbol.name || sym.name === source2.symbol.name;
             return eraser;
         }
 
@@ -5011,7 +5011,7 @@ namespace ts {
                 }
                 return <Type>t;
             });
-            mapper.mapsType = sym => forEach(sources, source => source.symbol === sym);
+            mapper.mapsType = sym => forEach(sources, source => source.symbol.name === sym.name);
             return mapper;
         }
 
@@ -5028,7 +5028,7 @@ namespace ts {
                     return t;
                 });
                 mapper.context = context;
-                mapper.mapsType = sym => forEach(context.typeParameters, param => param.symbol === sym);
+                mapper.mapsType = sym => forEach(context.typeParameters, param => param.symbol.name === sym.name);
                 context.mapper = mapper;
             }
             return context.mapper;
@@ -5179,6 +5179,7 @@ namespace ts {
                         node.kind === SyntaxKind.JSDocFunctionType ||
                         node.kind === SyntaxKind.ClassDeclaration ||
                         node.kind === SyntaxKind.ClassExpression ||
+                        node.kind === SyntaxKind.TypeAliasDeclaration ||
                         node.kind === SyntaxKind.InterfaceDeclaration) {
                         const decl = <SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration>node;
                         if (decl.typeParameters && decl.typeParameters.length && forEach(decl.typeParameters, p => mapper.mapsType(getSymbolOfNode(p)))) {
