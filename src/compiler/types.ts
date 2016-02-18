@@ -2286,6 +2286,7 @@ namespace ts {
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
                                     // The identity mapper and regular instantiation mappers do not need it.
+        mapsType(s: Symbol): boolean;
     }
 
     /* @internal */
