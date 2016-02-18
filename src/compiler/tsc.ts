@@ -415,7 +415,8 @@ namespace ts {
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!compilerOptions.watch) {
+            // Firefox has Object.prototype.watch
+            if (!compilerOptions.watch || !compilerOptions.hasOwnProperty("watch")) {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -441,7 +442,8 @@ namespace ts {
             }
             // Use default host function
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && compilerOptions.watch) {
+            // Firefox has Object.prototype.watch
+            if (sourceFile && compilerOptions.watch && compilerOptions.hasOwnProperty("watch")) {
                 // Attach a file watcher
                 const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
                 sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
