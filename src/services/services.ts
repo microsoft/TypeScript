@@ -2857,6 +2857,12 @@ namespace ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the
                         // host says should be used.
+
+                        // We do not support the scenario where a host can modify a registered
+                        // file's script kind, i.e. in one project some file is treated as ".ts"
+                        // and in another as ".js"
+                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind +") for file: " + fileName);
+
                         return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
 
