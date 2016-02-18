@@ -3728,7 +3728,8 @@ namespace ts {
                     continue;
                 }
 
-                if (parseOptional(SyntaxKind.ExclamationToken)) {
+                if (token === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                    nextToken();
                     const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
                     nonNullExpression.expression = expression;
                     expression = finishNode(nonNullExpression);
