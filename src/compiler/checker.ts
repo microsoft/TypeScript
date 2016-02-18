@@ -5852,7 +5852,10 @@ namespace ts {
 
                 if (isNumericLiteralType(source)) {
                     if (isNumericLiteralType(target)) return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
-                    if (target === numberType || target.flags & TypeFlags.Enum) return Ternary.True;
+                    if (target === numberType) return Ternary.True;
+                    if (target.flags & TypeFlags.Enum) {
+                        //TODO: If enum numeric value = numeric literal value, then true, else false
+                    }
                 }
                 if (relation === assignableRelation || relation === comparableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
