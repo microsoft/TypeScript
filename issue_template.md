@@ -13,11 +13,15 @@ __________________________________________________________ -->
 
 **TypeScript Version:** 
 
+1.7.5 / 1.8.0-beta / nightly (1.9.0-dev.20160217)
+
 **Code**
+
 ```ts
 // A self-contained demonstration of the problem follows...
 
 ```
 
-**Expected behavior:** 
+**Expected behavior:**
+
 **Actual behavior:** 
