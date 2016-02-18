@@ -592,7 +592,7 @@ namespace ts {
 
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            diagnostics = diagnostics.concat(emitOutput.declarationDiagnostics);
+            diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
