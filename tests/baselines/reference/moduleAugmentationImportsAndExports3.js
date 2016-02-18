@@ -72,3 +72,4 @@ export declare class B {
     n: number;
 }
 //// [f4.d.ts]
+import "./f3";

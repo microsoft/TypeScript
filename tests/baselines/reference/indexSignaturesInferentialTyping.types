@@ -21,15 +21,15 @@ var x1 = foo({ 0: 0, 1: 1 });       // type should be number
 >x1 : number
 >foo({ 0: 0, 1: 1 }) : number
 >foo : <T>(items: { [index: number]: T; }) => T
->{ 0: 0, 1: 1 } : { [x: number]: number; 0: number; 1: number; }
+>{ 0: 0, 1: 1 } : { 0: number; 1: number; }
 >0 : number
 >1 : number
 
 var x2 = foo({ zero: 0, one: 1 });
->x2 : any
->foo({ zero: 0, one: 1 }) : any
+>x2 : {}
+>foo({ zero: 0, one: 1 }) : {}
 >foo : <T>(items: { [index: number]: T; }) => T
->{ zero: 0, one: 1 } : { [x: number]: undefined; zero: number; one: number; }
+>{ zero: 0, one: 1 } : { zero: number; one: number; }
 >zero : number
 >0 : number
 >one : number
@@ -39,7 +39,7 @@ var x3 = bar({ 0: 0, 1: 1 });
 >x3 : number
 >bar({ 0: 0, 1: 1 }) : number
 >bar : <T>(items: { [index: string]: T; }) => T
->{ 0: 0, 1: 1 } : { [x: string]: number; 0: number; 1: number; }
+>{ 0: 0, 1: 1 } : { 0: number; 1: number; }
 >0 : number
 >1 : number
 
@@ -47,7 +47,7 @@ var x4 = bar({ zero: 0, one: 1 });  // type should be number
 >x4 : number
 >bar({ zero: 0, one: 1 }) : number
 >bar : <T>(items: { [index: string]: T; }) => T
->{ zero: 0, one: 1 } : { [x: string]: number; zero: number; one: number; }
+>{ zero: 0, one: 1 } : { zero: number; one: number; }
 >zero : number
 >0 : number
 >one : number

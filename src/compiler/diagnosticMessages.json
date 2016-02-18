@@ -1,4 +1,4 @@
- {
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -447,7 +447,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -722,6 +722,10 @@
     "Parameter '{0}' is not in the same position as parameter '{1}'.": {
         "category": "Error",
         "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
     },
     "A type predicate cannot reference a rest parameter.": {
         "category": "Error",
@@ -1699,6 +1703,10 @@
         "category": "Error",
         "code": 2529
     },
+    "Property '{0}' is incompatible with index signature.": {
+        "category": "Error",
+        "code": 2530
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1818,6 +1826,22 @@
     "Cannot augment module '{0}' because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2671
+    },
+    "Cannot assign a '{0}' constructor type to a '{1}' constructor type.": {
+        "category": "Error",
+        "code": 2672
+    },
+    "Constructor of class '{0}' is private and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2673
+    },
+    "Constructor of class '{0}' is protected and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2674
+    },
+    "Cannot extend a class '{0}'. Class constructor is marked as private.": {
+        "category": "Error",
+        "code": 2675
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2187,6 +2211,7 @@
         "category": "Error",
         "code": 5062
     },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2231,10 +2256,10 @@
         "category": "Message",
         "code": 6011
     },
-  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
-    "category": "Message",
-    "code": 6015
-  },
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+        "category": "Message",
+        "code": 6015
+    },
     "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
@@ -2319,7 +2344,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
         "category": "Error",
         "code": 6046
     },
@@ -2571,6 +2596,11 @@
         "category": "Message",
         "code": 6111
     },
+    "Do not emit 'use strict' directives in module output.": {
+        "category": "Message",
+        "code": 6112
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2723,11 +2753,6 @@
         "category": "Error",
         "code": 8016
     },
-    "'decorators' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8017
-    },
-
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2757,23 +2782,23 @@
         "code": 17004
     },
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
-      "category": "Error",
-      "code": 17005
+        "category": "Error",
+        "code": 17005
     },
     "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17006
+        "category": "Error",
+        "code": 17006
     },
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17007
+        "category": "Error",
+        "code": 17007
     },
     "JSX element '{0}' has no corresponding closing tag.": {
-      "category": "Error",
-      "code": 17008
+        "category": "Error",
+        "code": 17008
     },
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
-      "category": "Error",
-      "code": 17009
+        "category": "Error",
+        "code": 17009
     }
 }

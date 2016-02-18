@@ -25,7 +25,7 @@ export class App extends React.Component<any, any> {
 >render : Symbol(render, Decl(app.tsx, 5, 52))
 
         return <Button />;
->Button : Symbol(Button, Decl(app.tsx, 3, 8))
+>Button : Symbol(Button, Decl(button.tsx, 0, 31))
     }
 
 }

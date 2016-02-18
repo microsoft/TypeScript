@@ -422,14 +422,9 @@ namespace ts {
         IntrinsicNamedElement = 1 << 0,
         /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 1 << 1,
-        /** An element backed by a class, class-like, or function value */
-        ValueElement = 1 << 2,
-        /** Element resolution failed */
-        UnknownElement = 1 << 4,
 
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
-
 
     /* @internal */
     export const enum RelationComparisonResult {
@@ -1559,7 +1554,7 @@ namespace ts {
         /* @internal */ classifiableNames?: Map<string>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
-        // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
@@ -1685,7 +1680,7 @@ namespace ts {
 
     export interface EmitResult {
         emitSkipped: boolean;
-        diagnostics: Diagnostic[];
+        /* @internal */ declarationDiagnostics: Diagnostic[];
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -1753,7 +1748,8 @@ namespace ts {
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
+        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1818,21 +1814,23 @@ namespace ts {
         Identifier
     }
 
-    export interface TypePredicate {
+    export interface TypePredicateBase {
         kind: TypePredicateKind;
         type: Type;
     }
 
     // @kind (TypePredicateKind.This)
-    export interface ThisTypePredicate extends TypePredicate {
+    export interface ThisTypePredicate extends TypePredicateBase {
         _thisTypePredicateBrand: any;
     }
 
     // @kind (TypePredicateKind.Identifier)
-    export interface IdentifierTypePredicate extends TypePredicate {
+    export interface IdentifierTypePredicate extends TypePredicateBase {
         parameterName: string;
         parameterIndex: number;
     }
+
+    export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -1846,7 +1844,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
+    export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
@@ -1888,7 +1886,7 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
+        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
@@ -2013,7 +2011,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
-        isDeclaratonWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
+        isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // true if module exports some value (not just types)
     }
@@ -2041,9 +2039,9 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
-        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
+        ClassWithBodyScopedClassBinding     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00100000, // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
     /* @internal */
@@ -2061,8 +2059,10 @@ namespace ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
-        jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+        jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
+        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
     }
 
     export const enum TypeFlags {
@@ -2098,7 +2098,6 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2110,7 +2109,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
@@ -2129,11 +2128,6 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
-    }
-
-    // Predicate types (TypeFlags.Predicate)
-    export interface PredicateType extends Type {
-        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)
@@ -2166,7 +2160,7 @@ namespace ts {
 
     // Type references (TypeFlags.Reference). When a class or interface has type parameters or
     // a "this" type, references to the class or interface are made using type references. The
-    // typeArguments property specififes the types to substitute for the type parameters of the
+    // typeArguments property specifies the types to substitute for the type parameters of the
     // class or interface and optionally includes an extra element that specifies the type to
     // substitute for "this" in the resulting instantiation. When no extra argument is present,
     // the type reference itself is substituted for "this". The typeArguments property is undefined
@@ -2270,6 +2264,8 @@ namespace ts {
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
+        /* @internal */
+        typePredicate?: TypePredicate;
     }
 
     export const enum IndexKind {
@@ -2422,6 +2418,7 @@ namespace ts {
         traceModuleResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        noImplicitUseStrict?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2692,7 +2689,7 @@ namespace ts {
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
          * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
-         * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
+         * will apply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
@@ -2718,7 +2715,7 @@ namespace ts {
         getGlobalDiagnostics(): Diagnostic[];
 
         // If fileName is provided, gets all the diagnostics associated with that file name.
-        // Otherwise, returns all the diagnostics (global and file associated) in this colletion.
+        // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(fileName?: string): Diagnostic[];
 
         // Gets a count of how many times this collection has been modified.  This value changes
