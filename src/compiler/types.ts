@@ -240,6 +240,7 @@ namespace ts {
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
+        NonNullExpression,
 
         // Misc
         TemplateSpan,
@@ -1016,6 +1017,11 @@ namespace ts {
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
+
+    // @kind(SyntaxKind.NonNullExpression)
+    export interface NonNullExpression extends LeftHandSideExpression {
+        expression: Expression;
+    }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
     // @kind(SyntaxKind.JsxElement)

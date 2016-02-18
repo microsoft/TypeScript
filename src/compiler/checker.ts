@@ -6878,6 +6878,7 @@ namespace ts {
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.TypeAssertionExpression:
                     case SyntaxKind.AsExpression:
+                    case SyntaxKind.NonNullExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.DeleteExpression:
@@ -10383,6 +10384,10 @@ namespace ts {
             return targetType;
         }
 
+        function checkNonNullExpression(node: NonNullExpression) {
+            return getNonNullableType(checkExpression(node.expression));
+        }
+
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
                 pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
@@ -11555,6 +11560,8 @@ namespace ts {
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return checkAssertion(<AssertionExpression>node);
+                case SyntaxKind.NonNullExpression:
+                    return checkNonNullExpression(<NonNullExpression>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
