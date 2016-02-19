@@ -2,8 +2,9 @@
 
 // @allowJs: true
 
-// @Filename: node_modules/myMod/index.js
-//// module.exports = { n: 3, s: 'foo', b: true };
+// @Filename: node_modules/myMod/index.ts
+//// var exp = { n: 3, s: 'foo', b: true };
+//// export = exp;
 
 // @Filename: consumer.js
 //// import * as x from 'myMod';

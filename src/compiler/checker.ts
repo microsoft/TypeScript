@@ -1005,6 +1005,13 @@ namespace ts {
                     return getTargetOfExportSpecifier(<ExportSpecifier>node);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.BinaryExpression:
+                    // module.exports = ...
+                    const targetExpr = (node as BinaryExpression).right;
+                    if (targetExpr.kind === SyntaxKind.Identifier) {
+                        return resolveName(node, (targetExpr as Identifier).text, SymbolFlags.Value, Diagnostics.Cannot_find_name_0, (targetExpr as Identifier));
+                    }
+                    return getSymbolOfNode((node as BinaryExpression).right);
             }
         }
 
@@ -1197,6 +1204,12 @@ namespace ts {
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression): Symbol {
             let symbol = resolveExternalModuleSymbol(moduleSymbol);
+
+            if (moduleSymbol && moduleSymbol.valueDeclaration && (<SourceFile>moduleSymbol.valueDeclaration).commonJsModuleIndicator) {
+                // CommonJS module could module.export nearly any value. TODO(billti): Should check for some valid value?
+                return symbol;
+            }
+
             if (symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
                 error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
                 symbol = undefined;
@@ -2973,6 +2986,14 @@ namespace ts {
             return links.type;
         }
 
+        function getTypeOfObjectLiteralSymbol(symbol: Symbol): Type {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                links.type = checkObjectLiteral(symbol.declarations[0] as ObjectLiteralExpression);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
@@ -2991,6 +3012,9 @@ namespace ts {
             }
             if (symbol.flags & SymbolFlags.Alias) {
                 return getTypeOfAlias(symbol);
+            }
+            if (symbol.flags & SymbolFlags.ObjectLiteral) {
+                return getTypeOfObjectLiteralSymbol(symbol);
             }
             return unknownType;
         }

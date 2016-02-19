@@ -1389,8 +1389,13 @@ namespace ts {
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
             else {
+                if (getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports) {
+                    declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                }
+                else {
                 // An export default clause with an expression exports a value
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                    declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+                }
             }
         }
 
