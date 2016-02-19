@@ -10112,8 +10112,10 @@ namespace ts {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
                     const baseTypeNode = getClassExtendsHeritageClauseElement(getContainingClass(node));
-                    const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
-                    return resolveCall(node, baseConstructors, candidatesOutArray);
+                    if (baseTypeNode) {
+                        const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
+                        return resolveCall(node, baseConstructors, candidatesOutArray);
+                    }
                 }
                 return resolveUntypedCall(node);
             }
