@@ -4,13 +4,13 @@ interface Object {
       * Determines whether an object has a property with the specified name. 
       * @param v A property name.
       */
-    hasOwnProperty(v: string | number): boolean;
+    hasOwnProperty(v: PropertyKey): boolean
 
     /** 
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
-    propertyIsEnumerable(v: string | number): boolean;
+    propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
@@ -76,7 +76,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, propertyKey: string | number): PropertyDescriptor;
+    getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property. 
@@ -86,5 +86,5 @@ interface ObjectConstructor {
       * @param attributes Descriptor for the property. It can be for a data property or an accessor
       *  property.
       */
-    defineProperty(o: any, propertyKey: string | number, attributes: PropertyDescriptor): any;
+    defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
 }
