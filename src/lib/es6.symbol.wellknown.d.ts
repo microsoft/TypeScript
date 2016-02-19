@@ -68,6 +68,10 @@ interface SymbolConstructor {
     readonly unscopables: symbol;
 }
 
+interface Symbol {
+    readonly [Symbol.toStringTag]: "Symbol";
+}
+
 interface Array<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;

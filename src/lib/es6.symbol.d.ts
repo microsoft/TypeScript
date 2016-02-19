@@ -6,8 +6,6 @@ interface Symbol {
 
     /** Returns the primitive value of the specified object. */
     valueOf(): Object;
-
-    readonly [Symbol.toStringTag]: "Symbol";
 }
 
 interface SymbolConstructor {
