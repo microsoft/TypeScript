@@ -1311,7 +1311,7 @@
         "category": "Error",
         "code": 2427
     },
-    "All declarations of an interface must have identical type parameters.": {
+    "All declarations must have identical type parameters.": {
         "category": "Error",
         "code": 2428
     },
