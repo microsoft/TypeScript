@@ -95,7 +95,7 @@ var r9 = a[1];
 var b: { [x: string]: string } = { y: '' }
 >b : { [x: string]: string; }
 >x : string
->{ y: '' } : { [x: string]: string; y: string; }
+>{ y: '' } : { y: string; }
 >y : string
 >'' : string
 

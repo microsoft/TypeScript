@@ -1313,7 +1313,7 @@ namespace ts {
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     emitModuleElementDeclarationFlags(node);
                 }
-                else if (node.kind === SyntaxKind.MethodDeclaration) {
+                else if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) {
                     emitClassMemberDeclarationFlags(node.flags);
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {

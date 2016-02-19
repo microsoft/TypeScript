@@ -1,0 +1,130 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(34,8): error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(36,9): error TS2339: Property 'host' does not exist on type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(37,9): error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(41,8): error TS2339: Property 'children' does not exist on type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(44,8): error TS2339: Property 'host' does not exist on type 'FileSystemObject'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(57,13): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(58,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(63,9): error TS2339: Property 'lead' does not exist on type 'GenericGuard<File>'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(66,9): error TS2339: Property 'follow' does not exist on type 'GenericGuard<File>'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(70,19): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts(79,11): error TS2339: Property 'do' does not exist on type 'SpecificGuard'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts (15 errors) ====
+    // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+    namespace Test {
+    	export class FileSystemObject {
+    		isFSO: this is FileSystemObject;
+    		       ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    		get isFile(): this is File {
+    		              ~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    			return this instanceof File;
+    		}
+    		set isFile(param) {
+    			// noop
+    		}
+    		get isDirectory(): this is Directory {
+    		                   ~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    			return this instanceof Directory;
+    		}
+    		isNetworked: this is (Networked & this);
+    		             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    		constructor(public path: string) {}
+    	}
+    
+    	export class File extends FileSystemObject {
+    		constructor(path: string, public content: string) { super(path); }
+    	}
+    	export class Directory extends FileSystemObject {
+    		children: FileSystemObject[];
+    	}
+    	export interface Networked {
+    		host: string;
+    	}
+    
+    	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+    	file.isNetworked = false;
+    	file.isFSO = file.isFile;
+    	file.isFile = true;
+    	let x = file.isFile;
+    	if (file.isFile) {
+    		file.content;
+    		     ~~~~~~~
+!!! error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
+    		if (file.isNetworked) {
+    			file.host;
+    			     ~~~~
+!!! error TS2339: Property 'host' does not exist on type 'FileSystemObject'.
+    			file.content;
+    			     ~~~~~~~
+!!! error TS2339: Property 'content' does not exist on type 'FileSystemObject'.
+    		}
+    	}
+    	else if (file.isDirectory) {
+    		file.children;
+    		     ~~~~~~~~
+!!! error TS2339: Property 'children' does not exist on type 'FileSystemObject'.
+    	}
+    	else if (file.isNetworked) {
+    		file.host;
+    		     ~~~~
+!!! error TS2339: Property 'host' does not exist on type 'FileSystemObject'.
+    	}
+    	
+    	interface GenericLeadGuard<T> extends GenericGuard<T> {
+    		lead(): void;
+    	}
+    	
+    	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+    		follow(): void;
+    	}
+    	
+    	interface GenericGuard<T> {
+    		target: T;
+    		isLeader: this is (GenericLeadGuard<T>);
+    		          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    		isFollower: this is GenericFollowerGuard<T>;
+    		            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    	}
+    
+    	let guard: GenericGuard<File>;
+    	if (guard.isLeader) {
+    		guard.lead();
+    		      ~~~~
+!!! error TS2339: Property 'lead' does not exist on type 'GenericGuard<File>'.
+    	}
+    	else if (guard.isFollower) {
+    		guard.follow();
+    		      ~~~~~~
+!!! error TS2339: Property 'follow' does not exist on type 'GenericGuard<File>'.
+    	}
+    
+    	interface SpecificGuard {
+    		isMoreSpecific: this is MoreSpecificGuard;
+    		                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    	}
+    
+    	interface MoreSpecificGuard extends SpecificGuard {
+    		do(): void;
+    	}
+    
+    	let general: SpecificGuard;
+    	if (general.isMoreSpecific) {
+    		general.do();
+    		        ~~
+!!! error TS2339: Property 'do' does not exist on type 'SpecificGuard'.
+    	}
+    }
+    
