@@ -102,4 +102,4 @@ var a = (function () {
     a.prototype.z2 = function () {
     };
     return a;
-})();
+}());

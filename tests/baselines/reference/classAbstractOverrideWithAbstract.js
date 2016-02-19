@@ -34,20 +34,20 @@ var A = (function () {
     }
     A.prototype.foo = function () { };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var AA = (function () {
     function AA() {
     }
     AA.prototype.foo = function () { };
     return AA;
-})();
+}());
 var BB = (function (_super) {
     __extends(BB, _super);
     function BB() {
@@ -55,14 +55,14 @@ var BB = (function (_super) {
     }
     BB.prototype.bar = function () { };
     return BB;
-})(AA);
+}(AA));
 var CC = (function (_super) {
     __extends(CC, _super);
     function CC() {
         _super.apply(this, arguments);
     }
     return CC;
-})(BB); // error
+}(BB)); // error
 var DD = (function (_super) {
     __extends(DD, _super);
     function DD() {
@@ -70,4 +70,4 @@ var DD = (function (_super) {
     }
     DD.prototype.foo = function () { };
     return DD;
-})(BB);
+}(BB));

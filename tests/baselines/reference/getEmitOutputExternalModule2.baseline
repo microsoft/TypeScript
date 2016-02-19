@@ -5,11 +5,11 @@ var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 var x = "world";
 var Bar2 = (function () {
     function Bar2() {
     }
     return Bar2;
-})();
+}());
 

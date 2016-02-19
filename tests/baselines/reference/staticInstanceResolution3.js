@@ -21,7 +21,7 @@ var Promise = (function () {
         return null;
     };
     return Promise;
-})();
+}());
 exports.Promise = Promise;
 //// [staticInstanceResolution3_1.js]
 "use strict";

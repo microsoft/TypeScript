@@ -28,12 +28,12 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     M.E = E;
     var D = (function () {
         function D() {
@@ -45,6 +45,6 @@ var M;
         D.prototype.m262 = function (i) { };
         D.prototype.m3 = function () { return new C(); };
         return D;
-    })();
+    }());
     M.D = D;
 })(M || (M = {}));

@@ -18,9 +18,9 @@ var George = (function (_super) {
         _super.call(this);
     }
     return George;
-})((function () {
+}((function () {
     function class_1() {
     }
     class_1.prototype.reset = function () { return this.y; };
     return class_1;
-})());
+}())));

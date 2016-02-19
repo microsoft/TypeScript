@@ -13,8 +13,9 @@ export class Bar extends Foo {
 }
 
 //// [foo.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     var Foo;
     return {
         setters:[],
@@ -23,14 +24,15 @@ System.register([], function(exports_1) {
                 function Foo() {
                 }
                 return Foo;
-            })();
+            }());
             exports_1("Foo", Foo);
         }
     }
 });
 //// [bar.js]
-System.register(['./foo'], function(exports_1) {
+System.register(['./foo'], function(exports_1, context_1) {
     "use strict";
+    var __moduleName = context_1 && context_1.id;
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
         function __() { this.constructor = d; }
@@ -50,7 +52,7 @@ System.register(['./foo'], function(exports_1) {
                     _super.apply(this, arguments);
                 }
                 return Bar;
-            })(foo_1.Foo);
+            }(foo_1.Foo));
             exports_1("Bar", Bar);
         }
     }

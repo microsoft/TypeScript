@@ -115,7 +115,7 @@ namespace ts {
     const gutterStyleSequence = "\u001b[100;30m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
-    const elipsis = "...";
+    const ellipsis = "...";
     const categoryFormatMap: Map<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
@@ -139,7 +139,7 @@ namespace ts {
             const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;
             if (hasMoreThanFiveLines) {
-                gutterWidth = Math.max(elipsis.length, gutterWidth);
+                gutterWidth = Math.max(ellipsis.length, gutterWidth);
             }
 
             output += sys.newLine;
@@ -147,7 +147,7 @@ namespace ts {
                 // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                 // so we'll skip ahead to the second-to-last line.
                 if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += formatAndReset(padLeft(elipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                    output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
                     i = lastLine - 1;
                 }
 
@@ -334,13 +334,14 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
+                const configFilePath = toPath(configFileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                configFileWatcher = sys.watchFile(configFilePath, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
                 directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be 
-                    // the current direcotry; if there is a given "project" parameter, then the configFileName
+                    // When the configFileName is just "tsconfig.json", the watched directory should be
+                    // the current directory; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
                     directory == "" ? "." : directory,
                     watchedDirectoryChanged, /*recursive*/ true);
@@ -375,7 +376,7 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -442,7 +443,8 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+                sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -484,7 +486,7 @@ namespace ts {
         }
 
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName, commandLine.options)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, compilerOptions)) {
                 return;
             }
 
@@ -588,30 +590,21 @@ namespace ts {
                 }
             }
 
-            reportDiagnostics(diagnostics, compilerHost);
-
-            // If the user doesn't want us to emit, then we're done at this point.
-            if (compilerOptions.noEmit) {
-                return diagnostics.length
-                    ? ExitStatus.DiagnosticsPresent_OutputsSkipped
-                    : ExitStatus.Success;
-            }
-
             // Otherwise, emit and report any errors we ran into.
             const emitOutput = program.emit();
-            reportDiagnostics(emitOutput.diagnostics, compilerHost);
+            diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
-            // If the emitter didn't emit anything, then pass that value along.
-            if (emitOutput.emitSkipped) {
+            reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
+
+            if (emitOutput.emitSkipped && diagnostics.length > 0) {
+                // If the emitter didn't emit anything, then pass that value along.
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
-
-            // The emitter emitted something, inform the caller if that happened in the presence
-            // of diagnostics or not.
-            if (diagnostics.length > 0 || emitOutput.diagnostics.length > 0) {
+            else if (diagnostics.length > 0) {
+                // The emitter emitted something, inform the caller if that happened in the presence
+                // of diagnostics or not.
                 return ExitStatus.DiagnosticsPresent_OutputsGenerated;
             }
-
             return ExitStatus.Success;
         }
     }
@@ -717,13 +710,15 @@ namespace ts {
         else {
             const compilerOptions = extend(options, defaultInitCompilerOptions);
             const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions),
-                exclude: ["node_modules"]
+                compilerOptions: serializeCompilerOptions(compilerOptions)
             };
 
             if (fileNames && fileNames.length) {
                 // only set the files property if we have at least one file
                 configurations.files = fileNames;
+            }
+            else {
+                configurations.exclude = ["node_modules"];
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
@@ -738,7 +733,9 @@ namespace ts {
 
             for (const name in options) {
                 if (hasProperty(options, name)) {
-                    const value = options[name];
+                    // tsconfig only options cannot be specified via command line,
+                    // so we can assume that only types that can appear here string | number | boolean
+                    const value = <string | number | boolean>options[name];
                     switch (name) {
                         case "init":
                         case "watch":

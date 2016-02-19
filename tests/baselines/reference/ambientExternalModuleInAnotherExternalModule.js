@@ -18,7 +18,7 @@ define(["require", "exports", "ext"], function (require, exports, ext) {
         function D() {
         }
         return D;
-    })();
+    }());
     var x = ext;
     return D;
 });

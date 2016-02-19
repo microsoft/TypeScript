@@ -97,7 +97,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 // Errors
 // decrease visibility of all public members to protected
 var Derived1 = (function (_super) {
@@ -106,7 +106,7 @@ var Derived1 = (function (_super) {
         _super.call(this, a);
     }
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
@@ -114,7 +114,7 @@ var Derived2 = (function (_super) {
     }
     Derived2.prototype.b = function (a) { };
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
@@ -126,7 +126,7 @@ var Derived3 = (function (_super) {
         configurable: true
     });
     return Derived3;
-})(Base);
+}(Base));
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
@@ -138,21 +138,21 @@ var Derived4 = (function (_super) {
         configurable: true
     });
     return Derived4;
-})(Base);
+}(Base));
 var Derived5 = (function (_super) {
     __extends(Derived5, _super);
     function Derived5(a) {
         _super.call(this, a);
     }
     return Derived5;
-})(Base);
+}(Base));
 var Derived6 = (function (_super) {
     __extends(Derived6, _super);
     function Derived6(a) {
         _super.call(this, a);
     }
     return Derived6;
-})(Base);
+}(Base));
 var Derived7 = (function (_super) {
     __extends(Derived7, _super);
     function Derived7(a) {
@@ -160,7 +160,7 @@ var Derived7 = (function (_super) {
     }
     Derived7.s = function (a) { };
     return Derived7;
-})(Base);
+}(Base));
 var Derived8 = (function (_super) {
     __extends(Derived8, _super);
     function Derived8(a) {
@@ -172,7 +172,7 @@ var Derived8 = (function (_super) {
         configurable: true
     });
     return Derived8;
-})(Base);
+}(Base));
 var Derived9 = (function (_super) {
     __extends(Derived9, _super);
     function Derived9(a) {
@@ -184,11 +184,11 @@ var Derived9 = (function (_super) {
         configurable: true
     });
     return Derived9;
-})(Base);
+}(Base));
 var Derived10 = (function (_super) {
     __extends(Derived10, _super);
     function Derived10(a) {
         _super.call(this, a);
     }
     return Derived10;
-})(Base);
+}(Base));

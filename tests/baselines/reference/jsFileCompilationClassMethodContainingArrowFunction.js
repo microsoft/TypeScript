@@ -15,4 +15,4 @@ var c = (function () {
         var x = function (a) { return _this.method(a); };
     };
     return c;
-})();
+}());

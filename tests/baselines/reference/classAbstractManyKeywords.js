@@ -10,20 +10,20 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 exports.B = B;
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());

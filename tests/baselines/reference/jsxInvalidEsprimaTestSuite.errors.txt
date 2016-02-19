@@ -50,6 +50,8 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,3): error TS1003: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,11): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,13): error TS2304: Cannot find name 'a'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,22): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(18,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(19,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(22,10): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(23,20): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(24,15): error TS1003: Identifier expected.
@@ -58,14 +60,16 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(25,7): error TS2304: 
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(27,17): error TS1005: '>' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,10): error TS2304: Cannot find name 'props'.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,28): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (65 errors) ====
+==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (69 errors) ====
     declare var React: any;
     
     </>;
@@ -188,7 +192,11 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
                          ~
 !!! error TS1109: Expression expected.
     <a><a />;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
     <a b={}>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
     var x = <div>one</div><div>two</div>;;
     var x = <div>one</div> /* intervening comment */ <div>two</div>;;
     <a>{"str";}</a>;
@@ -218,9 +226,13 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
     <a>></a>;
     <a> ></a>;
     <a b=}>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
          ~
 !!! error TS1005: '{' expected.
     <a b=<}>;
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
          ~
 !!! error TS1005: '{' expected.
           ~
@@ -230,4 +242,4 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS17002
        ~~~
 !!! error TS1003: Identifier expected.
                         
-!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+!!! error TS1005: '</' expected.

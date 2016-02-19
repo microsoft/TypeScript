@@ -48,13 +48,13 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 // A type query directly depends on the type of the referenced entity.
 var x = [];
 var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var yy;
 var zz;

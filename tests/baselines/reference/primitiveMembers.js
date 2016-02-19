@@ -59,7 +59,7 @@ var baz = (function () {
     baz.prototype.bar = function () { };
     ;
     return baz;
-})();
+}());
 var foo = (function (_super) {
     __extends(foo, _super);
     function foo() {
@@ -68,4 +68,4 @@ var foo = (function (_super) {
     foo.prototype.bar = function () { return undefined; };
     ;
     return foo;
-})(baz);
+}(baz));

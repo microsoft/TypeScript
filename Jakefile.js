@@ -108,17 +108,6 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
-var scriptSources = [
-    "tslint/booleanTriviaRule.ts",
-    "tslint/nextLineRule.ts",
-    "tslint/noNullRule.ts",
-    "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts",
-    "tslint/noInOperatorRule.ts"
-].map(function (f) {
-    return path.join(scriptsDirectory, f);
-});
-
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -174,13 +163,15 @@ var harnessSources = harnessCoreSources.concat([
 }));
 
 var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["core.d.ts"] },
+        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
         { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
+        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -232,51 +223,59 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param prereqs: prerequisite tasks to compiling the file
     * @param prefixes: a list of files to prepend to the target file
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @param noOutFile: true to compile without using --out
-    * @param generateDeclarations: true to compile using --declaration
-    * @param outDir: true to compile using --outDir
-    * @param keepComments: false to compile using --removeComments
+    * @parap {Object}  opts - property bag containing auxiliary options
+    * @param {boolean} opts.noOutFile: true to compile without using --out
+    * @param {boolean} opts.generateDeclarations: true to compile using --declaration
+    * @param {string}  opts.outDir: value for '--outDir' command line option
+    * @param {boolean} opts.keepComments: false to compile using --removeComments
+    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
+    * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
+    * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
+    * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--noImplicitAny --noEmitOnError --pretty";
-
+        opts = opts || {};
         // Keep comments when specifically requested
         // or when in debug mode.
-        if (!(keepComments || useDebugMode)) {
+        if (!(opts.keepComments || useDebugMode)) {
             options += " --removeComments";
         }
 
-        if (generateDeclarations) {
+        if (opts.generateDeclarations) {
             options += " --declaration";
         }
 
-        if (preserveConstEnums || useDebugMode) {
+        if (opts.preserveConstEnums || useDebugMode) {
             options += " --preserveConstEnums";
         }
 
-        if (outDir) {
-            options += " --outDir " + outDir;
+        if (opts.outDir) {
+            options += " --outDir " + opts.outDir;
         }
 
-        if (!noOutFile) {
+        if (!opts.noOutFile) {
             options += " --out " + outFile;
         }
         else {
             options += " --module commonjs"
         }
 
-        if(noResolve) {
+        if(opts.noResolve) {
             options += " --noResolve";
         }
 
         if (useDebugMode) {
-            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            options += " -sourcemap";
+            if (!opts.noMapRoot) {
+                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            }
         }
 
-        if (stripInternal) {
+        if (opts.stripInternal) {
             options += " --stripInternal"
         }
 
@@ -391,13 +390,7 @@ compileFile(/*outfile*/configureNightlyJs,
             /*prereqs*/ [configureNightlyTs],
             /*prefixes*/ [],
             /*useBuiltCompiler*/ false,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ false,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ undefined,
-            /*keepComments*/ false,
-            /*noResolve*/ false,
-            /*stripInternal*/ false);
+            { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function() {
     useDebugMode = true;
@@ -447,6 +440,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -455,13 +449,7 @@ var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_s
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ true,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ true,
-            /*keepComments*/ true,
-            /*noResolve*/ false,
-            /*stripInternal*/ true,
+            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true },
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -484,6 +472,16 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
+compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
+            /*prefixes*/ [copyright],
+            /*useBuiltCompiler*/ true,
+            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true, noMapRoot: true },
+            /*callback*/ function () {
+                var content = fs.readFileSync(servicesFileInBrowserTest).toString();
+                var i = content.lastIndexOf("\n");
+                fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
+            });
+    
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -495,8 +493,7 @@ compileFile(
     [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
-    /*noOutFile*/ false,
-    /*generateDeclarations*/ true);
+    { noOutFile: false, generateDeclarations: true });
 
 // Local target to build the language service server library
 desc("Builds language service server library");
@@ -729,7 +726,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = 'tests/webTestServer.js'
 var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true);
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
@@ -738,7 +735,7 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function() {
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
     host = "node"
     port = process.env.port || process.env.p || '8888';
@@ -878,7 +875,8 @@ var tslintRules = ([
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
-    "noInOperatorRule"
+    "noInOperatorRule",
+    "noIncrementDecrementRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -889,7 +887,8 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
+    { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint")});
 });
 
 function getLinterOptions() {
@@ -903,6 +902,7 @@ function getLinterOptions() {
 
 function lintFileContents(options, path, contents) {
     var ll = new Linter(path, contents, options);
+    console.log("Linting '" + path + "'.")
     return ll.lint();
 }
 
@@ -921,10 +921,20 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
+var servicesLintTargets = [
+    "navigateTo.ts",
+    "outliningElementsCollector.ts",
+    "patternMatcher.ts",
+    "services.ts",
+    "shims.ts",
+].map(function (s) {
+    return path.join(servicesDirectory, s);
+});
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
-    .concat(scriptSources);
+    .concat(tslintRulesFiles)
+    .concat(servicesLintTargets);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

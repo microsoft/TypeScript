@@ -88,36 +88,36 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 var A1 = (function () {
     function A1() {
     }
     return A1;
-})();
+}());
 var B1 = (function () {
     function B1() {
     }
     return B1;
-})();
+}());
 var A2 = (function () {
     function A2() {
     }
     return A2;
-})();
+}());
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
         _super.apply(this, arguments);
     }
     return B2;
-})(A2);
+}(A2));
 var a1;
 var a2;
 var b1;

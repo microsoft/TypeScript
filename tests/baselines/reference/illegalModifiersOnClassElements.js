@@ -11,4 +11,4 @@ var C = (function () {
         this.bar = 1;
     }
     return C;
-})();
+}());

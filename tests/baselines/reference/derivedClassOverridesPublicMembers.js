@@ -88,7 +88,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(a) {
@@ -109,7 +109,7 @@ var Derived = (function (_super) {
         configurable: true
     });
     return Derived;
-})(Base);
+}(Base));
 var d = new Derived(y);
 var r1 = d.a;
 var r2 = d.b(y);
@@ -125,14 +125,14 @@ var Base2 = (function () {
     function Base2() {
     }
     return Base2;
-})();
+}());
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base2);
+}(Base2));
 var d2;
 var r7 = d2[''];
 var r8 = d2[1];

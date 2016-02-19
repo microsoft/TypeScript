@@ -20,7 +20,7 @@ var foo = (function () {
     function foo() {
     }
     return foo;
-})();
+}());
 var bar = (function (_super) {
     __extends(bar, _super);
     function bar() {
@@ -31,5 +31,5 @@ var bar = (function (_super) {
         ;
     };
     return bar;
-})(foo);
+}(foo));
 var x = new bar();

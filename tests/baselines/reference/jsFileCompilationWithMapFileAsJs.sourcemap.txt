@@ -39,7 +39,7 @@ sourceFile:a.ts
 1->Emitted(4, 5) Source(3, 1) + SourceIndex(0)
 2 >Emitted(4, 13) Source(3, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

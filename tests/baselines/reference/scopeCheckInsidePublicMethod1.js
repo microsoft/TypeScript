@@ -14,4 +14,4 @@ var C = (function () {
         s = 1; // ERR
     };
     return C;
-})();
+}());

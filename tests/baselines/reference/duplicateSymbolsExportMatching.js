@@ -101,7 +101,7 @@ define(["require", "exports"], function (require, exports) {
             function C() {
             }
             return C;
-        })();
+        }());
         var C;
         (function (C) {
             var t;

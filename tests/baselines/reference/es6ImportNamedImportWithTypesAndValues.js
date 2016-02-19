@@ -27,14 +27,14 @@ var C = (function () {
         this.prop = "hello";
     }
     return C;
-})();
+}());
 exports.C = C;
 var C2 = (function () {
     function C2() {
         this.prop2 = "world";
     }
     return C2;
-})();
+}());
 exports.C2 = C2;
 //// [client.js]
 "use strict";

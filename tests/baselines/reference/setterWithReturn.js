@@ -27,4 +27,4 @@ var C234 = (function () {
         configurable: true
     });
     return C234;
-})();
+}());

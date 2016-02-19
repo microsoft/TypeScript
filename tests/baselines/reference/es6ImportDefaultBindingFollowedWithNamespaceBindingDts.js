@@ -14,7 +14,7 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 exports.a = a;
 //// [client.js]
 "use strict";

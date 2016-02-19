@@ -30,19 +30,19 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function () {
     function Derived() {
     }
     return Derived;
-})();
+}());
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 var b;
 var d1;
 var d2;

@@ -366,7 +366,7 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M1_public.c1 = c1;
         function f1() {
             return new c1;
@@ -380,7 +380,7 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M2_private.c1 = c1;
         function f1() {
             return new c1;
@@ -449,7 +449,7 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M1_public.c1 = c1;
         function f1() {
             return new c1;
@@ -463,7 +463,7 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M2_private.c1 = c1;
         function f1() {
             return new c1;
@@ -531,7 +531,7 @@ var glo_M1_public;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M1_public.c1 = c1;
     function f1() {
         return new c1;
@@ -552,7 +552,7 @@ var glo_M3_private;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M3_private.c1 = c1;
     function f1() {
         return new c1;

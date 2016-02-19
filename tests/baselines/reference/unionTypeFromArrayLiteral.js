@@ -44,13 +44,13 @@ var C = (function () {
     }
     C.prototype.foo = function () { };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     D.prototype.foo2 = function () { };
     return D;
-})();
+}());
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -58,7 +58,7 @@ var E = (function (_super) {
     }
     E.prototype.foo3 = function () { };
     return E;
-})(C);
+}(C));
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
@@ -66,7 +66,7 @@ var F = (function (_super) {
     }
     F.prototype.foo4 = function () { };
     return F;
-})(C);
+}(C));
 var c, d, e, f;
 var arr6 = [c, d]; // (C | D)[]
 var arr7 = [c, d, e]; // (C | D)[]

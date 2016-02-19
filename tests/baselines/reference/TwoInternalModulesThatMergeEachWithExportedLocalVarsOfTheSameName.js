@@ -56,7 +56,7 @@ var A;
                 this.br = br;
             }
             return Plane;
-        })();
+        }());
         Utils.Plane = Plane;
     })(Utils = A.Utils || (A.Utils = {}));
 })(A = exports.A || (exports.A = {}));

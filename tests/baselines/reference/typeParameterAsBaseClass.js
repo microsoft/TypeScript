@@ -14,9 +14,9 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(T);
+}(T));
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());

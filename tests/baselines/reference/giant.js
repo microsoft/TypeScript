@@ -743,7 +743,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return C;
-    })();
+    }());
     var M;
     (function (M_1) {
         var V;
@@ -792,7 +792,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return C;
-        })();
+        }());
         var M;
         (function (M) {
             var V;
@@ -802,7 +802,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -813,7 +813,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             M.eC = eC;
             ;
             ;
@@ -868,7 +868,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return eC;
-        })();
+        }());
         M_1.eC = eC;
         var eM;
         (function (eM) {
@@ -879,7 +879,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -890,7 +890,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             eM.eC = eC;
             ;
             ;
@@ -947,7 +947,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return eC;
-    })();
+    }());
     exports.eC = eC;
     var eM;
     (function (eM_1) {
@@ -997,7 +997,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return C;
-        })();
+        }());
         var M;
         (function (M) {
             var V;
@@ -1007,7 +1007,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -1018,7 +1018,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             M.eC = eC;
             ;
             ;
@@ -1073,7 +1073,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return eC;
-        })();
+        }());
         eM_1.eC = eC;
         var eM;
         (function (eM) {
@@ -1084,7 +1084,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -1095,7 +1095,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             eM.eC = eC;
             ;
             ;
@@ -1120,11 +1120,11 @@ export declare class eC {
     pF(): void;
     private rF();
     pgF(): void;
-    pgF: any;
+    readonly pgF: any;
     psF(param: any): void;
     psF: any;
     private rgF();
-    private rgF;
+    private readonly rgF;
     private rsF(param);
     private rsF;
     static tV: any;
@@ -1132,7 +1132,7 @@ export declare class eC {
     static tsF(param: any): void;
     static tsF: any;
     static tgF(): void;
-    static tgF: any;
+    static readonly tgF: any;
 }
 export interface eI {
     (): any;
@@ -1172,11 +1172,11 @@ export declare module eM {
         pF(): void;
         private rF();
         pgF(): void;
-        pgF: any;
+        readonly pgF: any;
         psF(param: any): void;
         psF: any;
         private rgF();
-        private rgF;
+        private readonly rgF;
         private rsF(param);
         private rsF;
         static tV: any;
@@ -1184,7 +1184,7 @@ export declare module eM {
         static tsF(param: any): void;
         static tsF: any;
         static tgF(): void;
-        static tgF: any;
+        static readonly tgF: any;
     }
     interface eI {
         (): any;
@@ -1239,11 +1239,11 @@ export declare module eM {
         pF(): void;
         private rF();
         pgF(): void;
-        pgF: any;
+        readonly pgF: any;
         psF(param: any): void;
         psF: any;
         private rgF();
-        private rgF;
+        private readonly rgF;
         private rsF(param);
         private rsF;
         static tV: any;
@@ -1251,7 +1251,7 @@ export declare module eM {
         static tsF(param: any): void;
         static tsF: any;
         static tgF(): void;
-        static tgF: any;
+        static readonly tgF: any;
     }
     module eaM {
         var V: any;
@@ -1281,11 +1281,11 @@ export declare class eaC {
     pF(): void;
     private rF();
     pgF(): void;
-    pgF: any;
+    readonly pgF: any;
     psF(param: any): void;
     psF: any;
     private rgF();
-    private rgF;
+    private readonly rgF;
     private rsF(param);
     private rsF;
     static tV: any;
@@ -1293,7 +1293,7 @@ export declare class eaC {
     static tsF(param: any): void;
     static tsF: any;
     static tgF(): void;
-    static tgF: any;
+    static readonly tgF: any;
 }
 export declare module eaM {
     var V: any;

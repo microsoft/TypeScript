@@ -59,7 +59,7 @@ var otherRoot;
                     this.br = br;
                 }
                 return Plane;
-            })();
+            }());
             Utils.Plane = Plane;
         })(Utils = A.Utils || (A.Utils = {}));
     })(A = otherRoot.A || (otherRoot.A = {}));

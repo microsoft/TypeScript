@@ -29,7 +29,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { return 1; };
     return A;
-})();
+}());
 var C = (function () {
     function C() {
         this.x = 1;
@@ -38,14 +38,14 @@ var C = (function () {
         return 1;
     };
     return C;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(A);
+}(A));
 var c;
 var c2;
 c = c2;

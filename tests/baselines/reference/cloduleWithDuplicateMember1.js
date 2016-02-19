@@ -33,7 +33,7 @@ var C = (function () {
     });
     C.foo = function () { };
     return C;
-})();
+}());
 var C;
 (function (C) {
     C.x = 1;

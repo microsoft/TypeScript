@@ -42,6 +42,6 @@ var test;
         function C() {
         }
         return C;
-    })();
+    }());
     var a;
 })(test || (test = {}));

@@ -19,14 +19,14 @@ var X = (function () {
     function X() {
     }
     return X;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(X);
+}(X));
 
 
 //// [declFileForFunctionTypeAsTypeParameter.d.ts]

@@ -7,15 +7,23 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number): void;
         emitStart(range: TextRange): void;
-        emitEnd(range: TextRange): void;
+        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
+        changeEmitSourcePos(): void;
         getText(): string;
         getSourceMappingURL(): string;
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
         reset(): void;
     }
 
-    const nop = <(...args: any[]) => any>Function.prototype;
     let nullSourceMapWriter: SourceMapWriter;
+    // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
+    const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
+        emittedLine: 1,
+        emittedColumn: 1,
+        sourceLine: 1,
+        sourceColumn: 1,
+        sourceIndex: 0
+    };
 
     export function getNullSourceMapWriter(): SourceMapWriter {
         if (nullSourceMapWriter === undefined) {
@@ -23,8 +31,9 @@ namespace ts {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
                 emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange): void { },
+                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
                 emitPos(pos: number): void { },
+                changeEmitSourcePos(): void { },
                 getText(): string { return undefined; },
                 getSourceMappingURL(): string { return undefined; },
                 initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
@@ -39,6 +48,8 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         let currentSourceFile: SourceFile;
         let sourceMapDir: string; // The directory in which sourcemap will be
+        let stopOverridingSpan = false;
+        let modifyLastSourcePos = false;
 
         // Current source map file and its index in the sources list
         let sourceMapSourceIndex: number;
@@ -57,6 +68,7 @@ namespace ts {
             emitPos,
             emitStart,
             emitEnd,
+            changeEmitSourcePos,
             getText,
             getSourceMappingURL,
             initialize,
@@ -75,13 +87,7 @@ namespace ts {
 
             // Last recorded and encoded spans
             lastRecordedSourceMapSpan = undefined;
-            lastEncodedSourceMapSpan = {
-                emittedLine: 1,
-                emittedColumn: 1,
-                sourceLine: 1,
-                sourceColumn: 1,
-                sourceIndex: 0
-            };
+            lastEncodedSourceMapSpan = defaultLastEncodedSourceMapSpan;
             lastEncodedNameIndex = 0;
 
             // Initialize source map data
@@ -143,6 +149,47 @@ namespace ts {
             sourceMapData = undefined;
         }
 
+        function updateLastEncodedAndRecordedSpans() {
+            if (modifyLastSourcePos) {
+                // Reset the source pos
+                modifyLastSourcePos = false;
+
+                // Change Last recorded Map with last encoded emit line and character
+                lastRecordedSourceMapSpan.emittedLine = lastEncodedSourceMapSpan.emittedLine;
+                lastRecordedSourceMapSpan.emittedColumn = lastEncodedSourceMapSpan.emittedColumn;
+
+                // Pop sourceMapDecodedMappings to remove last entry
+                sourceMapData.sourceMapDecodedMappings.pop();
+
+                // Point the lastEncodedSourceMapSpace to the previous encoded sourceMapSpan
+                // If the list is empty which indicates that we are at the beginning of the file,
+                // we have to reset it to default value (same value when we first initialize sourceMapWriter)
+                lastEncodedSourceMapSpan = sourceMapData.sourceMapDecodedMappings.length ?
+                    sourceMapData.sourceMapDecodedMappings[sourceMapData.sourceMapDecodedMappings.length - 1] :
+                    defaultLastEncodedSourceMapSpan;
+
+                // TODO: Update lastEncodedNameIndex 
+                // Since we dont support this any more, lets not worry about it right now.
+                // When we start supporting nameIndex, we will get back to this
+
+                // Change the encoded source map
+                const sourceMapMappings = sourceMapData.sourceMapMappings;
+                let lenthToSet = sourceMapMappings.length - 1;
+                for (; lenthToSet >= 0; lenthToSet--) {
+                    const currentChar = sourceMapMappings.charAt(lenthToSet);
+                    if (currentChar === ",") {
+                        // Separator for the entry found
+                        break;
+                    }
+                    if (currentChar === ";" && lenthToSet !== 0 && sourceMapMappings.charAt(lenthToSet - 1) !== ";") {
+                        // Last line separator found
+                        break;
+                    }
+                }
+                sourceMapData.sourceMapMappings = sourceMapMappings.substr(0, Math.max(0, lenthToSet));
+            }
+        }
+
         // Encoding for sourcemap span
         function encodeLastRecordedSourceMapSpan() {
             if (!lastRecordedSourceMapSpan || lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) {
@@ -179,6 +226,7 @@ namespace ts {
 
             // 5. Relative namePosition 0 based
             if (lastRecordedSourceMapSpan.nameIndex >= 0) {
+                Debug.assert(false, "We do not support name index right now, Make sure to update updateLastEncodedAndRecordedSpans when we start using this");
                 sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex - lastEncodedNameIndex);
                 lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
             }
@@ -220,22 +268,36 @@ namespace ts {
                     sourceColumn: sourceLinePos.character,
                     sourceIndex: sourceMapSourceIndex
                 };
+
+                stopOverridingSpan = false;
             }
-            else {
+            else if (!stopOverridingSpan) {
                 // Take the new pos instead since there is no change in emittedLine and column since last location
                 lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                 lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
                 lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
             }
+
+            updateLastEncodedAndRecordedSpans();
+        }
+
+        function getStartPos(range: TextRange) {
+            const rangeHasDecorators = !!(range as Node).decorators;
+            return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
         }
 
         function emitStart(range: TextRange) {
-            const rangeHasDecorators = !!(range as Node).decorators;
-            emitPos(range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1);
+            emitPos(getStartPos(range));
         }
 
-        function emitEnd(range: TextRange) {
+        function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
             emitPos(range.end);
+            stopOverridingSpan = stopOverridingEnd;
+        }
+
+        function changeEmitSourcePos() {
+            Debug.assert(!modifyLastSourcePos);
+            modifyLastSourcePos = true;
         }
 
         function setSourceFile(sourceFile: SourceFile) {

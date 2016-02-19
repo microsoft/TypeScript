@@ -31,7 +31,7 @@ var db = (function () {
     db.prototype.doSomething = function () {
     };
     return db;
-})();
+}());
 exports.db = db;
 //// [service.js]
 "use strict";
@@ -49,5 +49,5 @@ var MyClass = (function () {
         __metadata('design:paramtypes', [db.db])
     ], MyClass);
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;

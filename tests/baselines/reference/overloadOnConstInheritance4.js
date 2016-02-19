@@ -16,4 +16,4 @@ var C = (function () {
     C.prototype.x1 = function (a, callback) {
     };
     return C;
-})();
+}());

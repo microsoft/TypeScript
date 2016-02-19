@@ -22,16 +22,16 @@ l00:
 for (let x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00;
     }
 }
@@ -210,16 +210,16 @@ l00_c:
 for (const x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00_c;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00_c;
     }
 }
@@ -406,16 +406,16 @@ l0: for (var _i = 0, _a = []; _i < _a.length; _i++) {
 var _loop_2 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 1) {
+    if (x == "1") {
         return "break-l00";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue-l00";
     }
 };
@@ -454,7 +454,7 @@ l1: for (var x = 0; x < 1; ++x) {
     }
 }
 var _loop_4 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -480,7 +480,7 @@ l2: while (1 === 1) {
     }
 }
 var _loop_5 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
     if (x == 1) {
@@ -557,7 +557,7 @@ l5: for (var x = 0, y = 1; x < 1; ++x) {
     }
 }
 var _loop_8 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -583,7 +583,7 @@ l6: while (1 === 1) {
     }
 }
 var _loop_9 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
     if (x == 1) {
@@ -664,16 +664,16 @@ l0_c: for (var _b = 0, _c = []; _b < _c.length; _b++) {
 var _loop_12 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 1) {
+    if (x == "1") {
         return "break-l00_c";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue-l00_c";
     }
 };

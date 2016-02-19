@@ -27,14 +27,14 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(B);
+}(B));
 var v2;
 var y = v2.x; // should be 'string'
 var u = v2.a; // should be 'string'

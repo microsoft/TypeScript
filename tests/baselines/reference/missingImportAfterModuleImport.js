@@ -30,7 +30,7 @@ var MainModule = (function () {
     function MainModule() {
     }
     return MainModule;
-})();
+}());
 module.exports = MainModule;
 
 

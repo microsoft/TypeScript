@@ -8,7 +8,7 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     var M;
     (function (M) {
         M.foo = new C();

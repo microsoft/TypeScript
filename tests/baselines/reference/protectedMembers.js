@@ -83,7 +83,6 @@ interface E extends C {
 }
 
 class CC {
-    // Error, constructor cannot be protected
     protected constructor() {
     }
 }
@@ -133,7 +132,7 @@ var C1 = (function () {
         return this.sx;
     };
     return C1;
-})();
+}());
 // Derived class accessing protected members
 var C2 = (function (_super) {
     __extends(C2, _super);
@@ -147,7 +146,7 @@ var C2 = (function (_super) {
         return _super.sf.call(this) + this.sx;
     };
     return C2;
-})(C1);
+}(C1));
 // Derived class making protected members public
 var C3 = (function (_super) {
     __extends(C3, _super);
@@ -161,7 +160,7 @@ var C3 = (function (_super) {
         return _super.sf.call(this);
     };
     return C3;
-})(C2);
+}(C2));
 var c1;
 var c2;
 var c3;
@@ -184,14 +183,14 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -205,30 +204,29 @@ var C = (function (_super) {
         e.x = 1;
     };
     return C;
-})(A);
+}(A));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 var CC = (function () {
-    // Error, constructor cannot be protected
     function CC() {
     }
     return CC;
-})();
+}());
 var A1 = (function () {
     function A1() {
     }
     return A1;
-})();
+}());
 var B1 = (function () {
     function B1() {
     }
     return B1;
-})();
+}());
 var a1;
 var b1;
 a1 = b1; // Error, B1 doesn't derive from A1
@@ -237,19 +235,19 @@ var A2 = (function () {
     function A2() {
     }
     return A2;
-})();
+}());
 var B2 = (function (_super) {
     __extends(B2, _super);
     function B2() {
         _super.apply(this, arguments);
     }
     return B2;
-})(A2);
+}(A2));
 var A3 = (function () {
     function A3() {
     }
     return A3;
-})();
+}());
 // Error x is protected in B3 but public in A3
 var B3 = (function (_super) {
     __extends(B3, _super);
@@ -257,4 +255,4 @@ var B3 = (function (_super) {
         _super.apply(this, arguments);
     }
     return B3;
-})(A3);
+}(A3));

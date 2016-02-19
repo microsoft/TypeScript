@@ -5,7 +5,7 @@ define(["require", "exports"], function (require, exports) {
         function m1_c1() {
         }
         return m1_c1;
-    })();
+    }());
     exports.m1_c1 = m1_c1;
     exports.m1_instance1 = new m1_c1();
     function m1_f1() {

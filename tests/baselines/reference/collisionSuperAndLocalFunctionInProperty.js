@@ -36,7 +36,7 @@ var Foo = (function () {
         };
     }
     return Foo;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -49,4 +49,4 @@ var b = (function (_super) {
         };
     }
     return b;
-})(Foo);
+}(Foo));

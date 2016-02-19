@@ -17,5 +17,5 @@ var C = (function () {
     }
     C.prototype.foo = function (x, y) { };
     return C;
-})();
+}());
 var x = 10;

@@ -18,4 +18,4 @@ var Bar = (function () {
     Bar.prototype.foo = function (bar) {
     };
     return Bar;
-})();
+}());

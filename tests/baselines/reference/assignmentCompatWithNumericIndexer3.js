@@ -51,7 +51,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var a;
 var b;
 a = b; // error
@@ -62,7 +62,7 @@ var B2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return B2;
-})(A);
+}(A));
 var b2;
 a = b2; // ok
 b2 = a; // error
@@ -72,7 +72,7 @@ var Generics;
         function A() {
         }
         return A;
-    })();
+    }());
     function foo() {
         var a;
         var b;

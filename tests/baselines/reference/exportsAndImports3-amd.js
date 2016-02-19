@@ -46,7 +46,7 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
     exports.C1 = C;
     (function (E) {

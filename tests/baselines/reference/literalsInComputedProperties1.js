@@ -73,7 +73,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var z;
 z[1].toExponential();
 z[2].toExponential();

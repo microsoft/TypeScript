@@ -57,14 +57,14 @@ var Kettle = (function () {
         this.member1 = 2;
     }
     return Kettle;
-})();
+}());
 exports.Kettle = Kettle;
 var Kettle = (function () {
     function Kettle() {
         this.member2 = 42;
     }
     return Kettle;
-})();
+}());
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error

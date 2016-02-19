@@ -76,7 +76,7 @@ sourceFile:sourceMapValidationImport.ts
 1->Emitted(7, 9) Source(3, 5) + SourceIndex(0)
 2 >Emitted(7, 17) Source(3, 6) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     

@@ -20,7 +20,7 @@ var Foo = (function () {
         this.a = a;
     }
     return Foo;
-})();
+}());
 module.exports = Foo;
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_1.js]
 "use strict";

@@ -31,7 +31,6 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-var expect: typeof _chai.expect = _chai.expect;
 declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 /* tslint:enable:no-var-keyword */
@@ -246,7 +245,6 @@ namespace Utils {
         }
 
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
-        function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
         function serializeNode(n: ts.Node): any {
             const o: any = { kind: getKindName(n.kind) };
@@ -275,19 +273,12 @@ namespace Utils {
                         break;
 
                     case "flags":
-                        // Print out flags with their enum names.
-                        if (n.flags) {
-                            o[propertyName] = getNodeFlagName(n.flags);
-                        }
-                        break;
-
-                    case "parserContextFlags":
-                        // Clear the flag that are produced by aggregating child values..  That is ephemeral 
-                        // data we don't care about in the dump.  We only care what the parser set directly
-                        // on the ast.
-                        let value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
-                        if (value) {
-                            o[propertyName] = getParserContextFlagName(value);
+                        // Clear the flags that are produced by aggregating child values. That is ephemeral
+                        // data we don't care about in the dump. We only care what the parser set directly
+                        // on the AST.
+                        const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                        if (flags) {
+                            o[propertyName] = getNodeFlagName(flags);
                         }
                         break;
 
@@ -354,12 +345,11 @@ namespace Utils {
         assert.equal(node1.pos, node2.pos, "node1.pos !== node2.pos");
         assert.equal(node1.end, node2.end, "node1.end !== node2.end");
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
-        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
         // call this on both nodes to ensure all propagated flags have been set (and thus can be 
         // compared).
         assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
-        assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
+        assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
         ts.forEachChild(node1,
             child1 => {
@@ -513,7 +503,6 @@ namespace Harness {
                 }
 
                 const folder: any = fso.GetFolder(path);
-                const paths: string[] = [];
 
                 return filesInFolder(folder, path);
             };
@@ -617,7 +606,6 @@ namespace Harness {
             export const getExecutingFilePath = () => "";
             export const exit = (exitCode: number) => {};
 
-            const supportsCodePage = () => false;
             export let log = (s: string) => console.log(s);
 
             namespace Http {
@@ -627,18 +615,6 @@ namespace Harness {
                 }
 
                 /// Ask the server to use node's path.resolve to resolve the given path
-                function getResolvedPathFromServer(path: string) {
-                    const xhr = new XMLHttpRequest();
-                    try {
-                        xhr.open("GET", path + "?resolve", /*async*/ false);
-                        xhr.send();
-                    }
-                    catch (e) {
-                        return { status: 404, responseText: null };
-                    }
-
-                    return waitForXHR(xhr);
-                }
 
                 export interface XHRResponse {
                     status: number;
@@ -770,7 +746,7 @@ namespace Harness {
 
 namespace Harness {
     export const libFolder = "built/local/";
-    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
+    const tcServicesFileName = ts.combinePaths(libFolder, Utils.getExecutionEnvironment() === Utils.ExecutionEnvironment.Browser ? "typescriptServicesInBrowserTest.js" : "typescriptServices.js");
     export const tcServicesFile = IO.readFile(tcServicesFileName);
 
     export interface SourceMapEmitterCallback {
@@ -919,7 +895,8 @@ namespace Harness {
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean" }
+            { name: "noErrorTruncation", type: "boolean" },
+            { name: "suppressOutputPathCheck", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -989,7 +966,6 @@ namespace Harness {
 
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.clone(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
-            options.module = options.module || ts.ModuleKind.None;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = true;
@@ -999,6 +975,9 @@ namespace Harness {
             // Parse settings
             if (harnessSettings) {
                 setCompilerOptionsFromHarnessSetting(harnessSettings, options);
+            }
+            if (options.rootDirs) {
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
             }
 
             const useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
@@ -1034,13 +1013,19 @@ namespace Harness {
                 useCaseSensitiveFileNames,
                 currentDirectory,
                 options.newLine);
+
+            let traceResults: string[];
+            if (options.traceModuleResolution) {
+                traceResults = [];
+                compilerHost.trace = text => traceResults.push(text);
+            }
             const program = ts.createProgram(programFileNames, options, compilerHost);
 
             const emitResult = program.emit();
 
             const errors = ts.getPreEmitDiagnostics(program);
 
-            const result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps);
+            const result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps, traceResults);
             return { result, options };
         }
 
@@ -1321,7 +1306,7 @@ namespace Harness {
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
             constructor(fileResults: GeneratedFile[], errors: ts.Diagnostic[], public program: ts.Program,
-                public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
+                public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[], public traceResults: string[]) {
 
                 for (const emittedFile of fileResults) {
                     if (isDTS(emittedFile.fileName)) {
@@ -1381,7 +1366,7 @@ namespace Harness {
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string): { settings: CompilerSettings; testUnitData: TestUnitData[]; } {
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): { settings: CompilerSettings; testUnitData: TestUnitData[]; tsConfig: ts.ParsedCommandLine } {
             const settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
@@ -1459,7 +1444,31 @@ namespace Harness {
             };
             testUnitData.push(newTestFile2);
 
-            return { settings, testUnitData };
+            // unit tests always list files explicitly 
+            const parseConfigHost: ts.ParseConfigHost = {
+                readDirectory: (name) => []
+            };
+
+            // check if project has tsconfig.json in the list of files
+            let tsConfig: ts.ParsedCommandLine;
+            for (let i = 0; i < testUnitData.length; i++) {
+                const data = testUnitData[i];
+                if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
+                    const configJson = ts.parseConfigFileTextToJson(data.name, data.content);
+                    assert.isTrue(configJson.config !== undefined);
+                    let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
+                    if (rootDir) {
+                        baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
+                    }
+                    tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+
+                    // delete entry from the list
+                    testUnitData.splice(i, 1);
+
+                    break;
+                }
+            }
+            return { settings, testUnitData, tsConfig };
         }
     }
 
