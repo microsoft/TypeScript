@@ -710,13 +710,15 @@ namespace ts {
         else {
             const compilerOptions = extend(options, defaultInitCompilerOptions);
             const configurations: any = {
-                compilerOptions: serializeCompilerOptions(compilerOptions),
-                exclude: ["node_modules"]
+                compilerOptions: serializeCompilerOptions(compilerOptions)
             };
 
             if (fileNames && fileNames.length) {
                 // only set the files property if we have at least one file
                 configurations.files = fileNames;
+            }
+            else {
+                configurations.exclude = ["node_modules"];
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
