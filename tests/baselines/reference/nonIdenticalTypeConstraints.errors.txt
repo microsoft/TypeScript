@@ -1,6 +1,6 @@
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(16,7): error TS2428: All declarations must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All declarations must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations of 'Foo' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(16,7): error TS2428: All declarations of 'Qux' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All declarations of 'Quux' must have identical type parameters.
 
 
 ==== tests/cases/compiler/nonIdenticalTypeConstraints.ts (3 errors) ====
@@ -15,7 +15,7 @@ tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All de
     }
     interface Foo<T extends Different> {
               ~~~
-!!! error TS2428: All declarations must have identical type parameters.
+!!! error TS2428: All declarations of 'Foo' must have identical type parameters.
         y: T;
     }
     interface Qux<T extends Different> {
@@ -23,7 +23,7 @@ tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All de
     }
     class Qux<T extends Function> {
           ~~~
-!!! error TS2428: All declarations must have identical type parameters.
+!!! error TS2428: All declarations of 'Qux' must have identical type parameters.
         n: T;
     }
     
@@ -45,6 +45,6 @@ tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All de
     }
     interface Quux<U> {
               ~~~~
-!!! error TS2428: All declarations must have identical type parameters.
+!!! error TS2428: All declarations of 'Quux' must have identical type parameters.
         m: U;
     }
