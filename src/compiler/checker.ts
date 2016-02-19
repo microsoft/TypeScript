@@ -7065,17 +7065,54 @@ namespace ts {
                 return strictNullChecks && assumeTrue && getResolvedSymbol(expr) === symbol ? getNonNullableType(type) : type;
             }
 
-            function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // Check that we have 'typeof <symbol>' on the left and string literal on the right
-                if (expr.left.kind !== SyntaxKind.TypeOfExpression || expr.right.kind !== SyntaxKind.StringLiteral) {
+            function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                switch (expr.operatorToken.kind) {
+                    case SyntaxKind.EqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsToken:
+                        if (expr.right.kind === SyntaxKind.NullKeyword) {
+                            return narrowTypeByNullCheck(type, expr, assumeTrue);
+                        }
+                        // Fall through
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
+                        if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral) {
+                            return narrowTypeByTypeof(type, expr, assumeTrue);
+                        }
+                        break;
+                    case SyntaxKind.AmpersandAmpersandToken:
+                        return narrowTypeByAnd(type, expr, assumeTrue);
+                    case SyntaxKind.BarBarToken:
+                        return narrowTypeByOr(type, expr, assumeTrue);
+                    case SyntaxKind.InstanceOfKeyword:
+                        return narrowTypeByInstanceof(type, expr, assumeTrue);
+                }
+                return type;
+            }
+
+            function narrowTypeByNullCheck(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                // We have '==' or '!=' operator with 'null' on the right
+                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken) {
+                    assumeTrue = !assumeTrue;
+                }
+                if (!strictNullChecks || assumeTrue) {
                     return type;
                 }
+                if (expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                    return type;
+                }
+                return getNonNullableType(type);
+            }
+
+            function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                // We have '==', '!=', '====', or !==' operator with 'typeof xxx' on the left
+                // and string literal on the right
                 const left = <TypeOfExpression>expr.left;
                 const right = <LiteralExpression>expr.right;
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
+                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
+                    expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
                 const typeInfo = primitiveTypeInfo[right.text];
@@ -7260,20 +7297,7 @@ namespace ts {
                     case SyntaxKind.ParenthesizedExpression:
                         return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
-                        const operator = (<BinaryExpression>expr).operatorToken.kind;
-                        if (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
-                            return narrowTypeByEquality(type, <BinaryExpression>expr, assumeTrue);
-                        }
-                        else if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                            return narrowTypeByAnd(type, <BinaryExpression>expr, assumeTrue);
-                        }
-                        else if (operator === SyntaxKind.BarBarToken) {
-                            return narrowTypeByOr(type, <BinaryExpression>expr, assumeTrue);
-                        }
-                        else if (operator === SyntaxKind.InstanceOfKeyword) {
-                            return narrowTypeByInstanceof(type, <BinaryExpression>expr, assumeTrue);
-                        }
-                        break;
+                        return narrowTypeByBinaryExpression(type, <BinaryExpression>expr, assumeTrue);
                     case SyntaxKind.PrefixUnaryExpression:
                         if ((<PrefixUnaryExpression>expr).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (<PrefixUnaryExpression>expr).operand, !assumeTrue);
