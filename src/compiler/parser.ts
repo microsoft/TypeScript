@@ -407,6 +407,22 @@ namespace ts {
         return result;
     }
 
+    /* @internal */
+    export function getScriptKindFromFileName(fileName: string): ScriptKind {
+        const ext = fileName.split(".").pop();
+        switch (ext.toLowerCase()) {
+            case "js":
+                return ScriptKind.JS;
+            case "jsx":
+                return ScriptKind.JSX;
+            case "ts":
+                return ScriptKind.TS;
+            case "tsx":
+                return ScriptKind.TSX;
+            default:
+                return ScriptKind.TS;
+        }
+    }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
@@ -549,22 +565,6 @@ namespace ts {
             clearState();
 
             return result;
-        }
-
-        function getScriptKindFromFileName(fileName: string): ScriptKind {
-            const ext = fileName.split(".").pop();
-            switch (ext.toLowerCase()) {
-                case "js":
-                    return ScriptKind.JS;
-                case "jsx":
-                    return ScriptKind.JSX;
-                case "ts":
-                    return ScriptKind.TS;
-                case "tsx":
-                    return ScriptKind.TSX;
-                default:
-                    return ScriptKind.TS;
-            }
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {
