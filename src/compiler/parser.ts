@@ -409,15 +409,15 @@ namespace ts {
 
     /* @internal */
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
-        const ext = fileName.split(".").pop();
+        const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
-            case "js":
+            case ".js":
                 return ScriptKind.JS;
-            case "jsx":
+            case ".jsx":
                 return ScriptKind.JSX;
-            case "ts":
+            case ".ts":
                 return ScriptKind.TS;
-            case "tsx":
+            case ".tsx":
                 return ScriptKind.TSX;
             default:
                 return ScriptKind.TS;
