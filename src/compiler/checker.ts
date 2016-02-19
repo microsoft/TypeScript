@@ -14033,16 +14033,17 @@ namespace ts {
 
         /** Check that type parameter lists are identical across multiple declarations */
         function checkTypeParameterListsIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+            if (symbol.declarations.length === 1) {
+                return;
+            }
             let firstDecl: ClassLikeDeclaration | InterfaceDeclaration;
-            if (symbol.declarations.length > 1) {
-                for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                        if (!firstDecl) {
-                            firstDecl = <ClassLikeDeclaration | InterfaceDeclaration>declaration;
-                        }
-                        else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
-                            error(node.name, Diagnostics.All_declarations_must_have_identical_type_parameters);
-                        }
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    if (!firstDecl) {
+                        firstDecl = <ClassLikeDeclaration | InterfaceDeclaration>declaration;
+                    }
+                    else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
+                        error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
                     }
                 }
             }
