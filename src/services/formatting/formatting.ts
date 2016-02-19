@@ -477,7 +477,6 @@ namespace ts.formatting {
                         case SyntaxKind.CloseParenToken:
                         case SyntaxKind.ElseKeyword:
                         case SyntaxKind.WhileKeyword:
-                        case SyntaxKind.FromKeyword:
                         case SyntaxKind.AtToken:
                             return indentation;
                         default:

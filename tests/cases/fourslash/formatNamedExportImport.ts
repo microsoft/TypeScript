@@ -44,7 +44,7 @@ verify.currentLineContentIs("    y as yy, z");
 goTo.marker("exportCloseBrace");
 verify.currentLineContentIs("}");
 goTo.marker("fromKeywordAutoformat");
-verify.currentLineContentIs("from");
+verify.currentLineContentIs("    from");
 goTo.marker("fromKeywordIndent");
 verify.indentationIs(4);
 goTo.marker("exportDir");
@@ -62,7 +62,7 @@ verify.currentLineContentIs("        as yy,");
 goTo.marker("importCloseBrace");
 verify.currentLineContentIs("}");
 goTo.marker("importDir");
-verify.currentLineContentIs('from "wow"');
+verify.currentLineContentIs('    from "wow"');
 
 goTo.marker("formatOnEnter");
 edit.insertLine('');
