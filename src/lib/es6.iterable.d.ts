@@ -1,3 +1,5 @@
+/// <reference path="lib.es6.symbol.d.ts" />
+
 interface IteratorResult<T> {
     done: boolean;
     value?: T;
