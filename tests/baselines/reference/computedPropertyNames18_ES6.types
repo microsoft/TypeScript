@@ -3,8 +3,8 @@ function foo() {
 >foo : () => void
 
     var obj = {
->obj : {}
->{        [this.bar]: 0    } : {}
+>obj : { [x: number]: number; }
+>{        [this.bar]: 0    } : { [x: number]: number; }
 
         [this.bar]: 0
 >this.bar : any
