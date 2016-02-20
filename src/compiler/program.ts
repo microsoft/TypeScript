@@ -1670,6 +1670,10 @@ namespace ts {
                 }
             }
 
+            if (!options.declaration && options.declarationDir) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration"));
+            }
+
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 

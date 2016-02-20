@@ -2015,11 +2015,13 @@ namespace ts {
     export function getDeclarationEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost) {
         const options = host.getCompilerOptions();
         const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
-        return options.declaration ? removeFileExtension(
-            outputDir
+
+        if (options.declaration) {
+            const path = outputDir
                 ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
-                : sourceFile.fileName
-        ) + ".d.ts" : undefined;
+                : sourceFile.fileName;
+            return removeFileExtension(path) + ".d.ts";
+        }
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
