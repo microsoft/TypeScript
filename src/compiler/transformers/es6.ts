@@ -659,7 +659,7 @@ namespace ts {
             );
         }
 
-        function visitVariableDeclaration(node: VariableDeclaration): OneOrMore<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): OneOrMany<VariableDeclaration> {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return createNodeArrayNode(
@@ -1375,28 +1375,13 @@ namespace ts {
             const clone = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            let statementOffset = addPrologueDirectives(statements, node.statements);
+            let statementOffset = copyPrologueDirectives(node.statements, statements);
             addCaptureThisForNodeIfNeeded(statements, node);
             addNodes(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             addNodes(statements, endLexicalEnvironment());
             clone.statements = createNodeArray(statements, node.statements);
             return clone;
         }
-
-        function addPrologueDirectives(to: Statement[], from: NodeArray<Statement>): number {
-            for (let i = 0; i < from.length; ++i) {
-                if (isPrologueDirective(from[i])) {
-                    addNode(to, from[i]);
-                }
-                else {
-                    return i;
-                }
-            }
-
-            return from.length;
-        }
-
-        var inEmit: boolean;
 
         function onBeforeEmitNode(node: Node) {
             previousOnBeforeEmitNode(node);

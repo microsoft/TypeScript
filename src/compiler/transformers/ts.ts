@@ -1795,7 +1795,7 @@ namespace ts {
          *
          * @param node The function node.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMore<Statement> {
+        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
             if (shouldElideFunctionLikeDeclaration(node)) {
                 return undefined;
             }
@@ -2079,14 +2079,6 @@ namespace ts {
                 ),
                 /*location*/ node
             );
-        }
-
-        function getInitializedVariables(node: VariableDeclarationList) {
-            return filter(node.declarations, isInitializedVariable);
-        }
-
-        function isInitializedVariable(node: VariableDeclaration) {
-            return node.initializer !== undefined;
         }
 
         function transformInitializedVariable(node: VariableDeclaration): Expression {
@@ -2446,7 +2438,7 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMore<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMany<Statement> {
             Debug.assert(!isExternalModuleImportEqualsDeclaration(node));
             if (shouldElideImportEqualsDeclaration(node)) {
                 return undefined;

@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMore<T extends Node> = T | NodeArrayNode<T>;
+    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -531,7 +531,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMore<T>>visitor(node);
+            const visited = node && <OneOrMany<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
@@ -660,7 +660,7 @@ namespace ts {
     /**
      * Flattens an array of nodes that could contain NodeArrayNodes.
      */
-    export function flattenNodes<T extends Node>(nodes: OneOrMore<T>[]): T[] {
+    export function flattenNodes<T extends Node>(nodes: OneOrMany<T>[]): T[] {
         let result: T[];
         if (nodes) {
             result = [];
@@ -678,7 +678,7 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMore<T>, startOnNewLine?: boolean) {
+    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
         addNodeWorker(to, from, startOnNewLine, /*test*/ undefined)
     }
 
@@ -688,7 +688,7 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMore<T>[], startOnNewLine?: boolean) {
+    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
         addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
     }
 
@@ -698,7 +698,7 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addLine<T extends Node>(to: T[], from: OneOrMore<T>) {
+    export function addLine<T extends Node>(to: T[], from: OneOrMany<T>) {
         addNodeWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
     }
 
@@ -708,11 +708,11 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addLines<T extends Node>(to: T[], from: OneOrMore<T>[]) {
+    export function addLines<T extends Node>(to: T[], from: OneOrMany<T>[]) {
         addNodesWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
     }
 
-    function addNodeWorker<T extends Node>(to: T[], from: OneOrMore<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
         if (to && from) {
             if (isNodeArrayNode(from)) {
                 addNodesWorker(to, from.nodes, addOnNewLine, test);
@@ -728,7 +728,7 @@ namespace ts {
         }
     }
 
-    function addNodesWorker<T extends Node>(to: T[], from: OneOrMore<T>[], addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], addOnNewLine: boolean, test: (node: Node) => boolean) {
         if (to && from) {
             for (const node of from) {
                 addNodeWorker(to, node, addOnNewLine, test);

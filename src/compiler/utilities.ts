@@ -2847,6 +2847,90 @@ namespace ts {
             : { pos: range.end, end: range.end };
     }
 
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
+        const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
+        const exportSpecifiers: Map<ExportSpecifier[]> = {};
+        let exportEquals: ExportAssignment = undefined;
+        let hasExportStars = false;
+        for (let node of sourceFile.statements) {
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
+                    if (!(<ImportDeclaration>node).importClause ||
+                        resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
+                        // import "mod"
+                        // import x from "mod" where x is referenced
+                        // import * as x from "mod" where x is referenced
+                        // import { x, y } from "mod" where at least one import is referenced
+                        externalImports.push(<ImportDeclaration>node);
+                    }
+                    break;
+
+                case SyntaxKind.ImportEqualsDeclaration:
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
+                        // import x = require("mod") where x is referenced
+                        externalImports.push(<ImportEqualsDeclaration>node);
+                    }
+                    break;
+
+                case SyntaxKind.ExportDeclaration:
+                    if ((<ExportDeclaration>node).moduleSpecifier) {
+                        if (!(<ExportDeclaration>node).exportClause) {
+                            // export * from "mod"
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStars = true;
+                        }
+                        else if (resolver.isValueAliasDeclaration(node)) {
+                            // export { x, y } from "mod" where at least one export is a value symbol
+                            externalImports.push(<ExportDeclaration>node);
+                        }
+                    }
+                    else {
+                        // export { x, y }
+                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                            const name = (specifier.propertyName || specifier.name).text;
+                            if (!exportSpecifiers[name]) {
+                                exportSpecifiers[name] = [specifier];
+                            }
+                            else {
+                                exportSpecifiers[name].push(specifier);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
+                        // export = x
+                        exportEquals = <ExportAssignment>node;
+                    }
+                    break;
+            }
+        }
+
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStars };
+    }
+
+    export function copyPrologueDirectives(from: Statement[], to: Statement[]): number {
+        for (let i = 0; i < from.length; ++i) {
+            if (isPrologueDirective(from[i])) {
+                addNode(to, from[i]);
+            }
+            else {
+                return i;
+            }
+        }
+
+        return from.length;
+    }
+
+    export function getInitializedVariables(node: VariableDeclarationList) {
+        return filter(node.declarations, isInitializedVariable);
+    }
+
+    function isInitializedVariable(node: VariableDeclaration) {
+        return node.initializer !== undefined;
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that
