@@ -6986,6 +6986,11 @@ namespace ts {
             }
         }
 
+        function isNullOrUndefinedLiteral(node: Expression) {
+            return node.kind === SyntaxKind.NullKeyword ||
+                node.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>node) === undefinedSymbol;
+        }
+
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             let type = getTypeOfSymbol(symbol);
@@ -7069,7 +7074,7 @@ namespace ts {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        if (expr.right.kind === SyntaxKind.NullKeyword) {
+                        if (isNullOrUndefinedLiteral(expr.right)) {
                             return narrowTypeByNullCheck(type, expr, assumeTrue);
                         }
                         // Fall through
