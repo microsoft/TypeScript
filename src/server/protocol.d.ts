@@ -469,7 +469,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
 
         /** Index operator */
-        [key: string] : string | number | boolean;
+        [key: string]: string | number | boolean;
     }
 
     /**
