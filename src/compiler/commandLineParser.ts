@@ -320,6 +320,11 @@ namespace ts {
             name: "allowSyntheticDefaultImports",
             type: "boolean",
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
+        },
+        {
+            name: "experimentalTransforms",
+            type: "boolean",
+            experimental: true
         }
     ];
 

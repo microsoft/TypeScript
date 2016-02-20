@@ -91,7 +91,7 @@ namespace ts {
                     // Emit reference in dts, if the file reference was not already emitted
                     if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
                         // Add a reference to generated dts file,
-                        // global file reference is added only 
+                        // global file reference is added only
                         //  - if it is not bundled emit (because otherwise it would be self reference)
                         //  - and it is not already added
                         if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
@@ -144,7 +144,7 @@ namespace ts {
 
             if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
                 // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
-                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something
                 // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
                 write("export {};");
                 writeLine();
@@ -349,7 +349,7 @@ namespace ts {
                 const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                emitComments(currentText, currentLineMap, writer, jsDocComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeCommentRange);
             }
         }
 
@@ -736,7 +736,7 @@ namespace ts {
 
         function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
             // emitExternalModuleSpecifier is usually called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
-            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
+            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered
             // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
             // so compiler will treat them as external modules.
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;

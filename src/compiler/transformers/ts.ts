@@ -31,14 +31,17 @@ namespace ts {
         context.onBeforeEmitNode = onBeforeEmitNode;
         context.onAfterEmitNode = onAfterEmitNode;
 
-        let hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = false;
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceLocalName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
         let currentParent: Node;
         let currentNode: Node;
+        let combinedNodeFlags: NodeFlags;
         let isRightmostExpression: boolean;
+
+        // This stack is is used to support substitutions when printing nodes.
+        let hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = false;
         let superContainerStack: SuperContainer[];
 
         return transformSourceFile;
@@ -61,6 +64,7 @@ namespace ts {
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
+            const savedCombinedNodeFlags = combinedNodeFlags;
             const savedIsRightmostExpression = isRightmostExpression;
             onBeforeVisitNode(node);
             node = visitor(node);
@@ -68,6 +72,7 @@ namespace ts {
             currentScope = savedCurrentScope;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
+            combinedNodeFlags = savedCombinedNodeFlags;
             isRightmostExpression = savedIsRightmostExpression;
             return node;
         }
@@ -290,7 +295,7 @@ namespace ts {
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     // TypeScript type assertions are removed, but their subtrees are preserved.
-                    return visitNode((<TypeAssertion | AsExpression>node).expression, visitor, isExpression);
+                    return visitAssertionExpression(<AssertionExpression>node);
 
                 case SyntaxKind.EnumDeclaration:
                     // TypeScript enum declarations do not exist in ES6 and must be rewritten.
@@ -313,7 +318,7 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.fail("Unexpected node.");
+                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
                     break;
             }
         }
@@ -326,6 +331,9 @@ namespace ts {
         function onBeforeVisitNode(node: Node) {
             currentParent = currentNode;
             currentNode = node;
+
+            combinedNodeFlags = combineNodeFlags(currentNode, currentParent, combinedNodeFlags);
+
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.CaseBlock:
@@ -357,7 +365,7 @@ namespace ts {
             const statements: Statement[] = [];
             const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node, heritageClauses !== undefined);
+            const members = transformClassMembers(node, firstOrUndefined(heritageClauses) !== undefined);
             let decoratedClassAlias: Identifier;
 
             // emit name if
@@ -744,7 +752,10 @@ namespace ts {
 
             // End the lexical environment.
             addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements);
+            return setMultiLine(
+                createBlock(statements, constructor ? constructor.body : undefined),
+                true
+            );
         }
 
         /**
@@ -855,7 +866,17 @@ namespace ts {
          * @param receiver The receiver on which each property should be assigned.
          */
         function generateInitializedPropertyStatements(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
-            return map(generateInitializedPropertyExpressions(node, properties, receiver), expressionToStatement);
+            const statements: Statement[] = [];
+            for (const property of properties) {
+                statements.push(
+                    createStatement(
+                        transformInitializedProperty(node, property, receiver),
+                        /*location*/ property
+                    )
+                );
+            }
+
+            return statements;
         }
 
         /**
@@ -868,8 +889,9 @@ namespace ts {
         function generateInitializedPropertyExpressions(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                expressions.push(transformInitializedProperty(node, property, receiver));
+                expressions.push(transformInitializedProperty(node, property, receiver, /*location*/ property));
             }
+
             return expressions;
         }
 
@@ -880,12 +902,13 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
+        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, location?: TextRange) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             return createAssignment(
                 createMemberAccessForPropertyName(receiver, propertyName),
-                initializer
+                initializer,
+                location
             );
         }
 
@@ -1467,7 +1490,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail("Cannot serialize unexpected type node.");
+                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
                     break;
             }
 
@@ -2053,7 +2076,8 @@ namespace ts {
             return createStatement(
                 inlineExpressions(
                     map(variables, transformInitializedVariable)
-                )
+                ),
+                /*location*/ node
             );
         }
 
@@ -2113,7 +2137,10 @@ namespace ts {
                 location = undefined;
             }
 
-            const namespaceMemberName = getNamespaceMemberName(node.name);
+            const name = isNamespaceExport(node)
+                ? getNamespaceMemberName(node.name)
+                : getSynthesizedNode(node.name);
+
             currentNamespaceLocalName = getGeneratedNameForNode(node);
             addNode(statements,
                  createStatement(
@@ -2127,9 +2154,9 @@ namespace ts {
                             )
                         ),
                         [createLogicalOr(
-                            namespaceMemberName,
+                            name,
                             createAssignment(
-                                namespaceMemberName,
+                                name,
                                 createObjectLiteral()
                             )
                         )]
@@ -2143,7 +2170,7 @@ namespace ts {
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList([
-                            createVariableDeclaration(node.name, namespaceMemberName)
+                            createVariableDeclaration(node.name, name)
                         ]),
                         location
                     )
@@ -2229,12 +2256,20 @@ namespace ts {
          * @param node The await expression node.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
-            const expression = createYield(
-                visitNode(node.expression, visitor, isExpression),
+            const expression = setOriginalNode(
+                createYield(
+                    visitNode(node.expression, visitor, isExpression),
+                    node
+                ),
                 node
             );
 
-            return isRightmostExpression ? expression : createParen(expression);
+            return isRightmostExpression
+                ? expression
+                : setOriginalNode(
+                    createParen(expression, /*location*/ node),
+                    node
+                );
         }
 
         /**
@@ -2265,11 +2300,29 @@ namespace ts {
                     !(expression.kind === SyntaxKind.CallExpression && currentParent.kind === SyntaxKind.NewExpression) &&
                     !(expression.kind === SyntaxKind.FunctionExpression && currentParent.kind === SyntaxKind.CallExpression) &&
                     !(expression.kind === SyntaxKind.NumericLiteral && currentParent.kind === SyntaxKind.PropertyAccessExpression)) {
-                    return expression;
+                    return trackChildOfNotEmittedNode(node, expression, node.expression);
                 }
             }
 
-            return createParen(expression, node);
+            return setOriginalNode(
+                createParen(expression, node),
+                node
+            );
+        }
+
+        function visitAssertionExpression(node: AssertionExpression): Expression {
+            const expression = visitNode((<TypeAssertion | AsExpression>node).expression, visitor, isExpression);
+            return trackChildOfNotEmittedNode(node, expression, node.expression);
+        }
+
+        function trackChildOfNotEmittedNode<T extends Node>(parent: Node, child: T, original: T) {
+            if (!child.parent && !child.original) {
+                child = cloneNode(child, child, child.flags, child.parent, original);
+            }
+
+            setNodeEmitFlags(parent, NodeEmitFlags.IsNotEmittedNode);
+            setNodeEmitFlags(child, NodeEmitFlags.EmitCommentsOfNotEmittedParent);
+            return child;
         }
 
         /**
@@ -2305,10 +2358,14 @@ namespace ts {
                 location = undefined;
             }
 
+            const name = isNamespaceExport(node)
+                ? getNamespaceMemberName(node.name)
+                : getSynthesizedNode(node.name);
+
             let moduleParam: Expression = createLogicalOr(
-                getNamespaceMemberName(node.name),
+                name,
                 createAssignment(
-                    getNamespaceMemberName(node.name),
+                    name,
                     createObjectLiteral([])
                 )
             );
@@ -2515,13 +2572,10 @@ namespace ts {
         }
 
         function getNamespaceMemberName(name: Identifier): Expression {
-            name = getSynthesizedNode(name);
-            return currentNamespaceLocalName
-                ? createPropertyAccess(currentNamespaceLocalName, name)
-                : name
+            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedNode(name));
         }
 
-        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
+        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration | EnumDeclaration) {
             return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
         }
 
@@ -2536,7 +2590,7 @@ namespace ts {
         }
 
         function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution ? previousExpressionSubstitution(node) : node;
+            node = previousExpressionSubstitution(node);
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
@@ -2556,18 +2610,29 @@ namespace ts {
             return node;
         }
 
-        function substituteExpressionIdentifier(node: Identifier) {
-            if (!nodeIsSynthesized(node) && resolver.getNodeCheckFlags(node) & NodeCheckFlags.BodyScopedClassBinding) {
-                // Due to the emit for class decorators, any reference to the class from inside of the class body
-                // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                // behavior of class names in ES6.
-                const original = getOriginalNode(node);
-                const declaration = resolver.getReferencedValueDeclaration(isIdentifier(original) ? original : node);
-                if (declaration) {
-                    const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
-                    if (classAlias) {
-                        return cloneNode(classAlias);
+        function substituteExpressionIdentifier(node: Identifier): Expression {
+            const original = getOriginalNode(node);
+            if (isIdentifier(original)) {
+                if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.BodyScopedClassBinding) {
+                    // Due to the emit for class decorators, any reference to the class from inside of the class body
+                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                    // behavior of class names in ES6.
+                    const declaration = resolver.getReferencedValueDeclaration(original);
+                    if (declaration) {
+                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                        if (classAlias) {
+                            return cloneNode(classAlias);
+                        }
                     }
+                }
+
+                const container = resolver.getReferencedExportContainer(original);
+                if (container && container.kind === SyntaxKind.ModuleDeclaration) {
+                    return createPropertyAccess(
+                        getGeneratedNameForNode(container),
+                        cloneNode(node),
+                        /*location*/ node
+                    );
                 }
             }
 
@@ -2652,6 +2717,8 @@ namespace ts {
         }
 
         function onBeforeEmitNode(node: Node): void {
+            previousOnAfterEmitNode(node);
+
             const kind = node.kind;
             if (kind === SyntaxKind.ClassDeclaration && node.decorators) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
@@ -2673,6 +2740,8 @@ namespace ts {
         }
 
         function onAfterEmitNode(node: Node): void {
+            previousOnAfterEmitNode(node);
+
             const kind = node.kind;
             if (kind === SyntaxKind.ClassDeclaration && node.decorators) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;

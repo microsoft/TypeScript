@@ -1971,20 +1971,6 @@ namespace ts {
 
                 break;
 
-            case SyntaxKind.ExpressionStatement:
-                if (nodeIsSynthesized(node)) {
-                    const expression = (<ExpressionStatement>node).expression;
-                    if (nodeIsSynthesized(expression)
-                        && isCallExpression(expression)
-                        && expression.expression.kind === SyntaxKind.SuperKeyword) {
-                        // A synthesized call to `super` should be transformed to a cleaner emit
-                        // when transpiling to ES5/3.
-                        transformFlags |= TransformFlags.AssertES6;
-                    }
-                }
-
-                break;
-
             case SyntaxKind.BinaryExpression:
                 if (isDestructuringAssignment(node)) {
                     // Destructuring assignments are ES6 syntax.
@@ -2093,7 +2079,7 @@ namespace ts {
             case SyntaxKind.VariableDeclarationList:
                 // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
                 if (node.flags & NodeFlags.BlockScoped) {
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
                 }
 
                 break;
@@ -2102,6 +2088,26 @@ namespace ts {
                 // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
                 if (node.flags & NodeFlags.Export) {
                     transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
+                }
+
+                break;
+
+            case SyntaxKind.LabeledStatement:
+                // A labeled statement containing a block scoped binding *may* need to be transformed from ES6.
+                if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding
+                    && isIterationStatement(this, /*lookInLabeledStatements*/ true)) {
+                    transformFlags |= TransformFlags.AssertES6;
+                }
+
+                break;
+
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+                // A loop containing a block scoped binding *may* need to be transformed from ES6.
+                if (subtreeFlags & TransformFlags.ContainsBlockScopedBinding) {
+                    transformFlags |= TransformFlags.AssertES6;
                 }
 
                 break;

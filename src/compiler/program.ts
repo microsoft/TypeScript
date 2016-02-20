@@ -968,7 +968,7 @@ namespace ts {
 
             const start = new Date().getTime();
 
-            const emitResult = emitFiles(
+            const emitResult = (options.experimentalTransforms ? printFiles : emitFiles)(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);

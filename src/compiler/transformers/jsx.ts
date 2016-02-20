@@ -34,7 +34,7 @@ namespace ts {
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
             }
 
-            Debug.fail("Unexpected node kind.");
+            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
         function transformJsxChildToExpression(node: JsxChild): Expression {
@@ -52,7 +52,7 @@ namespace ts {
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
             }
 
-            Debug.fail("Unexpected node kind.");
+            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
         function visitJsxElement(node: JsxElement) {
@@ -85,14 +85,14 @@ namespace ts {
                                 properties = undefined;
                             }
 
-                            addNode(segments, transformJsxSpreadAttributeToExpression(attr), isExpression);
+                            addNode(segments, transformJsxSpreadAttributeToExpression(attr));
                         }
                         else {
                             if (!properties) {
                                 properties = [];
                             }
 
-                            addNode(properties, transformJsxAttributeToObjectLiteralElement(attr), isObjectLiteralElement);
+                            addNode(properties, transformJsxAttributeToObjectLiteralElement(attr));
                         }
                     }
 

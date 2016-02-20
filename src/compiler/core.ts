@@ -292,9 +292,9 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T): T;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             const count = array.length;
             if (count > 0) {
@@ -308,7 +308,7 @@ namespace ts {
                     result = initial;
                 }
                 while (pos < count) {
-                    result = f(result, array[pos]);
+                    result = f(result, array[pos], pos);
                     pos++;
                 }
                 return result;
@@ -317,9 +317,9 @@ namespace ts {
         return initial;
     }
 
-    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T): T;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
@@ -332,7 +332,7 @@ namespace ts {
                     result = initial;
                 }
                 while (pos >= 0) {
-                    result = f(result, array[pos]);
+                    result = f(result, array[pos], pos);
                     pos--;
                 }
                 return result;

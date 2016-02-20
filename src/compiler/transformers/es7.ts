@@ -30,7 +30,7 @@ namespace ts {
                     return visitBinaryExpression(<BinaryExpression>node);
             }
 
-            Debug.fail("Unexpected node kind.");
+            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
         function visitBinaryExpression(node: BinaryExpression): Expression {
@@ -90,7 +90,7 @@ namespace ts {
                 return createMathPow(left, right, /*location*/ node);
             }
             else {
-                Debug.fail("Unexpected node kind.");
+                Debug.fail(`Unexpected operator kind: ${formatSyntaxKind(node.operatorToken.kind)}.`);
             }
         }
     }

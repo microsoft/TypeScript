@@ -84,8 +84,12 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
+            identifierSubstitution: node => node,
+            expressionSubstitution: node => node,
             enableExpressionSubstitution,
             isExpressionSubstitutionEnabled,
+            onBeforeEmitNode: node => { },
+            onAfterEmitNode: node => { },
             enableEmitNotification,
             isEmitNotificationEnabled,
         };
@@ -148,8 +152,9 @@ namespace ts {
         /**
          * Sets flags that control emit behavior of a node.
          */
-        function setNodeEmitFlags(node: Node, flags: NodeEmitFlags) {
+        function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
             nodeEmitFlags[getNodeId(node)] = flags;
+            return node;
         }
 
         /**

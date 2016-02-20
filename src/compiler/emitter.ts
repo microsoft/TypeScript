@@ -287,12 +287,8 @@ namespace ts {
         _i        = 0x10000000,  // Use/preference flag for '_i'
     }
 
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
-        return printFiles(resolver, host, targetSourceFile);
-    }
-
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function legacyEmitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -1919,7 +1915,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (multiLine) {
                     decreaseIndent();
-                    writeLine();
                 }
 
                 write(")");
@@ -2241,6 +2236,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function skipParentheses(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
+                }
+                return node;
+            }
+
+            function skipAssertions(node: Expression): Expression {
+                while (node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
                     node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
@@ -2695,7 +2697,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function synthesizedNodeStartsOnNewLine(node: Node) {
-                return nodeIsSynthesized(node) && (<SynthesizedNode>node).startsOnNewLine;
+                return nodeIsSynthesized(node) && node.startsOnNewLine;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
@@ -3312,8 +3314,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // we can't reuse 'arr' because it might be modified within the body of the loop.
                 const counter = createTempVariable(TempFlags._i);
                 const rhsReference = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
-                rhsReference.text = node.expression.kind === SyntaxKind.Identifier ?
-                    makeUniqueName((<Identifier>node.expression).text) :
+                const expressionWithoutAssertions = skipAssertions(node.expression);
+                rhsReference.text = expressionWithoutAssertions.kind === SyntaxKind.Identifier ?
+                    makeUniqueName((<Identifier>expressionWithoutAssertions).text) :
                     makeTempVariableName(TempFlags.Auto);
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
@@ -4328,7 +4331,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
+                    write(restIndex > 0
+                        ? `[${tempName} - ${restIndex}] = arguments[${tempName}];`
+                        : `[${tempName}] = arguments[${tempName}];`);
                     emitEnd(restParam);
                     decreaseIndent();
                     writeLine();
@@ -5344,6 +5349,18 @@ const _super = (function (geti, seti) {
                     write(" = ");
                 }
 
+                const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
+                const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
+                let tempVariable: Identifier;
+
+                if (isClassExpressionWithStaticProperties) {
+                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    write("(");
+                    increaseIndent();
+                    emit(tempVariable);
+                    write(" = ");
+                }
+
                 write("(function (");
                 const baseTypeNode = getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
@@ -5373,9 +5390,6 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitPropertyDeclarations(node, getInitializedProperties(node, /*isStatic*/ true));
-                writeLine();
-                emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5402,7 +5416,23 @@ const _super = (function (geti, seti) {
                 write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
+                    emitPropertyDeclarations(node, staticProperties);
+                    writeLine();
+                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 }
+                else if (isClassExpressionWithStaticProperties) {
+                    for (const property of staticProperties) {
+                        write(",");
+                        writeLine();
+                        emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
+                    }
+                    write(",");
+                    writeLine();
+                    emit(tempVariable);
+                    decreaseIndent();
+                    write(")");
+                }
+
                 emitEnd(node);
 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -7941,7 +7971,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
@@ -7953,7 +7983,7 @@ const _super = (function (geti, seti) {
                 const trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
             /**
@@ -7968,8 +7998,8 @@ const _super = (function (geti, seti) {
 
                 const trailingComments = getTrailingCommentRanges(currentText, pos);
 
-                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitLeadingCommentsOfPositionWorker(pos: number) {
@@ -7990,7 +8020,7 @@ const _super = (function (geti, seti) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {

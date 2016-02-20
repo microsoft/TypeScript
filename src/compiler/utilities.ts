@@ -8,13 +8,6 @@ namespace ts {
         isNoDefaultLib?: boolean;
     }
 
-    export interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-        startsOnNewLine?: boolean;
-        disableSourceMap?: boolean;
-    }
-
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -330,8 +323,7 @@ namespace ts {
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
-            isFunctionLike(node) ||
-            isFunctionBlock(node);
+            isFunctionLike(node);
     }
 
     export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
@@ -354,29 +346,40 @@ namespace ts {
         return false;
     }
 
+    export function isBlockScope(node: Node, parentNode: Node) {
+        switch (node.kind)  {
+            case SyntaxKind.SourceFile:
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.CatchClause:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+
+            case SyntaxKind.Block:
+                // function block is not considered block-scope container
+                // see comment in binder.ts: bind(...), case for SyntaxKind.Block
+                return parentNode && !isFunctionLike(parentNode);
+        }
+
+        return false;
+    }
+
     // Gets the nearest enclosing block scope container that has the provided node
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
         let current = node.parent;
         while (current) {
-            if (isFunctionLike(current)) {
+            if (isBlockScope(current, current.parent)) {
                 return current;
-            }
-            switch (current.kind) {
-                case SyntaxKind.SourceFile:
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.CatchClause:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                    return current;
-                case SyntaxKind.Block:
-                    // function block is not considered block-scope container
-                    // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                    if (!isFunctionLike(current.parent)) {
-                        return current;
-                    }
             }
 
             current = current.parent;
@@ -486,6 +489,19 @@ namespace ts {
         }
 
         return node;
+    }
+
+    /**
+     * Combines the flags of a node with the combined flags of its parent if they can be combined.
+     */
+    export function combineNodeFlags(node: Node, parentNode: Node, previousNodeFlags: NodeFlags) {
+        if ((node.kind === SyntaxKind.VariableDeclarationList && parentNode.kind === SyntaxKind.VariableStatement) ||
+            (node.kind === SyntaxKind.VariableDeclaration && parentNode.kind === SyntaxKind.VariableDeclarationList) ||
+            (node.kind === SyntaxKind.BindingElement)) {
+            return node.flags | previousNodeFlags;
+        }
+
+        return node.flags;
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
@@ -1733,7 +1749,7 @@ namespace ts {
         return getOperatorPrecedence(expression.kind, operator, hasArguments);
     }
 
-    function getOperator(expression: Expression) {
+    export function getOperator(expression: Expression) {
         if (expression.kind === SyntaxKind.BinaryExpression) {
             return (<BinaryExpression>expression).operatorToken.kind;
         }
@@ -2318,26 +2334,33 @@ namespace ts {
         }
     }
 
-    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], leadingSeparator: boolean, trailingSeparator: boolean, newLine: string,
         writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
-        let emitLeadingSpace = !trailingSeparator;
-        forEach(comments, comment => {
-            if (emitLeadingSpace) {
-                writer.write(" ");
-                emitLeadingSpace = false;
-            }
-            writeComment(text, lineMap, writer, comment, newLine);
-            if (comment.hasTrailingNewLine) {
-                writer.writeLine();
-            }
-            else if (trailingSeparator) {
+        if (comments && comments.length > 0) {
+            if (leadingSeparator) {
                 writer.write(" ");
             }
-            else {
-                // Emit leading space to separate comment during next comment emit
-                emitLeadingSpace = true;
+
+            let emitInterveningSeperator = false;
+            for (const comment of comments) {
+                if (emitInterveningSeperator) {
+                    writer.write(" ");
+                    emitInterveningSeperator = false;
+                }
+
+                writeComment(text, lineMap, writer, comment, newLine);
+                if (comment.hasTrailingNewLine) {
+                    writer.writeLine();
+                }
+                else {
+                    emitInterveningSeperator = true;
+                }
             }
-        });
+
+            if (emitInterveningSeperator && trailingSeparator) {
+                writer.write(" ");
+            }
+        }
     }
 
     /**
@@ -2394,7 +2417,7 @@ namespace ts {
                 if (nodeLine >= lastCommentLine + 2) {
                     // Valid detachedComments
                     emitNewLineBeforeLeadingComments(lineMap, writer, node, leadingComments);
-                    emitComments(text, lineMap, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                    emitComments(text, lineMap, writer, detachedComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
                     currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                 }
             }
@@ -2795,6 +2818,35 @@ namespace ts {
         return false;
     }
 
+    export function formatSyntaxKind(kind: SyntaxKind): string {
+        const syntaxKindEnum = (<any>ts).SyntaxKind;
+        if (syntaxKindEnum) {
+            for (const name in syntaxKindEnum) {
+                if (syntaxKindEnum[name] === kind) {
+                    return kind.toString() + " (" + name + ")";
+                }
+            }
+        }
+        else {
+            return kind.toString();
+        }
+    }
+
+    export const enum TextRangeCollapse {
+        CollapseToStart,
+        CollapseToEnd,
+    }
+
+    export function collapseTextRange(range: TextRange, collapse: TextRangeCollapse) {
+        if (range.pos === range.end) {
+            return range;
+        }
+
+        return collapse === TextRangeCollapse.CollapseToStart
+            ? { pos: range.pos, end: range.end }
+            : { pos: range.end, end: range.end };
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that
@@ -2811,6 +2863,10 @@ namespace ts {
     }
 
     // Literals
+
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+        return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
@@ -2905,6 +2961,10 @@ namespace ts {
 
     // Type members
 
+    export function isMethodDeclaration(node: Node): node is MethodDeclaration {
+        return node.kind === SyntaxKind.MethodDeclaration;
+    }
+
     export function isClassElement(node: Node): node is ClassElement {
         const kind = node.kind;
         return kind === SyntaxKind.Constructor
@@ -2991,11 +3051,16 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
+        return node.kind === SyntaxKind.SpreadElementExpression;
+    }
+
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind) {
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
             || kind === SyntaxKind.NewExpression
@@ -3021,11 +3086,8 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        return isLeftHandSideExpressionKind(node.kind);
-    }
-
-    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PrefixUnaryExpression
             || kind === SyntaxKind.PostfixUnaryExpression
             || kind === SyntaxKind.DeleteExpression
@@ -3033,14 +3095,11 @@ namespace ts {
             || kind === SyntaxKind.VoidExpression
             || kind === SyntaxKind.AwaitExpression
             || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpressionKind(kind);
+            || isLeftHandSideExpression(node);
     }
 
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
-        return isUnaryExpressionKind(node.kind);
-    }
-
-    export function isExpressionKind(kind: SyntaxKind): boolean {
+    export function isExpression(node: Node): node is Expression {
+        const kind = node.kind;
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
@@ -3048,11 +3107,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElementExpression
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || isUnaryExpressionKind(kind);
-    }
-
-    export function isExpression(node: Node): node is Expression {
-        return isExpressionKind(node.kind);
+            || isUnaryExpression(node);
     }
 
     // Misc
@@ -3264,9 +3319,12 @@ namespace ts {
 
     // Property assignments
 
-    export function isShortHandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
-        const kind = node.kind;
-        return kind === SyntaxKind.ShorthandPropertyAssignment;
+    export function isPropertyAssignment(node: Node): node is PropertyAssignment {
+        return node.kind === SyntaxKind.PropertyAssignment;
+    }
+
+    export function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
+        return node.kind === SyntaxKind.ShorthandPropertyAssignment;
     }
 
     // Enum
