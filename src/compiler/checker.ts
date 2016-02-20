@@ -10214,8 +10214,10 @@ namespace ts {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
                     const baseTypeNode = getClassExtendsHeritageClauseElement(getContainingClass(node));
-                    const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
-                    return resolveCall(node, baseConstructors, candidatesOutArray);
+                    if (baseTypeNode) {
+                        const baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
+                        return resolveCall(node, baseConstructors, candidatesOutArray);
+                    }
                 }
                 return resolveUntypedCall(node);
             }
@@ -14127,7 +14129,7 @@ namespace ts {
             }
         }
 
-        // Check each type parameter and check that list has no duplicate type parameter declarations
+        /** Check each type parameter and check that type parameters have no duplicate type parameter declarations */
         function checkTypeParameters(typeParameterDeclarations: TypeParameterDeclaration[]) {
             if (typeParameterDeclarations) {
                 for (let i = 0, n = typeParameterDeclarations.length; i < n; i++) {
@@ -14140,6 +14142,24 @@ namespace ts {
                                 error(node.name, Diagnostics.Duplicate_identifier_0, declarationNameToString(node.name));
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        /** Check that type parameter lists are identical across multiple declarations */
+        function checkTypeParameterListsIdentical(node: ClassLikeDeclaration | InterfaceDeclaration, symbol: Symbol) {
+            if (symbol.declarations.length === 1) {
+                return;
+            }
+            let firstDecl: ClassLikeDeclaration | InterfaceDeclaration;
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    if (!firstDecl) {
+                        firstDecl = <ClassLikeDeclaration | InterfaceDeclaration>declaration;
+                    }
+                    else if (!areTypeParametersIdentical(firstDecl.typeParameters, node.typeParameters)) {
+                        error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_type_parameters, node.name.text);
                     }
                 }
             }
@@ -14178,6 +14198,7 @@ namespace ts {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
             const staticType = <ObjectType>getTypeOfSymbol(symbol);
+            checkTypeParameterListsIdentical(node, symbol);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
@@ -14440,14 +14461,10 @@ namespace ts {
 
                 checkExportsOnMergedDeclarations(node);
                 const symbol = getSymbolOfNode(node);
-                const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
-                if (symbol.declarations.length > 1) {
-                    if (node !== firstInterfaceDecl && !areTypeParametersIdentical(firstInterfaceDecl.typeParameters, node.typeParameters)) {
-                        error(node.name, Diagnostics.All_declarations_of_an_interface_must_have_identical_type_parameters);
-                    }
-                }
+                checkTypeParameterListsIdentical(node, symbol);
 
                 // Only check this symbol once
+                const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
                 if (node === firstInterfaceDecl) {
                     const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                     const typeWithThis = getTypeWithThisArgument(type);
