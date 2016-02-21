@@ -198,13 +198,12 @@ namespace ts.NavigationBar {
                         return true;
                     }
 
-                    // Or if it is not parented by another function.  i.e all functions
-                    // at module scope are 'top level'.
+                    // Or if it is not parented by another function(except for parent functions that
+                    // are methods and constructors). I.e all functions at module scope are 'top level'.
                     if (!isFunctionBlock(functionDeclaration.parent)) {
                         return true;
                     }
                     else {
-                        // Except for parent functions that are methods and constructors.
                         const grandParentKind = functionDeclaration.parent.parent.kind;
                         if (grandParentKind === SyntaxKind.MethodDeclaration ||
                             grandParentKind === SyntaxKind.Constructor) {
