@@ -8945,10 +8945,6 @@ namespace ts {
             }
 
             // Property is known to be private or protected at this point
-            // Get the declaring and enclosing class instance types
-            const enclosingClassDeclaration = getContainingClass(node);
-
-            const enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
 
             // Private property is accessible if the property is within the declaring class
             if (flags & NodeFlags.Private) {
@@ -8966,13 +8962,17 @@ namespace ts {
             if (left.kind === SyntaxKind.SuperKeyword) {
                 return true;
             }
+
+            // Get the enclosing class that has the declaring class as its base type
+            const enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
+                const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration));
+                return hasBaseType(enclosingClass, declaringClass) ? enclosingClass : undefined;
+            });
+
             // A protected property is accessible if the property is within the declaring class or classes derived from it
-            const typeClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(type.symbol);
-            if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
-                if (!isNodeWithinClass(node, typeClassDeclaration)) {
-                    error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
-                    return false;
-                }
+            if (!enclosingClass) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                return false;
             }
             // No further restrictions for static properties
             if (flags & NodeFlags.Static) {
@@ -8985,11 +8985,9 @@ namespace ts {
             }
 
             // TODO: why is the first part of this check here?
-            if (getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                if (!(hasBaseType(<InterfaceType>type, enclosingClass) || isNodeWithinClass(node, typeClassDeclaration))) {
-                    error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
-                    return false;
-                }
+            if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
+                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                return false;
             }
             return true;
         }
@@ -15467,16 +15465,20 @@ namespace ts {
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
+        function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T): T {
+            let result: T;
+
             while (true) {
                 node = getContainingClass(node);
-                if (!node) {
-                    return false;
-                }
-                if (node === classDeclaration) {
-                    return true;
-                }
+                if (!node) break;
+                if (result = callback(node)) break;
             }
+
+            return result;
+        }
+
+        function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
+            return !!forEachEnclosingClass(node, n => n === classDeclaration);
         }
 
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment {
