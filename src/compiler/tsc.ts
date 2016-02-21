@@ -719,6 +719,9 @@ namespace ts {
             }
             else {
                 configurations.exclude = ["node_modules"];
+                if (compilerOptions.outDir) {
+                    configurations.exclude.push(compilerOptions.outDir);
+                }
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
