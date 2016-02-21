@@ -156,8 +156,7 @@ namespace ts.NavigationBar {
                     case SyntaxKind.ClassDeclaration:
                         topLevelNodes.push(node);
                         forEach((<ClassDeclaration>node).members, (node) => {
-                            if (node.kind === SyntaxKind.MethodDeclaration ||
-                                node.kind === SyntaxKind.Constructor) {
+                            if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) {
                                 if ((<MethodDeclaration>node).body) {
                                     addTopLevelNodes((<Block>(<MethodDeclaration>node).body).statements, topLevelNodes);
                                 }
