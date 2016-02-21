@@ -154,6 +154,15 @@ namespace ts.NavigationBar {
             for (let node of nodes) {
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
+                        topLevelNodes.push(node);
+                        forEach((<ClassDeclaration>node).members, (node) => {
+                            if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) {
+                                if ((<MethodDeclaration>node).body) {
+                                    addTopLevelNodes((<Block>(<MethodDeclaration>node).body).statements, topLevelNodes);
+                                }
+                            }
+                        });
+                        break;
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                         topLevelNodes.push(node);
@@ -188,10 +197,18 @@ namespace ts.NavigationBar {
                         return true;
                     }
 
-                    // Or if it is not parented by another function.  i.e all functions
-                    // at module scope are 'top level'.
+                    // Or if it is not parented by another function(except for parent functions that
+                    // are methods and constructors). I.e all functions at module scope are 'top level'.
                     if (!isFunctionBlock(functionDeclaration.parent)) {
                         return true;
+                    }
+                    else {
+                        const grandParentKind = functionDeclaration.parent.parent.kind;
+                        if (grandParentKind === SyntaxKind.MethodDeclaration ||
+                            grandParentKind === SyntaxKind.Constructor) {
+
+                            return true;
+                        }
                     }
                 }
             }
@@ -407,7 +424,7 @@ namespace ts.NavigationBar {
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 let moduleName = getModuleName(node);
-                
+
                 let childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
                 return getNavigationBarItem(moduleName,
@@ -422,7 +439,7 @@ namespace ts.NavigationBar {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
                     let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
-                    return getNavigationBarItem(!node.name ? "default": node.name.text ,
+                    return getNavigationBarItem(!node.name ? "default": node.name.text,
                         ts.ScriptElementKind.functionElement,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
