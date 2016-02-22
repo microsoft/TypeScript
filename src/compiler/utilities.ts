@@ -8,12 +8,6 @@ namespace ts {
         isNoDefaultLib?: boolean;
     }
 
-    export interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-        startsOnNewLine: boolean;
-    }
-
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -177,6 +171,10 @@ namespace ts {
 
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
+    }
+
+    export function isDefined(value: any): boolean {
+        return value !== undefined;
     }
 
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
@@ -1714,7 +1712,7 @@ namespace ts {
         return getOperatorPrecedence(expression.kind, operator, hasArguments);
     }
 
-    function getOperator(expression: Expression) {
+    export function getOperator(expression: Expression) {
         if (expression.kind === SyntaxKind.BinaryExpression) {
             return (<BinaryExpression>expression).operatorToken.kind;
         }
@@ -2724,6 +2722,10 @@ namespace ts {
 
     // Literals
 
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+        return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
+
     export function isLiteralKind(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
     }
@@ -2817,6 +2819,10 @@ namespace ts {
 
     // Type members
 
+    export function isMethodDeclaration(node: Node): node is MethodDeclaration {
+        return node.kind === SyntaxKind.MethodDeclaration;
+    }
+
     export function isClassElement(node: Node): node is ClassElement {
         const kind = node.kind;
         return kind === SyntaxKind.Constructor
@@ -2824,7 +2830,6 @@ namespace ts {
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.MethodSignature
             || kind === SyntaxKind.IndexSignature;
     }
 
@@ -2890,6 +2895,10 @@ namespace ts {
         return node.kind === SyntaxKind.BinaryExpression;
     }
 
+    export function isConditionalExpression(node: Node): node is ConditionalExpression {
+        return node.kind === SyntaxKind.ConditionalExpression;
+    }
+
     export function isCallExpression(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression;
     }
@@ -2900,11 +2909,16 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
+        return node.kind === SyntaxKind.SpreadElementExpression;
+    }
+
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind) {
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
             || kind === SyntaxKind.NewExpression
@@ -2930,11 +2944,8 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        return isLeftHandSideExpressionKind(node.kind);
-    }
-
-    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PrefixUnaryExpression
             || kind === SyntaxKind.PostfixUnaryExpression
             || kind === SyntaxKind.DeleteExpression
@@ -2942,14 +2953,11 @@ namespace ts {
             || kind === SyntaxKind.VoidExpression
             || kind === SyntaxKind.AwaitExpression
             || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpressionKind(kind);
+            || isLeftHandSideExpression(node);
     }
 
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
-        return isUnaryExpressionKind(node.kind);
-    }
-
-    export function isExpressionKind(kind: SyntaxKind): boolean {
+    export function isExpression(node: Node): node is Expression {
+        const kind = node.kind;
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
@@ -2957,11 +2965,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElementExpression
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || isUnaryExpressionKind(kind);
-    }
-
-    export function isExpression(node: Node): node is Expression {
-        return isExpressionKind(node.kind);
+            || isUnaryExpression(node);
     }
 
     // Misc
@@ -3113,7 +3117,8 @@ namespace ts {
     export function isStatement(node: Node): node is Statement {
         const kind = node.kind;
         return isStatementKindButNotDeclarationKind(kind)
-            || isDeclarationStatementKind(kind);
+            || isDeclarationStatementKind(kind)
+            || kind === SyntaxKind.Block;
     }
 
     // Module references
@@ -3149,6 +3154,10 @@ namespace ts {
             || kind === SyntaxKind.JsxSpreadAttribute;
     }
 
+    export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
+        return node.kind === SyntaxKind.JsxSpreadAttribute;
+    }
+
     // Clauses
 
     export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
@@ -3168,9 +3177,12 @@ namespace ts {
 
     // Property assignments
 
-    export function isShortHandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
-        const kind = node.kind;
-        return kind === SyntaxKind.ShorthandPropertyAssignment;
+    export function isPropertyAssignment(node: Node): node is PropertyAssignment {
+        return node.kind === SyntaxKind.PropertyAssignment;
+    }
+
+    export function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
+        return node.kind === SyntaxKind.ShorthandPropertyAssignment;
     }
 
     // Enum

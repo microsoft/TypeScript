@@ -22,8 +22,8 @@ namespace ts {
         return node;
     }
 
-    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange): NodeArray<T> {
-        if (elements !== undefined) {
+    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange, hasTrailingComma?: boolean): NodeArray<T> {
+        if (elements) {
             if (isNodeArray(elements)) {
                 return elements;
             }
@@ -33,7 +33,7 @@ namespace ts {
         }
 
         const array = <NodeArray<T>>elements;
-        if (location !== undefined) {
+        if (location) {
             array.pos = location.pos;
             array.end = location.end;
         }
@@ -42,13 +42,17 @@ namespace ts {
             array.end = -1;
         }
 
+        if (hasTrailingComma) {
+            array.hasTrailingComma = true;
+        }
+
         array.arrayKind = ArrayKind.NodeArray;
         return array;
     }
 
     export function createModifiersArray(elements?: Modifier[], location?: TextRange): ModifiersArray {
         let flags: NodeFlags;
-        if (elements !== undefined) {
+        if (elements) {
             if (isModifiersArray(elements)) {
                 return elements;
             }
@@ -64,7 +68,7 @@ namespace ts {
         }
 
         const array = <ModifiersArray>elements;
-        if (location !== undefined) {
+        if (location) {
             array.pos = location.pos;
             array.end = location.end;
         }
@@ -79,7 +83,7 @@ namespace ts {
     }
 
     export function setModifiers<T extends Node>(node: T, modifiers: Modifier[]) {
-        if (modifiers !== undefined) {
+        if (modifiers) {
             const array = createModifiersArray(modifiers);
             node.modifiers = array;
             node.flags |= array.flags;
@@ -92,7 +96,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        const node = <SynthesizedNode>createNode(kind, /*location*/ undefined);
+        const node = createNode(kind, /*location*/ undefined);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -145,48 +149,41 @@ namespace ts {
         return clone;
     }
 
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     */
+    export function getMutableNode<T extends Node>(node: T): T {
+        return cloneNode<T>(node, node, node.flags, node.parent, node);
+    }
+
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
         const node = <NodeArrayNode<T>>createSynthesizedNode(SyntaxKind.NodeArrayNode);
         node.nodes = createNodeArray(elements);
         return node;
     }
 
-    export function createReturn(expression?: Expression): ReturnStatement {
-        const node = <ReturnStatement>createSynthesizedNode(SyntaxKind.ReturnStatement);
-        node.expression = expression;
-        return node;
+    // Literals
+
+    export function createLiteral(value: string, location?: TextRange): StringLiteral;
+    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression {
+        if (typeof value === "number") {
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location);
+            node.text = value.toString();
+            return node;
+        }
+        else if (typeof value === "boolean") {
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location);
+        }
+        else {
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
+            node.text = String(value);
+            return node;
+        }
     }
 
-    export function createStatement(expression: Expression): ExpressionStatement {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = expression;
-        return node;
-    }
-
-    export function createVariableStatement(declarationList: VariableDeclarationList): VariableStatement {
-        const node = <VariableStatement>createSynthesizedNode(SyntaxKind.VariableStatement);
-        node.declarationList = declarationList;
-        return node;
-    }
-
-    export function createVariableDeclarationList(declarations: VariableDeclaration[]): VariableDeclarationList {
-        const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
-        node.declarations = createNodeArray(declarations);
-        return node;
-    }
-
-    export function createBlock(statements: Statement[]): Block {
-        const block = <Block>createSynthesizedNode(SyntaxKind.Block);
-        block.statements = createNodeArray(statements);
-        return block;
-    }
-
-    export function createVariableDeclaration(name: BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
-        const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
-        node.name = name;
-        node.initializer = initializer;
-        return node;
-    }
+    // Identifiers
 
     export function createIdentifier(text: string): Identifier {
         const node = <Identifier>createNode(SyntaxKind.Identifier);
@@ -194,54 +191,208 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(tempKind: TempVariableKind): Identifier {
+    export function createTempVariable(): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.tempKind = tempKind;
+        name.text = undefined;
+        name.tempKind = TempVariableKind.Auto;
         getNodeId(name);
         return name;
     }
 
-    export function createLiteral(value: string): StringLiteral;
-    export function createLiteral(value: number): LiteralExpression;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression {
-        if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
-            node.text = value.toString();
-            return node;
-        }
-        else if (typeof value === "boolean") {
-            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
-        }
-        else {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral);
-            node.text = String(value);
-            return node;
-        }
+    export function createLoopVariable(): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier);
+        name.text = undefined;
+        name.tempKind = TempVariableKind.Loop;
+        getNodeId(name);
+        return name;
     }
 
-    export function createVoid(expression: UnaryExpression) {
-        const node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+    // Reserved words
+
+    export function createSuper() {
+        const node = <PrimaryExpression>createNode(SyntaxKind.SuperKeyword);
+        return node;
+    }
+
+    export function createThis(location?: TextRange) {
+        const node = <PrimaryExpression>createNode(SyntaxKind.ThisKeyword, location);
+        return node;
+    }
+
+    export function createNull() {
+        const node = <PrimaryExpression>createNode(SyntaxKind.NullKeyword);
+        return node;
+    }
+
+    // Names
+
+    export function createComputedPropertyName(expression: Expression, location?: TextRange) {
+        const node = <ComputedPropertyName>createNode(SyntaxKind.ComputedPropertyName, location);
         node.expression = expression;
         return node;
     }
 
-    export function createVoidZero() {
-        return createVoid(createLiteral(0));
+    // Type members
+
+    export function createMethod(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+        const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        node.body = body;
+        return node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier) {
-        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression);
+    export function createConstructor(parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+        const node = <ConstructorDeclaration>createNode(SyntaxKind.Constructor, location);
+        node.decorators = undefined;
+        node.modifiers = undefined;
+        node.typeParameters = undefined;
+        node.parameters = createSynthesizedNodeArray(parameters);
+        node.type = undefined;
+        node.body = body;
+        return node;
+    }
+
+    export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, body: Block, location?: TextRange) {
+        const node = <GetAccessorDeclaration>createNode(SyntaxKind.GetAccessor, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray<ParameterDeclaration>();
+        node.body = body;
+        return node;
+    }
+
+    export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameter: ParameterDeclaration, body: Block, location?: TextRange) {
+        const node = <SetAccessorDeclaration>createNode(SyntaxKind.SetAccessor, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray([parameter]);
+        node.body = body;
+        return node;
+    }
+
+    export function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange) {
+        const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location);
+        node.decorators = undefined;
+        node.modifiers = undefined;
+        node.dotDotDotToken = undefined;
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.questionToken = undefined;
+        node.type = undefined;
+        node.initializer = initializer;
+        return node;
+    }
+
+    // Expression
+
+    export function createArrayLiteral(elements?: Expression[]) {
+        const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
+        node.elements = createNodeArray(elements);
+        return node;
+    }
+
+    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange) {
+        const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
+        node.properties = createNodeArray(properties);
+        return node;
+    }
+
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
+        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         return node;
     }
 
-    export function createElementAccess(expression: Expression, index: number | Expression) {
-        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression);
+    export function createElementAccess(expression: Expression, index: number | Expression, location?: TextRange) {
+        const node = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.argumentExpression = typeof index === "number" ? createLiteral(index) : index;
+        return node;
+    }
+
+    export function createCall(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
+        const node = <CallExpression>createNode(SyntaxKind.CallExpression, location);
+        node.expression = parenthesizeForAccess(expression);
+        node.arguments = createNodeArray(argumentsArray);
+        return node;
+    }
+
+    export function createNew(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
+        const node = <NewExpression>createNode(SyntaxKind.NewExpression, location);
+        node.expression = parenthesizeForAccess(expression);
+        node.arguments = argumentsArray ? createNodeArray(argumentsArray) : undefined;
+        return node;
+    }
+
+    export function createParen(expression: Expression, location?: TextRange) {
+        const node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+        const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location);
+        node.modifiers = undefined;
+        node.asteriskToken = asteriskToken;
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        node.type = undefined;
+        node.body = body;
+        return node;
+    }
+
+    export function createArrowFunction(parameters: ParameterDeclaration[], body: Expression | Block, location?: TextRange) {
+        const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, location);
+        node.modifiers = undefined;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        node.type = undefined;
+        node.equalsGreaterThanToken = createNode(SyntaxKind.EqualsGreaterThanToken);
+        node.body = body;
+        return node;
+    }
+
+    export function createTypeOf(expression: Expression) {
+        const node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function createVoid(expression: Expression) {
+        const node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function createPrefix(operator: SyntaxKind, operand: Expression, location?: TextRange) {
+        const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression, location);
+        node.operator = operator;
+        node.operand = parenthesizePrefixOperand(operand);
+        return node;
+    }
+
+    export function createPostfix(operand: Expression, operator: SyntaxKind, location?: TextRange) {
+        const node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, location);
+        node.operand = parenthesizePostfixOperand(operand);
+        node.operator = operator;
+        return node;
+    }
+
+    export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
+        const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
+        node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true);
+        node.operatorToken = createSynthesizedNode(operator);
+        node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false);
         return node;
     }
 
@@ -255,12 +406,221 @@ namespace ts {
         return node;
     }
 
-    export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
-        const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
-        node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true);
-        node.operatorToken = createSynthesizedNode(operator);
-        node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false);
+    export function createYield(expression: Expression, location?: TextRange) {
+        const node = <YieldExpression>createNode(SyntaxKind.YieldExpression, location);
+        node.expression = expression;
         return node;
+    }
+
+    export function createSpread(expression: Expression) {
+        const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
+        node.expression = expression;
+        return node;
+    }
+
+    export function createClassExpression(name: Identifier, heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange) {
+        const node = <ClassExpression>createNode(SyntaxKind.ClassExpression, location);
+        node.decorators = undefined;
+        node.modifiers = undefined;
+        node.name = name;
+        node.typeParameters = undefined;
+        node.heritageClauses = createSynthesizedNodeArray(heritageClauses);
+        node.members = createSynthesizedNodeArray(members);
+        return node;
+    }
+
+    export function createExpressionWithTypeArguments(expression: Expression, location?: TextRange) {
+        const node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments, location);
+        node.typeArguments = undefined;
+        node.expression = parenthesizeForAccess(expression);
+        return node;
+    }
+
+    // Element
+
+    export function createBlock(statements: Statement[], location?: TextRange): Block {
+        const block = <Block>createNode(SyntaxKind.Block, location);
+        block.statements = createNodeArray(statements);
+        return block;
+    }
+
+    export function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList, location?: TextRange): VariableStatement {
+        const node = <VariableStatement>createNode(SyntaxKind.VariableStatement, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.declarationList = declarationList;
+        return node;
+    }
+
+    export function createVariableDeclarationList(declarations: VariableDeclaration[], location?: TextRange, flags?: NodeFlags): VariableDeclarationList {
+        const node = <VariableDeclarationList>createNode(SyntaxKind.VariableDeclarationList, location, flags);
+        node.declarations = createNodeArray(declarations);
+        return node;
+    }
+
+    export function createLetDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
+        return createVariableDeclarationList(declarations, location, NodeFlags.Let);
+    }
+
+    export function createConstDeclarationList(declarations: VariableDeclaration[], location?: TextRange) {
+        return createVariableDeclarationList(declarations, location, NodeFlags.Const);
+    }
+
+    export function createVariableDeclaration(name: string | BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
+        const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.initializer = initializer;
+        return node;
+    }
+
+    export function createEmptyStatement(location: TextRange) {
+        return <EmptyStatement>createNode(SyntaxKind.EmptyStatement, location);
+    }
+
+    export function createStatement(expression: Expression, location?: TextRange): ExpressionStatement {
+        const node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement, location?: TextRange) {
+        const node = <IfStatement>createNode(SyntaxKind.IfStatement, location);
+        node.expression = expression;
+        node.thenStatement = thenStatement;
+        node.elseStatement = elseStatement;
+        return node;
+    }
+
+    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location);
+        node.initializer = initializer;
+        node.condition = condition;
+        node.incrementor = incrementor;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createLabel(label: string | Identifier, statement: Statement, location?: TextRange) {
+        const node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, location);
+        node.label = typeof label === "string" ? createIdentifier(label) : label;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createDo(expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <DoStatement>createNode(SyntaxKind.DoStatement, location);
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createWhile(statement: Statement, expression: Expression, location?: TextRange) {
+        const node = <WhileStatement>createNode(SyntaxKind.WhileStatement, location);
+        node.statement = statement;
+        node.expression = expression;
+        return node;
+    }
+
+    export function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForInStatement>createNode(SyntaxKind.ForInStatement, location);
+        node.initializer = initializer;
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, location);
+        node.initializer = initializer;
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createReturn(expression?: Expression, location?: TextRange): ReturnStatement {
+        const node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+        const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.asteriskToken = asteriskToken;
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.typeParameters = undefined;
+        node.parameters = createNodeArray(parameters);
+        node.type = undefined;
+        node.body = body;
+        return node;
+    }
+
+    export function createClassDeclaration(modifiers: Modifier[], name: Identifier, heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange) {
+        const node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, location);
+        node.decorators = undefined;
+        setModifiers(node, modifiers);
+        node.name = name;
+        node.typeParameters = undefined;
+        node.heritageClauses = createSynthesizedNodeArray(heritageClauses);
+        node.members = createSynthesizedNodeArray(members);
+        return node;
+    }
+
+    export function createExportDefault(expression: Expression) {
+        const node = <ExportAssignment>createNode(SyntaxKind.ExportAssignment);
+        node.isExportEquals = false;
+        node.expression = expression;
+        return node;
+    }
+
+    export function createExportDeclaration(exportClause: NamedExports, moduleSpecifier?: Expression) {
+        const node = <ExportDeclaration>createNode(SyntaxKind.ExportDeclaration);
+        node.exportClause = exportClause;
+        node.moduleSpecifier = moduleSpecifier;
+        return node;
+    }
+
+    export function createNamedExports(elements: ExportSpecifier[]) {
+        const node = <NamedExports>createNode(SyntaxKind.NamedExports);
+        node.elements = createNodeArray(elements);
+        return node;
+    }
+
+    export function createExportSpecifier(name: string | Identifier, propertyName?: string | Identifier) {
+        const node = <ExportSpecifier>createNode(SyntaxKind.ExportSpecifier);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.propertyName = typeof propertyName === "string" ? createIdentifier(propertyName) : propertyName;
+        return node;
+    }
+
+    // Clauses
+
+    export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[], location?: TextRange) {
+        const node = <HeritageClause>createNode(SyntaxKind.HeritageClause, location);
+        node.token = token;
+        node.types = createSynthesizedNodeArray(types);
+        return node;
+    }
+
+    // Property assignments
+
+    export function createPropertyAssignment(name: string | PropertyName, initializer: Expression, location?: TextRange) {
+        const node = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, location);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
+        node.questionToken = undefined;
+        node.initializer = initializer;
+        return node;
+    }
+
+    // Compound nodes
+
+    export function createComma(left: Expression, right: Expression) {
+        return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
+    }
+
+    export function createLessThan(left: Expression, right: Expression, location?: TextRange) {
+        return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
@@ -271,15 +631,70 @@ namespace ts {
         return createBinary(left, SyntaxKind.EqualsEqualsEqualsToken, right);
     }
 
-    export function createComma(left: Expression, right: Expression) {
-        return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
+    export function createStrictInequality(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
     }
 
-    export function createCall(expression: Expression, argumentsArray: Expression[]) {
-        const node = <CallExpression>createNode(SyntaxKind.CallExpression);
-        node.expression = parenthesizeForAccess(expression);
-        node.arguments = createNodeArray(argumentsArray);
+    export function createAdd(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.PlusToken, right);
+    }
+
+    export function createSubtract(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.MinusToken, right);
+    }
+
+    export function createPostfixIncrement(operand: Expression, location?: TextRange) {
+        return createPostfix(operand, SyntaxKind.PlusPlusToken, location);
+    }
+
+    export function createLogicalAnd(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.AmpersandAmpersandToken, right);
+    }
+
+    export function createLogicalOr(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.BarBarToken, right);
+    }
+
+    export function createLogicalNot(operand: Expression) {
+        return createPrefix(SyntaxKind.ExclamationToken, operand);
+    }
+
+    export function createVoidZero() {
+        return createVoid(createLiteral(0));
+    }
+
+    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+        return isIdentifier(memberName)
+            ? createPropertyAccess(target, cloneNode(memberName), location)
+            : createElementAccess(target, cloneNode(isComputedPropertyName(memberName) ? memberName.expression : memberName), location);
+    }
+
+    export function createRestParameter(name: string | Identifier) {
+        const node = createParameter(name, /*initializer*/ undefined);
+        node.dotDotDotToken = createSynthesizedNode(SyntaxKind.DotDotDotToken);
         return node;
+    }
+
+    export function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange) {
+        return createCall(
+            createPropertyAccess(func, "call"),
+            [
+                thisArg,
+                ...argumentsList
+            ],
+            location
+        );
+    }
+
+    export function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(func, "apply"),
+            [
+                thisArg,
+                argumentsExpression
+            ],
+            location
+        );
     }
 
     export function createArraySlice(array: Expression, start?: number | Expression) {
@@ -291,15 +706,352 @@ namespace ts {
         return createCall(createPropertyAccess(array, "slice"), argumentsList);
     }
 
-    export function parenthesizeExpression(expression: Expression) {
-        const node = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
-        node.expression = expression;
-        return node;
+    export function createArrayConcat(array: Expression, values: Expression[]) {
+        return createCall(
+            createPropertyAccess(array, "concat"),
+            values
+        );
+    }
+
+    export function createMathPow(left: Expression, right: Expression, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(createIdentifier("Math"), "pow"),
+            [left, right],
+            location
+        );
+    }
+
+    export function createJsxSpread(reactNamespace: string, segments: Expression[]) {
+        return createCall(
+            createPropertyAccess(
+                createIdentifier(reactNamespace || "React"),
+                "__spread"
+            ),
+            segments
+        );
+    }
+
+    export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
+        const argumentsList = [tagName];
+        if (props) {
+            argumentsList.push(props);
+        }
+
+        if (children && children.length > 0) {
+            if (!props) {
+                argumentsList.push(createNull());
+            }
+
+            addRange(argumentsList, children);
+        }
+
+        return createCall(
+            createPropertyAccess(
+                createIdentifier(reactNamespace || "React"),
+                "createElement"
+            ),
+            argumentsList
+        );
+    }
+
+    // Helpers
+
+    export function createExtendsHelper(name: Identifier) {
+        return createCall(
+            createIdentifier("__extends"),
+            [
+                name,
+                createIdentifier("_super")
+            ]
+        );
+    }
+
+    export function createParamHelper(expression: Expression, parameterOffset: number) {
+        return createCall(
+            createIdentifier("__param"),
+            [
+                createLiteral(parameterOffset),
+                expression
+            ]
+        );
+    }
+
+    export function createMetadataHelper(metadataKey: string, metadataValue: Expression, defer?: boolean) {
+        return createCall(
+            createIdentifier("__metadata"),
+            [
+                createLiteral(metadataKey),
+                defer
+                    ? createArrowFunction([], metadataValue)
+                    : metadataValue
+            ]
+        );
+    }
+
+    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
+        const argumentsArray: Expression[] = [];
+        argumentsArray.push(createArrayLiteral(decoratorExpressions));
+        argumentsArray.push(target);
+        if (memberName) {
+            argumentsArray.push(memberName);
+            if (descriptor) {
+                argumentsArray.push(descriptor);
+            }
+        }
+
+        return createCall(createIdentifier("__decorate"), argumentsArray);
+    }
+
+    export function createAwaiterHelper(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
+        return createCall(
+            createIdentifier("__awaiter"),
+            [
+                createThis(),
+                hasLexicalArguments ? createIdentifier("arguments") : createVoidZero(),
+                promiseConstructor ? createExpressionFromEntityName(promiseConstructor) : createVoidZero(),
+                createFunctionExpression(
+                    createNode(SyntaxKind.AsteriskToken),
+                    /*name*/ undefined,
+                    [],
+                    body
+                )
+            ]
+        );
+    }
+
+    export function createHasOwnProperty(target: LeftHandSideExpression, propertyName: Expression) {
+        return createCall(
+            createPropertyAccess(target, "hasOwnProperty"),
+            [propertyName]
+        );
+    }
+
+    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+        const properties: ObjectLiteralElement[] = [];
+        addPropertyAssignment(properties, "get", get, preferNewLine);
+        addPropertyAssignment(properties, "set", set, preferNewLine);
+        addPropertyAssignment(properties, "value", value, preferNewLine);
+        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine);
+        addPropertyAssignment(properties, "configurable", configurable, preferNewLine);
+        addPropertyAssignment(properties, "writable", writable, preferNewLine);
+        return createObjectLiteral(properties, location);
+    }
+
+    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean) {
+        if (value !== undefined) {
+            const property = createPropertyAssignment(
+                name,
+                typeof value === "boolean" ? createLiteral(value) : value
+            );
+
+            if (preferNewLine) {
+                property.startsOnNewLine = true;
+            }
+
+            addNode(properties, property);
+        }
+    }
+
+    export interface PropertyDescriptorOptions {
+        get?: Expression;
+        set?: Expression;
+        value?: Expression;
+        enumerable?: boolean | Expression;
+        configurable?: boolean | Expression;
+        writable?: boolean | Expression;
+    }
+
+    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(
+                createIdentifier("Object"),
+                "defineProperty"
+            ),
+            [
+                target,
+                memberName,
+                createPropertyDescriptor(descriptor, preferNewLine)
+            ],
+            location
+        );
+    }
+
+    function createObjectCreate(prototype: Expression) {
+        return createCall(
+            createPropertyAccess(createIdentifier("Object"), "create"),
+            [prototype]
+        );
+    }
+
+    function createGeti(target: LeftHandSideExpression) {
+        // name => super[name]
+        return createArrowFunction(
+            [createParameter("name")],
+            createElementAccess(
+                target,
+                createIdentifier("name")
+            )
+        );
+    }
+
+    function createSeti(target: LeftHandSideExpression) {
+        // (name, value) => super[name] = value
+        return createArrowFunction(
+            [
+                createParameter("name"),
+                createParameter("value")
+            ],
+            createAssignment(
+                createElementAccess(
+                    target,
+                    createIdentifier("name")
+                ),
+                createIdentifier("value")
+            )
+        );
+    }
+
+    export function createAdvancedAsyncSuperHelper() {
+        //  const _super = (function (geti, seti) {
+        //      const cache = Object.create(null);
+        //      return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        //  })(name => super[name], (name, value) => super[name] = value);
+
+        // const cache = Object.create(null);
+        const createCache = createVariableStatement(
+            /*modifiers*/ undefined,
+            createConstDeclarationList([
+                createVariableDeclaration(
+                    "cache",
+                    createObjectCreate(createNull())
+                )
+            ])
+        );
+
+        // get value() { return geti(name); }
+        const getter = createGetAccessor(
+            /*modifiers*/ undefined,
+            "value",
+            createBlock([
+                createReturn(
+                    createCall(
+                        createIdentifier("geti"),
+                        [createIdentifier("name")]
+                    )
+                )
+            ])
+        );
+
+        // set value(v) { seti(name, v); }
+        const setter = createSetAccessor(
+            /*modifiers*/ undefined,
+            "value",
+            createParameter("v"),
+            createBlock([
+                createStatement(
+                    createCall(
+                        createIdentifier("seti"),
+                        [
+                            createIdentifier("name"),
+                            createIdentifier("v")
+                        ]
+                    )
+                )
+            ])
+        );
+
+        // return name => cache[name] || ...
+        const getOrCreateAccessorsForName = createReturn(
+            createArrowFunction(
+                [createParameter("name")],
+                createLogicalOr(
+                    createElementAccess(
+                        createIdentifier("cache"),
+                        createIdentifier("name")
+                    ),
+                    createParen(
+                        createAssignment(
+                            createElementAccess(
+                                createIdentifier("cache"),
+                                createIdentifier("name")
+                            ),
+                            createObjectLiteral([
+                                getter,
+                                setter
+                            ])
+                        )
+                    )
+                )
+            )
+        );
+
+        //  const _super = (function (geti, seti) {
+        //      const cache = Object.create(null);
+        //      return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        //  })(name => super[name], (name, value) => super[name] = value);
+        return createVariableStatement(
+            /*modifiers*/ undefined,
+            createConstDeclarationList([
+                createVariableDeclaration(
+                    "_super",
+                    createCall(
+                        createParen(
+                            createFunctionExpression(
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                [
+                                    createParameter("geti"),
+                                    createParameter("seti")
+                                ],
+                                createBlock([
+                                    createCache,
+                                    getOrCreateAccessorsForName
+                                ])
+                            )
+                        ),
+                        [
+                            createGeti(createSuper()),
+                            createSeti(createSuper())
+                        ]
+                    )
+                )
+            ])
+        );
+    }
+
+    export function createSimpleAsyncSuperHelper() {
+        return createVariableStatement(
+            /*modifiers*/ undefined,
+            createConstDeclarationList([
+                createVariableDeclaration(
+                    "_super",
+                    createGeti(createSuper())
+                )
+            ])
+        );
     }
 
     export function inlineExpressions(expressions: Expression[]) {
         return reduceLeft(expressions, createComma);
     }
+
+    export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
+        return isQualifiedName(node)
+            ? createPropertyAccess(
+                createExpressionFromEntityName(node.left),
+                cloneNode(node.right)
+            )
+            : cloneNode(node);
+    }
+
+    export function createExpressionForPropertyName(memberName: PropertyName, location?: TextRange): Expression {
+        return isIdentifier(memberName) ? createLiteral(memberName.text, location)
+             : isComputedPropertyName(memberName) ? cloneNode(memberName.expression, location)
+             : cloneNode(memberName, location);
+    }
+
+
+    // Utilities
 
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
@@ -310,18 +1062,14 @@ namespace ts {
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
-        // When diagnosing whether the expression needs parentheses, the decision should be based
-        // on the innermost expression in a chain of nested type assertions.
-        operand = skipAssertions(operand);
-
+    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
         if (operand.kind === SyntaxKind.ParenthesizedExpression) {
             return operand;
         }
 
         return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary)
-            ? parenthesizeExpression(operand)
+            ? createParen(operand)
             : operand;
     }
 
@@ -428,11 +1176,7 @@ namespace ts {
      *
      * @param expr The expression node.
      */
-    function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-        // When diagnosing whether the expression needs parentheses, the decision should be based
-        // on the innermost expression in a chain of nested type assertions.
-        expr = skipAssertions(expr);
-
+    export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
         // to parenthesize the expression before a dot. The known exceptions are:
         //
@@ -441,25 +1185,112 @@ namespace ts {
         //    NumericLiteral
         //       1.x            -> not the same as (1).x
         //
-        if (isLeftHandSideExpression(expr) &&
-            expr.kind !== SyntaxKind.NewExpression &&
-            expr.kind !== SyntaxKind.NumericLiteral) {
-            return expr;
+        if (isLeftHandSideExpression(expression) &&
+            expression.kind !== SyntaxKind.NewExpression &&
+            expression.kind !== SyntaxKind.NumericLiteral) {
+            return <LeftHandSideExpression>expression;
         }
 
-        return parenthesizeExpression(expr);
+        return createParen(expression, /*location*/ expression);
     }
 
-    /**
-     * Skips past any TypeAssertionExpression or AsExpression nodes to their inner expression.
-     *
-     * @param node The expression node.
-     */
-    function skipAssertions(node: Expression) {
-        while (node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
-            node = (<AssertionExpression>node).expression;
+    export function parenthesizePostfixOperand(operand: Expression) {
+        return isLeftHandSideExpression(operand)
+            ? <LeftHandSideExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    export function parenthesizePrefixOperand(operand: Expression) {
+        return isUnaryExpression(operand)
+            ? <UnaryExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    export function parenthesizeExpressionForList(expression: Expression) {
+        const expressionPrecedence = getExpressionPrecedence(expression);
+        const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
+        return expressionPrecedence > commaPrecedence
+            ? expression
+            : createParen(expression, /*location*/ expression);
+    }
+
+    export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
+        if (isCallExpression(expression)) {
+            const callee = expression.expression;
+            if (callee.kind === SyntaxKind.FunctionExpression
+                || callee.kind === SyntaxKind.ArrowFunction) {
+                const clone = cloneNode(expression, expression, expression.flags, expression.parent, expression);
+                clone.expression = createParen(callee, /*location*/ callee);
+                return clone;
+            }
+        }
+        else if (getLeftmostExpression(expression).kind === SyntaxKind.ObjectLiteralExpression) {
+            return createParen(expression, /*location*/ expression);
+        }
+
+        return expression;
+    }
+
+    function getLeftmostExpression(node: Expression): Expression {
+        while (true) {
+            switch (node.kind) {
+                case SyntaxKind.PostfixUnaryExpression:
+                    node = (<PostfixUnaryExpression>node).operand;
+                    continue;
+
+                case SyntaxKind.BinaryExpression:
+                    node = (<BinaryExpression>node).left;
+                    continue;
+
+                case SyntaxKind.ConditionalExpression:
+                    node = (<ConditionalExpression>node).condition;
+                    continue;
+
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
+                    continue;
+            }
+
+            return node;
+        }
+    }
+
+    export function skipParentheses(node: Expression): Expression {
+        while (node.kind === SyntaxKind.ParenthesizedExpression
+            || node.kind === SyntaxKind.TypeAssertionExpression
+            || node.kind === SyntaxKind.AsExpression) {
+            node = (<ParenthesizedExpression | AssertionExpression>node).expression;
         }
 
         return node;
+    }
+
+    export function startOnNewLine<T extends Node>(node: T): T {
+        node.startsOnNewLine = true;
+        return node;
+    }
+
+    export function setOriginalNode<T extends Node>(node: T, original: Node): T {
+        node.original = original;
+        return node;
+    }
+
+    export function setTextRange<T extends TextRange>(node: T, location: TextRange): T {
+        if (location) {
+            node.pos = location.pos;
+            node.end = location.end;
+        }
+        return node;
+    }
+
+    export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
+        node.flags = flags;
+        return node;
+    }
+
+    export function getSynthesizedNode<T extends Node>(node: T): T {
+        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 }
