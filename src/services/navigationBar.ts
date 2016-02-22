@@ -158,6 +158,7 @@ namespace ts.NavigationBar {
                         forEach((<ClassDeclaration>node).members, (node) => {
                             if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) {
                                 if ((<MethodDeclaration>node).body) {
+                                    topLevelNodes.push(node);
                                     addTopLevelNodes((<Block>(<MethodDeclaration>node).body).statements, topLevelNodes);
                                 }
                             }
@@ -387,6 +388,10 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ClassDeclaration:
                     return createClassItem(<ClassDeclaration>node);
 
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                    return createMemberFunctionLikeItem(<MethodDeclaration>node);
+
                 case SyntaxKind.EnumDeclaration:
                     return createEnumItem(<EnumDeclaration>node);
 
@@ -441,6 +446,31 @@ namespace ts.NavigationBar {
 
                     return getNavigationBarItem(!node.name ? "default": node.name.text,
                         ts.ScriptElementKind.functionElement,
+                        getNodeModifiers(node),
+                        [getNodeSpan(node)],
+                        childItems,
+                        getIndent(node));
+                }
+
+                return undefined;
+            }
+
+            function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration) {
+                if (node.body && node.body.kind === SyntaxKind.Block) {
+                    let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
+                    let scriptElementKind: string;
+                    let memberFunctionName: string;
+                    if (node.kind === SyntaxKind.MethodDeclaration) {
+                        memberFunctionName = getPropertyNameForPropertyNameNode(node.name);
+                        scriptElementKind = ts.ScriptElementKind.memberFunctionElement;
+                    }
+                    else {
+                        memberFunctionName = "constructor";
+                        scriptElementKind = ts.ScriptElementKind.constructorImplementationElement;
+                    }
+
+                    return getNavigationBarItem(memberFunctionName,
+                        scriptElementKind,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
                         childItems,

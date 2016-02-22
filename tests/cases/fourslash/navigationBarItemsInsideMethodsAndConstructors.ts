@@ -35,4 +35,3 @@ test.markers().forEach((marker) => {
 
 // no other items
 verify.getScriptLexicalStructureListCount(12);
-
