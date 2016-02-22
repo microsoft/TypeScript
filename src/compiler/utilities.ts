@@ -8,12 +8,6 @@ namespace ts {
         isNoDefaultLib?: boolean;
     }
 
-    export interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-        startsOnNewLine: boolean;
-    }
-
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
         if (declarations) {

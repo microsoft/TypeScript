@@ -130,11 +130,12 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+    export function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
-            for (const v of array) {
-                if (predicate(v)) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (predicate(v, i)) {
                     count++;
                 }
             }
@@ -142,25 +143,49 @@ namespace ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
+    export function filter<T, U extends T>(array: T[], f: (x: T, i: number) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (f(v, i)) {
+                    result.push(v);
                 }
             }
         }
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
+    export function map<T, U>(array: T[], f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
-            for (const v of array) {
-                result.push(f(v));
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                result.push(f(v, i));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     */
+    export function flatMap<T, U>(array: T[], f: (x: T, i: number) => U | U[]): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                const ar = f(v, i);
+                if (ar) {
+                    // We cast to <U> here to leverage the behavior of Array#concat
+                    // which will append a single value here.
+                    result = result.concat(<U[]>ar);
+                }
             }
         }
         return result;
@@ -170,7 +195,7 @@ namespace ts {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
 
-        return array1.concat(array2);
+        return [...array1, ...array2];
     }
 
     export function deduplicate<T>(array: T[]): T[] {
@@ -184,6 +209,27 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    /**
+     * Compacts an array, removing any falsey elements.
+     */
+    export function compact<T>(array: T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (result || !v) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (v) {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     export function sum(array: any[], prop: string): number {
@@ -212,15 +258,25 @@ namespace ts {
         return true;
     }
 
+    export function firstOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[0]
+            : undefined;
+    }
+
+    export function singleOrUndefined<T>(array: T[]): T {
+        return array && array.length === 1
+            ? array[0]
+            : undefined;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
     export function lastOrUndefined<T>(array: T[]): T {
-        if (array.length === 0) {
-            return undefined;
-        }
-
-        return array[array.length - 1];
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
     }
 
     /**
@@ -252,9 +308,9 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T): T;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             const count = array.length;
             if (count > 0) {
@@ -268,7 +324,7 @@ namespace ts {
                     result = initial;
                 }
                 while (pos < count) {
-                    result = f(result, array[pos]);
+                    result = f(result, array[pos], pos);
                     pos++;
                 }
                 return result;
@@ -277,9 +333,9 @@ namespace ts {
         return initial;
     }
 
-    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T) => U, initial: U): U;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T): T;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T) => T, initial?: T): T {
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
@@ -292,7 +348,7 @@ namespace ts {
                     result = initial;
                 }
                 while (pos >= 0) {
-                    result = f(result, array[pos]);
+                    result = f(result, array[pos], pos);
                     pos--;
                 }
                 return result;

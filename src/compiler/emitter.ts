@@ -2728,7 +2728,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function synthesizedNodeStartsOnNewLine(node: Node) {
-                return nodeIsSynthesized(node) && (<SynthesizedNode>node).startsOnNewLine;
+                return nodeIsSynthesized(node) && node.startsOnNewLine;
             }
 
             function emitConditionalExpression(node: ConditionalExpression) {
