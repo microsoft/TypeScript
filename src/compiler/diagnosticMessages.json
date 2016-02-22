@@ -1151,7 +1151,7 @@
         "category": "Error",
         "code": 2382
     },
-    "Overload signatures must all be exported or not exported.": {
+    "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383
     },
@@ -1635,7 +1635,7 @@
         "category": "Error",
         "code": 2511
     },
-    "Overload signatures must all be abstract or not abstract.": {
+    "Overload signatures must all be abstract or non-abstract.": {
         "category": "Error",
         "code": 2512
     },
