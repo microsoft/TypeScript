@@ -2800,5 +2800,9 @@
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }

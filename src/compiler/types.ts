@@ -2432,6 +2432,13 @@ namespace ts {
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: any;
+    }
+
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2490,6 +2497,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
