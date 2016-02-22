@@ -663,13 +663,18 @@ namespace ts {
     export function flattenNodes<T extends Node>(nodes: OneOrMany<T>[]): T[] {
         let result: T[];
         if (nodes) {
-            result = [];
-            for (const node of nodes) {
-                addNode(result, node);
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i];
+                if (result || node === undefined || isNodeArrayNode(node)) {
+                    if (!result) {
+                        result = <T[]>nodes.slice(0, i);
+                    }
+                    addNode(result, node);
+                }
             }
         }
 
-        return result;
+        return result || <T[]>nodes;
     }
 
     /**
@@ -678,8 +683,9 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
+    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean): T[] {
         addNodeWorker(to, from, startOnNewLine, /*test*/ undefined)
+        return to;
     }
 
     /**
@@ -688,8 +694,9 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
+    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean): T[] {
         addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
+        return to;
     }
 
     /**
@@ -698,8 +705,9 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addLine<T extends Node>(to: T[], from: OneOrMany<T>) {
+    export function addLine<T extends Node>(to: T[], from: OneOrMany<T>): T[] {
         addNodeWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
+        return to;
     }
 
     /**
@@ -708,8 +716,9 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addLines<T extends Node>(to: T[], from: OneOrMany<T>[]) {
+    export function addLines<T extends Node>(to: T[], from: OneOrMany<T>[]): T[] {
         addNodesWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
+        return to;
     }
 
     function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
@@ -896,7 +905,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function liftToBlock(nodes: NodeArray<Node>) {
+    export function liftToBlock(nodes: NodeArray<Node>) {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }

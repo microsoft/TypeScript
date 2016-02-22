@@ -3,9 +3,8 @@
 
 /*@internal*/
 namespace ts {
-    // TODO(rbuckton): CommonJS/AMD/UMD transformer
     export function transformModule(context: TransformationContext) {
-        const transformModuleDelegates: Map<(node: SourceFile) => Statement[]> = {
+        const transformModuleDelegates: Map<(node: SourceFile) => SourceFile> = {
             [ModuleKind.None]: transformCommonJSModule,
             [ModuleKind.CommonJS]: transformCommonJSModule,
             [ModuleKind.AMD]: transformAMDModule,
@@ -36,21 +35,20 @@ namespace ts {
 
         return transformSourceFile;
 
+        /**
+         * Transforms the module aspects of a SourceFile.
+         *
+         * @param node The SourceFile node.
+         */
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
 
-                // collect information about the external module
+                // Collect information about the external module.
                 ({ externalImports, exportSpecifiers, exportEquals, hasExportStars } = collectExternalModuleInfo(node, resolver));
 
-                const moduleTransformer = transformModuleDelegates[moduleKind];
-                const statements = moduleTransformer(node);
-                const updated = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
-                updated.statements = createNodeArray(statements, node.statements);
-
-                if (hasExportStars && moduleTransformer === transformCommonJSModule) {
-                    setNodeEmitFlags(updated, NodeEmitFlags.EmitExportStar);
-                }
+                // Perform the transformation.
+                const updated = transformModuleDelegates[moduleKind](node);
 
                 currentSourceFile = undefined;
                 externalImports = undefined;
@@ -63,147 +61,154 @@ namespace ts {
             return node;
         }
 
+        /**
+         * Transforms a SourceFile into a CommonJS module.
+         *
+         * @param node The SourceFile node.
+         */
         function transformCommonJSModule(node: SourceFile) {
-            const statements: Statement[] = [];
             startLexicalEnvironment();
-
-            const statementOffset = copyPrologueDirectives(node.statements, statements);
-            addNodes(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-            addNodes(statements, endLexicalEnvironment());
-            addNode(statements, tryCreateExportEquals(/*emitAsReturn*/ false));
-
-            return statements;
+            return setNodeEmitFlags(
+                updateSourceFile(
+                    node,
+                    [
+                        ...visitNodes(node.statements, visitor, isStatement),
+                        ...(endLexicalEnvironment() || []),
+                        tryCreateExportEquals(/*emitAsReturn*/ false)
+                    ]
+                ),
+                hasExportStars ? NodeEmitFlags.EmitExportStar : 0
+            );
         }
 
+        /**
+         * Transforms a SourceFile into an AMD module.
+         *
+         * @param node The SourceFile node.
+         */
         function transformAMDModule(node: SourceFile) {
             const define = createIdentifier("define");
             const moduleName = node.moduleName ? createLiteral(node.moduleName) : undefined;
             return transformAsynchronousModule(node, define, moduleName, /*includeNonAmdDependencies*/ true);
         }
 
+        /**
+         * Transforms a SourceFile into a UMD module.
+         *
+         * @param node The SourceFile node.
+         */
         function transformUMDModule(node: SourceFile) {
             const define = createIdentifier("define");
             setNodeEmitFlags(define, NodeEmitFlags.UMDDefine);
             return transformAsynchronousModule(node, define, /*moduleName*/ undefined, /*includeNonAmdDependencies*/ false);
         }
 
+        /**
+         * Transforms a SourceFile into an AMD or UMD module.
+         *
+         * @param node The SourceFile node.
+         * @param define The expression used to define the module.
+         * @param moduleName An expression for the module name, if available.
+         * @param includeNonAmdDependencies A value indicating whether to incldue any non-AMD dependencies.
+         */
         function transformAsynchronousModule(node: SourceFile, define: Expression, moduleName: Expression, includeNonAmdDependencies: boolean) {
-            const statements: Statement[] = [];
-            startLexicalEnvironment();
-
-            const statementOffset = copyPrologueDirectives(node.statements, statements);
-
-            // An AMD define function has the following shape:
-            //     define(id?, dependencies?, factory);
-            //
-            // This has the shape of
-            //     define(name, ["module1", "module2"], function (module1Alias) {
-            // The location of the alias in the parameter list in the factory function needs to
-            // match the position of the module name in the dependency list.
-            //
-            // To ensure this is true in cases of modules with no aliases, e.g.:
-            // `import "module"` or `<amd-dependency path= "a.css" />`
-            // we need to add modules without alias names to the end of the dependencies list
-
-            const defineArguments: Expression[] = [];
-            const unaliasedModuleNames: Expression[] = [];
-            const aliasedModuleNames: Expression[] = [createLiteral("require"), createLiteral("exports") ];
-            const importAliasNames = [createParameter("require"), createParameter("exports")];
-
-            for (const amdDependency of node.amdDependencies) {
-                if (amdDependency.name) {
-                    aliasedModuleNames.push(createLiteral(amdDependency.name));
-                    importAliasNames.push(createParameter(createIdentifier(amdDependency.name)));
-                }
-                else {
-                    unaliasedModuleNames.push(createLiteral(amdDependency.path));
-                }
-            }
-
-            for (const importNode of externalImports) {
-                // Find the name of the external module
-                const externalModuleName = getExternalModuleNameLiteral(importNode);
-                // Find the name of the module alias, if there is one
-                const importAliasName = getLocalNameForExternalImport(importNode);
-                if (includeNonAmdDependencies && importAliasName) {
-                    aliasedModuleNames.push(externalModuleName);
-                    importAliasNames.push(createParameter(importAliasName));
-                }
-                else {
-                    unaliasedModuleNames.push(externalModuleName);
-                }
-            }
-
-            // Add the module name.
-            addNode(defineArguments, moduleName);
-
-            // Create the import names array.
-            addNode(defineArguments, createArrayLiteral(concatenate(aliasedModuleNames, unaliasedModuleNames)));
-
-            // Create the body of the module.
-            const moduleBodyStatements: Statement[] = [];
-
             // Start the lexical environment for the module body.
             startLexicalEnvironment();
 
-            // Pipe each statement of the source file through a visitor and out to the module body
-            addNodes(moduleBodyStatements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+            const { importModuleNames, importAliasNames } = collectAsynchronousDependencies(node, includeNonAmdDependencies);
 
-            // End the lexical environment for the module body.
-            addNodes(moduleBodyStatements, endLexicalEnvironment());
-
-            // Append the 'export =' statement if provided.
-            addNode(moduleBodyStatements, tryCreateExportEquals(/*emitAsReturn*/ true));
-
-            // Create the function for the module body.
-            const moduleBody = setMultiLine(createBlock(moduleBodyStatements), true);
-
-            if (hasExportStars) {
-                setNodeEmitFlags(moduleBody, NodeEmitFlags.EmitExportStar);
-            }
-
-            addNode(defineArguments,
-                createFunctionExpression(
-                    /*asteriskToken*/ undefined,
-                    /*name*/ undefined,
-                    importAliasNames,
-                    moduleBody
-                )
-            );
-
-            addNode(statements,
+            // Create an updated SourceFile:
+            //
+            //     define(moduleName?, ["module1", "module2"], function ...
+            return updateSourceFile(node, [
                 createStatement(
                     createCall(
                         define,
-                        defineArguments
+                        flattenNodes([
+                            // Add the module name (if provided).
+                            moduleName,
+
+                            // Add the dependency array argument:
+                            //
+                            //     ["module1", "module2", ...]
+                            createArrayLiteral(importModuleNames),
+
+                            // Add the module body function argument:
+                            //
+                            //     function (module1, module2) ...
+                            createFunctionExpression(
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                importAliasNames,
+                                setNodeEmitFlags(
+                                    setMultiLine(
+                                        createBlock(
+                                            flattenNodes([
+                                                // Visit each statement of the module body.
+                                                ...visitNodes(node.statements, visitor, isStatement),
+
+                                                // End the lexical environment for the module body
+                                                // and merge any new lexical declarations.
+                                                ...(endLexicalEnvironment() || []),
+
+                                                // Append the 'export =' statement if provided.
+                                                tryCreateExportEquals(/*emitAsReturn*/ true)
+                                            ])
+                                        ),
+                                        /*multiLine*/ true
+                                    ),
+
+                                    // If we have any `export * from ...` declarations
+                                    // we need to inform the emitter to add the __export helper.
+                                    hasExportStars ? NodeEmitFlags.EmitExportStar : 0
+                                )
+                            )
+                        ])
                     )
                 )
-            );
-
-            return statements;
+            ]);
         }
 
+        /**
+         * Visits a node at the top level of the source file.
+         *
+         * @param node The node.
+         */
         function visitor(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
+
                 case SyntaxKind.ImportEqualsDeclaration:
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+
                 case SyntaxKind.ExportDeclaration:
                     return visitExportDeclaration(<ExportDeclaration>node);
+
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
+
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
+
                 case SyntaxKind.FunctionDeclaration:
                     return visitFunctionDeclaration(<FunctionDeclaration>node);
+
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
+
                 default:
+                    // This visitor does not descend into the tree, as export/import statements
+                    // are only transformed at the top level of a file.
                     return node;
             }
         }
 
+        /**
+         * Visits an ImportDeclaration node.
+         *
+         * @param node The ImportDeclaration node.
+         */
         function visitImportDeclaration(node: ImportDeclaration): OneOrMany<Statement> {
             if (contains(externalImports, node)) {
                 const statements: Statement[] = [];
@@ -428,9 +433,7 @@ namespace ts {
                         createObjectDefineProperty(
                             createIdentifier("exports"),
                             createLiteral("_esModule"),
-                            {
-                                value: createLiteral(true)
-                            }
+                            { value: createLiteral(true) }
                         )
                     );
                 }
@@ -500,14 +503,6 @@ namespace ts {
             }
         }
 
-        function getModuleMemberName(name: Identifier) {
-            return createPropertyAccess(
-                createIdentifier("exports"),
-                name,
-                /*location*/ name
-            );
-        }
-
         function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
             const statements: Statement[] = [];
             if (node.name) {
@@ -524,7 +519,7 @@ namespace ts {
                     );
 
                     if (node.flags & NodeFlags.Default) {
-                        addExportDefault(statements, getGeneratedNameForNode(node.name), /*location*/ node);
+                        addExportDefault(statements, getSynthesizedNode(node.name), /*location*/ node);
                     }
                 }
                 else {
@@ -631,6 +626,14 @@ namespace ts {
             return undefined;
         }
 
+        function getModuleMemberName(name: Identifier) {
+            return createPropertyAccess(
+                createIdentifier("exports"),
+                name,
+                /*location*/ name
+            );
+        }
+
         function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
@@ -653,7 +656,7 @@ namespace ts {
         }
 
         function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            let namespaceDeclaration = getNamespaceDeclarationNode(node);
+            const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (namespaceDeclaration && !isDefaultImport(node)) {
                 return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
             }
@@ -665,23 +668,6 @@ namespace ts {
             }
         }
 
-        function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-            if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                return <ImportEqualsDeclaration>node;
-            }
-
-            let importClause = (<ImportDeclaration>node).importClause;
-            if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                return <NamespaceImport>importClause.namedBindings;
-            }
-        }
-
-        function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-            return node.kind === SyntaxKind.ImportDeclaration
-                && (<ImportDeclaration>node).importClause
-                && !!(<ImportDeclaration>node).importClause.name;
-        }
-
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(importNode);
             return createCall(
@@ -691,18 +677,83 @@ namespace ts {
         }
 
         function createExportAssignment(name: Identifier, value: Expression) {
-            let exports = createIdentifier("exports");
-            let exportMember: LeftHandSideExpression;
-            if (name.originalKeywordKind && languageVersion === ScriptTarget.ES3) {
-                let exportName = createLiteral(name.text);
-                exportMember = createElementAccess(exports, exportName);
-            }
-            else {
-                let exportName = getSynthesizedNode(name);
-                exportMember = createPropertyAccess(exports, exportName);
+            return createAssignment(
+                name.originalKeywordKind && languageVersion === ScriptTarget.ES3
+                    ? createElementAccess(
+                        createIdentifier("exports"),
+                        createLiteral(name.text)
+                    )
+                    : createPropertyAccess(
+                        createIdentifier("exports"),
+                        getSynthesizedNode(name)
+                    ),
+                value
+            );
+        }
+
+        function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+            // An AMD define function has the following shape:
+            //
+            //     define(id?, dependencies?, factory);
+            //
+            // This has the shape of the following:
+            //
+            //     define(name, ["module1", "module2"], function (module1Alias) { ... }
+            //
+            // The location of the alias in the parameter list in the factory function needs to
+            // match the position of the module name in the dependency list.
+            //
+            // To ensure this is true in cases of modules with no aliases, e.g.:
+            //
+            //     import "module"
+            //
+            // or
+            //
+            //     /// <amd-dependency path= "a.css" />
+            //
+            // we need to add modules without alias names to the end of the dependencies list
+
+            const unaliasedModuleNames: Expression[] = [];
+            const aliasedModuleNames: Expression[] = [createLiteral("require"), createLiteral("exports") ];
+            const importAliasNames = [createParameter("require"), createParameter("exports")];
+
+            for (const amdDependency of node.amdDependencies) {
+                if (amdDependency.name) {
+                    aliasedModuleNames.push(createLiteral(amdDependency.name));
+                    importAliasNames.push(createParameter(createIdentifier(amdDependency.name)));
+                }
+                else {
+                    unaliasedModuleNames.push(createLiteral(amdDependency.path));
+                }
             }
 
-            return createAssignment(exportMember, value);
+            for (const importNode of externalImports) {
+                // Find the name of the external module
+                const externalModuleName = getExternalModuleNameLiteral(importNode);
+                // Find the name of the module alias, if there is one
+                const importAliasName = getLocalNameForExternalImport(importNode);
+                if (includeNonAmdDependencies && importAliasName) {
+                    aliasedModuleNames.push(externalModuleName);
+                    importAliasNames.push(createParameter(importAliasName));
+                }
+                else {
+                    unaliasedModuleNames.push(externalModuleName);
+                }
+            }
+
+            return {
+                importModuleNames: [
+                    ...unaliasedModuleNames,
+                    ...aliasedModuleNames
+                ],
+                importAliasNames
+            };
+        }
+
+        function updateSourceFile(node: SourceFile, statements: Statement[]) {
+            const updated = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
+            updated.statements = createNodeArray(statements, node.statements);
+            return updated;
         }
     }
 }

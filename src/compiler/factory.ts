@@ -145,6 +145,13 @@ namespace ts {
         return clone;
     }
 
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     */
+    export function getMutableNode<T extends Node>(node: T): T {
+        return cloneNode<T>(node, node, node.flags, node.parent, node);
+    }
+
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
         const node = <NodeArrayNode<T>>createSynthesizedNode(SyntaxKind.NodeArrayNode);
         node.nodes = createNodeArray(elements);
@@ -364,6 +371,13 @@ namespace ts {
         return node;
     }
 
+    export function createPrefix(operator: SyntaxKind, operand: Expression, location?: TextRange) {
+        const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression, location);
+        node.operator = operator;
+        node.operand = parenthesizePrefixOperand(operand);
+        return node;
+    }
+
     export function createPostfix(operand: Expression, operator: SyntaxKind, location?: TextRange) {
         const node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, location);
         node.operand = parenthesizePostfixOperand(operand);
@@ -512,6 +526,14 @@ namespace ts {
         return node;
     }
 
+    export function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, location);
+        node.initializer = initializer;
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
     export function createReturn(expression?: Expression, location?: TextRange): ReturnStatement {
         const node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement, location);
         node.expression = expression;
@@ -628,6 +650,10 @@ namespace ts {
 
     export function createLogicalOr(left: Expression, right: Expression) {
         return createBinary(left, SyntaxKind.BarBarToken, right);
+    }
+
+    export function createLogicalNot(operand: Expression) {
+        return createPrefix(SyntaxKind.ExclamationToken, operand);
     }
 
     export function createVoidZero() {
@@ -787,6 +813,13 @@ namespace ts {
                     body
                 )
             ]
+        );
+    }
+
+    export function createHasOwnProperty(target: LeftHandSideExpression, propertyName: Expression) {
+        return createCall(
+            createPropertyAccess(target, "hasOwnProperty"),
+            [propertyName]
         );
     }
 

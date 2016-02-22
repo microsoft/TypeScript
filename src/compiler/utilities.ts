@@ -1240,6 +1240,23 @@ namespace ts {
         }
     }
 
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            return <ImportEqualsDeclaration>node;
+        }
+
+        const importClause = (<ImportDeclaration>node).importClause;
+        if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+            return <NamespaceImport>importClause.namedBindings;
+        }
+    }
+
+    export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        return node.kind === SyntaxKind.ImportDeclaration
+            && (<ImportDeclaration>node).importClause
+            && !!(<ImportDeclaration>node).importClause.name;
+    }
+
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {
