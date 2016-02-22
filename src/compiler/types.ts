@@ -1125,6 +1125,7 @@ namespace ts {
     // @kind(SyntaxKind.Block)
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
+        /*@internal*/ multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.VariableStatement)
@@ -1302,7 +1303,7 @@ namespace ts {
     export interface EnumMember extends Declaration {
         // This does include ComputedPropertyName, but the parser will give an error
         // if it parses a ComputedPropertyName in an EnumMember
-        name: DeclarationName;
+        name: PropertyName;
         initializer?: Expression;
     }
 
@@ -2799,8 +2800,7 @@ namespace ts {
         UMDDefine = 1 << 4,                 // This node should be replaced with the UMD define helper.
         NoLexicalEnvironment = 1 << 5,      // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
         SingleLine = 1 << 6,                // The contents of this node should be emit on a single line.
-        MultiLine = 1 << 7,                 // The contents of this node should be emit on multiple lines.
-        AdviseOnEmitNode = 1 << 8,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        AdviseOnEmitNode = 1 << 7,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2817,7 +2817,7 @@ namespace ts {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
-        setNodeEmitFlags(node: Node, flags: NodeEmitFlags): void;
+        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
         isUniqueName(name: string): boolean;
