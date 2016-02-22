@@ -55,8 +55,8 @@ namespace ts.JsTyping {
         globalCachePath: Path,
         projectRootPath: Path,
         typingOptions: TypingOptions,
-        compilerOptions: CompilerOptions)
-        : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
+        compilerOptions: CompilerOptions):
+        { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
         const inferredTypings: Map<string> = {};
