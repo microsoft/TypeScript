@@ -275,11 +275,16 @@ namespace ts {
                 }
 
                 if (hoistedVariableDeclarations) {
-                    statements = append(statements,
-                        createVariableStatement(
-                            createVariableDeclarationList(hoistedVariableDeclarations)
-                        )
+                    const statement = createVariableStatement(
+                        createVariableDeclarationList(hoistedVariableDeclarations)
                     );
+
+                    if (!statements) {
+                        statements = [statement];
+                    }
+                    else {
+                        statements.push(statement);
+                    }
                 }
             }
 

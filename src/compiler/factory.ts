@@ -22,8 +22,8 @@ namespace ts {
         return node;
     }
 
-    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange): NodeArray<T> {
-        if (elements !== undefined) {
+    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange, hasTrailingComma?: boolean): NodeArray<T> {
+        if (elements) {
             if (isNodeArray(elements)) {
                 return elements;
             }
@@ -33,7 +33,7 @@ namespace ts {
         }
 
         const array = <NodeArray<T>>elements;
-        if (location !== undefined) {
+        if (location) {
             array.pos = location.pos;
             array.end = location.end;
         }
@@ -42,13 +42,17 @@ namespace ts {
             array.end = -1;
         }
 
+        if (hasTrailingComma) {
+            array.hasTrailingComma = true;
+        }
+
         array.arrayKind = ArrayKind.NodeArray;
         return array;
     }
 
     export function createModifiersArray(elements?: Modifier[], location?: TextRange): ModifiersArray {
         let flags: NodeFlags;
-        if (elements !== undefined) {
+        if (elements) {
             if (isModifiersArray(elements)) {
                 return elements;
             }
@@ -64,7 +68,7 @@ namespace ts {
         }
 
         const array = <ModifiersArray>elements;
-        if (location !== undefined) {
+        if (location) {
             array.pos = location.pos;
             array.end = location.end;
         }
@@ -79,7 +83,7 @@ namespace ts {
     }
 
     export function setModifiers<T extends Node>(node: T, modifiers: Modifier[]) {
-        if (modifiers !== undefined) {
+        if (modifiers) {
             const array = createModifiersArray(modifiers);
             node.modifiers = array;
             node.flags |= array.flags;
@@ -92,7 +96,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        const node = <SynthesizedNode>createNode(kind, /*location*/ undefined);
+        const node = createNode(kind, /*location*/ undefined);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -143,6 +147,15 @@ namespace ts {
         }
 
         return clone;
+    }
+
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     *
+     * @param node The node to clone.
+     */
+    export function getMutableNode<T extends Node>(node: T): T {
+        return cloneNode<T>(node, node, node.flags, node.parent, node);
     }
 
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
