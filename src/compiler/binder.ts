@@ -1798,7 +1798,7 @@ namespace ts {
      * @param node The node to analyze
      * @param subtreeFlags Transform flags computed for this node's subtree
      */
-    export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags) {
+    export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags): TransformFlags {
         // Ambient nodes are TypeScript syntax and the flags of their subtree are ignored.
         if (node.flags & NodeFlags.Ambient) {
             return (node.transformFlags = TransformFlags.AssertTypeScript)
