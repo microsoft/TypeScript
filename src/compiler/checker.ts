@@ -12196,7 +12196,7 @@ namespace ts {
                     forEach(overloads, o => {
                         const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
                         if (deviation & NodeFlags.Export) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_not_exported);
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
                         }
                         else if (deviation & NodeFlags.Ambient) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
@@ -12205,7 +12205,7 @@ namespace ts {
                             error(o.name || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract);
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
                         }
                     });
                 }
