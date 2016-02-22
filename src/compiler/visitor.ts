@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMore<T extends Node> = T | NodeArrayNode<T>;
+    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -529,7 +529,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMore<T>>visitor(node);
+            const visited = node && <OneOrMany<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
@@ -540,14 +540,14 @@ namespace ts {
                     aggregateTransformFlags(visited);
                 }
 
-                addNode(updated, visited, test);
+                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test);
             }
         }
 
         if (updated !== undefined) {
             return <TArray>(isModifiersArray(nodes)
                 ? createModifiersArray(updated, nodes)
-                : createNodeArray(updated, nodes));
+                : createNodeArray(updated, nodes, nodes.hasTrailingComma));
         }
 
         return nodes;
@@ -576,21 +576,28 @@ namespace ts {
 
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
+            let modifiers: NodeFlags;
             for (const edge of edgeTraversalPath) {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     const visited = visitEdge(edge, value, visitor);
+                    if (visited && isArray(visited) && isModifiersArray(visited)) {
+                        modifiers = visited.flags;
+                    }
+
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = cloneNode(node, /*location*/ node, node.flags & ~NodeFlags.Modifier, /*parent*/ undefined, /*original*/ node);
+                            updated = getMutableNode(node);
+                            updated.flags &= ~NodeFlags.Modifier;
                         }
 
-                        if (visited && isArray(visited) && isModifiersArray(visited)) {
-                            updated[edge.name] = visited;
-                            updated.flags |= visited.flags;
+                        if (modifiers) {
+                            updated.flags |= modifiers;
+                            modifiers = undefined;
                         }
-                        else {
-                            updated[edge.name] = visited;
+
+                        if (visited !== value) {
+                            setEdgeValue(updated, edge, visited);
                         }
                     }
                 }
@@ -610,9 +617,17 @@ namespace ts {
 
         if (updated !== node) {
             aggregateTransformFlags(updated);
+            updated.original = node;
         }
 
         return updated;
+    }
+
+    /**
+     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
+     */
+    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
+        parentNode[edge.name] = value;
     }
 
     /**
@@ -635,16 +650,8 @@ namespace ts {
      * @param from The source Node or NodeArrayNode.
      * @param test The node test used to validate each node.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMore<T>, test?: (node: Node) => boolean) {
-        if (to !== undefined && from !== undefined) {
-            if (isNodeArrayNode(from)) {
-                addNodes(to, from.nodes, test);
-            }
-            else {
-                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
-                to.push(from);
-            }
-        }
+    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
+        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined);
     }
 
     /**
@@ -654,10 +661,30 @@ namespace ts {
      * @param from The source array of Node or NodeArrayNode.
      * @param test The node test used to validate each node.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMore<T>[], test?: (node: Node) => boolean) {
-        if (to !== undefined && from !== undefined) {
+    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
+        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
+    }
+
+    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine: boolean, test: (node: Node) => boolean) {
+        if (to && from) {
+            if (isNodeArrayNode(from)) {
+                addNodesWorker(to, from.nodes, startOnNewLine, test);
+            }
+            else {
+                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+                if (startOnNewLine) {
+                    from.startsOnNewLine = true;
+                }
+
+                to.push(from);
+            }
+        }
+    }
+
+    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine: boolean, test: (node: Node) => boolean) {
+        if (to && from) {
             for (const node of from) {
-                addNode(to, node, test);
+                addNodeWorker(to, node, startOnNewLine, test);
             }
         }
     }

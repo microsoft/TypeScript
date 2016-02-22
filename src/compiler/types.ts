@@ -449,6 +449,7 @@ namespace ts {
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
+        /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
