@@ -12058,6 +12058,9 @@ namespace ts {
                         if (((node.flags & NodeFlags.AccessibilityModifier) !== (otherAccessor.flags & NodeFlags.AccessibilityModifier))) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }
+                        if (((node.flags & NodeFlags.Abstract) !== (otherAccessor.flags & NodeFlags.Abstract))) {
+                            error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
+                        }
 
                         const currentAccessorType = getAnnotatedAccessorType(node);
                         const otherAccessorType = getAnnotatedAccessorType(otherAccessor);
@@ -16505,8 +16508,11 @@ namespace ts {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
                         }
                         if (node.kind !== SyntaxKind.ClassDeclaration) {
-                            if (node.kind !== SyntaxKind.MethodDeclaration) {
-                                return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_or_method_declaration);
+                            if (node.kind !== SyntaxKind.MethodDeclaration &&
+                                node.kind !== SyntaxKind.PropertyDeclaration &&
+                                node.kind !== SyntaxKind.GetAccessor &&
+                                node.kind !== SyntaxKind.SetAccessor) {
+                                return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration);
                             }
                             if (!(node.parent.kind === SyntaxKind.ClassDeclaration && node.parent.flags & NodeFlags.Abstract)) {
                                 return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
@@ -17000,7 +17006,7 @@ namespace ts {
             else if (isInAmbientContext(accessor)) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
             }
-            else if (accessor.body === undefined) {
+            else if (accessor.body === undefined && !(accessor.flags & NodeFlags.Abstract)) {
                 return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
             else if (accessor.typeParameters) {

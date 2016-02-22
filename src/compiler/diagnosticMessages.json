@@ -779,7 +779,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class or method declaration.": {
+    "'abstract' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -1842,6 +1842,10 @@
     "Cannot extend a class '{0}'. Class constructor is marked as private.": {
         "category": "Error",
         "code": 2675
+    },
+    "Accessors must both be abstract or non-abstract.": {
+        "category": "Error",
+        "code": 2676
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
