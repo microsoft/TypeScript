@@ -13,6 +13,7 @@
 ////            {| "itemName": "LocalEnumMemberInConstructor", "kind": "property", "parentName": "LocalEnumInConstructor"|}LocalEnumMemberInConstructor,
 ////        }
 ////    }
+////
 ////    method() {
 ////        {| "itemName": "LocalFunctionInMethod", "kind": "function", "parentName": "foo"|}function LocalFunctionInMethod() {
 ////            {| "itemName": "LocalFunctionInLocalFunctionInMethod", "kind": "function", "parentName": "bar"|}function LocalFunctionInLocalFunctionInMethod() {
@@ -27,6 +28,10 @@
 ////            {| "itemName": "LocalEnumMemberInMethod", "kind": "property", "parentName": "foo"|}LocalEnumMemberInMethod,
 ////        }
 ////    }
+////
+////    emptyMethod() { // Non child functions method should not be duplicated
+////
+////    }
 ////}
 
 test.markers().forEach((marker) => {
@@ -34,4 +39,4 @@ test.markers().forEach((marker) => {
 });
 
 // no other items
-verify.getScriptLexicalStructureListCount(12);
+verify.getScriptLexicalStructureListCount(17);

@@ -157,8 +157,12 @@ namespace ts.NavigationBar {
                         topLevelNodes.push(node);
                         forEach((<ClassDeclaration>node).members, (node) => {
                             if (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.Constructor) {
-                                if ((<MethodDeclaration>node).body) {
-                                    topLevelNodes.push(node);
+                                type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
+                                if ((<FunctionLikeMember>node).body) {
+                                    // We do not include methods that does not have child functions in it, because of duplications.
+                                    if (hasNonAnonymousFunctionDeclarations((<Block>(<FunctionLikeMember>node).body).statements)) {
+                                        topLevelNodes.push(node);
+                                    }
                                     addTopLevelNodes((<Block>(<MethodDeclaration>node).body).statements, topLevelNodes);
                                 }
                             }
@@ -186,14 +190,19 @@ namespace ts.NavigationBar {
             }
         }
 
+        function hasNonAnonymousFunctionDeclarations(nodes: NodeArray<any>) {
+            if (forEach(nodes, s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
+                return true;
+            }
+        }
+
         function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
                 // A function declaration is 'top level' if it contains any function declarations 
                 // within it. 
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
-                    if (forEach((<Block>functionDeclaration.body).statements,
-                        s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
+                    if (hasNonAnonymousFunctionDeclarations((<Block>functionDeclaration.body).statements)) {
 
                         return true;
                     }
@@ -390,13 +399,13 @@ namespace ts.NavigationBar {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.Constructor:
-                    return createMemberFunctionLikeItem(<MethodDeclaration>node);
+                    return createMemberFunctionLikeItem(<MethodDeclaration | ConstructorDeclaration>node);
 
                 case SyntaxKind.EnumDeclaration:
                     return createEnumItem(<EnumDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
-                    return createIterfaceItem(<InterfaceDeclaration>node);
+                    return createInterfaceItem(<InterfaceDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:
                     return createModuleItem(<ModuleDeclaration>node);
@@ -540,7 +549,7 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
+            function createInterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
                 let childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
