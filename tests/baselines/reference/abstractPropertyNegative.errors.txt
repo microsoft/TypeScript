@@ -16,10 +16,10 @@ tests/cases/compiler/abstractPropertyNegative.ts(30,7): error TS2415: Class 'Wro
 tests/cases/compiler/abstractPropertyNegative.ts(33,7): error TS2415: Class 'WrongTypeAccessorImpl2' incorrectly extends base class 'WrongTypeAccessor'.
   Types of property 'num' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/abstractPropertyNegative.ts(38,18): error TS2676: Accessors must both be abstract or not abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(39,9): error TS2676: Accessors must both be abstract or not abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors must both be abstract or not abstract.
-tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or not abstract.
+tests/cases/compiler/abstractPropertyNegative.ts(38,18): error TS2676: Accessors must both be abstract or non-abstract.
+tests/cases/compiler/abstractPropertyNegative.ts(39,9): error TS2676: Accessors must both be abstract or non-abstract.
+tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors must both be abstract or non-abstract.
+tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or non-abstract.
 
 
 ==== tests/cases/compiler/abstractPropertyNegative.ts (16 errors) ====
@@ -92,15 +92,15 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
     abstract class AbstractAccessorMismatch {
         abstract get p1(): string;
                      ~~
-!!! error TS2676: Accessors must both be abstract or not abstract.
+!!! error TS2676: Accessors must both be abstract or non-abstract.
         set p1(val: string) { };
             ~~
-!!! error TS2676: Accessors must both be abstract or not abstract.
+!!! error TS2676: Accessors must both be abstract or non-abstract.
         get p2(): string { return "should work"; }
             ~~
-!!! error TS2676: Accessors must both be abstract or not abstract.
+!!! error TS2676: Accessors must both be abstract or non-abstract.
         abstract set p2(val: string);
                      ~~
-!!! error TS2676: Accessors must both be abstract or not abstract.
+!!! error TS2676: Accessors must both be abstract or non-abstract.
     }
     

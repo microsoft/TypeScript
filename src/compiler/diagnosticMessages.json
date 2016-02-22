@@ -1843,7 +1843,7 @@
         "category": "Error",
         "code": 2675
     },
-    "Accessors must both be abstract or not abstract.": {
+    "Accessors must both be abstract or non-abstract.": {
         "category": "Error",
         "code": 2676
     },

@@ -12052,7 +12052,7 @@ namespace ts {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
                         }
                         if (((node.flags & NodeFlags.Abstract) !== (otherAccessor.flags & NodeFlags.Abstract))) {
-                            error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_not_abstract);
+                            error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
 
                         const currentAccessorType = getAnnotatedAccessorType(node);
