@@ -4,12 +4,12 @@ class C {
 
     get [Symbol.toPrimitive]() { return ""; }
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 
     set [Symbol.toPrimitive](x) { }
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit4.ts, 2, 29))
 }
