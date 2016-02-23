@@ -502,8 +502,8 @@ namespace ts {
             return node;
         }
 
-        if (lift !== undefined && visited !== undefined && isNodeArrayNode(visited)) {
-            visited = lift((<NodeArrayNode<Node>>visited).nodes);
+        if (visited !== undefined && isNodeArrayNode(visited)) {
+            visited = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
         }
 
         if (parenthesize !== undefined && visited !== undefined) {
