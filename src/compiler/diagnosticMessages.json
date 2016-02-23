@@ -2604,6 +2604,10 @@
         "category": "Message",
         "code": 6112
     },
+    "The maximum dependency depth to search under node_modules and load JavaScript files": {
+        "category": "Message",
+        "code": 6113
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
