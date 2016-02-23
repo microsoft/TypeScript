@@ -20,6 +20,7 @@ namespace ts {
     export interface TextRange {
         pos: number;
         end: number;
+        /* @internal */ disableSourceMap?: boolean; // Whether a synthesized text range disables source maps for its contents (used by transforms).
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
@@ -2468,6 +2469,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ experimentalTransforms?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
@@ -2793,14 +2795,16 @@ namespace ts {
 
     /* @internal */
     export const enum NodeEmitFlags {
-        EmitEmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,            // The export * helper should be written to this node.
-        EmitSuperHelper = 1 << 2,           // Emit the basic _super helper for async methods.
-        EmitAdvancedSuperHelper = 1 << 3,   // Emit the advanced _super helper for async methods.
-        UMDDefine = 1 << 4,                 // This node should be replaced with the UMD define helper.
-        NoLexicalEnvironment = 1 << 5,      // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
-        SingleLine = 1 << 6,                // The contents of this node should be emit on a single line.
-        AdviseOnEmitNode = 1 << 7,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
+        EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
+        EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
+        EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
+        UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
+        NoLexicalEnvironment = 1 << 5,           // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
+        SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
+        AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
+        EmitCommentsOfNotEmittedParent = 1 << 8, // Emits comments of missing parent nodes.
     }
 
     /** Additional context provided to `visitEachChild` */

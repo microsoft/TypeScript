@@ -2290,26 +2290,33 @@ namespace ts {
         }
     }
 
-    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], leadingSeparator: boolean, trailingSeparator: boolean, newLine: string,
         writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
-        let emitLeadingSpace = !trailingSeparator;
-        forEach(comments, comment => {
-            if (emitLeadingSpace) {
-                writer.write(" ");
-                emitLeadingSpace = false;
-            }
-            writeComment(text, lineMap, writer, comment, newLine);
-            if (comment.hasTrailingNewLine) {
-                writer.writeLine();
-            }
-            else if (trailingSeparator) {
+        if (comments && comments.length > 0) {
+            if (leadingSeparator) {
                 writer.write(" ");
             }
-            else {
-                // Emit leading space to separate comment during next comment emit
-                emitLeadingSpace = true;
+
+            let emitInterveningSeperator = false;
+            for (const comment of comments) {
+                if (emitInterveningSeperator) {
+                    writer.write(" ");
+                    emitInterveningSeperator = false;
+                }
+
+                writeComment(text, lineMap, writer, comment, newLine);
+                if (comment.hasTrailingNewLine) {
+                    writer.writeLine();
+                }
+                else {
+                    emitInterveningSeperator = true;
+                }
             }
-        });
+
+            if (emitInterveningSeperator && trailingSeparator) {
+                writer.write(" ");
+            }
+        }
     }
 
     /**
@@ -2366,7 +2373,7 @@ namespace ts {
                 if (nodeLine >= lastCommentLine + 2) {
                     // Valid detachedComments
                     emitNewLineBeforeLeadingComments(lineMap, writer, node, leadingComments);
-                    emitComments(text, lineMap, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                    emitComments(text, lineMap, writer, detachedComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
                     currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                 }
             }
@@ -2703,6 +2710,21 @@ namespace ts {
             return sys.newLine;
         }
         return carriageReturnLineFeed;
+    }
+
+    export const enum TextRangeCollapse {
+        CollapseToStart,
+        CollapseToEnd,
+    }
+
+    export function collapseTextRange(range: TextRange, collapse: TextRangeCollapse) {
+        if (range.pos === range.end) {
+            return range;
+        }
+
+        return collapse === TextRangeCollapse.CollapseToStart
+            ? { pos: range.pos, end: range.end }
+            : { pos: range.end, end: range.end };
     }
 
     // Node tests

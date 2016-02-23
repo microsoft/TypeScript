@@ -7,12 +7,15 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number): void;
         emitStart(range: TextRange): void;
-        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
-        changeEmitSourcePos(): void;
+        emitEnd(range: TextRange): void;
+        /*@deprecated*/ emitEnd(range: TextRange, stopOverridingSpan: boolean): void;
+        /*@deprecated*/ changeEmitSourcePos(): void;
         getText(): string;
         getSourceMappingURL(): string;
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
         reset(): void;
+        enable(): void;
+        disable(): void;
     }
 
     let nullSourceMapWriter: SourceMapWriter;
@@ -38,6 +41,8 @@ namespace ts {
                 getSourceMappingURL(): string { return undefined; },
                 initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
                 reset(): void { },
+                enable(): void { },
+                disable(): void { }
             };
         }
 
@@ -62,6 +67,8 @@ namespace ts {
         // Source map data
         let sourceMapData: SourceMapData;
 
+        let disableDepth: number;
+
         return {
             getSourceMapData: () => sourceMapData,
             setSourceFile,
@@ -73,6 +80,8 @@ namespace ts {
             getSourceMappingURL,
             initialize,
             reset,
+            enable,
+            disable,
         };
 
         function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
@@ -81,6 +90,7 @@ namespace ts {
             }
 
             currentSourceFile = undefined;
+            disableDepth = 0;
 
             // Current source map file and its index in the sources list
             sourceMapSourceIndex = -1;
@@ -147,6 +157,17 @@ namespace ts {
             lastEncodedSourceMapSpan = undefined;
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined;
+            disableDepth = 0;
+        }
+
+        function enable() {
+            if (disableDepth > 0) {
+                disableDepth--;
+            }
+        }
+
+        function disable() {
+            disableDepth++;
         }
 
         function updateLastEncodedAndRecordedSpans() {
@@ -168,7 +189,7 @@ namespace ts {
                     sourceMapData.sourceMapDecodedMappings[sourceMapData.sourceMapDecodedMappings.length - 1] :
                     defaultLastEncodedSourceMapSpan;
 
-                // TODO: Update lastEncodedNameIndex 
+                // TODO: Update lastEncodedNameIndex
                 // Since we dont support this any more, lets not worry about it right now.
                 // When we start supporting nameIndex, we will get back to this
 
@@ -236,7 +257,7 @@ namespace ts {
         }
 
         function emitPos(pos: number) {
-            if (pos === -1) {
+            if (positionIsSynthesized(pos) || disableDepth > 0) {
                 return;
             }
 
@@ -288,9 +309,17 @@ namespace ts {
 
         function emitStart(range: TextRange) {
             emitPos(getStartPos(range));
+
+            if (range.disableSourceMap) {
+                disable();
+            }
         }
 
         function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
+            if (range.disableSourceMap) {
+                enable();
+            }
+
             emitPos(range.end);
             stopOverridingSpan = stopOverridingEnd;
         }
