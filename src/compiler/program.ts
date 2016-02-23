@@ -1670,8 +1670,13 @@ namespace ts {
                 }
             }
 
-            if (!options.declaration && options.declarationDir) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration"));
+            if (options.declarationDir) {
+                if (!options.declaration) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration"));
+                }
+                if (options.out || options.outFile) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile"));
+                }
             }
 
             const languageVersion = options.target || ScriptTarget.ES3;
