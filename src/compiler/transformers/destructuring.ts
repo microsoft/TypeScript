@@ -18,22 +18,29 @@ namespace ts {
         recordTempVariable: (node: Identifier) => void,
         visitor?: (node: Node) => Node) {
 
-        let location: TextRange = node;
-        let value = node.right;
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
-            return value;
+            return node.right;
         }
 
+        let location: TextRange = node;
+        let value = node.right;
         const expressions: Expression[] = [];
         if (needsValue) {
-            // Temporary assignment needed to emit root should highlight whole binary expression
-            value = ensureIdentifier(node.right, /*reuseIdentifierExpressions*/ true, node, emitTempVariableAssignment);
+            // If the right-hand value of the destructuring assignment needs to be preserved (as
+            // is the case when the destructuring assignmen) is part of a larger expression),
+            // then we need to cache the right-hand value.
+            //
+            // The source map location for the assignment should point to the entire binary
+            // expression.
+            value = ensureIdentifier(node.right, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
         }
         else if (nodeIsSynthesized(node)) {
-            // Source map node for root.left = root.right is root
-            // but if root is synthetic, which could be in below case, use the target which is { a }
-            // for ({a} of {a: string}) {
-            // }
+            // Generally, the source map location for a destructuring assignment is the root
+            // expression.
+            //
+            // However, if the root expression is synthesized (as in the case
+            // of the initializer when transforming a ForOfStatement), then the source map
+            // location should point to the right-hand value of the expression.
             location = node.right;
         }
 
@@ -255,21 +262,22 @@ namespace ts {
 
         function emitArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, location: TextRange) {
             const elements = target.elements;
-            if (elements.length !== 1) {
+            const numElements = elements.length;
+            if (numElements !== 1) {
                 // For anything but a single element destructuring we need to generate a temporary
                 // to ensure value is evaluated exactly once.
                 // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
                 value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
             }
 
-            for (let i = 0; i < elements.length; i++) {
+            for (let i = 0; i < numElements; i++) {
                 const e = elements[i];
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     // Assignment for target = value.propName should highligh whole property, hence use e as source map node
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
                         emitDestructuringAssignment(e, createElementAccess(value, createLiteral(i)), e);
                     }
-                    else if (i === elements.length - 1) {
+                    else if (i === numElements - 1) {
                         emitDestructuringAssignment((<SpreadElementExpression>e).expression, createArraySlice(value, i), e);
                     }
                 }
@@ -299,11 +307,11 @@ namespace ts {
                     // so in that case, we'll intentionally create that temporary.
                     value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, target, emitTempVariableAssignment);
                 }
-                for (let i = 0; i < elements.length; i++) {
-                    let element = elements[i];
+                for (let i = 0; i < numElements; i++) {
+                    const element = elements[i];
                     if (name.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
-                        let propName = element.propertyName || <Identifier>element.name;
+                        const propName = element.propertyName || <Identifier>element.name;
                         emitBindingElement(element, createDestructuringPropertyAccess(value, propName));
                     }
                     else if (element.kind !== SyntaxKind.OmittedExpression) {
@@ -311,7 +319,7 @@ namespace ts {
                             // Rewrite element to a declaration that accesses array element at index i
                             emitBindingElement(element, createElementAccess(value, i));
                         }
-                        else if (i === elements.length - 1) {
+                        else if (i === numElements - 1) {
                             emitBindingElement(element, createArraySlice(value, i));
                         }
                     }
@@ -332,16 +340,23 @@ namespace ts {
             );
         }
 
-        function createDestructuringPropertyAccess(object: Expression, propertyName: PropertyName): LeftHandSideExpression {
+        /**
+         * Creates either a PropertyAccessExpression or an ElementAccessExpression for the
+         * right-hand side of a transformed destructuring assignment.
+         *
+         * @param expression The right-hand expression that is the source of the property.
+         * @param propertyName The destructuring property name.
+         */
+        function createDestructuringPropertyAccess(expression: Expression, propertyName: PropertyName): LeftHandSideExpression {
             if (isComputedPropertyName(propertyName)) {
                 return createElementAccess(
-                    object,
-                    ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, propertyName, emitTempVariableAssignment)
+                    expression,
+                    ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName, emitTempVariableAssignment)
                 );
             }
             else if (isIdentifier(propertyName)) {
                 return createPropertyAccess(
-                    object,
+                    expression,
                     propertyName.text
                 );
             }
@@ -349,7 +364,7 @@ namespace ts {
                 // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                 // otherwise occur when the identifier is emitted.
                 return createElementAccess(
-                    object,
+                    expression,
                     cloneNode(propertyName)
                 );
             }

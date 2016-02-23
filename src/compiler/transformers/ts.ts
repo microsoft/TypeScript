@@ -202,7 +202,7 @@ namespace ts {
 
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are elided. The constructor of a class will be
-                    // reordered to the start of the member list in `transformClassDeclaration`.
+                    // transformed as part of `transformClassDeclaration`.
                     return undefined;
 
                 case SyntaxKind.ClassDeclaration:
@@ -1964,7 +1964,7 @@ namespace ts {
                     )
                 );
 
-                const block = createBlock(statements);
+                const block = createBlock(statements, /*location*/ node.body);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
