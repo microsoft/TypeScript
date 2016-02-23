@@ -239,6 +239,11 @@ namespace ts {
     function isJSONSupported() {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
+    
+    function isWatchSet(options: CompilerOptions) { 
+        // Firefox has Object.prototype.watch
+        return options.watch && options.hasOwnProperty("watch");
+    }
 
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
@@ -327,8 +332,7 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        // Firefox has Object.prototype.watch
-        if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
+        if (isWatchSet(commandLine.options)) {
             if (!sys.watchFile) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -415,7 +419,7 @@ namespace ts {
 
             const compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
-            if (!compilerOptions.watch) {
+            if (!isWatchSet(compilerOptions)) {
                 return sys.exit(compileResult.exitStatus);
             }
 
@@ -441,7 +445,7 @@ namespace ts {
             }
             // Use default host function
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && compilerOptions.watch) {
+            if (sourceFile && isWatchSet(compilerOptions)) {
                 // Attach a file watcher
                 const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
                 sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
