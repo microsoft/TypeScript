@@ -216,7 +216,7 @@ const _super = (function (geti, seti) {
                 onAfterEmitNode = undefined;
                 isUniqueName = undefined;
                 temporaryVariables = undefined;
-                tempFlags = 0;
+                tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
                 currentText = undefined;
                 extendsEmitted = false;
@@ -1838,7 +1838,11 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean) {
+            /**
+             * Emits any prologue directives at the start of a Statement list, returning the
+             * number of prologue directives written to the output.
+             */
+            function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean): number {
                 for (let i = 0; i < statements.length; i++) {
                     if (isPrologueDirective(statements[i])) {
                         if (startWithNewLine || i > 0) {

@@ -22,7 +22,7 @@ namespace ts {
         return node;
     }
 
-    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange): NodeArray<T> {
+    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange, hasTrailingComma?: boolean): NodeArray<T> {
         if (elements) {
             if (isNodeArray(elements)) {
                 return elements;
@@ -40,6 +40,10 @@ namespace ts {
         else {
             array.pos = -1;
             array.end = -1;
+        }
+
+        if (hasTrailingComma) {
+            array.hasTrailingComma = true;
         }
 
         array.arrayKind = ArrayKind.NodeArray;
@@ -285,7 +289,6 @@ namespace ts {
         node.initializer = initializer;
         return node;
     }
-
 
     // Expression
 
@@ -888,7 +891,7 @@ namespace ts {
                 target,
                 createIdentifier("name")
             )
-        )
+        );
     }
 
     function createSeti(target: LeftHandSideExpression) {
@@ -1047,8 +1050,8 @@ namespace ts {
              : cloneNode(memberName, location);
     }
 
-
     // Utilities
+
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.
