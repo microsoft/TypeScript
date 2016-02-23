@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMore<T extends Node> = T | NodeArrayNode<T>;
+    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -20,6 +20,7 @@ namespace ts {
         /** A callback used to lift a NodeArrayNode into a valid node. */
         lift?: (nodes: NodeArray<Node>) => Node;
 
+        /** A callback used to parenthesize a node to preserve the intended order of operations. */
         parenthesize?: (value: Node, parentNode: Node) => Node;
     };
 
@@ -531,7 +532,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMore<T>>visitor(node);
+            const visited = node && <OneOrMany<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
@@ -549,7 +550,7 @@ namespace ts {
         if (updated !== undefined) {
             return <TArray>(isModifiersArray(nodes)
                 ? createModifiersArray(updated, nodes)
-                : setHasTrailingComma(createNodeArray(updated, nodes), nodes.hasTrailingComma));
+                : createNodeArray(updated, nodes, nodes.hasTrailingComma));
         }
 
         return nodes;
@@ -589,7 +590,8 @@ namespace ts {
 
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = cloneNode(node, /*location*/ node, node.flags & ~NodeFlags.Modifier, /*parent*/ undefined, /*original*/ node);
+                            updated = getMutableNode(node);
+                            updated.flags &= ~NodeFlags.Modifier;
                         }
 
                         if (modifiers) {
@@ -625,17 +627,6 @@ namespace ts {
     }
 
     /**
-     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
-     */
-    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
-        if (value && edge.parenthesize && !isArray(value)) {
-            value = parenthesizeEdge(<Node>value, parentNode, edge.parenthesize, edge.test);
-        }
-
-        parentNode[edge.name] = value;
-    }
-
-    /**
      * Visits a node edge.
      *
      * @param edge The edge of the Node.
@@ -646,6 +637,17 @@ namespace ts {
         return isArray(value)
             ? visitNodes(<NodeArray<Node>>value, visitor, edge.test, /*start*/ undefined, /*count*/ undefined)
             : visitNode(<Node>value, visitor, !edge.parenthesize ? edge.test : undefined, edge.optional, edge.lift);
+    }
+
+    /**
+     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
+     */
+    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
+        if (value && edge.parenthesize && !isArray(value)) {
+            value = parenthesizeEdge(<Node>value, parentNode, edge.parenthesize, edge.test);
+        }
+
+        parentNode[edge.name] = value;
     }
 
     /**
@@ -660,7 +662,7 @@ namespace ts {
     /**
      * Flattens an array of nodes that could contain NodeArrayNodes.
      */
-    export function flattenNodes<T extends Node>(nodes: OneOrMore<T>[]): T[] {
+    export function flattenNodes<T extends Node>(nodes: OneOrMany<T>[]): T[] {
         let result: T[];
         if (nodes) {
             result = [];
@@ -678,7 +680,7 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMore<T>, startOnNewLine?: boolean) {
+    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
         addNodeWorker(to, from, startOnNewLine, /*test*/ undefined)
     }
 
@@ -688,7 +690,7 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMore<T>[], startOnNewLine?: boolean) {
+    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
         addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
     }
 
@@ -698,7 +700,7 @@ namespace ts {
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addLine<T extends Node>(to: T[], from: OneOrMore<T>) {
+    export function addLine<T extends Node>(to: T[], from: OneOrMany<T>) {
         addNodeWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
     }
 
@@ -708,11 +710,11 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addLines<T extends Node>(to: T[], from: OneOrMore<T>[]) {
+    export function addLines<T extends Node>(to: T[], from: OneOrMany<T>[]) {
         addNodesWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
     }
 
-    function addNodeWorker<T extends Node>(to: T[], from: OneOrMore<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
         if (to && from) {
             if (isNodeArrayNode(from)) {
                 addNodesWorker(to, from.nodes, addOnNewLine, test);
@@ -728,7 +730,7 @@ namespace ts {
         }
     }
 
-    function addNodesWorker<T extends Node>(to: T[], from: OneOrMore<T>[], addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], addOnNewLine: boolean, test: (node: Node) => boolean) {
         if (to && from) {
             for (const node of from) {
                 addNodeWorker(to, node, addOnNewLine, test);
@@ -896,7 +898,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function liftToBlock(nodes: NodeArray<Node>) {
+    export function liftToBlock(nodes: NodeArray<Node>) {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }

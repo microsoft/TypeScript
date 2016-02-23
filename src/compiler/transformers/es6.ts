@@ -659,7 +659,7 @@ namespace ts {
             );
         }
 
-        function visitVariableDeclaration(node: VariableDeclaration): OneOrMore<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): OneOrMany<VariableDeclaration> {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return createNodeArrayNode(

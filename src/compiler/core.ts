@@ -130,11 +130,12 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+    export function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
-            for (const v of array) {
-                if (predicate(v)) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (predicate(v, i)) {
                     count++;
                 }
             }
@@ -170,7 +171,10 @@ namespace ts {
         return result;
     }
 
-    export function flatMap<T, U>(array: T[], f: (x: T, i: number) => U[]): U[] {
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     */
+    export function flatMap<T, U>(array: T[], f: (x: T, i: number) => U | U[]): U[] {
         let result: U[];
         if (array) {
             result = [];
@@ -178,7 +182,9 @@ namespace ts {
                 const v = array[i];
                 const ar = f(v, i);
                 if (ar) {
-                    result = result.concat(ar);
+                    // We cast to <U> here to leverage the behavior of Array#concat
+                    // which will append a single value here.
+                    result = result.concat(<U[]>ar);
                 }
             }
         }
@@ -189,18 +195,6 @@ namespace ts {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
         return [...array1, ...array2];
-    }
-
-    export function append<T>(array: T[], value: T): T[] {
-        if (value === undefined) return array;
-        if (!array || !array.length) return [value];
-        return [...array, value];
-    }
-
-    export function prepend<T>(array: T[], value: T): T[] {
-        if (value === undefined) return array;
-        if (!array || !array.length) return [value];
-        return [value, ...array];
     }
 
     export function deduplicate<T>(array: T[]): T[] {
@@ -214,6 +208,27 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    /**
+     * Compacts an array, removing any falsey elements.
+     */
+    export function compact<T>(array: T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (result || !v) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (v) {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     export function sum(array: any[], prop: string): number {

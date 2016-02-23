@@ -1126,7 +1126,7 @@ namespace ts {
     // @kind(SyntaxKind.Block)
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
-        multiLine?: boolean;
+        /*@internal*/ multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.VariableStatement)
@@ -2512,10 +2512,8 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
-        ES7 = 3,
         ES2015 = ES6,
-        ES2016 = ES7,
-        Latest = ES7,
+        Latest = ES6,
     }
 
     export const enum LanguageVariant {
