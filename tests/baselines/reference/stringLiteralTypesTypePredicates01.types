@@ -36,7 +36,7 @@ var x: Kind = "A";
 >"A" : "A"
 
 if (kindIs(x, "A")) {
->kindIs(x, "A") : kind is "A"
+>kindIs(x, "A") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
 >x : "A" | "B"
 >"A" : "A"
@@ -53,7 +53,7 @@ else {
 
 if (!kindIs(x, "B")) {
 >!kindIs(x, "B") : boolean
->kindIs(x, "B") : kind is "B"
+>kindIs(x, "B") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
 >x : "A" | "B"
 >"B" : "B"

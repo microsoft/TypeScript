@@ -55,6 +55,7 @@ namespace ts {
 
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -344,6 +345,15 @@ namespace ts {
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
             const scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
+        }
+
+        public getScriptKind(fileName: string): ScriptKind {
+            if ("getScriptKind" in this.shimHost) {
+                return this.shimHost.getScriptKind(fileName);
+            }
+            else {
+                return ScriptKind.Unknown;
+            }
         }
 
         public getScriptVersion(fileName: string): string {
