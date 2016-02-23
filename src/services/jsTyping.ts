@@ -173,6 +173,9 @@ namespace ts.JsTyping {
                 if (jsonDict.hasOwnProperty("dependencies")) {
                     mergeTypings(Object.keys(jsonDict.dependencies));
                 }
+                if (jsonDict.hasOwnProperty("devDependencies")) {
+                    mergeTypings(Object.keys(jsonDict.devDependencies));
+                }
             }
         }
 
