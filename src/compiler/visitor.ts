@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMore<T extends Node> = T | NodeArrayNode<T>;
+    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -19,6 +19,9 @@ namespace ts {
 
         /** A callback used to lift a NodeArrayNode into a valid node. */
         lift?: (nodes: NodeArray<Node>) => Node;
+
+        /** A callback used to parenthesize a node to preserve the intended order of operations. */
+        parenthesize?: (value: Node, parentNode: Node) => Node;
     };
 
     /**
@@ -52,7 +55,7 @@ namespace ts {
             { name: "modifiers", test: isModifier },
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.Decorator]: [
             { name: "expression", test: isLeftHandSideExpression },
@@ -108,34 +111,34 @@ namespace ts {
         [SyntaxKind.BindingElement]: [
             { name: "propertyName", test: isPropertyName, optional: true },
             { name: "name", test: isBindingName },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ArrayLiteralExpression]: [
-            { name: "elements", test: isExpression },
+            { name: "elements", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ObjectLiteralExpression]: [
             { name: "properties", test: isObjectLiteralElement },
         ],
         [SyntaxKind.PropertyAccessExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "name", test: isIdentifier },
         ],
         [SyntaxKind.ElementAccessExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "argumentExpression", test: isExpression },
         ],
         [SyntaxKind.CallExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.NewExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.TaggedTemplateExpression]: [
-            { name: "tag", test: isLeftHandSideExpression },
+            { name: "tag", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "template", test: isTemplate },
         ],
         [SyntaxKind.TypeAssertionExpression]: [
@@ -163,26 +166,26 @@ namespace ts {
             { name: "body", test: isConciseBody, lift: liftToBlock },
         ],
         [SyntaxKind.DeleteExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.TypeOfExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.VoidExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.AwaitExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.PrefixUnaryExpression]: [
-            { name: "operand", test: isUnaryExpression },
+            { name: "operand", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.PostfixUnaryExpression]: [
-            { name: "operand", test: isLeftHandSideExpression },
+            { name: "operand", test: isLeftHandSideExpression, parenthesize: parenthesizePostfixOperand },
         ],
         [SyntaxKind.BinaryExpression]: [
-            { name: "left", test: isExpression },
-            { name: "right", test: isExpression },
+            { name: "left", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, true) },
+            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false) },
         ],
         [SyntaxKind.ConditionalExpression]: [
             { name: "condition", test: isExpression },
@@ -197,7 +200,7 @@ namespace ts {
             { name: "expression", test: isExpression, optional: true },
         ],
         [SyntaxKind.SpreadElementExpression]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ClassExpression]: [
             { name: "decorators", test: isDecorator },
@@ -208,7 +211,7 @@ namespace ts {
             { name: "members", test: isClassElement },
         ],
         [SyntaxKind.ExpressionWithTypeArguments]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
         ],
         [SyntaxKind.AsExpression]: [
@@ -228,7 +231,7 @@ namespace ts {
             { name: "declarationList", test: isVariableDeclarationList },
         ],
         [SyntaxKind.ExpressionStatement]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForExpressionStatement },
         ],
         [SyntaxKind.IfStatement]: [
             { name: "expression", test: isExpression },
@@ -291,7 +294,7 @@ namespace ts {
         [SyntaxKind.VariableDeclaration]: [
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.VariableDeclarationList]: [
             { name: "declarations", test: isVariableDeclaration },
@@ -420,7 +423,7 @@ namespace ts {
         ],
         [SyntaxKind.PropertyAssignment]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression },
+            { name: "initializer", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ShorthandPropertyAssignment]: [
             { name: "name", test: isIdentifier },
@@ -428,7 +431,7 @@ namespace ts {
         ],
         [SyntaxKind.EnumMember]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.SourceFile]: [
             { name: "statements", test: isStatement },
@@ -530,7 +533,7 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMore<T>>visitor(node);
+            const visited = node && <OneOrMany<T>>visitor(node);
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
@@ -541,14 +544,14 @@ namespace ts {
                     aggregateTransformFlags(visited);
                 }
 
-                addNode(updated, visited, test);
+                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test);
             }
         }
 
         if (updated !== undefined) {
             return <TArray>(isModifiersArray(nodes)
                 ? createModifiersArray(updated, nodes)
-                : createNodeArray(updated, nodes));
+                : createNodeArray(updated, nodes, nodes.hasTrailingComma));
         }
 
         return nodes;
@@ -577,21 +580,28 @@ namespace ts {
 
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
+            let modifiers: NodeFlags;
             for (const edge of edgeTraversalPath) {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     const visited = visitEdge(edge, value, visitor);
+                    if (visited && isArray(visited) && isModifiersArray(visited)) {
+                        modifiers = visited.flags;
+                    }
+
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = cloneNode(node, /*location*/ node, node.flags & ~NodeFlags.Modifier, /*parent*/ undefined, /*original*/ node);
+                            updated = getMutableNode(node);
+                            updated.flags &= ~NodeFlags.Modifier;
                         }
 
-                        if (visited && isArray(visited) && isModifiersArray(visited)) {
-                            updated[edge.name] = visited;
-                            updated.flags |= visited.flags;
+                        if (modifiers) {
+                            updated.flags |= modifiers;
+                            modifiers = undefined;
                         }
-                        else {
-                            updated[edge.name] = visited;
+
+                        if (visited !== value) {
+                            setEdgeValue(updated, edge, visited);
                         }
                     }
                 }
@@ -631,22 +641,34 @@ namespace ts {
     }
 
     /**
+     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
+     */
+    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
+        if (value && edge.parenthesize && !isArray(value)) {
+            value = parenthesizeEdge(<Node>value, parentNode, edge.parenthesize, edge.test);
+        }
+
+        parentNode[edge.name] = value;
+    }
+
+    /**
+     * Applies parentheses to a node to ensure the correct precedence.
+     */
+    function parenthesizeEdge(node: Node, parentNode: Node, parenthesize: (node: Node, parentNode: Node) => Node, test: (node: Node) => boolean) {
+        node = parenthesize(node, parentNode);
+        Debug.assert(test === undefined || test(node), "Unexpected node kind after visit.");
+        return node;
+    }
+
+    /**
      * Appends a node to an array.
      *
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      * @param test The node test used to validate each node.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMore<T>, test?: (node: Node) => boolean) {
-        if (to && from) {
-            if (isNodeArrayNode(from)) {
-                addNodes(to, from.nodes, test);
-            }
-            else {
-                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
-                to.push(from);
-            }
-        }
+    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
+        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined);
     }
 
     /**
@@ -656,10 +678,30 @@ namespace ts {
      * @param from The source array of Node or NodeArrayNode.
      * @param test The node test used to validate each node.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMore<T>[], test?: (node: Node) => boolean) {
+    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
+        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
+    }
+
+    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine: boolean, test: (node: Node) => boolean) {
+        if (to && from) {
+            if (isNodeArrayNode(from)) {
+                addNodesWorker(to, from.nodes, startOnNewLine, test);
+            }
+            else {
+                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+                if (startOnNewLine) {
+                    from.startsOnNewLine = true;
+                }
+
+                to.push(from);
+            }
+        }
+    }
+
+    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine: boolean, test: (node: Node) => boolean) {
         if (to && from) {
             for (const node of from) {
-                addNode(to, node, test);
+                addNodeWorker(to, node, startOnNewLine, test);
             }
         }
     }
@@ -824,7 +866,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function liftToBlock(nodes: NodeArray<Node>) {
+    export function liftToBlock(nodes: NodeArray<Node>) {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }

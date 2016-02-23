@@ -1,54 +1,54 @@
-/** 
-  * Declaration module describing the TypeScript Server protocol 
+/**
+  * Declaration module describing the TypeScript Server protocol
   */
 declare namespace ts.server.protocol {
-    /** 
-      * A TypeScript Server message 
+    /**
+      * A TypeScript Server message
       */
     export interface Message {
-        /** 
-          * Sequence number of the message 
+        /**
+          * Sequence number of the message
           */
         seq: number;
 
         /**
-          * One of "request", "response", or "event" 
+          * One of "request", "response", or "event"
           */
         type: string;
     }
 
-    /** 
-      * Client-initiated request message 
+    /**
+      * Client-initiated request message
       */
     export interface Request extends Message {
         /**
-          * The command to execute 
+          * The command to execute
           */
         command: string;
 
-        /** 
-          * Object containing arguments for the command 
+        /**
+          * Object containing arguments for the command
           */
         arguments?: any;
     }
 
     /**
-      * Request to reload the project structure for all the opened files 
+      * Request to reload the project structure for all the opened files
       */
     export interface ReloadProjectsRequest extends Message {
     }
 
-    /** 
-      * Server-initiated event message 
+    /**
+      * Server-initiated event message
       */
     export interface Event extends Message {
-        /** 
-          * Name of event 
+        /**
+          * Name of event
           */
         event: string;
 
-        /** 
-          * Event-specific information 
+        /**
+          * Event-specific information
           */
         body?: any;
     }
@@ -62,18 +62,18 @@ declare namespace ts.server.protocol {
           */
         request_seq: number;
 
-        /** 
-          * Outcome of the request. 
+        /**
+          * Outcome of the request.
           */
         success: boolean;
 
-        /** 
+        /**
           * The command requested.
           */
         command: string;
 
-        /** 
-          * Contains error message if success === false. 
+        /**
+          * Contains error message if success === false.
           */
         message?: string;
 
@@ -83,7 +83,7 @@ declare namespace ts.server.protocol {
         body?: any;
     }
 
-    /** 
+    /**
       * Arguments for FileRequest messages.
       */
     export interface FileRequestArgs {
@@ -93,7 +93,7 @@ declare namespace ts.server.protocol {
         file: string;
     }
 
-    /** 
+    /**
       * Arguments for ProjectInfoRequest request.
       */
     export interface ProjectInfoRequestArgs extends FileRequestArgs {
@@ -110,7 +110,7 @@ declare namespace ts.server.protocol {
         arguments: ProjectInfoRequestArgs;
     }
 
-    /** 
+    /**
       * Response message body for "projectInfo" request
       */
     export interface ProjectInfo {
@@ -125,7 +125,7 @@ declare namespace ts.server.protocol {
         fileNames?: string[];
     }
 
-    /** 
+    /**
       * Response message for "projectInfo" request
       */
     export interface ProjectInfoResponse extends Response {
@@ -144,12 +144,12 @@ declare namespace ts.server.protocol {
       * (file, line, character offset), where line and character offset are 1-based.
       */
     export interface FileLocationRequestArgs extends FileRequestArgs {
-        /** 
+        /**
           * The line number for the request (1-based).
           */
         line: number;
 
-        /** 
+        /**
           * The character offset (on the line) for the request (1-based).
           */
         offset: number;
@@ -216,7 +216,7 @@ declare namespace ts.server.protocol {
       * Object found in response messages defining a span of text in a specific source file.
       */
     export interface FileSpan extends TextSpan {
-        /** 
+        /**
           * File containing text span.
           */
         file: string;
@@ -300,14 +300,14 @@ declare namespace ts.server.protocol {
           */
         lineText: string;
 
-        /** 
+        /**
           * True if reference is a write location, false otherwise.
           */
         isWriteAccess: boolean;
     }
 
     /**
-      * The body of a "references" response message. 
+      * The body of a "references" response message.
       */
     export interface ReferencesResponseBody {
         /**
@@ -325,7 +325,7 @@ declare namespace ts.server.protocol {
           */
         symbolStartOffset: number;
 
-        /** 
+        /**
           * The full display name of the symbol.
           */
         symbolDisplayString: string;
@@ -355,7 +355,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * Information about the item to be renamed. 
+      * Information about the item to be renamed.
       */
     export interface RenameInfo {
         /**
@@ -373,7 +373,7 @@ declare namespace ts.server.protocol {
           */
         displayName: string;
 
-        /** 
+        /**
           * Full display name of item to be renamed.
           */
         fullDisplayName: string;
@@ -383,7 +383,7 @@ declare namespace ts.server.protocol {
           */
         kind: string;
 
-        /** 
+        /**
           * Optional modifiers for the kind (such as 'public').
           */
         kindModifiers: string;
@@ -469,7 +469,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
 
         /** Index operator */
-        [key: string] : string | number | boolean;
+        [key: string]: string | number | boolean;
     }
 
     /**
@@ -477,7 +477,7 @@ declare namespace ts.server.protocol {
       */
     export interface ConfigureRequestArguments {
 
-        /** 
+        /**
           * Information about the host, for example 'Emacs 24.4' or
           * 'Sublime Text version 3075'
           */
@@ -495,7 +495,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      *  Configure request; value of command field is "configure".  Specifies 
+      *  Configure request; value of command field is "configure".  Specifies
       *  host information, such as host type, tab size, and indent size.
       */
     export interface ConfigureRequest extends Request {
@@ -514,8 +514,8 @@ declare namespace ts.server.protocol {
       */
     export interface OpenRequestArgs extends FileRequestArgs {
         /**
-         * Used when a version of the file content is known to be more up to date than the one on disk. 
-         * Then the known content will be used upon opening instead of the disk copy   
+         * Used when a version of the file content is known to be more up to date than the one on disk.
+         * Then the known content will be used upon opening instead of the disk copy
          */
         fileContent?: string;
     }
@@ -751,7 +751,7 @@ declare namespace ts.server.protocol {
           * Optional modifiers for the kind (such as 'public').
           */
         kindModifiers: string;
-        /** 
+        /**
          * A string that is used for comparing completion items so that they can be ordered.  This
          * is often the same as the name but may be different in certain circumstances.
          */
@@ -794,7 +794,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Signature help information for a single parameter    
+     * Signature help information for a single parameter
      */
     export interface SignatureHelpParameter {
 
@@ -814,18 +814,18 @@ declare namespace ts.server.protocol {
         displayParts: SymbolDisplayPart[];
 
         /**
-         * Whether the parameter is optional or not.         
+         * Whether the parameter is optional or not.
          */
         isOptional: boolean;
     }
 
     /**
-     * Represents a single signature to show in signature help.    
+     * Represents a single signature to show in signature help.
      */
     export interface SignatureHelpItem {
 
         /**
-         * Whether the signature accepts a variable number of arguments. 
+         * Whether the signature accepts a variable number of arguments.
          */
         isVariadic: boolean;
 
@@ -845,7 +845,7 @@ declare namespace ts.server.protocol {
         separatorDisplayParts: SymbolDisplayPart[];
 
         /**
-         * The signature helps items for the parameters. 
+         * The signature helps items for the parameters.
          */
         parameters: SignatureHelpParameter[];
 
@@ -861,17 +861,17 @@ declare namespace ts.server.protocol {
     export interface SignatureHelpItems {
 
         /**
-         * The signature help items.    
+         * The signature help items.
          */
         items: SignatureHelpItem[];
 
         /**
-         * The span for which signature help should appear on a signature 
+         * The span for which signature help should appear on a signature
          */
         applicableSpan: TextSpan;
 
         /**
-         * The item selected in the set of available help items. 
+         * The item selected in the set of available help items.
          */
         selectedItemIndex: number;
 
@@ -895,7 +895,7 @@ declare namespace ts.server.protocol {
 
     /**
       * Signature help request; value of command field is "signatureHelp".
-      * Given a file location (file, line, col), return the signature 
+      * Given a file location (file, line, col), return the signature
       * help.
       */
     export interface SignatureHelpRequest extends FileLocationRequest {
@@ -926,8 +926,8 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * GeterrForProjectRequest request; value of command field is 
-      * "geterrForProject". It works similarly with 'Geterr', only 
+      * GeterrForProjectRequest request; value of command field is
+      * "geterrForProject". It works similarly with 'Geterr', only
       * it request for every file in this project.
       */
     export interface GeterrForProjectRequest extends Request {
@@ -997,7 +997,7 @@ declare namespace ts.server.protocol {
         diagnostics: Diagnostic[];
     }
 
-    /** 
+    /**
       * Event message for "syntaxDiag" and "semanticDiag" event types.
       * These events provide syntactic and semantic errors for a file.
       */
@@ -1033,7 +1033,7 @@ declare namespace ts.server.protocol {
     export interface ReloadResponse extends Response {
     }
 
-    /** 
+    /**
       * Arguments for saveto request.
       */
     export interface SavetoRequestArgs extends FileRequestArgs {
@@ -1109,7 +1109,7 @@ declare namespace ts.server.protocol {
           */
         kindModifiers?: string;
 
-        /** 
+        /**
           * The file in which the symbol is found.
           */
         file: string;
@@ -1156,7 +1156,7 @@ declare namespace ts.server.protocol {
 
     /**
       * Change request message; value of command field is "change".
-      * Update the server's view of the file named by argument 'file'.  
+      * Update the server's view of the file named by argument 'file'.
       * Server does not currently send a response to a change request.
       */
     export interface ChangeRequest extends FileLocationRequest {

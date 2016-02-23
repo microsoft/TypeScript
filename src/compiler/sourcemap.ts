@@ -310,13 +310,13 @@ namespace ts {
         function emitStart(range: TextRange) {
             emitPos(getStartPos(range));
 
-            if ((<SynthesizedNode>range).disableSourceMap) {
+            if (range.disableSourceMap) {
                 disable();
             }
         }
 
         function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
-            if ((<SynthesizedNode>range).disableSourceMap) {
+            if (range.disableSourceMap) {
                 enable();
             }
 
