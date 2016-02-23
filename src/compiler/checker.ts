@@ -15410,7 +15410,11 @@ namespace ts {
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
-                                copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
+                                const declarationSymbol = getSymbolOfNode(location);
+                                copySymbols(declarationSymbol.members, meaning & SymbolFlags.Type);
+
+                                const abstractAncestorMembers = getUnImplementedAncestorMembers(getDeclaredTypeOfClassOrInterface(declarationSymbol));
+                                copySymbols(abstractAncestorMembers, meaning);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
@@ -15459,6 +15463,39 @@ namespace ts {
                     }
                 }
             }
+
+            function getUnImplementedAncestorMembers(type: InterfaceType): SymbolTable {
+                const results: SymbolTable = {};
+
+                const baseTypes = getAbstractAncestorTypes(type);
+                for (const bt of baseTypes) {
+                    const abstractMembers = getNamedMembers(bt.symbol.members).filter(isSymbolAbstract);
+                    for (const am of abstractMembers) {
+                        results[am.name] = am;
+                    }
+                }
+
+                for (const member of getPropertiesOfType(type).filter(m => !isSymbolAbstract(m))) {
+                    delete results[member.name];
+                }
+
+                return results;
+            }
+
+            // TODO: Are we allowed to use a generator here?
+            function getAbstractAncestorTypes(type: InterfaceType): Type[] {
+                let ancestors: Type[] = [];
+
+                for (const bt of getBaseTypes(type).filter(t => isSymbolAbstract(t.symbol))) {
+                    ancestors = ancestors.concat([bt, ...getAbstractAncestorTypes(<InterfaceType>bt)]);
+                }
+
+                return ancestors;
+            }
+        }
+
+        function isSymbolAbstract(symbol: Symbol): boolean {
+            return !!(symbol.valueDeclaration.flags & NodeFlags.Abstract);
         }
 
         function isTypeDeclarationName(name: Node): boolean {
