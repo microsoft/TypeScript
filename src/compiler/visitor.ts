@@ -856,26 +856,6 @@ namespace ts {
     }
 
     /**
-     * Tries to lift a NodeArrayNode to a Node. This is primarily used to
-     * lift multiple statements into a single Block.
-     *
-     * @param node The visited Node.
-     * @param options Options used to control lift behavior.
-     */
-    function liftNode(node: Node, lifter: (nodes: NodeArray<Node>) => Node): Node {
-        if (node === undefined) {
-            return undefined;
-        }
-        else if (isNodeArrayNode(node)) {
-            const lift = lifter || extractSingleNode;
-            return lift(node.nodes);
-        }
-        else {
-            return node;
-        }
-    }
-
-    /**
      * Lifts a NodeArray containing only Statement nodes to a block.
      *
      * @param nodes The NodeArray.
