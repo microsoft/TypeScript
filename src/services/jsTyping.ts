@@ -21,8 +21,7 @@ namespace ts.JsTyping {
     function tryParseJson(jsonPath: string, host: TypingResolutionHost): any {
         if (host.fileExists(jsonPath)) {
             try {
-                // Strip out single-line comments
-                const contents = host.readFile(jsonPath).replace(/^\s*\/\/(.*)$/gm, "");
+                const contents = removeComments(host.readFile(jsonPath));
                 return JSON.parse(contents);
             }
             catch (e) { }
