@@ -199,7 +199,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["scriptHost.d.ts"], },
         
         // JavaScript library
-        { target: "lib.es5.d.ts", sources: ["header.d.ts", "intl.d.ts", "es5.d.ts"] },
+        { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts"] },
         { target: "lib.es7.d.ts", sources: ["header.d.ts", "es7.d.ts"] },
         

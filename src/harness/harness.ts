@@ -805,12 +805,28 @@ namespace Harness {
             return result;
         }
 
+        export function createES6LibrarySourceFileAndAssertInvariants(fileName: string, languageVersion: ts.ScriptTarget) {
+            // We'll only assert invariants outside of light mode.
+            const shouldAssertInvariants = !Harness.lightMode;
+
+            const es6Lib = ts.createSourceFile(fileName, IO.readFile(libFolder + "lib.es6.d.ts"), languageVersion,  /*setParentNodes:*/ shouldAssertInvariants);
+
+            let fullES6LibSourceText = "";
+            if (es6Lib.referencedFiles) {
+                for (const refFile of es6Lib.referencedFiles) {
+                    fullES6LibSourceText += IO.readFile(libFolder + refFile.fileName);
+                }
+            }
+
+            return createSourceFileAndAssertInvariants(fileName, fullES6LibSourceText, languageVersion);
+        }
+
         const carriageReturnLineFeed = "\r\n";
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
-        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export const defaultES6LibSourceFile = createES6LibrarySourceFileAndAssertInvariants(defaultLibFileName, ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
@@ -1605,7 +1621,7 @@ namespace Harness {
     }
 
     export function isLibraryFile(filePath: string): boolean {
-        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.core.d.ts");
+        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.es5.d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
