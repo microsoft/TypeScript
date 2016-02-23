@@ -1919,6 +1919,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (multiLine) {
                     decreaseIndent();
+                    if (!compilerOptions.transformCompatibleEmit) {
+                        writeLine();
+                    }
                 }
 
                 write(")");
@@ -4335,7 +4338,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    write(restIndex > 0
+                    write(restIndex > 0 || !compilerOptions.transformCompatibleEmit
                         ? `[${tempName} - ${restIndex}] = arguments[${tempName}];`
                         : `[${tempName}] = arguments[${tempName}];`);
                     emitEnd(restParam);
@@ -5357,7 +5360,7 @@ const _super = (function (geti, seti) {
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
                 let tempVariable: Identifier;
 
-                if (isClassExpressionWithStaticProperties) {
+                if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
                     tempVariable = createAndRecordTempVariable(TempFlags.Auto);
                     write("(");
                     increaseIndent();
@@ -5394,6 +5397,11 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
+                if (!compilerOptions.transformCompatibleEmit) {
+                    emitPropertyDeclarations(node, staticProperties);
+                    writeLine();
+                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
+                }
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5420,11 +5428,13 @@ const _super = (function (geti, seti) {
                 write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
-                    emitPropertyDeclarations(node, staticProperties);
-                    writeLine();
-                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
+                    if (compilerOptions.transformCompatibleEmit) {
+                        emitPropertyDeclarations(node, staticProperties);
+                        writeLine();
+                        emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
+                    }
                 }
-                else if (isClassExpressionWithStaticProperties) {
+                else if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
                     for (const property of staticProperties) {
                         write(",");
                         writeLine();

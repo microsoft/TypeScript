@@ -322,7 +322,16 @@ namespace ts {
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         },
         {
+            // this option will be removed when this is merged with master and exists solely
+            // to enable the tree transforming emitter side-by-side with the existing emitter.
             name: "experimentalTransforms",
+            type: "boolean",
+            experimental: true
+        },
+        {
+            // this option will be removed when this is merged with master and exists solely
+            // to enable the tree transforming emitter side-by-side with the existing emitter.
+            name: "transformCompatibleEmit",
             type: "boolean",
             experimental: true
         }

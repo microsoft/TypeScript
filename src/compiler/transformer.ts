@@ -75,9 +75,7 @@ namespace ts {
             }
 
             currentSourceFile = sourceFile;
-            const visited = transformation(sourceFile);
-            currentSourceFile = undefined;
-            return visited;
+            return transformation(sourceFile);
         }
 
         function enableExpressionSubstitution(kind: SyntaxKind) {
