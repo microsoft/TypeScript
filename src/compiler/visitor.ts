@@ -639,7 +639,7 @@ namespace ts {
                         }
 
                         if (visited !== value) {
-                            updated[edge.name] = value;
+                            updated[edge.name] = visited;
                         }
                     }
                 }
