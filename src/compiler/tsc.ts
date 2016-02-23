@@ -239,8 +239,8 @@ namespace ts {
     function isJSONSupported() {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
-    
-    function isWatchSet(options: CompilerOptions) { 
+
+    function isWatchSet(options: CompilerOptions) {
         // Firefox has Object.prototype.watch
         return options.watch && options.hasOwnProperty("watch");
     }
