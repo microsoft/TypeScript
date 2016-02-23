@@ -656,7 +656,7 @@ namespace ts {
     }
 
     function ConvertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
-        let items: string[] = [];
+        const items: string[] = [];
         let invalidOptionType = false;
         if (!isArray(optionJson)) {
             invalidOptionType = true;
