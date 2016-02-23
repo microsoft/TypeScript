@@ -5522,7 +5522,7 @@ namespace ts {
                     // A & B = (A & B) | (C & D).
                     if (source.flags & TypeFlags.Intersection) {
                         // If target is a union type the following check will report errors so we suppress them here
-                        if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
+                        if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & (TypeFlags.Union | TypeFlags.ObjectType)))) {
                             return result;
                         }
                     }
