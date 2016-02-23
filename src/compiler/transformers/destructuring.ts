@@ -50,7 +50,7 @@ namespace ts {
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const expression = createAssignment(name, value, location);
             if (isSimpleExpression(value)) {
-                (<SynthesizedNode>expression).disableSourceMap = true;
+                expression.disableSourceMap = true;
             }
 
             aggregateTransformFlags(expression);
@@ -82,7 +82,7 @@ namespace ts {
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const declaration = createVariableDeclaration(name, value, location);
             if (isSimpleExpression(value)) {
-                (<SynthesizedNode>declaration).disableSourceMap = true;
+                declaration.disableSourceMap = true;
             }
 
             aggregateTransformFlags(declaration);
@@ -117,7 +117,7 @@ namespace ts {
             }
 
             if (isSimpleExpression(value)) {
-                (<SynthesizedNode>declaration).disableSourceMap = true;
+                declaration.disableSourceMap = true;
             }
 
             declaration.original = original;
@@ -169,7 +169,7 @@ namespace ts {
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignment(name, value, location);
             if (isSimpleExpression(value)) {
-                (<SynthesizedNode>expression).disableSourceMap = true;
+                expression.disableSourceMap = true;
             }
 
             expression.original = original;
@@ -199,7 +199,7 @@ namespace ts {
         function emitDestructuringAssignment(bindingTarget: Expression | ShorthandPropertyAssignment, value: Expression, location: TextRange) {
             // When emitting target = value use source map node to highlight, including any temporary assignments needed for this
             let target: Expression;
-            if (isShortHandPropertyAssignment(bindingTarget)) {
+            if (isShorthandPropertyAssignment(bindingTarget)) {
                 const initializer = visitor
                     ? visitNode(bindingTarget.objectAssignmentInitializer, visitor, isExpression)
                     : bindingTarget.objectAssignmentInitializer;

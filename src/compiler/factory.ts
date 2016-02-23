@@ -22,7 +22,7 @@ namespace ts {
         return node;
     }
 
-    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange): NodeArray<T> {
+    export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange, hasTrailingComma?: boolean): NodeArray<T> {
         if (elements) {
             if (isNodeArray(elements)) {
                 return elements;
@@ -40,6 +40,10 @@ namespace ts {
         else {
             array.pos = -1;
             array.end = -1;
+        }
+
+        if (hasTrailingComma) {
+            array.hasTrailingComma = true;
         }
 
         array.arrayKind = ArrayKind.NodeArray;
@@ -92,7 +96,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        const node = <SynthesizedNode>createNode(kind, /*location*/ undefined);
+        const node = createNode(kind, /*location*/ undefined);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -145,6 +149,13 @@ namespace ts {
         return clone;
     }
 
+    /**
+     * Creates a shallow, memberwise clone of a node for mutation.
+     */
+    export function getMutableNode<T extends Node>(node: T): T {
+        return cloneNode<T>(node, node, node.flags, node.parent, node);
+    }
+
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
         const node = <NodeArrayNode<T>>createSynthesizedNode(SyntaxKind.NodeArrayNode);
         node.nodes = createNodeArray(elements);
@@ -153,20 +164,20 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(value: string): StringLiteral;
-    export function createLiteral(value: number): LiteralExpression;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression {
+    export function createLiteral(value: string, location?: TextRange): StringLiteral;
+    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword);
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location);
         }
         else {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
             node.text = String(value);
             return node;
         }
@@ -203,8 +214,8 @@ namespace ts {
         return node;
     }
 
-    export function createThis() {
-        const node = <PrimaryExpression>createNode(SyntaxKind.ThisKeyword);
+    export function createThis(location?: TextRange) {
+        const node = <PrimaryExpression>createNode(SyntaxKind.ThisKeyword, location);
         return node;
     }
 
@@ -267,8 +278,8 @@ namespace ts {
         return node;
     }
 
-    export function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression) {
-        const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+    export function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange) {
+        const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location);
         node.decorators = undefined;
         node.modifiers = undefined;
         node.dotDotDotToken = undefined;
@@ -279,7 +290,6 @@ namespace ts {
         return node;
     }
 
-
     // Expression
 
     export function createArrayLiteral(elements?: Expression[]) {
@@ -288,8 +298,8 @@ namespace ts {
         return node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElement[]) {
-        const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression);
+    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange) {
+        const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
         return node;
     }
@@ -313,6 +323,13 @@ namespace ts {
         const node = <CallExpression>createNode(SyntaxKind.CallExpression, location);
         node.expression = parenthesizeForAccess(expression);
         node.arguments = createNodeArray(argumentsArray);
+        return node;
+    }
+
+    export function createNew(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
+        const node = <NewExpression>createNode(SyntaxKind.NewExpression, location);
+        node.expression = parenthesizeForAccess(expression);
+        node.arguments = argumentsArray ? createNodeArray(argumentsArray) : undefined;
         return node;
     }
 
@@ -347,13 +364,27 @@ namespace ts {
 
     export function createTypeOf(expression: Expression) {
         const node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
-        node.expression = parenthesizeForUnary(expression);
+        node.expression = parenthesizePrefixOperand(expression);
         return node;
     }
 
     export function createVoid(expression: Expression) {
         const node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
-        node.expression = parenthesizeForUnary(expression);
+        node.expression = parenthesizePrefixOperand(expression);
+        return node;
+    }
+
+    export function createPrefix(operator: SyntaxKind, operand: Expression, location?: TextRange) {
+        const node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression, location);
+        node.operator = operator;
+        node.operand = parenthesizePrefixOperand(operand);
+        return node;
+    }
+
+    export function createPostfix(operand: Expression, operator: SyntaxKind, location?: TextRange) {
+        const node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, location);
+        node.operand = parenthesizePostfixOperand(operand);
+        node.operator = operator;
         return node;
     }
 
@@ -442,14 +473,72 @@ namespace ts {
         return node;
     }
 
+    export function createEmptyStatement(location: TextRange) {
+        return <EmptyStatement>createNode(SyntaxKind.EmptyStatement, location);
+    }
+
     export function createStatement(expression: Expression, location?: TextRange): ExpressionStatement {
         const node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, location);
         node.expression = expression;
         return node;
     }
 
-    export function createReturn(expression?: Expression): ReturnStatement {
-        const node = <ReturnStatement>createSynthesizedNode(SyntaxKind.ReturnStatement);
+    export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement, location?: TextRange) {
+        const node = <IfStatement>createNode(SyntaxKind.IfStatement, location);
+        node.expression = expression;
+        node.thenStatement = thenStatement;
+        node.elseStatement = elseStatement;
+        return node;
+    }
+
+    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location);
+        node.initializer = initializer;
+        node.condition = condition;
+        node.incrementor = incrementor;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createLabel(label: string | Identifier, statement: Statement, location?: TextRange) {
+        const node = <LabeledStatement>createNode(SyntaxKind.LabeledStatement, location);
+        node.label = typeof label === "string" ? createIdentifier(label) : label;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createDo(expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <DoStatement>createNode(SyntaxKind.DoStatement, location);
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createWhile(statement: Statement, expression: Expression, location?: TextRange) {
+        const node = <WhileStatement>createNode(SyntaxKind.WhileStatement, location);
+        node.statement = statement;
+        node.expression = expression;
+        return node;
+    }
+
+    export function createForIn(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForInStatement>createNode(SyntaxKind.ForInStatement, location);
+        node.initializer = initializer;
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createForOf(initializer: ForInitializer, expression: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForOfStatement>createNode(SyntaxKind.ForOfStatement, location);
+        node.initializer = initializer;
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createReturn(expression?: Expression, location?: TextRange): ReturnStatement {
+        const node = <ReturnStatement>createNode(SyntaxKind.ReturnStatement, location);
         node.expression = expression;
         return node;
     }
@@ -516,9 +605,9 @@ namespace ts {
 
     // Property assignments
 
-    export function createPropertyAssignment(name: PropertyName, initializer: Expression) {
-        const node = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment);
-        node.name = name;
+    export function createPropertyAssignment(name: string | PropertyName, initializer: Expression, location?: TextRange) {
+        const node = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, location);
+        node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
         node.initializer = initializer;
         return node;
@@ -526,16 +615,16 @@ namespace ts {
 
     // Compound nodes
 
+    export function createComma(left: Expression, right: Expression) {
+        return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
+    }
+
+    export function createLessThan(left: Expression, right: Expression, location?: TextRange) {
+        return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
+    }
+
     export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
-    }
-
-    export function createLogicalAnd(left: Expression, right: Expression) {
-        return createBinary(left, SyntaxKind.AmpersandAmpersandToken, right);
-    }
-
-    export function createLogicalOr(left: Expression, right: Expression) {
-        return createBinary(left, SyntaxKind.BarBarToken, right);
     }
 
     export function createStrictEquality(left: Expression, right: Expression) {
@@ -546,8 +635,28 @@ namespace ts {
         return createBinary(left, SyntaxKind.ExclamationEqualsEqualsToken, right);
     }
 
-    export function createComma(left: Expression, right: Expression) {
-        return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
+    export function createAdd(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.PlusToken, right);
+    }
+
+    export function createSubtract(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.MinusToken, right);
+    }
+
+    export function createPostfixIncrement(operand: Expression, location?: TextRange) {
+        return createPostfix(operand, SyntaxKind.PlusPlusToken, location);
+    }
+
+    export function createLogicalAnd(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.AmpersandAmpersandToken, right);
+    }
+
+    export function createLogicalOr(left: Expression, right: Expression) {
+        return createBinary(left, SyntaxKind.BarBarToken, right);
+    }
+
+    export function createLogicalNot(operand: Expression) {
+        return createPrefix(SyntaxKind.ExclamationToken, operand);
     }
 
     export function createVoidZero() {
@@ -566,6 +675,28 @@ namespace ts {
         return node;
     }
 
+    export function createFunctionCall(func: Expression, thisArg: Expression, argumentsList: Expression[], location?: TextRange) {
+        return createCall(
+            createPropertyAccess(func, "call"),
+            [
+                thisArg,
+                ...argumentsList
+            ],
+            location
+        );
+    }
+
+    export function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(func, "apply"),
+            [
+                thisArg,
+                argumentsExpression
+            ],
+            location
+        );
+    }
+
     export function createArraySlice(array: Expression, start?: number | Expression) {
         const argumentsList: Expression[] = [];
         if (start !== undefined) {
@@ -573,6 +704,13 @@ namespace ts {
         }
 
         return createCall(createPropertyAccess(array, "slice"), argumentsList);
+    }
+
+    export function createArrayConcat(array: Expression, values: Expression[]) {
+        return createCall(
+            createPropertyAccess(array, "concat"),
+            values
+        );
     }
 
     export function createMathPow(left: Expression, right: Expression, location?: TextRange) {
@@ -617,6 +755,16 @@ namespace ts {
     }
 
     // Helpers
+
+    export function createExtendsHelper(name: Identifier) {
+        return createCall(
+            createIdentifier("__extends"),
+            [
+                name,
+                createIdentifier("_super")
+            ]
+        );
+    }
 
     export function createParamHelper(expression: Expression, parameterOffset: number) {
         return createCall(
@@ -671,6 +819,63 @@ namespace ts {
         );
     }
 
+    export function createHasOwnProperty(target: LeftHandSideExpression, propertyName: Expression) {
+        return createCall(
+            createPropertyAccess(target, "hasOwnProperty"),
+            [propertyName]
+        );
+    }
+
+    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+        const properties: ObjectLiteralElement[] = [];
+        addPropertyAssignment(properties, "get", get, preferNewLine);
+        addPropertyAssignment(properties, "set", set, preferNewLine);
+        addPropertyAssignment(properties, "value", value, preferNewLine);
+        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine);
+        addPropertyAssignment(properties, "configurable", configurable, preferNewLine);
+        addPropertyAssignment(properties, "writable", writable, preferNewLine);
+        return createObjectLiteral(properties, location);
+    }
+
+    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean) {
+        if (value !== undefined) {
+            const property = createPropertyAssignment(
+                name,
+                typeof value === "boolean" ? createLiteral(value) : value
+            );
+
+            if (preferNewLine) {
+                property.startsOnNewLine = true;
+            }
+
+            addNode(properties, property);
+        }
+    }
+
+    export interface PropertyDescriptorOptions {
+        get?: Expression;
+        set?: Expression;
+        value?: Expression;
+        enumerable?: boolean | Expression;
+        configurable?: boolean | Expression;
+        writable?: boolean | Expression;
+    }
+
+    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+        return createCall(
+            createPropertyAccess(
+                createIdentifier("Object"),
+                "defineProperty"
+            ),
+            [
+                target,
+                memberName,
+                createPropertyDescriptor(descriptor, preferNewLine)
+            ],
+            location
+        );
+    }
+
     function createObjectCreate(prototype: Expression) {
         return createCall(
             createPropertyAccess(createIdentifier("Object"), "create"),
@@ -686,7 +891,7 @@ namespace ts {
                 target,
                 createIdentifier("name")
             )
-        )
+        );
     }
 
     function createSeti(target: LeftHandSideExpression) {
@@ -839,8 +1044,15 @@ namespace ts {
             : cloneNode(node);
     }
 
+    export function createExpressionForPropertyName(memberName: PropertyName, location?: TextRange): Expression {
+        return isIdentifier(memberName) ? createLiteral(memberName.text, location)
+             : isComputedPropertyName(memberName) ? cloneNode(memberName.expression, location)
+             : cloneNode(memberName, location);
+    }
+
 
     // Utilities
+
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.
@@ -850,11 +1062,7 @@ namespace ts {
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
-        // When diagnosing whether the expression needs parentheses, the decision should be based
-        // on the innermost expression in a chain of nested type assertions.
-        operand = skipAssertions(operand);
-
+    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
         if (operand.kind === SyntaxKind.ParenthesizedExpression) {
             return operand;
@@ -968,11 +1176,7 @@ namespace ts {
      *
      * @param expr The expression node.
      */
-    function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-        // When diagnosing whether the expression needs parentheses, the decision should be based
-        // on the innermost expression in a chain of nested type assertions.
-        expr = skipAssertions(expr);
-
+    export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
         // to parenthesize the expression before a dot. The known exceptions are:
         //
@@ -981,38 +1185,90 @@ namespace ts {
         //    NumericLiteral
         //       1.x            -> not the same as (1).x
         //
-        if (isLeftHandSideExpression(expr) &&
-            expr.kind !== SyntaxKind.NewExpression &&
-            expr.kind !== SyntaxKind.NumericLiteral) {
-            return expr;
+        if (isLeftHandSideExpression(expression) &&
+            expression.kind !== SyntaxKind.NewExpression &&
+            expression.kind !== SyntaxKind.NumericLiteral) {
+            return <LeftHandSideExpression>expression;
         }
 
-        return createParen(expr);
+        return createParen(expression, /*location*/ expression);
     }
 
-    function parenthesizeForUnary(operand: Expression) {
-        if (isUnaryExpression(operand)) {
-            return operand;
+    export function parenthesizePostfixOperand(operand: Expression) {
+        return isLeftHandSideExpression(operand)
+            ? <LeftHandSideExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    export function parenthesizePrefixOperand(operand: Expression) {
+        return isUnaryExpression(operand)
+            ? <UnaryExpression>operand
+            : createParen(operand, /*location*/ operand);
+    }
+
+    export function parenthesizeExpressionForList(expression: Expression) {
+        const expressionPrecedence = getExpressionPrecedence(expression);
+        const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
+        return expressionPrecedence > commaPrecedence
+            ? expression
+            : createParen(expression, /*location*/ expression);
+    }
+
+    export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
+        if (isCallExpression(expression)) {
+            const callee = expression.expression;
+            if (callee.kind === SyntaxKind.FunctionExpression
+                || callee.kind === SyntaxKind.ArrowFunction) {
+                const clone = cloneNode(expression, expression, expression.flags, expression.parent, expression);
+                clone.expression = createParen(callee, /*location*/ callee);
+                return clone;
+            }
+        }
+        else if (getLeftmostExpression(expression).kind === SyntaxKind.ObjectLiteralExpression) {
+            return createParen(expression, /*location*/ expression);
         }
 
-        return createParen(operand);
+        return expression;
     }
 
-    /**
-     * Skips past any TypeAssertionExpression or AsExpression nodes to their inner expression.
-     *
-     * @param node The expression node.
-     */
-    function skipAssertions(node: Expression) {
-        while (node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
-            node = (<AssertionExpression>node).expression;
+    function getLeftmostExpression(node: Expression): Expression {
+        while (true) {
+            switch (node.kind) {
+                case SyntaxKind.PostfixUnaryExpression:
+                    node = (<PostfixUnaryExpression>node).operand;
+                    continue;
+
+                case SyntaxKind.BinaryExpression:
+                    node = (<BinaryExpression>node).left;
+                    continue;
+
+                case SyntaxKind.ConditionalExpression:
+                    node = (<ConditionalExpression>node).condition;
+                    continue;
+
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
+                    continue;
+            }
+
+            return node;
+        }
+    }
+
+    export function skipParentheses(node: Expression): Expression {
+        while (node.kind === SyntaxKind.ParenthesizedExpression
+            || node.kind === SyntaxKind.TypeAssertionExpression
+            || node.kind === SyntaxKind.AsExpression) {
+            node = (<ParenthesizedExpression | AssertionExpression>node).expression;
         }
 
         return node;
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
-        (<SynthesizedNode>node).startsOnNewLine = true;
+        node.startsOnNewLine = true;
         return node;
     }
 

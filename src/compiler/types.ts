@@ -20,6 +20,7 @@ namespace ts {
     export interface TextRange {
         pos: number;
         end: number;
+        /* @internal */ disableSourceMap?: boolean; // Whether a synthesized text range disables source maps for its contents (used by transforms).
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
@@ -449,6 +450,7 @@ namespace ts {
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
+        /* @internal */ startsOnNewLine?: boolean;      // Whether a synthesized node should start on a new line (used by transforms).
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
@@ -1124,6 +1126,7 @@ namespace ts {
     // @kind(SyntaxKind.Block)
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
+        /*@internal*/ multiLine?: boolean;
     }
 
     // @kind(SyntaxKind.VariableStatement)
@@ -2466,6 +2469,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ experimentalTransforms?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
@@ -2508,10 +2512,8 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
-        ES7 = 3,
         ES2015 = ES6,
-        ES2016 = ES7,
-        Latest = ES7,
+        Latest = ES6,
     }
 
     export const enum LanguageVariant {
@@ -2767,6 +2769,7 @@ namespace ts {
         ContainsParameterPropertyAssignments = 1 << 13,
         ContainsSpreadElementExpression = 1 << 14,
         ContainsComputedPropertyName = 1 << 15,
+        ContainsBlockScopedBinding = 1 << 16,
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -2779,12 +2782,12 @@ namespace ts {
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
         NodeExcludes = TypeScript | Jsx | ES7 | ES6,
-        ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments,
-        FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments,
-        ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsParameterPropertyAssignments,
-        MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis,
+        ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
+        FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
+        ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
+        MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments,
-        ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis,
+        ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         TypeExcludes = ~ContainsTypeScript,
         ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
@@ -2792,15 +2795,16 @@ namespace ts {
 
     /* @internal */
     export const enum NodeEmitFlags {
-        EmitEmitHelpers = 1 << 0,           // Any emit helpers should be written to this node.
-        EmitExportStar = 1 << 1,            // The export * helper should be written to this node.
-        EmitSuperHelper = 1 << 2,           // Emit the basic _super helper for async methods.
-        EmitAdvancedSuperHelper = 1 << 3,   // Emit the advanced _super helper for async methods.
-        UMDDefine = 1 << 4,                 // This node should be replaced with the UMD define helper.
-        NoLexicalEnvironment = 1 << 5,      // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
-        SingleLine = 1 << 6,                // The contents of this node should be emit on a single line.
-        MultiLine = 1 << 7,                 // The contents of this node should be emit on multiple lines.
-        AdviseOnEmitNode = 1 << 8,          // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        EmitEmitHelpers = 1 << 0,                // Any emit helpers should be written to this node.
+        EmitExportStar = 1 << 1,                 // The export * helper should be written to this node.
+        EmitSuperHelper = 1 << 2,                // Emit the basic _super helper for async methods.
+        EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
+        UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
+        NoLexicalEnvironment = 1 << 5,           // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
+        SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
+        AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
+        EmitCommentsOfNotEmittedParent = 1 << 8, // Emits comments of missing parent nodes.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2817,7 +2821,7 @@ namespace ts {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
-        setNodeEmitFlags(node: Node, flags: NodeEmitFlags): void;
+        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
         isUniqueName(name: string): boolean;

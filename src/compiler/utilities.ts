@@ -8,13 +8,6 @@ namespace ts {
         isNoDefaultLib?: boolean;
     }
 
-    export interface SynthesizedNode extends Node {
-        leadingCommentRanges?: CommentRange[];
-        trailingCommentRanges?: CommentRange[];
-        startsOnNewLine?: boolean;
-        disableSourceMap?: boolean;
-    }
-
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -1733,7 +1726,7 @@ namespace ts {
         return getOperatorPrecedence(expression.kind, operator, hasArguments);
     }
 
-    function getOperator(expression: Expression) {
+    export function getOperator(expression: Expression) {
         if (expression.kind === SyntaxKind.BinaryExpression) {
             return (<BinaryExpression>expression).operatorToken.kind;
         }
@@ -2318,26 +2311,33 @@ namespace ts {
         }
     }
 
-    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], leadingSeparator: boolean, trailingSeparator: boolean, newLine: string,
         writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
-        let emitLeadingSpace = !trailingSeparator;
-        forEach(comments, comment => {
-            if (emitLeadingSpace) {
-                writer.write(" ");
-                emitLeadingSpace = false;
-            }
-            writeComment(text, lineMap, writer, comment, newLine);
-            if (comment.hasTrailingNewLine) {
-                writer.writeLine();
-            }
-            else if (trailingSeparator) {
+        if (comments && comments.length > 0) {
+            if (leadingSeparator) {
                 writer.write(" ");
             }
-            else {
-                // Emit leading space to separate comment during next comment emit
-                emitLeadingSpace = true;
+
+            let emitInterveningSeperator = false;
+            for (const comment of comments) {
+                if (emitInterveningSeperator) {
+                    writer.write(" ");
+                    emitInterveningSeperator = false;
+                }
+
+                writeComment(text, lineMap, writer, comment, newLine);
+                if (comment.hasTrailingNewLine) {
+                    writer.writeLine();
+                }
+                else {
+                    emitInterveningSeperator = true;
+                }
             }
-        });
+
+            if (emitInterveningSeperator && trailingSeparator) {
+                writer.write(" ");
+            }
+        }
     }
 
     /**
@@ -2394,7 +2394,7 @@ namespace ts {
                 if (nodeLine >= lastCommentLine + 2) {
                     // Valid detachedComments
                     emitNewLineBeforeLeadingComments(lineMap, writer, node, leadingComments);
-                    emitComments(text, lineMap, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                    emitComments(text, lineMap, writer, detachedComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
                     currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                 }
             }
@@ -2733,6 +2733,21 @@ namespace ts {
         return carriageReturnLineFeed;
     }
 
+    export const enum TextRangeCollapse {
+        CollapseToStart,
+        CollapseToEnd,
+    }
+
+    export function collapseTextRange(range: TextRange, collapse: TextRangeCollapse) {
+        if (range.pos === range.end) {
+            return range;
+        }
+
+        return collapse === TextRangeCollapse.CollapseToStart
+            ? { pos: range.pos, end: range.end }
+            : { pos: range.end, end: range.end };
+    }
+
     /**
      * Tests whether a node and its subtree is simple enough to have its position
      * information ignored when emitting source maps in a destructuring assignment.
@@ -2811,6 +2826,10 @@ namespace ts {
     }
 
     // Literals
+
+    export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
+        return node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
+    }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
@@ -2905,6 +2924,10 @@ namespace ts {
 
     // Type members
 
+    export function isMethodDeclaration(node: Node): node is MethodDeclaration {
+        return node.kind === SyntaxKind.MethodDeclaration;
+    }
+
     export function isClassElement(node: Node): node is ClassElement {
         const kind = node.kind;
         return kind === SyntaxKind.Constructor
@@ -2991,11 +3014,16 @@ namespace ts {
             || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
+        return node.kind === SyntaxKind.SpreadElementExpression;
+    }
+
     export function isExpressionWithTypeArguments(node: Node): node is ExpressionWithTypeArguments {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
-    function isLeftHandSideExpressionKind(kind: SyntaxKind) {
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
             || kind === SyntaxKind.NewExpression
@@ -3021,11 +3049,8 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        return isLeftHandSideExpressionKind(node.kind);
-    }
-
-    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        const kind = node.kind;
         return kind === SyntaxKind.PrefixUnaryExpression
             || kind === SyntaxKind.PostfixUnaryExpression
             || kind === SyntaxKind.DeleteExpression
@@ -3033,14 +3058,11 @@ namespace ts {
             || kind === SyntaxKind.VoidExpression
             || kind === SyntaxKind.AwaitExpression
             || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpressionKind(kind);
+            || isLeftHandSideExpression(node);
     }
 
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
-        return isUnaryExpressionKind(node.kind);
-    }
-
-    export function isExpressionKind(kind: SyntaxKind): boolean {
+    export function isExpression(node: Node): node is Expression {
+        const kind = node.kind;
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
@@ -3048,11 +3070,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElementExpression
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || isUnaryExpressionKind(kind);
-    }
-
-    export function isExpression(node: Node): node is Expression {
-        return isExpressionKind(node.kind);
+            || isUnaryExpression(node);
     }
 
     // Misc
@@ -3264,9 +3282,12 @@ namespace ts {
 
     // Property assignments
 
-    export function isShortHandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
-        const kind = node.kind;
-        return kind === SyntaxKind.ShorthandPropertyAssignment;
+    export function isPropertyAssignment(node: Node): node is PropertyAssignment {
+        return node.kind === SyntaxKind.PropertyAssignment;
+    }
+
+    export function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment {
+        return node.kind === SyntaxKind.ShorthandPropertyAssignment;
     }
 
     // Enum
