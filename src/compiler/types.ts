@@ -1536,6 +1536,7 @@ namespace ts {
         amdDependencies: AmdDependency[];
         moduleName: string;
         referencedFiles: FileReference[];
+        referencedLibraries: FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
@@ -2415,6 +2416,7 @@ namespace ts {
         jsx?: JsxEmit;
         reactNamespace?: string;
         listFiles?: boolean;
+        librarySearchPaths?: string[];
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -2466,8 +2468,11 @@ namespace ts {
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
 
-        list?: string[];
+        /* @internal */
+        // When options come from a config file, its path is recorded here
+        configFilePath?: string;
 
+        list?: string[];
         [option: string]: CompilerOptionsValue;
     }
 
@@ -2741,6 +2746,13 @@ namespace ts {
          * - don't use tripleslash references
          */
         isExternalLibraryImport?: boolean;
+    }
+
+    export interface ResolvedLibrary {
+        // True if the library was found in a primary lookup location         
+        primary: boolean;
+        // The location of the .d.ts file we located, or undefined if resolution failed
+        resolvedFileName?: string;
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

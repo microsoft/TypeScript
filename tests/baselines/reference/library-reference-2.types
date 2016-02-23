@@ -1,0 +1,14 @@
+=== tests/cases/conformance/references/consumer.ts ===
+/// <reference library="jquery" />
+$.foo();
+>$.foo() : void
+>$.foo : () => void
+>$ : { foo(): void; }
+>foo : () => void
+
+=== tests/cases/conformance/references/typings/jquery/jquery.d.ts ===
+declare var $: { foo(): void };
+>$ : { foo(): void; }
+>foo : () => void
+
+

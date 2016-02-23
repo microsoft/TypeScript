@@ -390,6 +390,7 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
+            configParseResult.options.configFilePath = configFileName as Path;
             return configParseResult;
         }
 

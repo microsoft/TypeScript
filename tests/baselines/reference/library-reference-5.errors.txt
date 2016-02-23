@@ -1,0 +1,29 @@
+tests/cases/conformance/references/src/root.ts(1,1): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/references/src/root.ts(2,1): error TS2304: Cannot find name 'bar'.
+
+
+==== tests/cases/conformance/references/src/root.ts (2 errors) ====
+    /// <reference library="foo" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'foo'.
+    /// <reference library="bar" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'bar'.
+    
+==== tests/cases/conformance/references/node_modules/foo/index.d.ts (0 errors) ====
+    
+    // Secondary references may not be duplicated if they disagree in content
+    
+    /// <reference library="alpha" />
+    declare var foo: any;
+    
+==== tests/cases/conformance/references/node_modules/foo/node_modules/alpha/index.d.ts (0 errors) ====
+    declare var alpha: any;
+    
+==== tests/cases/conformance/references/node_modules/bar/index.d.ts (0 errors) ====
+    /// <reference library="alpha" />
+    declare var bar: any;
+    
+==== tests/cases/conformance/references/node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====
+    declare var alpha: {};
+    
