@@ -848,7 +848,7 @@ namespace ts {
                 property.startsOnNewLine = true;
             }
 
-            addNode(properties, property);
+            properties.push(property);
         }
     }
 
