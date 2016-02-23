@@ -503,8 +503,8 @@ namespace ts {
             return node;
         }
 
-        if (lift !== undefined && visited !== undefined && isNodeArrayNode(visited)) {
-            visited = lift((<NodeArrayNode<Node>>visited).nodes);
+        if (visited !== undefined && isNodeArrayNode(visited)) {
+            visited = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
         }
 
         if (parenthesize !== undefined && visited !== undefined) {
@@ -854,26 +854,6 @@ namespace ts {
      */
     function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
         return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
-    }
-
-    /**
-     * Tries to lift a NodeArrayNode to a Node. This is primarily used to
-     * lift multiple statements into a single Block.
-     *
-     * @param node The visited Node.
-     * @param options Options used to control lift behavior.
-     */
-    function liftNode(node: Node, lifter: (nodes: NodeArray<Node>) => Node): Node {
-        if (node === undefined) {
-            return undefined;
-        }
-        else if (isNodeArrayNode(node)) {
-            const lift = lifter || extractSingleNode;
-            return lift(node.nodes);
-        }
-        else {
-            return node;
-        }
     }
 
     /**
