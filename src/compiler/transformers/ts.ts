@@ -6,7 +6,6 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
-    // TODO(rbuckton): TS->ES7 transformer
     export function transformTypeScript(context: TransformationContext) {
         const {
             nodeHasGeneratedName,
@@ -38,7 +37,6 @@ namespace ts {
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
         let currentParent: Node;
         let currentNode: Node;
-        let isRightmostExpression: boolean;
         let superContainerStack: SuperContainer[];
 
         return transformSourceFile;
@@ -47,7 +45,6 @@ namespace ts {
             currentSourceFile = node;
             node = visitEachChild(node, visitor, context);
             setNodeEmitFlags(node, NodeEmitFlags.EmitEmitHelpers);
-            currentSourceFile = undefined;
             return node;
         }
 
@@ -61,14 +58,12 @@ namespace ts {
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
-            const savedIsRightmostExpression = isRightmostExpression;
             onBeforeVisitNode(node);
             node = visitor(node);
             currentNamespace = savedCurrentNamespace;
             currentScope = savedCurrentScope;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
-            isRightmostExpression = savedIsRightmostExpression;
             return node;
         }
 
@@ -334,11 +329,6 @@ namespace ts {
                     currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
                     break;
             }
-
-            // Keep track of whether this is the right-most expression of an expression tree.
-            // This is used to determine whether to parenthesize an `await` expression transformed
-            // into a `yield` expression.
-            isRightmostExpression = currentParent && isRightmost(currentParent, currentNode, isRightmostExpression);
         }
 
         /**
@@ -567,7 +557,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassExpression(node: ClassExpression): LeftHandSideExpression {
+        function visitClassExpression(node: ClassExpression): Expression {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, heritageClauses !== undefined);
@@ -598,7 +588,7 @@ namespace ts {
                 addNode(expressions, createAssignment(temp, classExpression));
                 addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
                 addNode(expressions, temp);
-                return createParen(inlineExpressions(expressions));
+                return inlineExpressions(expressions);
             }
 
             return classExpression;
@@ -2229,12 +2219,10 @@ namespace ts {
          * @param node The await expression node.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
-            const expression = createYield(
+            return createYield(
                 visitNode(node.expression, visitor, isExpression),
                 node
             );
-
-            return isRightmostExpression ? expression : createParen(expression);
         }
 
         /**
@@ -2688,49 +2676,6 @@ namespace ts {
                 if (superContainerStack) {
                     superContainerStack.pop();
                 }
-            }
-        }
-
-        function isRightmost(parentNode: Node, node: Node, wasRightmost: boolean) {
-            switch (parentNode.kind) {
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.BindingElement:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.ExpressionStatement:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.ThrowStatement:
-                case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.Decorator:
-                case SyntaxKind.ExpressionWithTypeArguments:
-                case SyntaxKind.SpreadElementExpression:
-                case SyntaxKind.AsExpression:
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.JsxAttribute:
-                case SyntaxKind.JsxSpreadAttribute:
-                case SyntaxKind.JsxExpression:
-                    return true;
-                case SyntaxKind.TemplateSpan:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                    return node !== (<CallExpression | NewExpression>parentNode).expression;
-                case SyntaxKind.BinaryExpression:
-                    return wasRightmost && node === (<BinaryExpression>parentNode).right;
-                case SyntaxKind.ConditionalExpression:
-                    return wasRightmost && node === (<ConditionalExpression>parentNode).whenTrue;
-                default:
-                    return wasRightmost;
             }
         }
     }
