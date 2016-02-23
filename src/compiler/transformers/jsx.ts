@@ -85,14 +85,14 @@ namespace ts {
                                 properties = undefined;
                             }
 
-                            addNode(segments, transformJsxSpreadAttributeToExpression(attr), isExpression);
+                            addNode(segments, transformJsxSpreadAttributeToExpression(attr));
                         }
                         else {
                             if (!properties) {
                                 properties = [];
                             }
 
-                            addNode(properties, transformJsxAttributeToObjectLiteralElement(attr), isObjectLiteralElement);
+                            addNode(properties, transformJsxAttributeToObjectLiteralElement(attr));
                         }
                     }
 

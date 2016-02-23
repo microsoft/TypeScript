@@ -238,6 +238,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
+var useTransforms = process.env.USE_TRANSFORMS || false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
@@ -295,6 +296,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (stripInternal) {
             options += " --stripInternal"
+        }
+
+        if (useBuiltCompiler && useTransforms) {
+            options += " --experimentalTransforms"
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -418,6 +423,10 @@ compileFile(/*outfile*/configureNightlyJs,
 
 task("setDebugMode", function() {
     useDebugMode = true;
+});
+
+task("setTransforms", function() {
+    useTransforms = true;
 });
 
 task("configure-nightly", [configureNightlyJs], function() {
