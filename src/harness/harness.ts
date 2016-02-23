@@ -817,7 +817,7 @@ namespace Harness {
         export let fourslashSourceFile: ts.SourceFile;
 
         export function getCanonicalFileName(fileName: string): string {
-            return Harness.IO.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
+            return fileName;
         }
 
         export function createCompilerHost(
@@ -832,6 +832,8 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
+            const harnessNormalizePath = (f: string) => <ts.Path>ts.normalizePath(getCanonicalFileName(f));
+
             const fileMap: ts.FileMap<ts.SourceFile> = ts.createFileMap<ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
@@ -839,6 +841,7 @@ namespace Harness {
                     const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
                     fileMap.set(path, sourceFile);
+                    fileMap.set(harnessNormalizePath(path), sourceFile);
                 }
             }
 
@@ -867,6 +870,7 @@ namespace Harness {
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         Harness.IO.newLine();
 
+
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
@@ -875,8 +879,12 @@ namespace Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
+                fileExists: fileName => {
+                    return fileMap.contains(harnessNormalizePath(fileName));
+                },
+                readFile: (fileName: string): string => {
+                    return fileMap.get(harnessNormalizePath(fileName)).getText();
+                }
             };
         }
 
@@ -1462,6 +1470,7 @@ namespace Harness {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
                     tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+                    tsConfig.options.configFilePath = <ts.Path>data.name;
 
                     // delete entry from the list
                     testUnitData.splice(i, 1);
