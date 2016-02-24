@@ -743,7 +743,7 @@ namespace ts {
     export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
-            argumentsList.push(props)
+            argumentsList.push(props);
         }
 
         if (children && children.length > 0) {

@@ -288,11 +288,6 @@ namespace ts {
     }
 
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
-        return printFiles(resolver, host, targetSourceFile);
-    }
-
-    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function legacyEmitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
