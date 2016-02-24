@@ -1031,6 +1031,7 @@ namespace ts {
 
         function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             const options = program.getCompilerOptions();
+            // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
             if (!sourceFile || options.out || options.outFile) {
                 return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
             }
