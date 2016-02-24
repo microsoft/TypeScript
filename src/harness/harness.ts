@@ -871,6 +871,7 @@ namespace Harness {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName: options => defaultLibFileName,
+                getUserDefinedLibFileName: options => [],
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,

@@ -2424,6 +2424,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        library?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2516,7 +2517,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | Map<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2532,7 +2533,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number>;             // an object literal mapping named values to actual values
+        type: Map<number | string>;             // an object literal mapping named values to actual values
         error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
     }
 
@@ -2710,6 +2711,7 @@ namespace ts {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
+        getUserDefinedLibFileName(options: CompilerOptions): string[];
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;

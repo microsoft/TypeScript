@@ -2228,11 +2228,11 @@
         "category": "Message",
         "code": 6002
     },
-    "Specifies the location where debugger should locate map files instead of generated locations.": {
+    "Specify the location where debugger should locate map files instead of generated locations.": {
         "category": "Message",
         "code": 6003
     },
-    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+    "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
     },
@@ -2264,7 +2264,7 @@
         "category": "Message",
         "code": 6011
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
         "code": 6015
     },
@@ -2336,6 +2336,10 @@
         "category": "Message",
         "code": 6038
     },
+    "LIBRARY": {
+      "category": "Message",
+      "code":  6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2396,7 +2400,7 @@
         "category": "Message",
         "code": 6056
     },
-    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+    "Specify the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
     },
@@ -2404,7 +2408,7 @@
         "category": "Error",
         "code": 6059
     },
-    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+    "Specify the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
         "code": 6060
     },
@@ -2436,7 +2440,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
+    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },
@@ -2492,7 +2496,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
@@ -2607,6 +2611,14 @@
     "Do not emit 'use strict' directives in module output.": {
         "category": "Message",
         "code": 6112
+    },
+    "Specify library to be included in the compilation:": {
+        "category": "Message",
+        "code": 6113
+    },
+    "Arguments for library option must be: {0}": {
+      "category": "Error",
+      "code": 6114
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

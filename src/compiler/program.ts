@@ -630,10 +630,18 @@ namespace ts {
             }
         }
 
+        function getUserDefinedLibFileName(options: CompilerOptions): string[] {
+            const directoryPath = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
+            return options.library.map(fileName => {
+                return combinePaths(directoryPath, fileName);
+            });
+        }
+
         const newLine = getNewLineCharacter(options);
 
         return {
             getSourceFile,
+            getUserDefinedLibFileName,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
@@ -753,8 +761,14 @@ namespace ts {
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
-            if (!skipDefaultLib) {
+            if (!skipDefaultLib && !options.library) {
                 processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+            }
+            else {
+                const libFileNames = host.getUserDefinedLibFileName(options);
+                libFileNames.forEach(libFileName => {
+                    processRootFile(libFileName, /*isDefaultLib*/ true);
+                });
             }
         }
 
