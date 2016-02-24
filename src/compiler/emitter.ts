@@ -287,12 +287,8 @@ namespace ts {
         _i        = 0x10000000,  // Use/preference flag for '_i'
     }
 
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
-        return printFiles(resolver, host, targetSourceFile);
-    }
-
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function legacyEmitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
