@@ -238,14 +238,14 @@ namespace ts {
             addExtendsHelperIfNeeded(statements, node, hasExtendsClause);
             addConstructor(statements, node, hasExtendsClause);
             addClassMembers(statements, node);
-            addLine(statements, createReturn(getDeclarationName(node)));
-            addLines(statements, endLexicalEnvironment());
-            return createBlock(statements);
+            addNode(statements, createReturn(getDeclarationName(node)));
+            addNodes(statements, endLexicalEnvironment());
+            return setMultiLine(createBlock(statements), /*multiLine*/ true);
         }
 
         function addExtendsHelperIfNeeded(classStatements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
             if (hasExtendsClause) {
-                addLine(classStatements,
+                addNode(classStatements,
                     createStatement(
                         createExtendsHelper(getDeclarationName(node))
                     )
@@ -256,7 +256,7 @@ namespace ts {
         function addConstructor(classStatements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, hasExtendsClause);
-            addLine(classStatements,
+            addNode(classStatements,
                 createFunctionDeclaration(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
@@ -291,13 +291,13 @@ namespace ts {
                 addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, hasSynthesizedSuper ? 1 : 0));
             }
 
-            addLines(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ constructor && constructor.body);
+            addNodes(statements, endLexicalEnvironment());
+            return setMultiLine(createBlock(statements, /*location*/ constructor && constructor.body), /*multiLine*/ true);
         }
 
         function addDefaultSuperCall(statements: Statement[], constructor: ConstructorDeclaration, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
             if (constructor ? hasSynthesizedSuper : hasExtendsClause) {
-                addLine(statements,
+                addNode(statements,
                     createStatement(
                         createFunctionApply(
                             createIdentifier("_super"),
@@ -370,7 +370,7 @@ namespace ts {
             // we usually don't want to emit a var declaration; however, in the presence
             // of an initializer, we must emit that expression to preserve side effects.
             if (name.elements.length > 0) {
-                addLine(statements,
+                addNode(statements,
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
@@ -380,7 +380,7 @@ namespace ts {
                 );
             }
             else if (initializer) {
-                addLine(statements,
+                addNode(statements,
                     createStatement(
                         createAssignment(
                             temp,
@@ -396,7 +396,7 @@ namespace ts {
         }
 
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
-            addLine(statements,
+            addNode(statements,
                 createIf(
                     createStrictEquality(
                         getSynthesizedNode(name),
@@ -436,7 +436,7 @@ namespace ts {
             const temp = createLoopVariable();
 
             // var param = [];
-            addLine(statements,
+            addNode(statements,
                 createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -451,7 +451,7 @@ namespace ts {
             // for (var _i = restIndex; _i < arguments.length; _i++) {
             //   param[_i - restIndex] = arguments[_i];
             // }
-            addLine(statements,
+            addNode(statements,
                 createFor(
                     createVariableDeclarationList([
                         createVariableDeclaration(temp, createLiteral(restIndex))
@@ -482,7 +482,7 @@ namespace ts {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
                 enableExpressionSubstitutionForCapturedThis();
 
-                addLine(statements,
+                addNode(statements,
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList([
@@ -500,11 +500,11 @@ namespace ts {
             for (const member of node.members) {
                 switch (member.kind) {
                     case SyntaxKind.SemicolonClassElement:
-                        addLine(classStatements, transformSemicolonClassElementToStatement(<SemicolonClassElement>member));
+                        addNode(classStatements, transformSemicolonClassElementToStatement(<SemicolonClassElement>member));
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        addLine(classStatements, transformClassMethodDeclarationToStatement(node, <MethodDeclaration>member));
+                        addNode(classStatements, transformClassMethodDeclarationToStatement(node, <MethodDeclaration>member));
                         break;
 
                     case SyntaxKind.GetAccessor:
@@ -512,7 +512,7 @@ namespace ts {
                         const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
                             const receiver = getClassMemberPrefix(node, member);
-                            addLine(classStatements, transformAccessorsToStatement(receiver, accessors));
+                            addNode(classStatements, transformAccessorsToStatement(receiver, accessors));
                         }
 
                         break;
@@ -639,7 +639,7 @@ namespace ts {
                 }
             }
 
-            addLines(statements, endLexicalEnvironment());
+            addNodes(statements, endLexicalEnvironment());
             return createBlock(statements, node.body);
         }
 
@@ -804,9 +804,7 @@ namespace ts {
             // for-of bodies are always emitted as blocks.
 
             const expression = visitNode(node.expression, visitor, isExpression);
-            const rhsIsIdentifier = expression.kind === SyntaxKind.Identifier;
             const initializer = node.initializer;
-            const loopDeclarations: VariableDeclaration[] = [];
             const loopBodyStatements: Statement[] = [];
 
             // In the case where the user wrote an identifier as the RHS, like this:
@@ -822,12 +820,11 @@ namespace ts {
             // Initialize LHS
             // var v = _a[_i];
             if (isVariableDeclarationList(initializer)) {
-                const declarations: VariableDeclaration[] = [];
                 const firstDeclaration = firstOrUndefined(initializer.declarations);
                 if (firstDeclaration && isBindingPattern(firstDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
-                    addLine(loopBodyStatements,
+                    addNode(loopBodyStatements,
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
@@ -844,7 +841,7 @@ namespace ts {
                 else {
                     // The following call does not include the initializer, so we have
                     // to emit it separately.
-                    addLine(loopBodyStatements,
+                    addNode(loopBodyStatements,
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
@@ -864,7 +861,7 @@ namespace ts {
                 const assignment = createAssignment(initializer, createElementAccess(rhsReference, counter));
                 if (isDestructuringAssignment(assignment)) {
                     // This is a destructuring pattern, so we flatten the destructuring instead.
-                    addLine(loopBodyStatements,
+                    addNode(loopBodyStatements,
                         createStatement(
                             flattenDestructuringAssignment(
                                 assignment,
@@ -876,7 +873,7 @@ namespace ts {
                     );
                 }
                 else {
-                    addLine(loopBodyStatements, createStatement(assignment, /*location*/ node.initializer));
+                    addNode(loopBodyStatements, createStatement(assignment, /*location*/ node.initializer));
                 }
             }
 
@@ -909,10 +906,6 @@ namespace ts {
             );
         }
 
-        function shouldConvertLoopBody(node: IterationStatement): boolean {
-            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
-        }
-
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
             // We are here because a ComputedPropertyName was used somewhere in the expression.
             const properties = node.properties;
@@ -936,8 +929,6 @@ namespace ts {
             hoistVariableDeclaration(temp);
 
             // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
-            let initialProperties = visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties);
-
             const expressions: Expression[] = [];
             addNode(expressions,
                 createAssignment(
@@ -1067,7 +1058,7 @@ namespace ts {
                     target,
                     thisArg,
                     transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false)
-                )
+                );
             }
             else {
                 Debug.assert(isSuperCall(node));
@@ -1285,7 +1276,7 @@ namespace ts {
             // thus we need to remove those characters.
             // First template piece starts with "`", others with "}"
             // Last template piece ends with "`", others with "${"
-            let isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
             text = text.substring(1, text.length - (isLast ? 1 : 2));
 
             // Newline normalization:
@@ -1363,7 +1354,6 @@ namespace ts {
         }
 
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
-            const expression = createIdentifier("_super");
             return containingNonArrowFunction
                 && isClassElement(containingNonArrowFunction)
                 && (containingNonArrowFunction.flags & NodeFlags.Static) === 0
@@ -1375,7 +1365,7 @@ namespace ts {
             const clone = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            let statementOffset = addPrologueDirectives(statements, node.statements);
+            const statementOffset = addPrologueDirectives(statements, node.statements);
             addCaptureThisForNodeIfNeeded(statements, node);
             addNodes(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             addNodes(statements, endLexicalEnvironment());
@@ -1384,7 +1374,7 @@ namespace ts {
         }
 
         function addPrologueDirectives(to: Statement[], from: NodeArray<Statement>): number {
-            for (let i = 0; i < from.length; ++i) {
+            for (let i = 0; i < from.length; i++) {
                 if (isPrologueDirective(from[i])) {
                     addNode(to, from[i]);
                 }
@@ -1395,8 +1385,6 @@ namespace ts {
 
             return from.length;
         }
-
-        var inEmit: boolean;
 
         function onBeforeEmitNode(node: Node) {
             previousOnBeforeEmitNode(node);

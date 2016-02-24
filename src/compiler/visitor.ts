@@ -1,4 +1,5 @@
 /// <reference path="checker.ts" />
+/// <reference path="factory.ts" />
 
 /* @internal */
 namespace ts {
@@ -163,7 +164,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isConciseBody, lift: liftToBlock },
+            { name: "body", test: isConciseBody, lift: liftToBlock, parenthesize: parenthesizeConciseBody },
         ],
         [SyntaxKind.DeleteExpression]: [
             { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
@@ -408,7 +409,7 @@ namespace ts {
             { name: "expression", test: isExpression, optional: true },
         ],
         [SyntaxKind.CaseClause]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
             { name: "statements", test: isStatement },
         ],
         [SyntaxKind.DefaultClause]: [
@@ -478,24 +479,46 @@ namespace ts {
      * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
      */
     export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+        return <T>visitNodeWorker(node, visitor, test, optional, lift, /*parenthesize*/ undefined, /*parentNode*/ undefined);
+    }
+
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param optional A value indicating whether the Node is itself optional.
+     * @param lift A callback to execute to lift a NodeArrayNode into a valid Node.
+     * @param parenthesize A callback used to parenthesize the node if needed.
+     * @param parentNode A parentNode for the node.
+     */
+    function visitNodeWorker(node: Node, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
         if (node === undefined) {
             return undefined;
         }
 
-        const visited = visitor(node);
+        let visited = visitor(node);
         if (visited === node) {
             return node;
         }
 
-        const lifted = liftNode(visited, lift);
-        if (lifted === undefined) {
+        if (visited !== undefined && isNodeArrayNode(visited)) {
+            visited = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
+        }
+
+        if (parenthesize !== undefined && visited !== undefined) {
+            visited = parenthesize(visited, parentNode);
+        }
+
+        if (visited === undefined) {
             Debug.assert(optional, "Node not optional.");
             return undefined;
         }
 
         Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
         aggregateTransformFlags(visited);
-        return <T>visited;
+        return visited;
     }
 
     /**
@@ -508,11 +531,24 @@ namespace ts {
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
     export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test: (node: Node) => boolean, start?: number, count?: number): TArray {
+        return <TArray>visitNodesWorker(nodes, visitor, test, /*parenthesize*/ undefined, /*parentNode*/ undefined, start, count);
+    }
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => Node, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
         if (nodes === undefined) {
             return undefined;
         }
 
-        let updated: T[];
+        let updated: Node[];
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -532,25 +568,21 @@ namespace ts {
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMany<T>>visitor(node);
+            const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
                     updated = nodes.slice(0, i);
                 }
 
-                if (visited !== node) {
-                    aggregateTransformFlags(visited);
-                }
-
-                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test);
+                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test, parenthesize, parentNode, /*isVisiting*/ visited !== node);
             }
         }
 
         if (updated !== undefined) {
-            return <TArray>(isModifiersArray(nodes)
+            return isModifiersArray(nodes)
                 ? createModifiersArray(updated, nodes)
-                : createNodeArray(updated, nodes, nodes.hasTrailingComma));
+                : createNodeArray(updated, nodes, nodes.hasTrailingComma);
         }
 
         return nodes;
@@ -583,9 +615,17 @@ namespace ts {
             for (const edge of edgeTraversalPath) {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
-                    const visited = visitEdge(edge, value, visitor);
-                    if (visited && isArray(visited) && isModifiersArray(visited)) {
-                        modifiers = visited.flags;
+                    let visited: Node | NodeArray<Node>;
+                    if (isArray(value)) {
+                        const visitedArray = visitNodesWorker(value, visitor, edge.test, edge.parenthesize, node, 0, value.length);
+                        if (isModifiersArray(visitedArray)) {
+                            modifiers = visitedArray.flags;
+                        }
+
+                        visited = visitedArray;
+                    }
+                    else {
+                        visited = visitNodeWorker(<Node>value, visitor, edge.test, edge.optional, edge.lift, edge.parenthesize, node);
                     }
 
                     if (updated !== undefined || visited !== value) {
@@ -600,7 +640,7 @@ namespace ts {
                         }
 
                         if (visited !== value) {
-                            setEdgeValue(updated, edge, visited);
+                            updated[edge.name] = visited;
                         }
                     }
                 }
@@ -627,39 +667,6 @@ namespace ts {
     }
 
     /**
-     * Visits a node edge.
-     *
-     * @param edge The edge of the Node.
-     * @param value The Node or NodeArray value for the edge.
-     * @param visitor A callback used to visit the node.
-     */
-    function visitEdge(edge: NodeEdge, value: Node | NodeArray<Node>, visitor: (node: Node) => Node) {
-        return isArray(value)
-            ? visitNodes(<NodeArray<Node>>value, visitor, edge.test, /*start*/ undefined, /*count*/ undefined)
-            : visitNode(<Node>value, visitor, !edge.parenthesize ? edge.test : undefined, edge.optional, edge.lift);
-    }
-
-    /**
-     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
-     */
-    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
-        if (value && edge.parenthesize && !isArray(value)) {
-            value = parenthesizeEdge(<Node>value, parentNode, edge.parenthesize, edge.test);
-        }
-
-        parentNode[edge.name] = value;
-    }
-
-    /**
-     * Applies parentheses to a node to ensure the correct precedence.
-     */
-    function parenthesizeEdge(node: Node, parentNode: Node, parenthesize: (node: Node, parentNode: Node) => Node, test: (node: Node) => boolean) {
-        node = parenthesize(node, parentNode);
-        Debug.assert(test === undefined || test(node), "Unexpected node kind after visit.");
-        return node;
-    }
-
-    /**
      * Flattens an array of nodes that could contain NodeArrayNodes.
      */
     export function flattenNodes<T extends Node>(nodes: OneOrMany<T>[]): T[] {
@@ -681,7 +688,7 @@ namespace ts {
      * @param from The source Node or NodeArrayNode.
      */
     export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
-        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined)
+        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
     /**
@@ -691,49 +698,38 @@ namespace ts {
      * @param from The source array of Node or NodeArrayNode.
      */
     export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
-        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
+        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
-    /**
-     * Appends a node to an array on a new line.
-     *
-     * @param to The destination array.
-     * @param from The source Node or NodeArrayNode.
-     */
-    export function addLine<T extends Node>(to: T[], from: OneOrMany<T>) {
-        addNodeWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
-    }
-
-    /**
-     * Appends an array of nodes to an array on new lines.
-     *
-     * @param to The destination NodeArray.
-     * @param from The source array of Node or NodeArrayNode.
-     */
-    export function addLines<T extends Node>(to: T[], from: OneOrMany<T>[]) {
-        addNodesWorker(to, from, /*addOnNewLine*/ true, /*test*/ undefined);
-    }
-
-    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodeWorker(to: Node[], from: OneOrMany<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean) {
         if (to && from) {
             if (isNodeArrayNode(from)) {
-                addNodesWorker(to, from.nodes, addOnNewLine, test);
+                addNodesWorker(to, from.nodes, startOnNewLine, test, parenthesize, parentNode, isVisiting);
+                return;
             }
-            else {
-                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
-                if (addOnNewLine) {
-                    startOnNewLine(from);
-                }
 
-                to.push(from);
+            if (parenthesize !== undefined) {
+                from = parenthesize(from, parentNode);
             }
+
+            Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+
+            if (startOnNewLine) {
+                from.startsOnNewLine = true;
+            }
+
+            if (isVisiting) {
+                aggregateTransformFlags(from);
+            }
+
+            to.push(from);
         }
     }
 
-    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], addOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodesWorker(to: Node[], from: OneOrMany<Node>[], startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean) {
         if (to && from) {
             for (const node of from) {
-                addNodeWorker(to, node, addOnNewLine, test);
+                addNodeWorker(to, node, startOnNewLine, test, parenthesize, parentNode, isVisiting);
             }
         }
     }
@@ -871,26 +867,6 @@ namespace ts {
      */
     function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
         return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
-    }
-
-    /**
-     * Tries to lift a NodeArrayNode to a Node. This is primarily used to
-     * lift multiple statements into a single Block.
-     *
-     * @param node The visited Node.
-     * @param options Options used to control lift behavior.
-     */
-    function liftNode(node: Node, lifter: (nodes: NodeArray<Node>) => Node): Node {
-        if (node === undefined) {
-            return undefined;
-        }
-        else if (isNodeArrayNode(node)) {
-            const lift = lifter || extractSingleNode;
-            return lift(node.nodes);
-        }
-        else {
-            return node;
-        }
     }
 
     /**
