@@ -250,7 +250,7 @@ namespace ts {
         node.decorators = undefined;
         node.modifiers = undefined;
         node.typeParameters = undefined;
-        node.parameters = createSynthesizedNodeArray(parameters);
+        node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.body = body;
         return node;
@@ -286,7 +286,7 @@ namespace ts {
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
         node.type = undefined;
-        node.initializer = initializer;
+        node.initializer = initializer ? parenthesizeExpressionForList(initializer) : undefined;
         return node;
     }
 
@@ -294,7 +294,7 @@ namespace ts {
 
     export function createArrayLiteral(elements?: Expression[]) {
         const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
-        node.elements = createNodeArray(elements);
+        node.elements = parenthesizeListElements(createNodeArray(elements));
         return node;
     }
 
@@ -322,14 +322,16 @@ namespace ts {
     export function createCall(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
         const node = <CallExpression>createNode(SyntaxKind.CallExpression, location);
         node.expression = parenthesizeForAccess(expression);
-        node.arguments = createNodeArray(argumentsArray);
+        node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
         return node;
     }
 
     export function createNew(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
         const node = <NewExpression>createNode(SyntaxKind.NewExpression, location);
         node.expression = parenthesizeForAccess(expression);
-        node.arguments = argumentsArray ? createNodeArray(argumentsArray) : undefined;
+        node.arguments = argumentsArray
+            ? parenthesizeListElements(createNodeArray(argumentsArray))
+            : undefined;
         return node;
     }
 
@@ -358,7 +360,7 @@ namespace ts {
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.equalsGreaterThanToken = createNode(SyntaxKind.EqualsGreaterThanToken);
-        node.body = body;
+        node.body = parenthesizeConciseBody(body);
         return node;
     }
 
@@ -414,7 +416,7 @@ namespace ts {
 
     export function createSpread(expression: Expression) {
         const node = <SpreadElementExpression>createNode(SyntaxKind.SpreadElementExpression);
-        node.expression = expression;
+        node.expression = parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -424,8 +426,8 @@ namespace ts {
         node.modifiers = undefined;
         node.name = name;
         node.typeParameters = undefined;
-        node.heritageClauses = createSynthesizedNodeArray(heritageClauses);
-        node.members = createSynthesizedNodeArray(members);
+        node.heritageClauses = createNodeArray(heritageClauses);
+        node.members = createNodeArray(members);
         return node;
     }
 
@@ -469,7 +471,7 @@ namespace ts {
     export function createVariableDeclaration(name: string | BindingPattern | Identifier, initializer?: Expression, location?: TextRange): VariableDeclaration {
         const node = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration, location);
         node.name = typeof name === "string" ? createIdentifier(name) : name;
-        node.initializer = initializer;
+        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
         return node;
     }
 
@@ -479,7 +481,7 @@ namespace ts {
 
     export function createStatement(expression: Expression, location?: TextRange): ExpressionStatement {
         const node = <ExpressionStatement>createNode(SyntaxKind.ExpressionStatement, location);
-        node.expression = expression;
+        node.expression = parenthesizeExpressionForExpressionStatement(expression);
         return node;
     }
 
@@ -562,8 +564,8 @@ namespace ts {
         setModifiers(node, modifiers);
         node.name = name;
         node.typeParameters = undefined;
-        node.heritageClauses = createSynthesizedNodeArray(heritageClauses);
-        node.members = createSynthesizedNodeArray(members);
+        node.heritageClauses = createNodeArray(heritageClauses);
+        node.members = createNodeArray(members);
         return node;
     }
 
@@ -599,7 +601,14 @@ namespace ts {
     export function createHeritageClause(token: SyntaxKind, types: ExpressionWithTypeArguments[], location?: TextRange) {
         const node = <HeritageClause>createNode(SyntaxKind.HeritageClause, location);
         node.token = token;
-        node.types = createSynthesizedNodeArray(types);
+        node.types = createNodeArray(types);
+        return node;
+    }
+
+    export function createCaseClause(expression: Expression, statements: Statement[], location?: TextRange) {
+        const node = <CaseClause>createNode(SyntaxKind.CaseClause, location);
+        node.expression = parenthesizeExpressionForList(expression);
+        node.statements = createNodeArray(statements);
         return node;
     }
 
@@ -609,7 +618,7 @@ namespace ts {
         const node = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, location);
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
-        node.initializer = initializer;
+        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
         return node;
     }
 
@@ -734,7 +743,7 @@ namespace ts {
     export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
-            argumentsList.push(props)
+            argumentsList.push(props);
         }
 
         if (children && children.length > 0) {
@@ -1206,6 +1215,26 @@ namespace ts {
             : createParen(operand, /*location*/ operand);
     }
 
+    function parenthesizeListElements(elements: NodeArray<Expression>) {
+        let result: Expression[];
+        for (let i = 0; i < elements.length; i++) {
+            const element = parenthesizeExpressionForList(elements[i]);
+            if (result !== undefined || element !== elements[i]) {
+                if (result === undefined) {
+                    result = elements.slice(0, i);
+                }
+
+                result.push(element);
+            }
+        }
+
+        if (result !== undefined) {
+            return createNodeArray(result, elements, elements.hasTrailingComma);
+        }
+
+        return elements;
+    }
+
     export function parenthesizeExpressionForList(expression: Expression) {
         const expressionPrecedence = getExpressionPrecedence(expression);
         const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
@@ -1229,6 +1258,14 @@ namespace ts {
         }
 
         return expression;
+    }
+
+    export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
+        if (body.kind === SyntaxKind.ObjectLiteralExpression) {
+            return createParen(<Expression>body, /*location*/ body);
+        }
+
+        return body;
     }
 
     function getLeftmostExpression(node: Expression): Expression {

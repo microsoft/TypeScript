@@ -204,7 +204,7 @@ namespace ts.formatting {
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
             let useActualIndentation =
-                (isDeclaration(current) || isStatement(current)) &&
+                (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
             if (!useActualIndentation) {

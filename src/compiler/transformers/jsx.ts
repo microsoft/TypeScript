@@ -40,7 +40,7 @@ namespace ts {
         function transformJsxChildToExpression(node: JsxChild): Expression {
             switch (node.kind) {
                 case SyntaxKind.JsxText:
-                    return visitNonEmptyJsxText(<JsxText>node);
+                    return visitJsxText(<JsxText>node);
 
                 case SyntaxKind.JsxExpression:
                     return visitJsxExpression(<JsxExpression>node);
@@ -69,7 +69,7 @@ namespace ts {
             let objectProperties: Expression;
             if (node.attributes.length === 0) {
                 // When there are no attributes, React wants "null"
-                objectProperties = createLiteral(null);
+                objectProperties = createNull();
             }
             else {
                 // Either emit one big object literal (no spread attribs), or
@@ -124,7 +124,7 @@ namespace ts {
             return createPropertyAssignment(name, expression);
         }
 
-        function visitNonEmptyJsxText(node: JsxText) {
+        function visitJsxText(node: JsxText) {
             const text = getTextToEmit(node);
             if (text !== undefined) {
                 return createLiteral(text);
@@ -155,7 +155,7 @@ namespace ts {
                 const c = text.charCodeAt(i);
                 if (isLineBreak(c)) {
                     if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
-                        let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
+                        const part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
                         result = (result ? result + "\" + ' ' + \"" : "") + part;
                     }
                     firstNonWhitespace = -1;
@@ -216,11 +216,6 @@ namespace ts {
             else {
                 return name;
             }
-        }
-
-        function visitJsxText(node: JsxText) {
-            const text = trimReactWhitespaceAndApplyEntities(node);
-            return createLiteral(text || "");
         }
 
         function visitJsxExpression(node: JsxExpression) {
