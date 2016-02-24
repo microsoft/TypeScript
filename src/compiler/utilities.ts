@@ -2817,7 +2817,7 @@ namespace ts {
             else if (kind === SyntaxKind.ConditionalExpression) {
                 return isSimpleExpressionWorker((<ConditionalExpression>node).condition, depth + 1)
                     && isSimpleExpressionWorker((<ConditionalExpression>node).whenTrue, depth + 1)
-                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenFalse, depth + 1)
+                    && isSimpleExpressionWorker((<ConditionalExpression>node).whenFalse, depth + 1);
             }
             else if (kind === SyntaxKind.VoidExpression
                 || kind === SyntaxKind.TypeOfExpression

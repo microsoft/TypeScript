@@ -6,10 +6,8 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
-    // TODO(rbuckton): TS->ES7 transformer
     export function transformTypeScript(context: TransformationContext) {
         const {
-            nodeHasGeneratedName,
             getGeneratedNameForNode,
             makeUniqueName,
             setNodeEmitFlags,
@@ -21,16 +19,18 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const decoratedClassAliases: Map<Identifier> = {};
-        const currentDecoratedClassAliases: Map<Identifier> = {};
+
+        // Save the previous transformation hooks.
         const previousExpressionSubstitution = context.expressionSubstitution;
         const previousOnBeforeEmitNode = context.onBeforeEmitNode;
         const previousOnAfterEmitNode = context.onAfterEmitNode;
-        context.enableExpressionSubstitution(SyntaxKind.Identifier);
+
+        // Set new transformation hooks.
         context.expressionSubstitution = substituteExpression;
         context.onBeforeEmitNode = onBeforeEmitNode;
         context.onAfterEmitNode = onAfterEmitNode;
 
+        // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceLocalName: Identifier;
@@ -38,10 +38,28 @@ namespace ts {
         let currentParent: Node;
         let currentNode: Node;
         let combinedNodeFlags: NodeFlags;
-        let isRightmostExpression: boolean;
 
-        // This stack is is used to support substitutions when printing nodes.
+        // These variables keep track of whether expression substitution has been enabled for
+        // specific edge cases. They are persisted between each SourceFile transformation and
+        // should not be reset.
+        let hasEnabledExpressionSubstitutionForDecoratedClasses = false;
+        let hasEnabledExpressionSubstitutionForNamespaceExports = false;
         let hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = false;
+
+        // This map keeps track of aliases created for classes with decorators to avoid issues
+        // with the double-binding behavior of classes.
+        let decoratedClassAliases: Map<Identifier>;
+
+        // This map keeps track of currently active aliases defined in `decoratedClassAliases`
+        // when just-in-time substitution occurs while printing an expression identifier.
+        let currentDecoratedClassAliases: Map<Identifier>;
+
+        // This value keeps track of how deeply nested we are within any containing namespaces
+        // when performing just-in-time substitution while printing an expression identifier.
+        let namespaceNestLevel: number;
+
+        // This array keeps track of containers where `super` is valid, for use with
+        // just-in-time substitution for `super` expressions inside of async methods.
         let superContainerStack: SuperContainer[];
 
         return transformSourceFile;
@@ -50,7 +68,6 @@ namespace ts {
             currentSourceFile = node;
             node = visitEachChild(node, visitor, context);
             setNodeEmitFlags(node, NodeEmitFlags.EmitEmitHelpers);
-            currentSourceFile = undefined;
             return node;
         }
 
@@ -60,20 +77,25 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitWithStack(node: Node, visitor: (node: Node) => Node): Node {
+            // Save state
             const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedCombinedNodeFlags = combinedNodeFlags;
-            const savedIsRightmostExpression = isRightmostExpression;
+
+            // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
+
             node = visitor(node);
+
+            // Restore state
             currentNamespace = savedCurrentNamespace;
             currentScope = savedCurrentScope;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             combinedNodeFlags = savedCombinedNodeFlags;
-            isRightmostExpression = savedIsRightmostExpression;
+
             return node;
         }
 
@@ -156,6 +178,11 @@ namespace ts {
             return visitorWorker(node);
         }
 
+        /**
+         * Branching visitor, visits a TypeScript syntax node.
+         *
+         * @param node The node to visit.
+         */
         function visitTypeScript(node: Node): Node {
             // TypeScript ambient declarations are elided.
             if (node.flags & NodeFlags.Ambient) {
@@ -212,7 +239,7 @@ namespace ts {
 
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are elided. The constructor of a class will be
-                    // reordered to the start of the member list in `transformClassDeclaration`.
+                    // transformed as part of `transformClassDeclaration`.
                     return undefined;
 
                 case SyntaxKind.ClassDeclaration:
@@ -342,11 +369,6 @@ namespace ts {
                     currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
                     break;
             }
-
-            // Keep track of whether this is the right-most expression of an expression tree.
-            // This is used to determine whether to parenthesize an `await` expression transformed
-            // into a `yield` expression.
-            isRightmostExpression = currentParent && isRightmost(currentParent, currentNode, isRightmostExpression);
         }
 
         /**
@@ -479,11 +501,13 @@ namespace ts {
 
                 // Record an alias to avoid class double-binding.
                 if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                    enableExpressionSubstitutionForDecoratedClasses();
                     decoratedClassAlias = makeUniqueName(node.name ? node.name.text : "default");
                     decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
 
                     // We emit the class alias as a `let` declaration here so that it has the same
                     // TDZ as the class.
+
                     //  let ${decoratedClassAlias};
                     addNode(statements,
                         createVariableStatement(
@@ -546,7 +570,7 @@ namespace ts {
             // Write any decorators of the node.
             addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ false));
             addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ true));
-            addNode(statements, generateConstructorDecorationStatement(node, decoratedClassAlias))
+            addNode(statements, generateConstructorDecorationStatement(node, decoratedClassAlias));
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
@@ -575,7 +599,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassExpression(node: ClassExpression): LeftHandSideExpression {
+        function visitClassExpression(node: ClassExpression): Expression {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, heritageClauses !== undefined);
@@ -606,7 +630,7 @@ namespace ts {
                 addNode(expressions, createAssignment(temp, classExpression));
                 addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
                 addNode(expressions, temp);
-                return createParen(inlineExpressions(expressions));
+                return inlineExpressions(expressions);
             }
 
             return classExpression;
@@ -1093,7 +1117,7 @@ namespace ts {
          * Transforms all of the decorators for a declaration into an array of expressions.
          *
          * @param node The declaration node.
-         * @param allDecorators The AllDecorators object for the node.
+         * @param allDecorators An object containing all of the decorators for the declaration.
          */
         function transformAllDecoratorsOfDeclaration(node: Declaration, allDecorators: AllDecorators) {
             if (!allDecorators) {
@@ -1290,13 +1314,13 @@ namespace ts {
          */
         function addTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
-                if (shouldAppendTypeMetadata(node)) {
+                if (shouldAddTypeMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node), /*defer*/ true));
                 }
-                if (shouldAppendParamTypesMetadata(node)) {
+                if (shouldAddParamTypesMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node), /*defer*/ true));
                 }
-                if (shouldAppendReturnTypeMetadata(node)) {
+                if (shouldAddReturnTypeMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node), /*defer*/ true));
                 }
             }
@@ -1304,12 +1328,12 @@ namespace ts {
 
         /**
          * Determines whether to emit the "design:type" metadata based on the node's kind.
-         * The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
-         * compiler option is set.
+         * The caller should have already tested whether the node has decorators and whether the
+         * emitDecoratorMetadata compiler option is set.
          *
          * @param node The node to test.
          */
-        function shouldAppendTypeMetadata(node: Declaration): boolean {
+        function shouldAddTypeMetadata(node: Declaration): boolean {
             const kind = node.kind;
             return kind === SyntaxKind.MethodDeclaration
                 || kind === SyntaxKind.GetAccessor
@@ -1319,23 +1343,23 @@ namespace ts {
 
         /**
          * Determines whether to emit the "design:returntype" metadata based on the node's kind.
-         * The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
-         * compiler option is set.
+         * The caller should have already tested whether the node has decorators and whether the
+         * emitDecoratorMetadata compiler option is set.
          *
          * @param node The node to test.
          */
-        function shouldAppendReturnTypeMetadata(node: Declaration): boolean {
+        function shouldAddReturnTypeMetadata(node: Declaration): boolean {
             return node.kind === SyntaxKind.MethodDeclaration;
         }
 
         /**
          * Determines whether to emit the "design:paramtypes" metadata based on the node's kind.
-         * The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
-         * compiler option is set.
+         * The caller should have already tested whether the node has decorators and whether the
+         * emitDecoratorMetadata compiler option is set.
          *
          * @param node The node to test.
          */
-        function shouldAppendParamTypesMetadata(node: Declaration): boolean {
+        function shouldAddParamTypesMetadata(node: Declaration): boolean {
             const kind = node.kind;
             return kind === SyntaxKind.ClassDeclaration
                 || kind === SyntaxKind.ClassExpression
@@ -1465,7 +1489,7 @@ namespace ts {
 
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.BooleanKeyword:
-                    return createIdentifier("Boolean")
+                    return createIdentifier("Boolean");
 
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.StringLiteral:
@@ -1591,7 +1615,7 @@ namespace ts {
          *                    qualified name at runtime.
          */
         function serializeQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean): Expression {
-            let left: Expression
+            let left: Expression;
             if (node.left.kind === SyntaxKind.Identifier) {
                 left = serializeEntityNameAsExpression(node.left, useFallback);
             }
@@ -1997,7 +2021,7 @@ namespace ts {
                     )
                 );
 
-                const block = createBlock(statements);
+                const block = createBlock(statements, /*location*/ node.body);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -2020,25 +2044,6 @@ namespace ts {
                     promiseConstructor,
                     <Block>transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ true)
                 );
-            }
-        }
-
-        function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
-            if (!hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper) {
-                hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = true;
-
-                // We need to enable substitutions for call, property access, and element access
-                // if we need to rewrite super calls.
-                context.enableExpressionSubstitution(SyntaxKind.CallExpression);
-                context.enableExpressionSubstitution(SyntaxKind.PropertyAccessExpression);
-                context.enableExpressionSubstitution(SyntaxKind.ElementAccessExpression);
-
-                // We need to be notified when entering and exiting declarations that bind super.
-                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-                context.enableEmitNotification(SyntaxKind.GetAccessor);
-                context.enableEmitNotification(SyntaxKind.SetAccessor);
-                context.enableEmitNotification(SyntaxKind.Constructor);
             }
         }
 
@@ -2217,7 +2222,7 @@ namespace ts {
          * @param member The enum member node.
          */
         function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-            let value = resolver.getConstantValue(member);
+            const value = resolver.getConstantValue(member);
             if (value !== undefined) {
                 return createLiteral(value);
             }
@@ -2248,20 +2253,13 @@ namespace ts {
          * @param node The await expression node.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
-            const expression = setOriginalNode(
+            return setOriginalNode(
                 createYield(
                     visitNode(node.expression, visitor, isExpression),
-                    node
+                    /*location*/ node
                 ),
                 node
             );
-
-            return isRightmostExpression
-                ? expression
-                : setOriginalNode(
-                    createParen(expression, /*location*/ node),
-                    node
-                );
         }
 
         /**
@@ -2330,6 +2328,8 @@ namespace ts {
             }
 
             Debug.assert(isIdentifier(node.name));
+
+            enableExpressionSubstitutionForNamespaceExports();
 
             const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
             const modifiers = visitNodes(node.modifiers, visitor, isModifier);
@@ -2532,19 +2532,6 @@ namespace ts {
             return createStatement(expression, /*location*/ undefined);
         }
 
-        function createExportStatement(node: ClassExpression | ClassDeclaration | FunctionDeclaration): Statement {
-            const name = getDeclarationName(node);
-            if (currentNamespace) {
-                return createNamespaceExport(name, name);
-            }
-            else if (node.flags & NodeFlags.Default) {
-                return createExportDefault(name);
-            }
-            else {
-                return createModuleExport(name);
-            }
-        }
-
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return createStatement(
                 createAssignment(
@@ -2581,8 +2568,65 @@ namespace ts {
                 : getClassPrototype(node);
         }
 
+        function onBeforeEmitNode(node: Node): void {
+            previousOnBeforeEmitNode(node);
+
+            const kind = node.kind;
+            if (hasEnabledExpressionSubstitutionForDecoratedClasses
+                && kind === SyntaxKind.ClassDeclaration && node.decorators) {
+                currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
+            }
+
+            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
+                && (kind === SyntaxKind.ClassDeclaration
+                    || kind === SyntaxKind.Constructor
+                    || kind === SyntaxKind.MethodDeclaration
+                    || kind === SyntaxKind.GetAccessor
+                    || kind === SyntaxKind.SetAccessor)) {
+
+                if (!superContainerStack) {
+                    superContainerStack = [];
+                }
+
+                superContainerStack.push(<SuperContainer>node);
+            }
+
+            if (hasEnabledExpressionSubstitutionForNamespaceExports
+                && kind === SyntaxKind.ModuleDeclaration) {
+                namespaceNestLevel++;
+            }
+        }
+
+        function onAfterEmitNode(node: Node): void {
+            previousOnAfterEmitNode(node);
+
+            const kind = node.kind;
+            if (hasEnabledExpressionSubstitutionForDecoratedClasses
+                && kind === SyntaxKind.ClassDeclaration && node.decorators) {
+                currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
+            }
+
+            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
+                && (kind === SyntaxKind.ClassDeclaration
+                    || kind === SyntaxKind.Constructor
+                    || kind === SyntaxKind.MethodDeclaration
+                    || kind === SyntaxKind.GetAccessor
+                    || kind === SyntaxKind.SetAccessor)) {
+
+                if (superContainerStack) {
+                    superContainerStack.pop();
+                }
+            }
+
+            if (hasEnabledExpressionSubstitutionForNamespaceExports
+                && kind === SyntaxKind.ModuleDeclaration) {
+                namespaceNestLevel--;
+            }
+        }
+
         function substituteExpression(node: Expression): Expression {
             node = previousExpressionSubstitution(node);
+
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
@@ -2603,35 +2647,41 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            const original = getOriginalNode(node);
-            if (isIdentifier(original)) {
-                if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.BodyScopedClassBinding) {
-                    // Due to the emit for class decorators, any reference to the class from inside of the class body
-                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                    // behavior of class names in ES6.
-                    const declaration = resolver.getReferencedValueDeclaration(original);
-                    if (declaration) {
-                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
-                        if (classAlias) {
-                            return cloneNode(classAlias);
+            if (hasEnabledExpressionSubstitutionForDecoratedClasses) {
+                const original = getOriginalNode(node);
+                if (isIdentifier(original)) {
+                    if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.BodyScopedClassBinding) {
+                        // Due to the emit for class decorators, any reference to the class from inside of the class body
+                        // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                        // behavior of class names in ES6.
+                        const declaration = resolver.getReferencedValueDeclaration(original);
+                        if (declaration) {
+                            const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                            if (classAlias) {
+                                return cloneNode(classAlias);
+                            }
                         }
                     }
                 }
+            }
 
-                const container = resolver.getReferencedExportContainer(original);
-                if (container && container.kind === SyntaxKind.ModuleDeclaration) {
-                    return createPropertyAccess(
-                        getGeneratedNameForNode(container),
-                        cloneNode(node),
-                        /*location*/ node
-                    );
+            if (hasEnabledExpressionSubstitutionForNamespaceExports
+                && namespaceNestLevel > 0) {
+                // If we are nested within a namespace declaration, we may need to qualifiy
+                // an identifier that is exported from a merged namespace.
+                const original = getOriginalNode(node);
+                if (isIdentifier(original) && original.parent) {
+                    const container = resolver.getReferencedExportContainer(original);
+                    if (container && container.kind === SyntaxKind.ModuleDeclaration) {
+                        return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
+                    }
                 }
             }
 
             return node;
         }
 
-        function substituteCallExpression(node: CallExpression) {
+        function substituteCallExpression(node: CallExpression): Expression {
             const expression = node.expression;
             if (isSuperPropertyOrElementAccess(expression)) {
                 const flags = getSuperContainerAsyncMethodFlags();
@@ -2681,6 +2731,54 @@ namespace ts {
             return node;
         }
 
+        function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
+            if (!hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper) {
+                hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = true;
+
+                // We need to enable substitutions for call, property access, and element access
+                // if we need to rewrite super calls.
+                context.enableExpressionSubstitution(SyntaxKind.CallExpression);
+                context.enableExpressionSubstitution(SyntaxKind.PropertyAccessExpression);
+                context.enableExpressionSubstitution(SyntaxKind.ElementAccessExpression);
+
+                // We need to be notified when entering and exiting declarations that bind super.
+                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
+                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
+                context.enableEmitNotification(SyntaxKind.GetAccessor);
+                context.enableEmitNotification(SyntaxKind.SetAccessor);
+                context.enableEmitNotification(SyntaxKind.Constructor);
+            }
+        }
+
+        function enableExpressionSubstitutionForDecoratedClasses() {
+            if (!hasEnabledExpressionSubstitutionForDecoratedClasses) {
+                hasEnabledExpressionSubstitutionForDecoratedClasses = true;
+
+                // We need to enable substitutions for identifiers. This allows us to
+                // substitute class names inside of a class declaration.
+                context.enableExpressionSubstitution(SyntaxKind.Identifier);
+
+                // Keep track of class aliases.
+                decoratedClassAliases = {};
+                currentDecoratedClassAliases = {};
+            }
+        }
+
+        function enableExpressionSubstitutionForNamespaceExports() {
+            if (!hasEnabledExpressionSubstitutionForNamespaceExports) {
+                hasEnabledExpressionSubstitutionForNamespaceExports = true;
+
+                // We need to enable substitutions for identifiers. This allows us to
+                // substitute the names of exported members of a namespace.
+                context.enableExpressionSubstitution(SyntaxKind.Identifier);
+
+                // We need to be notified when entering and exiting namespaces.
+                context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
+
+                // Keep track of namespace nesting depth
+                namespaceNestLevel = 0;
+            }
+        }
 
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {
             if (flags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
@@ -2706,93 +2804,6 @@ namespace ts {
             const container = lastOrUndefined(superContainerStack);
             return container !== undefined
                 && resolver.getNodeCheckFlags(getOriginalNode(container)) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
-        }
-
-        function onBeforeEmitNode(node: Node): void {
-            previousOnAfterEmitNode(node);
-
-            const kind = node.kind;
-            if (kind === SyntaxKind.ClassDeclaration && node.decorators) {
-                currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
-            }
-
-            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
-                && (kind === SyntaxKind.ClassDeclaration
-                    || kind === SyntaxKind.Constructor
-                    || kind === SyntaxKind.MethodDeclaration
-                    || kind === SyntaxKind.GetAccessor
-                    || kind === SyntaxKind.SetAccessor)) {
-
-                if (!superContainerStack) {
-                    superContainerStack = [];
-                }
-
-                superContainerStack.push(<SuperContainer>node);
-            }
-        }
-
-        function onAfterEmitNode(node: Node): void {
-            previousOnAfterEmitNode(node);
-
-            const kind = node.kind;
-            if (kind === SyntaxKind.ClassDeclaration && node.decorators) {
-                currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
-            }
-
-            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
-                && (kind === SyntaxKind.ClassDeclaration
-                    || kind === SyntaxKind.Constructor
-                    || kind === SyntaxKind.MethodDeclaration
-                    || kind === SyntaxKind.GetAccessor
-                    || kind === SyntaxKind.SetAccessor)) {
-
-                if (superContainerStack) {
-                    superContainerStack.pop();
-                }
-            }
-        }
-
-        function isRightmost(parentNode: Node, node: Node, wasRightmost: boolean) {
-            switch (parentNode.kind) {
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.Parameter:
-                case SyntaxKind.BindingElement:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.ExpressionStatement:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.ThrowStatement:
-                case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.Decorator:
-                case SyntaxKind.ExpressionWithTypeArguments:
-                case SyntaxKind.SpreadElementExpression:
-                case SyntaxKind.AsExpression:
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.JsxAttribute:
-                case SyntaxKind.JsxSpreadAttribute:
-                case SyntaxKind.JsxExpression:
-                    return true;
-                case SyntaxKind.TemplateSpan:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                    return node !== (<CallExpression | NewExpression>parentNode).expression;
-                case SyntaxKind.BinaryExpression:
-                    return wasRightmost && node === (<BinaryExpression>parentNode).right;
-                case SyntaxKind.ConditionalExpression:
-                    return wasRightmost && node === (<ConditionalExpression>parentNode).whenTrue;
-                default:
-                    return wasRightmost;
-            }
         }
     }
 }

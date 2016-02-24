@@ -137,7 +137,6 @@ const _super = (function (geti, seti) {
             const comments = createCommentWriter(host, writer, sourceMap);
             const {
                 getLeadingComments,
-                getLeadingCommentsOfPosition,
                 getTrailingComments,
                 getTrailingCommentsOfPosition,
                 emitLeadingComments,
@@ -2421,7 +2420,7 @@ const _super = (function (geti, seti) {
     function createBracketsMap() {
         const brackets: string[][] = [];
         brackets[ListFormat.Braces] = ["{", "}"];
-        brackets[ListFormat.Parenthesis] = ["(",")"];
+        brackets[ListFormat.Parenthesis] = ["(", ")"];
         brackets[ListFormat.AngleBrackets] = ["<", ">"];
         brackets[ListFormat.SquareBrackets] = ["[", "]"];
         return brackets;

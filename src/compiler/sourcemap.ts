@@ -67,6 +67,11 @@ namespace ts {
         // Source map data
         let sourceMapData: SourceMapData;
 
+        // This keeps track of the number of times `disable` has been called without a
+        // corresponding call to `enable`. As long as this value is non-zero, mappings will not
+        // be recorded.
+        // This is primarily used to provide a better experience when debugging binding
+        // patterns and destructuring assignments for simple expressions.
         let disableDepth: number;
 
         return {
@@ -160,12 +165,18 @@ namespace ts {
             disableDepth = 0;
         }
 
+        /**
+         * Re-enables the recording of mappings.
+         */
         function enable() {
             if (disableDepth > 0) {
                 disableDepth--;
             }
         }
 
+        /**
+         * Disables the recording of mappings.
+         */
         function disable() {
             disableDepth++;
         }
