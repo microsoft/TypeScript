@@ -52,14 +52,14 @@ var p2 = ([...a]) => { };
 >a : any[]
 
 var p3 = ([, a]) => { };
->p3 : ([ , a]: [any, any]) => void
->([, a]) => { } : ([ , a]: [any, any]) => void
+>p3 : ([, a]: [any, any]) => void
+>([, a]) => { } : ([, a]: [any, any]) => void
 > : undefined
 >a : any
 
 var p4 = ([, ...a]) => { };
->p4 : ([ , ...a]: Iterable<any>) => void
->([, ...a]) => { } : ([ , ...a]: Iterable<any>) => void
+>p4 : ([, ...a]: Iterable<any>) => void
+>([, ...a]) => { } : ([, ...a]: Iterable<any>) => void
 > : undefined
 >a : any[]
 

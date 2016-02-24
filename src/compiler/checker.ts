@@ -2211,23 +2211,22 @@ namespace ts {
 
             function buildBindingElementDisplay(bindingElement: BindingElement, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
-                    writeSpace(writer);
+                    return;
                 }
-                else if (bindingElement.kind === SyntaxKind.BindingElement) {
-                    if (bindingElement.propertyName) {
-                        writer.writeSymbol(getTextOfNode(bindingElement.propertyName), bindingElement.symbol);
-                        writePunctuation(writer, SyntaxKind.ColonToken);
+                Debug.assert(bindingElement.kind === SyntaxKind.BindingElement);
+                if (bindingElement.propertyName) {
+                    writer.writeSymbol(getTextOfNode(bindingElement.propertyName), bindingElement.symbol);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                }
+                if (bindingElement.name) {
+                    if (isBindingPattern(bindingElement.name)) {
+                        buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
                     }
-                    if (bindingElement.name) {
-                        if (isBindingPattern(bindingElement.name)) {
-                            buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
+                    else {
+                        if (bindingElement.dotDotDotToken) {
+                            writePunctuation(writer, SyntaxKind.DotDotDotToken);
                         }
-                        else {
-                            if (bindingElement.dotDotDotToken) {
-                                writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                            }
-                            appendSymbolNameOnly(bindingElement.symbol, writer);
-                        }
+                        appendSymbolNameOnly(bindingElement.symbol, writer);
                     }
                 }
             }
