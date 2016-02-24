@@ -43,6 +43,7 @@ module E {
 
 //// [importStatementsInterfaces.js]
 // no code gen expected
+// no code gen expected
 var C;
 (function (C) {
     var m;

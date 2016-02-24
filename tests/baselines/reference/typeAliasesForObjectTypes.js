@@ -16,6 +16,7 @@ type T3<T> = { x: T }
 
 
 //// [typeAliasesForObjectTypes.js]
+// An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
 var C1 = (function () {
     function C1() {
     }

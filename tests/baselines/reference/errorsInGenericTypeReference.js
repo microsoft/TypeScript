@@ -145,3 +145,4 @@ var testClass8 = (function () {
     }
     return testClass8;
 }()); // error: could not find symbol V
+// in signatures

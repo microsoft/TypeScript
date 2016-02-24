@@ -349,6 +349,8 @@ export var tests: TestRunner = (function () {
 "use strict";
 / /;
 commonjs;
+//import FileManager = require('filemanager');
+//import App = require('app');
 var TestFileDir = ".\\TempTestFiles";
 var TestCase = (function () {
     function TestCase(name, test, errorMessageRegEx) {

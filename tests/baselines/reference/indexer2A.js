@@ -16,6 +16,7 @@ var IHeapObjectProperty = (function () {
 var IDirectChildrenMap = (function () {
     function IDirectChildrenMap() {
     }
+    // Decided to enforce a semicolon after declarations
     return IDirectChildrenMap;
 }());
 var directChildrenMap = {};

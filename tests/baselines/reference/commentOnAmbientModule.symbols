@@ -13,6 +13,7 @@ declare module E {
 >foo : Symbol(foo, Decl(b.ts, 2, 32))
     }
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=========
     Keep this pinned comment
@@ -27,7 +28,7 @@ declare module C {
 >foo : Symbol(foo, Decl(a.ts, 6, 18))
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare module D {
 >D : Symbol(D, Decl(a.ts, 8, 1))
 

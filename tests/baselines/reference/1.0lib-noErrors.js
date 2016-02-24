@@ -1158,3 +1158,60 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
+/**
+  * Evaluates JavaScript code and executes it.
+  * @param x A String value that contains valid JavaScript code.
+  */
+/**
+  * Converts A string to an integer.
+  * @param s A string to convert into a number.
+  * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
+  * All other strings are considered decimal.
+  */
+/**
+  * Converts a string to a floating-point number.
+  * @param string A string that contains a floating-point number.
+  */
+/**
+  * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number).
+  * @param number A numeric value.
+  */
+/**
+  * Determines whether a supplied number is finite.
+  * @param number Any numeric value.
+  */
+/**
+  * Gets the unencoded version of an encoded Uniform Resource Identifier (URI).
+  * @param encodedURI A value representing an encoded URI.
+  */
+/**
+  * Gets the unencoded version of an encoded component of a Uniform Resource Identifier (URI).
+  * @param encodedURIComponent A value representing an encoded URI component.
+  */
+/**
+  * Encodes a text string as a valid Uniform Resource Identifier (URI)
+  * @param uri A value representing an encoded URI.
+  */
+/**
+  * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
+  * @param uriComponent A value representing an encoded URI component.
+  */
+/**
+  * Provides functionality common to all JavaScript objects.
+  */
+/**
+  * Creates a new function.
+  */
+/**
+  * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
+  */
+/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
+/** An intrinsic object that provides basic mathematics functionality and constants. */
+/** Enables basic storage and retrieval of dates and times. */
+/**
+  * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
+  */
+/////////////////////////////
+/// ECMAScript Array API (specially handled by compiler)
+/////////////////////////////

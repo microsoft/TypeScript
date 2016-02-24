@@ -86,6 +86,7 @@ d2(); // no error (typed as any)
 fn2 `${0}${''}`; // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
 fn2 `${''}${0}`; // OK
+// Generic overloads with differing arity
 function fn3() { return null; }
 var s = fn3 `${3}`;
 var s = fn3 `${''}${3}${''}`;
@@ -97,6 +98,7 @@ var s = fn3 `${''}${''}${''}`;
 var n = fn3 `${''}${''}${3}`;
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
 fn3 ``; // Error
+// Generic overloads with constraints
 function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
 fn4 `${''}${3}`;
@@ -108,6 +110,7 @@ fn4 `${null}${null}`; // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4 `${true}${null}`;
 fn4 `${null}${true}`;
+// Non - generic overloads where contextual typing of function arguments has errors
 function fn5() { return undefined; }
 fn5 `${(n) => n.toFixed()}`; // will error; 'n' should have type 'string'.
 fn5 `${(n) => n.substr(0)}`;

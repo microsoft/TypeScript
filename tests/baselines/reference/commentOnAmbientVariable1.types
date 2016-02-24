@@ -8,7 +8,7 @@
 declare var v: number;
 >v : number
 
-// Don't keep this comment.
+// Keep this comment.
 declare var y: number;
 >y : number
 

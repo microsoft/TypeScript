@@ -103,7 +103,9 @@ function f16<T extends String, U extends T>(x: any) { }
 //// [stringLiteralTypeIsSubtypeOfString.js]
 // string literal types are subtypes of string, any
 function f1(x) { }
+// ok
 function f2(x) { }
+// errors
 function f3(x) { }
 function f4(x) { }
 function f5(x) { }
@@ -142,7 +144,9 @@ var C = (function () {
     C.prototype.valueOf = function () { return null; };
     return C;
 }());
+// BUG 831846
 function f10(x) { }
+// BUG 831846
 function f11(x) { }
 function f12(x) { }
 function f13(x) { }

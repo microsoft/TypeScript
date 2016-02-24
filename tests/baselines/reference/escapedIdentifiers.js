@@ -168,6 +168,7 @@ var classType2Object1 = new classType2();
 classType2Object1.foo2 = 2;
 var classType2Object2 = new classType\u0032();
 classType2Object2.foo2 = 2;
+// interfaces
 var interfaceType1Object1 = { bar1: 0 };
 interfaceType1Object1.bar1 = 2;
 var interfaceType1Object2 = { bar1: 0 };

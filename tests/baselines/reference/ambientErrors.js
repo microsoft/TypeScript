@@ -60,4 +60,15 @@ declare module 'bar' {
 
 
 //// [ambientErrors.js]
+// Ambient functions with invalid overloads
+// Ambient functions with duplicate signatures
+// Ambient function overloads that differ only by return type
+// Ambient function with default parameter values
+// Ambient function with function body
 ;
+// Ambient enum with non - integer literal constant member
+// Ambient enum with computer member
+// Ambient module with initializers for values, bodies for functions / classes
+// Ambient external module not in the global module
+// Ambient external module with a string literal name that isn't a top level external module name
+// Ambient external module with export assignment and other exported members

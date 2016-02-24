@@ -180,6 +180,7 @@ function f1(aOrb) {
 }
 f1("hello");
 f1(10);
+/** this is signature 2*/
 /** this is f2 var comment*/
 function f2(aOrb) {
     return 10;
@@ -191,6 +192,8 @@ function f3(aOrb) {
 }
 f3("hello");
 f3(10);
+/** this is signature 4 - with number parameter*/
+/** this is signature 4 - with string parameter*/
 function f4(aOrb) {
     return 10;
 }
@@ -205,15 +208,21 @@ var c = (function () {
     c.prototype.prop1 = function (aorb) {
         return 10;
     };
+    /** prop2 1*/
     c.prototype.prop2 = function (aorb) {
         return 10;
     };
+    /** prop3 2*/
     c.prototype.prop3 = function (aorb) {
         return 10;
     };
+    /** prop4 1*/
+    /** prop4 2*/
     c.prototype.prop4 = function (aorb) {
         return 10;
     };
+    /** prop5 1*/
+    /** prop5 2*/
     /** Prop5 implementaion*/
     c.prototype.prop5 = function (aorb) {
         return 10;
@@ -226,22 +235,29 @@ var c1 = (function () {
     return c1;
 }());
 var c2 = (function () {
+    /** c2 1*/
+    // c2 2
     function c2(aorb) {
     }
     return c2;
 }());
 var c3 = (function () {
+    /** c3 2*/
     function c3(aorb) {
     }
     return c3;
 }());
 var c4 = (function () {
+    /** c4 1*/
+    /** c4 2*/
     /** c4 3 */
     function c4(aorb) {
     }
     return c4;
 }());
 var c5 = (function () {
+    /** c5 1*/
+    /** c5 2*/
     /** c5 implementation*/
     function c5(aorb) {
     }

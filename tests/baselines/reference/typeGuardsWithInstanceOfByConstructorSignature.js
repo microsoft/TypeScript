@@ -201,6 +201,7 @@ if (obj2 instanceof A) {
     obj2.foo;
     obj2.bar;
 }
+// a construct signature with generics
 var obj3;
 if (obj3 instanceof B) {
     obj3.foo = 1;
@@ -213,6 +214,7 @@ if (obj4 instanceof B) {
     obj4.foo = 1;
     obj4.bar = "str";
 }
+// has multiple construct signature
 var obj5;
 if (obj5 instanceof C) {
     obj5.foo;
@@ -226,6 +228,7 @@ if (obj6 instanceof C) {
     obj6.bar1;
     obj6.bar2;
 }
+// with object type literal
 var obj7;
 if (obj7 instanceof D) {
     obj7.foo;
@@ -236,6 +239,7 @@ if (obj8 instanceof D) {
     obj8.foo;
     obj8.bar;
 }
+// a construct signature that returns a union type
 var obj9;
 if (obj9 instanceof E) {
     obj9.foo;
@@ -248,6 +252,7 @@ if (obj10 instanceof E) {
     obj10.bar1;
     obj10.bar2;
 }
+// a construct signature that returns any
 var obj11;
 if (obj11 instanceof F) {
     obj11.foo;
@@ -258,6 +263,7 @@ if (obj12 instanceof F) {
     obj12.foo;
     obj12.bar;
 }
+// a type with a prototype, it overrides the construct signature
 var obj13;
 if (obj13 instanceof G) {
     obj13.foo1;
@@ -268,6 +274,7 @@ if (obj14 instanceof G) {
     obj14.foo1;
     obj14.foo2;
 }
+// a type with a prototype that has any type
 var obj15;
 if (obj15 instanceof H) {
     obj15.foo;

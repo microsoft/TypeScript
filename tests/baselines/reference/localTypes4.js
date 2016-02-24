@@ -59,6 +59,7 @@ function f3() {
     }
 }
 function f4() {
+    // Local types are block scoped
     var v;
     v.x = 10;
     if (true) {

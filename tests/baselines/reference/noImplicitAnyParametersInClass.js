@@ -168,6 +168,7 @@ var C = (function () {
             r[_i - 1] = arguments[_i];
         }
     };
+    // Implicit-'any' errors for x1, y2, x3, and y3.
     C.prototype.pub_f8 = function (x3, y3) { };
     ///////////////////////////////////////////
     // No implicit-'any' errors.
@@ -194,6 +195,7 @@ var C = (function () {
             r[_i - 1] = arguments[_i];
         }
     };
+    // Implicit-'any' errors for x1, y2, x3, and y3.
     C.prototype.priv_f8 = function (x3, y3) { };
     return C;
 }());

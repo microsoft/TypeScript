@@ -33,6 +33,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var s = ({});
+// scenario 2
 var x = {};
 var C1 = (function () {
     function C1() {

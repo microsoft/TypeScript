@@ -12,3 +12,4 @@ interface IFace1{
 
 
 //// [implicitAnyFunctionOverloadWithImplicitAnyReturnType.js]
+// this should not be an error

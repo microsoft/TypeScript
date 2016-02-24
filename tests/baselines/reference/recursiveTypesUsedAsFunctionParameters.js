@@ -59,8 +59,13 @@ function foo(x) {
 function foo2(x) {
 }
 function other() {
+    // error but wrong error
+    // BUG 838247
     function foo3(x) { }
+    // should be error
+    // BUG 838247
     function foo4(x) { }
+    // ok
     function foo5(x) { return null; }
     var list;
     var myList;

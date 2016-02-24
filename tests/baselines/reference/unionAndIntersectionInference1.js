@@ -109,5 +109,6 @@ function get(x) {
 }
 var foo;
 get(foo).toUpperCase(); // Ok
+// Repro from #5456
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man

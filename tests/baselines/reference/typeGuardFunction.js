@@ -122,6 +122,9 @@ var union;
 if (isA(union)) {
     union.propA;
 }
+// Call signature
+// The parameter index and argument index for the type guard target is matching.
+// The type predicate type is assignable to the parameter type.
 if (isC_multipleParams(a, 0)) {
     a.propC;
 }
@@ -137,11 +140,14 @@ var D = (function () {
 }());
 // Arrow function
 var f1 = function (p1) { return false; };
+// Function type
 // Function expressions
 f2(function (p1) {
     return true;
 });
+// Evaluations are asssignable to boolean.
 acceptingBoolean(isA(a));
+// Type predicates with different parameter name.
 acceptingTypeGuardFunction(isA);
 // Binary expressions
 var union2;

@@ -69,6 +69,9 @@ var { b2: { b21 } = { b21: "string" } } = { b2: { b21: "world" } };
 var { 1: b3 } = { 1: "string" };
 var { b4 = 1 } = { b4: 100000 };
 var { b5: { b52 } } = { b5: { b52 } };
+// V is an object assignment pattern and, for each assignment property P in V,
+//      P specifies a numeric property name and S has a numeric index signature
+//          of a type that is assignable to the target given in P, or
 function foo() {
     return {
         1: true
@@ -81,6 +84,8 @@ function bar() {
 }
 var { 1: c0 } = foo();
 var { 1: c1 } = bar();
+// V is an object assignment pattern and, for each assignment property P in V,
+//      S has a string index signature of a type that is assignable to the target given in P
 function foo1() {
     return {
         "prop1": 2

@@ -46,6 +46,10 @@ else {
 }
 
 //// [stringLiteralTypesAsTags03.js]
+// Currently (2015-12-14), we write '"A" | "A"' and '"B" | "B"' to avoid
+// interpreting respective overloads as "specialized" signatures.
+// That way, we can avoid the need to look for a compatible overload
+// signature and simply check compatibility with the implementation.
 function hasKind(entity, kind) {
     return entity.kind === kind;
 }

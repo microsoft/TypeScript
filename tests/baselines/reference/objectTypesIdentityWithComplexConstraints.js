@@ -15,4 +15,5 @@ function foo(x: B); // error after constraints above made illegal
 function foo(x: any) { }
 
 //// [objectTypesIdentityWithComplexConstraints.js]
+// ok, not considered identical because the steps of contextual signature instantiation create fresh type parameters
 function foo(x) { }

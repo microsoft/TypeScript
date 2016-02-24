@@ -10,7 +10,7 @@
 module ElidedModule {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 module ElidedModule2 {
 }
 
@@ -19,10 +19,12 @@ module ElidedModule2 {
 module ElidedModule3 {
 }
 
+
 //// [a.js]
 /*!=================
     Keep this pinned
    =================
 */
+// Keep this comment.
 //// [b.js]
 ///<reference path="a.ts"/>

@@ -9,7 +9,7 @@ declare module C {
     function foo();
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare module D {
     class bar { }
 }

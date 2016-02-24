@@ -16,7 +16,7 @@ declare function foobar(a: typeof foo): typeof bar;
 declare function foo();
 >foo : Symbol(foo, Decl(a.ts, 0, 0))
 
-// Don't keep this comment.
+// Keep this comment.
 declare function bar();
 >bar : Symbol(bar, Decl(a.ts, 6, 23))
 

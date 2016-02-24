@@ -62,6 +62,7 @@ module M {
 var a;
 var r1 = a.foo;
 var r2 = a.bar;
+// basic generic case
 var b;
 var r3 = b.foo;
 var r4 = b.bar;

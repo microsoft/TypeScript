@@ -12,6 +12,8 @@ var fooVar: () => void;
 foo(50);
 fooVar();
 
+/** unattached JSDoc style comment */
+
 /**class comment*/
 class c {
     /** constructor comment*/
@@ -80,6 +82,7 @@ module m1 {
     }
 
     /// module m2
+    /// <reference path="sys.ts" />
     export module m2 {
     }
 }
@@ -98,6 +101,7 @@ function foo(/** parameter comment*/ p) {
 var fooVar;
 foo(50);
 fooVar();
+/** unattached JSDoc style comment */
 /**class comment*/
 var c = (function () {
     /** constructor comment*/
@@ -121,6 +125,8 @@ var c = (function () {
         enumerable: true,
         configurable: true
     });
+    /** overload signature1*/
+    /** Overload signature 2*/
     /** overload implementation signature*/
     c.prototype.foo1 = function (aOrb) {
         return aOrb.toString();
@@ -129,6 +135,7 @@ var c = (function () {
 }());
 /**instance comment*/
 var i = new c();
+/** interface comments*/
 /**interface instance comments*/
 var i1_i;
 /** this is module comment*/
@@ -142,7 +149,9 @@ var m1;
         return b;
     }());
     m1.b = b;
+    /// module m2
 })(m1 || (m1 = {}));
+/// this is x
 
 
 //// [commentsemitComments.d.ts]
@@ -152,6 +161,7 @@ declare var myVariable: number;
 declare function foo(/** parameter comment*/ p: number): void;
 /** variable with function type comment*/
 declare var fooVar: () => void;
+/** unattached JSDoc style comment */
 /**class comment*/
 declare class c {
     /** constructor comment*/

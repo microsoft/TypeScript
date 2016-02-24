@@ -42,6 +42,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./file1"], function (require, exports, x) {
     "use strict";
     x.b = 1;
+    // OK - './file1' is a namespace
 });
 //// [file3.js]
 define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {

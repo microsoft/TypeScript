@@ -87,6 +87,7 @@ d2(); // no error (typed as any)
 (_e = ["", "", ""], _e.raw = ["", "", ""], fn2(_e, 0, '')); // OK
 // Generic and non-generic overload where non-generic overload is the only candidate
 (_f = ["", "", ""], _f.raw = ["", "", ""], fn2(_f, '', 0)); // OK
+// Generic overloads with differing arity
 function fn3() { return null; }
 var s = (_g = ["", ""], _g.raw = ["", ""], fn3(_g, 3));
 var s = (_h = ["", "", "", ""], _h.raw = ["", "", "", ""], fn3(_h, '', 3, ''));
@@ -98,6 +99,7 @@ var s = (_l = ["", "", "", ""], _l.raw = ["", "", "", ""], fn3(_l, '', '', ''));
 var n = (_m = ["", "", "", ""], _m.raw = ["", "", "", ""], fn3(_m, '', '', 3));
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
 (_o = [""], _o.raw = [""], fn3(_o)); // Error
+// Generic overloads with constraints
 function fn4() { }
 // Generic overloads with constraints tagged with types that satisfy the constraints
 (_p = ["", "", ""], _p.raw = ["", "", ""], fn4(_p, '', 3));
@@ -109,6 +111,7 @@ function fn4() { }
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 (_u = ["", "", ""], _u.raw = ["", "", ""], fn4(_u, true, null));
 (_v = ["", "", ""], _v.raw = ["", "", ""], fn4(_v, null, true));
+// Non - generic overloads where contextual typing of function arguments has errors
 function fn5() { return undefined; }
 (_w = ["", ""], _w.raw = ["", ""], fn5(_w, function (n) { return n.toFixed(); })); // will error; 'n' should have type 'string'.
 (_x = ["", ""], _x.raw = ["", ""], fn5(_x, function (n) { return n.substr(0); }));

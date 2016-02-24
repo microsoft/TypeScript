@@ -25,6 +25,8 @@ let a: x.A; // should not work
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    // augmentation for 'file1'
+    // should error since 'file1' does not have namespace meaning
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports) {

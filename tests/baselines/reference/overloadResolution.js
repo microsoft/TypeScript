@@ -126,11 +126,13 @@ var SomeDerived3 = (function (_super) {
     }
     return SomeDerived3;
 }(SomeBase));
+// Ambiguous call picks the first overload in declaration order
 function fn1() { return null; }
 var s = fn1(undefined);
 var s;
 // No candidate overloads found
 fn1({}); // Error
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 function fn2() { return undefined; }
 var d = fn2(0, undefined);
 var d;
@@ -140,6 +142,7 @@ var s = fn2(0, '');
 fn2('', 0); // Error
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 fn2('', 0); // OK
+// Generic overloads with differing arity called without type arguments
 function fn3() { return null; }
 var s = fn3(3);
 var s = fn3('', 3, '');
@@ -151,6 +154,7 @@ var s = fn3('', '', '');
 var n = fn3('', '', 3);
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3(); // Error
+// Generic overloads with constraints called with type arguments that satisfy the constraints
 function fn4() { }
 fn4('', 3);
 fn4(3, ''); // Error
@@ -166,6 +170,7 @@ fn4(null, null); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 fn4(true, null); // Error
 fn4(null, true); // Error
+// Non - generic overloads where contextual typing of function arguments has errors
 function fn5() { return undefined; }
 var n = fn5(function (n) { return n.toFixed(); });
 var s = fn5(function (n) { return n.substr(0); });

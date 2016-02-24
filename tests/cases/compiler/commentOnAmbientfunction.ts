@@ -7,7 +7,7 @@
 /*! Don't keep this pinned comment */
 declare function foo();
 
-// Don't keep this comment.
+// Keep this comment.
 declare function bar();
 
 //@filename: b.ts

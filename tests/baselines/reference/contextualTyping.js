@@ -293,6 +293,7 @@ c6t5 = function (n) { return ({}); };
 // CONTEXT: Array index assignment
 var c7t2;
 c7t2[0] = ({ n: 1 });
+// CONTEXT: Object property assignment
 var objc8 = ({});
 objc8.t1 = (function (s) { return s; });
 objc8.t2 = ({
@@ -355,8 +356,11 @@ var c12t13 = ({
 var c12t14 = ({
     a: []
 });
+// CONTEXT: Contextual typing declarations
+// contextually typing function declarations
 function EF1(a, b) { return a + b; }
 var efv = EF1(1, 2);
+// contextually typing from ambient class declarations
 function Point(x, y) {
     this.x = x;
     this.y = y;

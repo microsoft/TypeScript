@@ -3,6 +3,7 @@
 declare enum E {
 >E : E
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=========
     Keep this pinned comment
@@ -23,7 +24,7 @@ declare enum C {
 >c : C
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare enum D {
 >D : D
 }

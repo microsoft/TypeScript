@@ -8,7 +8,7 @@
 interface I {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 interface I2 {
 }
 

@@ -56,6 +56,7 @@ var E2;
 (function (E2) {
     E2[E2["X"] = 0] = "X";
 })(E2 || (E2 = {}));
+// Check that we infer from both a.r and b before fixing T in a.w
 var v1;
 var v1 = f1({ w: function (x) { return x; }, r: function () { return 0; } }, 0);
 var v1 = f1({ w: function (x) { return x; }, r: function () { return 0; } }, E1.X);

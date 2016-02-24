@@ -30,4 +30,5 @@ var _modes;
         return Mode;
     }());
 })(_modes || (_modes = {}));
+//_modes. // produces an internal error - please implement in derived class
 var m;

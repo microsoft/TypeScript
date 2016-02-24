@@ -77,7 +77,19 @@ declare module 'external1' {
 
 
 //// [ambientDeclarations.js]
+// Ambient variable with type annotation
+// Ambient function with no type annotations
+// Ambient function with type annotations
+// Ambient function with valid overloads
+// Ambient function with optional parameters
+// Ambient class
+// Ambient enum
+// Ambient enum with integer literal initializer
+// Ambient enum members are always exported with or without export keyword
 var x = E3.B;
+// Ambient module
 // Ambient module members are always exported with or without export keyword
 var p = M1.x;
 var q = M1.fn();
+// Ambient external module in the global module
+// Ambient external module with a string literal name that is a top level external module name

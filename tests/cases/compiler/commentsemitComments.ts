@@ -14,6 +14,8 @@ var fooVar: () => void;
 foo(50);
 fooVar();
 
+/** unattached JSDoc style comment */
+
 /**class comment*/
 class c {
     /** constructor comment*/
@@ -82,6 +84,7 @@ module m1 {
     }
 
     /// module m2
+    /// <reference path="sys.ts" />
     export module m2 {
     }
 }

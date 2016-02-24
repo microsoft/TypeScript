@@ -45,3 +45,16 @@ declare var d_f13: (...r) => string;
 declare var d_f14: (x, ...r) => string;
 
 //// [noImplicitAnyParametersInAmbientFunctions.js]
+// Implicit-'any' errors for x.
+// No implicit-'any' errors.
+// Implicit-'any' errors for x, y, and z.
+// Implicit-'any' errors for x, and z.
+// Implicit-'any[]' errors for r.
+// Implicit-'any'/'any[]' errors for x, r.
+// Implicit-'any' errors for x1, y2, x3, and y3.
+// No implicit-'any' errors.
+// Implicit-'any' error for x.
+// Implicit-'any' errors for x, y, and z.
+// Implicit-'any' errors for x and z.
+// Implicit-'any[]' error for r.
+// Implicit-'any'/'any[]' errors for x, r.

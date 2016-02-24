@@ -16,7 +16,7 @@ declare function foobar(a: typeof foo): typeof bar;
 declare function foo();
 >foo : () => any
 
-// Don't keep this comment.
+// Keep this comment.
 declare function bar();
 >bar : () => any
 

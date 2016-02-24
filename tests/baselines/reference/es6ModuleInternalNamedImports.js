@@ -37,6 +37,7 @@ export var M;
 (function (M) {
     // variable
     M.M_V = 0;
+    // interface
     //calss
     class M_C {
     }
@@ -46,6 +47,7 @@ export var M;
     (function (M_M) {
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
+    // uninstantiated module
     // function
     function M_F() { }
     M.M_F = M_F;

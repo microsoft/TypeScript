@@ -57,16 +57,20 @@ var C1 = (function () {
     }
     return C1;
 }());
+// Allowed
+// Negative Case
 // Err - not implemented item
 var C2 = (function () {
     function C2() {
     }
     return C2;
 }());
+// Negative case
 var C3 = (function () {
     function C3() {
     }
     return C3;
 }());
+// Negative case 
 I1;
 { }

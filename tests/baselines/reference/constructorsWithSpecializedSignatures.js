@@ -44,6 +44,7 @@ interface I2 {
 }
 
 //// [constructorsWithSpecializedSignatures.js]
+// ok
 // errors
 var D = (function () {
     function D(x) {
@@ -56,3 +57,5 @@ var D2 = (function () {
     } // error
     return D2;
 }());
+// errors
+// ok

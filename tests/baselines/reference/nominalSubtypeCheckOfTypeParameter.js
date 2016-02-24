@@ -19,3 +19,5 @@ interface List<T> extends Sequence<T> {
 
 
 //// [nominalSubtypeCheckOfTypeParameter.js]
+// error, despite the fact that the code explicitly says List<T> extends Sequence<T>, the current rules for infinitely expanding type references 
+// perform nominal subtyping checks that allow variance for type arguments, but not nominal subtyping for the generic type itself

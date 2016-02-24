@@ -30,3 +30,4 @@ interface Derived5 extends Base {
 }
 
 //// [derivedInterfaceIncompatibleWithBaseIndexer.js]
+// satisifies string indexer but not numeric indexer

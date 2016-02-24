@@ -10,7 +10,7 @@
 interface I {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 interface I2 {
 }
 
@@ -19,10 +19,12 @@ interface I2 {
 interface I3 {
 }
 
+
 //// [a.js]
 /*!=================
     Keep this pinned
    =================
 */
+// Keep this comment.
 //// [b.js]
 ///<reference path='a.ts'/>

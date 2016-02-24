@@ -149,6 +149,8 @@ var e;
     e[e["e1"] = 0] = "e1";
     e[e["e2"] = 1] = "e2";
 })(e || (e = {}));
+// A union type U is a subtype of a type T if each type in U is a subtype of T
+// error cases
 var A = (function () {
     function A() {
     }

@@ -68,6 +68,7 @@ export interface D { }
 //// [duplicateSymbolsExportMatching.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    // Doesn't match export visibility, but it's in a different parent, so it's ok
     // Should report error only once for instantiated module
     var M;
     (function (M) {
@@ -107,4 +108,5 @@ define(["require", "exports"], function (require, exports) {
             var t;
         })(C = M.C || (M.C = {}));
     })(M || (M = {}));
+    // Top level
 });
