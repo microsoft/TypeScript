@@ -37,7 +37,7 @@ namespace ts {
         let contextObjectForFile: Identifier;
         let exportedLocalNames: Identifier[];
         let exportedFunctionDeclarations: ExpressionStatement[];
-        let noSubstitution: Map<boolean> = {};
+        const noSubstitution: Map<boolean> = {};
 
         return transformSourceFile;
 
@@ -992,7 +992,7 @@ namespace ts {
 
         function hasExportedReferenceInArrayDestructuringElement(node: Expression): boolean {
             if (isSpreadElementExpression(node)) {
-                let expression = node.expression;
+                const expression = node.expression;
                 return isIdentifier(expression) && isExportedBinding(expression);
             }
             else {
@@ -1002,7 +1002,7 @@ namespace ts {
 
         function hasExportedReferenceInDestructuringElement(node: Expression): boolean {
             if (isBinaryExpression(node)) {
-                let left = node.left;
+                const left = node.left;
                 return node.operatorToken.kind === SyntaxKind.EqualsToken
                     && isDestructuringPattern(left)
                     && hasExportedReferenceInDestructuringPattern(left);
@@ -1011,7 +1011,7 @@ namespace ts {
                 return isExportedBinding(node);
             }
             else if (isSpreadElementExpression(node)) {
-                let expression = node.expression;
+                const expression = node.expression;
                 return isIdentifier(expression) && isExportedBinding(expression);
             }
             else if (isDestructuringPattern(node)) {
@@ -1052,7 +1052,7 @@ namespace ts {
         }
 
         function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-            let moduleName = getExternalModuleName(importNode);
+            const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
                 return tryRenameExternalModule(<StringLiteral>moduleName)
                     || getSynthesizedNode(<StringLiteral>moduleName);
@@ -1074,12 +1074,12 @@ namespace ts {
         }
 
         function getLocalNameTextForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
-            let name = getLocalNameForExternalImport(node);
+            const name = getLocalNameForExternalImport(node);
             return name ? name.text : undefined;
         }
 
         function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            let namespaceDeclaration = getNamespaceDeclarationNode(node);
+            const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (namespaceDeclaration && !isDefaultImport(node)) {
                 return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
             }
@@ -1182,8 +1182,8 @@ namespace ts {
          * @param node The declaration to export.
          */
         function createDeclarationExport(node: DeclarationStatement) {
-            let declarationName = getDeclarationName(node);
-            let exportName = node.flags & NodeFlags.Default ? createLiteral("default") : declarationName;
+            const declarationName = getDeclarationName(node);
+            const exportName = node.flags & NodeFlags.Default ? createLiteral("default") : declarationName;
             return createExportStatement(exportName, declarationName);
         }
 
@@ -1209,15 +1209,15 @@ namespace ts {
         }
 
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
-            let groupIndices: Map<number> = {};
-            let dependencyGroups: DependencyGroup[] = [];
-            for (let i = 0; i < externalImports.length; ++i) {
-                let externalImport = externalImports[i];
-                let externalModuleName = getExternalModuleNameLiteral(externalImport);
-                let text = externalModuleName.text;
+            const groupIndices: Map<number> = {};
+            const dependencyGroups: DependencyGroup[] = [];
+            for (let i = 0; i < externalImports.length; i++) {
+                const externalImport = externalImports[i];
+                const externalModuleName = getExternalModuleNameLiteral(externalImport);
+                const text = externalModuleName.text;
                 if (hasProperty(groupIndices, text)) {
                     // deduplicate/group entries in dependency list by the dependency name
-                    let groupIndex = groupIndices[text];
+                    const groupIndex = groupIndices[text];
                     dependencyGroups[groupIndex].externalImports.push(externalImport);
                     continue;
                 }
@@ -1245,14 +1245,6 @@ namespace ts {
             exportedLocalNames.push(name);
         }
 
-        function hoistExportedVariableDeclaration(name: Identifier) {
-
-        }
-
-        function hoistExportedFunctionDeclaration(node: FunctionDeclaration) {
-
-        }
-
         function recordExportedFunctionDeclaration(node: FunctionDeclaration) {
             if (!exportedFunctionDeclarations) {
                 exportedFunctionDeclarations = [];
@@ -1262,7 +1254,7 @@ namespace ts {
         }
 
         function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean) {
-            let name = node.name;
+            const name = node.name;
             if (isIdentifier(name)) {
                 hoistVariableDeclaration(getSynthesizedNode(name));
                 if (isExported) {

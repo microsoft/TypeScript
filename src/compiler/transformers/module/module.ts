@@ -338,7 +338,7 @@ namespace ts {
 
         function visitExportDeclaration(node: ExportDeclaration): OneOrMany<Statement> {
             if (contains(externalImports, node)) {
-                let generatedName = getGeneratedNameForNode(node);
+                const generatedName = getGeneratedNameForNode(node);
                 if (node.exportClause) {
                     const statements: Statement[] = [];
                     // export { x, y } from "mod";

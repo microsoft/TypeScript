@@ -2869,7 +2869,7 @@ namespace ts {
         const exportSpecifiers: Map<ExportSpecifier[]> = {};
         let exportEquals: ExportAssignment = undefined;
         let hasExportStars = false;
-        for (let node of sourceFile.statements) {
+        for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     if (!(<ImportDeclaration>node).importClause ||
@@ -2928,7 +2928,7 @@ namespace ts {
     }
 
     export function copyPrologueDirectives(from: Statement[], to: Statement[]): number {
-        for (let i = 0; i < from.length; ++i) {
+        for (let i = 0; i < from.length; i++) {
             if (isPrologueDirective(from[i])) {
                 addNode(to, from[i]);
             }
