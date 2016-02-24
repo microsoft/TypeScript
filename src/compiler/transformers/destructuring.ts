@@ -197,7 +197,7 @@ namespace ts {
         }
 
         if (isBinaryExpression(root)) {
-            emitDestructuringAssignment(root.left, value, location)
+            emitDestructuringAssignment(root.left, value, location);
         }
         else {
             emitBindingElement(root, value);
