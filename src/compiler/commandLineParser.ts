@@ -18,6 +18,12 @@ namespace ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
+            name: "declarationDir",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.DIRECTORY,
+        },
+        {
             name: "diagnostics",
             type: "boolean",
         },
