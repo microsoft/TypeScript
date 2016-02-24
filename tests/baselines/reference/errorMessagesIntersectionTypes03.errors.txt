@@ -1,13 +1,8 @@
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'T'.
-  Type 'B' is not assignable to type 'T'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'U'.
-  Type 'B' is not assignable to type 'U'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'V'.
-  Type 'B' is not assignable to type 'V'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(22,5): error TS2322: Type 'T & B' is not assignable to type 'U'.
-  Type 'B' is not assignable to type 'U'.
 tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Type 'T & B' is not assignable to type 'V'.
-  Type 'B' is not assignable to type 'V'.
 
 
 ==== tests/cases/compiler/errorMessagesIntersectionTypes03.ts (5 errors) ====
@@ -30,23 +25,18 @@ tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Ty
         t = a_and_b;
         ~
 !!! error TS2322: Type 'A & B' is not assignable to type 'T'.
-!!! error TS2322:   Type 'B' is not assignable to type 'T'.
         u = a_and_b;
         ~
 !!! error TS2322: Type 'A & B' is not assignable to type 'U'.
-!!! error TS2322:   Type 'B' is not assignable to type 'U'.
         v = a_and_b;
         ~
 !!! error TS2322: Type 'A & B' is not assignable to type 'V'.
-!!! error TS2322:   Type 'B' is not assignable to type 'V'.
     
         t = t_and_b;
         u = t_and_b;
         ~
 !!! error TS2322: Type 'T & B' is not assignable to type 'U'.
-!!! error TS2322:   Type 'B' is not assignable to type 'U'.
         v = t_and_b;
         ~
 !!! error TS2322: Type 'T & B' is not assignable to type 'V'.
-!!! error TS2322:   Type 'B' is not assignable to type 'V'.
     }
