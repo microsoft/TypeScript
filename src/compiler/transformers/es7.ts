@@ -5,8 +5,6 @@
 namespace ts {
     // TODO(rbuckton): ES7->ES6 transformer
     export function transformES7(context: TransformationContext) {
-        const { hoistVariableDeclaration } = context;
-
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {

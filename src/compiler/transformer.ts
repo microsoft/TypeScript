@@ -1,15 +1,47 @@
 /// <reference path="visitor.ts" />
+/// <reference path="transformers/ts.ts" />
+/// <reference path="transformers/jsx.ts" />
+/// <reference path="transformers/es7.ts" />
+/// <reference path="transformers/es6.ts" />
+/// <reference path="transformers/module/module.ts" />
+/// <reference path="transformers/module/system.ts" />
+/// <reference path="transformers/module/es6.ts" />
 
 /* @internal */
 namespace ts {
+    const moduleTransformerMap: Map<Transformer> = {
+        [ModuleKind.ES6]: transformES6Module,
+        [ModuleKind.System]: transformSystemModule,
+        [ModuleKind.AMD]: transformModule,
+        [ModuleKind.CommonJS]: transformModule,
+        [ModuleKind.UMD]: transformModule,
+        [ModuleKind.None]: transformModule,
+    };
+
     const enum SyntaxKindFeatureFlags {
         ExpressionSubstitution = 1 << 0,
         EmitNotifications = 1 << 1,
     }
 
     export function getTransformers(compilerOptions: CompilerOptions) {
+        const jsx = compilerOptions.jsx;
+        const languageVersion = getEmitScriptTarget(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: Transformer[] = [];
-        // TODO(rbuckton): Add transformers
+
+        transformers.push(transformTypeScript);
+        transformers.push(moduleTransformerMap[moduleKind]);
+
+        if (jsx === JsxEmit.React) {
+            transformers.push(transformJsx);
+        }
+
+        transformers.push(transformES7);
+
+        if (languageVersion < ScriptTarget.ES6) {
+            transformers.push(transformES6);
+        }
+
         return transformers;
     }
 
@@ -75,9 +107,7 @@ namespace ts {
             }
 
             currentSourceFile = sourceFile;
-            const visited = transformation(sourceFile);
-            currentSourceFile = undefined;
-            return visited;
+            return transformation(sourceFile);
         }
 
         function enableExpressionSubstitution(kind: SyntaxKind) {
