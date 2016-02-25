@@ -278,9 +278,11 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
+            const isJsModuleExport = node.kind === SyntaxKind.BinaryExpression ? getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports : false;
             const isDefaultExport = node.flags & NodeFlags.Default;
+
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
+            const name = isJsModuleExport ? "export=" : isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -1438,7 +1440,7 @@ namespace ts {
         function bindModuleExportsAssignment(node: BinaryExpression) {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            bindExportAssignment(node);
+            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
