@@ -1,4 +1,4 @@
-//// [declarationEmit_bindingPatters.ts]
+//// [declarationEmit_bindingPatterns.ts]
 
 const k = ({x: z = 'y'}) => { }
 
@@ -6,7 +6,7 @@ var a;
 function f({} = a, [] = a, { p: {} = a} = a) {
 }
 
-//// [declarationEmit_bindingPatters.js]
+//// [declarationEmit_bindingPatterns.js]
 var k = function (_a) {
     var _b = _a.x, z = _b === void 0 ? 'y' : _b;
 };
@@ -18,8 +18,8 @@ function f(_a, _b, _c) {
 }
 
 
-//// [declarationEmit_bindingPatters.d.ts]
-declare const k: ({x:z}: {
+//// [declarationEmit_bindingPatterns.d.ts]
+declare const k: ({x: z}: {
     x?: string;
 }) => void;
 declare var a: any;

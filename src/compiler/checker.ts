@@ -2192,16 +2192,16 @@ namespace ts {
             }
 
             function buildBindingPatternDisplay(bindingPattern: BindingPattern, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                // We have to explicitly emit square bracket and bracket because these tokens are not store inside the node.
+                // We have to explicitly emit square bracket and bracket because these tokens are not stored inside the node.
                 if (bindingPattern.kind === SyntaxKind.ObjectBindingPattern) {
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
-                    buildDisplayForCommaSeparatedList(bindingPattern.elements, writer, enclosingDeclaration, flags, symbolStack, buildBindingElementDisplay);
+                    buildDisplayForCommaSeparatedList(bindingPattern.elements, writer, e => buildBindingElementDisplay(e, writer, enclosingDeclaration, flags, symbolStack));
                     writePunctuation(writer, SyntaxKind.CloseBraceToken);
                 }
                 else if (bindingPattern.kind === SyntaxKind.ArrayBindingPattern) {
                     writePunctuation(writer, SyntaxKind.OpenBracketToken);
                     const elements = bindingPattern.elements;
-                    buildDisplayForCommaSeparatedList(elements, writer, enclosingDeclaration, flags, symbolStack, buildBindingElementDisplay);
+                    buildDisplayForCommaSeparatedList(elements, writer, e => buildBindingElementDisplay(e, writer, enclosingDeclaration, flags, symbolStack));
                     if (elements && elements.hasTrailingComma) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                     }
@@ -2217,35 +2217,34 @@ namespace ts {
                 if (bindingElement.propertyName) {
                     writer.writeSymbol(getTextOfNode(bindingElement.propertyName), bindingElement.symbol);
                     writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
                 }
-                if (bindingElement.name) {
-                    if (isBindingPattern(bindingElement.name)) {
-                        buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
+                if (isBindingPattern(bindingElement.name)) {
+                    buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
+                }   
+                else {
+                    if (bindingElement.dotDotDotToken) {
+                        writePunctuation(writer, SyntaxKind.DotDotDotToken);
                     }
-                    else {
-                        if (bindingElement.dotDotDotToken) {
-                            writePunctuation(writer, SyntaxKind.DotDotDotToken);
-                        }
-                        appendSymbolNameOnly(bindingElement.symbol, writer);
-                    }
+                    appendSymbolNameOnly(bindingElement.symbol, writer);
                 }
             }
 
             function buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
-                    buildDisplayForCommaSeparatedList(typeParameters, writer, enclosingDeclaration, flags, symbolStack, buildTypeParameterDisplay);
+                    buildDisplayForCommaSeparatedList(typeParameters, writer, p => buildTypeParameterDisplay(p, writer, enclosingDeclaration, flags, symbolStack));
                     writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
             }
 
-            function buildDisplayForCommaSeparatedList<T>(list: T[], writer: SymbolWriter, enclosingDeclaration: Node, flags: TypeFormatFlags, symbolStack: Symbol[], action: (item: T, writer: SymbolWriter, enclosingDeclaration: Node, flags: TypeFormatFlags, symbolStack: Symbol[]) => void) {
+            function buildDisplayForCommaSeparatedList<T>(list: T[], writer: SymbolWriter, action: (item: T) => void) {
                 for (let i = 0; i < list.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
-                    action(list[i], writer, enclosingDeclaration, flags, symbolStack);
+                    action(list[i]);
                 }
             }
 
