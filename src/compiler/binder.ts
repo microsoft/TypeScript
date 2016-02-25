@@ -685,7 +685,7 @@ namespace ts {
             // post catch/finally state is reachable if
             // - post try state is reachable - control flow can fall out of try block
             // - post catch state is reachable - control flow can fall out of catch block
-            currentReachabilityState = or(postTryState, postCatchState);
+            currentReachabilityState = n.catchClause ? or(postTryState, postCatchState) : postTryState;
         }
 
         function bindSwitchStatement(n: SwitchStatement): void {
