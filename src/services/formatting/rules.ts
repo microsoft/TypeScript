@@ -561,13 +561,13 @@ namespace ts.formatting {
             //// Ex: 
             //// if (1)
             //// { ... }
-            ////      * ) and { are on differnet lines. We only need to format if the block is multiline context. So in this case we don't format.
+            ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we don't format.
             ////
             //// Ex:
             //// if (1) 
             //// { ...
             //// }
-            ////      * ) and { are on differnet lines. We only need to format if the block is multiline context. So in this case we format.
+            ////      * ) and { are on different lines. We only need to format if the block is multiline context. So in this case we format.
 
             return context.TokensAreOnSameLine() || Rules.IsBeforeMultilineBlockContext(context);
         }

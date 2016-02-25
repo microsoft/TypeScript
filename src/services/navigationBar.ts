@@ -374,7 +374,7 @@ namespace ts.NavigationBar {
                     return createEnumItem(<EnumDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
-                    return createIterfaceItem(<InterfaceDeclaration>node);
+                    return createInterfaceItem(<InterfaceDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:
                     return createModuleItem(<ModuleDeclaration>node);
@@ -493,7 +493,7 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
+            function createInterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
                 let childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
