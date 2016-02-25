@@ -2221,7 +2221,7 @@ namespace ts {
                 }
                 if (isBindingPattern(bindingElement.name)) {
                     buildBindingPatternDisplay(<BindingPattern>bindingElement.name, writer, enclosingDeclaration, flags, symbolStack);
-                }   
+                }
                 else {
                     if (bindingElement.dotDotDotToken) {
                         writePunctuation(writer, SyntaxKind.DotDotDotToken);
