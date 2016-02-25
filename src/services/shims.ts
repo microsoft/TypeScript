@@ -232,7 +232,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
-        resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string;
+        discoverTypings(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string;
         updateNotFoundTypingNames(newTypingsJson: string, globalCachePath: string, projectRootPath: string): string;
     }
 
@@ -988,14 +988,11 @@ namespace ts {
             );
         }
 
-        public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string {
+        public discoverTypings(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
-            return this.forwardJSONCall("resolveTypeDefinitions()", () => {
+            return this.forwardJSONCall("discoverTypings()", () => {
                 const cachePath = projectRootPath ? projectRootPath : globalCachePath;
                 const typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
-                // Convert the include and exclude lists from a semi-colon delimited string to a string array
-                typingOptions.include = typingOptions.include ? typingOptions.include.toString().split(";") : [];
-                typingOptions.exclude = typingOptions.exclude ? typingOptions.exclude.toString().split(";") : [];
 
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const fileNames: string[] = JSON.parse(fileNamesJson);
