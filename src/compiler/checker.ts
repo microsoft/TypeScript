@@ -10742,6 +10742,7 @@ namespace ts {
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (contextualMapper === identityMapper && isContextSensitive(node)) {
+                checkNodeDeferred(node);
                 return anyFunctionType;
             }
 
