@@ -66,9 +66,7 @@ namespace ts.JsTyping {
 
         const cachePath = projectRootPath || globalCachePath;
         // Only infer typings for .js and .jsx files
-        fileNames = fileNames
-            .map(ts.normalizePath)
-            .filter(f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
+        fileNames = filter(map(fileNames, ts.normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
 
         const safeListFilePath = ts.combinePaths(globalCachePath, "safeList.json");
         if (!safeList && host.fileExists(safeListFilePath)) {
@@ -84,7 +82,7 @@ namespace ts.JsTyping {
         exclude = typingOptions.exclude || [];
 
         if (typingOptions.enableAutoDiscovery) {
-            const possibleSearchDirs = fileNames.map(ts.getDirectoryPath);
+            const possibleSearchDirs = map(fileNames, ts.getDirectoryPath);
             if (projectRootPath !== undefined) {
                 possibleSearchDirs.push(projectRootPath);
             }
@@ -109,7 +107,7 @@ namespace ts.JsTyping {
         const tsdJsonDict = tryParseJson(tsdJsonPath, host);
         if (tsdJsonDict) {
             for (const notFoundTypingName of notFoundTypingNames) {
-                if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
+                if (hasProperty(inferredTypings, notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
                     delete inferredTypings[notFoundTypingName];
                 }
             }
@@ -156,7 +154,7 @@ namespace ts.JsTyping {
             }
 
             for (const typing of typingNames) {
-                if (!inferredTypings.hasOwnProperty(typing)) {
+                if (!hasProperty(inferredTypings, typing)) {
                     inferredTypings[typing] = undefined;
                 }
             }
@@ -169,11 +167,11 @@ namespace ts.JsTyping {
             const jsonDict = tryParseJson(jsonPath, host);
             if (jsonDict) {
                 filesToWatch.push(jsonPath);
-                if (jsonDict.hasOwnProperty("dependencies")) {
-                    mergeTypings(Object.keys(jsonDict.dependencies));
+                if (hasProperty(jsonDict, "dependencies")) {
+                    mergeTypings(getKeys(jsonDict.dependencies));
                 }
-                if (jsonDict.hasOwnProperty("devDependencies")) {
-                    mergeTypings(Object.keys(jsonDict.devDependencies));
+                if (hasProperty(jsonDict, "devDependencies")) {
+                    mergeTypings(getKeys(jsonDict.devDependencies));
                 }
             }
         }
@@ -185,12 +183,17 @@ namespace ts.JsTyping {
          * @param fileNames are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-            const jsFileNames = fileNames.filter(hasJavaScriptFileExtension);
-            const inferredTypingNames = jsFileNames.map(f => ts.removeFileExtension(ts.getBaseFileName(f.toLowerCase())));
-            const cleanedTypingNames = inferredTypingNames.map(f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-            safeList === undefined ? mergeTypings(cleanedTypingNames) : mergeTypings(cleanedTypingNames.filter(f => safeList.hasOwnProperty(f)));
+            const jsFileNames = filter(fileNames, hasJavaScriptFileExtension);
+            const inferredTypingNames = map(jsFileNames, f => ts.removeFileExtension(ts.getBaseFileName(f.toLowerCase())));
+            const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
+            if (safeList === undefined) {
+                mergeTypings(cleanedTypingNames);
+            }
+            else {
+                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
+            }
 
-            const jsxFileNames = fileNames.filter(f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
+            const jsxFileNames = filter(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
             if (jsxFileNames.length > 0) {
                 mergeTypings(["react"]);
             }
@@ -208,7 +211,9 @@ namespace ts.JsTyping {
 
             const typingNames: string[] = [];
             const packageJsonFiles =
-                host.readDirectory(nodeModulesPath, /*extension*/ undefined, /*exclude*/ undefined, /*depth*/ 2).filter(f => ts.getBaseFileName(f) === "package.json");
+                filter(
+                    host.readDirectory(nodeModulesPath, /*extension*/ undefined, /*exclude*/ undefined, /*depth*/ 2),
+                    f => ts.getBaseFileName(f) === "package.json");
             for (const packageJsonFile of packageJsonFiles) {
                 const packageJsonDict = tryParseJson(packageJsonFile, host);
                 if (!packageJsonDict) { continue; }
@@ -219,14 +224,14 @@ namespace ts.JsTyping {
                 // we should include all the top level module names for npm 2, and only module names whose
                 // "_requiredBy" field starts with "#" or equals "/" for npm 3.
                 if (packageJsonDict._requiredBy &&
-                    packageJsonDict._requiredBy.filter((r: string) => r[0] === "#" || r === "/").length === 0) {
+                    filter(packageJsonDict._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
                     continue;
                 }
 
                 // If the package has its own d.ts typings, those will take precedence. Otherwise the package name will be used
                 // to download d.ts files from DefinitelyTyped
                 const packageName = packageJsonDict["name"];
-                if (packageJsonDict.hasOwnProperty("typings")) {
+                if (hasProperty(packageJsonDict, "typings")) {
                     const absPath = ts.getNormalizedAbsolutePath(packageJsonDict.typings, ts.getDirectoryPath(packageJsonFile));
                     inferredTypings[packageName] = absPath;
                 }
@@ -266,10 +271,10 @@ namespace ts.JsTyping {
         const cacheTsdJsonDict = tryParseJson(tsdJsonPath, host);
         if (cacheTsdJsonDict) {
             const installedTypingFiles = hasProperty(cacheTsdJsonDict, "installed")
-                ? Object.keys(cacheTsdJsonDict.installed)
+                ? getKeys(cacheTsdJsonDict.installed)
                 : [];
             const newMissingTypingNames =
-                ts.filter(newTypingNames, name => notFoundTypingNames.indexOf(name) < 0 && !isInstalled(name, installedTypingFiles));
+                filter(newTypingNames, name => notFoundTypingNames.indexOf(name) < 0 && !isInstalled(name, installedTypingFiles));
             for (const newMissingTypingName of newMissingTypingNames) {
                 notFoundTypingNames.push(newMissingTypingName);
             }

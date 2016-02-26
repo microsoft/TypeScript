@@ -280,6 +280,14 @@ namespace ts {
         return hasOwnProperty.call(map, key);
     }
 
+    export function getKeys<T>(map: Map<T>): string[] {
+        const keys: string[] = [];
+        for (const key in map) {
+            keys.push(key);
+        }
+        return keys;
+    }
+
     export function getProperty<T>(map: Map<T>, key: string): T {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
