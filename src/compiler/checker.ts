@@ -7015,6 +7015,7 @@ namespace ts {
             }
             const visited: FlowMarkerTarget[] = [];
 
+            let loop = false;
             const narrowedType = getType(location, false);
             if (saveLocalType) {
                 if ((<Identifier>location).narrowingState === NarrowingState.Failed) {
@@ -7028,22 +7029,31 @@ namespace ts {
 
             function getType(where: Node, after: boolean) {
                 if (where === undefined) return initialType;
-                if (visited.indexOf(where) !== -1) return undefined;
+                if (visited.indexOf(where) !== -1) {
+                    loop = true;
+                    return undefined;
+                }
                 const isIdentifier = where.kind === SyntaxKind.Identifier;
-                if (isIdentifier && after) {
-                    const assignment = getAssignedTypeAtLocation(<Identifier>where);
-                    if (assignment) {
-                        return narrowTypeByAssignment(assignment);
+                if (isIdentifier) {
+                    if (after) {
+                        const assignment = getAssignedTypeAtLocation(<Identifier>where);
+                        if (assignment) {
+                            return narrowTypeByAssignment(assignment);
+                        }
+                    }
+                    if ((<Identifier>where).narrowingState === NarrowingState.Done) {
+                        return (<Identifier>where).localType;
                     }
                 }
                 let types: Type[] = [];
                 visited.push(where);
                 const fallback = getPreviousOccurences(symbol, where, handleGuards);
                 visited.pop();
-                if (fallback) {
-                    return initialType;
+                const type = fallback ? initialType : getUnionType(types);
+                if (!loop && (<Identifier>where).narrowingState !== NarrowingState.Failed) {
+                    (<Identifier>where).localType = type;
                 }
-                return getUnionType(types);
+                return type;
 
                 function handleGuards(node: Identifier, guards: BranchFlow[]) {
                     if (!node && guards.length === 0) {
@@ -7289,7 +7299,7 @@ namespace ts {
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
                     if ((<VariableDeclaration>parent).initializer && !isUnion) {
-                        return getTypeOfExpression((<VariableDeclaration>parent).initializer);
+                        return checkExpressionCached((<VariableDeclaration>parent).initializer);
                     }
                     else {
                         // This catches these constructs:
@@ -7302,7 +7312,7 @@ namespace ts {
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                     if (!isUnion) return initialType;
-                    return getTypeOfExpression((<BinaryExpression>parent).right);
+                    return checkExpressionCached((<BinaryExpression>parent).right);
                 }
                 if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
                     // for (x in z) {}
