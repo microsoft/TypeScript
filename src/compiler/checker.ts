@@ -8980,13 +8980,10 @@ namespace ts {
         function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationFlagsFromSymbol(prop);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop));
-
+            const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
+                (<PropertyAccessExpression | VariableDeclaration>node).name :
+                (<QualifiedName>node).right;
             if (left.kind === SyntaxKind.SuperKeyword) {
-                // TODO: Move this out and use it in the rest of the code
-                const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
-                    (<PropertyAccessExpression | VariableDeclaration>node).name :
-                    (<QualifiedName>node).right;
-
                 // TS 1.0 spec (April 2014): 4.8.2
                 // - In a constructor, instance member function, instance member accessor, or
                 //   instance member variable initializer where this references a derived class instance,
@@ -9027,7 +9024,7 @@ namespace ts {
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
                 if (declaringClass !== enclosingClass) {
-                    error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
+                    error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
                 return true;
@@ -9041,7 +9038,7 @@ namespace ts {
             }
             // A protected property is accessible in the declaring class and classes derived from it
             if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
-                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
                 return false;
             }
             // No further restrictions for static properties
@@ -9056,7 +9053,7 @@ namespace ts {
 
             // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
-                error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 return false;
             }
             return true;
