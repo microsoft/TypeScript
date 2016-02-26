@@ -189,7 +189,7 @@ var es7LibrarySourceMap = es7LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: [source] };
 })
 
-var hostsLibrarySources = [ "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]
+var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]
 
 var librarySourceMap = [
         // Host library
@@ -206,10 +206,6 @@ var librarySourceMap = [
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
         { target: "lib.full.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es6LibrarySources, hostsLibrarySources), },
-
-        // Preset JavaScript & host library
-        { target: "lib.dom.es5.d.ts", sources:["header.d.ts", "importes5.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.es5.d.ts", sources:["header.d.ts", "importes5.d.ts", "intl.d.ts", "webworker.generated.d.ts", "webworker.importscripts.d.ts"], },
 ].concat(es6LibrarySourceMap, es7LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
