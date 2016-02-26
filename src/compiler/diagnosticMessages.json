@@ -2215,6 +2215,14 @@
         "category": "Error",
         "code": 5062
     },
+    "The left-hand side of a '{0}' expression cannot have type '{1}'.": {
+        "category": "Error",
+        "code": 5063
+    },
+    "The condition of a '{0}' statement cannot have type '{1}'.": {
+        "category": "Error",
+        "code": 5064
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",

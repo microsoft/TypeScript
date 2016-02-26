@@ -11295,7 +11295,7 @@ namespace ts {
                     if ((leftType.flags & TypeFlags.Boolean) &&
                         (rightType.flags & TypeFlags.Boolean) &&
                         (suggestedOperator = getSuggestedBooleanOperator(operatorToken.kind)) !== undefined) {
-                        error(errorNode || operatorToken, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(operatorToken.kind), tokenToString(suggestedOperator));
+                        error(errorNode || operatorToken, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(operator), tokenToString(suggestedOperator));
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal
@@ -11374,8 +11374,15 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
+                    if (leftType.flags & TypeFlags.Void) {
+                        error(errorNode || operatorToken, Diagnostics.The_left_hand_side_of_a_0_expression_cannot_have_type_1, tokenToString(operator), typeToString(leftType));
+                    }
                     return rightType;
                 case SyntaxKind.BarBarToken:
+                    if (leftType.flags & TypeFlags.Void) {
+                        error(errorNode || operatorToken, Diagnostics.The_left_hand_side_of_a_0_expression_cannot_have_type_1, tokenToString(operator), typeToString(leftType));
+                        return rightType;
+                    }
                     return getUnionType([leftType, rightType]);
                 case SyntaxKind.EqualsToken:
                     checkAssignmentOperator(rightType);
@@ -12973,7 +12980,9 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
+                checkGrammarForGenerator(node);
+
+                checkFunctionOrMethodDeclaration(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -13406,7 +13415,9 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkExpression(node.expression);
+            const conditionType = checkExpression(node.expression);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
+
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -13421,14 +13432,16 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             checkSourceElement(node.statement);
-            checkExpression(node.expression);
+            const conditionType = checkExpression(node.expression);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
         }
 
         function checkWhileStatement(node: WhileStatement) {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkExpression(node.expression);
+            const conditionType = checkExpression(node.expression);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
             checkSourceElement(node.statement);
         }
 
@@ -13449,9 +13462,27 @@ namespace ts {
                 }
             }
 
-            if (node.condition) checkExpression(node.condition);
+            if (node.condition) {
+                const conditionType = checkExpression(node.condition);
+                checkConditionOfBranchingStatement(node, node.condition, conditionType);
+            }
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
+        }
+
+        function checkConditionOfBranchingStatement(statement: IfStatement | ForStatement | DoStatement, condition: Expression, conditionType: Type): void {
+            // Any type apart from 'void' is okay.
+            if (conditionType !== voidType) {
+                return;
+            }
+
+            // Don't report an error for '||'.
+            // We'll have reported errors elsewhere.
+            if (condition.kind === SyntaxKind.BinaryExpression && (condition as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken) {
+                return;
+            }
+
+            error(statement, Diagnostics.The_condition_of_a_0_statement_cannot_have_type_1, tokenToString(statement.kind), voidType);
         }
 
         function checkForOfStatement(node: ForOfStatement): void {
