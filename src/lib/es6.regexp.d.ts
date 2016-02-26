@@ -25,5 +25,3 @@ interface RegExp {
       */
     readonly unicode: boolean;
 }
-
-interface RegExpConstructor { }
