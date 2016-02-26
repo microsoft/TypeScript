@@ -144,6 +144,7 @@ function someGenerics9(strs, a, b, c) {
 }
 var a9a = someGenerics9 `${''}${0}${[]}`;
 var a9a;
+// Generic tag with multiple parameters of generic type passed arguments with multiple best common types
 var a9e = someGenerics9 `${undefined}${{ x: 6, z: new Date() }}${{ x: 6, y: '' }}`;
 var a9e;
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type

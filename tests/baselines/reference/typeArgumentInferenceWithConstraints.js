@@ -171,6 +171,7 @@ var a9a = someGenerics9('', 0, []);
 var a9a;
 var a9b = someGenerics9({ a: 0 }, { b: '' }, null);
 var a9b;
+// Generic call with multiple parameters of generic type passed arguments with multiple best common types
 var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9e;
 var a9f = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });

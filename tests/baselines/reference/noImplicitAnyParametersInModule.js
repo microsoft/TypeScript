@@ -73,6 +73,7 @@ var M;
             r[_i - 1] = arguments[_i];
         }
     }
+    // Implicit-'any' errors for x1, y2, x3, and y3.
     function m_f8(x3, y3) { }
     // No implicit-'any' errors.
     var m_f9 = function () { return ""; };

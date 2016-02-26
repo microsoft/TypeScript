@@ -84,6 +84,7 @@ var a;
 var r1 = a.foo;
 var r2 = a.bar;
 var r3 = a.baz;
+// basic generic case
 var b;
 var r4 = b.foo;
 var r5 = b.bar;

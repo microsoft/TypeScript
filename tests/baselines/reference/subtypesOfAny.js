@@ -163,3 +163,7 @@ var c;
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
+//interface I18<T, U extends T> {
+//    [x: string]: any;
+//    foo: U;
+//}

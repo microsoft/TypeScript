@@ -48,6 +48,7 @@ var A;
     A.Origin = new Point(0, 0);
 })(A || (A = {}));
 // no code gen expected
+// no code gen expected
 var C;
 (function (C) {
     var m;

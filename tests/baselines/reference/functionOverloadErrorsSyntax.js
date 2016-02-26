@@ -14,4 +14,5 @@ function fn5() { }
 //// [functionOverloadErrorsSyntax.js]
 function fn4a() { }
 function fn4b() { }
+//Function overload signature with rest param followed by non-optional parameter
 function fn5() { }

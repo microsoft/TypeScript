@@ -140,6 +140,7 @@ var s = new fn1(undefined);
 var s;
 // No candidate overloads found
 new fn1({}); // Error
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 var fn2;
 var d = new fn2(0, undefined);
 var d;
@@ -149,6 +150,7 @@ var s = new fn2(0, '');
 new fn2('', 0); // Error
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 new fn2('', 0); // OK
+// Generic overloads with differing arity called without type arguments
 var fn3;
 var s = new fn3(3);
 var s = new fn3('', 3, '');
@@ -160,6 +162,7 @@ var s = new fn3('', '', '');
 var n = new fn3('', '', 3);
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 new fn3(); // Error
+// Generic overloads with constraints called with type arguments that satisfy the constraints
 var fn4;
 new fn4('', 3);
 new fn4(3, ''); // Error
@@ -175,6 +178,7 @@ new fn4(null, null); // Error
 // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
 new fn4(true, null); // Error
 new fn4(null, true); // Error
+// Non - generic overloads where contextual typing of function arguments has errors
 var fn5;
 var n = new fn5(function (n) { return n.toFixed(); });
 var s = new fn5(function (n) { return n.substr(0); });

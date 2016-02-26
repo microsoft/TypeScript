@@ -7,11 +7,13 @@
 /*! Don't keep this pinned comment */
 declare var v: number;
 
-// Don't keep this comment.
+// Keep this comment.
 declare var y: number;
+
 
 //// [commentOnAmbientVariable1.js]
 /*!=========
     Keep this pinned comment
    =========
 */
+// Keep this comment.

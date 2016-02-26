@@ -28,5 +28,6 @@ function foo<T, U extends <V extends T>(v: V) => void>() {
 // used to be valid, now an error to do this
 function f() {
 }
+// No error
 function foo() {
 }

@@ -20,6 +20,8 @@ foo(50);
 fooVar();
 >fooVar : Symbol(fooVar, Decl(commentsemitComments.ts, 9, 3))
 
+/** unattached JSDoc style comment */
+
 /**class comment*/
 class c {
 >c : Symbol(c, Decl(commentsemitComments.ts, 11, 9))
@@ -30,117 +32,118 @@ class c {
 
     /** property comment */
     public b = 10;
->b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
 
     /** function comment */
     public myFoo() {
->myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 20, 18))
+>myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 22, 18))
 
         return this.b;
->this.b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>this.b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
 >this : Symbol(c, Decl(commentsemitComments.ts, 11, 9))
->b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
     }
 
     /** getter comment*/
     public get prop1() {
->prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 25, 5), Decl(commentsemitComments.ts, 30, 5))
+>prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 27, 5), Decl(commentsemitComments.ts, 32, 5))
 
         return this.b;
->this.b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>this.b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
 >this : Symbol(c, Decl(commentsemitComments.ts, 11, 9))
->b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
     }
 
     /** setter comment*/
     public set prop1(val: number) {
->prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 25, 5), Decl(commentsemitComments.ts, 30, 5))
->val : Symbol(val, Decl(commentsemitComments.ts, 33, 21))
+>prop1 : Symbol(prop1, Decl(commentsemitComments.ts, 27, 5), Decl(commentsemitComments.ts, 32, 5))
+>val : Symbol(val, Decl(commentsemitComments.ts, 35, 21))
 
         this.b = val;
->this.b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
+>this.b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
 >this : Symbol(c, Decl(commentsemitComments.ts, 11, 9))
->b : Symbol(b, Decl(commentsemitComments.ts, 17, 5))
->val : Symbol(val, Decl(commentsemitComments.ts, 33, 21))
+>b : Symbol(b, Decl(commentsemitComments.ts, 19, 5))
+>val : Symbol(val, Decl(commentsemitComments.ts, 35, 21))
     }
 
     /** overload signature1*/
     public foo1(a: number): string;
->foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 35, 5), Decl(commentsemitComments.ts, 38, 35), Decl(commentsemitComments.ts, 40, 35))
->a : Symbol(a, Decl(commentsemitComments.ts, 38, 16))
+>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 37, 5), Decl(commentsemitComments.ts, 40, 35), Decl(commentsemitComments.ts, 42, 35))
+>a : Symbol(a, Decl(commentsemitComments.ts, 40, 16))
 
     /** Overload signature 2*/
     public foo1(b: string): string;
->foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 35, 5), Decl(commentsemitComments.ts, 38, 35), Decl(commentsemitComments.ts, 40, 35))
->b : Symbol(b, Decl(commentsemitComments.ts, 40, 16))
+>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 37, 5), Decl(commentsemitComments.ts, 40, 35), Decl(commentsemitComments.ts, 42, 35))
+>b : Symbol(b, Decl(commentsemitComments.ts, 42, 16))
 
     /** overload implementation signature*/
     public foo1(aOrb) {
->foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 35, 5), Decl(commentsemitComments.ts, 38, 35), Decl(commentsemitComments.ts, 40, 35))
->aOrb : Symbol(aOrb, Decl(commentsemitComments.ts, 42, 16))
+>foo1 : Symbol(foo1, Decl(commentsemitComments.ts, 37, 5), Decl(commentsemitComments.ts, 40, 35), Decl(commentsemitComments.ts, 42, 35))
+>aOrb : Symbol(aOrb, Decl(commentsemitComments.ts, 44, 16))
 
         return aOrb.toString();
->aOrb : Symbol(aOrb, Decl(commentsemitComments.ts, 42, 16))
+>aOrb : Symbol(aOrb, Decl(commentsemitComments.ts, 44, 16))
     }
 }
 
 /**instance comment*/
 var i = new c();
->i : Symbol(i, Decl(commentsemitComments.ts, 48, 3))
+>i : Symbol(i, Decl(commentsemitComments.ts, 50, 3))
 >c : Symbol(c, Decl(commentsemitComments.ts, 11, 9))
 
 /** interface comments*/
 interface i1 {
->i1 : Symbol(i1, Decl(commentsemitComments.ts, 48, 16))
+>i1 : Symbol(i1, Decl(commentsemitComments.ts, 50, 16))
 
     /** caller comments*/
     (a: number): number;
->a : Symbol(a, Decl(commentsemitComments.ts, 53, 5))
+>a : Symbol(a, Decl(commentsemitComments.ts, 55, 5))
 
     /** new comments*/
     new (b: string);
->b : Symbol(b, Decl(commentsemitComments.ts, 56, 9))
+>b : Symbol(b, Decl(commentsemitComments.ts, 58, 9))
 
     /**indexer property*/
     [a: number]: string;
->a : Symbol(a, Decl(commentsemitComments.ts, 59, 5))
+>a : Symbol(a, Decl(commentsemitComments.ts, 61, 5))
 
     /** function property;*/
     myFoo(/*param prop*/a: number): string;
->myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 59, 24))
->a : Symbol(a, Decl(commentsemitComments.ts, 62, 10))
+>myFoo : Symbol(myFoo, Decl(commentsemitComments.ts, 61, 24))
+>a : Symbol(a, Decl(commentsemitComments.ts, 64, 10))
 
     /** prop*/
     prop: string;
->prop : Symbol(prop, Decl(commentsemitComments.ts, 62, 43))
+>prop : Symbol(prop, Decl(commentsemitComments.ts, 64, 43))
 }
 
 /**interface instance comments*/
 var i1_i: i1;
->i1_i : Symbol(i1_i, Decl(commentsemitComments.ts, 69, 3))
->i1 : Symbol(i1, Decl(commentsemitComments.ts, 48, 16))
+>i1_i : Symbol(i1_i, Decl(commentsemitComments.ts, 71, 3))
+>i1 : Symbol(i1, Decl(commentsemitComments.ts, 50, 16))
 
 /** this is module comment*/
 module m1 {
->m1 : Symbol(m1, Decl(commentsemitComments.ts, 69, 13))
+>m1 : Symbol(m1, Decl(commentsemitComments.ts, 71, 13))
 
     /** class b */
     export class b {
->b : Symbol(b, Decl(commentsemitComments.ts, 72, 11))
+>b : Symbol(b, Decl(commentsemitComments.ts, 74, 11))
 
         constructor(public x: number) {
->x : Symbol(x, Decl(commentsemitComments.ts, 75, 20))
+>x : Symbol(x, Decl(commentsemitComments.ts, 77, 20))
 
         }
     }
 
     /// module m2
+    /// <reference path="sys.ts" />
     export module m2 {
->m2 : Symbol(m2, Decl(commentsemitComments.ts, 78, 5))
+>m2 : Symbol(m2, Decl(commentsemitComments.ts, 80, 5))
     }
 }
 
 /// this is x
 declare var x;
->x : Symbol(x, Decl(commentsemitComments.ts, 86, 11))
+>x : Symbol(x, Decl(commentsemitComments.ts, 89, 11))
 

@@ -13,7 +13,7 @@ declare enum C {
     c
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare enum D {
 }
 
@@ -22,10 +22,12 @@ declare enum D {
 declare enum E {
 }
 
+
 //// [a.js]
 /*!=========
     Keep this pinned comment
    =========
 */
+// Keep this comment.
 //// [b.js]
 ///<reference path="a.ts"/>

@@ -3,6 +3,7 @@
 interface I3 {
 >I3 : Symbol(I3, Decl(b.ts, 0, 0))
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=================
     Keep this pinned
@@ -14,7 +15,7 @@ interface I {
 >I : Symbol(I, Decl(a.ts, 0, 0))
 }
 
-// Don't keep this comment.
+// Keep this comment.
 interface I2 {
 >I2 : Symbol(I2, Decl(a.ts, 7, 1))
 }

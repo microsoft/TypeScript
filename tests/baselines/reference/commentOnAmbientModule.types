@@ -13,6 +13,7 @@ declare module E {
 >foo : () => any
     }
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=========
     Keep this pinned comment
@@ -27,7 +28,7 @@ declare module C {
 >foo : () => any
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare module D {
 >D : typeof D
 

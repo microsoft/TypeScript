@@ -2267,6 +2267,7 @@ var Harness;
         return content;
     }
     Harness.readFile = readFile;
+    // Logger
     var Logger = (function () {
         function Logger() {
         }
@@ -2302,6 +2303,7 @@ var Harness;
         }
     }
     Harness.emitLog = emitLog;
+    // BDD Framework
     var Runnable = (function () {
         function Runnable(description, block) {
             this.description = description;
@@ -3150,6 +3152,8 @@ var Harness;
             compiler.errorReporter.hasErrors = false;
         }
         Compiler.reset = reset;
+        // Defines functions to invoke before compiling a piece of code and a post compile action intended to clean up the
+        // effects of preCompile, preferably with something lighter weight than a full recreate()
         function addUnit(code, unitName, isResident, isDeclareFile, references) {
             var script = null;
             var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
@@ -3299,6 +3303,8 @@ var Harness;
      */
     var TestCaseParser;
     (function (TestCaseParser) {
+        /** all the necesarry information to set the right compiler settings */
+        /** All the necessary information to turn a multi file test into useful units for later compilation */
         optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out"];

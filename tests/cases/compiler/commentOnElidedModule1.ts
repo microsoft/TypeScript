@@ -8,7 +8,7 @@
 module ElidedModule {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 module ElidedModule2 {
 }
 

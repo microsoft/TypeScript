@@ -4,7 +4,7 @@ function foo2(n: number): void;
 >foo2 : { (n: number): void; (s: string): void; }
 >n : number
 
-// Don't keep this comment.
+// Keep this comment.
 function foo2(s: string): void;
 >foo2 : { (n: number): void; (s: string): void; }
 >s : string
@@ -13,6 +13,7 @@ function foo2(a: any): void {
 >foo2 : { (n: number): void; (s: string): void; }
 >a : any
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=================
     Keep this pinned
@@ -24,7 +25,7 @@ function foo(n: number): void;
 >foo : { (n: number): void; (s: string): void; }
 >n : number
 
-// Don't keep this comment.
+// Keep this comment.
 function foo(s: string): void;
 >foo : { (n: number): void; (s: string): void; }
 >s : string
@@ -37,7 +38,7 @@ function foo(a: any): void {
 class c {
 >c : c
 
-    // dont keep this comment
+    // keep this comment
     constructor(a: string);
 >a : string
 
@@ -49,7 +50,7 @@ class c {
 >a : any
     }
 
-    // dont keep this comment
+    // keep this comment
     foo(a: string);
 >foo : { (a: string): any; (a: number): any; }
 >a : string

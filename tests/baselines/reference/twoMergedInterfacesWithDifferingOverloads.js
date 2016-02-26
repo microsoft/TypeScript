@@ -54,7 +54,9 @@ var r3 = d.foo(1, 1); // boolean, last definition wins
 // interfaces that merge must not have members that conflict
 var b;
 var r = b.foo(true); // returns Date
+// add generic overload
 var c;
 var r2 = c.foo(1, 2); // number
+// add generic overload that would be ambiguous
 var d;
 var r3 = d.foo(1, 1); // boolean, last definition wins

@@ -42,6 +42,7 @@ s = map("", dottedIdentity.x);
 s = map("", dottedIdentity['x']);
 // function call
 s = map("", (function () { return identity; })());
+// construct
 var ic;
 s = map("", new ic());
 // assignment

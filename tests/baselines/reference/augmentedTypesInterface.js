@@ -35,6 +35,7 @@ interface i4 {
 
 //// [augmentedTypesInterface.js]
 // interface then interface
+// interface then class
 var i2 = (function () {
     function i2() {
     }
@@ -43,9 +44,11 @@ var i2 = (function () {
     };
     return i2;
 }());
+// interface then enum
 var i3;
 (function (i3) {
     i3[i3["One"] = 0] = "One";
 })(i3 || (i3 = {}));
 ; // error
+// interface then import
 //import i4 = require('');  // error 

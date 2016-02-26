@@ -143,14 +143,17 @@ var noParams;
 new noParams();
 new noParams();
 new noParams();
+// Generic call with parameters but none use type parameter type
 var noGenericParams;
 new noGenericParams('');
 new noGenericParams('');
 new noGenericParams('');
+// Generic call with multiple type parameters and only one used in parameter type annotation
 var someGenerics1;
 new someGenerics1(3, 4);
 new someGenerics1(3, 4); // Error
 new someGenerics1(3, 4);
+// Generic call with argument of function type whose parameter is of type parameter type
 var someGenerics2a;
 new someGenerics2a(function (n) { return n; });
 new someGenerics2a(function (n) { return n; });
@@ -159,37 +162,45 @@ var someGenerics2b;
 new someGenerics2b(function (n, x) { return n; });
 new someGenerics2b(function (n, t) { return n; });
 new someGenerics2b(function (n, t) { return n.substr(t * t); });
+// Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 var someGenerics3;
 new someGenerics3(function () { return ''; });
 new someGenerics3(function () { return undefined; });
 new someGenerics3(function () { return 3; });
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 var someGenerics4;
 new someGenerics4(4, function () { return null; });
 new someGenerics4('', function () { return 3; });
 new someGenerics4('', function (x) { return ''; }); // Error
 new someGenerics4(null, null);
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 var someGenerics5;
 new someGenerics5(4, function () { return null; });
 new someGenerics5('', function () { return 3; });
 new someGenerics5('', function (x) { return ''; }); // Error
 new someGenerics5(null, null);
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
 var someGenerics6;
 new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Error
 new someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+// Generic call with multiple arguments of function types that each have parameters of different generic type
 var someGenerics7;
 new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
 new someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+// Generic call with argument of generic function type
 var someGenerics8;
 var x = new someGenerics8(someGenerics7);
 new x(null, null, null);
+// Generic call with multiple parameters of generic type passed arguments with no best common type
 var someGenerics9;
 var a9a = new someGenerics9('', 0, []);
 var a9a;
 var a9b = new someGenerics9({ a: 0 }, { b: '' }, null);
 var a9b;
+// Generic call with multiple parameters of generic type passed arguments with multiple best common types
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 var a9e;
 var a9f = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });

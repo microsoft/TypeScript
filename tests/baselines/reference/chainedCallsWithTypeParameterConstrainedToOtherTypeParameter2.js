@@ -60,6 +60,7 @@ var Chain = (function () {
     };
     return Chain;
 }());
+// Similar to above, but T is now constrained. Verify that the constraint is maintained across invocations
 var Chain2 = (function () {
     function Chain2(value) {
         this.value = value;

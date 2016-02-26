@@ -82,3 +82,4 @@ var c;
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
+// A type T is a subtype of a union type U if T is a subtype of any type in U.

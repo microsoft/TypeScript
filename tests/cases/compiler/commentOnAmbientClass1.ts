@@ -8,7 +8,7 @@
 declare class C {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare class D {
 }
 

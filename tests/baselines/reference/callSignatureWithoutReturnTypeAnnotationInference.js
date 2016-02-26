@@ -198,6 +198,7 @@ function foo11() {
     return M;
 }
 var r11 = foo11();
+// merged declarations
 function foo12() {
     var i2;
     return i2;

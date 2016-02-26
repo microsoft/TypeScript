@@ -11,7 +11,7 @@ declare module C {
     function foo();
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare module D {
     class bar { }
 }
@@ -24,10 +24,12 @@ declare module E {
     }
 }
 
+
 //// [a.js]
 /*!=========
     Keep this pinned comment
    =========
 */
+// Keep this comment.
 //// [b.js]
 ///<reference path="a.ts"/>

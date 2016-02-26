@@ -44,6 +44,10 @@ declare;
 module;
 {
     var XDate = (function () {
+        // etc.
+        // Called as a function
+        // Not supported anymore? public (): string;
+        // Called as a constructor
         function XDate() {
         }
         return XDate;

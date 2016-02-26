@@ -209,6 +209,7 @@ if (funA(0, a)) {
 if (hasNoTypeGuard(a)) {
     a.propB;
 }
+// Type predicate type is not assignable
 acceptingDifferentSignatureTypeGuardFunction(isC);
 // Boolean not assignable to type guard
 var assign1;

@@ -20,4 +20,6 @@ var result = bar(derived, d => d.toBase());
 //// [fixingTypeParametersRepeatedly2.js]
 var derived;
 var result = foo(derived, function (d) { return d.toBase(); });
+// bar should type check just like foo.
+// The same error should be observed in both cases.
 var result = bar(derived, function (d) { return d.toBase(); });

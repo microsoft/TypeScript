@@ -21,6 +21,7 @@ var C = (function () {
     };
     return C;
 }());
+// just want to make sure this one doesn't crash the compiler
 var Foo = (function () {
     function Foo() {
     }

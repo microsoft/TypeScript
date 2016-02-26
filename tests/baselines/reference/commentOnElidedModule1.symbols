@@ -3,6 +3,7 @@
 module ElidedModule3 {
 >ElidedModule3 : Symbol(ElidedModule3, Decl(b.ts, 0, 0))
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=================
     Keep this pinned
@@ -14,7 +15,7 @@ module ElidedModule {
 >ElidedModule : Symbol(ElidedModule, Decl(a.ts, 0, 0))
 }
 
-// Don't keep this comment.
+// Keep this comment.
 module ElidedModule2 {
 >ElidedModule2 : Symbol(ElidedModule2, Decl(a.ts, 7, 1))
 }

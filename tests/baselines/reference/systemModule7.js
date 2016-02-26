@@ -23,6 +23,7 @@ System.register([], function(exports_1, context_1) {
                 var x = 1;
             })(M = M || (M = {}));
             exports_1("M", M);
+            // filename: nonInstantiatedModule.ts
         }
     }
 });

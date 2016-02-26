@@ -10,7 +10,7 @@
 declare class C {
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare class D {
 }
 
@@ -19,10 +19,12 @@ declare class D {
 declare class E extends C {
 }
 
+
 //// [a.js]
 /*!=========
     Keep this pinned comment
    =========
 */
+// Keep this comment.
 //// [b.js]
 ///<reference path="a.ts"/>

@@ -58,6 +58,7 @@ function foo(x, items) {
 var a = foo("hi", []); // D
 var b = foo("bye", []); // E 
 var c = foo("um", []); // error
+//function bar(x: "hi", items: string[]): D;
 function bar(x, items) {
     return null;
 }

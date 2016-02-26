@@ -44,6 +44,7 @@ var zz: { x: T11 }
 
 //// [directDependenceBetweenTypeAliases.js]
 // It is an error for the type specified in a type alias to depend on that type alias
+// A type reference directly depends on the referenced type and each of the type arguments, if any.
 var C = (function () {
     function C() {
     }

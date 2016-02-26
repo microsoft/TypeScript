@@ -3,6 +3,7 @@
 declare enum E {
 >E : Symbol(E, Decl(b.ts, 0, 0))
 }
+
 === tests/cases/compiler/a.ts ===
 /*!=========
     Keep this pinned comment
@@ -23,7 +24,7 @@ declare enum C {
 >c : Symbol(C.c, Decl(a.ts, 8, 6))
 }
 
-// Don't keep this comment.
+// Keep this comment.
 declare enum D {
 >D : Symbol(D, Decl(a.ts, 10, 1))
 }

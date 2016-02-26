@@ -136,6 +136,7 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
+// error cases
 var A = (function () {
     function A() {
     }

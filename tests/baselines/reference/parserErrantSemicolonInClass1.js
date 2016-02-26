@@ -37,6 +37,7 @@ class a {
 
 //// [parserErrantSemicolonInClass1.js]
 var a = (function () {
+    //constructor ();
     function a(ns) {
     }
     a.prototype.pgF = function () { };

@@ -28,6 +28,7 @@ var A = (function () {
 exports.A = A;
 //// [f2.js]
 "use strict";
+// change the shape of Array<T>
 var x = [1];
 var y = x.getA().x;
 

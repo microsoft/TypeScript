@@ -19,4 +19,5 @@ var foo;
 (function (foo) {
     function bar() { }
 })(foo || (foo = {}));
+// test #3
 // test #4 

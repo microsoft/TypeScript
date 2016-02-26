@@ -29,6 +29,7 @@ let b = a.a;
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    // OK - './file1' is a namespace
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports) {

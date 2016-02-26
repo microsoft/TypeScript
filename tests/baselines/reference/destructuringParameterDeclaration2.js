@@ -78,6 +78,9 @@ function a0(_a) {
 }
 a0([1, "string", [["world"]]]); // Error
 a0([1, 2, [["world"]], "string"]); // Error
+// If the declaration includes an initializer expression (which is permitted only
+// when the parameter list occurs in conjunction with a function body),
+// the parameter type is the widened form (section 3.11) of the type of the initializer expression.
 function b1(z, o) {
     if (z === void 0) { z = null; }
     if (o === void 0) { o = { x: 0, y: undefined }; }

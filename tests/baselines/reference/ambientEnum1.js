@@ -9,3 +9,4 @@
     }
 
 //// [ambientEnum1.js]
+// Ambient enum with computer member

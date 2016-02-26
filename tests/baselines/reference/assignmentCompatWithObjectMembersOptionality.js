@@ -116,9 +116,11 @@ var Derived2 = (function (_super) {
 }(Derived));
 var TargetHasOptional;
 (function (TargetHasOptional) {
+    // targets
     var c;
     var a;
     var b = { opt: new Base() };
+    // sources
     var d;
     var e;
     var f;
@@ -139,9 +141,11 @@ var TargetHasOptional;
 })(TargetHasOptional || (TargetHasOptional = {}));
 var SourceHasOptional;
 (function (SourceHasOptional) {
+    // targets
     var c;
     var a;
     var b = { opt: new Base() };
+    // sources
     var d;
     var e;
     var f;

@@ -72,6 +72,7 @@ i3_i.nc_l(10);
 //// [commentsInterface.js]
 var i1_i;
 var nc_i1_i;
+/** this is interface 2 with memebers*/
 var i2_i;
 var i2_i_x = i2_i.x;
 var i2_i_foo = i2_i.foo;

@@ -85,6 +85,7 @@ var C = (function () {
 var c;
 c.foo();
 c.foo(1);
+// these are errors
 var i;
 i();
 i(1);

@@ -46,6 +46,7 @@ anyVar('');
 anyVar('hello');
 anyVar();
 anyVar(undefined);
+// Invoke function call on value of a subtype of Function with no call signatures with no type arguments
 var subFunc;
 subFunc(0);
 subFunc('');

@@ -9,4 +9,5 @@ g("", x => null, x => x.toLowerCase());
 
 //// [fixingTypeParametersRepeatedly1.js]
 f("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
+// First overload of g should type check just like f
 g("", function (x) { return null; }, function (x) { return x.toLowerCase(); });
