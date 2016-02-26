@@ -2607,8 +2607,7 @@ namespace ts {
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
-            const parent = <VariableLikeDeclaration>pattern.parent;
-            const parentType = getTypeForBindingElementParent(parent);
+            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -2642,11 +2641,6 @@ namespace ts {
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
-                }
-
-                const property = getPropertyOfType(parentType, text);
-                if (parent && parent.initializer && property && getParentOfSymbol(property)) {
-                    checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }
             }
             else {
@@ -13313,6 +13307,15 @@ namespace ts {
                 // check computed properties inside property names of binding elements
                 if (node.propertyName && node.propertyName.kind === SyntaxKind.ComputedPropertyName) {
                     checkComputedPropertyName(<ComputedPropertyName>node.propertyName);
+                }
+
+                // check private/protected variable access
+                const parent = <VariableLikeDeclaration>(<BindingPattern>node.parent).parent;
+                const parentType = getTypeForBindingElementParent(parent);
+                const name = node.propertyName || <Identifier>node.name;
+                const property = getPropertyOfType(parentType, getTextOfPropertyName(name));
+                if (parent.initializer && property && getParentOfSymbol(property)) {
+                    checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }
             }
 
