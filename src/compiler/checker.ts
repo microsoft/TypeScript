@@ -5163,33 +5163,35 @@ namespace ts {
             for (const original of type.symbol.declarations) {
                 let node: Node = original;
                 while (node !== undefined) {
-                    if (node.kind === SyntaxKind.FunctionType ||
-                        node.kind === SyntaxKind.ConstructorType ||
-                        node.kind === SyntaxKind.FunctionDeclaration ||
-                        node.kind === SyntaxKind.MethodDeclaration ||
-                        node.kind === SyntaxKind.MethodSignature ||
-                        node.kind === SyntaxKind.Constructor ||
-                        node.kind === SyntaxKind.CallSignature ||
-                        node.kind === SyntaxKind.ConstructSignature ||
-                        node.kind === SyntaxKind.IndexSignature ||
-                        node.kind === SyntaxKind.GetAccessor ||
-                        node.kind === SyntaxKind.SetAccessor ||
-                        node.kind === SyntaxKind.FunctionExpression ||
-                        node.kind === SyntaxKind.ArrowFunction ||
-                        node.kind === SyntaxKind.JSDocFunctionType ||
-                        node.kind === SyntaxKind.ClassDeclaration ||
-                        node.kind === SyntaxKind.ClassExpression ||
-                        node.kind === SyntaxKind.TypeAliasDeclaration ||
-                        node.kind === SyntaxKind.InterfaceDeclaration) {
-                        const decl = <SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration>node;
-                        if (decl.typeParameters && decl.typeParameters.length && forEach(decl.typeParameters, p => mapper.mapsType(getSymbolOfNode(p)))) {
-                            return true;
-                        }
-                        if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassExpression) &&
-                            mapper.mapsType(getSymbolOfNode(decl))) {
-                            // mapper maps the this class type of a class
-                            return true;
-                        }
+                    switch (node.kind) {
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.JSDocFunctionType:
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                        case SyntaxKind.TypeAliasDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                            const decl = <SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration>node;
+                            if (decl.typeParameters && decl.typeParameters.length && forEach(decl.typeParameters, p => mapper.mapsType(getSymbolOfNode(p)))) {
+                                return true;
+                            }
+                            if ((isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration) &&
+                                mapper.mapsType(getSymbolOfNode(decl))) {
+                                // mapper maps the this class type of a class
+                                return true;
+                            }
+                            break;
                     }
                     node = node.parent;
                 }
