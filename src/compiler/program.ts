@@ -1030,7 +1030,14 @@ namespace ts {
         }
 
         function getDeclarationDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
+            const options = program.getCompilerOptions();
+            // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
+            if (!sourceFile || options.out || options.outFile) {
+                return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
+            }
+            else {
+                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
+            }
         }
 
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1244,15 +1251,17 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
-                if (!isDeclarationFile(sourceFile)) {
-                    const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
-                    // Don't actually write any files since we're just getting diagnostics.
-                    const writeFile: WriteFileCallback = () => { };
-                    return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
-                }
+                const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
+                // Don't actually write any files since we're just getting diagnostics.
+                const writeFile: WriteFileCallback = () => { };
+                return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
             });
+        }
+
+        function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return isDeclarationFile(sourceFile) ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
         function getOptionsDiagnostics(): Diagnostic[] {
@@ -1667,6 +1676,15 @@ namespace ts {
                 }
                 if (options.sourceRoot && !options.inlineSourceMap) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
+                }
+            }
+
+            if (options.declarationDir) {
+                if (!options.declaration) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration"));
+                }
+                if (options.out || options.outFile) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile"));
                 }
             }
 

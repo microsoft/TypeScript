@@ -7402,8 +7402,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
+                emitTempDeclarations(/*newLine*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -7416,8 +7416,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ false);
+                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitUMDModule(node: SourceFile) {
@@ -7443,8 +7443,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
+                emitTempDeclarations(/*newLine*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");

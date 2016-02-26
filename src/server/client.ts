@@ -83,7 +83,7 @@ namespace ts.server {
 
         private processResponse<T extends protocol.Response>(request: protocol.Request): T {
             var lastMessage = this.messages.shift();
-            Debug.assert(!!lastMessage, "Did not recieve any responses.");
+            Debug.assert(!!lastMessage, "Did not receive any responses.");
 
             // Read the content length
             var contentLengthPrefix = "Content-Length: ";
@@ -108,7 +108,7 @@ namespace ts.server {
             }
 
             // verify the sequence numbers
-            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequance number did not match request sequence number.");
+            Debug.assert(response.request_seq === request.seq, "Malformed response: response sequence number did not match request sequence number.");
             
             // unmarshal errors
             if (!response.success) {
