@@ -1465,7 +1465,7 @@ namespace ts {
             }
 
             // Declare the method/property
-            declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            declareSymbol(funcSymbol.members, funcSymbol, leftSideOfAssignment, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
         }
 
         function bindCallExpression(node: CallExpression) {
