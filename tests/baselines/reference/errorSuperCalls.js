@@ -122,12 +122,12 @@ var NoBase = (function () {
     //super call in static class member initializer with no base type
     NoBase.k = _super.call(this);
     return NoBase;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     //super call with type arguments 
@@ -136,12 +136,12 @@ var Derived = (function (_super) {
         _super.call(this);
     }
     return Derived;
-})(Base);
+}(Base));
 var OtherBase = (function () {
     function OtherBase() {
     }
     return OtherBase;
-})();
+}());
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
@@ -166,4 +166,4 @@ var OtherDerived = (function (_super) {
         configurable: true
     });
     return OtherDerived;
-})(OtherBase);
+}(OtherBase));

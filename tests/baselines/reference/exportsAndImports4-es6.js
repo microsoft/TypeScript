@@ -40,26 +40,29 @@ export { a, b, c, d, e1, e2, f1, f2 };
 
 
 //// [t1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 //// [t3.js]
-var a = require("./t1");
+"use strict";
+const a = require("./t1");
 exports.a = a;
 a.default;
-var t1_1 = require("./t1");
+const t1_1 = require("./t1");
 exports.b = t1_1.default;
 t1_1.default;
-var c = require("./t1");
+const c = require("./t1");
 exports.c = c;
 c.default;
-var t1_2 = require("./t1");
+const t1_2 = require("./t1");
 exports.d = t1_2.default;
 t1_2.default;
-var t1_3 = require("./t1"), e2 = t1_3;
+const t1_3 = require("./t1"), e2 = t1_3;
 exports.e1 = t1_3.default;
 exports.e2 = e2;
 t1_3.default;
 e2.default;
-var t1_4 = require("./t1");
+const t1_4 = require("./t1");
 exports.f1 = t1_4.default;
 exports.f2 = t1_4.default;
 t1_4.default;

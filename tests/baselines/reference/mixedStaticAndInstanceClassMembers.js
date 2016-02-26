@@ -23,7 +23,7 @@ var A = (function () {
     A.prototype.m1 = function (a) {
     };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
@@ -31,4 +31,4 @@ var B = (function () {
     B.prototype.m1 = function (a) {
     };
     return B;
-})();
+}());

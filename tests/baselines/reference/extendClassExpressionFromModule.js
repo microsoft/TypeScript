@@ -12,13 +12,15 @@ class y extends x {}
 
 
 //// [foo1.js]
+"use strict";
 var x = (function () {
     function x() {
     }
     return x;
-})();
+}());
 module.exports = x;
 //// [foo2.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -32,4 +34,4 @@ var y = (function (_super) {
         _super.apply(this, arguments);
     }
     return y;
-})(x);
+}(x));

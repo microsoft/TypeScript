@@ -28,7 +28,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(152,63): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(153,30): error TS2304: Cannot find name 'List_TextEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(155,32): error TS2304: Cannot find name 'AuthorTokenKind'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(182,79): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(183,20): error TS2304: Cannot find name 'GetIndentSizeFromText'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(183,20): error TS2662: Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(186,67): error TS2503: Cannot find namespace 'Services'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(207,50): error TS2304: Cannot find name 'TokenSpan'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(207,67): error TS2304: Cannot find name 'ParseNode'.
@@ -373,7 +373,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
 !!! error TS2503: Cannot find namespace 'Services'.
                 return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'GetIndentSizeFromText'.
+!!! error TS2662: Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?
             }
     
             static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {

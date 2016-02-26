@@ -19,4 +19,4 @@ var C = (function () {
         dec()
     ], C.prototype, "prop", void 0);
     return C;
-})();
+}());

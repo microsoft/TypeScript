@@ -34,7 +34,7 @@ var Base = (function () {
         this.x; // OK, accessed within their declaring class
     };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
@@ -45,7 +45,7 @@ var Derived1 = (function (_super) {
         _super.x; // Error, x is not public
     };
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
@@ -56,4 +56,4 @@ var Derived2 = (function (_super) {
         _super.x; // Error, x is not public
     };
     return Derived2;
-})(Derived1);
+}(Derived1));

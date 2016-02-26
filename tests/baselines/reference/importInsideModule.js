@@ -10,6 +10,7 @@ export module myModule {
 }
 
 //// [importInsideModule_file2.js]
+"use strict";
 var myModule;
 (function (myModule) {
     var a = foo.x;

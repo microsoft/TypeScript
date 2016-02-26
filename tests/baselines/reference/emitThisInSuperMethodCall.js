@@ -39,7 +39,7 @@ var User = (function () {
     User.prototype.sayHello = function () {
     };
     return User;
-})();
+}());
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
@@ -65,4 +65,4 @@ var RegisteredUser = (function (_super) {
         }
     };
     return RegisteredUser;
-})(User);
+}(User));

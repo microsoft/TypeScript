@@ -52,7 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }    
+    }  
+
+    interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+    }  
 }
 
 declare namespace FourSlashInterface {
@@ -75,6 +81,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number | string;
@@ -131,9 +138,10 @@ declare namespace FourSlashInterface {
         verifyDefinitionsName(name: string, containerName: string): void;
     }
     class verify extends verifyNegatable {
+        assertHasRanges(ranges: FourSlash.Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
-        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: IndentStyle): void;
+        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
         textAtCaretIs(text: string): void;
         /**
          * Compiles the current file and evaluates 'expr' in a context containing
@@ -144,6 +152,7 @@ declare namespace FourSlashInterface {
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
+        verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
@@ -325,6 +334,36 @@ declare namespace FourSlashInterface {
             textSpan?: TextSpan;
         };
         function typeAliasName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxOpenTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxCloseTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxSelfClosingTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxAttribute(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxText(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxAttributeStringLiteralValue(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;

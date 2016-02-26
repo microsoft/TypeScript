@@ -1,0 +1,18 @@
+=== tests/cases/compiler/a.js ===
+
+function foo(a) {
+>foo : (a: any) => void
+>a : any
+
+    for (let a = 0; a < 10; a++) {
+>a : number
+>0 : number
+>a < 10 : boolean
+>a : number
+>10 : number
+>a++ : number
+>a : number
+
+        // do something
+    }
+}

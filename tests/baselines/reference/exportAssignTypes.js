@@ -54,29 +54,37 @@ var v7: {<x>(p1: x): x} = iGeneric;
 
 
 //// [expString.js]
+"use strict";
 var x = "test";
 module.exports = x;
 //// [expNumber.js]
+"use strict";
 var x = 42;
 module.exports = x;
 //// [expBoolean.js]
+"use strict";
 var x = true;
 module.exports = x;
 //// [expArray.js]
+"use strict";
 var x = [1, 2];
 module.exports = x;
 //// [expObject.js]
+"use strict";
 var x = { answer: 42, when: 1776 };
 module.exports = x;
 //// [expAny.js]
+"use strict";
 var x;
 module.exports = x;
 //// [expGeneric.js]
+"use strict";
 function x(a) {
     return a;
 }
 module.exports = x;
 //// [consumer.js]
+"use strict";
 var iString = require('./expString');
 var v1 = iString;
 var iNumber = require('./expNumber');

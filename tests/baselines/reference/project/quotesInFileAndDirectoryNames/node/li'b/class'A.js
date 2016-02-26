@@ -5,6 +5,6 @@ var test;
         }
         ClassA.prototype.method = function () { };
         return ClassA;
-    })();
+    }());
     test.ClassA = ClassA;
 })(test || (test = {}));

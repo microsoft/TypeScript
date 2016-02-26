@@ -29,13 +29,14 @@ export class MyComponent {
 
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var MyComponent = (function () {
         function MyComponent() {
         }
         MyComponent.prototype.render = function () {
         };
         return MyComponent;
-    })();
+    }());
     exports.MyComponent = MyComponent;
     <MyComponent foo="bar"/>; // ok  
     <MyComponent foo={0}/>; // should be an error

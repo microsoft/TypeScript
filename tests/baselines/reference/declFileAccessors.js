@@ -102,6 +102,7 @@ class c2 {
 }
 
 //// [declFileAccessors_0.js]
+"use strict";
 /** This is comment for c1*/
 var c1 = (function () {
     function c1() {
@@ -182,7 +183,7 @@ var c1 = (function () {
         configurable: true
     });
     return c1;
-})();
+}());
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
 /** This is comment for c2 - the global class*/
@@ -265,7 +266,7 @@ var c2 = (function () {
         configurable: true
     });
     return c2;
-})();
+}());
 
 
 //// [declFileAccessors_0.d.ts]
@@ -283,7 +284,7 @@ export declare class c1 {
     nc_p3: number;
     private nc_pp3;
     static nc_s3: string;
-    onlyGetter: number;
+    readonly onlyGetter: number;
     onlySetter: number;
 }
 //// [declFileAccessors_1.d.ts]
@@ -301,6 +302,6 @@ declare class c2 {
     nc_p3: number;
     private nc_pp3;
     static nc_s3: string;
-    onlyGetter: number;
+    readonly onlyGetter: number;
     onlySetter: number;
 }

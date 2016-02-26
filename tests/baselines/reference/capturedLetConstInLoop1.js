@@ -138,7 +138,7 @@ for (var x = 0; x < 1; ++x) {
     _loop_3(x);
 }
 var _loop_4 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
 };
@@ -146,7 +146,7 @@ while (1 === 1) {
     _loop_4();
 }
 var _loop_5 = function() {
-    var x = void 0;
+    var x;
     (function () { return x; });
     (function () { return x; });
 };
@@ -169,7 +169,7 @@ for (var x = 0, y = 1; x < 1; ++x) {
     _loop_7(x, y);
 }
 var _loop_8 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
 };
@@ -177,7 +177,7 @@ while (1 === 1) {
     _loop_8();
 }
 var _loop_9 = function() {
-    var x = void 0, y = void 0;
+    var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
 };

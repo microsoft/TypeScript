@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts.NavigationBar {
-    export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
+    export function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[]  {
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.
         let hasGlobalNode = false;
@@ -374,7 +374,7 @@ namespace ts.NavigationBar {
                     return createEnumItem(<EnumDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
-                    return createIterfaceItem(<InterfaceDeclaration>node);
+                    return createInterfaceItem(<InterfaceDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:
                     return createModuleItem(<ModuleDeclaration>node);
@@ -387,7 +387,7 @@ namespace ts.NavigationBar {
 
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
-                if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
+                if (isAmbientModule(moduleDeclaration)) {
                     return getTextOfNode(moduleDeclaration.name);
                 }
 
@@ -493,7 +493,7 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
+            function createInterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
                 let childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,

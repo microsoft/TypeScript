@@ -2,14 +2,14 @@
 
 // Assignments to 'exports.p' define a property 'p'
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: myMod.js
 //// exports.n = 3;
 //// exports.s = 'foo';
 //// exports.b = true;
 
 // @Filename: consumer.js
-//// var x = require('myMod');
+//// var x = require('./myMod');
 //// x/**/;
 
 goTo.file('consumer.js');

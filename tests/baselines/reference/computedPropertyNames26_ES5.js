@@ -23,7 +23,7 @@ var Base = (function () {
         return 0;
     };
     return Base;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -32,4 +32,4 @@ var C = (function (_super) {
     C.prototype[(_a = {}, _a[_super.bar.call(this)] = 1, _a)[0]] = function () { };
     return C;
     var _a;
-})(Base);
+}(Base));

@@ -147,7 +147,7 @@ namespace ts {
 
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicity always consider them non-completed
                 return false;
 
             case SyntaxKind.ForStatement:
@@ -257,15 +257,15 @@ namespace ts {
         return syntaxList;
     }
 
-    /* Gets the token whose text has range [start, end) and 
+    /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
     export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isWord(n.kind));
     }
 
-    /* Gets the token whose text has range [start, end) and position >= start 
-     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+    /* Gets the token whose text has range [start, end) and position >= start
+     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
@@ -391,8 +391,8 @@ namespace ts {
                     const start = child.getStart(sourceFile);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText 
-                    
+                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
+
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
@@ -407,7 +407,7 @@ namespace ts {
 
             Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
 
-            // Here we know that none of child token nodes embrace the position, 
+            // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
@@ -429,7 +429,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart();
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
@@ -445,7 +445,7 @@ namespace ts {
 
         if (token && position <= token.getStart()) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-                
+
             // The end marker of a single-line comment does not include the newline character.
             // In the following case, we are inside a comment (^ denotes the cursor position):
             //
@@ -565,6 +565,7 @@ namespace ts {
 
     export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): boolean {
         if (kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.StringLiteralType
             || kind === SyntaxKind.RegularExpressionLiteral
             || isTemplateLiteralKind(kind)) {
             return true;
@@ -606,6 +607,36 @@ namespace ts {
             }
         }
         return true;
+    }
+
+    export function isArrayLiteralOrObjectLiteralDestructuringPattern(node: Node) {
+        if (node.kind === SyntaxKind.ArrayLiteralExpression ||
+            node.kind === SyntaxKind.ObjectLiteralExpression) {
+            // [a,b,c] from:
+            // [a, b, c] = someExpression;
+            if (node.parent.kind === SyntaxKind.BinaryExpression &&
+                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                return true;
+            }
+
+            // [a, b, c] from:
+            // for([a, b, c] of expression)
+            if (node.parent.kind === SyntaxKind.ForOfStatement &&
+                (<ForOfStatement>node.parent).initializer === node) {
+                return true;
+            }
+
+            // [a, b, c] of
+            // [x, [a, b, c] ] = someExpression
+            // or 
+            // {x, a: {a, b, c} } = someExpression
+            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

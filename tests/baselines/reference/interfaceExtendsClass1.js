@@ -28,7 +28,7 @@ var Control = (function () {
     function Control() {
     }
     return Control;
-})();
+}());
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
@@ -36,7 +36,7 @@ var Button = (function (_super) {
     }
     Button.prototype.select = function () { };
     return Button;
-})(Control);
+}(Control));
 var TextBox = (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
@@ -44,17 +44,17 @@ var TextBox = (function (_super) {
     }
     TextBox.prototype.select = function () { };
     return TextBox;
-})(Control);
+}(Control));
 var Image = (function (_super) {
     __extends(Image, _super);
     function Image() {
         _super.apply(this, arguments);
     }
     return Image;
-})(Control);
+}(Control));
 var Location = (function () {
     function Location() {
     }
     Location.prototype.select = function () { };
     return Location;
-})();
+}());

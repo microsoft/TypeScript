@@ -24,15 +24,17 @@ export {MyClass};
 
 
 //// [db.js]
+"use strict";
 var db = (function () {
     function db() {
     }
     db.prototype.doSomething = function () {
     };
     return db;
-})();
+}());
 exports.db = db;
 //// [service.js]
+"use strict";
 var db_1 = require('./db'); // error no default export
 function someDecorator(target) {
     return target;
@@ -47,5 +49,5 @@ var MyClass = (function () {
         __metadata('design:paramtypes', [Object])
     ], MyClass);
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;

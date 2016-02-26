@@ -16,13 +16,15 @@ foo("IN " + thingy.me + "!");
 
 
 //// [unusedImportDeclaration_testerB.js]
+"use strict";
 var TesterB = (function () {
     function TesterB() {
     }
     return TesterB;
-})();
+}());
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
+"use strict";
 var thingy = {
     me: "A"
 };

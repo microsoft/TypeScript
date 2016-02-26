@@ -90,7 +90,7 @@ var C = (function () {
         }
     } // Error, rest parameter can't have accessibilityModifier
     return C;
-})();
+}());
 // Rest parameter with generic
 function foo1() {
     var a = [];

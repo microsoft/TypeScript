@@ -84,4 +84,4 @@ var Benchmark = (function () {
         this.results[name] = this.results[name];
     };
     return Benchmark;
-})();
+}());

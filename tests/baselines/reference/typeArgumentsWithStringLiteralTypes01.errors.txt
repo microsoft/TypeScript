@@ -1,4 +1,3 @@
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(4,18): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(37,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(38,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(39,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
@@ -36,13 +35,11 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
   Type '"World"' is not assignable to type '"Hello"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts (25 errors) ====
+==== tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts (24 errors) ====
     
     declare function randBool(): boolean;
     declare function takeReturnString(str: string): string;
     declare function takeReturnHello(str: "Hello"): "Hello";
-                     ~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World";
     
     function fun1<T>(x: T, y: T) {

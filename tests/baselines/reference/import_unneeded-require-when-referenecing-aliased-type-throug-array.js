@@ -18,6 +18,7 @@ var p = testData[0].name;
 //// [b.js]
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var testData;
     var p = testData[0].name;
 });

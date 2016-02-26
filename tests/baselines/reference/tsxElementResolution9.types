@@ -1,9 +1,10 @@
-=== tests/cases/conformance/jsx/tsxElementResolution9.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 
-	interface Element { }
+	interface Element { something; }
 >Element : Element
+>something : any
 
 	interface IntrinsicElements { }
 >IntrinsicElements : IntrinsicElements

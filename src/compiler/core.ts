@@ -74,8 +74,6 @@ namespace ts {
         GreaterThan = 1
     }
 
-    export interface StringSet extends Map<any> { }
-
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
@@ -244,9 +242,11 @@ namespace ts {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result = arguments.length <= 2 ? array[pos++] : initial;
+                let result = arguments.length <= 2 ? array[pos] : initial;
+                pos++;
                 while (pos < count) {
-                    result = f(<U>result, array[pos++]);
+                    result = f(<U>result, array[pos]);
+                    pos++;
                 }
                 return <U>result;
             }
@@ -260,9 +260,11 @@ namespace ts {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result = arguments.length <= 2 ? array[pos--] : initial;
+                let result = arguments.length <= 2 ? array[pos] : initial;
+                pos--;
                 while (pos >= 0) {
-                    result = f(<U>result, array[pos--]);
+                    result = f(<U>result, array[pos]);
+                    pos--;
                 }
                 return <U>result;
             }
@@ -297,8 +299,8 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
-        const result: Map<T1 & T2> = {};
+    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
         }
@@ -356,6 +358,33 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Reduce the properties of a map.
+     *
+     * @param map The map to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        if (map) {
+            for (const key in map) {
+                if (hasProperty(map, key)) {
+                    result = callback(result, map[key], String(key));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Tests whether a value is an array.
+     */
+    export function isArray(value: any): value is any[] {
+        return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {
@@ -408,6 +437,17 @@ namespace ts {
             category: message.category,
             code: message.code,
         };
+    }
+
+    /* internal */
+    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 2) {
+            text = formatStringFromArgs(text, arguments, 2);
+        }
+
+        return text;
     }
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -585,7 +625,9 @@ namespace ts {
         return path.substr(0, rootLength) + normalized.join(directorySeparator);
     }
 
-    export function getDirectoryPath(path: string) {
+    export function getDirectoryPath(path: Path): Path;
+    export function getDirectoryPath(path: string): string;
+    export function getDirectoryPath(path: string): any {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
@@ -625,7 +667,7 @@ namespace ts {
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {
-        // Get root length of http://www.website.com/folder1/foler2/
+        // Get root length of http://www.website.com/folder1/folder2/
         // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
@@ -653,7 +695,7 @@ namespace ts {
         const indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
             // Found the "/" after the website.com so the root is length of http://www.website.com/
-            // and get components afetr the root normally like any other folder components
+            // and get components after the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
             return normalizedPathComponents(url, rootLength);
         }
@@ -685,7 +727,8 @@ namespace ts {
         }
 
         // Find the component that differs
-        for (var joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
+        let joinStartIndex: number;
+        for (joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
             if (getCanonicalFileName(directoryComponents[joinStartIndex]) !== getCanonicalFileName(pathComponents[joinStartIndex])) {
                 break;
             }
@@ -714,7 +757,7 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
-        if (!path) {
+        if (path === undefined) {
             return undefined;
         }
         const i = path.lastIndexOf(directorySeparator);
@@ -738,13 +781,18 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
-    export const supportedJsExtensions = supportedExtensions.concat(".js", ".jsx");
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedJavascriptExtensions = [".js", ".jsx"];
+    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function isSupportedSourceFileName(fileName: string) {
+    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    }
+
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
 
-        for (const extension of supportedExtensions) {
+        for (const extension of getSupportedExtensions(compilerOptions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -761,23 +809,6 @@ namespace ts {
         }
         return path;
     }
-
-    const backslashOrDoubleQuote = /[\"\\]/g;
-    const escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: Map<string> = {
-        "\0": "\\0",
-        "\t": "\\t",
-        "\v": "\\v",
-        "\f": "\\f",
-        "\b": "\\b",
-        "\r": "\\r",
-        "\n": "\\n",
-        "\\": "\\\\",
-        "\"": "\\\"",
-        "\u2028": "\\u2028", // lineSeparator
-        "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
-    };
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
@@ -855,4 +886,11 @@ namespace ts {
         }
         return copiedList;
     }
+
+    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
+        return useCaseSensitivefileNames
+            ? ((fileName) => fileName)
+            : ((fileName) => fileName.toLowerCase());
+    }
+
 }

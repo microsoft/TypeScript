@@ -6,6 +6,7 @@ export default function () {
 
 
 //// [es5-commonjs5.js]
+"use strict";
 function default_1() {
     return "test";
 }

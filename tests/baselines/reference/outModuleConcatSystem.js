@@ -14,7 +14,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-System.register("tests/cases/compiler/ref/a", [], function(exports_1) {
+System.register("ref/a", [], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var A;
     return {
         setters:[],
@@ -23,12 +25,14 @@ System.register("tests/cases/compiler/ref/a", [], function(exports_1) {
                 function A() {
                 }
                 return A;
-            })();
+            }());
             exports_1("A", A);
         }
     }
 });
-System.register("tests/cases/compiler/b", ["tests/cases/compiler/ref/a"], function(exports_2) {
+System.register("b", ["ref/a"], function(exports_2, context_2) {
+    "use strict";
+    var __moduleName = context_2 && context_2.id;
     var a_1;
     var B;
     return {
@@ -43,7 +47,7 @@ System.register("tests/cases/compiler/b", ["tests/cases/compiler/ref/a"], functi
                     _super.apply(this, arguments);
                 }
                 return B;
-            })(a_1.A);
+            }(a_1.A));
             exports_2("B", B);
         }
     }
@@ -51,12 +55,12 @@ System.register("tests/cases/compiler/b", ["tests/cases/compiler/ref/a"], functi
 //# sourceMappingURL=all.js.map
 
 //// [all.d.ts]
-declare module "tests/cases/compiler/ref/a" {
+declare module "ref/a" {
     export class A {
     }
 }
-declare module "tests/cases/compiler/b" {
-    import { A } from "tests/cases/compiler/ref/a";
+declare module "b" {
+    import { A } from "ref/a";
     export class B extends A {
     }
 }

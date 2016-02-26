@@ -41,7 +41,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 function B1() {
     // class expression can use T
     return (function (_super) {
@@ -50,7 +50,7 @@ function B1() {
             _super.apply(this, arguments);
         }
         return class_1;
-    })(A);
+    }(A));
 }
 var B2 = (function () {
     function B2() {
@@ -60,10 +60,10 @@ var B2 = (function () {
                 _super.apply(this, arguments);
             }
             return class_2;
-        })(A);
+        }(A));
     }
     return B2;
-})();
+}());
 function B3() {
     return (function (_super) {
         __extends(Inner, _super);
@@ -71,7 +71,7 @@ function B3() {
             _super.apply(this, arguments);
         }
         return Inner;
-    })(A);
+    }(A));
 }
 // extends can call B
 var K = (function (_super) {
@@ -80,14 +80,14 @@ var K = (function (_super) {
         _super.apply(this, arguments);
     }
     return K;
-})(B1());
+}(B1()));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})((new B2().anon));
+}((new B2().anon)));
 var b3Number = B3();
 var S = (function (_super) {
     __extends(S, _super);
@@ -95,7 +95,7 @@ var S = (function (_super) {
         _super.apply(this, arguments);
     }
     return S;
-})(b3Number);
+}(b3Number));
 var c = new C();
 var k = new K();
 var s = new S();

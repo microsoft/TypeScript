@@ -31,11 +31,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var A = (function () {
         function A(ctor) {
         }
         return A;
-    })();
+    }());
     exports.A = A;
     var B = (function (_super) {
         __extends(B, _super);
@@ -45,7 +46,7 @@ define(["require", "exports"], function (require, exports) {
             this.p2 = url;
         }
         return B;
-    })(A);
+    }(A));
     exports.B = B;
     var reg;
     reg.register(B);

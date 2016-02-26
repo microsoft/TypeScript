@@ -14,11 +14,13 @@ let obj: Buzz;
 export {bar};
 
 //// [utils.js]
+"use strict";
 function foo() { }
 exports.foo = foo;
 function bar() { }
 exports.bar = bar;
 //// [index.js]
+"use strict";
 var utils_1 = require("./utils");
 exports.bar = utils_1.bar;
 utils_1.foo();

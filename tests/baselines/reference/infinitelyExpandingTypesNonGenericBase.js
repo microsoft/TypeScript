@@ -34,19 +34,19 @@ var Functionality = (function () {
     function Functionality() {
     }
     return Functionality;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
         _super.apply(this, arguments);
     }
     return A;
-})(Base);
+}(Base));
 function o(type) {
 }
 o(A);

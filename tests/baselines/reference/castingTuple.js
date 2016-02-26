@@ -43,18 +43,18 @@ var A = (function () {
         this.a = 10;
     }
     return A;
-})();
+}());
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 ;
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 ;
 var E = (function (_super) {
     __extends(E, _super);
@@ -62,7 +62,7 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     return E;
-})(A);
+}(A));
 ;
 var F = (function (_super) {
     __extends(F, _super);
@@ -70,7 +70,7 @@ var F = (function (_super) {
         _super.apply(this, arguments);
     }
     return F;
-})(A);
+}(A));
 ;
 var E1;
 (function (E1) {

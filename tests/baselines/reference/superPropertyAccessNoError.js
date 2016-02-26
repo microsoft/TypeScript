@@ -82,7 +82,7 @@ var SomeBaseClass = (function () {
         return 3;
     };
     return SomeBaseClass;
-})();
+}());
 var SomeDerivedClass = (function (_super) {
     __extends(SomeDerivedClass, _super);
     function SomeDerivedClass() {
@@ -127,4 +127,4 @@ var SomeDerivedClass = (function (_super) {
         configurable: true
     });
     return SomeDerivedClass;
-})(SomeBaseClass);
+}(SomeBaseClass));

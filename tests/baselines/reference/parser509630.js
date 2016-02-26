@@ -17,11 +17,11 @@ var Type = (function () {
         this.examples = []; // typing here
     }
     return Type;
-})();
+}());
 var Any = (function (_super) {
     __extends(Any, _super);
     function Any() {
         _super.apply(this, arguments);
     }
     return Any;
-})(Type);
+}(Type));

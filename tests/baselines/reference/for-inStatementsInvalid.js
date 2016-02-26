@@ -103,7 +103,7 @@ var A = (function () {
         return null;
     };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -118,6 +118,6 @@ var B = (function (_super) {
         return null;
     };
     return B;
-})(A);
+}(A));
 var i;
 for (var x in i[42]) { }

@@ -20,6 +20,6 @@ var A;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     A.UnitSquare = null;
 })(A || (A = {}));

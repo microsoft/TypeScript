@@ -111,34 +111,34 @@ var SomeBase = (function () {
     function SomeBase() {
     }
     return SomeBase;
-})();
+}());
 var SomeDerived1 = (function (_super) {
     __extends(SomeDerived1, _super);
     function SomeDerived1() {
         _super.apply(this, arguments);
     }
     return SomeDerived1;
-})(SomeBase);
+}(SomeBase));
 var SomeDerived2 = (function (_super) {
     __extends(SomeDerived2, _super);
     function SomeDerived2() {
         _super.apply(this, arguments);
     }
     return SomeDerived2;
-})(SomeBase);
+}(SomeBase));
 var SomeDerived3 = (function (_super) {
     __extends(SomeDerived3, _super);
     function SomeDerived3() {
         _super.apply(this, arguments);
     }
     return SomeDerived3;
-})(SomeBase);
+}(SomeBase));
 // Ambiguous call picks the first overload in declaration order
 var fn1 = (function () {
     function fn1() {
     }
     return fn1;
-})();
+}());
 new fn1(undefined);
 // No candidate overloads found
 new fn1({}); // Error
@@ -147,7 +147,7 @@ var fn2 = (function () {
     function fn2() {
     }
     return fn2;
-})();
+}());
 var d = new fn2(0, undefined);
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = new fn2(0, '');
@@ -160,7 +160,7 @@ var fn3 = (function () {
     function fn3() {
     }
     return fn3;
-})();
+}());
 new fn3(3);
 new fn3('', 3, '');
 new fn3(5, 5, 5);
@@ -175,7 +175,7 @@ var fn4 = (function () {
     function fn4() {
     }
     return fn4;
-})();
+}());
 new fn4('', 3);
 new fn4(3, ''); // Error
 new fn4('', 3); // Error
@@ -196,7 +196,7 @@ var fn5 = (function () {
         return undefined;
     }
     return fn5;
-})();
+}());
 new fn5(function (n) { return n.toFixed(); });
 new fn5(function (n) { return n.substr(0); });
 new fn5(function (n) { return n.blah; }); // Error

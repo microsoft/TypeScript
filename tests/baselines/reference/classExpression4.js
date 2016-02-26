@@ -15,5 +15,5 @@ var C = (function () {
         return new C();
     };
     return class_1;
-})();
+}());
 var x = (new C).foo();

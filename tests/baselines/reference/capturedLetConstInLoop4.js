@@ -144,7 +144,9 @@ for (const y = 0; y < 1;) {
 
 
 //// [capturedLetConstInLoop4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var v0, v00, v1, v2, v3, v4, v5, v6, v7, v8, v0_c, v00_c, v1_c, v2_c, v3_c, v4_c, v5_c, v6_c, v7_c, v8_c;
     //======let
     function exportedFoo() {
@@ -185,7 +187,7 @@ System.register([], function(exports_1) {
                 _loop_3(x);
             }
             var _loop_4 = function() {
-                var x = void 0;
+                var x;
                 v2 = x;
                 (function () { return x + v2; });
                 (function () { return x; });
@@ -194,7 +196,7 @@ System.register([], function(exports_1) {
                 _loop_4();
             }
             var _loop_5 = function() {
-                var x = void 0;
+                var x;
                 v3 = x;
                 (function () { return x + v3; });
                 (function () { return x; });
@@ -220,7 +222,7 @@ System.register([], function(exports_1) {
                 _loop_7(x, y);
             }
             var _loop_8 = function() {
-                var x = void 0, y = void 0;
+                var x, y;
                 v6 = x;
                 (function () { return x + y + v6; });
                 (function () { return x + y; });
@@ -229,7 +231,7 @@ System.register([], function(exports_1) {
                 _loop_8();
             }
             var _loop_9 = function() {
-                var x = void 0, y = void 0;
+                var x, y;
                 v7 = x;
                 (function () { return x + y + v7; });
                 (function () { return x + y; });

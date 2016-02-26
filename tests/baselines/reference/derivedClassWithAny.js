@@ -87,7 +87,7 @@ var C = (function () {
         return 1;
     };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -114,7 +114,7 @@ var D = (function (_super) {
         return null;
     };
     return D;
-})(C);
+}(C));
 // if D is a valid class definition than E is now not safe tranisitively through C
 var E = (function (_super) {
     __extends(E, _super);
@@ -140,7 +140,7 @@ var E = (function (_super) {
         return '';
     };
     return E;
-})(D);
+}(D));
 var c;
 var d;
 var e;

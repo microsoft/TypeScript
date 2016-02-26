@@ -346,6 +346,7 @@ export var tests: TestRunner = (function () {
 })();
 
 //// [duplicateLocalVariable1.js]
+"use strict";
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";
@@ -356,7 +357,7 @@ var TestCase = (function () {
         this.errorMessageRegEx = errorMessageRegEx;
     }
     return TestCase;
-})();
+}());
 exports.TestCase = TestCase;
 var TestRunner = (function () {
     function TestRunner() {
@@ -405,7 +406,7 @@ var TestRunner = (function () {
         }
     };
     return TestRunner;
-})();
+}());
 exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();

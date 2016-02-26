@@ -49,9 +49,9 @@ class CompilerBaselineRunner extends RunnerBase {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
-
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let harnessSettings: Harness.TestCaseParser.CompilerSettings;
+            let hasNonDtsFiles: boolean;
 
             let result: Harness.Compiler.CompilerResult;
             let options: ts.CompilerOptions;
@@ -63,16 +63,31 @@ class CompilerBaselineRunner extends RunnerBase {
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
                 const content = Harness.IO.readFile(fileName);
-                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
+                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName, rootDir);
                 const units = testCaseContent.testUnitData;
                 harnessSettings = testCaseContent.settings;
+                let tsConfigOptions: ts.CompilerOptions;
+                if (testCaseContent.tsConfig) {
+                    assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
+
+                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                }
+                else {
+                    const baseUrl = harnessSettings["baseUrl"];
+                    if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
+                        harnessSettings["baseUrl"] = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                    }
+                }
+
                 lastUnit = units[units.length - 1];
-                const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
+
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
@@ -88,7 +103,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
+                    toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
 
                 options = output.options;
                 result = output.result;
@@ -99,6 +114,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 // Therefore we have to clean out large objects after the test is done.
                 justName = undefined;
                 lastUnit = undefined;
+                hasNonDtsFiles = undefined;
                 result = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
@@ -123,6 +139,14 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
+            it (`Correct module resolution tracing for ${fileName}`, () => {
+                if (options.traceModuleResolution) {
+                    Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
+                        return JSON.stringify(result.traceResults || [], undefined, 4);
+                    });
+                }
+            });
+
             // Source maps?
             it("Correct sourcemap content for " + fileName, () => {
                 if (options.sourceMap || options.inlineSourceMap) {
@@ -138,8 +162,8 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it("Correct JS output for " + fileName, () => {
-                if (!ts.fileExtensionIs(lastUnit.name, ".d.ts") && this.emit) {
-                    if (result.files.length === 0 && result.errors.length === 0) {
+                if (hasNonDtsFiles && this.emit) {
+                    if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
                         throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                     }
 
@@ -238,8 +262,8 @@ class CompilerBaselineRunner extends RunnerBase {
                     // different order with 'pull' operations, and thus can produce slightly differing
                     // output.
                     //
-                    // For example, with a full type check, we may see a type outputed as: number | string
-                    // But with a pull type check, we may see it as:                       string | number
+                    // For example, with a full type check, we may see a type displayed as: number | string
+                    // But with a pull type check, we may see it as:                        string | number
                     //
                     // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
@@ -248,7 +272,6 @@ class CompilerBaselineRunner extends RunnerBase {
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
                     const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
-                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ false);
 
                     const fullResults: ts.Map<TypeWriterResult[]> = {};
                     const pullResults: ts.Map<TypeWriterResult[]> = {};

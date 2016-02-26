@@ -20,12 +20,12 @@ var __extends = (this && this.__extends) || function (d, b) {
 //# sourceMappingURL=all.js.map
 
 //// [all.d.ts]
-declare module "tests/cases/compiler/ref/a" {
+declare module "ref/a" {
     export class A {
     }
 }
-declare module "tests/cases/compiler/b" {
-    import { A } from "tests/cases/compiler/ref/a";
+declare module "b" {
+    import { A } from "ref/a";
     export class B extends A {
     }
 }
