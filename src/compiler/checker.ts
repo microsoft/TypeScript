@@ -2607,7 +2607,8 @@ namespace ts {
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
-            const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
+            const parent = <VariableLikeDeclaration>pattern.parent;
+            const parentType = getTypeForBindingElementParent(parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -2641,6 +2642,11 @@ namespace ts {
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
                     return unknownType;
+                }
+
+                const property = getPropertyOfType(parentType, text);
+                if (parent && parent.initializer && property && getParentOfSymbol(property)) {
+                    checkClassPropertyAccess(parent, parent.initializer, parentType, property);
                 }
             }
             else {
@@ -8971,13 +8977,14 @@ namespace ts {
          * @param type The type of left.
          * @param prop The symbol for the right hand side of the property access.
          */
-        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
+        function checkClassPropertyAccess(node: PropertyAccessExpression | QualifiedName | VariableLikeDeclaration, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationFlagsFromSymbol(prop);
             const declaringClass = <InterfaceType>getDeclaredTypeOfSymbol(getParentOfSymbol(prop));
 
             if (left.kind === SyntaxKind.SuperKeyword) {
-                const errorNode = node.kind === SyntaxKind.PropertyAccessExpression ?
-                    (<PropertyAccessExpression>node).name :
+                // TODO: Move this out and use it in the rest of the code
+                const errorNode = node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.VariableDeclaration ?
+                    (<PropertyAccessExpression | VariableDeclaration>node).name :
                     (<QualifiedName>node).right;
 
                 // TS 1.0 spec (April 2014): 4.8.2
