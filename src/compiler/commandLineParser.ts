@@ -616,10 +616,10 @@ namespace ts {
                         }
                     }
                     else if (id === "include") {
-                        options.include = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
+                        options.include = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else if (id === "exclude") {
-                        options.exclude = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
+                        options.exclude = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
@@ -668,7 +668,7 @@ namespace ts {
                                 break;
                             case "object":
                                 // "object" options with 'isFilePath' = true expected to be string arrays
-                                value = ConvertJsonOptionToStringArray(opt.name, value, errors, (element) => normalizePath(combinePaths(basePath, element)));
+                                value = convertJsonOptionToStringArray(opt.name, value, errors, (element) => normalizePath(combinePaths(basePath, element)));
                                 break;
                         }
                         if (value === "") {
@@ -689,7 +689,7 @@ namespace ts {
         return { options, errors };
     }
 
-    function ConvertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
+    function convertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
         const items: string[] = [];
         let invalidOptionType = false;
         if (!isArray(optionJson)) {
