@@ -821,6 +821,7 @@ namespace ts {
             const isOr = node.operatorToken.kind === SyntaxKind.BarBarToken;
 
             if (isAnd || isOr) {
+                bindFlowMarker(node);
                 bind(node.left);
                 const preRightState = currentReachabilityState;
                 bindBranchFlow(node, node.left, isAnd);
@@ -837,6 +838,7 @@ namespace ts {
         }
 
         function bindConditionalExpression(node: ConditionalExpression) {
+            bindFlowMarker(node);
             bind(node.condition);
             const postConditionState = currentReachabilityState;
 

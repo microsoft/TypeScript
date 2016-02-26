@@ -6938,7 +6938,7 @@ namespace ts {
             }
         }
 
-        function getPreviousOccurences(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
+        function getPreviousOccurences(symbol: Symbol, where: Node, callback: (node: Node, guards: BranchFlow[]) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
             const guards: BranchFlow[] = [];
@@ -6950,21 +6950,22 @@ namespace ts {
                 if (stop) return;
                 let isGuard = false;
                 let nodeId: number;
-                if ((<Node> location).kind !== undefined) {
+                if ((<Node>location).kind !== undefined) {
                     nodeId = getNodeId(<Node>location);
                     if (visited[nodeId]) return;
 
-                    const otherSymbol = getSymbolAtLocation(<Identifier> location);
-                    if (location !== where && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
+                    const otherSymbol = getSymbolAtLocation(<Node>location);
+                    const isSameIdentifier = location !== where && (<Node>location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
+                    if (isSameIdentifier || isBranchStart(<Node>location)) {
                         stop = callback(<Identifier> location, guards);
                         return;
                     }
                     visited[nodeId] = true;
                 }
                 else {
-                    if (guards.indexOf(<BranchFlow> location) !== -1) return;
+                    if (guards.indexOf(<BranchFlow>location) !== -1) return;
                     isGuard = true;
-                    guards.push(<BranchFlow> location);
+                    guards.push(<BranchFlow>location);
                 }
                 if (location.previous === undefined) {
                     // We cannot do analysis in a catch or finally block
@@ -6982,6 +6983,11 @@ namespace ts {
                     visited[nodeId] = false;
                 }
                 return;
+            }
+            function isBranchStart(node: Node) {
+                const guard = guards[guards.length - 1];
+                if (!guard) return false;
+                return guard.node === node;
             }
         }
 
@@ -7014,6 +7020,7 @@ namespace ts {
                 if (getSourceFileOfNode(declaration) !== getSourceFileOfNode(location)) return initialType;
             }
             const visited: FlowMarkerTarget[] = [];
+            const cache: { [nodeId: number]: Type } = {};
 
             let loop = false;
             const narrowedType = getType(location, false);
@@ -7029,6 +7036,10 @@ namespace ts {
 
             function getType(where: Node, after: boolean) {
                 if (where === undefined) return initialType;
+                const whereId = getNodeId(where);
+                if (after && cache[whereId]) {
+                    return cache[whereId];
+                }
                 if (visited.indexOf(where) !== -1) {
                     loop = true;
                     return undefined;
@@ -7038,7 +7049,7 @@ namespace ts {
                     if (after) {
                         const assignment = getAssignedTypeAtLocation(<Identifier>where);
                         if (assignment) {
-                            return narrowTypeByAssignment(assignment);
+                            return cache[whereId] = narrowTypeByAssignment(assignment);
                         }
                     }
                     if ((<Identifier>where).narrowingState === NarrowingState.Done) {
@@ -7050,8 +7061,11 @@ namespace ts {
                 const fallback = getPreviousOccurences(symbol, where, handleGuards);
                 visited.pop();
                 const type = fallback ? initialType : getUnionType(types);
-                if (!loop && (<Identifier>where).narrowingState !== NarrowingState.Failed) {
+                if (!loop && isIdentifier && (<Identifier>where).narrowingState !== NarrowingState.Failed) {
                     (<Identifier>where).localType = type;
+                }
+                if (after) {
+                    cache[whereId] = type;
                 }
                 return type;
 
