@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -722,6 +722,10 @@
     "Parameter '{0}' is not in the same position as parameter '{1}'.": {
         "category": "Error",
         "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
     },
     "A type predicate cannot reference a rest parameter.": {
         "category": "Error",
@@ -775,7 +779,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class or method declaration.": {
+    "'abstract' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -1147,7 +1151,7 @@
         "category": "Error",
         "code": 2382
     },
-    "Overload signatures must all be exported or not exported.": {
+    "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383
     },
@@ -1307,7 +1311,7 @@
         "category": "Error",
         "code": 2427
     },
-    "All declarations of an interface must have identical type parameters.": {
+    "All declarations of '{0}' must have identical type parameters.": {
         "category": "Error",
         "code": 2428
     },
@@ -1631,7 +1635,7 @@
         "category": "Error",
         "code": 2511
     },
-    "Overload signatures must all be abstract or not abstract.": {
+    "Overload signatures must all be abstract or non-abstract.": {
         "category": "Error",
         "code": 2512
     },
@@ -1698,6 +1702,10 @@
     "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module containing async functions.": {
         "category": "Error",
         "code": 2529
+    },
+    "Property '{0}' is incompatible with index signature.": {
+        "category": "Error",
+        "code": 2530
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -1818,6 +1826,26 @@
     "Cannot augment module '{0}' because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2671
+    },
+    "Cannot assign a '{0}' constructor type to a '{1}' constructor type.": {
+        "category": "Error",
+        "code": 2672
+    },
+    "Constructor of class '{0}' is private and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2673
+    },
+    "Constructor of class '{0}' is protected and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2674
+    },
+    "Cannot extend a class '{0}'. Class constructor is marked as private.": {
+        "category": "Error",
+        "code": 2675
+    },
+    "Accessors must both be abstract or non-abstract.": {
+        "category": "Error",
+        "code": 2676
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2729,11 +2757,6 @@
         "category": "Error",
         "code": 8016
     },
-    "'decorators' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8017
-    },
-
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002

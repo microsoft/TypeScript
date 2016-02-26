@@ -1,3 +1,4 @@
+
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -425,7 +426,6 @@ namespace ts {
 
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
-
 
     /* @internal */
     export const enum RelationComparisonResult {
@@ -1551,6 +1551,7 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+        /* @internal */ scriptKind: ScriptKind;
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
@@ -1701,6 +1702,7 @@ namespace ts {
 
     export interface EmitResult {
         emitSkipped: boolean;
+        /** Contains declaration emit diagnostics */
         diagnostics: Diagnostic[];
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -1769,6 +1771,7 @@ namespace ts {
         buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -1834,21 +1837,23 @@ namespace ts {
         Identifier
     }
 
-    export interface TypePredicate {
+    export interface TypePredicateBase {
         kind: TypePredicateKind;
         type: Type;
     }
 
     // @kind (TypePredicateKind.This)
-    export interface ThisTypePredicate extends TypePredicate {
+    export interface ThisTypePredicate extends TypePredicateBase {
         _thisTypePredicateBrand: any;
     }
 
     // @kind (TypePredicateKind.Identifier)
-    export interface IdentifierTypePredicate extends TypePredicate {
+    export interface IdentifierTypePredicate extends TypePredicateBase {
         parameterName: string;
         parameterIndex: number;
     }
+
+    export type TypePredicate = IdentifierTypePredicate | ThisTypePredicate;
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -2057,10 +2062,9 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding  = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
-        HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
-        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00400000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        ClassWithBodyScopedClassBinding     = 0x00080000, // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00100000, // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00200000, // Block scoped binding whose value should be explicitly copied outside of the converted loop
     }
 
     /* @internal */
@@ -2080,6 +2084,8 @@ namespace ts {
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
+        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
     }
 
     export const enum TypeFlags {
@@ -2115,7 +2121,6 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
-        PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2127,7 +2132,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
@@ -2146,11 +2151,6 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
-    }
-
-    // Predicate types (TypeFlags.Predicate)
-    export interface PredicateType extends Type {
-        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)
@@ -2287,6 +2287,8 @@ namespace ts {
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
+        /* @internal */
+        typePredicate?: TypePredicate;
     }
 
     export const enum IndexKind {
@@ -2389,6 +2391,7 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
+        declarationDir?: string;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
@@ -2477,6 +2480,14 @@ namespace ts {
          * This value denotes the character position in line and is different from the 'column' because of tab characters.
          */
         character: number;
+    }
+
+    export const enum ScriptKind {
+        Unknown = 0,
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4
     }
 
     export const enum ScriptTarget {
