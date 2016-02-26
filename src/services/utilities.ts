@@ -149,7 +149,7 @@ namespace ts {
 
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicity always consider them non-completed
                 return false;
 
             case SyntaxKind.ForStatement:
@@ -271,7 +271,7 @@ namespace ts {
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));

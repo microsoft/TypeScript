@@ -13,4 +13,4 @@ Refer to CONTRIBUTING.MD for more details.
   https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md
 -->
 
-**Fixes issue:** #
+Fixes #
