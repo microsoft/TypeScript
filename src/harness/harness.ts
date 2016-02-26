@@ -805,28 +805,13 @@ namespace Harness {
             return result;
         }
 
-        export function createES6LibrarySourceFileAndAssertInvariants(fileName: string, languageVersion: ts.ScriptTarget) {
-            // We'll only assert invariants outside of light mode.
-            const shouldAssertInvariants = !Harness.lightMode;
-
-            const es6Lib = ts.createSourceFile(fileName, IO.readFile(libFolder + "lib.es6.d.ts"), languageVersion,  /*setParentNodes:*/ shouldAssertInvariants);
-
-            let fullES6LibSourceText = "";
-            if (es6Lib.referencedFiles) {
-                for (const refFile of es6Lib.referencedFiles) {
-                    fullES6LibSourceText += IO.readFile(libFolder + refFile.fileName);
-                }
-            }
-
-            return createSourceFileAndAssertInvariants(fileName, fullES6LibSourceText, languageVersion);
-        }
-
         const carriageReturnLineFeed = "\r\n";
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
         export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export const defaultES6LibSourceFile = createES6LibrarySourceFileAndAssertInvariants(defaultLibFileName, ts.ScriptTarget.Latest);
+        // TODO (yuisu): we should not use the lib.full.es6.d.ts. We will fix this when all the work for library modularization is in
+        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.full.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
