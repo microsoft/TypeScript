@@ -1467,7 +1467,7 @@
         "category": "Error",
         "code": 2468
     },
-    "The '{0}' operator cannot be applied to type 'symbol'.": {
+    "The '{0}' operator cannot be applied to type '{1}'.": {
         "category": "Error",
         "code": 2469
     },
@@ -2222,6 +2222,10 @@
     "The condition of a '{0}' statement cannot have type '{1}'.": {
         "category": "Error",
         "code": 5064
+    },
+    "The tested expression of a conditional expression cannot have type '{0}'.": {
+        "category": "Error",
+        "code": 5065
     },
 
     "Concatenate and emit output to single file.": {
