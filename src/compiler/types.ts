@@ -974,6 +974,8 @@ namespace ts {
         name: Identifier;
     }
 
+    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
@@ -2071,7 +2073,7 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         generatedName?: string;           // Generated name for module, enum, or import declaration
         generatedNames?: Map<string>;     // Generated names table for source file
-        assignmentChecks?: Map<boolean>;  // Cache of assignment checks
+        assignmentMap?: Map<boolean>;     // Cached map of references assigned within this node
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with

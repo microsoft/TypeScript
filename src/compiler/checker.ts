@@ -69,10 +69,7 @@ namespace ts {
             isUnknownSymbol: symbol => symbol === unknownSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
-
-            // The language service will always care about the narrowed type of a symbol, because that is
-            // the type the language says the symbol should have.
-            getTypeOfSymbolAtLocation: getNarrowedTypeOfSymbol,
+            getTypeOfSymbolAtLocation,
             getSymbolsOfParameterPropertyDeclaration,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
@@ -6869,7 +6866,7 @@ namespace ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = (!nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node)) || unknownSymbol;
+                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -6893,48 +6890,59 @@ namespace ts {
             Debug.fail("should not get here");
         }
 
+        // Return the assignment key for a "dotted name" (i.e. a sequence of identifiers
+        // separated by dots). The key consists of the id of the symbol referenced by the
+        // leftmost identifier followed by zero or more property names separated by dots.
+        // The result is undefined if the reference isn't a dotted name.
+        function getAssignmentKey(node: Node): string {
+            if (node.kind === SyntaxKind.Identifier) {
+                const symbol = getResolvedSymbol(<Identifier>node);
+                return symbol !== unknownSymbol ? "" + getSymbolId(symbol) : undefined;
+            }
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                const key = getAssignmentKey((<PropertyAccessExpression>node).expression);
+                return key && key + "." + (<PropertyAccessExpression>node).name.text;
+            }
+            return undefined;
+        }
+
         function hasInitializer(node: VariableLikeDeclaration): boolean {
             return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableLikeDeclaration>node.parent.parent));
         }
 
-        // Check if a given variable is assigned within a given syntax node
-        function isVariableAssignedWithin(symbol: Symbol, node: Node): boolean {
-            const links = getNodeLinks(node);
-            if (links.assignmentChecks) {
-                const cachedResult = links.assignmentChecks[symbol.id];
-                if (cachedResult !== undefined) {
-                    return cachedResult;
-                }
-            }
-            else {
-                links.assignmentChecks = {};
-            }
-            return links.assignmentChecks[symbol.id] = isAssignedIn(node);
+        // For a given node compute a map of which dotted names are assigned within
+        // the node.
+        function getAssignmentMap(node: Node): Map<boolean> {
+            const assignmentMap: Map<boolean> = {};
+            visit(node);
+            return assignmentMap;
 
-            function isAssignedInBinaryExpression(node: BinaryExpression) {
+            function visitBinaryExpression(node: BinaryExpression) {
                 if (node.operatorToken.kind >= SyntaxKind.FirstAssignment && node.operatorToken.kind <= SyntaxKind.LastAssignment) {
-                    const n = skipParenthesizedNodes(node.left);
-                    if (n.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>n) === symbol) {
-                        return true;
+                    const key = getAssignmentKey(skipParenthesizedNodes(node.left));
+                    if (key) {
+                        assignmentMap[key] = true;
                     }
                 }
-                return forEachChild(node, isAssignedIn);
+                forEachChild(node, visit);
             }
 
-            function isAssignedInVariableDeclaration(node: VariableLikeDeclaration) {
-                if (!isBindingPattern(node.name) && getSymbolOfNode(node) === symbol && hasInitializer(node)) {
-                    return true;
+            function visitVariableDeclaration(node: VariableLikeDeclaration) {
+                if (!isBindingPattern(node.name) && hasInitializer(node)) {
+                    assignmentMap[getSymbolId(getSymbolOfNode(node))] = true;
                 }
-                return forEachChild(node, isAssignedIn);
+                forEachChild(node, visit);
             }
 
-            function isAssignedIn(node: Node): boolean {
+            function visit(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.BinaryExpression:
-                        return isAssignedInBinaryExpression(<BinaryExpression>node);
+                        visitBinaryExpression(<BinaryExpression>node);
+                        break;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
-                        return isAssignedInVariableDeclaration(<VariableLikeDeclaration>node);
+                        visitVariableDeclaration(<VariableLikeDeclaration>node);
+                        break;
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
                     case SyntaxKind.ArrayLiteralExpression:
@@ -6980,9 +6988,30 @@ namespace ts {
                     case SyntaxKind.JsxSpreadAttribute:
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxExpression:
-                        return forEachChild(node, isAssignedIn);
+                        forEachChild(node, visit);
+                        break;
                 }
-                return false;
+            }
+        }
+
+        function isReferenceAssignedWithin(reference: Node, node: Node): boolean {
+            const key = getAssignmentKey(reference);
+            if (key) {
+                const links = getNodeLinks(node);
+                return (links.assignmentMap || (links.assignmentMap = getAssignmentMap(node)))[key];
+            }
+            return false;
+        }
+
+        function isAnyPartOfReferenceAssignedWithin(reference: Node, node: Node) {
+            while (true) {
+                if (isReferenceAssignedWithin(reference, node)) {
+                    return true;
+                }
+                if (reference.kind !== SyntaxKind.PropertyAccessExpression) {
+                    return false;
+                }
+                reference = (<PropertyAccessExpression>reference).expression;
             }
         }
 
@@ -6991,83 +7020,112 @@ namespace ts {
                 node.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>node) === undefinedSymbol;
         }
 
-        // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
-            let type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of type any or an object, union, or type parameter type
-            if (node && symbol.flags & SymbolFlags.Variable) {
-                if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
-                    const declaration = getDeclarationOfKind(symbol, SyntaxKind.VariableDeclaration);
-                    const top = declaration && getDeclarationContainer(declaration);
-                    const originalType = type;
-                    const nodeStack: {node: Node, child: Node}[] = [];
-                    loop: while (node.parent) {
-                        const child = node;
-                        node = node.parent;
-                        switch (node.kind) {
-                            case SyntaxKind.IfStatement:
-                            case SyntaxKind.ConditionalExpression:
-                            case SyntaxKind.BinaryExpression:
-                                nodeStack.push({node, child});
-                                break;
-                            case SyntaxKind.SourceFile:
-                            case SyntaxKind.ModuleDeclaration:
-                                // Stop at the first containing file or module declaration
-                                break loop;
-                        }
-                        if (node === top) {
-                            break;
-                        }
-                    }
+        function getLeftmostIdentifier(node: Node): Identifier {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return <Identifier>node;
+                case SyntaxKind.PropertyAccessExpression:
+                    return getLeftmostIdentifier((<PropertyAccessExpression>node).expression);
+            }
+            return undefined;
+        }
 
-                    let nodes: {node: Node, child: Node};
-                    while (nodes = nodeStack.pop()) {
-                        const {node, child} = nodes;
-                        switch (node.kind) {
-                            case SyntaxKind.IfStatement:
-                                // In a branch of an if statement, narrow based on controlling expression
-                                if (child !== (<IfStatement>node).expression) {
-                                    type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
-                                }
-                                break;
-                            case SyntaxKind.ConditionalExpression:
-                                // In a branch of a conditional expression, narrow based on controlling condition
-                                if (child !== (<ConditionalExpression>node).condition) {
-                                    type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
-                                }
-                                break;
-                            case SyntaxKind.BinaryExpression:
-                                // In the right operand of an && or ||, narrow based on left operand
-                                if (child === (<BinaryExpression>node).right) {
-                                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
-                                    }
-                                    else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
-                                    }
-                                }
-                                break;
-                            default:
-                                Debug.fail("Unreachable!");
-                        }
-
-                        // Use original type if construct contains assignments to variable
-                        if (type !== originalType && isVariableAssignedWithin(symbol, node)) {
-                            type = originalType;
-                        }
-                    }
-
-                    // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-                    if (type === emptyUnionType) {
-                        type = originalType;
-                    }
+        function isMatchingReference(source: Node, target: Node): boolean {
+            if (source.kind === target.kind) {
+                if (source.kind === SyntaxKind.Identifier) {
+                    return getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target);
                 }
+                if (source.kind === SyntaxKind.PropertyAccessExpression) {
+                    return (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
+                        isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                }
+            }
+            return false;
+        }
+
+        // Get the narrowed type of a given symbol at a given location
+        function getNarrowedTypeOfReference(type: Type, reference: IdentifierOrPropertyAccess) {
+            if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
+                return type;
+            }
+            const leftmostIdentifier = getLeftmostIdentifier(reference);
+            if (!leftmostIdentifier) {
+                return type;
+            }
+            const leftmostSymbol = getResolvedSymbol(leftmostIdentifier);
+            if (!(leftmostSymbol.flags & SymbolFlags.Variable)) {
+                return type;
+            }
+            const declaration = getDeclarationOfKind(leftmostSymbol, SyntaxKind.VariableDeclaration);
+            const top = declaration && getDeclarationContainer(declaration);
+            const originalType = type;
+            const nodeStack: { node: Node, child: Node }[] = [];
+            let node: Node = reference;
+            loop: while (node.parent) {
+                const child = node;
+                node = node.parent;
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.BinaryExpression:
+                        nodeStack.push({node, child});
+                        break;
+                    case SyntaxKind.SourceFile:
+                    case SyntaxKind.ModuleDeclaration:
+                        // Stop at the first containing file or module declaration
+                        break loop;
+                }
+                if (node === top) {
+                    break;
+                }
+            }
+
+            let nodes: { node: Node, child: Node };
+            while (nodes = nodeStack.pop()) {
+                const {node, child} = nodes;
+                switch (node.kind) {
+                    case SyntaxKind.IfStatement:
+                        // In a branch of an if statement, narrow based on controlling expression
+                        if (child !== (<IfStatement>node).expression) {
+                            type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
+                        }
+                        break;
+                    case SyntaxKind.ConditionalExpression:
+                        // In a branch of a conditional expression, narrow based on controlling condition
+                        if (child !== (<ConditionalExpression>node).condition) {
+                            type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
+                        }
+                        break;
+                    case SyntaxKind.BinaryExpression:
+                        // In the right operand of an && or ||, narrow based on left operand
+                        if (child === (<BinaryExpression>node).right) {
+                            if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
+                            }
+                            else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
+                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
+                            }
+                        }
+                        break;
+                    default:
+                        Debug.fail("Unreachable!");
+                }
+
+                // Use original type if construct contains assignments to variable
+                if (type !== originalType && isAnyPartOfReferenceAssignedWithin(reference, node)) {
+                    type = originalType;
+                }
+            }
+
+            // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
+            if (type === emptyUnionType) {
+                type = originalType;
             }
 
             return type;
 
             function narrowTypeByTruthiness(type: Type, expr: Identifier, assumeTrue: boolean): Type {
-                return strictNullChecks && assumeTrue && getResolvedSymbol(expr) === symbol ? getNonNullableType(type) : type;
+                return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -7095,14 +7153,11 @@ namespace ts {
             }
 
             function narrowTypeByNullCheck(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // We have '==' or '!=' operator with 'null' on the right
+                // We have '==' or '!=' operator with 'null' or 'undefined' on the right
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || assumeTrue) {
-                    return type;
-                }
-                if (expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (!strictNullChecks || assumeTrue || !isMatchingReference(expr.left, reference)) {
                     return type;
                 }
                 return getNonNullableType(type);
@@ -7113,7 +7168,7 @@ namespace ts {
                 // and string literal on the right
                 const left = <TypeOfExpression>expr.left;
                 const right = <LiteralExpression>expr.right;
-                if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
+                if (!isMatchingReference(left.expression, reference)) {
                     return type;
                 }
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
@@ -7181,7 +7236,7 @@ namespace ts {
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (isTypeAny(type) || !isMatchingReference(expr.left, reference)) {
                     return type;
                 }
 
@@ -7252,43 +7307,27 @@ namespace ts {
                     return type;
                 }
                 const signature = getResolvedSignature(callExpression);
-
                 const predicate = signature.typePredicate;
                 if (!predicate) {
                     return type;
                 }
-
                 if (isIdentifierTypePredicate(predicate)) {
-                    if (callExpression.arguments[predicate.parameterIndex] &&
-                        getSymbolAtTypePredicatePosition(callExpression.arguments[predicate.parameterIndex]) === symbol) {
+                    const predicateArgument = callExpression.arguments[predicate.parameterIndex];
+                    if (predicateArgument && isMatchingReference(predicateArgument, reference)) {
                         return getNarrowedType(type, predicate.type, assumeTrue);
                     }
                 }
                 else {
                     const invokedExpression = skipParenthesizedNodes(callExpression.expression);
-                    return narrowTypeByThisTypePredicate(type, predicate, invokedExpression, assumeTrue);
-                }
-                return type;
-            }
-
-            function narrowTypeByThisTypePredicate(type: Type, predicate: ThisTypePredicate, invokedExpression: Expression, assumeTrue: boolean): Type {
-                if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
-                    const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
-                    const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
-                    if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtTypePredicatePosition(possibleIdentifier) === symbol) {
-                        return getNarrowedType(type, predicate.type, assumeTrue);
+                    if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                        const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
+                        const possibleReference= skipParenthesizedNodes(accessExpression.expression);
+                        if (isMatchingReference(possibleReference, reference)) {
+                            return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
                     }
                 }
                 return type;
-            }
-
-            function getSymbolAtTypePredicatePosition(expr: Expression): Symbol {
-                expr = skipParenthesizedNodes(expr);
-                switch (expr.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccessExpression:
-                        return getSymbolOfEntityNameOrPropertyAccessExpression(expr as (Identifier | PropertyAccessExpression));
-                }
             }
 
             // Narrow the given type based on the given expression having the assumed boolean value. The returned type
@@ -7296,6 +7335,7 @@ namespace ts {
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccessExpression:
                         return narrowTypeByTruthiness(type, <Identifier>expr, assumeTrue);
                     case SyntaxKind.CallExpression:
                         return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
@@ -7311,6 +7351,16 @@ namespace ts {
                 }
                 return type;
             }
+        }
+
+        function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
+            // The language service will always care about the narrowed type of a symbol, because that is
+            // the type the language says the symbol should have.
+            let type = getTypeOfSymbol(symbol);
+            if (location.kind === SyntaxKind.Identifier && isExpression(location) && getResolvedSymbol(<Identifier>location) === symbol) {
+                type = getNarrowedTypeOfReference(type, <Identifier>location);
+            }
+            return type;
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {
@@ -7371,7 +7421,7 @@ namespace ts {
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            return getNarrowedTypeOfSymbol(localOrExportSymbol, node);
+            return getNarrowedTypeOfReference(getTypeOfSymbol(localOrExportSymbol), node);
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -9122,7 +9172,10 @@ namespace ts {
             if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
                 checkClassPropertyAccess(node, left, apparentType, prop);
             }
-            return getTypeOfSymbol(prop);
+
+            const propType = getTypeOfSymbol(prop);
+            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & SymbolFlags.Property ?
+                getNarrowedTypeOfReference(propType, <PropertyAccessExpression>node) : propType;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
