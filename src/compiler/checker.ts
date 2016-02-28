@@ -6863,7 +6863,19 @@ namespace ts {
 
         // EXPRESSION TYPE CHECKING
 
+        function createTransientIdentifier(symbol: Symbol, location: Node): Identifier {
+            let result = <TransientIdentifier>createNode(SyntaxKind.Identifier);
+            result.text = symbol.name;
+            result.resolvedSymbol = symbol;
+            result.parent = location;
+            result.id = -1;
+            return result;
+        }
+
         function getResolvedSymbol(node: Identifier): Symbol {
+            if (node.id === -1) {
+                return (<TransientIdentifier>node).resolvedSymbol;
+            }
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
                 links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
@@ -7356,11 +7368,25 @@ namespace ts {
         function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
             // The language service will always care about the narrowed type of a symbol, because that is
             // the type the language says the symbol should have.
-            let type = getTypeOfSymbol(symbol);
-            if (location.kind === SyntaxKind.Identifier && isExpression(location) && getResolvedSymbol(<Identifier>location) === symbol) {
-                type = getNarrowedTypeOfReference(type, <Identifier>location);
+            const type = getTypeOfSymbol(symbol);
+            if (location.kind === SyntaxKind.Identifier) {
+                if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
+                    location = location.parent;
+                }
+                // If location is an identifier or property access that references the given
+                // symbol, use the location as the reference with respect to which we narrow.
+                if (isExpression(location)) {
+                    checkExpression(<Expression>location);
+                    if (getNodeLinks(location).resolvedSymbol === symbol) {
+                        return getNarrowedTypeOfReference(type, <IdentifierOrPropertyAccess>location);
+                    }
+                }
             }
-            return type;
+            // The location isn't a reference to the given symbol, meaning we're being asked
+            // a hypothetical question of what type the symbol would have if there was a reference
+            // to it at the given location. To answer that question we manufacture a transient
+            // identifier at the location and narrow with respect to that identifier.
+            return getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {
