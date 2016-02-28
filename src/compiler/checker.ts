@@ -6864,7 +6864,7 @@ namespace ts {
         // EXPRESSION TYPE CHECKING
 
         function createTransientIdentifier(symbol: Symbol, location: Node): Identifier {
-            let result = <TransientIdentifier>createNode(SyntaxKind.Identifier);
+            const result = <TransientIdentifier>createNode(SyntaxKind.Identifier);
             result.text = symbol.name;
             result.resolvedSymbol = symbol;
             result.parent = location;
