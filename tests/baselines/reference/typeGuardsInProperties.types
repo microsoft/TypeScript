@@ -76,18 +76,18 @@ var c1: C1;
 >C1 : C1
 
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
->strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string | number
+>strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string
 >strOrNum : string | number
->typeof c1.pp2 === "string" && c1.pp2 : string | number
+>typeof c1.pp2 === "string" && c1.pp2 : string
 >typeof c1.pp2 === "string" : boolean
 >typeof c1.pp2 : string
 >c1.pp2 : string | number
 >c1 : C1
 >pp2 : string | number
 >"string" : string
->c1.pp2 : string | number
+>c1.pp2 : string
 >c1 : C1
->pp2 : string | number
+>pp2 : string
 
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
 >strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string | number
@@ -111,16 +111,16 @@ var obj1: {
 
 };
 strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
->strOrNum = typeof obj1.x === "string" && obj1.x : string | number
+>strOrNum = typeof obj1.x === "string" && obj1.x : string
 >strOrNum : string | number
->typeof obj1.x === "string" && obj1.x : string | number
+>typeof obj1.x === "string" && obj1.x : string
 >typeof obj1.x === "string" : boolean
 >typeof obj1.x : string
 >obj1.x : string | number
 >obj1 : { x: string | number; }
 >x : string | number
 >"string" : string
->obj1.x : string | number
+>obj1.x : string
 >obj1 : { x: string | number; }
->x : string | number
+>x : string
 
