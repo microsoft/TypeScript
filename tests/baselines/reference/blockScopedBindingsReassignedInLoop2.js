@@ -73,10 +73,9 @@ var _loop_2 = function(x, y) {
 };
 var out_x_2, out_y_2;
 for (var x = 1, y = 2; x < y; ++x, --y) {
-    var state_2 = _loop_2(x, y);
+    _loop_2(x, y);
     x = out_x_2;
     y = out_y_2;
-    if (state_2 === "continue") continue;
 }
 var _loop_3 = function(x, y) {
     var a = function () { return x++ + y++; };
