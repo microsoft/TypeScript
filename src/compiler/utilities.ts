@@ -2865,6 +2865,10 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier;
     }
 
+    export function isGeneratedIdentifier(node: Node): node is Identifier {
+        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.Node;
+    }
+
     // Keywords
 
     export function isModifier(node: Node): node is Modifier {

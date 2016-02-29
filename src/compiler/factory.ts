@@ -213,7 +213,7 @@ namespace ts {
         return name;
     }
 
-    export function createGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
+    export function getGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.original = node;

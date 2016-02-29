@@ -8,8 +8,6 @@ namespace ts {
 
     export function transformTypeScript(context: TransformationContext) {
         const {
-            getGeneratedNameForNode,
-            makeUniqueName,
             setNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -496,7 +494,7 @@ namespace ts {
                 // Record an alias to avoid class double-binding.
                 if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
                     enableExpressionSubstitutionForDecoratedClasses();
-                    decoratedClassAlias = makeUniqueName(node.name ? node.name.text : "default");
+                    decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                     decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
 
                     // We emit the class alias as a `let` declaration here so that it has the same
@@ -691,7 +689,7 @@ namespace ts {
         function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter(makeUniqueName("args"))] : [];
+                : hasExtendsClause ? [createRestParameter(createUniqueName("args"))] : [];
         }
 
         /**
@@ -2103,14 +2101,15 @@ namespace ts {
             }
 
             const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const statements: Statement[] = [];
 
             let location: TextRange = node;
-            if (!isNamespaceExport(node)) {
+            if (!isExported(node) || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, SyntaxKind.EnumDeclaration))) {
+                // Emit a VariableStatement if the enum is not exported, or is the first enum
+                // with the same name exported from an external module.
                 addNode(statements,
                     createVariableStatement(
-                        modifiers,
+                        visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
                             createVariableDeclaration(node.name)
                         ]),
@@ -2179,7 +2178,7 @@ namespace ts {
          *
          * @param member The enum member node.
          */
-        function transformEnumMember(member: EnumMember) {
+        function transformEnumMember(member: EnumMember): Statement {
             const name = getExpressionForPropertyName(member);
             return createStatement(
                 createAssignment(
@@ -2444,13 +2443,30 @@ namespace ts {
         }
 
         /**
+         * Gets a value indicating whether the node is exported.
+         *
+         * @param node The node to test.
+         */
+        function isExported(node: Node) {
+            return (node.flags & NodeFlags.Export) !== 0;
+        }
+
+        /**
+         * Gets a value indicating whether the node is exported from a namespace.
+         *
+         * @param node The node to test.
+         */
+        function isNamespaceExport(node: Node) {
+            return currentNamespace !== undefined && isExported(node);
+        }
+
+        /**
          * Gets a value indicating whether the node is exported from an external module.
          *
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined
-                && (node.flags & NodeFlags.Export) !== 0;
+            return currentNamespace === undefined && isExported(node);
         }
 
         /**
@@ -2473,14 +2489,9 @@ namespace ts {
                 && (node.flags & NodeFlags.Default) !== 0;
         }
 
-        /**
-         * Gets a value indicating whether the node is exported from a namespace.
-         *
-         * @param node The node to test.
-         */
-        function isNamespaceExport(node: Node) {
-            return currentNamespace !== undefined
-                && (node.flags & NodeFlags.Export) !== 0;
+        function isFirstDeclarationOfKind(node: Declaration, kind: SyntaxKind) {
+            const original = getOriginalNode(node);
+            return !forEach(original.symbol && original.symbol.declarations, declaration => declaration.kind === kind && declaration.pos < original.pos);
         }
 
         /**
