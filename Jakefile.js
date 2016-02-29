@@ -166,6 +166,7 @@ var es6LibrarySources = [
     "es6.array.d.ts",
     "es6.collection.d.ts",
     "es6.function.d.ts",
+    "es6.generator.d.ts",
     "es6.iterable.d.ts",
     "es6.math.d.ts",
     "es6.number.d.ts",
