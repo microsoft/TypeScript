@@ -185,24 +185,38 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
-        const node = <Identifier>createNode(SyntaxKind.Identifier);
+    export function createIdentifier(text: string, location?: TextRange): Identifier {
+        const node = <Identifier>createNode(SyntaxKind.Identifier, location);
         node.text = text;
         return node;
     }
 
-    export function createTempVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = TempVariableKind.Auto;
+    export function createTempVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
         return name;
     }
 
-    export function createLoopVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = TempVariableKind.Loop;
+    export function createLoopVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Loop;
+        getNodeId(name);
+        return name;
+    }
+
+    export function createUniqueName(text: string, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.text = text;
+        name.autoGenerateKind = GeneratedIdentifierKind.Unique;
+        getNodeId(name);
+        return name;
+    }
+
+    export function createGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.original = node;
         getNodeId(name);
         return name;
     }
