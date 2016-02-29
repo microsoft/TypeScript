@@ -497,16 +497,19 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
-    export const enum TempVariableKind {
-        Auto,   // Automatically generated identifier
-        Loop,   // Automatically generated identifier with a preference for '_i'
+    export const enum GeneratedIdentifierKind {
+        None,   // Not automatically generated.
+        Auto,   // Automatically generated identifier.
+        Loop,   // Automatically generated identifier with a preference for '_i'.
+        Unique, // Unique name based on the 'text' property.
+        Node,   // Unique name based on the node in the 'original' property.
     }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
-        tempKind?: TempVariableKind;                   // Specifies whether to auto-generate the text for an identifier.
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        autoGenerateKind?: GeneratedIdentifierKind;    // Specifies whether to auto-generate the text for an identifier.
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -2805,7 +2808,7 @@ namespace ts {
         SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
         AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
         IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
-        EmitCommentsOfNotEmittedParent = 1 << 8, // Emits comments of missing parent nodes.
+        EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2825,10 +2828,6 @@ namespace ts {
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
-        isUniqueName(name: string): boolean;
-        getGeneratedNameForNode(node: Node): Identifier;
-        nodeHasGeneratedName(node: Node): boolean;
-        makeUniqueName(baseName: string): Identifier;
 
         /**
          * Hook used by transformers to substitute non-expression identifiers

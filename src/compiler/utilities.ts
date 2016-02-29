@@ -2297,11 +2297,11 @@ namespace ts {
                 writer.write(" ");
             }
 
-            let emitInterveningSeperator = false;
+            let emitInterveningSeparator = false;
             for (const comment of comments) {
-                if (emitInterveningSeperator) {
+                if (emitInterveningSeparator) {
                     writer.write(" ");
-                    emitInterveningSeperator = false;
+                    emitInterveningSeparator = false;
                 }
 
                 writeComment(text, lineMap, writer, comment, newLine);
@@ -2309,11 +2309,11 @@ namespace ts {
                     writer.writeLine();
                 }
                 else {
-                    emitInterveningSeperator = true;
+                    emitInterveningSeparator = true;
                 }
             }
 
-            if (emitInterveningSeperator && trailingSeparator) {
+            if (emitInterveningSeparator && trailingSeparator) {
                 writer.write(" ");
             }
         }
@@ -2723,7 +2723,7 @@ namespace ts {
         }
 
         return collapse === TextRangeCollapse.CollapseToStart
-            ? { pos: range.pos, end: range.end }
+            ? { pos: range.pos, end: range.pos }
             : { pos: range.end, end: range.end };
     }
 
