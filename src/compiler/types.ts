@@ -2473,7 +2473,6 @@ namespace ts {
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
         /* @internal */ experimentalTransforms?: boolean;
-        /* @internal */ transformCompatibleEmit?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;

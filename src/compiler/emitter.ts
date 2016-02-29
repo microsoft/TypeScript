@@ -1915,9 +1915,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (multiLine) {
                     decreaseIndent();
-                    if (!compilerOptions.transformCompatibleEmit) {
-                        writeLine();
-                    }
                 }
 
                 write(")");
@@ -2237,7 +2234,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
             }
 
-            function skipParentheses(node: Expression): Expression {
+            function skipParenthesesAndAssertions(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
                     node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
@@ -2268,7 +2265,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitCallWithSpread(node: CallExpression) {
                 let target: Expression;
-                const expr = skipParentheses(node.expression);
+                const expr = skipParenthesesAndAssertions(node.expression);
                 if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
@@ -4334,9 +4331,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    write(restIndex > 0 || !compilerOptions.transformCompatibleEmit
-                        ? `[${tempName} - ${restIndex}] = arguments[${tempName}];`
-                        : `[${tempName}] = arguments[${tempName}];`);
+                    write(`[${tempName} - ${restIndex}] = arguments[${tempName}];`);
                     emitEnd(restParam);
                     decreaseIndent();
                     writeLine();
@@ -5356,7 +5351,7 @@ const _super = (function (geti, seti) {
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
                 let tempVariable: Identifier;
 
-                if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
+                if (isClassExpressionWithStaticProperties) {
                     tempVariable = createAndRecordTempVariable(TempFlags.Auto);
                     write("(");
                     increaseIndent();
@@ -5393,11 +5388,6 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                if (!compilerOptions.transformCompatibleEmit) {
-                    emitPropertyDeclarations(node, staticProperties);
-                    writeLine();
-                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
-                }
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5424,13 +5414,10 @@ const _super = (function (geti, seti) {
                 write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
-                    if (compilerOptions.transformCompatibleEmit) {
-                        emitPropertyDeclarations(node, staticProperties);
-                        writeLine();
-                        emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
-                    }
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 }
-                else if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
+                else if (isClassExpressionWithStaticProperties) {
                     for (const property of staticProperties) {
                         write(",");
                         writeLine();
