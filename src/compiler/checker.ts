@@ -1159,7 +1159,7 @@ namespace ts {
 
             const isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                const symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
                 if (symbol) {
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(symbol);
