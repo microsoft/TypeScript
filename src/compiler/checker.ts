@@ -888,8 +888,12 @@ namespace ts {
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+
             if (moduleSymbol) {
-                const exportDefaultSymbol = resolveSymbol(moduleSymbol.exports["default"]);
+                const exportDefaultSymbol = moduleSymbol.exports["export="] ?
+                    getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
+                    resolveSymbol(moduleSymbol.exports["default"]);
+
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
@@ -963,8 +967,7 @@ namespace ts {
                     let symbolFromVariable: Symbol;
                     // First check if module was specified with "export=". If so, get the member from the resolved type
                     if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports["export="]) {
-                        const members = (getTypeOfSymbol(targetSymbol) as ResolvedType).members;
-                        symbolFromVariable = members && members[name.text];
+                        symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), name.text);
                     }
                     else {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);

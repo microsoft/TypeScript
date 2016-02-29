@@ -278,7 +278,7 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            const isJsModuleExport = node.kind === SyntaxKind.BinaryExpression ? getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports : false;
+            const isJsModuleExport = getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports;
             const isDefaultExport = node.flags & NodeFlags.Default;
 
             // The exported symbol for an export default function/class node is always named "default"
