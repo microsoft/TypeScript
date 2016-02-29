@@ -7000,7 +7000,7 @@ namespace ts {
             if (!location || !(symbol.flags & SymbolFlags.Variable)) return initialType;
             if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
 
-            if (location.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration> location.parent).name === location) return initialType;
+            if (isLeftHandSideOfAssignment(location)) return initialType;
 
             let saveLocalType = false;
             if (location.kind === SyntaxKind.Identifier) {
@@ -7088,6 +7088,22 @@ namespace ts {
                         types.push(type);
                     }
                     return false;
+                }
+            }
+            
+            function isLeftHandSideOfAssignment(node: Node): boolean {
+                const parent = node.parent;
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                    return isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
+                }
+                else if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
+                    return hasInitializer(<VariableDeclaration>parent);
+                }
+                else if ((parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<ObjectLiteralElement>parent).name === node) {
+                    return isLeftHandSideOfAssignment(parent.parent);
+                }
+                else if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                    return isLeftHandSideOfAssignment(parent);
                 }
             }
 
