@@ -18,7 +18,7 @@ var robotA: Robot = [1, "mower", "mowing"];
 >"mowing" : string
 
 function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
->foo1 : ([, nameA = "noName"]?: [number, string, string]) => void
+>foo1 : ([, nameA]?: [number, string, string]) => void
 > : undefined
 >nameA : string
 >"noName" : string
@@ -38,7 +38,7 @@ function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 }
 
 function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
->foo2 : ([numberB = -1]?: [number, string, string]) => void
+>foo2 : ([numberB]?: [number, string, string]) => void
 >numberB : number
 >-1 : number
 >1 : number
@@ -58,7 +58,7 @@ function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 }
 
 function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
->foo3 : ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]?: [number, string, string]) => void
+>foo3 : ([numberA2, nameA2, skillA2]?: [number, string, string]) => void
 >numberA2 : number
 >-1 : number
 >1 : number
@@ -82,7 +82,7 @@ function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, 
 }
 
 function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
->foo4 : ([numberA3 = -1, ...robotAInfo]?: [number, string, string]) => void
+>foo4 : ([numberA3, ...robotAInfo]?: [number, string, string]) => void
 >numberA3 : number
 >-1 : number
 >1 : number
@@ -104,12 +104,12 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 
 foo1(robotA);
 >foo1(robotA) : void
->foo1 : ([, nameA = "noName"]?: [number, string, string]) => void
+>foo1 : ([, nameA]?: [number, string, string]) => void
 >robotA : [number, string, string]
 
 foo1([2, "trimmer", "trimming"]);
 >foo1([2, "trimmer", "trimming"]) : void
->foo1 : ([, nameA = "noName"]?: [number, string, string]) => void
+>foo1 : ([, nameA]?: [number, string, string]) => void
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : number
 >"trimmer" : string
@@ -117,12 +117,12 @@ foo1([2, "trimmer", "trimming"]);
 
 foo2(robotA);
 >foo2(robotA) : void
->foo2 : ([numberB = -1]?: [number, string, string]) => void
+>foo2 : ([numberB]?: [number, string, string]) => void
 >robotA : [number, string, string]
 
 foo2([2, "trimmer", "trimming"]);
 >foo2([2, "trimmer", "trimming"]) : void
->foo2 : ([numberB = -1]?: [number, string, string]) => void
+>foo2 : ([numberB]?: [number, string, string]) => void
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : number
 >"trimmer" : string
@@ -130,12 +130,12 @@ foo2([2, "trimmer", "trimming"]);
 
 foo3(robotA);
 >foo3(robotA) : void
->foo3 : ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]?: [number, string, string]) => void
+>foo3 : ([numberA2, nameA2, skillA2]?: [number, string, string]) => void
 >robotA : [number, string, string]
 
 foo3([2, "trimmer", "trimming"]);
 >foo3([2, "trimmer", "trimming"]) : void
->foo3 : ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]?: [number, string, string]) => void
+>foo3 : ([numberA2, nameA2, skillA2]?: [number, string, string]) => void
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : number
 >"trimmer" : string
@@ -143,12 +143,12 @@ foo3([2, "trimmer", "trimming"]);
 
 foo4(robotA);
 >foo4(robotA) : void
->foo4 : ([numberA3 = -1, ...robotAInfo]?: [number, string, string]) => void
+>foo4 : ([numberA3, ...robotAInfo]?: [number, string, string]) => void
 >robotA : [number, string, string]
 
 foo4([2, "trimmer", "trimming"]);
 >foo4([2, "trimmer", "trimming"]) : void
->foo4 : ([numberA3 = -1, ...robotAInfo]?: [number, string, string]) => void
+>foo4 : ([numberA3, ...robotAInfo]?: [number, string, string]) => void
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : number
 >"trimmer" : string
