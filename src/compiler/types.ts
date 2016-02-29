@@ -497,16 +497,18 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
-    export const enum TempVariableKind {
+    export const enum GeneratedIdentifierKind {
+        None,   // Not automatically generated
         Auto,   // Automatically generated identifier
         Loop,   // Automatically generated identifier with a preference for '_i'
+        Unique, // Automatically generated identifier based on specified text
     }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
-        tempKind?: TempVariableKind;                   // Specifies whether to auto-generate the text for an identifier.
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        tempKind?: GeneratedIdentifierKind;            // Specifies whether to auto-generate the text for an identifier.
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -944,11 +946,16 @@ namespace ts {
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
-    // @kind(SyntaxKind.NumericLiteral)
     // @kind(SyntaxKind.RegularExpressionLiteral)
     // @kind(SyntaxKind.NoSubstitutionTemplateLiteral)
     export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
         _literalExpressionBrand: any;
+    }
+
+    // @kind(SyntaxKind.NumericLiteral)
+    export interface NumericLiteral extends LiteralExpression {
+        _numericLiteralBrand: any;
+        trailingComment?: string;
     }
 
     // @kind(SyntaxKind.TemplateHead)
@@ -2759,18 +2766,20 @@ namespace ts {
         ContainsES7 = 1 << 5,
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
+        ContainsGenerators = 1 << 8,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 8,
-        ContainsPropertyInitializer = 1 << 9,
-        ContainsLexicalThis = 1 << 10,
-        ContainsCapturedLexicalThis = 1 << 11,
-        ContainsDefaultValueAssignments = 1 << 12,
-        ContainsParameterPropertyAssignments = 1 << 13,
-        ContainsSpreadElementExpression = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
+        ContainsDecorators = 1 << 9,
+        ContainsPropertyInitializer = 1 << 10,
+        ContainsLexicalThis = 1 << 11,
+        ContainsCapturedLexicalThis = 1 << 12,
+        ContainsDefaultValueAssignments = 1 << 13,
+        ContainsParameterPropertyAssignments = 1 << 14,
+        ContainsSpreadElementExpression = 1 << 15,
+        ContainsComputedPropertyName = 1 << 16,
+        ContainsBlockScopedBinding = 1 << 17,
+        ContainsYield = 1 << 18,
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -2783,10 +2792,10 @@ namespace ts {
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
         NodeExcludes = TypeScript | Jsx | ES7 | ES6,
-        ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
-        FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
-        ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
-        MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
+        ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield,
+        FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield,
+        ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield,
+        MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield,
         ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments,
         ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         TypeExcludes = ~ContainsTypeScript,
@@ -2825,10 +2834,8 @@ namespace ts {
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
-        isUniqueName(name: string): boolean;
         getGeneratedNameForNode(node: Node): Identifier;
         nodeHasGeneratedName(node: Node): boolean;
-        makeUniqueName(baseName: string): Identifier;
 
         /**
          * Hook used by transformers to substitute non-expression identifiers

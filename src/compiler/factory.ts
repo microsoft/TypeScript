@@ -152,8 +152,22 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node for mutation.
      */
-    export function getMutableNode<T extends Node>(node: T): T {
-        return cloneNode<T>(node, node, node.flags, node.parent, node);
+    export function getMutableClone<T extends Node>(node: T): T {
+        return cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone with no position information.
+     */
+    export function getSynthesizedClone<T extends Node>(node: T): T {
+        return cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone with the specified position information.
+     */
+    export function getRelocatedClone<T extends Node>(node: T, location: TextRange) {
+        return cloneNode(node, location, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
@@ -165,12 +179,13 @@ namespace ts {
     // Literals
 
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
-    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
+    export function createLiteral(value: number, location?: TextRange, trailingComment?: string): NumericLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean, location?: TextRange, trailingComment?: string): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location);
+            const node = <NumericLiteral>createNode(SyntaxKind.NumericLiteral, location);
             node.text = value.toString();
+            node.trailingComment = trailingComment;
             return node;
         }
         else if (typeof value === "boolean") {
@@ -185,8 +200,8 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
-        const node = <Identifier>createNode(SyntaxKind.Identifier);
+    export function createIdentifier(text: string, location?: TextRange): Identifier {
+        const node = <Identifier>createNode(SyntaxKind.Identifier, location);
         node.text = text;
         return node;
     }
@@ -194,7 +209,7 @@ namespace ts {
     export function createTempVariable(): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier);
         name.text = undefined;
-        name.tempKind = TempVariableKind.Auto;
+        name.tempKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
         return name;
     }
@@ -202,7 +217,15 @@ namespace ts {
     export function createLoopVariable(): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier);
         name.text = undefined;
-        name.tempKind = TempVariableKind.Loop;
+        name.tempKind = GeneratedIdentifierKind.Loop;
+        getNodeId(name);
+        return name;
+    }
+
+    export function createUniqueName(text: string): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier);
+        name.text = text;
+        name.tempKind = GeneratedIdentifierKind.Unique;
         getNodeId(name);
         return name;
     }
@@ -292,15 +315,23 @@ namespace ts {
 
     // Expression
 
-    export function createArrayLiteral(elements?: Expression[]) {
-        const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
+    export function createArrayLiteral(elements?: Expression[], location?: TextRange, multiLine?: boolean) {
+        const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression, location);
         node.elements = parenthesizeListElements(createNodeArray(elements));
+        if (multiLine) {
+            node.multiLine = true;
+        }
+
         return node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange) {
+    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange, multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
+        if (multiLine) {
+            node.multiLine = true;
+        }
+
         return node;
     }
 
@@ -319,16 +350,16 @@ namespace ts {
         return node;
     }
 
-    export function createCall(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
+    export function createCall(expression: string | Expression, argumentsArray: Expression[], location?: TextRange) {
         const node = <CallExpression>createNode(SyntaxKind.CallExpression, location);
-        node.expression = parenthesizeForAccess(expression);
+        node.expression = typeof expression === "string" ? createIdentifier(expression) : parenthesizeForAccess(expression);
         node.arguments = parenthesizeListElements(createNodeArray(argumentsArray));
         return node;
     }
 
     export function createNew(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
         const node = <NewExpression>createNode(SyntaxKind.NewExpression, location);
-        node.expression = parenthesizeForAccess(expression);
+        node.expression = parenthesizeForNew(expression);
         node.arguments = argumentsArray
             ? parenthesizeListElements(createNodeArray(argumentsArray))
             : undefined;
@@ -341,7 +372,7 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, original?: Node) {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location);
         node.modifiers = undefined;
         node.asteriskToken = asteriskToken;
@@ -350,6 +381,10 @@ namespace ts {
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.body = body;
+        if (original) {
+            node.original = original;
+        }
+
         return node;
     }
 
@@ -390,11 +425,15 @@ namespace ts {
         return node;
     }
 
-    export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
+    export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange, original?: Node) {
         const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
         node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true);
         node.operatorToken = createSynthesizedNode(operator);
         node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false);
+        if (original) {
+            node.original = original;
+        }
+
         return node;
     }
 
@@ -440,9 +479,13 @@ namespace ts {
 
     // Element
 
-    export function createBlock(statements: Statement[], location?: TextRange): Block {
+    export function createBlock(statements: Statement[], location?: TextRange, multiLine?: boolean): Block {
         const block = <Block>createNode(SyntaxKind.Block, location);
         block.statements = createNodeArray(statements);
+        if (multiLine) {
+            block.multiLine = true;
+        }
+
         return block;
     }
 
@@ -545,6 +588,42 @@ namespace ts {
         return node;
     }
 
+    export function createWith(expression: Expression, statement: Statement, location?: TextRange): ReturnStatement {
+        const node = <WithStatement>createNode(SyntaxKind.WithStatement, location);
+        node.expression = expression;
+        node.statement = statement;
+        return node;
+    }
+
+    export function createSwitch(expression: Expression, caseBlock: CaseBlock, location?: TextRange): ReturnStatement {
+        const node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement, location);
+        node.expression = expression;
+        node.caseBlock = caseBlock;
+        return node;
+    }
+
+    export function createThrow(expression: Expression, location?: TextRange): ReturnStatement {
+        const node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement, location);
+        node.expression = expression;
+        return node;
+    }
+
+    export function createTryCatchFinally(tryBlock: Block, catchClause: CatchClause, finallyBlock: Block, location?: TextRange) {
+        const node = <TryStatement>createNode(SyntaxKind.TryStatement, location);
+        node.tryBlock = tryBlock;
+        node.catchClause = catchClause;
+        node.finallyBlock = finallyBlock;
+        return node;
+    }
+
+    export function createTryCatch(tryBlock: Block, catchClause: CatchClause, location?: TextRange) {
+        return createTryCatchFinally(tryBlock, catchClause, /*finallyBlock*/ undefined, location);
+    }
+
+    export function createTryFinally(tryBlock: Block, finallyBlock: Block, location?: TextRange) {
+        return createTryCatchFinally(tryBlock, /*catchClause*/ undefined, finallyBlock, location);
+    }
+
     export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location);
         node.decorators = undefined;
@@ -566,6 +645,12 @@ namespace ts {
         node.typeParameters = undefined;
         node.heritageClauses = createNodeArray(heritageClauses);
         node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function createCaseBlock(clauses: CaseOrDefaultClause[], location?: TextRange) {
+        const node = <CaseBlock>createNode(SyntaxKind.CaseBlock, location);
+        node.clauses = createNodeArray(clauses);
         return node;
     }
 
@@ -632,7 +717,7 @@ namespace ts {
         return <Expression>createBinary(left, SyntaxKind.LessThanToken, right, location);
     }
 
-    export function createAssignment(left: Expression, right: Expression, location?: TextRange) {
+    export function createAssignment(left: Expression, right: Expression, location?: TextRange, original?: Node) {
         return createBinary(left, SyntaxKind.EqualsToken, right, location);
     }
 
@@ -1040,6 +1125,58 @@ namespace ts {
         );
     }
 
+    export interface CallTarget {
+        target: LeftHandSideExpression;
+        thisArg: Expression;
+    }
+
+    export function createCallBinding(expression: Expression): CallTarget {
+        const callee = skipParentheses(expression);
+        let thisArg: Expression;
+        let target: LeftHandSideExpression;
+        switch (callee.kind) {
+            case SyntaxKind.PropertyAccessExpression: {
+                // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                thisArg = createTempVariable();
+                target = createPropertyAccess(
+                    createAssignment(
+                        thisArg,
+                        (<PropertyAccessExpression>callee).expression,
+                        /*location*/ (<PropertyAccessExpression>callee).expression
+                    ),
+                    (<PropertyAccessExpression>callee).name,
+                    /*location*/ callee
+                );
+                break;
+            }
+
+            case SyntaxKind.ElementAccessExpression: {
+                // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                thisArg = createTempVariable();
+                target = createElementAccess(
+                    createAssignment(
+                        thisArg,
+                        (<ElementAccessExpression>callee).expression,
+                        /*location*/ (<ElementAccessExpression>callee).expression
+                    ),
+                    (<ElementAccessExpression>callee).argumentExpression,
+                    /*location*/ callee
+                );
+
+                break;
+            }
+
+            default: {
+                // for `a()` target is `a` and thisArg is `void 0`
+                thisArg = createVoidZero();
+                target = parenthesizeForAccess(expression);
+                break;
+            }
+        }
+
+        return { target, thisArg };
+    }
+
     export function inlineExpressions(expressions: Expression[]) {
         return reduceLeft(expressions, createComma);
     }
@@ -1057,6 +1194,96 @@ namespace ts {
         return isIdentifier(memberName) ? createLiteral(memberName.text, location)
              : isComputedPropertyName(memberName) ? cloneNode(memberName.expression, location)
              : cloneNode(memberName, location);
+    }
+
+    export function createExpressionForObjectLiteralElement(node: ObjectLiteralExpression, property: ObjectLiteralElement, receiver: Expression): Expression {
+        switch (property.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return createExpressionForAccessorDeclaration(node.properties, <AccessorDeclaration>property, receiver, node.multiLine);
+            case SyntaxKind.PropertyAssignment:
+                return createExpressionForPropertyAssignment(<PropertyAssignment>property, receiver);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return createExpressionForShorthandPropertyAssignment(<ShorthandPropertyAssignment>property, receiver);
+            case SyntaxKind.MethodDeclaration:
+                return createExpressionForMethodDeclaration(<MethodDeclaration>property, receiver);
+        }
+    }
+
+    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
+        const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
+        if (property === firstAccessor) {
+            return aggregateTransformFlags(
+                createObjectDefineProperty(
+                    receiver,
+                    createExpressionForPropertyName(property.name, /*location*/ property.name),
+                    {
+                        get: getAccessor && createFunctionExpression(
+                            /*asteriskToken*/ undefined,
+                            /*name*/ undefined,
+                            getAccessor.parameters,
+                            getAccessor.body,
+                            /*location*/ getAccessor,
+                            /*original*/ getAccessor
+                        ),
+                        set: setAccessor && createFunctionExpression(
+                            /*asteriskToken*/ undefined,
+                            /*name*/ undefined,
+                            setAccessor.parameters,
+                            setAccessor.body,
+                            /*location*/ setAccessor,
+                            /*original*/ setAccessor
+                        ),
+                        enumerable: true,
+                        configurable: true
+                    },
+                    multiLine,
+                    /*location*/ firstAccessor
+                )
+            );
+        }
+
+        return undefined;
+    }
+
+    function createExpressionForPropertyAssignment(property: PropertyAssignment, receiver: Expression) {
+        return aggregateTransformFlags(
+            createAssignment(
+                createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                property.initializer,
+                /*location*/ property,
+                /*original*/ property
+            )
+        );
+    }
+
+    function createExpressionForShorthandPropertyAssignment(property: ShorthandPropertyAssignment, receiver: Expression) {
+        return aggregateTransformFlags(
+            createAssignment(
+                createMemberAccessForPropertyName(receiver, property.name, /*location*/ property.name),
+                getSynthesizedClone(property.name),
+                /*location*/ property,
+                /*original*/ property
+            )
+        );
+    }
+
+    function createExpressionForMethodDeclaration(method: MethodDeclaration, receiver: Expression) {
+        return aggregateTransformFlags(
+            createAssignment(
+                createMemberAccessForPropertyName(receiver, method.name, /*location*/ method.name),
+                createFunctionExpression(
+                    method.asteriskToken,
+                    /*name*/ undefined,
+                    method.parameters,
+                    method.body,
+                    /*location*/ method,
+                    /*original*/ method
+                ),
+                /*location*/ method,
+                /*original*/ method
+            )
+        );
     }
 
     // Utilities
@@ -1176,6 +1403,17 @@ namespace ts {
             || binaryOperator === SyntaxKind.BarToken
             || binaryOperator === SyntaxKind.AmpersandToken
             || binaryOperator === SyntaxKind.CaretToken;
+    }
+
+    export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
+        const lhs = parenthesizeForAccess(expression);
+        switch (lhs.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                return createParen(lhs);
+        }
+
+        return lhs;
     }
 
     /**
@@ -1334,9 +1572,5 @@ namespace ts {
     export function setHasTrailingComma<T extends Node>(nodes: NodeArray<T>, hasTrailingComma: boolean): NodeArray<T> {
         nodes.hasTrailingComma = hasTrailingComma;
         return nodes;
-    }
-
-    export function getSynthesizedNode<T extends Node>(node: T): T {
-        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 }

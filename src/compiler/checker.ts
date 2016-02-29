@@ -11404,7 +11404,7 @@ namespace ts {
             return type;
         }
 
-        function checkNumericLiteral(node: LiteralExpression): Type {
+        function checkNumericLiteral(node: NumericLiteral): Type {
             // Grammar checking
             checkGrammarNumericLiteral(node);
             return numberType;
@@ -11424,7 +11424,7 @@ namespace ts {
                 case SyntaxKind.FalseKeyword:
                     return booleanType;
                 case SyntaxKind.NumericLiteral:
-                    return checkNumericLiteral(<LiteralExpression>node);
+                    return checkNumericLiteral(<NumericLiteral>node);
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
@@ -14328,7 +14328,7 @@ namespace ts {
                             }
                             return undefined;
                         case SyntaxKind.NumericLiteral:
-                            return +(<LiteralExpression>e).text;
+                            return +(<NumericLiteral>e).text;
                         case SyntaxKind.ParenthesizedExpression:
                             return evalConstant((<ParenthesizedExpression>e).expression);
                         case SyntaxKind.Identifier:
@@ -15499,7 +15499,7 @@ namespace ts {
                         if (objectType === unknownType) return undefined;
                         const apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<LiteralExpression>node).text);
+                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text);
                     }
                     break;
             }
@@ -16693,7 +16693,7 @@ namespace ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumericLiteral(<LiteralExpression>name);
+                        checkGrammarNumericLiteral(<NumericLiteral>name);
                     }
                     currentKind = Property;
                 }
@@ -17194,7 +17194,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarNumericLiteral(node: LiteralExpression): boolean {
+        function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
             // Grammar checking
             if (node.isOctalLiteral && languageVersion >= ScriptTarget.ES5) {
                 return grammarErrorOnNode(node, Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher);

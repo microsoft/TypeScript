@@ -1406,7 +1406,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("\"");
 
                     if (node.kind === SyntaxKind.NumericLiteral) {
-                        write((<LiteralExpression>node).text);
+                        write((<NumericLiteral>node).text);
                     }
                     else {
                         writeTextOfNode(currentText, node);
@@ -3645,7 +3645,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function createVoidZero(): Expression {
-                const zero = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
+                const zero = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
                 zero.text = "0";
                 const result = <VoidExpression>createSynthesizedNode(SyntaxKind.VoidExpression);
                 result.expression = zero;
@@ -3889,7 +3889,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 function createNumericLiteral(value: number) {
-                    const node = <LiteralExpression>createSynthesizedNode(SyntaxKind.NumericLiteral);
+                    const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
                     node.text = "" + value;
                     return node;
                 }

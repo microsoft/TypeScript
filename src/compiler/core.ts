@@ -307,13 +307,14 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
     export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
-    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
-        if (array) {
-            const count = array.length;
-            if (count > 0) {
-                let pos = 0;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
+        if (array && array.length > 0) {
+            const size = array.length;
+            if (size > 0) {
+                let pos = start === undefined || start < 0 ? 0 : start;
+                const end = count === undefined || pos + count > size - 1 ? size - 1 : pos + count;
                 let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
@@ -322,7 +323,7 @@ namespace ts {
                 else {
                     result = initial;
                 }
-                while (pos < count) {
+                while (pos <= end) {
                     result = f(result, array[pos], pos);
                     pos++;
                 }
@@ -332,12 +333,14 @@ namespace ts {
         return initial;
     }
 
-    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U, start?: number, count?: number): U;
     export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
-    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T, start?: number, count?: number): T {
         if (array) {
-            let pos = array.length - 1;
-            if (pos >= 0) {
+            const size = array.length;
+            if (size > 0) {
+                let pos = start === undefined || start > size - 1 ? size - 1 : start;
+                const end = count === undefined || pos - count < 0 ? 0 : pos - count;
                 let result: T;
                 if (arguments.length <= 2) {
                     result = array[pos];
@@ -346,7 +349,7 @@ namespace ts {
                 else {
                     result = initial;
                 }
-                while (pos >= 0) {
+                while (pos >= end) {
                     result = f(result, array[pos], pos);
                     pos--;
                 }

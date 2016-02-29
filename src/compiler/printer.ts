@@ -58,6 +58,165 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };`;
 
+        const keysHelper = `
+var __keys = (this && this.__keys) || function (o) {
+    var a = [];
+    for (var k in o) a.push(k);
+    return __values(a);
+};`;
+
+        const valuesHelper = `
+var __values = (this && this.__values) || function (o) {
+    if (typeof o.next === "function") {
+        return o;
+    }
+    if (typeof o.length === "number") {
+        var i, done;
+        return {
+            next: function() {
+                return done || (done = i >= o.length)
+                    ? { value: undefined, done: true }
+                    : { value: o[i++], done: false };
+            }
+        };
+    }
+};`;
+
+        const generatorHelper = `
+var __generator = (this && this.__generator) || function (body) {
+    var done, finallyStack, executing, state, yieldStar;
+    function step(opcode, arg) {
+        if (typeof Debug !== "undefined" && "setNonUserCodeExceptions" in Debug) {
+            Debug.setNonUserCodeExceptions = true;
+        }
+
+        if (executing) {
+            throw new TypeError("Generator is already executing.");
+        }
+
+        state = state || { label: 0 };
+        while (true) {
+            executing = false;
+            verb = yielded = undefined;
+            if (!done) {
+                var trys = state.trys;
+                var region = trys && trys[trys.length - 1];
+                if (region) {
+                    var tryLabel = region[0 /*try*/];
+                    var catchLabel = region[1 /*catch*/];
+                    var finallyLabel = region[2 /*finally*/];
+                    var endLabel = region[3 /*endtry*/];
+                }
+                else {
+                    if (opcode === 6 /*catch*/) {
+                        opcode = 1 /*throw*/;
+                    }
+                    if (opcode === 1 /*throw*/ || opcode === 2 /*return*/) {
+                        done = true;
+                    }
+                }
+            }
+            if (done) {
+                finallyStack = void 0;
+                switch (opcode) {
+                    case 0 /*next*/: return { value: void 0, done: true };
+                    case 1 /*throw*/: throw arg;
+                    case 2 /*return*/: return { value: arg, done: true };
+                }
+            }
+            try {
+                if (yieldStar) {
+                    executing = true;
+                    var verb = yieldStar[opcode === 2 ? "return" : opcode === 1 ? "throw" : "next"];
+                    executing = false;
+                    if (verb) {
+                        executing = true;
+                        var yielded = verb.call(yieldStar, arg);
+                        executing = false;
+                        if (!yielded.done) {
+                            return yielded;
+                        }
+
+                        opcode = 0 /*next*/;
+                        arg = yielded.value;
+                    }
+
+                    yieldStar = void 0;
+                    continue;
+                }
+
+                switch (opcode) {
+                    case 0 /*next*/:
+                        state.sent = function() { return arg };
+                        break;
+
+                    case 1 /*throw*/:
+                        state.sent = function() { throw arg };
+                        break;
+
+                    case 4 /*yield*/:
+                        state.label++;
+                        return { value: arg, done: false };
+
+                    case 5 /*yield**/:
+                        state.label++;
+                        yieldStar = arg;
+                        opcode = 0 /*next*/;
+                        arg = void 0;
+                        continue;
+
+                    case 7 /*endfinally*/:
+                        arg = finallyStack.pop();
+                        opcode = finallyStack.pop();
+                        trys.pop();
+                        continue;
+
+                    default:
+                        if (opcode === 3 /*break*/ && (!region || (arg > tryLabel && arg < endLabel))) {
+                            state.label = arg;
+                        }
+                        else if (opcode === 6 /*catch*/ && state.label < catchLabel) {
+                            state.error = arg;
+                            state.label = catchLabel;
+                        }
+                        else if (state.label < finallyLabel) {
+                            finallyStack = finallyStack || [];
+                            finallyStack.push(opcode, arg);
+                            state.label = finallyLabel;
+                        }
+                        else {
+                            if (finallyLabel) {
+                                finallyStack.pop();
+                                finallyStack.pop();
+                            }
+
+                            trys.pop();
+                            continue;
+                        }
+
+                        break;
+                }
+
+                executing = true;
+                var operation = body(state);
+                opcode = operation[0];
+                arg = operation[1];
+            }
+            catch (e) {
+                opcode = 6 /*catch*/;
+                arg = e;
+                yieldStar = void 0;
+            }
+        }
+    }
+    return {
+        next: function (v) { return step(0 /*next*/, v); },
+        "throw": function (v) { return step(1 /*throw*/, v); },
+        "return": function (v) { return step(2 /*return*/, v); },
+    };
+};`;
+
+
         // emit output for the __export helper function
         const exportStarHelper = `
 function __export(m) {
@@ -154,11 +313,12 @@ const _super = (function (geti, seti) {
             let identifierSubstitution: (node: Identifier) => Identifier;
             let onBeforeEmitNode: (node: Node) => void;
             let onAfterEmitNode: (node: Node) => void;
-            let isUniqueName: (name: string) => boolean;
             let temporaryVariables: string[] = [];
             let tempFlags: TempFlags;
+            let generatedNameSet: Map<string>;
             let currentSourceFile: SourceFile;
             let currentText: string;
+            let currentFileIdentifiers: Map<string>;
             let extendsEmitted: boolean;
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
@@ -169,6 +329,8 @@ const _super = (function (geti, seti) {
 
             function doPrint(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
                 sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                generatedNameSet = {};
+
                 isOwnFileEmit = !isBundledEmit;
 
                 // Emit helpers from all the files
@@ -213,7 +375,6 @@ const _super = (function (geti, seti) {
                 identifierSubstitution = undefined;
                 onBeforeEmitNode = undefined;
                 onAfterEmitNode = undefined;
-                isUniqueName = undefined;
                 temporaryVariables = undefined;
                 tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
@@ -236,13 +397,13 @@ const _super = (function (geti, seti) {
                 identifierSubstitution = context.identifierSubstitution;
                 onBeforeEmitNode = context.onBeforeEmitNode;
                 onAfterEmitNode = context.onAfterEmitNode;
-                isUniqueName = context.isUniqueName;
                 return printSourceFile;
             }
 
             function printSourceFile(node: SourceFile) {
                 currentSourceFile = node;
                 currentText = node.text;
+                currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
                 emitWorker(node);
@@ -659,13 +820,16 @@ const _super = (function (geti, seti) {
             //
 
             function emitIdentifier(node: Identifier) {
-                if (node.text === undefined) {
-                    // Emit a temporary variable name for this node.
-                    const nodeId = getOriginalNodeId(node);
-                    const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeTempVariableName(tempKindToFlags(node.tempKind)));
-                    write(text);
+                switch (node.tempKind) {
+                    case GeneratedIdentifierKind.Auto:
+                        return emitAutoIdentifier(node);
+                    case GeneratedIdentifierKind.Loop:
+                        return emitLoopIdentifier(node);
+                    case GeneratedIdentifierKind.Unique:
+                        return emitUniqueIdentifier(node);
                 }
-                else if (nodeIsSynthesized(node) || !node.parent) {
+
+                if (nodeIsSynthesized(node) || !node.parent) {
                     if (getNodeEmitFlags(node) & NodeEmitFlags.UMDDefine) {
                         writeLines(umdHelper);
                     }
@@ -676,6 +840,24 @@ const _super = (function (geti, seti) {
                 else {
                     writeTextOfNode(currentText, node);
                 }
+            }
+
+            function emitAutoIdentifier(node: Identifier) {
+                const nodeId = getOriginalNodeId(node);
+                const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeTempVariableName(TempFlags.Auto));
+                write(text);
+            }
+
+            function emitLoopIdentifier(node: Identifier) {
+                const nodeId = getOriginalNodeId(node);
+                const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeTempVariableName(TempFlags._i));
+                write(text);
+            }
+
+            function emitUniqueIdentifier(node: Identifier) {
+                const nodeId = getOriginalNodeId(node);
+                const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeUniqueName(node.text));
+                write(text);
             }
 
             //
@@ -2368,10 +2550,16 @@ const _super = (function (geti, seti) {
                     && rangeEndIsOnSameLineAsRangeStart(block, block);
             }
 
-            function tempKindToFlags(kind: TempVariableKind) {
-                return kind === TempVariableKind.Loop
+            function tempKindToFlags(kind: GeneratedIdentifierKind) {
+                return kind === GeneratedIdentifierKind.Loop
                     ? TempFlags._i
                     : TempFlags.Auto;
+            }
+
+            function isUniqueName(name: string): boolean {
+                return !resolver.hasGlobalName(name) &&
+                    !hasProperty(currentFileIdentifiers, name) &&
+                    !hasProperty(generatedNameSet, name);
             }
 
             /**
@@ -2399,6 +2587,29 @@ const _super = (function (geti, seti) {
                             return name;
                         }
                     }
+                }
+            }
+
+            /**
+             * Generate a name that is unique within the current file and doesn't conflict with any names
+             * in global scope. The name is formed by adding an '_n' suffix to the specified base name,
+             * where n is a positive integer. Note that names generated by makeTempVariableName and
+             * makeUniqueName are guaranteed to never conflict.
+             */
+            function makeUniqueName(baseName: string): string {
+                // Find the first unique 'name_n', where n is a positive number
+                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+                    baseName += "_";
+                }
+
+                let i = 1;
+                while (true) {
+                    const generatedName = baseName + i;
+                    if (isUniqueName(generatedName)) {
+                        return generatedNameSet[generatedName] = generatedName;
+                    }
+
+                    i++;
                 }
             }
         }

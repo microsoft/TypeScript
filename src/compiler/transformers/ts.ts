@@ -9,7 +9,6 @@ namespace ts {
     export function transformTypeScript(context: TransformationContext) {
         const {
             getGeneratedNameForNode,
-            makeUniqueName,
             setNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -502,7 +501,7 @@ namespace ts {
                 // Record an alias to avoid class double-binding.
                 if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
                     enableExpressionSubstitutionForDecoratedClasses();
-                    decoratedClassAlias = makeUniqueName(node.name ? node.name.text : "default");
+                    decoratedClassAlias = createUniqueName(node.name ? node.name.text : "default");
                     decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
 
                     // We emit the class alias as a `let` declaration here so that it has the same
@@ -697,7 +696,7 @@ namespace ts {
         function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter(makeUniqueName("args"))] : [];
+                : hasExtendsClause ? [createRestParameter(createUniqueName("args"))] : [];
         }
 
         /**
@@ -1667,7 +1666,7 @@ namespace ts {
                 return createLiteral(name.text);
             }
             else {
-                return getSynthesizedNode(name);
+                return getSynthesizedClone(name);
             }
         }
 
@@ -1836,7 +1835,7 @@ namespace ts {
             if (isNamespaceExport(node)) {
                 return createNodeArrayNode([
                     func,
-                    createNamespaceExport(getSynthesizedNode(node.name), getSynthesizedNode(node.name))
+                    createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
                 ]);
             }
 
@@ -2136,7 +2135,7 @@ namespace ts {
 
             const name = isNamespaceExport(node)
                 ? getNamespaceMemberName(node.name)
-                : getSynthesizedNode(node.name);
+                : getSynthesizedClone(node.name);
 
             currentNamespaceLocalName = getGeneratedNameForNode(node);
             addNode(statements,
@@ -2352,7 +2351,7 @@ namespace ts {
 
             const name = isNamespaceExport(node)
                 ? getNamespaceMemberName(node.name)
-                : getSynthesizedNode(node.name);
+                : getSynthesizedClone(node.name);
 
             let moduleParam: Expression = createLogicalOr(
                 name,
@@ -2463,7 +2462,7 @@ namespace ts {
                 // exports.${name} = ${moduleReference};
                 return setOriginalNode(
                     createNamespaceExport(
-                        getSynthesizedNode(node.name),
+                        getSynthesizedClone(node.name),
                         moduleReference,
                         node
                     ),
@@ -2551,11 +2550,11 @@ namespace ts {
         }
 
         function getNamespaceMemberName(name: Identifier): Expression {
-            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedNode(name));
+            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedClone(name));
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration | EnumDeclaration) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {

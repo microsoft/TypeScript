@@ -6,7 +6,6 @@ namespace ts {
     export function transformES6(context: TransformationContext) {
         const {
             getGeneratedNameForNode,
-            makeUniqueName,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -399,14 +398,14 @@ namespace ts {
             addNode(statements,
                 createIf(
                     createStrictEquality(
-                        getSynthesizedNode(name),
+                        getSynthesizedClone(name),
                         createVoidZero()
                     ),
                     setNodeEmitFlags(
                         createBlock([
                             createStatement(
                                 createAssignment(
-                                    getSynthesizedNode(name),
+                                    getSynthesizedClone(name),
                                     visitNode(initializer, visitor, isExpression)
                                 )
                             )
@@ -431,7 +430,7 @@ namespace ts {
                 return;
             }
 
-            const name = getSynthesizedNode(<Identifier>parameter.name);
+            const name = getSynthesizedClone(<Identifier>parameter.name);
             const restIndex = node.parameters.length - 1;
             const temp = createLoopVariable();
 
@@ -611,7 +610,7 @@ namespace ts {
             return setOriginalNode(
                 createFunctionDeclaration(
                     /*modifiers*/ undefined,
-                    node.asteriskToken, // TODO(rbuckton): downlevel support for generators
+                    node.asteriskToken,
                     node.name,
                     visitNodes(node.parameters, visitor, isParameter),
                     transformFunctionBody(node),
@@ -779,6 +778,119 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        // // TODO(rbuckton): Switch to using __values helper for for..of?
+        // function visitForOfStatement2(node: ForOfStatement): OneOrMany<Statement> {
+        //     // [source]
+        //     //  for (let v of expr) {
+        //     //  }
+        //     //
+        //     // [output]
+        //     //  var __values = ...;
+        //     //  try {
+        //     //      for (_a = __values(expr), _b = _a.next(); !_b.done || (_a = void 0); _b = _a.next()) {
+        //     //          var v = _b.value;
+        //     //      }
+        //     //  }
+        //     //  finally {
+        //     //      if (_a && typeof _a.return === "function") _a.return();
+        //     //  }
+        //     //  var _a, b;
+
+        //     const iterator = createTempVariable();
+        //     const iteratorResult = createTempVariable();
+        //     hoistVariableDeclaration(iterator);
+        //     hoistVariableDeclaration(iteratorResult);
+        //     const expression = visitNode(node.expression, visitor, isExpression);
+        //     const initializer = node.initializer;
+        //     const statements: Statement[] = [];
+        //     if (isVariableDeclarationList(initializer)) {
+        //         const variable = getMutableClone(initializer.declarations[0]);
+        //         variable.initializer = createPropertyAccess(iteratorResult, "value");
+        //         statements.push(
+        //             createVariableStatement(
+        //                 /*modifiers*/ undefined,
+        //                 createVariableDeclarationList(
+        //                     isBindingPattern(variable.name)
+        //                         ? flattenVariableDestructuring(variable, /*value*/ undefined, visitor)
+        //                         : [variable]
+        //                 )
+        //             )
+        //         );
+        //     }
+        //     else {
+        //         statements.push(
+        //             createStatement(
+        //                 createAssignment(
+        //                     <Expression>node.initializer,
+        //                     createPropertyAccess(iteratorResult, "value")
+        //                 )
+        //             )
+        //         );
+        //     }
+
+        //     if (isBlock(node.statement)) {
+        //         addNodes(statements, visitNodes((<Block>node.statement).statements, visitor, isStatement));
+        //     }
+        //     else {
+        //         addNodes(statements, visitNodes(createNodeArray([node.statement]), visitor, isStatement));
+        //     }
+
+        //     return createTryFinally(
+        //         createBlock([
+        //             createFor(
+        //                 createComma(
+        //                     createAssignment(
+        //                         iterator,
+        //                         createCall(
+        //                             createIdentifier("__values"),
+        //                             [expression]
+        //                         )
+        //                     ),
+        //                     createAssignment(
+        //                         iteratorResult,
+        //                         createCall(
+        //                             createPropertyAccess(iterator, "next"),
+        //                             []
+        //                         )
+        //                     )
+        //                 ),
+        //                 createLogicalOr(
+        //                     createLogicalNot(createPropertyAccess(iteratorResult, "done")),
+        //                     createAssignment(iterator, createVoidZero())
+        //                 ),
+        //                 createAssignment(
+        //                     iteratorResult,
+        //                     createCall(
+        //                         createPropertyAccess(iterator, "next"),
+        //                         []
+        //                     )
+        //                 ),
+        //                 createBlock(statements)
+        //             )
+        //         ]),
+        //         createBlock([
+        //             createIf(
+        //                 createLogicalAnd(
+        //                     iterator,
+        //                     createStrictEquality(
+        //                         createTypeOf(
+        //                             createPropertyAccess(iterator, "return")
+        //                         ),
+        //                         createLiteral("function")
+        //                     )
+        //                 ),
+        //                 createStatement(
+        //                     createCall(
+        //                         createPropertyAccess(iterator, "return"),
+        //                         [],
+        //                         /*location*/ node.expression
+        //                     )
+        //                 )
+        //             )
+        //         ])
+        //     );
+        // }
+
         function visitForOfStatement(node: ForOfStatement): Statement {
             // TODO: Convert loop body for block scoped bindings.
 
@@ -814,7 +926,7 @@ namespace ts {
             // we don't want to emit a temporary variable for the RHS, just use it directly.
             const counter = createLoopVariable();
             const rhsReference = expression.kind === SyntaxKind.Identifier
-                ? makeUniqueName((<Identifier>expression).text)
+                ? createUniqueName((<Identifier>expression).text)
                 : createTempVariable();
 
             // Initialize LHS
@@ -906,22 +1018,24 @@ namespace ts {
             );
         }
 
-        function visitObjectLiteralExpression(node: ObjectLiteralExpression): LeftHandSideExpression {
+        function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
             // We are here because a ComputedPropertyName was used somewhere in the expression.
             const properties = node.properties;
             const numProperties = properties.length;
 
             // Find the first computed property.
             // Everything until that point can be emitted as part of the initial object literal.
-            let numInitialNonComputedProperties = numProperties;
-            for (let i = 0, n = properties.length; i < n; i++) {
-                if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
-                    numInitialNonComputedProperties = i;
+            let numInitialProperties = numProperties;
+            for (let i = 0; i < numProperties; i++) {
+                const property = properties[i];
+                if (property.transformFlags & TransformFlags.ContainsYield
+                    || property.name.kind === SyntaxKind.ComputedPropertyName) {
+                    numInitialProperties = i;
                     break;
                 }
             }
 
-            Debug.assert(numInitialNonComputedProperties !== numProperties);
+            Debug.assert(numInitialProperties !== numProperties);
 
             // For computed properties, we need to create a unique handle to the object
             // literal so we can modify it without risking internal assignments tainting the object.
@@ -933,27 +1047,27 @@ namespace ts {
             addNode(expressions,
                 createAssignment(
                     temp,
-                    setMultiLine(
-                        createObjectLiteral(
-                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties)
-                        ),
+                    createObjectLiteral(
+                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialProperties),
+                        /*location*/ undefined,
                         node.multiLine
                     )
                 ),
                 node.multiLine
             );
 
-            addObjectLiteralMembers(expressions, node, temp, numInitialNonComputedProperties);
+            addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
 
             // We need to clone the temporary identifier so that we can write it on a
             // new line
             addNode(expressions, cloneNode(temp), node.multiLine);
-            return createParen(inlineExpressions(expressions));
+            return inlineExpressions(expressions);
         }
 
-        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, numInitialNonComputedProperties: number) {
+        function addObjectLiteralMembers(expressions: Expression[], node: ObjectLiteralExpression, receiver: Identifier, start: number) {
             const properties = node.properties;
-            for (let i = numInitialNonComputedProperties, len = properties.length; i < len; i++) {
+            const numProperties = properties.length;
+            for (let i = start; i < numProperties; i++) {
                 const property = properties[i];
                 switch (property.kind) {
                     case SyntaxKind.GetAccessor:
@@ -1001,7 +1115,7 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                getSynthesizedNode(property.name),
+                getSynthesizedClone(property.name),
                 /*location*/ property
             );
         }
@@ -1032,7 +1146,7 @@ namespace ts {
         function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
             return createPropertyAssignment(
                 node.name,
-                getSynthesizedNode(node.name),
+                getSynthesizedClone(node.name),
                 /*location*/ node
             );
         }
@@ -1188,7 +1302,7 @@ namespace ts {
                         addNode(segments,
                             setMultiLine(
                                 createArrayLiteral(
-                                    visitNodes(elements, visitor, isExpression, start, i)
+                                    visitNodes(elements, visitor, isExpression, start, i - start)
                                 ),
                                 multiLine
                             )
@@ -1204,7 +1318,7 @@ namespace ts {
                 addNode(segments,
                     setMultiLine(
                         createArrayLiteral(
-                            visitNodes(elements, visitor, isExpression, start, length)
+                            visitNodes(elements, visitor, isExpression, start, length - start)
                         ),
                         multiLine
                     )
@@ -1469,7 +1583,7 @@ namespace ts {
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {

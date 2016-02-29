@@ -229,7 +229,7 @@ namespace ts {
                             // import * as n from "mod";
                             addNode(variables,
                                 createVariableDeclaration(
-                                    getSynthesizedNode(namespaceDeclaration.name),
+                                    getSynthesizedClone(namespaceDeclaration.name),
                                     createRequireCall(node)
                                 )
                             );
@@ -249,7 +249,7 @@ namespace ts {
                             if (namespaceDeclaration && isDefaultImport(node)) {
                                 addNode(variables,
                                     createVariableDeclaration(
-                                        getSynthesizedNode(namespaceDeclaration.name),
+                                        getSynthesizedClone(namespaceDeclaration.name),
                                         getGeneratedNameForNode(node)
                                     )
                                 );
@@ -272,7 +272,7 @@ namespace ts {
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
                                 createVariableDeclaration(
-                                    getSynthesizedNode(namespaceDeclaration.name),
+                                    getSynthesizedClone(namespaceDeclaration.name),
                                     getGeneratedNameForNode(node),
                                     /*location*/ node
                                 )
@@ -309,7 +309,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 createVariableDeclarationList([
                                     createVariableDeclaration(
-                                        getSynthesizedNode(node.name),
+                                        getSynthesizedClone(node.name),
                                         createRequireCall(node),
                                         /*location*/ node
                                     )
@@ -519,7 +519,7 @@ namespace ts {
                     );
 
                     if (node.flags & NodeFlags.Default) {
-                        addExportDefault(statements, getSynthesizedNode(node.name), /*location*/ node);
+                        addExportDefault(statements, getSynthesizedClone(node.name), /*location*/ node);
                     }
                 }
                 else {
@@ -559,7 +559,7 @@ namespace ts {
                     );
 
                     if (node.flags & NodeFlags.Default) {
-                        addExportDefault(statements, getSynthesizedNode(node.name), /*location*/ node);
+                        addExportDefault(statements, getSynthesizedClone(node.name), /*location*/ node);
                     }
                 }
                 else {
@@ -598,7 +598,7 @@ namespace ts {
             if (container && container.kind === SyntaxKind.SourceFile) {
                 return createPropertyAccess(
                     createIdentifier("exports"),
-                    getSynthesizedNode(node),
+                    getSynthesizedClone(node),
                     /*location*/ node
                 );
             }
@@ -638,7 +638,7 @@ namespace ts {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
                 return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedNode(<StringLiteral>moduleName);
+                    || getSynthesizedClone(<StringLiteral>moduleName);
             }
 
             return undefined;
@@ -685,7 +685,7 @@ namespace ts {
                     )
                     : createPropertyAccess(
                         createIdentifier("exports"),
-                        getSynthesizedNode(name)
+                        getSynthesizedClone(name)
                     ),
                 value
             );

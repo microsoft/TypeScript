@@ -11,7 +11,6 @@ namespace ts {
 
         const {
             getGeneratedNameForNode,
-            makeUniqueName,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -83,8 +82,8 @@ namespace ts {
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
-            exportFunctionForFile = makeUniqueName("exports");
-            contextObjectForFile = makeUniqueName("context");
+            exportFunctionForFile = createUniqueName("exports");
+            contextObjectForFile = createUniqueName("context");
 
             const dependencyGroups = collectDependencyGroups(externalImports);
 
@@ -299,7 +298,7 @@ namespace ts {
                 }
             }
 
-            const exportedNamesStorageRef = makeUniqueName("exportedNames");
+            const exportedNamesStorageRef = createUniqueName("exportedNames");
             addNode(statements,
                 createVariableStatement(
                     /*modifiers*/ undefined,
@@ -323,7 +322,7 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const parameterName = makeUniqueName(forEach(group.externalImports, getLocalNameTextForExternalImport) || "");
+                const parameterName = createUniqueName(forEach(group.externalImports, getLocalNameTextForExternalImport) || "");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
                     const importVariableName = getLocalNameForExternalImport(entry);
@@ -705,7 +704,7 @@ namespace ts {
         function visitForInStatement(node: ForInStatement): ForInStatement {
             const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.initializer = transformForBinding(initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
@@ -723,7 +722,7 @@ namespace ts {
         function visitForOfStatement(node: ForOfStatement): ForOfStatement {
             const initializer = node.initializer;
             if (isVariableDeclarationList(initializer)) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.initializer = transformForBinding(initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
@@ -741,7 +740,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement) {
             const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
             if (statement !== node.statement) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.statement = statement;
                 return updated;
             }
@@ -756,7 +755,7 @@ namespace ts {
         function visitWhileStatement(node: WhileStatement) {
             const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
             if (statement !== node.statement) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.statement = statement;
                 return updated;
             }
@@ -771,7 +770,7 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement) {
             const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
             if (statement !== node.statement) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.statement = statement;
                 return updated;
             }
@@ -786,7 +785,7 @@ namespace ts {
         function visitWithStatement(node: WithStatement) {
             const statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
             if (statement !== node.statement) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.statement = statement;
                 return updated;
             }
@@ -801,7 +800,7 @@ namespace ts {
         function visitSwitchStatement(node: SwitchStatement) {
             const caseBlock = visitNode(node.caseBlock, visitNestedNode, isCaseBlock);
             if (caseBlock !== node.caseBlock) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.caseBlock = caseBlock;
                 return updated;
             }
@@ -816,7 +815,7 @@ namespace ts {
         function visitCaseBlock(node: CaseBlock) {
             const clauses = visitNodes(node.clauses, visitNestedNode, isCaseOrDefaultClause);
             if (clauses !== node.clauses) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.clauses = clauses;
                 return updated;
             }
@@ -831,7 +830,7 @@ namespace ts {
         function visitCaseClause(node: CaseClause) {
             const statements = visitNodes(node.statements, visitNestedNode, isStatement);
             if (statements !== node.statements) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.statements = statements;
                 return updated;
             }
@@ -864,7 +863,7 @@ namespace ts {
         function visitCatchClause(node: CatchClause) {
             const block = visitNode(node.block, visitNestedNode, isBlock);
             if (block !== node.block) {
-                const updated = getMutableNode(node);
+                const updated = getMutableClone(node);
                 updated.block = block;
                 return updated;
             }
@@ -1055,7 +1054,7 @@ namespace ts {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
                 return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedNode(<StringLiteral>moduleName);
+                    || getSynthesizedClone(<StringLiteral>moduleName);
             }
 
             return undefined;
@@ -1096,11 +1095,11 @@ namespace ts {
          * @param node The declaration statement.
          */
         function getDeclarationName(node: DeclarationStatement) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function addExportStarFunction(statements: Statement[], localNames: Identifier) {
-            const exportStarFunction = makeUniqueName("exportStar");
+            const exportStarFunction = createUniqueName("exportStar");
             const m = createIdentifier("m");
             const n = createIdentifier("n");
             const exports = createIdentifier("exports");
@@ -1204,7 +1203,7 @@ namespace ts {
                 return createElementAccess(importAlias, createLiteral(name.text));
             }
             else {
-                return createPropertyAccess(importAlias, getSynthesizedNode(name));
+                return createPropertyAccess(importAlias, getSynthesizedClone(name));
             }
         }
 
@@ -1256,7 +1255,7 @@ namespace ts {
         function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean) {
             const name = node.name;
             if (isIdentifier(name)) {
-                hoistVariableDeclaration(getSynthesizedNode(name));
+                hoistVariableDeclaration(getSynthesizedClone(name));
                 if (isExported) {
                     recordExportName(name);
                 }

@@ -2563,6 +2563,12 @@ namespace ts {
         return 0;
     }
 
+    export function isLogicalOperator(token: SyntaxKind): boolean {
+        return token === SyntaxKind.BarBarToken
+            || token === SyntaxKind.AmpersandAmpersandToken
+            || token === SyntaxKind.ExclamationToken;
+    }
+
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
@@ -3001,6 +3007,10 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isGeneratedIdentifier(node: Node): node is Identifier {
+        return isIdentifier(node) && node.tempKind > GeneratedIdentifierKind.None;
     }
 
     // Keywords

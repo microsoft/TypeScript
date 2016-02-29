@@ -1115,7 +1115,7 @@ namespace ts {
             }
         }
 
-        function checkStrictModeNumericLiteral(node: LiteralExpression) {
+        function checkStrictModeNumericLiteral(node: NumericLiteral) {
             if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
@@ -1296,7 +1296,7 @@ namespace ts {
                 case SyntaxKind.DeleteExpression:
                     return checkStrictModeDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.NumericLiteral:
-                    return checkStrictModeNumericLiteral(<LiteralExpression>node);
+                    return checkStrictModeNumericLiteral(<NumericLiteral>node);
                 case SyntaxKind.PostfixUnaryExpression:
                     return checkStrictModePostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -1852,11 +1852,14 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
-            case SyntaxKind.YieldExpression:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES6;
                 break;
 
+            case SyntaxKind.YieldExpression:
+                // This node is ES6 syntax.
+                transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsYield;
+                break;
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
@@ -2026,10 +2029,13 @@ namespace ts {
                 // A FunctionExpression excludes markers that should not escape the scope of a FunctionExpression.
                 excludeFlags = TransformFlags.FunctionExcludes;
 
+                if ((<FunctionExpression>node).asteriskToken) {
+                    transformFlags |= TransformFlags.ContainsGenerators;
+                }
+
                 // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
                 // as needing to capture the lexical this, then this node is ES6 syntax.
-                if ((<FunctionLikeDeclaration>node).asteriskToken
-                    || subtreeFlags & TransformFlags.ContainsCapturedLexicalThis
+                if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis
                     || subtreeFlags & TransformFlags.ContainsDefaultValueAssignments) {
                     transformFlags |= TransformFlags.AssertES6;
                 }
@@ -2051,11 +2057,14 @@ namespace ts {
                     break;
                 }
 
+                if ((<FunctionDeclaration>node).asteriskToken) {
+                    transformFlags |= TransformFlags.ContainsGenerators;
+                }
+
                 // If a FunctionDeclaration has an asterisk token, is exported, or its
                 // subtree has marked the container as needing to capture the lexical `this`,
                 // then this node is ES6 syntax.
-                if ((<FunctionDeclaration>node).asteriskToken
-                    || node.flags & NodeFlags.Export
+                if (node.flags & NodeFlags.Export
                     || subtreeFlags & TransformFlags.ContainsCapturedLexicalThis
                     || subtreeFlags & TransformFlags.ContainsDefaultValueAssignments) {
                     transformFlags |= TransformFlags.AssertES6;
@@ -2182,6 +2191,10 @@ namespace ts {
                 // A MethodDeclaration is ES6 syntax.
                 excludeFlags = TransformFlags.MethodOrAccessorExcludes;
                 transformFlags |= TransformFlags.AssertES6;
+
+                if ((<MethodDeclaration>node).asteriskToken) {
+                    transformFlags |= TransformFlags.ContainsGenerators;
+                }
 
                 // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
                 // generic, or has both a computed property name and a decorator.

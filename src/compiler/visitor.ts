@@ -134,7 +134,7 @@ namespace ts {
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.NewExpression]: [
-            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForNew },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
@@ -630,7 +630,7 @@ namespace ts {
 
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = getMutableNode(node);
+                            updated = getMutableClone(node);
                             updated.flags &= ~NodeFlags.Modifier;
                         }
 
@@ -897,8 +897,9 @@ namespace ts {
     /**
      * Aggregates the TransformFlags for a Node and its subtree.
      */
-    export function aggregateTransformFlags(node: Node): void {
+    export function aggregateTransformFlags<T extends Node>(node: T): T {
         aggregateTransformFlagsForNode(node);
+        return node;
     }
 
     /**
