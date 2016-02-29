@@ -1221,7 +1221,7 @@ namespace ts {
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {
