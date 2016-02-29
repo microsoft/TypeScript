@@ -1644,7 +1644,7 @@ namespace ts {
                 return createLiteral(name.text);
             }
             else {
-                return getSynthesizedNode(name);
+                return getSynthesizedClone(name);
             }
         }
 
@@ -1813,7 +1813,7 @@ namespace ts {
             if (isNamespaceExport(node)) {
                 return createNodeArrayNode([
                     func,
-                    createNamespaceExport(getSynthesizedNode(node.name), getSynthesizedNode(node.name))
+                    createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
                 ]);
             }
 
@@ -2420,7 +2420,7 @@ namespace ts {
                 // exports.${name} = ${moduleReference};
                 return setOriginalNode(
                     createNamespaceExport(
-                        getSynthesizedNode(node.name),
+                        getSynthesizedClone(node.name),
                         moduleReference,
                         node
                     ),
@@ -2520,14 +2520,14 @@ namespace ts {
         }
 
         function getNamespaceMemberName(name: Identifier): Expression {
-            name = getSynthesizedNode(name);
+            name = getSynthesizedClone(name);
             return currentNamespaceLocalName
                 ? createPropertyAccess(currentNamespaceLocalName, name)
                 : name;
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {

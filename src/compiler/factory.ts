@@ -153,7 +153,21 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node for mutation.
      */
     export function getMutableNode<T extends Node>(node: T): T {
-        return cloneNode<T>(node, node, node.flags, node.parent, node);
+        return cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone of a node with no source map location.
+     */
+    export function getSynthesizedClone<T extends Node>(node: T): T {
+        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone of a node at the specified source map location.
+     */
+    export function getRelocatedClone<T extends Node>(node: T, location: TextRange): T {
+        return cloneNode(node, location, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
@@ -1339,9 +1353,5 @@ namespace ts {
     export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
         node.flags = flags;
         return node;
-    }
-
-    export function getSynthesizedNode<T extends Node>(node: T): T {
-        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 }
