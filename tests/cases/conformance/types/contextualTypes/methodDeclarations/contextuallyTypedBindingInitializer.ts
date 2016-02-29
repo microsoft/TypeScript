@@ -3,6 +3,8 @@ interface Show {
     show: (x: number) => string;
 }
 function f({ show = v => v.toString() }: Show) {}
+function f2({ "show": showRename = v => v.toString() }: Show) {}
+function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 
 interface Nested {
     nested: Show
@@ -23,3 +25,5 @@ interface StringIdentity {
     stringIdentity(s: string): string;
 }
 let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};
+
+

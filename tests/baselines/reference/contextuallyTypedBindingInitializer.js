@@ -3,6 +3,8 @@ interface Show {
     show: (x: number) => string;
 }
 function f({ show = v => v.toString() }: Show) {}
+function f2({ "show": showRename = v => v.toString() }: Show) {}
+function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 
 interface Nested {
     nested: Show
@@ -25,9 +27,17 @@ interface StringIdentity {
 let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};
 
 
+
+
 //// [contextuallyTypedBindingInitializer.js]
 function f(_a) {
     var _b = _a.show, show = _b === void 0 ? function (v) { return v.toString(); } : _b;
+}
+function f2(_a) {
+    var _b = _a["show"], showRename = _b === void 0 ? function (v) { return v.toString(); } : _b;
+}
+function f3(_a) {
+    var _b = "show", _c = _a[_b], showRename = _c === void 0 ? function (v) { return v.toString(); } : _c;
 }
 function ff(_a) {
     var _b = _a.nested, nested = _b === void 0 ? { show: function (v) { return v.toString(); } } : _b;

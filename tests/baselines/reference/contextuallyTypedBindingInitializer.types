@@ -17,6 +17,29 @@ function f({ show = v => v.toString() }: Show) {}
 >toString : (radix?: number) => string
 >Show : Show
 
+function f2({ "show": showRename = v => v.toString() }: Show) {}
+>f2 : ({"show": showRename}: Show) => void
+>showRename : (x: number) => string
+>v => v.toString() : (v: number) => string
+>v : number
+>v.toString() : string
+>v.toString : (radix?: number) => string
+>v : number
+>toString : (radix?: number) => string
+>Show : Show
+
+function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
+>f3 : ({["show"]: showRename}: Show) => void
+>"show" : string
+>showRename : (x: number) => string
+>v => v.toString() : (v: number) => string
+>v : number
+>v.toString() : string
+>v.toString : (radix?: number) => string
+>v : number
+>toString : (radix?: number) => string
+>Show : Show
+
 interface Nested {
 >Nested : Nested
 
@@ -82,4 +105,6 @@ let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x =>
 >x => x : (x: string) => string
 >x : string
 >x : string
+
+
 

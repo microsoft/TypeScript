@@ -3,6 +3,8 @@ interface Show {
     show: (x: number) => string;
 }
 function f({ show: showRename = v => v }: Show) {}
+function f2({ "show": showRename = v => v }: Show) {}
+function f3({ ["show"]: showRename = v => v }: Show) {}
 
 interface Nested {
     nested: Show

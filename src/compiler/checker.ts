@@ -7856,9 +7856,11 @@ namespace ts {
                     const name = declaration.propertyName || declaration.name;
                     if (isVariableLike(parentDeclaration) &&
                         parentDeclaration.type &&
-                        (name.kind === SyntaxKind.Identifier || name.kind == SyntaxKind.StringLiteral)) {
-                        const text = (<Identifier | LiteralExpression>name).text;
-                        return getTypeOfPropertyOfType(getTypeFromTypeNode(parentDeclaration.type), text);
+                        !isBindingPattern(name)) {
+                        const text = getTextOfPropertyName(name);
+                        if (text) {
+                            return getTypeOfPropertyOfType(getTypeFromTypeNode(parentDeclaration.type), text);
+                        }
                     }
                 }
             }

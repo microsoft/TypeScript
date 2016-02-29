@@ -3,6 +3,8 @@ interface Show {
     show: (x: number) => string;
 }
 function f({ show: showRename = v => v }: Show) {}
+function f2({ "show": showRename = v => v }: Show) {}
+function f3({ ["show"]: showRename = v => v }: Show) {}
 
 interface Nested {
     nested: Show
@@ -28,6 +30,12 @@ function h({ prop = "baz" }: StringUnion) {}
 //// [contextuallyTypedBindingInitializerNegative.js]
 function f(_a) {
     var _b = _a.show, showRename = _b === void 0 ? function (v) { return v; } : _b;
+}
+function f2(_a) {
+    var _b = _a["show"], showRename = _b === void 0 ? function (v) { return v; } : _b;
+}
+function f3(_a) {
+    var _b = "show", _c = _a[_b], showRename = _c === void 0 ? function (v) { return v; } : _c;
 }
 function ff(_a) {
     var _b = _a.nested, nestedRename = _b === void 0 ? { show: function (v) { return v; } } : _b;
