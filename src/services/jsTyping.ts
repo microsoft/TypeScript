@@ -13,35 +13,47 @@ namespace ts.JsTyping {
         readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
     };
 
+    interface TsdJson {
+        version: string;
+        repo: string;
+        ref: string;
+        path: string;
+        installed?: Map<TsdInstalledItem>;
+    };
+
+    interface TsdInstalledItem {
+        commit: string;
+    };
+
+    interface PackageJson {
+        _requiredBy?: string[];
+        dependencies?: Map<string>;
+        devDependencies?: Map<string>;
+        name: string;
+        optionalDependencies?: Map<string>;
+        peerDependencies?: Map<string>;
+        typings?: string;
+    };
+
     // A map of loose file names to library names
     // that we are confident require typings
     let safeList: Map<string>;
-    const notFoundTypingNames: string[] = [];
-
-    function tryParseJson(jsonPath: string, host: TypingResolutionHost): any {
-        if (host.fileExists(jsonPath)) {
-            try {
-                const contents = removeComments(host.readFile(jsonPath));
-                return JSON.parse(contents);
-            }
-            catch (e) { }
-        }
-        return undefined;
-    }
 
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project.
-     * @param globalCachePath is used to get the safe list file path and as cache path if the project root path isn't specified.
-     * @param projectRootPath is the path to the project root directory. This is used for the local typings cache.
+     * @param cachePath is the path to the typings cache
+     * @param projectRootPath is the path to the project root directory
+     * @param safeListPath is the path used to retrieve the safe list
      * @param typingOptions are used for customizing the typing inference process.
      * @param compilerOptions are used as a source of typing inference.
      */
     export function discoverTypings(
         host: TypingResolutionHost,
         fileNames: string[],
-        globalCachePath: Path,
+        cachePath: Path,
         projectRootPath: Path,
+        safeListPath: Path,
         typingOptions: TypingOptions,
         compilerOptions: CompilerOptions):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -53,13 +65,12 @@ namespace ts.JsTyping {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
-        const cachePath = projectRootPath || globalCachePath;
         // Only infer typings for .js and .jsx files
         fileNames = filter(map(fileNames, normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
 
-        const safeListFilePath = combinePaths(globalCachePath, "safeList.json");
-        if (!safeList && host.fileExists(safeListFilePath)) {
-            safeList = tryParseJson(safeListFilePath, host);
+        if (!safeList) {
+            const result = readConfigFile(safeListPath, host.readFile);
+            if (result.config) { safeList = result.config; }
         }
 
         const filesToWatch: string[] = [];
@@ -86,26 +97,20 @@ namespace ts.JsTyping {
                 const nodeModulesPath = combinePaths(searchDir, "node_modules");
                 getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
             }
-
             getTypingNamesFromSourceFileNames(fileNames);
-            getTypingNamesFromCompilerOptions(compilerOptions);
         }
 
         const typingsPath = combinePaths(cachePath, "typings");
         const tsdJsonPath = combinePaths(cachePath, "tsd.json");
-        const tsdJsonDict = tryParseJson(tsdJsonPath, host);
-        if (tsdJsonDict) {
-            for (const notFoundTypingName of notFoundTypingNames) {
-                if (hasProperty(inferredTypings, notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
-                    delete inferredTypings[notFoundTypingName];
-                }
-            }
+        const result = readConfigFile(tsdJsonPath, host.readFile);
+        if (result.config) {
+            const tsdJson: TsdJson = result.config;
 
             // The "installed" property in the tsd.json serves as a registry of installed typings. Each item
             // of this object has a key of the relative file path, and a value that contains the corresponding
             // commit hash.
-            if (hasProperty(tsdJsonDict, "installed")) {
-                for (const cachedTypingPath in tsdJsonDict.installed) {
+            if (tsdJson.installed) {
+                for (const cachedTypingPath in tsdJson.installed) {
                     // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
                     const cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf("/"));
                     // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
@@ -153,20 +158,21 @@ namespace ts.JsTyping {
          * Get the typing info from common package manager json files like package.json or bower.json
          */
         function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
-            const jsonDict = tryParseJson(jsonPath, host);
-            if (jsonDict) {
+            const result = readConfigFile(jsonPath, host.readFile);
+            if (result.config) {
+                const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
-                if (hasProperty(jsonDict, "dependencies")) {
-                    mergeTypings(getKeys(jsonDict.dependencies));
+                if (jsonConfig.dependencies) {
+                    mergeTypings(getKeys(jsonConfig.dependencies));
                 }
-                if (hasProperty(jsonDict, "devDependencies")) {
-                    mergeTypings(getKeys(jsonDict.devDependencies));
+                if (jsonConfig.devDependencies) {
+                    mergeTypings(getKeys(jsonConfig.devDependencies));
                 }
-                if (hasProperty(jsonDict, "optionalDependencies")) {
-                    mergeTypings(getKeys(jsonDict.optionalDependencies));
+                if (jsonConfig.optionalDependencies) {
+                    mergeTypings(getKeys(jsonConfig.optionalDependencies));
                 }
-                if (hasProperty(jsonDict, "peerDependencies")) {
-                    mergeTypings(getKeys(jsonDict.peerDependencies));
+                if (jsonConfig.peerDependencies) {
+                    mergeTypings(getKeys(jsonConfig.peerDependencies));
                 }
             }
         }
@@ -205,75 +211,36 @@ namespace ts.JsTyping {
             }
 
             const typingNames: string[] = [];
-            const jsonFiles = host.readDirectory(nodeModulesPath, "*.json", /*exclude*/ undefined, /*depth*/ 2);
-            for (const jsonFile of jsonFiles) {
-                if (getBaseFileName(jsonFile) !== "package.json") { continue; }
-                const packageJsonDict = tryParseJson(jsonFile, host);
-                if (!packageJsonDict) { continue; }
+            const fileNames = host.readDirectory(nodeModulesPath, "*.json", /*exclude*/ undefined, /*depth*/ 2);
+            for (const fileName of fileNames) {
+                const normalizedFileName = normalizePath(fileName);
+                if (getBaseFileName(normalizedFileName) !== "package.json") { continue; }
+                const result = readConfigFile(normalizedFileName, host.readFile);
+                if (!result.config) { continue; }
+                const packageJson: PackageJson = result.config;
+                filesToWatch.push(normalizedFileName);
 
-                filesToWatch.push(jsonFile);
-
-                // npm 3 has the package.json contains a "_requiredBy" field
+                // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
                 // "_requiredBy" field starts with "#" or equals "/" for npm 3.
-                if (packageJsonDict._requiredBy &&
-                    filter(packageJsonDict._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
+                if (packageJson._requiredBy &&
+                    filter(packageJson._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
                     continue;
                 }
 
                 // If the package has its own d.ts typings, those will take precedence. Otherwise the package name will be used
                 // to download d.ts files from DefinitelyTyped
-                const packageName = packageJsonDict["name"];
-                if (hasProperty(packageJsonDict, "typings")) {
-                    const absolutePath = getNormalizedAbsolutePath(packageJsonDict.typings, getDirectoryPath(jsonFile));
-                    inferredTypings[packageName] = absolutePath;
+                if (!packageJson.name) { continue; }
+                if (packageJson.typings) {
+                    const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
+                    inferredTypings[packageJson.name] = absolutePath;
                 }
                 else {
-                    typingNames.push(packageName);
+                    typingNames.push(packageJson.name);
                 }
             }
             mergeTypings(typingNames);
         }
 
-        function getTypingNamesFromCompilerOptions(options: CompilerOptions) {
-            const typingNames: string[] = [];
-            if (!options) {
-                return;
-            }
-            mergeTypings(typingNames);
-        }
-    }
-
-    /**
-     * Keep a list of typings names that we know cannot be obtained at the moment (could be because
-     * of network issues or because the package doesn't hava a d.ts file in DefinitelyTyped), so
-     * that we won't try again next time within this session.
-     * @param newTypingNames The list of new typings that the host attempted to acquire
-     * @param cachePath The path to the tsd.json cache
-     * @param host The object providing I/O related operations.
-     */
-    export function updateNotFoundTypingNames(newTypingNames: string[], cachePath: string, host: TypingResolutionHost): void {
-        const tsdJsonPath = combinePaths(cachePath, "tsd.json");
-        const cacheTsdJsonDict = tryParseJson(tsdJsonPath, host);
-        if (cacheTsdJsonDict) {
-            const installedTypingFiles = hasProperty(cacheTsdJsonDict, "installed")
-                ? getKeys(cacheTsdJsonDict.installed)
-                : [];
-            const newMissingTypingNames =
-                filter(newTypingNames, name => notFoundTypingNames.indexOf(name) < 0 && !isInstalled(name, installedTypingFiles));
-            for (const newMissingTypingName of newMissingTypingNames) {
-                notFoundTypingNames.push(newMissingTypingName);
-            }
-        }
-    }
-
-    function isInstalled(typing: string, installedKeys: string[]) {
-        const typingPrefix = typing + "/";
-        for (const key of installedKeys) {
-            if (key.indexOf(typingPrefix) === 0) {
-                return true;
-            }
-        }
-        return false;
     }
 }

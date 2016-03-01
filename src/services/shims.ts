@@ -230,8 +230,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
-        discoverTypings(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string;
-        updateNotFoundTypingNames(newTypingsJson: string, globalCachePath: string, projectRootPath: string): string;
+        discoverTypings(fileNamesJson: string, cachePath: string, projectRootPath: string, safeListPath: string, typingOptionsJson: string, compilerOptionsJson: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -986,29 +985,20 @@ namespace ts {
             );
         }
 
-        public discoverTypings(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson: string, compilerOptionsJson: string): string {
+        public discoverTypings(fileNamesJson: string, cachePath: string, projectRootPath: string, safeListPath: string, typingOptionsJson: string, compilerOptionsJson: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
-                const cachePath = projectRootPath ? projectRootPath : globalCachePath;
                 const typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
-
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const fileNames: string[] = JSON.parse(fileNamesJson);
                 return ts.JsTyping.discoverTypings(
                     this.host,
                     fileNames,
-                    toPath(globalCachePath, globalCachePath, getCanonicalFileName),
                     toPath(cachePath, cachePath, getCanonicalFileName),
+                    toPath(projectRootPath, projectRootPath, getCanonicalFileName),
+                    toPath(safeListPath, safeListPath, getCanonicalFileName),
                     typingOptions,
                     compilerOptions);
-            });
-        }
-
-        public updateNotFoundTypingNames(newTypingsJson: string, globalCachePath: string, projectRootPath: string): string {
-            return this.forwardJSONCall("updateNotFoundTypingNames()", () => {
-                const newTypingNames: string[] = JSON.parse(newTypingsJson);
-                const cachePath = projectRootPath ? projectRootPath : globalCachePath;
-                ts.JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath, this.host);
             });
         }
     }
