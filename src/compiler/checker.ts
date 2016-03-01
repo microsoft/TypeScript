@@ -8797,18 +8797,20 @@ namespace ts {
                     if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
                         // Is this is a stateless function component? See if its single signature's return type is
                         // assignable to the JSX Element Type
-                        const elemType = checkExpression(node.tagName);
-                        const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
-                        const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
-                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
-                            // Intersect in JSX.IntrinsicAttributes if it exists
-                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                            if (intrinsicAttributes !== unknownType) {
-                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                        if (jsxElementType) {
+                            const elemType = checkExpression(node.tagName);
+                            const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                            const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
+                            const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                            let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                            if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                                // Intersect in JSX.IntrinsicAttributes if it exists
+                                const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                                if (intrinsicAttributes !== unknownType) {
+                                    paramType = intersectTypes(intrinsicAttributes, paramType);
+                                }
+                                return links.resolvedJsxType = paramType;
                             }
-                            return links.resolvedJsxType = paramType;
                         }
                     }
 
