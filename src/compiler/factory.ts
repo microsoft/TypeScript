@@ -153,7 +153,21 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node for mutation.
      */
     export function getMutableNode<T extends Node>(node: T): T {
-        return cloneNode<T>(node, node, node.flags, node.parent, node);
+        return cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone of a node with no source map location.
+     */
+    export function getSynthesizedClone<T extends Node>(node: T): T {
+        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
+    }
+
+    /**
+     * Creates a shallow, memberwise clone of a node at the specified source map location.
+     */
+    export function getRelocatedClone<T extends Node>(node: T, location: TextRange): T {
+        return cloneNode(node, location, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
@@ -185,24 +199,38 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
-        const node = <Identifier>createNode(SyntaxKind.Identifier);
+    export function createIdentifier(text: string, location?: TextRange): Identifier {
+        const node = <Identifier>createNode(SyntaxKind.Identifier, location);
         node.text = text;
         return node;
     }
 
-    export function createTempVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = TempVariableKind.Auto;
+    export function createTempVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
         return name;
     }
 
-    export function createLoopVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = TempVariableKind.Loop;
+    export function createLoopVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Loop;
+        getNodeId(name);
+        return name;
+    }
+
+    export function createUniqueName(text: string, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.text = text;
+        name.autoGenerateKind = GeneratedIdentifierKind.Unique;
+        getNodeId(name);
+        return name;
+    }
+
+    export function getGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.original = node;
         getNodeId(name);
         return name;
     }
@@ -1334,9 +1362,5 @@ namespace ts {
     export function setHasTrailingComma<T extends Node>(nodes: NodeArray<T>, hasTrailingComma: boolean): NodeArray<T> {
         nodes.hasTrailingComma = hasTrailingComma;
         return nodes;
-    }
-
-    export function getSynthesizedNode<T extends Node>(node: T): T {
-        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 }

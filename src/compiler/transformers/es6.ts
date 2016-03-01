@@ -5,8 +5,6 @@
 namespace ts {
     export function transformES6(context: TransformationContext) {
         const {
-            getGeneratedNameForNode,
-            makeUniqueName,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -399,14 +397,14 @@ namespace ts {
             addNode(statements,
                 createIf(
                     createStrictEquality(
-                        getSynthesizedNode(name),
+                        getSynthesizedClone(name),
                         createVoidZero()
                     ),
                     setNodeEmitFlags(
                         createBlock([
                             createStatement(
                                 createAssignment(
-                                    getSynthesizedNode(name),
+                                    getSynthesizedClone(name),
                                     visitNode(initializer, visitor, isExpression)
                                 )
                             )
@@ -431,7 +429,7 @@ namespace ts {
                 return;
             }
 
-            const name = getSynthesizedNode(<Identifier>parameter.name);
+            const name = getSynthesizedClone(<Identifier>parameter.name);
             const restIndex = node.parameters.length - 1;
             const temp = createLoopVariable();
 
@@ -814,7 +812,7 @@ namespace ts {
             // we don't want to emit a temporary variable for the RHS, just use it directly.
             const counter = createLoopVariable();
             const rhsReference = expression.kind === SyntaxKind.Identifier
-                ? makeUniqueName((<Identifier>expression).text)
+                ? createUniqueName((<Identifier>expression).text)
                 : createTempVariable();
 
             // Initialize LHS
@@ -1001,7 +999,7 @@ namespace ts {
                     receiver,
                     visitNode(property.name, visitor, isPropertyName)
                 ),
-                getSynthesizedNode(property.name),
+                getSynthesizedClone(property.name),
                 /*location*/ property
             );
         }
@@ -1032,7 +1030,7 @@ namespace ts {
         function visitShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
             return createPropertyAssignment(
                 node.name,
-                getSynthesizedNode(node.name),
+                getSynthesizedClone(node.name),
                 /*location*/ node
             );
         }
@@ -1482,7 +1480,7 @@ namespace ts {
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {

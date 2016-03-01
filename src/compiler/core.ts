@@ -172,22 +172,98 @@ namespace ts {
     }
 
     /**
-     * Maps an array. If the mapped value is an array, it is spread into the result.
+     * Flattens an array containing a mix of array or non-array elements.
+     *
+     * @param array The array to flatten.
      */
-    export function flatMap<T, U>(array: T[], f: (x: T, i: number) => U | U[]): U[] {
+    export function flatten<T>(array: (T | T[])[]): T[] {
+        let result: T[];
+        if (array) {
+            result = [];
+            for (const v of array) {
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[] {
         let result: U[];
         if (array) {
             result = [];
             for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                const ar = f(v, i);
-                if (ar) {
-                    // We cast to <U> here to leverage the behavior of Array#concat
-                    // which will append a single value here.
-                    result = result.concat(<U[]>ar);
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
                 }
             }
         }
+        return result;
+    }
+
+    /**
+     * Maps contiguous spans of values with the same key.
+     *
+     * @param array The array to map.
+     * @param keyfn A callback used to select the key for an element.
+     * @param mapfn A callback used to map a contiguous chunk of values to a single value.
+     */
+    export function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K) => U): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            const len = array.length;
+            let previousKey: K;
+            let key: K;
+            let start = 0;
+            let pos = 0;
+            while (start < len) {
+                while (pos < len) {
+                    const value = array[pos];
+                    key = keyfn(value, pos);
+                    if (pos === 0) {
+                        previousKey = key;
+                    }
+                    else if (key !== previousKey) {
+                        break;
+                    }
+
+                    pos++;
+                }
+
+                if (start < pos) {
+                    const v = mapfn(array.slice(start, pos), previousKey);
+                    if (v) {
+                        result.push(v);
+                    }
+
+                    start = pos;
+                }
+
+                previousKey = key;
+                pos++;
+            }
+        }
+
         return result;
     }
 

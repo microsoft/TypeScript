@@ -6,10 +6,17 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
+    const enum TypeScriptSubstitutionFlags {
+        /** Enables substitutions for decorated classes. */
+        DecoratedClasses = 1 << 0,
+        /** Enables substitutions for namespace exports. */
+        NamespaceExports = 1 << 1,
+        /** Enables substitutions for async methods with `super` calls. */
+        AsyncMethodsWithSuper = 1 << 2,
+    }
+
     export function transformTypeScript(context: TransformationContext) {
         const {
-            getGeneratedNameForNode,
-            makeUniqueName,
             setNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -21,14 +28,14 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
         // Save the previous transformation hooks.
-        const previousExpressionSubstitution = context.expressionSubstitution;
         const previousOnBeforeEmitNode = context.onBeforeEmitNode;
         const previousOnAfterEmitNode = context.onAfterEmitNode;
+        const previousExpressionSubstitution = context.expressionSubstitution;
 
         // Set new transformation hooks.
-        context.expressionSubstitution = substituteExpression;
         context.onBeforeEmitNode = onBeforeEmitNode;
         context.onAfterEmitNode = onAfterEmitNode;
+        context.expressionSubstitution = substituteExpression;
 
         // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
@@ -39,31 +46,46 @@ namespace ts {
         let currentNode: Node;
         let combinedNodeFlags: NodeFlags;
 
-        // These variables keep track of whether expression substitution has been enabled for
-        // specific edge cases. They are persisted between each SourceFile transformation and
-        // should not be reset.
-        let hasEnabledExpressionSubstitutionForDecoratedClasses = false;
-        let hasEnabledExpressionSubstitutionForNamespaceExports = false;
-        let hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = false;
+        /**
+         * Keeps track of whether expression substitution has been enabled for specific edge cases.
+         * They are persisted between each SourceFile transformation and should not be reset.
+         */
+        let enabledSubstitutions: TypeScriptSubstitutionFlags;
 
-        // This map keeps track of aliases created for classes with decorators to avoid issues
-        // with the double-binding behavior of classes.
+        /**
+         * A map that keeps track of aliases created for classes with decorators to avoid issues
+         * with the double-binding behavior of classes.
+         */
         let decoratedClassAliases: Map<Identifier>;
 
-        // This map keeps track of currently active aliases defined in `decoratedClassAliases`
-        // when just-in-time substitution occurs while printing an expression identifier.
+        /**
+         * A map that keeps track of currently active aliases defined in `decoratedClassAliases`
+         * when just-in-time substitution occurs while printing an expression identifier.
+         */
         let currentDecoratedClassAliases: Map<Identifier>;
 
-        // This value keeps track of how deeply nested we are within any containing namespaces
-        // when performing just-in-time substitution while printing an expression identifier.
+        /**
+         * Keeps track of how deeply nested we are within any containing namespaces
+         * when performing just-in-time substitution while printing an expression identifier.
+         * If the nest level is greater than zero, then we are performing a substitution
+         * inside of a namespace and we should perform the more costly checks to determine
+         * whether the identifier points to an exported declaration.
+         */
         let namespaceNestLevel: number;
 
-        // This array keeps track of containers where `super` is valid, for use with
-        // just-in-time substitution for `super` expressions inside of async methods.
+        /**
+         * This array keeps track of containers where `super` is valid, for use with
+         * just-in-time substitution for `super` expressions inside of async methods.
+         */
         let superContainerStack: SuperContainer[];
 
         return transformSourceFile;
 
+        /**
+         * Transform TypeScript-specific syntax in a SourceFile.
+         *
+         * @param node A SourceFile node.
+         */
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
             node = visitEachChild(node, visitor, context);
@@ -141,8 +163,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function namespaceElementVisitorWorker(node: Node): Node {
-            if (node.transformFlags & TransformFlags.TypeScript
-                || node.flags & NodeFlags.Export) {
+            if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
                 node = visitTypeScript(node);
@@ -170,12 +191,25 @@ namespace ts {
          * @param node The node to visit.
          */
         function classElementVisitorWorker(node: Node) {
-            if (node.kind === SyntaxKind.Constructor) {
-                // TypeScript constructors are elided.
-                return undefined;
-            }
+            switch (node.kind) {
+                case SyntaxKind.Constructor:
+                    // TypeScript constructors are transformed in `transformClassDeclaration`.
+                    // We elide them here as `visitorWorker` checks transform flags, which could
+                    // erronously include an ES6 constructor without TypeScript syntax.
+                    return undefined;
 
-            return visitorWorker(node);
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.IndexSignature:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                    // Fallback to the default visit behavior.
+                    return visitorWorker(node);
+
+                default:
+                    Debug.fail("Unexpected node.");
+                    break;
+            }
         }
 
         /**
@@ -184,9 +218,9 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): Node {
-            // TypeScript ambient declarations are elided.
             if (node.flags & NodeFlags.Ambient) {
-                return;
+                // TypeScript ambient declarations are elided.
+                return undefined;
             }
 
             switch (node.kind) {
@@ -238,8 +272,7 @@ namespace ts {
                     // TypeScript property declarations are elided.
 
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are elided. The constructor of a class will be
-                    // transformed as part of `transformClassDeclaration`.
+                    // TypeScript constructors are transformed in `transformClassDeclaration`.
                     return undefined;
 
                 case SyntaxKind.ClassDeclaration:
@@ -384,11 +417,7 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration): NodeArrayNode<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
-            const statements: Statement[] = [];
-            const modifiers = visitNodes(node.modifiers, visitor, isModifier);
-            const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node, firstOrUndefined(heritageClauses) !== undefined);
-            let decoratedClassAlias: Identifier;
+            const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
 
             // emit name if
             // - node has a name
@@ -399,165 +428,27 @@ namespace ts {
                 name = getGeneratedNameForNode(node);
             }
 
-            if (node.decorators) {
-                // When we emit an ES6 class that has a class decorator, we must tailor the
-                // emit to certain specific cases.
-                //
-                // In the simplest case, we emit the class declaration as a let declaration, and
-                // evaluate decorators after the close of the class body:
-                //
-                //  [Example 1]
-                //  ---------------------------------------------------------------------
-                //  TypeScript                      | Javascript
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C = class C {
-                //  class C {                       | }
-                //  }                               | C = __decorate([dec], C);
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C = class C {
-                //  export class C {                | }
-                //  }                               | C = __decorate([dec], C);
-                //                                  | export { C };
-                //  ---------------------------------------------------------------------
-                //
-                // If a class declaration contains a reference to itself *inside* of the class body,
-                // this introduces two bindings to the class: One outside of the class body, and one
-                // inside of the class body. If we apply decorators as in [Example 1] above, there
-                // is the possibility that the decorator `dec` will return a new value for the
-                // constructor, which would result in the binding inside of the class no longer
-                // pointing to the same reference as the binding outside of the class.
-                //
-                // As a result, we must instead rewrite all references to the class *inside* of the
-                // class body to instead point to a local temporary alias for the class:
-                //
-                //  [Example 2]
-                //  ---------------------------------------------------------------------
-                //  TypeScript                      | Javascript
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C_1;
-                //  class C {                       | let C = C_1 = class C {
-                //    static x() { return C.y; }    |   static x() { return C_1.y; }
-                //    static y = 1;                 | }
-                //  }                               | C.y = 1;
-                //                                  | C = C_1 = __decorate([dec], C);
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C_1;
-                //  export class C {                | let C = C_1 = class C {
-                //    static x() { return C.y; }    |   static x() { return C_1.y; }
-                //    static y = 1;                 | }
-                //  }                               | C.y = 1;
-                //                                  | C = C_1 = __decorate([dec], C);
-                //                                  | export { C };
-                //  ---------------------------------------------------------------------
-                //
-                // If a class declaration is the default export of a module, we instead emit
-                // the export after the decorated declaration:
-                //
-                //  [Example 3]
-                //  ---------------------------------------------------------------------
-                //  TypeScript                      | Javascript
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let default_1 = class {
-                //  export default class {          | }
-                //  }                               | default_1 = __decorate([dec], default_1);
-                //                                  | export default default_1;
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C = class C {
-                //  export default class C {        | }
-                //  }                               | C = __decorate([dec], C);
-                //                                  | export default C;
-                //  ---------------------------------------------------------------------
-                //
-                // If the class declaration is the default export and a reference to itself
-                // inside of the class body, we must emit both an alias for the class *and*
-                // move the export after the declaration:
-                //
-                //  [Example 4]
-                //  ---------------------------------------------------------------------
-                //  TypeScript                      | Javascript
-                //  ---------------------------------------------------------------------
-                //  @dec                            | let C_1;
-                //  export default class C {        | let C = C_1 = class C {
-                //    static x() { return C.y; }    |   static x() { return C_1.y; }
-                //    static y = 1;                 | }
-                //  }                               | C.y = 1;
-                //                                  | C = C_1 = __decorate([dec], C);
-                //                                  | export default C;
-                //  ---------------------------------------------------------------------
-                //
-
-                //  class ${name} ${heritageClauses} {
-                //      ${members}
-                //  }
-                let classExpression: Expression = setOriginalNode(
-                    createClassExpression(
-                        name,
-                        heritageClauses,
-                        members,
-                        /*location*/ node
-                    ),
-                    node
-                );
-
-                // Record an alias to avoid class double-binding.
-                if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
-                    enableExpressionSubstitutionForDecoratedClasses();
-                    decoratedClassAlias = makeUniqueName(node.name ? node.name.text : "default");
-                    decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
-
-                    // We emit the class alias as a `let` declaration here so that it has the same
-                    // TDZ as the class.
-
-                    //  let ${decoratedClassAlias};
-                    addNode(statements,
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            createVariableDeclarationList([
-                                createVariableDeclaration(decoratedClassAlias)
-                            ],
-                            /*location*/ undefined,
-                            NodeFlags.Let)
-                        )
-                    );
-
-                    //  ${decoratedClassAlias} = ${classExpression}
-                    classExpression = createAssignment(
-                        cloneNode(decoratedClassAlias),
-                        classExpression,
-                        /*location*/ node);
-                }
-
-                //  let ${name} = ${classExpression};
-                addNode(statements,
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
-                                name,
-                                classExpression
-                            )
-                        ],
-                        /*location*/ undefined,
-                        NodeFlags.Let)
-                    )
-                );
-            }
-            else {
+            let decoratedClassAlias: Identifier;
+            const statements: Statement[] = [];
+            if (!node.decorators) {
                 //  ${modifiers} class ${name} ${heritageClauses} {
                 //      ${members}
                 //  }
                 addNode(statements,
                     setOriginalNode(
                         createClassDeclaration(
-                            modifiers,
+                            visitNodes(node.modifiers, visitor, isModifier),
                             name,
-                            heritageClauses,
-                            members,
+                            visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                            transformClassMembers(node, hasExtendsClause),
                             /*location*/ node
                         ),
                         node
                     )
                 );
+            }
+            else {
+                decoratedClassAlias = addClassDeclarationHeadWithDecorators(statements, node, name, hasExtendsClause);
             }
 
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
@@ -583,11 +474,166 @@ namespace ts {
                     addNode(statements, createExportDefault(name));
                 }
                 else if (isNamedExternalModuleExport(node)) {
-                    addNode(statements, createModuleExport(name));
+                    addNode(statements, createExternalModuleExport(name));
                 }
             }
 
             return createNodeArrayNode(statements);
+        }
+
+        /**
+         * Transforms a decorated class declaration and appends the resulting statements. If
+         * the class requires an alias to avoid issues with double-binding, the alias is returned.
+         *
+         * @param node A ClassDeclaration node.
+         * @param name The name of the class.
+         * @param hasExtendsClause A value indicating whether
+         */
+        function addClassDeclarationHeadWithDecorators(statements: Statement[], node: ClassDeclaration, name: Identifier, hasExtendsClause: boolean) {
+            // When we emit an ES6 class that has a class decorator, we must tailor the
+            // emit to certain specific cases.
+            //
+            // In the simplest case, we emit the class declaration as a let declaration, and
+            // evaluate decorators after the close of the class body:
+            //
+            //  [Example 1]
+            //  ---------------------------------------------------------------------
+            //  TypeScript                      | Javascript
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C = class C {
+            //  class C {                       | }
+            //  }                               | C = __decorate([dec], C);
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C = class C {
+            //  export class C {                | }
+            //  }                               | C = __decorate([dec], C);
+            //                                  | export { C };
+            //  ---------------------------------------------------------------------
+            //
+            // If a class declaration contains a reference to itself *inside* of the class body,
+            // this introduces two bindings to the class: One outside of the class body, and one
+            // inside of the class body. If we apply decorators as in [Example 1] above, there
+            // is the possibility that the decorator `dec` will return a new value for the
+            // constructor, which would result in the binding inside of the class no longer
+            // pointing to the same reference as the binding outside of the class.
+            //
+            // As a result, we must instead rewrite all references to the class *inside* of the
+            // class body to instead point to a local temporary alias for the class:
+            //
+            //  [Example 2]
+            //  ---------------------------------------------------------------------
+            //  TypeScript                      | Javascript
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C_1;
+            //  class C {                       | let C = C_1 = class C {
+            //    static x() { return C.y; }    |   static x() { return C_1.y; }
+            //    static y = 1;                 | }
+            //  }                               | C.y = 1;
+            //                                  | C = C_1 = __decorate([dec], C);
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C_1;
+            //  export class C {                | let C = C_1 = class C {
+            //    static x() { return C.y; }    |   static x() { return C_1.y; }
+            //    static y = 1;                 | }
+            //  }                               | C.y = 1;
+            //                                  | C = C_1 = __decorate([dec], C);
+            //                                  | export { C };
+            //  ---------------------------------------------------------------------
+            //
+            // If a class declaration is the default export of a module, we instead emit
+            // the export after the decorated declaration:
+            //
+            //  [Example 3]
+            //  ---------------------------------------------------------------------
+            //  TypeScript                      | Javascript
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let default_1 = class {
+            //  export default class {          | }
+            //  }                               | default_1 = __decorate([dec], default_1);
+            //                                  | export default default_1;
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C = class C {
+            //  export default class C {        | }
+            //  }                               | C = __decorate([dec], C);
+            //                                  | export default C;
+            //  ---------------------------------------------------------------------
+            //
+            // If the class declaration is the default export and a reference to itself
+            // inside of the class body, we must emit both an alias for the class *and*
+            // move the export after the declaration:
+            //
+            //  [Example 4]
+            //  ---------------------------------------------------------------------
+            //  TypeScript                      | Javascript
+            //  ---------------------------------------------------------------------
+            //  @dec                            | let C_1;
+            //  export default class C {        | let C = C_1 = class C {
+            //    static x() { return C.y; }    |   static x() { return C_1.y; }
+            //    static y = 1;                 | }
+            //  }                               | C.y = 1;
+            //                                  | C = C_1 = __decorate([dec], C);
+            //                                  | export default C;
+            //  ---------------------------------------------------------------------
+            //
+
+            //  ... = class ${name} ${heritageClauses} {
+            //      ${members}
+            //  }
+            let classExpression: Expression = setOriginalNode(
+                createClassExpression(
+                    name,
+                    visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                    transformClassMembers(node, hasExtendsClause),
+                    /*location*/ node
+                ),
+                node
+            );
+
+            // Record an alias to avoid class double-binding.
+            let decoratedClassAlias: Identifier;
+            if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.DecoratedClassWithSelfReference) {
+                enableExpressionSubstitutionForDecoratedClasses();
+                decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
+                decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
+
+                // We emit the class alias as a `let` declaration here so that it has the same
+                // TDZ as the class.
+
+                //  let ${decoratedClassAlias};
+                addNode(statements,
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(decoratedClassAlias)
+                        ],
+                        /*location*/ undefined,
+                        NodeFlags.Let)
+                    )
+                );
+
+                //  ${decoratedClassAlias} = ${classExpression}
+                classExpression = createAssignment(
+                    decoratedClassAlias,
+                    classExpression,
+                    /*location*/ node);
+            }
+
+            //  let ${name} = ${classExpression};
+            addNode(statements,
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            name,
+                            classExpression
+                        )
+                    ],
+                    /*location*/ undefined,
+                    NodeFlags.Let)
+                )
+            );
+
+            return decoratedClassAlias;
         }
 
         /**
@@ -646,7 +692,7 @@ namespace ts {
             const members: ClassElement[] = [];
             addNode(members, transformConstructor(node, hasExtendsClause));
             addNodes(members, visitNodes(node.members, classElementVisitor, isClassElement));
-            return members;
+            return createNodeArray(members, /*location*/ node.members);
         }
 
         /**
@@ -697,7 +743,7 @@ namespace ts {
         function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter(makeUniqueName("args"))] : [];
+                : hasExtendsClause ? [createRestParameter(createUniqueName("args"))] : [];
         }
 
         /**
@@ -1667,7 +1713,7 @@ namespace ts {
                 return createLiteral(name.text);
             }
             else {
-                return getSynthesizedNode(name);
+                return getSynthesizedClone(name);
             }
         }
 
@@ -1836,7 +1882,7 @@ namespace ts {
             if (isNamespaceExport(node)) {
                 return createNodeArrayNode([
                     func,
-                    createNamespaceExport(getSynthesizedNode(node.name), getSynthesizedNode(node.name))
+                    createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
                 ]);
             }
 
@@ -2125,14 +2171,15 @@ namespace ts {
             }
 
             const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const statements: Statement[] = [];
 
             let location: TextRange = node;
-            if (!isNamespaceExport(node)) {
+            if (!isExported(node) || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, SyntaxKind.EnumDeclaration))) {
+                // Emit a VariableStatement if the enum is not exported, or is the first enum
+                // with the same name exported from an external module.
                 addNode(statements,
                     createVariableStatement(
-                        modifiers,
+                        visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
                             createVariableDeclaration(node.name)
                         ]),
@@ -2144,7 +2191,7 @@ namespace ts {
 
             const name = isNamespaceExport(node)
                 ? getNamespaceMemberName(node.name)
-                : getSynthesizedNode(node.name);
+                : getSynthesizedClone(node.name);
 
             currentNamespaceLocalName = getGeneratedNameForNode(node);
             addNode(statements,
@@ -2204,7 +2251,7 @@ namespace ts {
          *
          * @param member The enum member node.
          */
-        function transformEnumMember(member: EnumMember) {
+        function transformEnumMember(member: EnumMember): Statement {
             const name = getExpressionForPropertyName(member);
             return createStatement(
                 createAssignment(
@@ -2360,7 +2407,7 @@ namespace ts {
 
             const name = isNamespaceExport(node)
                 ? getNamespaceMemberName(node.name)
-                : getSynthesizedNode(node.name);
+                : getSynthesizedClone(node.name);
 
             let moduleParam: Expression = createLogicalOr(
                 name,
@@ -2471,7 +2518,7 @@ namespace ts {
                 // exports.${name} = ${moduleReference};
                 return setOriginalNode(
                     createNamespaceExport(
-                        getSynthesizedNode(node.name),
+                        getSynthesizedClone(node.name),
                         moduleReference,
                         node
                     ),
@@ -2494,13 +2541,30 @@ namespace ts {
         }
 
         /**
+         * Gets a value indicating whether the node is exported.
+         *
+         * @param node The node to test.
+         */
+        function isExported(node: Node) {
+            return (node.flags & NodeFlags.Export) !== 0;
+        }
+
+        /**
+         * Gets a value indicating whether the node is exported from a namespace.
+         *
+         * @param node The node to test.
+         */
+        function isNamespaceExport(node: Node) {
+            return currentNamespace !== undefined && isExported(node);
+        }
+
+        /**
          * Gets a value indicating whether the node is exported from an external module.
          *
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined
-                && (node.flags & NodeFlags.Export) !== 0;
+            return currentNamespace === undefined && isExported(node);
         }
 
         /**
@@ -2524,13 +2588,14 @@ namespace ts {
         }
 
         /**
-         * Gets a value indicating whether the node is exported from a namespace.
+         * Gets a value indicating whether a node is the first declaration of its kind.
          *
-         * @param node The node to test.
+         * @param node A Declaration node.
+         * @param kind The SyntaxKind to find among related declarations.
          */
-        function isNamespaceExport(node: Node) {
-            return currentNamespace !== undefined
-                && (node.flags & NodeFlags.Export) !== 0;
+        function isFirstDeclarationOfKind(node: Declaration, kind: SyntaxKind) {
+            const original = getOriginalNode(node);
+            return original.symbol && getDeclarationOfKind(original.symbol, kind) === original;
         }
 
         /**
@@ -2550,7 +2615,7 @@ namespace ts {
             );
         }
 
-        function createModuleExport(exportName: Identifier) {
+        function createExternalModuleExport(exportName: Identifier) {
             return createExportDeclaration(
                 createNamedExports([
                     createExportSpecifier(exportName)
@@ -2559,11 +2624,11 @@ namespace ts {
         }
 
         function getNamespaceMemberName(name: Identifier): Expression {
-            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedNode(name));
+            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedClone(name));
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration | EnumDeclaration) {
-            return node.name ? getSynthesizedNode(node.name) : getGeneratedNameForNode(node);
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {
@@ -2580,12 +2645,13 @@ namespace ts {
             previousOnBeforeEmitNode(node);
 
             const kind = node.kind;
-            if (hasEnabledExpressionSubstitutionForDecoratedClasses
-                && kind === SyntaxKind.ClassDeclaration && node.decorators) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses
+                && kind === SyntaxKind.ClassDeclaration
+                && node.decorators) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
             }
 
-            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
                 && (kind === SyntaxKind.ClassDeclaration
                     || kind === SyntaxKind.Constructor
                     || kind === SyntaxKind.MethodDeclaration
@@ -2599,7 +2665,7 @@ namespace ts {
                 superContainerStack.push(<SuperContainer>node);
             }
 
-            if (hasEnabledExpressionSubstitutionForNamespaceExports
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
                 && kind === SyntaxKind.ModuleDeclaration) {
                 namespaceNestLevel++;
             }
@@ -2609,12 +2675,13 @@ namespace ts {
             previousOnAfterEmitNode(node);
 
             const kind = node.kind;
-            if (hasEnabledExpressionSubstitutionForDecoratedClasses
-                && kind === SyntaxKind.ClassDeclaration && node.decorators) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses
+                && kind === SyntaxKind.ClassDeclaration
+                && node.decorators) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
             }
 
-            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
                 && (kind === SyntaxKind.ClassDeclaration
                     || kind === SyntaxKind.Constructor
                     || kind === SyntaxKind.MethodDeclaration
@@ -2626,7 +2693,7 @@ namespace ts {
                 }
             }
 
-            if (hasEnabledExpressionSubstitutionForNamespaceExports
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
                 && kind === SyntaxKind.ModuleDeclaration) {
                 namespaceNestLevel--;
             }
@@ -2640,7 +2707,7 @@ namespace ts {
                     return substituteExpressionIdentifier(<Identifier>node);
             }
 
-            if (hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) {
                 switch (node.kind) {
                     case SyntaxKind.CallExpression:
                         return substituteCallExpression(<CallExpression>node);
@@ -2655,10 +2722,10 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            if (hasEnabledExpressionSubstitutionForDecoratedClasses) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original)) {
-                    if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.BodyScopedClassBinding) {
+                    if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
                         // Due to the emit for class decorators, any reference to the class from inside of the class body
                         // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                         // behavior of class names in ES6.
@@ -2673,7 +2740,7 @@ namespace ts {
                 }
             }
 
-            if (hasEnabledExpressionSubstitutionForNamespaceExports
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
                 && namespaceNestLevel > 0) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
@@ -2740,8 +2807,8 @@ namespace ts {
         }
 
         function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
-            if (!hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper) {
-                hasEnabledExpressionSubstitutionForAsyncMethodsWithSuper = true;
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
 
                 // We need to enable substitutions for call, property access, and element access
                 // if we need to rewrite super calls.
@@ -2759,8 +2826,8 @@ namespace ts {
         }
 
         function enableExpressionSubstitutionForDecoratedClasses() {
-            if (!hasEnabledExpressionSubstitutionForDecoratedClasses) {
-                hasEnabledExpressionSubstitutionForDecoratedClasses = true;
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
 
                 // We need to enable substitutions for identifiers. This allows us to
                 // substitute class names inside of a class declaration.
@@ -2773,8 +2840,8 @@ namespace ts {
         }
 
         function enableExpressionSubstitutionForNamespaceExports() {
-            if (!hasEnabledExpressionSubstitutionForNamespaceExports) {
-                hasEnabledExpressionSubstitutionForNamespaceExports = true;
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
 
                 // We need to enable substitutions for identifiers. This allows us to
                 // substitute the names of exported members of a namespace.

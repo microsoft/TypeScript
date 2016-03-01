@@ -10,14 +10,16 @@ function g() {
 
 //// [modifierOnClassExpressionMemberInFunction.js]
 function g() {
-    var x = (function () {
-        function C() {
-            this.prop1 = 1;
-        }
-        C.prototype.foo = function () { };
-        C.prop2 = 43;
-        return C;
-    }());
+    var x = (_a = (function () {
+            function C() {
+                this.prop1 = 1;
+            }
+            C.prototype.foo = function () { };
+            return C;
+        }()),
+        _a.prop2 = 43,
+        _a);
+    var _a;
 }
 
 
