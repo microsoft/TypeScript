@@ -346,7 +346,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         };
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+            for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
@@ -1529,7 +1529,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             return;
                         }
                     }
-                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BodyScopedClassBinding) {
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
                         // Due to the emit for class decorators, any reference to the class from inside of the class body
                         // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                         // behavior of class names in ES6.
@@ -5203,7 +5203,7 @@ const _super = (function (geti, seti) {
                         //  [Example 4]
                         //
 
-                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
                             decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
                             decoratedClassAliases[getNodeId(node)] = decoratedClassAlias;
                             write(`let ${decoratedClassAlias};`);

@@ -1352,7 +1352,7 @@ namespace ts {
 
 
 
-    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+    export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
         while (node) {
             if (node === ancestor) return true;
             node = node.parent;
@@ -2866,7 +2866,8 @@ namespace ts {
     }
 
     export function isGeneratedIdentifier(node: Node): node is Identifier {
-        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.Node;
+        // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
+        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
     }
 
     // Keywords

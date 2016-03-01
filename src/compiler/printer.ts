@@ -2368,7 +2368,7 @@ const _super = (function (geti, seti) {
             }
 
             function isUniqueLocalName(name: string, container: Node): boolean {
-                for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+                for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                     if (node.locals && hasProperty(node.locals, name)) {
                         // We conservatively include alias symbols to cover cases where they're emitted as locals
                         if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
