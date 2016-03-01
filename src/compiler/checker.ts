@@ -2961,7 +2961,7 @@ namespace ts {
                 const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
                 const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
 
-                if (getter.flags & NodeFlags.JavaScriptFile) {
+                if (getter && getter.flags & NodeFlags.JavaScriptFile) {
                     const jsDocType = getTypeForVariableLikeDeclarationFromJSDocComment(getter);
                     if (jsDocType) {
                         return links.type = jsDocType;
