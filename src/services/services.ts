@@ -3134,7 +3134,7 @@ namespace ts {
             else if (isRightOfOpenTag) {
                 const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
-                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
                 }
                 else {
                     symbols = tagSymbols;
