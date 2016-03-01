@@ -136,7 +136,7 @@ namespace ts {
 
 
         const identityMapper: TypeMapper = <TypeMapper>((t: TypeParameter) => <Type>t);
-        identityMapper.mapsType = sym => false;
+        identityMapper.mapsType = t => false;
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -4959,13 +4959,13 @@ namespace ts {
 
         function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
             const mapper = <TypeMapper>(t => t === source ? target : t);
-            mapper.mapsType = sym => sym.name === source.symbol.name;
+            mapper.mapsType = t => t === source;
             return mapper;
         }
 
         function createBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
             const mapper = <TypeMapper>(t => t === source1 ? target1 : t === source2 ? target2 : t);
-            mapper.mapsType = sym => sym.name === source1.symbol.name || sym.name === source2.symbol.name;
+            mapper.mapsType = t => t === source1 || t === source2;
             return mapper;
         }
 
@@ -4982,19 +4982,19 @@ namespace ts {
                 }
                 return t;
             });
-            mapper.mapsType = sym => forEach(sources, source => sym.name === source.symbol.name);
+            mapper.mapsType = t => forEach(sources, source => t === source);
             return mapper;
         }
 
         function createUnaryTypeEraser(source: Type): TypeMapper {
             const eraser = <TypeMapper>(t => t === source ? <Type>anyType : <Type>t);
-            eraser.mapsType = sym => sym.name === source.symbol.name;
+            eraser.mapsType = t => t === source;
             return eraser;
         }
 
         function createBinaryTypeEraser(source1: Type, source2: Type): TypeMapper {
             const eraser = <TypeMapper>(t => t === source1 || t === source2 ? <Type>anyType : <Type>t);
-            eraser.mapsType = sym => sym.name === source1.symbol.name || sym.name === source2.symbol.name;
+            eraser.mapsType = t => t === source1 || t === source2;
             return eraser;
         }
 
@@ -5011,7 +5011,7 @@ namespace ts {
                 }
                 return <Type>t;
             });
-            mapper.mapsType = sym => forEach(sources, source => source.symbol.name === sym.name);
+            mapper.mapsType = t => forEach(sources, source => t === source);
             return mapper;
         }
 
@@ -5028,7 +5028,7 @@ namespace ts {
                     return t;
                 });
                 mapper.context = context;
-                mapper.mapsType = sym => forEach(context.typeParameters, param => param.symbol.name === sym.name);
+                mapper.mapsType = t => forEach(context.typeParameters, param => t === param);
                 context.mapper = mapper;
             }
             return context.mapper;
@@ -5036,7 +5036,7 @@ namespace ts {
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             const mapper = <TypeMapper>(t => instantiateType(mapper1(t), mapper2));
-            mapper.mapsType = sym => mapper1.mapsType(sym) || mapper2.mapsType(sym);
+            mapper.mapsType = t => mapper1.mapsType(t) || mapper2.mapsType(t);
             return mapper;
         }
 
@@ -5140,7 +5140,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Anonymous) {
                     return type.symbol &&
                             type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
-                            hasTypeParametersInScope(type, mapper) ?
+                            hasTypeParametersInScope(<AnonymousType>type, mapper) ?
                         instantiateAnonymousType(<AnonymousType>type, mapper) : type;
                 }
                 if (type.flags & TypeFlags.Reference) {
@@ -5159,7 +5159,7 @@ namespace ts {
             return type;
         }
 
-        function hasTypeParametersInScope(type: Type, mapper: TypeMapper) {
+        function hasTypeParametersInScope(type: AnonymousType, mapper: TypeMapper) {
             for (const original of type.symbol.declarations) {
                 let node: Node = original;
                 while (node !== undefined) {
@@ -5183,15 +5183,20 @@ namespace ts {
                         case SyntaxKind.TypeAliasDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             const decl = <SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration>node;
-                            if (decl.typeParameters && decl.typeParameters.length && forEach(decl.typeParameters, p => mapper.mapsType(getSymbolOfNode(p)))) {
+                            const typeParameters = map(decl.typeParameters, parameter => {
+                                const t = <TypeParameter>getTypeOfNode(parameter);
+                                return type.mapper ? type.mapper(t) : t;
+                            });
+                            if (forEach(typeParameters, mapper.mapsType)) {
                                 return true;
                             }
-                            if ((isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration) &&
-                                mapper.mapsType(getSymbolOfNode(decl))) {
-                                // mapper maps the this class type of a class
-                                return true;
+                            if (isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration) {
+                                const classLikeType = <InterfaceType>getTypeOfNode(node);
+                                if (mapper.mapsType(classLikeType.thisType)) {
+                                    return true;
+                                }
+                                break;
                             }
-                            break;
                     }
                     node = node.parent;
                 }
