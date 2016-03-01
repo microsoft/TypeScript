@@ -3232,8 +3232,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
                 // simple loops are emitted as just 'loop()';
+                // NOTE: if loop uses only 'continue' it still will be emitted as simple loop
                 const isSimpleLoop =
-                    !loop.state.nonLocalJumps &&
+                    !(loop.state.nonLocalJumps & ~Jump.Continue) &&
                     !loop.state.labeledNonLocalBreaks &&
                     !loop.state.labeledNonLocalContinues;
 
@@ -3274,13 +3275,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         writeLine();
                     }
 
-                    if (loop.state.nonLocalJumps & Jump.Continue) {
-                        write(`if (${loopResult} === "continue") continue;`);
-                        writeLine();
-                    }
-
                     // in case of labeled breaks emit code that either breaks to some known label inside outer loop or delegates jump decision to outer loop
                     emitDispatchTableForLabeledJumps(loopResult, loop.state, convertedLoopState);
+                    // in case of 'continue' we'll just fallthough here
                 }
 
                 if (emitAsBlock) {
@@ -3575,6 +3572,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             }
                             else {
                                 convertedLoopState.nonLocalJumps |= Jump.Continue;
+                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.     
                                 write(`"continue";`);
                             }
                         }
