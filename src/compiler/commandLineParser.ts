@@ -503,7 +503,7 @@ namespace ts {
      *
      * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
      */
-    export function removeComments(jsonText: string): string {
+    function removeComments(jsonText: string): string {
         let output = "";
         const scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
         let token: SyntaxKind;
@@ -613,6 +613,9 @@ namespace ts {
                     if (id === "enableAutoDiscovery") {
                         if (typeof jsonTypingOptions[id] === "boolean") {
                             options.enableAutoDiscovery = jsonTypingOptions[id];
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
                         }
                     }
                     else if (id === "include") {
