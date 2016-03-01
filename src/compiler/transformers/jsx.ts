@@ -71,35 +71,31 @@ namespace ts {
         function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[]) {
             const tagName = getTagName(node);
             let objectProperties: Expression;
-            if (node.attributes.length === 0) {
+            const attrs = node.attributes;
+            if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
                 objectProperties = createNull();
             }
             else {
+                // Map spans of JsxAttribute nodes into object literals and spans
+                // of JsxSpreadAttribute nodes into expressions.
+                const segments = flatten(
+                    spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+                        ? map(attrs, transformJsxSpreadAttributeToExpression)
+                        : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                    )
+                );
+
+                if (isJsxSpreadAttribute(attrs[0])) {
+                    // We must always emit at least one object literal before a spread
+                    // argument.
+                    segments.unshift(createObjectLiteral());
+                }
+
                 // Either emit one big object literal (no spread attribs), or
                 // a call to React.__spread
-                const attrs = node.attributes;
-                if (!forEach(attrs, isJsxSpreadAttribute)) {
-                    objectProperties = createObjectLiteral(map(node.attributes, transformJsxAttributeToObjectLiteralElement));
-                }
-                else {
-                    objectProperties = createJsxSpread(compilerOptions.reactNamespace,
-                        concatenate(
-                            // We must always emit at least one object literal before a spread
-                            // argument.
-                            isJsxSpreadAttribute(attrs[0]) ? [createObjectLiteral()] : undefined,
-
-                            // Map spans of JsxAttribute nodes into object literals and spans
-                            // of JsxSpreadAttribute nodes into expressions.
-                            flatten(
-                                spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                                    ? map(attrs, transformJsxSpreadAttributeToExpression)
-                                    : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                                )
-                            )
-                        )
-                    );
-                }
+                objectProperties = singleOrUndefined(segments)
+                    || createJsxSpread(compilerOptions.reactNamespace, segments);
             }
 
             return createJsxCreateElement(
