@@ -2958,12 +2958,22 @@ namespace ts {
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
+                const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
+                const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
+
+                if (getter.flags & NodeFlags.JavaScriptFile) {
+                    const jsDocType = getTypeForVariableLikeDeclarationFromJSDocComment(getter);
+                    if (jsDocType) {
+                        return links.type = jsDocType;
+                    }
+                }
+
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
-                const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
-                const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
+
                 let type: Type;
+
                 // First try to see if the user specified a return type on the get-accessor.
                 const getterReturnType = getAnnotatedAccessorType(getter);
                 if (getterReturnType) {

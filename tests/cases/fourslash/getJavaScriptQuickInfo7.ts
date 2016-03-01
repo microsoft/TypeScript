@@ -2,25 +2,19 @@
 
 // @allowNonTsExtensions: true
 // @Filename: file.js
-//// let x = {
-//// 	/** This is cool*/
-//// 	get m() {
-//// 		return 0;
-//// 	}
+//// /**
+////  * This is a very cool function that is very nice.
+////  * @returns something
+////  * @param p anotherthing
+////  */
+//// function a1(p) {
+//// 	try {
+//// 		throw new Error('x');
+//// 	} catch (x) { x--; }
+//// 	return 23;
 //// }
-//// x.m/*1*/;
-////
-//// class Foo {
-//// 	/** This is cool too*/
-//// 	get b() {
-//// 		return 0;
-//// 	}
-//// }
-//// var y = new Foo();
-//// y.b/*2*/;
+//// 
+//// x - /**/a1()
 
-goTo.marker('1');
-verify.quickInfoIs(undefined, 'This is cool'); 
-
-goTo.marker('2');
-verify.quickInfoIs(undefined, 'This is cool too'); 
+goTo.marker();
+verify.quickInfoExists();
