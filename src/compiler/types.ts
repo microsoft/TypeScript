@@ -411,7 +411,7 @@ namespace ts {
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
