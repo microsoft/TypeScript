@@ -327,13 +327,6 @@ namespace ts {
             name: "experimentalTransforms",
             type: "boolean",
             experimental: true
-        },
-        {
-            // this option will be removed when this is merged with master and exists solely
-            // to enable the tree transforming emitter side-by-side with the existing emitter.
-            name: "transformCompatibleEmit",
-            type: "boolean",
-            experimental: true
         }
     ];
 

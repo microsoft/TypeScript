@@ -4846,7 +4846,7 @@ namespace ts {
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
                 if (!(container.flags & NodeFlags.Static) &&
-                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
@@ -7206,8 +7206,8 @@ namespace ts {
                 let container = getContainingClass(node);
                 while (container !== undefined) {
                     if (container === localOrExportSymbol.valueDeclaration && container.name !== node) {
-                        getNodeLinks(container).flags |= NodeCheckFlags.ClassWithBodyScopedClassBinding;
-                        getNodeLinks(node).flags |= NodeCheckFlags.BodyScopedClassBinding;
+                        getNodeLinks(container).flags |= NodeCheckFlags.DecoratedClassWithSelfReference;
+                        getNodeLinks(node).flags |= NodeCheckFlags.SelfReferenceInDecoratedClass;
                         break;
                     }
 

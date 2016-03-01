@@ -1352,7 +1352,7 @@ namespace ts {
 
 
 
-    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+    export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
         while (node) {
             if (node === ancestor) return true;
             node = node.parent;
@@ -2318,11 +2318,11 @@ namespace ts {
                 writer.write(" ");
             }
 
-            let emitInterveningSeperator = false;
+            let emitInterveningSeparator = false;
             for (const comment of comments) {
-                if (emitInterveningSeperator) {
+                if (emitInterveningSeparator) {
                     writer.write(" ");
-                    emitInterveningSeperator = false;
+                    emitInterveningSeparator = false;
                 }
 
                 writeComment(text, lineMap, writer, comment, newLine);
@@ -2330,11 +2330,11 @@ namespace ts {
                     writer.writeLine();
                 }
                 else {
-                    emitInterveningSeperator = true;
+                    emitInterveningSeparator = true;
                 }
             }
 
-            if (emitInterveningSeperator && trailingSeparator) {
+            if (emitInterveningSeparator && trailingSeparator) {
                 writer.write(" ");
             }
         }
@@ -2744,7 +2744,7 @@ namespace ts {
         }
 
         return collapse === TextRangeCollapse.CollapseToStart
-            ? { pos: range.pos, end: range.end }
+            ? { pos: range.pos, end: range.pos }
             : { pos: range.end, end: range.end };
     }
 
@@ -2863,6 +2863,11 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isGeneratedIdentifier(node: Node): node is Identifier {
+        // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
+        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
     }
 
     // Keywords
