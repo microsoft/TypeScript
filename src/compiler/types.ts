@@ -430,7 +430,7 @@ namespace ts {
         JavaScriptFile = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await,
+        ParserGeneratedFlags = DisallowIn | Yield | Decorator | ThisNodeHasError | Await | JavaScriptFile,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = Yield | Await,
