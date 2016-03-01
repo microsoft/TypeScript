@@ -72,12 +72,14 @@ namespace ts.formatting {
         if (line === 0) {
             return [];
         }
-        // get the span for the previous\current line
+        // After the enter key, the cursor is now at a new line. The new line should not be formatted,
+        // otherwise the indentation would be treated as trailing whitespaces and removed. The previous
+        // line should be formatted, and the one before that should be used as reference.
         let span = {
-            // get start position for the previous line
-            pos: getStartPositionOfLine(line - 1, sourceFile),
-            // get end position for the current line (end value is exclusive so add 1 to the result)
-            end: getEndLinePosition(line, sourceFile) + 1
+            // get start position for the line before previous line
+            pos: getStartPositionOfLine(line - 2, sourceFile),
+            // get end position for the previous line (end value is exclusive so add 1 to the result)
+            end: getEndLinePosition(line - 1, sourceFile) + 1
         }
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
     }
