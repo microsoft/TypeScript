@@ -3268,6 +3268,10 @@ namespace ts {
         return node.kind === SyntaxKind.JsxSpreadAttribute;
     }
 
+    export function isJsxAttribute(node: Node): node is JsxAttribute {
+        return node.kind === SyntaxKind.JsxAttribute;
+    }
+
     // Clauses
 
     export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
