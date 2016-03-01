@@ -12,8 +12,6 @@ module ts {
 
                 let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
 
-                // Remove the parserContextFlags from the comparison
-                result = result.replace(/\,\n\s+\"parserContextFlags\": \"JavaScriptFile\"/g, "");
                 assert.equal(result, expected);
             }
 
@@ -1001,9 +999,6 @@ module ts {
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, 4);
-
-                // Remove the parserContextFlags from the comparison
-                result = result.replace(/\,\n\s+\"parserContextFlags\": \"JavaScriptFile\"/g, "");
 
                 if (result !== expected) {
                     // Turn on a human-readable diff
