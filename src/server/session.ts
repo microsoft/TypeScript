@@ -412,14 +412,15 @@ namespace ts.server {
 
         private getRenameLocations(line: number, offset: number, fileName: string, findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             const file = ts.normalizePath(fileName);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
+            const defaultProject = this.projectService.getProjectForFile(file);
+            if (!defaultProject) {
                 throw Errors.NoProject;
             }
 
-            const compilerService = project.compilerService;
-            const position = compilerService.host.lineOffsetToPosition(file, line, offset);
-            const renameInfo = compilerService.languageService.getRenameInfo(file, position);
+            // The rename info should be the same for every project
+            const defaultProjectCompilerService = defaultProject.compilerService;
+            const position = defaultProjectCompilerService.host.lineOffsetToPosition(file, line, offset);
+            const renameInfo = defaultProjectCompilerService.languageService.getRenameInfo(file, position);
             if (!renameInfo) {
                 return undefined;
             }
@@ -431,51 +432,65 @@ namespace ts.server {
                 };
             }
 
-            const renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
-            if (!renameLocations) {
-                return undefined;
-            }
+            const locsMap: Map<protocol.SpanGroup> = {};
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            for (const project of projects) {
+                const compilerService = project.compilerService;
+                const renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
+                if (!renameLocations) {
+                    continue;
+                }
 
-            const bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
-                file: location.fileName,
-                start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
-                end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
-            })).sort((a, b) => {
-                if (a.file < b.file) {
-                    return -1;
-                }
-                else if (a.file > b.file) {
-                    return 1;
-                }
-                else {
-                    // reverse sort assuming no overlap
-                    if (a.start.line < b.start.line) {
-                        return 1;
-                    }
-                    else if (a.start.line > b.start.line) {
+                const bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
+                    file: location.fileName,
+                    start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
+                    end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
+                })).sort((a, b) => {
+                    if (a.file < b.file) {
                         return -1;
                     }
+                    else if (a.file > b.file) {
+                        return 1;
+                    }
                     else {
-                        return b.start.offset - a.start.offset;
+                        // reverse sort assuming no overlap
+                        if (a.start.line < b.start.line) {
+                            return 1;
+                        }
+                        else if (a.start.line > b.start.line) {
+                            return -1;
+                        }
+                        else {
+                            return b.start.offset - a.start.offset;
+                        }
                     }
-                }
-            }).reduce<protocol.SpanGroup[]>((accum: protocol.SpanGroup[], cur: protocol.FileSpan) => {
-                let curFileAccum: protocol.SpanGroup;
-                if (accum.length > 0) {
-                    curFileAccum = accum[accum.length - 1];
-                    if (curFileAccum.file != cur.file) {
-                        curFileAccum = undefined;
+                }).reduce<protocol.SpanGroup[]>((accum: protocol.SpanGroup[], cur: protocol.FileSpan) => {
+                    let curFileAccum: protocol.SpanGroup;
+                    if (accum.length > 0) {
+                        curFileAccum = accum[accum.length - 1];
+                        if (curFileAccum.file != cur.file) {
+                            curFileAccum = undefined;
+                        }
                     }
-                }
-                if (!curFileAccum) {
-                    curFileAccum = { file: cur.file, locs: [] };
-                    accum.push(curFileAccum);
-                }
-                curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                return accum;
-            }, []);
+                    if (!curFileAccum) {
+                        curFileAccum = { file: cur.file, locs: [] };
+                        accum.push(curFileAccum);
+                    }
+                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
+                    return accum;
+                }, []);
 
-            return { info: renameInfo, locs: bakedRenameLocs };
+                for (const bakedRenameLoc of bakedRenameLocs) {
+                    locsMap[bakedRenameLoc.file] = bakedRenameLoc;
+                }
+            }
+
+            const locs: protocol.SpanGroup[] = [];
+            for (const key in locsMap) {
+                locs.push(locsMap[key]);
+            }
+            return { info: renameInfo, locs };
         }
 
         private getReferences(line: number, offset: number, fileName: string): protocol.ReferencesResponseBody {
