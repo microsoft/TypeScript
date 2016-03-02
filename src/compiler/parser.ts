@@ -4591,7 +4591,6 @@ namespace ts {
                 case SyntaxKind.EnumKeyword:
                     return parseEnumDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.GlobalKeyword:
-                    return parseModuleDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                     return parseModuleDeclaration(fullStart, decorators, modifiers);
