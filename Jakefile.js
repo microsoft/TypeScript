@@ -197,7 +197,7 @@ var librarySourceMap = [
         { target: "lib.dom.d.ts", sources: ["dom.generated.d.ts"], },
         { target: "lib.dom.iterable.d.ts", sources: ["dom.iterable.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["webworker.generated.d.ts"], },
-        { target: "lib.scriptHost.d.ts", sources: ["scriptHost.d.ts"], },
+        { target: "lib.scripthost.d.ts", sources: ["scripthost.d.ts"], },
         
         // JavaScript library
         { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
