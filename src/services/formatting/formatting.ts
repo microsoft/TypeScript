@@ -72,14 +72,20 @@ namespace ts.formatting {
         if (line === 0) {
             return [];
         }
-        // After the enter key, the cursor is now at a new line. The new line should not be formatted,
-        // otherwise the indentation would be treated as trailing whitespaces and removed. The previous
-        // line should be formatted, and the one before that should be used as reference.
+        // After the enter key, the cursor is now at a new line. The new line may or may not contain non-whitespace characters.
+        // If the new line has only whitespaces, we won't want to format this line, because that would remove the indentation as
+        // trailing whitespaces. So the end of the formatting span should be the later one between:
+        //  1. the end of the previous line
+        //  2. the last non-whitespace character in the current line
+        let endOfFormatSpan = getEndLinePosition(line, sourceFile);
+        while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan)) && !isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+            endOfFormatSpan--;
+        }
         let span = {
-            // get start position for the line before previous line
-            pos: getStartPositionOfLine(line - 2, sourceFile),
-            // get end position for the previous line (end value is exclusive so add 1 to the result)
-            end: getEndLinePosition(line - 1, sourceFile) + 1
+            // get start position for the previous line
+            pos: getStartPositionOfLine(line - 1, sourceFile),
+            // end value is exclusive so add 1 to the result
+            end: endOfFormatSpan + 1
         }
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
     }
