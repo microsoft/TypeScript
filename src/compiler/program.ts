@@ -1282,7 +1282,7 @@ namespace ts {
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+            processSourceFile(normalizePath(fileName), isDefaultLib, /*isReference*/ true);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -1376,7 +1376,10 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        /**
+          * 'isReference' indicates whether the file was brought in via a reference directive (rather than an import declaration)
+          */
+        function processSourceFile(fileName: string, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -1384,7 +1387,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -1394,13 +1397,13 @@ namespace ts {
                 }
             }
             else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
+                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -1429,13 +1432,17 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                }
+
+                if (file) {
+                    file.wasReferenced = file.wasReferenced || isReference;
                 }
 
                 return file;
@@ -1454,6 +1461,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
+                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1491,7 +1499,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, /*isDefaultLib*/ false, /*isReference*/ true, file, ref.pos, ref.end);
             });
         }
 
@@ -1517,7 +1525,7 @@ namespace ts {
                         i < file.imports.length;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,

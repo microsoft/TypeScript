@@ -981,6 +981,10 @@ namespace ts {
             return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
         }
 
+        function getTargetOfGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration): Symbol {
+            return node.parent.symbol;
+        }
+
         function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
             return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
                 getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
@@ -1005,6 +1009,8 @@ namespace ts {
                     return getTargetOfExportSpecifier(<ExportSpecifier>node);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return getTargetOfGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
             }
         }
 
@@ -15220,6 +15226,23 @@ namespace ts {
             }
         }
 
+        function checkGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+            if (node.modifiers && node.modifiers.length) {
+                error(node, Diagnostics.Modifiers_cannot_appear_here);
+            }
+
+            if (node.parent.kind !== SyntaxKind.SourceFile) {
+                error(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level);
+            }
+            else {
+                const parent = node.parent as SourceFile;
+                // Note: the binder handles the case where the declaration isn't in an external module
+                if (parent.externalModuleIndicator && !parent.isDeclarationFile) {
+                    error(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files);
+                }
+            }
+
+        }
 
         function checkSourceElement(node: Node): void {
             if (!node) {
@@ -15337,6 +15360,8 @@ namespace ts {
                     return checkExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return checkGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
                 case SyntaxKind.EmptyStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;
@@ -16330,6 +16355,9 @@ namespace ts {
                 }
                 if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                }
+                if (file.wasReferenced && file.symbol && file.symbol.globalExports) {
+                    mergeSymbolTable(globals, file.symbol.globalExports);
                 }
             });
 

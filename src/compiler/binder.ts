@@ -1355,6 +1355,8 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return bindGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -1402,6 +1404,15 @@ namespace ts {
                 // An export default clause with an expression exports a value
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
+        }
+
+        function bindGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+            if (!file.externalModuleIndicator) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
+                return;
+            }
+            file.symbol.globalExports = file.symbol.globalExports || {};
+            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {

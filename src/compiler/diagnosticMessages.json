@@ -831,6 +831,18 @@
         "category": "Error",
         "code": 1313
     },
+    "Global module exports may only appear in module files.": {
+        "category": "Error",
+        "code": 1314
+    },
+    "Global module exports may only appear in declaration files.": {
+        "category": "Error",
+        "code": 1315
+    },
+    "Global module exports may only appear at top level.": {
+        "category": "Error",
+        "code": 1316
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
