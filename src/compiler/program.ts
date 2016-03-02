@@ -12,7 +12,7 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    export const version = "1.8.5";
+    export const version = "1.8.7";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         let fileName = "tsconfig.json";
@@ -77,7 +77,7 @@ namespace ts {
 
     /**
      * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
-     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations. 
+     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, host: ModuleResolutionHost): string {
         return forEach(extensions, tryLoad);
@@ -106,7 +106,7 @@ namespace ts {
                 jsonContent = jsonText ? <{ typings?: string }>JSON.parse(jsonText) : { typings: undefined };
             }
             catch (e) {
-                // gracefully handle if readFile fails or returns not JSON 
+                // gracefully handle if readFile fails or returns not JSON
                 jsonContent = { typings: undefined };
             }
 
@@ -181,7 +181,7 @@ namespace ts {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
             referencedSourceFile = forEach(supportedExtensions, extension => {
                 if (extension === ".tsx" && !compilerOptions.jsx) {
-                    // resolve .tsx files only if jsx support is enabled 
+                    // resolve .tsx files only if jsx support is enabled
                     // 'logical not' handles both undefined and None cases
                     return undefined;
                 }
@@ -382,7 +382,7 @@ namespace ts {
 
         const filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
-        // used to track cases when two file names differ only in casing 
+        // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (oldProgram) {
@@ -980,7 +980,7 @@ namespace ts {
                         }
 
                         // TypeScript 1.0 spec (April 2014): 12.1.6
-                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules 
+                        // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
                         // only through top - level external module names. Relative external module names are not permitted.
                         if (!inAmbientModule || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
                             (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
@@ -998,7 +998,7 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
-                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // An AmbientExternalModuleDeclaration declares an external module.
                                 // This type of declaration is permitted only in the global module.
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
