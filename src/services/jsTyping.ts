@@ -60,8 +60,12 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            if (result.config) { safeList = result.config; }
-            else { safeList = {}; };
+            if (result.config) {
+                safeList = result.config;
+            }
+            else {
+                safeList = {};
+            };
         }
 
         const filesToWatch: string[] = [];
@@ -188,9 +192,13 @@ namespace ts.JsTyping {
             const fileNames = host.readDirectory(nodeModulesPath, "*.json", /*exclude*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
-                if (getBaseFileName(normalizedFileName) !== "package.json") { continue; }
+                if (getBaseFileName(normalizedFileName) !== "package.json") {
+                    continue;
+                }
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
-                if (!result.config) { continue; }
+                if (!result.config) {
+                    continue;
+                }
                 const packageJson: PackageJson = result.config;
 
                 // npm 3's package.json contains a "_requiredBy" field
@@ -203,7 +211,9 @@ namespace ts.JsTyping {
 
                 // If the package has its own d.ts typings, those will take precedence. Otherwise the package name will be used
                 // to download d.ts files from DefinitelyTyped
-                if (!packageJson.name) { continue; }
+                if (!packageJson.name) {
+                    continue;
+                }
                 if (packageJson.typings) {
                     const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
                     inferredTypings[packageJson.name] = absolutePath;

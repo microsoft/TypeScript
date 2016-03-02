@@ -988,16 +988,16 @@ namespace ts {
         public discoverTypings(discoverTypingsJson: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
-                const settings = <DiscoverTypingsSettings>JSON.parse(discoverTypingsJson);
+                const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
                 return ts.JsTyping.discoverTypings(
                     this.host,
-                    settings.fileNames,
-                    toPath(settings.cachePath, settings.cachePath, getCanonicalFileName),
-                    toPath(settings.projectRootPath, settings.projectRootPath, getCanonicalFileName),
-                    toPath(settings.safeListPath, settings.safeListPath, getCanonicalFileName),
-                    settings.packageNameToTypingLocation,
-                    settings.typingOptions,
-                    settings.compilerOptions);
+                    info.fileNames,
+                    toPath(info.cachePath, info.cachePath, getCanonicalFileName),
+                    toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
+                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    info.packageNameToTypingLocation,
+                    info.typingOptions,
+                    info.compilerOptions);
             });
         }
     }
