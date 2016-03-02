@@ -5337,7 +5337,7 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
                 const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
-                const related = compareTypes(t, s, /*reportErrors*/ false) || compareTypes(s, t, reportErrors);
+                const related = compareTypes(s, t, /*reportErrors*/ false) || compareTypes(t, s, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
