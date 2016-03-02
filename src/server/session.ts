@@ -481,10 +481,10 @@ namespace ts.server {
                     return accum;
                 }, []);
 
-                ts.addRange(locs, bakedRenameLocs);
+                addRange(locs, bakedRenameLocs);
             }
 
-            return { info: renameInfo, locs: ts.deduplicate(locs, areSpanGroupsForTheSameFile) };
+            return { info: renameInfo, locs: deduplicate(locs, areSpanGroupsForTheSameFile) };
 
             function areSpanGroupsForTheSameFile(a: protocol.SpanGroup, b: protocol.SpanGroup) {
                 if (a && b) {
@@ -537,11 +537,11 @@ namespace ts.server {
                     };
                 }).sort(compareFileStart);
 
-                ts.addRange(refs, bakedRefs);
+                addRange(refs, bakedRefs);
             }
 
             return {
-                refs: ts.deduplicate(refs, areReferencesResponseItemsForTheSameLocation),
+                refs: deduplicate(refs, areReferencesResponseItemsForTheSameLocation),
                 symbolName: nameText,
                 symbolStartOffset: nameColStart,
                 symbolDisplayString: displayString
@@ -868,41 +868,57 @@ namespace ts.server {
 
         private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
             const file = ts.normalizePath(fileName);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
+            const defaultProject = this.projectService.getProjectForFile(file);
+            if (!defaultProject) {
                 throw Errors.NoProject;
             }
 
-            const compilerService = project.compilerService;
-            const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
-            if (!navItems) {
-                return undefined;
-            }
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            const allNavToItems: protocol.NavtoItem[] = [];
+            for (const project of projects) {
+                const compilerService = project.compilerService;
+                const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
+                if (!navItems) {
+                    continue;
+                }
 
-            return navItems.map((navItem) => {
-                const start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
-                const end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
-                const bakedItem: protocol.NavtoItem = {
-                    name: navItem.name,
-                    kind: navItem.kind,
-                    file: navItem.fileName,
-                    start: start,
-                    end: end,
-                };
-                if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
-                    bakedItem.kindModifiers = navItem.kindModifiers;
+                const bakedNavItems = navItems.map((navItem) => {
+                    const start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
+                    const end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                    const bakedItem: protocol.NavtoItem = {
+                        name: navItem.name,
+                        kind: navItem.kind,
+                        file: navItem.fileName,
+                        start: start,
+                        end: end,
+                    };
+                    if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                        bakedItem.kindModifiers = navItem.kindModifiers;
+                    }
+                    if (navItem.matchKind !== "none") {
+                        bakedItem.matchKind = navItem.matchKind;
+                    }
+                    if (navItem.containerName && (navItem.containerName.length > 0)) {
+                        bakedItem.containerName = navItem.containerName;
+                    }
+                    if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                        bakedItem.containerKind = navItem.containerKind;
+                    }
+                    return bakedItem;
+                });
+                addRange(allNavToItems, bakedNavItems);
+            }
+            return deduplicate(allNavToItems, areNavToItemsForTheSameLocation);
+
+            function areNavToItemsForTheSameLocation(a: protocol.NavtoItem, b: protocol.NavtoItem) {
+                if (a && b) {
+                    return a.file === b.file &&
+                           a.start === b.start &&
+                           a.end === b.end;
                 }
-                if (navItem.matchKind !== "none") {
-                    bakedItem.matchKind = navItem.matchKind;
-                }
-                if (navItem.containerName && (navItem.containerName.length > 0)) {
-                    bakedItem.containerName = navItem.containerName;
-                }
-                if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                    bakedItem.containerKind = navItem.containerKind;
-                }
-                return bakedItem;
-            });
+                return false;
+            }
         }
 
         private getBraceMatching(line: number, offset: number, fileName: string): protocol.TextSpan[] {
