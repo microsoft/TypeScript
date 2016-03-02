@@ -311,8 +311,7 @@ const _super = (function (geti, seti) {
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let expressionSubstitution: (node: Expression) => Expression;
             let identifierSubstitution: (node: Identifier) => Identifier;
-            let onBeforeEmitNode: (node: Node) => void;
-            let onAfterEmitNode: (node: Node) => void;
+            let onEmitNode: (node: Node, emit: (node: Node) => void) => void;
             let nodeToGeneratedName: string[];
             let generatedNameSet: Map<string>;
             let tempFlags: TempFlags;
@@ -374,8 +373,7 @@ const _super = (function (geti, seti) {
                 isEmitNotificationEnabled = undefined;
                 expressionSubstitution = undefined;
                 identifierSubstitution = undefined;
-                onBeforeEmitNode = undefined;
-                onAfterEmitNode = undefined;
+                onEmitNode = undefined;
                 tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
                 currentText = undefined;
@@ -396,8 +394,7 @@ const _super = (function (geti, seti) {
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 expressionSubstitution = context.expressionSubstitution;
                 identifierSubstitution = context.identifierSubstitution;
-                onBeforeEmitNode = context.onBeforeEmitNode;
-                onAfterEmitNode = context.onAfterEmitNode;
+                onEmitNode = context.onEmitNode;
                 return printSourceFile;
             }
 
@@ -411,21 +408,52 @@ const _super = (function (geti, seti) {
                 return node;
             }
 
+            /**
+             * Emits a node.
+             */
             function emit(node: Node) {
-                emitWithWorker(node, emitWorker);
+                emitNodeWithNotificationOption(node, emitWithoutNotificationOption);
             }
 
+            /**
+             * Emits a node without calling onEmitNode.
+             * NOTE: Do not call this method directly.
+             */
+            function emitWithoutNotificationOption(node: Node) {
+                emitNodeWithWorker(node, emitWorker);
+            }
+
+            /**
+             * Emits an expression node.
+             */
             function emitExpression(node: Expression) {
-                emitWithWorker(node, emitExpressionWorker);
+                emitNodeWithNotificationOption(node, emitExpressionWithoutNotificationOption);
             }
 
-            function emitWithWorker(node: Node, emitWorker: (node: Node) => void) {
-                if (node) {
-                    const adviseOnEmit = isEmitNotificationEnabled(node);
-                    if (adviseOnEmit && onBeforeEmitNode) {
-                        onBeforeEmitNode(node);
-                    }
+            /**
+             * Emits an expression without calling onEmitNode.
+             * NOTE: Do not call this method directly.
+             */
+            function emitExpressionWithoutNotificationOption(node: Expression) {
+                emitNodeWithWorker(node, emitExpressionWorker);
+            }
 
+            /**
+             * Emits a node with emit notification if available.
+             */
+            function emitNodeWithNotificationOption(node: Node, emit: (node: Node) => void) {
+                if (node) {
+                    if (isEmitNotificationEnabled(node)) {
+                        onEmitNode(node, emit);
+                    }
+                    else {
+                        emit(node);
+                    }
+                }
+            }
+
+            function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
+                if (node) {
                     const leadingComments = getLeadingComments(node, getNotEmittedParent);
                     const trailingComments = getTrailingComments(node, getNotEmittedParent);
                     emitLeadingComments(node, leadingComments);
@@ -433,22 +461,7 @@ const _super = (function (geti, seti) {
                     emitWorker(node);
                     emitEnd(node);
                     emitTrailingComments(node, trailingComments);
-
-                    if (adviseOnEmit && onAfterEmitNode) {
-                        onAfterEmitNode(node);
-                    }
                 }
-            }
-
-            function getNotEmittedParent(node: Node): Node {
-                if (getNodeEmitFlags(node) & NodeEmitFlags.EmitCommentsOfNotEmittedParent) {
-                    const parent = getOriginalNode(node).parent;
-                    if (getNodeEmitFlags(parent) & NodeEmitFlags.IsNotEmittedNode) {
-                        return parent;
-                    }
-                }
-
-                return undefined;
             }
 
             function emitWorker(node: Node): void {
@@ -2524,6 +2537,17 @@ const _super = (function (geti, seti) {
                 return !block.multiLine
                     && block.statements.length === 0
                     && rangeEndIsOnSameLineAsRangeStart(block, block);
+            }
+
+            function getNotEmittedParent(node: Node): Node {
+                if (getNodeEmitFlags(node) & NodeEmitFlags.EmitCommentsOfNotEmittedParent) {
+                    const parent = getOriginalNode(node).parent;
+                    if (getNodeEmitFlags(parent) & NodeEmitFlags.IsNotEmittedNode) {
+                        return parent;
+                    }
+                }
+
+                return undefined;
             }
 
             function isUniqueName(name: string): boolean {

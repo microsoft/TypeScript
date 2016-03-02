@@ -28,13 +28,11 @@ namespace ts {
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
         // Save the previous transformation hooks.
-        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
-        const previousOnAfterEmitNode = context.onAfterEmitNode;
+        const previousOnEmitNode = context.onEmitNode;
         const previousExpressionSubstitution = context.expressionSubstitution;
 
         // Set new transformation hooks.
-        context.onBeforeEmitNode = onBeforeEmitNode;
-        context.onAfterEmitNode = onAfterEmitNode;
+        context.onEmitNode = onEmitNode;
         context.expressionSubstitution = substituteExpression;
 
         // These variables contain state that changes as we descend into the tree.
@@ -64,19 +62,16 @@ namespace ts {
         let currentDecoratedClassAliases: Map<Identifier>;
 
         /**
-         * Keeps track of how deeply nested we are within any containing namespaces
-         * when performing just-in-time substitution while printing an expression identifier.
-         * If the nest level is greater than zero, then we are performing a substitution
-         * inside of a namespace and we should perform the more costly checks to determine
-         * whether the identifier points to an exported declaration.
+         * Keeps track of whether  we are within any containing namespaces when performing
+         * just-in-time substitution while printing an expression identifier.
          */
-        let namespaceNestLevel: number;
+        let isEnclosedInNamespace: boolean;
 
         /**
-         * This array keeps track of containers where `super` is valid, for use with
+         * This keeps track of containers where `super` is valid, for use with
          * just-in-time substitution for `super` expressions inside of async methods.
          */
-        let superContainerStack: SuperContainer[];
+        let currentSuperContainer: SuperContainer;
 
         return transformSourceFile;
 
@@ -2415,21 +2410,24 @@ namespace ts {
             //      x_1.y = ...;
             //  })(x || (x = {}));
             statements.push(
-                setOriginalNode(
-                    createStatement(
-                        createCall(
-                            createParen(
-                                createFunctionExpression(
-                                    /*asteriskToken*/ undefined,
-                                    /*name*/ undefined,
-                                    [createParameter(currentNamespaceLocalName)],
-                                    transformModuleBody(node)
-                                )
-                            ),
-                            [moduleParam]
-                        )
+                setNodeEmitFlags(
+                    setOriginalNode(
+                        createStatement(
+                            createCall(
+                                createParen(
+                                    createFunctionExpression(
+                                        /*asteriskToken*/ undefined,
+                                        /*name*/ undefined,
+                                        [createParameter(currentNamespaceLocalName)],
+                                        transformModuleBody(node)
+                                    )
+                                ),
+                                [moduleParam]
+                            )
+                        ),
+                        node
                     ),
-                    node
+                    NodeEmitFlags.AdviseOnEmitNode
                 )
             );
 
@@ -2628,62 +2626,51 @@ namespace ts {
                 : getClassPrototype(node);
         }
 
-        function onBeforeEmitNode(node: Node): void {
-            previousOnBeforeEmitNode(node);
+        function isClassWithDecorators(node: Node): node is ClassDeclaration {
+            return node.kind === SyntaxKind.ClassDeclaration && node.decorators !== undefined;
+        }
 
+        function isSuperContainer(node: Node): node is SuperContainer {
             const kind = node.kind;
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses
-                && kind === SyntaxKind.ClassDeclaration
-                && node.decorators) {
+            return kind === SyntaxKind.ClassDeclaration
+                || kind === SyntaxKind.Constructor
+                || kind === SyntaxKind.MethodDeclaration
+                || kind === SyntaxKind.GetAccessor
+                || kind === SyntaxKind.SetAccessor;
+        }
+
+        function isTransformedModuleDeclaration(node: Node): boolean {
+            return getOriginalNode(node).kind === SyntaxKind.ModuleDeclaration;
+        }
+
+        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+            const savedIsEnclosedInNamespace = isEnclosedInNamespace;
+            const savedCurrentSuperContainer = currentSuperContainer;
+
+            // If we need support substitutions for aliases for decorated classes,
+            // we should enable it here.
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
-                && (kind === SyntaxKind.ClassDeclaration
-                    || kind === SyntaxKind.Constructor
-                    || kind === SyntaxKind.MethodDeclaration
-                    || kind === SyntaxKind.GetAccessor
-                    || kind === SyntaxKind.SetAccessor)) {
-
-                if (!superContainerStack) {
-                    superContainerStack = [];
-                }
-
-                superContainerStack.push(<SuperContainer>node);
+            // If we need to support substitutions for `super` in an async method,
+            // we should track it here.
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
+                currentSuperContainer = node;
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
-                && kind === SyntaxKind.ModuleDeclaration) {
-                namespaceNestLevel++;
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
+                isEnclosedInNamespace = true;
             }
-        }
 
-        function onAfterEmitNode(node: Node): void {
-            previousOnAfterEmitNode(node);
+            previousOnEmitNode(node, emit);
 
-            const kind = node.kind;
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses
-                && kind === SyntaxKind.ClassDeclaration
-                && node.decorators) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
-                && (kind === SyntaxKind.ClassDeclaration
-                    || kind === SyntaxKind.Constructor
-                    || kind === SyntaxKind.MethodDeclaration
-                    || kind === SyntaxKind.GetAccessor
-                    || kind === SyntaxKind.SetAccessor)) {
-
-                if (superContainerStack) {
-                    superContainerStack.pop();
-                }
-            }
-
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
-                && kind === SyntaxKind.ModuleDeclaration) {
-                namespaceNestLevel--;
-            }
+            isEnclosedInNamespace = savedIsEnclosedInNamespace;
+            currentSuperContainer = savedCurrentSuperContainer;
         }
 
         function substituteExpression(node: Expression): Expression {
@@ -2694,7 +2681,7 @@ namespace ts {
                     return substituteExpressionIdentifier(<Identifier>node);
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) {
                 switch (node.kind) {
                     case SyntaxKind.CallExpression:
                         return substituteCallExpression(<CallExpression>node);
@@ -2727,8 +2714,7 @@ namespace ts {
                 }
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports
-                && namespaceNestLevel > 0) {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isEnclosedInNamespace) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
                 const original = getOriginalNode(node);
@@ -2794,8 +2780,8 @@ namespace ts {
         }
 
         function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
 
                 // We need to enable substitutions for call, property access, and element access
                 // if we need to rewrite super calls.
@@ -2836,9 +2822,6 @@ namespace ts {
 
                 // We need to be notified when entering and exiting namespaces.
                 context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
-
-                // Keep track of namespace nesting depth
-                namespaceNestLevel = 0;
             }
         }
 
@@ -2863,9 +2846,8 @@ namespace ts {
         }
 
         function getSuperContainerAsyncMethodFlags() {
-            const container = lastOrUndefined(superContainerStack);
-            return container !== undefined
-                && resolver.getNodeCheckFlags(getOriginalNode(container)) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+            return currentSuperContainer !== undefined
+                && resolver.getNodeCheckFlags(getOriginalNode(currentSuperContainer)) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
         }
     }
 }

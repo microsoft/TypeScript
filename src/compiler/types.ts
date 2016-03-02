@@ -2874,16 +2874,10 @@ namespace ts {
         isEmitNotificationEnabled(node: Node): boolean;
 
         /**
-         * Hook used to notify transformers immediately before the pretty printer
-         * emits a node.
+         * Hook used to allow transformers to capture state before or after
+         * the printer emits a node.
          */
-        onBeforeEmitNode?: (node: Node) => void;
-
-        /**
-         * Hook used to notify transformers immediately after the pretty printer
-         * emits a node.
-         */
-        onAfterEmitNode?: (node: Node) => void;
+        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
     }
 
     /* @internal */

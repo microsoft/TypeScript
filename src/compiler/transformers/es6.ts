@@ -22,10 +22,8 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const previousIdentifierSubstitution = context.identifierSubstitution;
         const previousExpressionSubstitution = context.expressionSubstitution;
-        const previousOnBeforeEmitNode = context.onBeforeEmitNode;
-        const previousOnAfterEmitNode = context.onAfterEmitNode;
-        context.onBeforeEmitNode = onBeforeEmitNode;
-        context.onAfterEmitNode = onAfterEmitNode;
+        const previousOnEmitNode = context.onEmitNode;
+        context.onEmitNode = onEmitNode;
         context.identifierSubstitution = substituteIdentifier;
         context.expressionSubstitution = substituteExpression;
 
@@ -44,23 +42,9 @@ namespace ts {
         let enabledSubstitutions: ES6SubstitutionFlags;
 
         /**
-         * Keeps track of how deeply nested we are within function-likes when printing
-         * nodes. This is used to determine whether we need to emit `_this` instead of
-         * `this`.
+         * This is used to determine whether we need to emit `_this` instead of `this`.
          */
-        let containingFunctionDepth: number;
-
-        /**
-         * The first 31 bits are used to determine whether a containing function is an
-         * arrow function.
-         */
-        let containingFunctionState: number;
-
-        /**
-         * If the containingFunctionDepth grows beyond 31 nested function-likes, this
-         * array is used as a stack to track deeper levels of nesting.
-         */
-        let containingFunctionStack: number[];
+        let useCapturedThis: boolean;
 
         return transformSourceFile;
 
@@ -1830,28 +1814,18 @@ namespace ts {
          *
          * @param node The node to be printed.
          */
-        function onBeforeEmitNode(node: Node) {
-            previousOnBeforeEmitNode(node);
+        function onEmitNode(node: Node, emit: (node: Node) => void) {
+            const savedUseCapturedThis = useCapturedThis;
 
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, push a bit that indicates whether the
                 // containing function is an arrow function.
-                pushContainingFunction(node.kind === SyntaxKind.ArrowFunction);
+                useCapturedThis = node.kind === SyntaxKind.ArrowFunction;
             }
-        }
 
-        /**
-         * Called by the printer just after a node is printed.
-         *
-         * @param node The node that was printed.
-         */
-        function onAfterEmitNode(node: Node) {
-            previousOnAfterEmitNode(node);
+            previousOnEmitNode(node, emit);
 
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
-                // If we are tracking a captured `this`, pop the last containing function bit.
-                popContainingFunction();
-            }
+            useCapturedThis = savedUseCapturedThis;
         }
 
         /**
@@ -1872,7 +1846,6 @@ namespace ts {
         function enableSubstitutionsForCapturedThis() {
             if ((enabledSubstitutions & ES6SubstitutionFlags.CapturedThis) === 0) {
                 enabledSubstitutions |= ES6SubstitutionFlags.CapturedThis;
-                containingFunctionDepth = 0;
                 context.enableExpressionSubstitution(SyntaxKind.ThisKeyword);
                 context.enableEmitNotification(SyntaxKind.Constructor);
                 context.enableEmitNotification(SyntaxKind.MethodDeclaration);
@@ -1965,66 +1938,11 @@ namespace ts {
          * @param node The ThisKeyword node.
          */
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
-            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isContainedInArrowFunction()) {
+            if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && useCapturedThis) {
                 return createIdentifier("_this", /*location*/ node);
             }
 
             return node;
-        }
-
-        /**
-         * Pushes a value onto a stack that indicates whether we are currently printing a node
-         * within an arrow function. This is used to determine whether we need to capture `this`.
-         *
-         * @param isArrowFunction A value indicating whether the current function container is
-         *                        an arrow function.
-         */
-        function pushContainingFunction(isArrowFunction: boolean) {
-            // Encode whether the containing function is an arrow function in the first 31 bits of
-            // an integer. If the stack grows beyond a depth of 31 functions, use an array.
-            if (containingFunctionDepth > 0 && containingFunctionDepth % 31 === 0) {
-                if (!containingFunctionStack) {
-                    containingFunctionStack = [containingFunctionState];
-                }
-                else {
-                    containingFunctionStack.push(containingFunctionState);
-                }
-
-                containingFunctionState = 0;
-            }
-
-            if (isArrowFunction) {
-                containingFunctionState |= 1 << (containingFunctionDepth % 31);
-            }
-
-            containingFunctionDepth++;
-        }
-
-        /**
-         * Pops a value off of the containing function stack.
-         */
-        function popContainingFunction() {
-            if (containingFunctionDepth > 0) {
-                containingFunctionDepth--;
-                if (containingFunctionDepth === 0) {
-                    containingFunctionState = 0;
-                }
-                else if (containingFunctionDepth % 31 === 0) {
-                    containingFunctionState = containingFunctionStack.pop();
-                }
-                else {
-                    containingFunctionState &= ~(1 << containingFunctionDepth % 31);
-                }
-            }
-        }
-
-        /**
-         * Gets a value indicating whether we are currently printing a node inside of an arrow
-         * function.
-         */
-        function isContainedInArrowFunction() {
-            return containingFunctionDepth > 0
-                && containingFunctionState & (1 << (containingFunctionDepth - 1) % 31);
         }
 
         function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
