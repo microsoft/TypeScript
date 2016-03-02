@@ -7495,7 +7495,7 @@ namespace ts {
             // This is required for destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment
             // while a property access can.
             if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
-                if (isSuperPropertyOrElementAccess(node.parent) && isAssignmentTarget(node.parent)) {
+                if (isSuperProperty(node.parent) && isAssignmentTarget(node.parent)) {
                     getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
                 }
                 else {

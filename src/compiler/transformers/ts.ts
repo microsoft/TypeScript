@@ -44,7 +44,6 @@ namespace ts {
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
         let currentParent: Node;
         let currentNode: Node;
-        let combinedNodeFlags: NodeFlags;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -104,7 +103,6 @@ namespace ts {
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
-            const savedCombinedNodeFlags = combinedNodeFlags;
 
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
@@ -116,7 +114,6 @@ namespace ts {
             currentScope = savedCurrentScope;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
-            combinedNodeFlags = savedCombinedNodeFlags;
 
             return node;
         }
@@ -391,8 +388,6 @@ namespace ts {
         function onBeforeVisitNode(node: Node) {
             currentParent = currentNode;
             currentNode = node;
-
-            combinedNodeFlags = combineNodeFlags(currentNode, currentParent, combinedNodeFlags);
 
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
@@ -2758,7 +2753,7 @@ namespace ts {
 
         function substituteCallExpression(node: CallExpression): Expression {
             const expression = node.expression;
-            if (isSuperPropertyOrElementAccess(expression)) {
+            if (isSuperProperty(expression)) {
                 const flags = getSuperContainerAsyncMethodFlags();
                 if (flags) {
                     const argumentExpression = isPropertyAccessExpression(expression)

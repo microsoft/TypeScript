@@ -2761,18 +2761,19 @@ namespace ts {
         ContainsES7 = 1 << 5,
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
+        DestructuringAssignment = 1 << 8,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 8,
-        ContainsPropertyInitializer = 1 << 9,
-        ContainsLexicalThis = 1 << 10,
-        ContainsCapturedLexicalThis = 1 << 11,
-        ContainsDefaultValueAssignments = 1 << 12,
-        ContainsParameterPropertyAssignments = 1 << 13,
-        ContainsSpreadElementExpression = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
+        ContainsDecorators = 1 << 9,
+        ContainsPropertyInitializer = 1 << 10,
+        ContainsLexicalThis = 1 << 11,
+        ContainsCapturedLexicalThis = 1 << 12,
+        ContainsDefaultValueAssignments = 1 << 13,
+        ContainsParameterPropertyAssignments = 1 << 14,
+        ContainsSpreadElementExpression = 1 << 15,
+        ContainsComputedPropertyName = 1 << 16,
+        ContainsBlockScopedBinding = 1 << 17,
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -2784,7 +2785,7 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES7 | ES6,
+        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment,
         ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,

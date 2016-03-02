@@ -491,19 +491,6 @@ namespace ts {
         return node;
     }
 
-    /**
-     * Combines the flags of a node with the combined flags of its parent if they can be combined.
-     */
-    export function combineNodeFlags(node: Node, parentNode: Node, previousNodeFlags: NodeFlags) {
-        if ((node.kind === SyntaxKind.VariableDeclarationList && parentNode.kind === SyntaxKind.VariableStatement) ||
-            (node.kind === SyntaxKind.VariableDeclaration && parentNode.kind === SyntaxKind.VariableDeclarationList) ||
-            (node.kind === SyntaxKind.BindingElement)) {
-            return node.flags | previousNodeFlags;
-        }
-
-        return node.flags;
-    }
-
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
@@ -948,19 +935,20 @@ namespace ts {
     /**
      * Determines whether a node is a property or element access expression for super.
      */
-    export function isSuperPropertyOrElementAccess(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
+    export function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
         return (node.kind === SyntaxKind.PropertyAccessExpression
             || node.kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    /**
-     * Determines whether a node is a call to either `super`, or a super property or element access.
-     */
+    export function isSuperPropertyCall(node: Node): node is CallExpression {
+        return node.kind === SyntaxKind.CallExpression
+            && <boolean>isSuperProperty((<CallExpression>node).expression);
+    }
+
     export function isSuperCall(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression
-            && ((<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword
-                || isSuperPropertyOrElementAccess((<CallExpression>node).expression));
+            && (<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {

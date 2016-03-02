@@ -152,7 +152,7 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node for mutation.
      */
-    export function getMutableNode<T extends Node>(node: T): T {
+    export function getMutableClone<T extends Node>(node: T): T {
         return cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
@@ -320,15 +320,21 @@ namespace ts {
 
     // Expression
 
-    export function createArrayLiteral(elements?: Expression[]) {
-        const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression);
+    export function createArrayLiteral(elements?: Expression[], location?: TextRange, multiLine?: boolean) {
+        const node = <ArrayLiteralExpression>createNode(SyntaxKind.ArrayLiteralExpression, location);
         node.elements = parenthesizeListElements(createNodeArray(elements));
+        if (multiLine) {
+            node.multiLine = multiLine;
+        }
         return node;
     }
 
-    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange) {
+    export function createObjectLiteral(properties?: ObjectLiteralElement[], location?: TextRange, multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createNode(SyntaxKind.ObjectLiteralExpression, location);
         node.properties = createNodeArray(properties);
+        if (multiLine) {
+            node.multiLine = multiLine;
+        }
         return node;
     }
 
@@ -356,7 +362,7 @@ namespace ts {
 
     export function createNew(expression: Expression, argumentsArray: Expression[], location?: TextRange) {
         const node = <NewExpression>createNode(SyntaxKind.NewExpression, location);
-        node.expression = parenthesizeForAccess(expression);
+        node.expression = parenthesizeForNew(expression);
         node.arguments = argumentsArray
             ? parenthesizeListElements(createNodeArray(argumentsArray))
             : undefined;
@@ -369,7 +375,7 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createFunctionExpression(asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, original?: Node) {
         const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression, location);
         node.modifiers = undefined;
         node.asteriskToken = asteriskToken;
@@ -378,6 +384,10 @@ namespace ts {
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.body = body;
+        if (original) {
+            node.original = original;
+        }
+
         return node;
     }
 
@@ -468,9 +478,12 @@ namespace ts {
 
     // Element
 
-    export function createBlock(statements: Statement[], location?: TextRange): Block {
+    export function createBlock(statements: Statement[], location?: TextRange, multiLine?: boolean): Block {
         const block = <Block>createNode(SyntaxKind.Block, location);
         block.statements = createNodeArray(statements);
+        if (multiLine) {
+            block.multiLine = true;
+        }
         return block;
     }
 
@@ -573,7 +586,7 @@ namespace ts {
         return node;
     }
 
-    export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, original?: Node) {
         const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location);
         node.decorators = undefined;
         setModifiers(node, modifiers);
@@ -583,6 +596,9 @@ namespace ts {
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.body = body;
+        if (original) {
+            node.original = original;
+        }
         return node;
     }
 
@@ -1068,6 +1084,68 @@ namespace ts {
         );
     }
 
+    export interface CallBinding {
+        target: LeftHandSideExpression;
+        thisArg: Expression;
+    }
+
+    export function createCallBinding(expression: Expression, languageVersion?: ScriptTarget): CallBinding {
+        const callee = skipParentheses(expression);
+        let thisArg: Expression;
+        let target: LeftHandSideExpression;
+        if (isSuperProperty(callee)) {
+            thisArg = createThis(/*location*/ callee.expression);
+            target = callee;
+        }
+        else if (isSuperCall(callee)) {
+            thisArg = createThis(/*location*/ callee);
+            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : callee;
+        }
+        else {
+            switch (callee.kind) {
+                case SyntaxKind.PropertyAccessExpression: {
+                    // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                    thisArg = createTempVariable();
+                    target = createPropertyAccess(
+                        createAssignment(
+                            thisArg,
+                            (<PropertyAccessExpression>callee).expression,
+                            /*location*/ (<PropertyAccessExpression>callee).expression
+                        ),
+                        (<PropertyAccessExpression>callee).name,
+                        /*location*/ callee
+                    );
+                    break;
+                }
+
+                case SyntaxKind.ElementAccessExpression: {
+                    // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                    thisArg = createTempVariable();
+                    target = createElementAccess(
+                        createAssignment(
+                            thisArg,
+                            (<ElementAccessExpression>callee).expression,
+                            /*location*/ (<ElementAccessExpression>callee).expression
+                        ),
+                        (<ElementAccessExpression>callee).argumentExpression,
+                        /*location*/ callee
+                    );
+
+                    break;
+                }
+
+                default: {
+                    // for `a()` target is `a` and thisArg is `void 0`
+                    thisArg = createVoidZero();
+                    target = parenthesizeForAccess(expression);
+                    break;
+                }
+            }
+        }
+
+        return { target, thisArg };
+    }
+
     export function inlineExpressions(expressions: Expression[]) {
         return reduceLeft(expressions, createComma);
     }
@@ -1204,6 +1282,23 @@ namespace ts {
             || binaryOperator === SyntaxKind.BarToken
             || binaryOperator === SyntaxKind.AmpersandToken
             || binaryOperator === SyntaxKind.CaretToken;
+    }
+
+    /**
+     * Wraps an expression in parentheses if it is needed in order to use the expression
+     * as the expression of a NewExpression node.
+     *
+     * @param expression The Expression node.
+     */
+    export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
+        const lhs = parenthesizeForAccess(expression);
+        switch (lhs.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                return createParen(lhs);
+        }
+
+        return lhs;
     }
 
     /**

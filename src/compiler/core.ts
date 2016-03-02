@@ -221,6 +221,23 @@ namespace ts {
     }
 
     /**
+     * Computes the first matching span of elements and returns a tuple of the first span
+     * and the remaining elements.
+     */
+    export function span<T>(array: T[], f: (x: T, i: number) => boolean): [T[], T[]] {
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (!f(array[i], i)) {
+                    return [array.slice(0, i), array.slice(i)];
+                }
+            }
+            return [array.slice(0), []];
+        }
+
+        return undefined;
+    }
+
+    /**
      * Maps contiguous spans of values with the same key.
      *
      * @param array The array to map.

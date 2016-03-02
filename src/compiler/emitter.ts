@@ -2339,7 +2339,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     superCall = true;
                 }
                 else {
-                    superCall = isSuperPropertyOrElementAccess(expression);
+                    superCall = isSuperProperty(expression);
                     isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
                     emit(expression);
                 }
