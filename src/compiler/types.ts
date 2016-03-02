@@ -2439,7 +2439,7 @@ namespace ts {
         [option: string]: string[] | boolean;
     }
 
-    export interface DiscoverTypingsSettings {
+    export interface DiscoverTypingsInfo {
         fileNames: string[];                            // The file names that belong to the same project.
         cachePath: string;                              // The path to the typings cache
         projectRootPath: string;                        // The path to the project root directory
