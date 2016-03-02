@@ -85,7 +85,7 @@ namespace ts.JsTyping {
             getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
+            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
         }
         getTypingNamesFromSourceFileNames(fileNames);
 
@@ -178,7 +178,7 @@ namespace ts.JsTyping {
          * Infer typing names from node_module folder
          * @param nodeModulesPath is the path to the "node_modules" folder
          */
-        function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string, filesToWatch: string[]) {
+        function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
             // Todo: add support for ModuleResolutionHost too
             if (!host.directoryExists(nodeModulesPath)) {
                 return;
@@ -192,7 +192,6 @@ namespace ts.JsTyping {
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
                 if (!result.config) { continue; }
                 const packageJson: PackageJson = result.config;
-                filesToWatch.push(normalizedFileName);
 
                 // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
