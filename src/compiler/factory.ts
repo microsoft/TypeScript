@@ -157,16 +157,16 @@ namespace ts {
     }
 
     /**
-     * Creates a shallow, memberwise clone with no position information.
+     * Creates a shallow, memberwise clone of a node with no source map location.
      */
     export function getSynthesizedClone<T extends Node>(node: T): T {
-        return cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
+        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
     /**
-     * Creates a shallow, memberwise clone with the specified position information.
+     * Creates a shallow, memberwise clone of a node at the specified source map location.
      */
-    export function getRelocatedClone<T extends Node>(node: T, location: TextRange) {
+    export function getRelocatedClone<T extends Node>(node: T, location: TextRange): T {
         return cloneNode(node, location, node.flags, /*parent*/ undefined, /*original*/ node);
     }
 
@@ -206,26 +206,32 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = GeneratedIdentifierKind.Auto;
+    export function createTempVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
         return name;
     }
 
-    export function createLoopVariable(): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
-        name.text = undefined;
-        name.tempKind = GeneratedIdentifierKind.Loop;
+    export function createLoopVariable(location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Loop;
         getNodeId(name);
         return name;
     }
 
-    export function createUniqueName(text: string): Identifier {
-        const name = <Identifier>createNode(SyntaxKind.Identifier);
+    export function createUniqueName(text: string, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.text = text;
-        name.tempKind = GeneratedIdentifierKind.Unique;
+        name.autoGenerateKind = GeneratedIdentifierKind.Unique;
+        getNodeId(name);
+        return name;
+    }
+
+    export function getGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
+        const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.original = node;
         getNodeId(name);
         return name;
     }
@@ -624,7 +630,7 @@ namespace ts {
         return createTryCatchFinally(tryBlock, /*catchClause*/ undefined, finallyBlock, location);
     }
 
-    export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, original?: Node) {
         const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location);
         node.decorators = undefined;
         setModifiers(node, modifiers);
@@ -634,6 +640,9 @@ namespace ts {
         node.parameters = createNodeArray(parameters);
         node.type = undefined;
         node.body = body;
+        if (original) {
+            node.original = original;
+        }
         return node;
     }
 
@@ -1125,52 +1134,62 @@ namespace ts {
         );
     }
 
-    export interface CallTarget {
+    export interface CallBinding {
         target: LeftHandSideExpression;
         thisArg: Expression;
     }
 
-    export function createCallBinding(expression: Expression): CallTarget {
+    export function createCallBinding(expression: Expression, languageVersion?: ScriptTarget): CallBinding {
         const callee = skipParentheses(expression);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
-        switch (callee.kind) {
-            case SyntaxKind.PropertyAccessExpression: {
-                // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                thisArg = createTempVariable();
-                target = createPropertyAccess(
-                    createAssignment(
-                        thisArg,
-                        (<PropertyAccessExpression>callee).expression,
-                        /*location*/ (<PropertyAccessExpression>callee).expression
-                    ),
-                    (<PropertyAccessExpression>callee).name,
-                    /*location*/ callee
-                );
-                break;
-            }
+        if (isSuperProperty(callee)) {
+            thisArg = createThis(/*location*/ callee.expression);
+            target = callee;
+        }
+        else if (isSuperCall(callee)) {
+            thisArg = createThis(/*location*/ callee);
+            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : callee;
+        }
+        else {
+            switch (callee.kind) {
+                case SyntaxKind.PropertyAccessExpression: {
+                    // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                    thisArg = createTempVariable();
+                    target = createPropertyAccess(
+                        createAssignment(
+                            thisArg,
+                            (<PropertyAccessExpression>callee).expression,
+                            /*location*/ (<PropertyAccessExpression>callee).expression
+                        ),
+                        (<PropertyAccessExpression>callee).name,
+                        /*location*/ callee
+                    );
+                    break;
+                }
 
-            case SyntaxKind.ElementAccessExpression: {
-                // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                thisArg = createTempVariable();
-                target = createElementAccess(
-                    createAssignment(
-                        thisArg,
-                        (<ElementAccessExpression>callee).expression,
-                        /*location*/ (<ElementAccessExpression>callee).expression
-                    ),
-                    (<ElementAccessExpression>callee).argumentExpression,
-                    /*location*/ callee
-                );
+                case SyntaxKind.ElementAccessExpression: {
+                    // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                    thisArg = createTempVariable();
+                    target = createElementAccess(
+                        createAssignment(
+                            thisArg,
+                            (<ElementAccessExpression>callee).expression,
+                            /*location*/ (<ElementAccessExpression>callee).expression
+                        ),
+                        (<ElementAccessExpression>callee).argumentExpression,
+                        /*location*/ callee
+                    );
 
-                break;
-            }
+                    break;
+                }
 
-            default: {
-                // for `a()` target is `a` and thisArg is `void 0`
-                thisArg = createVoidZero();
-                target = parenthesizeForAccess(expression);
-                break;
+                default: {
+                    // for `a()` target is `a` and thisArg is `void 0`
+                    thisArg = createVoidZero();
+                    target = parenthesizeForAccess(expression);
+                    break;
+                }
             }
         }
 
@@ -1405,6 +1424,12 @@ namespace ts {
             || binaryOperator === SyntaxKind.CaretToken;
     }
 
+    /**
+     * Wraps an expression in parentheses if it is needed in order to use the expression
+     * as the expression of a NewExpression node.
+     *
+     * @param expression The Expression node.
+     */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
         const lhs = parenthesizeForAccess(expression);
         switch (lhs.kind) {

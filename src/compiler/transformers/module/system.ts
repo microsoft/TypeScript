@@ -10,7 +10,6 @@ namespace ts {
         }
 
         const {
-            getGeneratedNameForNode,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,

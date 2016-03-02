@@ -498,17 +498,18 @@ namespace ts {
     export interface Modifier extends Node { }
 
     export const enum GeneratedIdentifierKind {
-        None,   // Not automatically generated
-        Auto,   // Automatically generated identifier
-        Loop,   // Automatically generated identifier with a preference for '_i'
-        Unique, // Automatically generated identifier based on specified text
+        None,   // Not automatically generated.
+        Auto,   // Automatically generated identifier.
+        Loop,   // Automatically generated identifier with a preference for '_i'.
+        Unique, // Unique name based on the 'text' property.
+        Node,   // Unique name based on the node in the 'original' property.
     }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
-        tempKind?: GeneratedIdentifierKind;            // Specifies whether to auto-generate the text for an identifier.
+        autoGenerateKind?: GeneratedIdentifierKind;    // Specifies whether to auto-generate the text for an identifier.
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -2095,8 +2096,8 @@ namespace ts {
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
         HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
-        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
+        DecoratedClassWithSelfReference     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
+        SelfReferenceInDecoratedClass       = 0x00200000, // Binding to a decorated class inside of the class's body.
     }
 
     /* @internal */
@@ -2477,7 +2478,6 @@ namespace ts {
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
         /* @internal */ experimentalTransforms?: boolean;
-        /* @internal */ transformCompatibleEmit?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
@@ -2766,20 +2766,21 @@ namespace ts {
         ContainsES7 = 1 << 5,
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
-        ContainsGenerators = 1 << 8,
+        DestructuringAssignment = 1 << 8,
+        ContainsGenerators = 1 << 9,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 9,
-        ContainsPropertyInitializer = 1 << 10,
-        ContainsLexicalThis = 1 << 11,
-        ContainsCapturedLexicalThis = 1 << 12,
-        ContainsDefaultValueAssignments = 1 << 13,
-        ContainsParameterPropertyAssignments = 1 << 14,
-        ContainsSpreadElementExpression = 1 << 15,
-        ContainsComputedPropertyName = 1 << 16,
-        ContainsBlockScopedBinding = 1 << 17,
-        ContainsYield = 1 << 18,
+        ContainsDecorators = 1 << 10,
+        ContainsPropertyInitializer = 1 << 11,
+        ContainsLexicalThis = 1 << 12,
+        ContainsCapturedLexicalThis = 1 << 13,
+        ContainsDefaultValueAssignments = 1 << 14,
+        ContainsParameterPropertyAssignments = 1 << 15,
+        ContainsSpreadElementExpression = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
+        ContainsYield = 1 << 19,
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -2791,7 +2792,7 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES7 | ES6,
+        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment,
         ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield,
         FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield,
         ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield,
@@ -2814,7 +2815,8 @@ namespace ts {
         SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
         AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
         IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
-        EmitCommentsOfNotEmittedParent = 1 << 8, // Emits comments of missing parent nodes.
+        EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
+        NoSubstitution = 1 << 10,                // Disables further substitution of an expression.
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2834,8 +2836,6 @@ namespace ts {
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
-        getGeneratedNameForNode(node: Node): Identifier;
-        nodeHasGeneratedName(node: Node): boolean;
 
         /**
          * Hook used by transformers to substitute non-expression identifiers

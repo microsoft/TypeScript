@@ -1933,7 +1933,8 @@ namespace ts {
             case SyntaxKind.CallExpression:
                 excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
                 if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression
-                    || isSuperCall(node)) {
+                    || isSuperCall(node)
+                    || isSuperPropertyCall(node)) {
                     // If the this node contains a SpreadElementExpression, or is a super call, then it is an ES6
                     // node.
                     transformFlags |= TransformFlags.AssertES6;
@@ -1972,17 +1973,33 @@ namespace ts {
                     }
                 }
 
+                // If the expression of a ParenthesizedExpression is a destructuring assignment,
+                // then the ParenthesizedExpression is a destructuring assignment.
+                if ((<ParenthesizedExpression>node).expression.transformFlags & TransformFlags.DestructuringAssignment) {
+                    transformFlags |= TransformFlags.DestructuringAssignment;
+                }
+
                 break;
 
             case SyntaxKind.BinaryExpression:
                 if (isDestructuringAssignment(node)) {
                     // Destructuring assignments are ES6 syntax.
-                    transformFlags |= TransformFlags.AssertES6;
+                    transformFlags |= TransformFlags.AssertES6 | TransformFlags.DestructuringAssignment;
                 }
                 else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AsteriskAsteriskToken
                     || (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
                     // Exponentiation is ES7 syntax.
                     transformFlags |= TransformFlags.AssertES7;
+                }
+
+                break;
+
+            case SyntaxKind.ExpressionStatement:
+                // If the expression of an expression statement is a destructuring assignment,
+                // then we treat the statement as ES6 so that we can indicate that we do not
+                // need to hold on to the right-hand side.
+                if ((<ExpressionStatement>node).expression.transformFlags & TransformFlags.DestructuringAssignment) {
+                    transformFlags |= TransformFlags.AssertES6;
                 }
 
                 break;

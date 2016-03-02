@@ -231,7 +231,6 @@ namespace ts {
 
     export function transformGenerators(context: TransformationContext) {
         const {
-            getGeneratedNameForNode,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistFunctionDeclaration,

@@ -9,6 +9,11 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         return transformSourceFile;
 
+        /**
+         * Transform JSX-specific syntax in a SourceFile.
+         *
+         * @param node A SourceFile node.
+         */
         function transformSourceFile(node: SourceFile) {
             return visitEachChild(node, visitor, context);
         }
@@ -64,52 +69,41 @@ namespace ts {
         }
 
         function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[]) {
-            // We must the node onto the node stack if it is not already at the top.
             const tagName = getTagName(node);
             let objectProperties: Expression;
-            if (node.attributes.length === 0) {
+            const attrs = node.attributes;
+            if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
                 objectProperties = createNull();
             }
             else {
+                // Map spans of JsxAttribute nodes into object literals and spans
+                // of JsxSpreadAttribute nodes into expressions.
+                const segments = flatten(
+                    spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+                        ? map(attrs, transformJsxSpreadAttributeToExpression)
+                        : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                    )
+                );
+
+                if (isJsxSpreadAttribute(attrs[0])) {
+                    // We must always emit at least one object literal before a spread
+                    // argument.
+                    segments.unshift(createObjectLiteral());
+                }
+
                 // Either emit one big object literal (no spread attribs), or
                 // a call to React.__spread
-                const attrs = node.attributes;
-                if (forEach(attrs, isJsxSpreadAttribute)) {
-                    const segments: Expression[] = [];
-                    let properties: ObjectLiteralElement[] = [];
-                    for (const attr of attrs) {
-                        if (isJsxSpreadAttribute(attr)) {
-                            if (properties) {
-                                segments.push(createObjectLiteral(properties));
-                                properties = undefined;
-                            }
-
-                            addNode(segments, transformJsxSpreadAttributeToExpression(attr));
-                        }
-                        else {
-                            if (!properties) {
-                                properties = [];
-                            }
-
-                            addNode(properties, transformJsxAttributeToObjectLiteralElement(attr));
-                        }
-                    }
-
-                    if (properties) {
-                        segments.push(createObjectLiteral(properties));
-                    }
-
-                    objectProperties = createJsxSpread(compilerOptions.reactNamespace, segments);
-                }
-                else {
-                    const properties = map(node.attributes, transformJsxAttributeToObjectLiteralElement);
-                    objectProperties = createObjectLiteral(properties);
-                }
+                objectProperties = singleOrUndefined(segments)
+                    || createJsxSpread(compilerOptions.reactNamespace, segments);
             }
 
-            const childExpressions = filter(map(children, transformJsxChildToExpression), isDefined);
-            return createJsxCreateElement(compilerOptions.reactNamespace, tagName, objectProperties, childExpressions);
+            return createJsxCreateElement(
+                compilerOptions.reactNamespace,
+                tagName,
+                objectProperties,
+                filter(map(children, transformJsxChildToExpression), isDefined)
+            );
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
@@ -125,39 +119,29 @@ namespace ts {
         }
 
         function visitJsxText(node: JsxText) {
-            const text = getTextToEmit(node);
-            if (text !== undefined) {
-                return createLiteral(text);
-            }
-            return undefined;
-        }
-
-        function getTextToEmit(node: JsxText) {
-            const text = trimReactWhitespaceAndApplyEntities(node);
-            if (text === undefined || text.length === 0) {
-                return undefined;
-            }
-            else {
-                return text;
-            }
-        }
-
-        function trimReactWhitespaceAndApplyEntities(node: JsxText): string {
             const text = getTextOfNode(node, /*includeTrivia*/ true);
-            let result: string = undefined;
+            let parts: Expression[];
             let firstNonWhitespace = 0;
             let lastNonWhitespace = -1;
 
             // JSX trims whitespace at the end and beginning of lines, except that the
             // start/end of a tag is considered a start/end of a line only if that line is
-            // on the same line as the closing tag. See examples in tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
+            // on the same line as the closing tag. See examples in
+            // tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx
             for (let i = 0; i < text.length; i++) {
                 const c = text.charCodeAt(i);
                 if (isLineBreak(c)) {
                     if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                         const part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                        result = (result ? result + "\" + ' ' + \"" : "") + part;
+                        if (!parts) {
+                            parts = [];
+                        }
+
+                        // We do not escape the string here as that is handled by the printer
+                        // when it emits the literal. We do, however, need to decode JSX entities.
+                        parts.push(createLiteral(decodeEntities(part)));
                     }
+
                     firstNonWhitespace = -1;
                 }
                 else if (!isWhiteSpace(c)) {
@@ -170,22 +154,41 @@ namespace ts {
 
             if (firstNonWhitespace !== -1) {
                 const part = text.substr(firstNonWhitespace);
-                result = (result ? result + "\" + ' ' + \"" : "") + part;
+                if (!parts) {
+                    parts = [];
+                }
+
+                // We do not escape the string here as that is handled by the printer
+                // when it emits the literal. We do, however, need to decode JSX entities.
+                parts.push(createLiteral(decodeEntities(part)));
             }
 
-            if (result) {
-                // Replace entities like &nbsp;
-                result = result.replace(/&(\w+);/g, function(s: any, m: string) {
-                    if (entities[m] !== undefined) {
-                        return String.fromCharCode(entities[m]);
-                    }
-                    else {
-                        return s;
-                    }
-                });
+            if (parts) {
+                return reduceLeft(parts, aggregateJsxTextParts);
             }
 
-            return result;
+            return undefined;
+        }
+
+        /**
+         * Aggregates two expressions by interpolating them with a whitespace literal.
+         */
+        function aggregateJsxTextParts(left: Expression, right: Expression) {
+            return createAdd(createAdd(left, createLiteral(" ")), right);
+        }
+
+        /**
+         * Decodes JSX entities.
+         */
+        function decodeEntities(text: string) {
+            return text.replace(/&(\w+);/g, function(s: any, m: string) {
+                if (entities[m] !== undefined) {
+                    return String.fromCharCode(entities[m]);
+                }
+                else {
+                    return s;
+                }
+            });
         }
 
         function getTagName(node: JsxElement | JsxOpeningLikeElement): Expression {
@@ -210,7 +213,7 @@ namespace ts {
          */
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
-            if (/[A-Za-z_]+[\w*]/.test(name.text)) {
+            if (/^[A-Za-z_]\w*$/.test(name.text)) {
                 return createLiteral(name.text);
             }
             else {
@@ -422,62 +425,62 @@ namespace ts {
             "uarr": 0x2191,
             "rarr": 0x2192,
             "darr": 0x2193,
-        "harr": 0x2194,
-        "crarr": 0x21B5,
-        "lArr": 0x21D0,
-        "uArr": 0x21D1,
-        "rArr": 0x21D2,
-        "dArr": 0x21D3,
-        "hArr": 0x21D4,
-        "forall": 0x2200,
-        "part": 0x2202,
-        "exist": 0x2203,
-        "empty": 0x2205,
-        "nabla": 0x2207,
-        "isin": 0x2208,
-        "notin": 0x2209,
-        "ni": 0x220B,
-        "prod": 0x220F,
-        "sum": 0x2211,
-        "minus": 0x2212,
-        "lowast": 0x2217,
-        "radic": 0x221A,
-        "prop": 0x221D,
-        "infin": 0x221E,
-        "ang": 0x2220,
-        "and": 0x2227,
-        "or": 0x2228,
-        "cap": 0x2229,
-        "cup": 0x222A,
-        "int": 0x222B,
-        "there4": 0x2234,
-        "sim": 0x223C,
-        "cong": 0x2245,
-        "asymp": 0x2248,
-        "ne": 0x2260,
-        "equiv": 0x2261,
-        "le": 0x2264,
-        "ge": 0x2265,
-        "sub": 0x2282,
-        "sup": 0x2283,
-        "nsub": 0x2284,
-        "sube": 0x2286,
-        "supe": 0x2287,
-        "oplus": 0x2295,
-        "otimes": 0x2297,
-        "perp": 0x22A5,
-        "sdot": 0x22C5,
-        "lceil": 0x2308,
-        "rceil": 0x2309,
-        "lfloor": 0x230A,
-        "rfloor": 0x230B,
-        "lang": 0x2329,
-        "rang": 0x232A,
-        "loz": 0x25CA,
-        "spades": 0x2660,
-        "clubs": 0x2663,
-        "hearts": 0x2665,
-        "diams": 0x2666
-    };
+            "harr": 0x2194,
+            "crarr": 0x21B5,
+            "lArr": 0x21D0,
+            "uArr": 0x21D1,
+            "rArr": 0x21D2,
+            "dArr": 0x21D3,
+            "hArr": 0x21D4,
+            "forall": 0x2200,
+            "part": 0x2202,
+            "exist": 0x2203,
+            "empty": 0x2205,
+            "nabla": 0x2207,
+            "isin": 0x2208,
+            "notin": 0x2209,
+            "ni": 0x220B,
+            "prod": 0x220F,
+            "sum": 0x2211,
+            "minus": 0x2212,
+            "lowast": 0x2217,
+            "radic": 0x221A,
+            "prop": 0x221D,
+            "infin": 0x221E,
+            "ang": 0x2220,
+            "and": 0x2227,
+            "or": 0x2228,
+            "cap": 0x2229,
+            "cup": 0x222A,
+            "int": 0x222B,
+            "there4": 0x2234,
+            "sim": 0x223C,
+            "cong": 0x2245,
+            "asymp": 0x2248,
+            "ne": 0x2260,
+            "equiv": 0x2261,
+            "le": 0x2264,
+            "ge": 0x2265,
+            "sub": 0x2282,
+            "sup": 0x2283,
+            "nsub": 0x2284,
+            "sube": 0x2286,
+            "supe": 0x2287,
+            "oplus": 0x2295,
+            "otimes": 0x2297,
+            "perp": 0x22A5,
+            "sdot": 0x22C5,
+            "lceil": 0x2308,
+            "rceil": 0x2309,
+            "lfloor": 0x230A,
+            "rfloor": 0x230B,
+            "lang": 0x2329,
+            "rang": 0x232A,
+            "loz": 0x25CA,
+            "spades": 0x2660,
+            "clubs": 0x2663,
+            "hearts": 0x2665,
+            "diams": 0x2666
+        };
     }
 }
