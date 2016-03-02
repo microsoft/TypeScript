@@ -230,7 +230,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
-        discoverTypings(fileNamesJson: string, cachePath: string, projectRootPath: string, safeListPath: string, typingOptionsJson: string, compilerOptionsJson: string): string;
+        discoverTypings(discoverTypingsJson: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -985,20 +985,19 @@ namespace ts {
             );
         }
 
-        public discoverTypings(fileNamesJson: string, cachePath: string, projectRootPath: string, safeListPath: string, typingOptionsJson: string, compilerOptionsJson: string): string {
+        public discoverTypings(discoverTypingsJson: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
-                const typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
-                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                const fileNames: string[] = JSON.parse(fileNamesJson);
+                const settings = <DiscoverTypingsSettings>JSON.parse(discoverTypingsJson);
                 return ts.JsTyping.discoverTypings(
                     this.host,
-                    fileNames,
-                    toPath(cachePath, cachePath, getCanonicalFileName),
-                    toPath(projectRootPath, projectRootPath, getCanonicalFileName),
-                    toPath(safeListPath, safeListPath, getCanonicalFileName),
-                    typingOptions,
-                    compilerOptions);
+                    settings.fileNames,
+                    toPath(settings.cachePath, settings.cachePath, getCanonicalFileName),
+                    toPath(settings.projectRootPath, settings.projectRootPath, getCanonicalFileName),
+                    toPath(settings.safeListPath, settings.safeListPath, getCanonicalFileName),
+                    settings.packageNameToTypingLocation,
+                    settings.typingOptions,
+                    settings.compilerOptions);
             });
         }
     }

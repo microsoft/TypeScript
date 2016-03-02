@@ -13,23 +13,11 @@ namespace ts.JsTyping {
         readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
     };
 
-    interface TsdJson {
-        version: string;
-        repo: string;
-        ref: string;
-        path: string;
-        installed?: Map<TsdInstalledItem>;
-    };
-
-    interface TsdInstalledItem {
-        commit: string;
-    };
-
     interface PackageJson {
         _requiredBy?: string[];
         dependencies?: Map<string>;
         devDependencies?: Map<string>;
-        name: string;
+        name?: string;
         optionalDependencies?: Map<string>;
         peerDependencies?: Map<string>;
         typings?: string;
@@ -41,12 +29,13 @@ namespace ts.JsTyping {
 
     /**
      * @param host is the object providing I/O related operations.
-     * @param fileNames are the file names that belong to the same project.
+     * @param fileNames are the file names that belong to the same project
      * @param cachePath is the path to the typings cache
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
-     * @param typingOptions are used for customizing the typing inference process.
-     * @param compilerOptions are used as a source of typing inference.
+     * @param packageNameToTypingLocation is the map of package names to their cached typing locations
+     * @param typingOptions are used to customize the typing inference process
+     * @param compilerOptions are used as a source for typing inference
      */
     export function discoverTypings(
         host: TypingResolutionHost,
@@ -54,6 +43,7 @@ namespace ts.JsTyping {
         cachePath: Path,
         projectRootPath: Path,
         safeListPath: Path,
+        packageNameToTypingLocation: Map<string>,
         typingOptions: TypingOptions,
         compilerOptions: CompilerOptions):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
@@ -69,8 +59,9 @@ namespace ts.JsTyping {
         fileNames = filter(map(fileNames, normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
 
         if (!safeList) {
-            const result = readConfigFile(safeListPath, host.readFile);
+            const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
             if (result.config) { safeList = result.config; }
+            else { safeList = {}; };
         }
 
         const filesToWatch: string[] = [];
@@ -81,44 +72,27 @@ namespace ts.JsTyping {
         mergeTypings(typingOptions.include);
         exclude = typingOptions.exclude || [];
 
-        if (typingOptions.enableAutoDiscovery) {
-            const possibleSearchDirs = map(fileNames, getDirectoryPath);
-            if (projectRootPath !== undefined) {
-                possibleSearchDirs.push(projectRootPath);
-            }
-            searchDirs = deduplicate(possibleSearchDirs);
-            for (const searchDir of searchDirs) {
-                const packageJsonPath = combinePaths(searchDir, "package.json");
-                getTypingNamesFromJson(packageJsonPath, filesToWatch);
-
-                const bowerJsonPath = combinePaths(searchDir, "bower.json");
-                getTypingNamesFromJson(bowerJsonPath, filesToWatch);
-
-                const nodeModulesPath = combinePaths(searchDir, "node_modules");
-                getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
-            }
-            getTypingNamesFromSourceFileNames(fileNames);
+        const possibleSearchDirs = map(fileNames, getDirectoryPath);
+        if (projectRootPath !== undefined) {
+            possibleSearchDirs.push(projectRootPath);
         }
+        searchDirs = deduplicate(possibleSearchDirs);
+        for (const searchDir of searchDirs) {
+            const packageJsonPath = combinePaths(searchDir, "package.json");
+            getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
-        const typingsPath = combinePaths(cachePath, "typings");
-        const tsdJsonPath = combinePaths(cachePath, "tsd.json");
-        const result = readConfigFile(tsdJsonPath, host.readFile);
-        if (result.config) {
-            const tsdJson: TsdJson = result.config;
+            const bowerJsonPath = combinePaths(searchDir, "bower.json");
+            getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
-            // The "installed" property in the tsd.json serves as a registry of installed typings. Each item
-            // of this object has a key of the relative file path, and a value that contains the corresponding
-            // commit hash.
-            if (tsdJson.installed) {
-                for (const cachedTypingPath in tsdJson.installed) {
-                    // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
-                    const cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf("/"));
-                    // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
-                    // d.ts file that coming with the package. That one should take higher priority.
-                    if (hasProperty(inferredTypings, cachedTypingName) && !inferredTypings[cachedTypingName]) {
-                        inferredTypings[cachedTypingName] = combinePaths(typingsPath, cachedTypingPath);
-                    }
-                }
+            const nodeModulesPath = combinePaths(searchDir, "node_modules");
+            getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
+        }
+        getTypingNamesFromSourceFileNames(fileNames);
+
+        // Add the cached typing locations for inferred typings that are already installed
+        for (const name in packageNameToTypingLocation) {
+            if (hasProperty(inferredTypings, name) && !inferredTypings[name]) {
+                inferredTypings[name] = packageNameToTypingLocation[name];
             }
         }
 
@@ -158,7 +132,7 @@ namespace ts.JsTyping {
          * Get the typing info from common package manager json files like package.json or bower.json
          */
         function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
-            const result = readConfigFile(jsonPath, host.readFile);
+            const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
             if (result.config) {
                 const jsonConfig: PackageJson = result.config;
                 filesToWatch.push(jsonPath);
@@ -215,7 +189,7 @@ namespace ts.JsTyping {
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 if (getBaseFileName(normalizedFileName) !== "package.json") { continue; }
-                const result = readConfigFile(normalizedFileName, host.readFile);
+                const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
                 if (!result.config) { continue; }
                 const packageJson: PackageJson = result.config;
                 filesToWatch.push(normalizedFileName);
