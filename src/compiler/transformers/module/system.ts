@@ -35,7 +35,6 @@ namespace ts {
         let contextObjectForFile: Identifier;
         let exportedLocalNames: Identifier[];
         let exportedFunctionDeclarations: ExpressionStatement[];
-        const noSubstitution: Map<boolean> = {};
 
         return transformSourceFile;
 
@@ -921,24 +920,23 @@ namespace ts {
         }
 
         function substituteAssignmentExpression(node: BinaryExpression): Expression {
-            if (!noSubstitution[getNodeId(node)]) {
-                noSubstitution[getNodeId(node)] = true;
-                const left = node.left;
-                switch (left.kind) {
-                    case SyntaxKind.Identifier:
-                        const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>left);
-                        if (exportDeclaration) {
-                            return createExportExpression(<Identifier>left, node);
-                        }
-                        break;
+            setNodeEmitFlags(node, NodeEmitFlags.NoSubstitution);
 
-                    case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.ArrayLiteralExpression:
-                        if (hasExportedReferenceInDestructuringPattern(<ObjectLiteralExpression | ArrayLiteralExpression>left)) {
-                            return substituteDestructuring(node);
-                        }
-                        break;
-                }
+            const left = node.left;
+            switch (left.kind) {
+                case SyntaxKind.Identifier:
+                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>left);
+                    if (exportDeclaration) {
+                        return createExportExpression(<Identifier>left, node);
+                    }
+                    break;
+
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                    if (hasExportedReferenceInDestructuringPattern(<ObjectLiteralExpression | ArrayLiteralExpression>left)) {
+                        return substituteDestructuring(node);
+                    }
+                    break;
             }
 
             return node;
