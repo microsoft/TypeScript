@@ -2433,6 +2433,23 @@ namespace ts {
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean;
+    }
+
+    export interface DiscoverTypingsInfo {
+        fileNames: string[];                            // The file names that belong to the same project.
+        cachePath: string;                              // The path to the typings cache
+        projectRootPath: string;                        // The path to the project root directory
+        safeListPath: string;                           // The path used to retrieve the safe list
+        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
+        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        compilerOptions: CompilerOptions;               // Used as a source for typing inference
+    }
+
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2491,6 +2508,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
