@@ -13,6 +13,5 @@ var o: I = {
 var o = (_a = {},
     _a["" + 0] = function (y) { return y.length; },
     _a["" + 1] = function (y) { return y.length; },
-    _a
-);
+    _a);
 var _a;

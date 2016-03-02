@@ -121,7 +121,6 @@ const _super = (function (geti, seti) {
             const writer = createTextWriter(newLine);
             const {
                 write,
-                writeTextOfNode,
                 writeLine,
                 increaseIndent,
                 decreaseIndent
@@ -148,17 +147,19 @@ const _super = (function (geti, seti) {
             let startLexicalEnvironment: () => void;
             let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
+            let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
             let isExpressionSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let expressionSubstitution: (node: Expression) => Expression;
             let identifierSubstitution: (node: Identifier) => Identifier;
             let onBeforeEmitNode: (node: Node) => void;
             let onAfterEmitNode: (node: Node) => void;
-            let isUniqueName: (name: string) => boolean;
-            let temporaryVariables: string[] = [];
+            let nodeToGeneratedName: string[];
+            let generatedNameSet: Map<string>;
             let tempFlags: TempFlags;
             let currentSourceFile: SourceFile;
             let currentText: string;
+            let currentFileIdentifiers: Map<string>;
             let extendsEmitted: boolean;
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
@@ -169,6 +170,8 @@ const _super = (function (geti, seti) {
 
             function doPrint(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
                 sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+                nodeToGeneratedName = [];
+                generatedNameSet = {};
                 isOwnFileEmit = !isBundledEmit;
 
                 // Emit helpers from all the files
@@ -207,14 +210,13 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = undefined;
                 endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
+                setNodeEmitFlags = undefined;
                 isExpressionSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 expressionSubstitution = undefined;
                 identifierSubstitution = undefined;
                 onBeforeEmitNode = undefined;
                 onAfterEmitNode = undefined;
-                isUniqueName = undefined;
-                temporaryVariables = undefined;
                 tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
                 currentText = undefined;
@@ -230,19 +232,20 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = context.startLexicalEnvironment;
                 endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
+                setNodeEmitFlags = context.setNodeEmitFlags;
                 isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 expressionSubstitution = context.expressionSubstitution;
                 identifierSubstitution = context.identifierSubstitution;
                 onBeforeEmitNode = context.onBeforeEmitNode;
                 onAfterEmitNode = context.onAfterEmitNode;
-                isUniqueName = context.isUniqueName;
                 return printSourceFile;
             }
 
             function printSourceFile(node: SourceFile) {
                 currentSourceFile = node;
                 currentText = node.text;
+                currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
                 emitWorker(node);
@@ -659,22 +662,11 @@ const _super = (function (geti, seti) {
             //
 
             function emitIdentifier(node: Identifier) {
-                if (node.text === undefined) {
-                    // Emit a temporary variable name for this node.
-                    const nodeId = getOriginalNodeId(node);
-                    const text = temporaryVariables[nodeId] || (temporaryVariables[nodeId] = makeTempVariableName(tempKindToFlags(node.tempKind)));
-                    write(text);
-                }
-                else if (nodeIsSynthesized(node) || !node.parent) {
-                    if (getNodeEmitFlags(node) & NodeEmitFlags.UMDDefine) {
-                        writeLines(umdHelper);
-                    }
-                    else {
-                        write(node.text);
-                    }
+                if (getNodeEmitFlags(node) && NodeEmitFlags.UMDDefine) {
+                    writeLines(umdHelper);
                 }
                 else {
-                    writeTextOfNode(currentText, node);
+                    write(getTextOfNode(node, /*includeTrivia*/ false));
                 }
             }
 
@@ -1720,7 +1712,6 @@ const _super = (function (geti, seti) {
                 emitExpression(node.expression);
                 write(":");
 
-                debugger;
                 emitCaseOrDefaultClauseStatements(node, node.statements);
             }
 
@@ -1763,14 +1754,14 @@ const _super = (function (geti, seti) {
             function emitPropertyAssignment(node: PropertyAssignment) {
                 emit(node.name);
                 write(": ");
-                // // This is to ensure that we emit comment in the following case:
-                // //      For example:
-                // //          obj = {
-                // //              id: /*comment1*/ ()=>void
-                // //          }
-                // // "comment1" is not considered to be leading comment for node.initializer
-                // // but rather a trailing comment on the previous node.
-                // emitTrailingCommentsOfPosition(node.initializer.pos);
+                // This is to ensure that we emit comment in the following case:
+                //      For example:
+                //          obj = {
+                //              id: /*comment1*/ ()=>void
+                //          }
+                // "comment1" is not considered to be leading comment for node.initializer
+                // but rather a trailing comment on the previous node.
+                emitLeadingComments(node.initializer, getTrailingComments(collapseTextRange(node.initializer, TextRangeCollapse.CollapseToStart)));
                 emitExpression(node.initializer);
             }
 
@@ -1951,11 +1942,8 @@ const _super = (function (geti, seti) {
             }
 
             function emitModifiers(node: Node, modifiers: ModifiersArray) {
-                const startingPos = writer.getTextPos();
-                emitList(node, modifiers, ListFormat.SingleLine);
-
-                const endingPos = writer.getTextPos();
-                if (startingPos !== endingPos) {
+                if (modifiers && modifiers.length) {
+                    emitList(node, modifiers, ListFormat.SingleLine);
                     write(" ");
                 }
             }
@@ -1983,10 +1971,13 @@ const _super = (function (geti, seti) {
             }
 
             function tryEmitSubstitute(node: Node, substitution: (node: Node) => Node) {
-                const substitute = substitution ? substitution(node) : node;
-                if (substitute && substitute !== node) {
-                    emitWorker(substitute);
-                    return true;
+                if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
+                    const substitute = substitution(node);
+                    if (substitute !== node) {
+                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution);
+                        emitWorker(substitute);
+                        return true;
+                    }
                 }
 
                 return false;
@@ -2345,7 +2336,15 @@ const _super = (function (geti, seti) {
             }
 
             function getTextOfNode(node: Node, includeTrivia?: boolean) {
-                if (nodeIsSynthesized(node) && (isLiteralExpression(node) || isIdentifier(node))) {
+                if (isIdentifier(node)) {
+                    if (node.autoGenerateKind) {
+                        return getGeneratedIdentifier(node);
+                    }
+                    else if (nodeIsSynthesized(node) || !node.parent) {
+                        return node.text;
+                    }
+                }
+                else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return node.text;
                 }
 
@@ -2368,10 +2367,22 @@ const _super = (function (geti, seti) {
                     && rangeEndIsOnSameLineAsRangeStart(block, block);
             }
 
-            function tempKindToFlags(kind: TempVariableKind) {
-                return kind === TempVariableKind.Loop
-                    ? TempFlags._i
-                    : TempFlags.Auto;
+            function isUniqueName(name: string): boolean {
+                return !resolver.hasGlobalName(name) &&
+                    !hasProperty(currentFileIdentifiers, name) &&
+                    !hasProperty(generatedNameSet, name);
+            }
+
+            function isUniqueLocalName(name: string, container: Node): boolean {
+                for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
+                    if (node.locals && hasProperty(node.locals, name)) {
+                        // We conservatively include alias symbols to cover cases where they're emitted as locals
+                        if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
             }
 
             /**
@@ -2400,6 +2411,85 @@ const _super = (function (geti, seti) {
                         }
                     }
                 }
+            }
+
+            // Generate a name that is unique within the current file and doesn't conflict with any names
+            // in global scope. The name is formed by adding an '_n' suffix to the specified base name,
+            // where n is a positive integer. Note that names generated by makeTempVariableName and
+            // makeUniqueName are guaranteed to never conflict.
+            function makeUniqueName(baseName: string): string {
+                // Find the first unique 'name_n', where n is a positive number
+                if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
+                    baseName += "_";
+                }
+                let i = 1;
+                while (true) {
+                    const generatedName = baseName + i;
+                    if (isUniqueName(generatedName)) {
+                        return generatedNameSet[generatedName] = generatedName;
+                    }
+                    i++;
+                }
+            }
+
+            function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
+                const name = node.name.text;
+                // Use module/enum name itself if it is unique, otherwise make a unique variation
+                return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
+            }
+
+            function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
+                const expr = getExternalModuleName(node);
+                const baseName = expr.kind === SyntaxKind.StringLiteral ?
+                    escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+                return makeUniqueName(baseName);
+            }
+
+            function generateNameForExportDefault() {
+                return makeUniqueName("default");
+            }
+
+            function generateNameForClassExpression() {
+                return makeUniqueName("class");
+            }
+
+            function generateNameForNode(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        return makeUniqueName((<Identifier>node).text);
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                        return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                        return generateNameForExportDefault();
+                    case SyntaxKind.ClassExpression:
+                        return generateNameForClassExpression();
+                    default:
+                        return makeTempVariableName(TempFlags.Auto);
+                }
+            }
+
+            function generateIdentifier(node: Identifier) {
+                switch (node.autoGenerateKind) {
+                    case GeneratedIdentifierKind.Auto:
+                        return makeTempVariableName(TempFlags.Auto);
+                    case GeneratedIdentifierKind.Loop:
+                        return makeTempVariableName(TempFlags._i);
+                    case GeneratedIdentifierKind.Unique:
+                        return makeUniqueName(node.text);
+                    case GeneratedIdentifierKind.Node:
+                        return generateNameForNode(getOriginalNode(node));
+                }
+            }
+
+            function getGeneratedIdentifier(node: Identifier) {
+                const id = getOriginalNodeId(node);
+                return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
             }
         }
     }

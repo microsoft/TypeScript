@@ -491,19 +491,6 @@ namespace ts {
         return node;
     }
 
-    /**
-     * Combines the flags of a node with the combined flags of its parent if they can be combined.
-     */
-    export function combineNodeFlags(node: Node, parentNode: Node, previousNodeFlags: NodeFlags) {
-        if ((node.kind === SyntaxKind.VariableDeclarationList && parentNode.kind === SyntaxKind.VariableStatement) ||
-            (node.kind === SyntaxKind.VariableDeclaration && parentNode.kind === SyntaxKind.VariableDeclarationList) ||
-            (node.kind === SyntaxKind.BindingElement)) {
-            return node.flags | previousNodeFlags;
-        }
-
-        return node.flags;
-    }
-
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
@@ -948,19 +935,20 @@ namespace ts {
     /**
      * Determines whether a node is a property or element access expression for super.
      */
-    export function isSuperPropertyOrElementAccess(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
+    export function isSuperProperty(node: Node): node is (PropertyAccessExpression | ElementAccessExpression) {
         return (node.kind === SyntaxKind.PropertyAccessExpression
             || node.kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    /**
-     * Determines whether a node is a call to either `super`, or a super property or element access.
-     */
+    export function isSuperPropertyCall(node: Node): node is CallExpression {
+        return node.kind === SyntaxKind.CallExpression
+            && <boolean>isSuperProperty((<CallExpression>node).expression);
+    }
+
     export function isSuperCall(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression
-            && ((<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword
-                || isSuperPropertyOrElementAccess((<CallExpression>node).expression));
+            && (<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword;
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
@@ -1392,7 +1380,7 @@ namespace ts {
 
 
 
-    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+    export function isNodeDescendantOf(node: Node, ancestor: Node): boolean {
         while (node) {
             if (node === ancestor) return true;
             node = node.parent;
@@ -2358,11 +2346,11 @@ namespace ts {
                 writer.write(" ");
             }
 
-            let emitInterveningSeperator = false;
+            let emitInterveningSeparator = false;
             for (const comment of comments) {
-                if (emitInterveningSeperator) {
+                if (emitInterveningSeparator) {
                     writer.write(" ");
-                    emitInterveningSeperator = false;
+                    emitInterveningSeparator = false;
                 }
 
                 writeComment(text, lineMap, writer, comment, newLine);
@@ -2370,11 +2358,11 @@ namespace ts {
                     writer.writeLine();
                 }
                 else {
-                    emitInterveningSeperator = true;
+                    emitInterveningSeparator = true;
                 }
             }
 
-            if (emitInterveningSeperator && trailingSeparator) {
+            if (emitInterveningSeparator && trailingSeparator) {
                 writer.write(" ");
             }
         }
@@ -2860,7 +2848,7 @@ namespace ts {
         }
 
         return collapse === TextRangeCollapse.CollapseToStart
-            ? { pos: range.pos, end: range.end }
+            ? { pos: range.pos, end: range.pos }
             : { pos: range.end, end: range.end };
     }
 
@@ -3001,6 +2989,11 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isGeneratedIdentifier(node: Node): node is Identifier {
+        // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
+        return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
     }
 
     // Keywords
@@ -3399,6 +3392,10 @@ namespace ts {
 
     export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
         return node.kind === SyntaxKind.JsxSpreadAttribute;
+    }
+
+    export function isJsxAttribute(node: Node): node is JsxAttribute {
+        return node.kind === SyntaxKind.JsxAttribute;
     }
 
     // Clauses

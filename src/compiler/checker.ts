@@ -4846,7 +4846,7 @@ namespace ts {
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
                 if (!(container.flags & NodeFlags.Static) &&
-                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendantOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
@@ -7206,8 +7206,8 @@ namespace ts {
                 let container = getContainingClass(node);
                 while (container !== undefined) {
                     if (container === localOrExportSymbol.valueDeclaration && container.name !== node) {
-                        getNodeLinks(container).flags |= NodeCheckFlags.ClassWithBodyScopedClassBinding;
-                        getNodeLinks(node).flags |= NodeCheckFlags.BodyScopedClassBinding;
+                        getNodeLinks(container).flags |= NodeCheckFlags.DecoratedClassWithSelfReference;
+                        getNodeLinks(node).flags |= NodeCheckFlags.SelfReferenceInDecoratedClass;
                         break;
                     }
 
@@ -7495,7 +7495,7 @@ namespace ts {
             // This is required for destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment
             // while a property access can.
             if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
-                if (isSuperPropertyOrElementAccess(node.parent) && isAssignmentTarget(node.parent)) {
+                if (isSuperProperty(node.parent) && isAssignmentTarget(node.parent)) {
                     getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
                 }
                 else {

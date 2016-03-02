@@ -134,7 +134,7 @@ namespace ts {
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.NewExpression]: [
-            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForNew },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
@@ -630,7 +630,7 @@ namespace ts {
 
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = getMutableNode(node);
+                            updated = getMutableClone(node);
                             updated.flags &= ~NodeFlags.Modifier;
                         }
 

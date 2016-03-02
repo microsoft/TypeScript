@@ -346,7 +346,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         };
 
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+            for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
@@ -1529,7 +1529,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             return;
                         }
                     }
-                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BodyScopedClassBinding) {
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
                         // Due to the emit for class decorators, any reference to the class from inside of the class body
                         // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                         // behavior of class names in ES6.
@@ -1915,9 +1915,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 if (multiLine) {
                     decreaseIndent();
-                    if (!compilerOptions.transformCompatibleEmit) {
-                        writeLine();
-                    }
                 }
 
                 write(")");
@@ -2237,7 +2234,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
             }
 
-            function skipParentheses(node: Expression): Expression {
+            function skipParenthesesAndAssertions(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
                     node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
@@ -2268,7 +2265,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitCallWithSpread(node: CallExpression) {
                 let target: Expression;
-                const expr = skipParentheses(node.expression);
+                const expr = skipParenthesesAndAssertions(node.expression);
                 if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
@@ -2342,7 +2339,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     superCall = true;
                 }
                 else {
-                    superCall = isSuperPropertyOrElementAccess(expression);
+                    superCall = isSuperProperty(expression);
                     isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
                     emit(expression);
                 }
@@ -4334,9 +4331,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     writeLine();
                     emitStart(restParam);
                     emitNodeWithCommentsAndWithoutSourcemap(restParam.name);
-                    write(restIndex > 0 || !compilerOptions.transformCompatibleEmit
-                        ? `[${tempName} - ${restIndex}] = arguments[${tempName}];`
-                        : `[${tempName}] = arguments[${tempName}];`);
+                    write(`[${tempName} - ${restIndex}] = arguments[${tempName}];`);
                     emitEnd(restParam);
                     decreaseIndent();
                     writeLine();
@@ -5208,7 +5203,7 @@ const _super = (function (geti, seti) {
                         //  [Example 4]
                         //
 
-                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
                             decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
                             decoratedClassAliases[getNodeId(node)] = decoratedClassAlias;
                             write(`let ${decoratedClassAlias};`);
@@ -5356,7 +5351,7 @@ const _super = (function (geti, seti) {
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
                 let tempVariable: Identifier;
 
-                if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
+                if (isClassExpressionWithStaticProperties) {
                     tempVariable = createAndRecordTempVariable(TempFlags.Auto);
                     write("(");
                     increaseIndent();
@@ -5393,11 +5388,6 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                if (!compilerOptions.transformCompatibleEmit) {
-                    emitPropertyDeclarations(node, staticProperties);
-                    writeLine();
-                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
-                }
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
@@ -5424,13 +5414,10 @@ const _super = (function (geti, seti) {
                 write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
-                    if (compilerOptions.transformCompatibleEmit) {
-                        emitPropertyDeclarations(node, staticProperties);
-                        writeLine();
-                        emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
-                    }
+                    emitPropertyDeclarations(node, staticProperties);
+                    emitDecoratorsOfClass(node, /*decoratedClassAlias*/ undefined);
                 }
-                else if (isClassExpressionWithStaticProperties && compilerOptions.transformCompatibleEmit) {
+                else if (isClassExpressionWithStaticProperties) {
                     for (const property of staticProperties) {
                         write(",");
                         writeLine();
