@@ -6,7 +6,7 @@
 /* @internal */
 namespace ts.JsTyping {
 
-    interface TypingResolutionHost {
+    export interface TypingResolutionHost {
         directoryExists: (path: string) => boolean;
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
