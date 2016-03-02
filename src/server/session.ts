@@ -432,7 +432,7 @@ namespace ts.server {
                 };
             }
 
-            const locsMap: Map<protocol.SpanGroup> = {};
+            const locs: protocol.SpanGroup[] = [];
             const info = this.projectService.getScriptInfo(file);
             const projects = this.projectService.findReferencingProjects(info);
             for (const project of projects) {
@@ -481,63 +481,80 @@ namespace ts.server {
                     return accum;
                 }, []);
 
-                for (const bakedRenameLoc of bakedRenameLocs) {
-                    locsMap[bakedRenameLoc.file] = bakedRenameLoc;
-                }
+                ts.addRange(locs, bakedRenameLocs);
             }
 
-            const locs: protocol.SpanGroup[] = [];
-            for (const key in locsMap) {
-                locs.push(locsMap[key]);
+            return { info: renameInfo, locs: ts.deduplicate(locs, areSpanGroupsForTheSameFile) };
+
+            function areSpanGroupsForTheSameFile(a: protocol.SpanGroup, b: protocol.SpanGroup) {
+                if (a && b) {
+                    return a.file === b.file;
+                }
+                return false;
             }
-            return { info: renameInfo, locs };
         }
 
         private getReferences(line: number, offset: number, fileName: string): protocol.ReferencesResponseBody {
-            // TODO: get all projects for this file; report refs for all projects deleting duplicates
-            // can avoid duplicates by eliminating same ref file from subsequent projects
             const file = ts.normalizePath(fileName);
-            const project = this.projectService.getProjectForFile(file);
-            if (!project) {
+            const defaultProject = this.projectService.getProjectForFile(file);
+            if (!defaultProject) {
                 throw Errors.NoProject;
             }
 
-            const compilerService = project.compilerService;
-            const position = compilerService.host.lineOffsetToPosition(file, line, offset);
-
-            const references = compilerService.languageService.getReferencesAtPosition(file, position);
-            if (!references) {
-                return undefined;
-            }
-
-            const nameInfo = compilerService.languageService.getQuickInfoAtPosition(file, position);
+            const position = defaultProject.compilerService.host.lineOffsetToPosition(file, line, offset);
+            const nameInfo = defaultProject.compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
                 return undefined;
             }
 
             const displayString = ts.displayPartsToString(nameInfo.displayParts);
             const nameSpan = nameInfo.textSpan;
-            const nameColStart = compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
-            const nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            const bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
-                const start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
-                const refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
-                const snap = compilerService.host.getScriptSnapshot(ref.fileName);
-                const lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
-                return {
-                    file: ref.fileName,
-                    start: start,
-                    lineText: lineText,
-                    end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
-                    isWriteAccess: ref.isWriteAccess
-                };
-            }).sort(compareFileStart);
+            const nameColStart = defaultProject.compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
+            const nameText = defaultProject.compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            const refs: protocol.ReferencesResponseItem[] = [];
+            for (const project of projects)
+            {
+                const compilerService = project.compilerService;
+                const references = compilerService.languageService.getReferencesAtPosition(file, position);
+                if (!references) {
+                    continue;
+                }
+
+                const bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
+                    const start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
+                    const refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
+                    const snap = compilerService.host.getScriptSnapshot(ref.fileName);
+                    const lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                    return {
+                        file: ref.fileName,
+                        start: start,
+                        lineText: lineText,
+                        end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                        isWriteAccess: ref.isWriteAccess
+                    };
+                }).sort(compareFileStart);
+
+                ts.addRange(refs, bakedRefs);
+            }
+
             return {
-                refs: bakedRefs,
+                refs: ts.deduplicate(refs, areReferencesResponseItemsForTheSameLocation),
                 symbolName: nameText,
                 symbolStartOffset: nameColStart,
                 symbolDisplayString: displayString
             };
+
+            function areReferencesResponseItemsForTheSameLocation(a: protocol.ReferencesResponseItem, b: protocol.ReferencesResponseItem) {
+                if (a && b) {
+                    return a.file === b.file &&
+                           a.start === b.start &&
+                           a.end === b.end;
+                }
+                return false;
+            }
         }
 
         /**
