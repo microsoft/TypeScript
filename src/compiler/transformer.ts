@@ -46,8 +46,7 @@ namespace ts {
             expressionSubstitution: node => node,
             enableExpressionSubstitution,
             isExpressionSubstitutionEnabled,
-            onBeforeEmitNode: node => { },
-            onAfterEmitNode: node => { },
+            onEmitNode: (node, emit) => emit(node),
             enableEmitNotification,
             isEmitNotificationEnabled,
         };
