@@ -147,6 +147,7 @@ const _super = (function (geti, seti) {
             let startLexicalEnvironment: () => void;
             let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
+            let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
             let isExpressionSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let expressionSubstitution: (node: Expression) => Expression;
@@ -209,6 +210,7 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = undefined;
                 endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
+                setNodeEmitFlags = undefined;
                 isExpressionSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 expressionSubstitution = undefined;
@@ -230,6 +232,7 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = context.startLexicalEnvironment;
                 endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
+                setNodeEmitFlags = context.setNodeEmitFlags;
                 isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 expressionSubstitution = context.expressionSubstitution;
@@ -1968,10 +1971,13 @@ const _super = (function (geti, seti) {
             }
 
             function tryEmitSubstitute(node: Node, substitution: (node: Node) => Node) {
-                const substitute = substitution ? substitution(node) : node;
-                if (substitute && substitute !== node) {
-                    emitWorker(substitute);
-                    return true;
+                if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
+                    const substitute = substitution(node);
+                    if (substitute !== node) {
+                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution);
+                        emitWorker(substitute);
+                        return true;
+                    }
                 }
 
                 return false;

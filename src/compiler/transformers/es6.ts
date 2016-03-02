@@ -1036,11 +1036,11 @@ namespace ts {
             // explicit initializer since downlevel codegen for destructuring will fail
             // in the absence of initializer so all binding elements will say uninitialized
             const name = node.name;
-            if (isBindingPattern(name) || node.initializer) {
+            if (isBindingPattern(name)) {
                 return visitVariableDeclaration(node);
             }
 
-            if (shouldEmitExplicitInitializerForLetDeclaration(node)) {
+            if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
                 const clone = getMutableClone(node);
                 clone.initializer = createVoidZero();
                 return clone;
@@ -1416,7 +1416,7 @@ namespace ts {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
-            const { target, thisArg } = createCallBinding(node);
+            const { target, thisArg } = createCallBinding(node.expression);
             if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 // [source]
                 //      f(...a, b)

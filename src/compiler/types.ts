@@ -2809,6 +2809,7 @@ namespace ts {
         AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
         IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
         EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
+        NoSubstitution = 1 << 10,                // Disables further substitution of an expression.
     }
 
     /** Additional context provided to `visitEachChild` */
