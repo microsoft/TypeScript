@@ -792,6 +792,7 @@ module ts {
         "kind": "Identifier",
         "pos": 1,
         "end": 10,
+        "originalKeywordKind": "UndefinedKeyword",
         "text": "undefined"
     }
 }`);
