@@ -1,9 +1,0 @@
-=== tests/cases/conformance/externalModules/err5.d.ts ===
-// Illegal, may not appear in implementation files
-export var v;
->v : any
-
-export as namespace C;
->C : any
-
-

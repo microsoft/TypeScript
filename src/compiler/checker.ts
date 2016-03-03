@@ -15226,24 +15226,6 @@ namespace ts {
             }
         }
 
-        function checkGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
-            if (node.modifiers && node.modifiers.length) {
-                error(node, Diagnostics.Modifiers_cannot_appear_here);
-            }
-
-            if (node.parent.kind !== SyntaxKind.SourceFile) {
-                error(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level);
-            }
-            else {
-                const parent = node.parent as SourceFile;
-                // Note: the binder handles the case where the declaration isn't in an external module
-                if (parent.externalModuleIndicator && !parent.isDeclarationFile) {
-                    error(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files);
-                }
-            }
-
-        }
-
         function checkSourceElement(node: Node): void {
             if (!node) {
                 return;
@@ -15360,8 +15342,6 @@ namespace ts {
                     return checkExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return checkExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.GlobalModuleExportDeclaration:
-                    return checkGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
                 case SyntaxKind.EmptyStatement:
                     checkGrammarStatementInAmbientContext(node);
                     return;

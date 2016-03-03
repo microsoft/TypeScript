@@ -1,8 +1,0 @@
-=== tests/cases/conformance/externalModules/err5.d.ts ===
-// Illegal, may not appear in implementation files
-export var v;
->v : Symbol(v, Decl(err5.d.ts, 1, 10))
-
-export as namespace C;
-
-
