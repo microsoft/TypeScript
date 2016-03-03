@@ -386,6 +386,10 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
+            if (isWatchSet(configParseResult.options) && !sys.watchFile) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
             return configParseResult;
         }
 
@@ -445,7 +449,7 @@ namespace ts {
             }
             // Use default host function
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
-            if (sourceFile && isWatchSet(compilerOptions)) {
+            if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
                 const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
                 sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
