@@ -779,7 +779,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class or method declaration.": {
+    "'abstract' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -1151,7 +1151,7 @@
         "category": "Error",
         "code": 2382
     },
-    "Overload signatures must all be exported or not exported.": {
+    "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383
     },
@@ -1635,7 +1635,7 @@
         "category": "Error",
         "code": 2511
     },
-    "Overload signatures must all be abstract or not abstract.": {
+    "Overload signatures must all be abstract or non-abstract.": {
         "category": "Error",
         "code": 2512
     },
@@ -1842,6 +1842,14 @@
     "Cannot extend a class '{0}'. Class constructor is marked as private.": {
         "category": "Error",
         "code": 2675
+    },
+    "Accessors must both be abstract or non-abstract.": {
+        "category": "Error",
+        "code": 2676
+    },
+    "A type predicate's type must be assignable to its parameter's type.": {
+        "category": "Error",
+        "code": 2677
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2800,5 +2808,9 @@
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }

@@ -966,7 +966,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-                    return getQuotedEscapedLiteralText("\"", node.text, "\"");
+                    return getQuotedEscapedLiteralText('"', node.text, '"');
                 }
 
                 // If we don't need to downlevel and we can reach the original source text using
@@ -979,7 +979,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // or an escaped quoted form of the original text if it's string-like.
                 switch (node.kind) {
                     case SyntaxKind.StringLiteral:
-                        return getQuotedEscapedLiteralText("\"", node.text, "\"");
+                        return getQuotedEscapedLiteralText('"', node.text, '"');
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                         return getQuotedEscapedLiteralText("`", node.text, "`");
                     case SyntaxKind.TemplateHead:
@@ -1205,9 +1205,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 /// 'Div' for upper-cased or dotted names
                 function emitTagName(name: Identifier | QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
-                        write("\"");
+                        write('"');
                         emit(name);
-                        write("\"");
+                        write('"');
                     }
                     else {
                         emit(name);
@@ -1222,9 +1222,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         emit(name);
                     }
                     else {
-                        write("\"");
+                        write('"');
                         emit(name);
-                        write("\"");
+                        write('"');
                     }
                 }
 
@@ -1493,7 +1493,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     emit((<ComputedPropertyName>node).expression);
                 }
                 else {
-                    write("\"");
+                    write('"');
 
                     if (node.kind === SyntaxKind.NumericLiteral) {
                         write((<LiteralExpression>node).text);
@@ -1502,7 +1502,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         writeTextOfNode(currentText, node);
                     }
 
-                    write("\"");
+                    write('"');
                 }
             }
 
@@ -1592,7 +1592,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             if (declaration.kind === SyntaxKind.ImportClause) {
                                 // Identifier references default import
                                 write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
-                                write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
+                                write(languageVersion === ScriptTarget.ES3 ? '["default"]' : ".default");
                                 return;
                             }
                             else if (declaration.kind === SyntaxKind.ImportSpecifier) {
@@ -1601,7 +1601,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                                 const name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
                                 const identifier = getTextOfNodeFromSourceText(currentText, name);
                                 if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
-                                    write(`["default"]`);
+                                    write('["default"]');
                                 }
                                 else {
                                     write(".");
@@ -3232,8 +3232,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
                 // simple loops are emitted as just 'loop()';
+                // NOTE: if loop uses only 'continue' it still will be emitted as simple loop
                 const isSimpleLoop =
-                    !loop.state.nonLocalJumps &&
+                    !(loop.state.nonLocalJumps & ~Jump.Continue) &&
                     !loop.state.labeledNonLocalBreaks &&
                     !loop.state.labeledNonLocalContinues;
 
@@ -3274,13 +3275,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         writeLine();
                     }
 
-                    if (loop.state.nonLocalJumps & Jump.Continue) {
-                        write(`if (${loopResult} === "continue") continue;`);
-                        writeLine();
-                    }
-
                     // in case of labeled breaks emit code that either breaks to some known label inside outer loop or delegates jump decision to outer loop
                     emitDispatchTableForLabeledJumps(loopResult, loop.state, convertedLoopState);
+                    // in case of 'continue' we'll just fallthough here
                 }
 
                 if (emitAsBlock) {
@@ -3575,6 +3572,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             }
                             else {
                                 convertedLoopState.nonLocalJumps |= Jump.Continue;
+                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.     
                                 write(`"continue";`);
                             }
                         }
@@ -3792,7 +3790,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         if (!isEs6Module) {
                             if (languageVersion !== ScriptTarget.ES3) {
                                 // default value of configurable, enumerable, writable are `false`.
-                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                                write('Object.defineProperty(exports, "__esModule", { value: true });');
                                 writeLine();
                             }
                             else {
@@ -3828,7 +3826,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         if (node.flags & NodeFlags.Default) {
                             emitEs6ExportDefaultCompat(node);
                             if (languageVersion === ScriptTarget.ES3) {
-                                write("exports[\"default\"]");
+                                write('exports["default"]');
                             }
                             else {
                                 write("exports.default");
@@ -6600,7 +6598,7 @@ const _super = (function (geti, seti) {
                             emitEs6ExportDefaultCompat(node);
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
-                                write("[\"default\"] = ");
+                                write('["default"] = ');
                             }
                             else {
                                 write(".default = ");
@@ -7322,11 +7320,11 @@ const _super = (function (geti, seti) {
                 // Fill in amd-dependency tags
                 for (const amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
-                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        aliasedModuleNames.push('"' + amdDependency.path + '"');
                         importAliasNames.push(amdDependency.name);
                     }
                     else {
-                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        unaliasedModuleNames.push('"' + amdDependency.path + '"');
                     }
                 }
 
@@ -7368,7 +7366,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitAMDDependencyList({ aliasedModuleNames, unaliasedModuleNames }: AMDDependencyNames) {
-                write("[\"require\", \"exports\"");
+                write('["require", "exports"');
                 if (aliasedModuleNames.length) {
                     write(", ");
                     write(aliasedModuleNames.join(", "));
@@ -7402,8 +7400,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
+                emitTempDeclarations(/*newLine*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -7416,8 +7414,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ false);
+                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitUMDModule(node: SourceFile) {
@@ -7443,8 +7441,8 @@ const _super = (function (geti, seti) {
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
-                emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ true);
+                emitTempDeclarations(/*newLine*/ true);
                 decreaseIndent();
                 writeLine();
                 write("});");
@@ -7502,7 +7500,7 @@ const _super = (function (geti, seti) {
                     if (isLineBreak(c)) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                             const part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                            result = (result ? result + "\" + ' ' + \"" : "") + escapeString(part);
+                            result = (result ? result + `" + ' ' + "` : "") + escapeString(part);
                         }
                         firstNonWhitespace = -1;
                     }
@@ -7525,7 +7523,7 @@ const _super = (function (geti, seti) {
                         if (entities[m] !== undefined) {
                             const ch = String.fromCharCode(entities[m]);
                             // &quot; needs to be escaped
-                            return ch === "\"" ? "\\\"" : ch;
+                            return ch === '"' ? "\\\"" : ch;
                         }
                         else {
                             return s;
@@ -7569,9 +7567,9 @@ const _super = (function (geti, seti) {
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        write("\"");
+                        write('"');
                         write(trimReactWhitespaceAndApplyEntities(node));
-                        write("\"");
+                        write('"');
                         break;
 
                     case JsxEmit.Preserve:

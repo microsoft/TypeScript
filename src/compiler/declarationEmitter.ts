@@ -33,7 +33,7 @@ namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         const declarationDiagnostics = createDiagnosticCollection();
         forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
-        return declarationDiagnostics.getDiagnostics(targetSourceFile.fileName);
+        return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
         function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
             emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
@@ -753,9 +753,9 @@ namespace ts {
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
-                    write("\"");
+                    write('"');
                     write(moduleName);
-                    write("\"");
+                    write('"');
                     return;
                 }
             }
@@ -1679,7 +1679,7 @@ namespace ts {
                     host.getCanonicalFileName,
                     /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+                referencePathsOutput += '/// <reference path="' + declFileName + '" />' + newLine;
             }
             return addedBundledEmitReference;
 

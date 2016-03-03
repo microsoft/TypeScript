@@ -407,23 +407,6 @@ namespace ts {
         return result;
     }
 
-    /* @internal */
-    export function getScriptKindFromFileName(fileName: string): ScriptKind {
-        const ext = fileName.substr(fileName.lastIndexOf("."));
-        switch (ext.toLowerCase()) {
-            case ".js":
-                return ScriptKind.JS;
-            case ".jsx":
-                return ScriptKind.JSX;
-            case ".ts":
-                return ScriptKind.TS;
-            case ".tsx":
-                return ScriptKind.TSX;
-            default:
-                return ScriptKind.TS;
-        }
-    }
-
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
     // The SourceFile will be created with the compiler attempting to reuse as many nodes from
@@ -551,12 +534,7 @@ namespace ts {
         let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
-            // Using scriptKind as a condition handles both:
-            // - 'scriptKind' is unspecified and thus it is `undefined`
-            // - 'scriptKind' is set and it is `Unknown` (0)
-            // If the 'scriptKind' is 'undefined' or 'Unknown' then attempt
-            // to get the ScriptKind from the file name.
-            scriptKind = scriptKind ? scriptKind : getScriptKindFromFileName(fileName);
+            scriptKind = ensureScriptKind(fileName, scriptKind);
 
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor, scriptKind);
 

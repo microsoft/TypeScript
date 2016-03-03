@@ -13,7 +13,8 @@
         ],
         "no-var-keyword": true,
         "quotemark": [true,
-            "double"
+            "double",
+            "avoid-escape"
         ],
         "semicolon": true,
         "whitespace": [true,
