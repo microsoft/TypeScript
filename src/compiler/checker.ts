@@ -13848,11 +13848,11 @@ namespace ts {
                 }
             }
 
-            if (node.expression) {
-                const func = getContainingFunction(node);
-                if (func) {
-                    const signature = getSignatureFromDeclaration(func);
-                    const returnType = getReturnTypeOfSignature(signature);
+            const func = getContainingFunction(node);
+            if (func) {
+                const signature = getSignatureFromDeclaration(func);
+                const returnType = getReturnTypeOfSignature(signature);
+                if (node.expression) {
                     const exprType = checkExpressionCached(node.expression);
 
                     if (func.asteriskToken) {
@@ -13886,6 +13886,10 @@ namespace ts {
                             checkTypeAssignableTo(exprType, returnType, node.expression);
                         }
                     }
+                }
+                else if (compilerOptions.noImplicitReturns && !maybeTypeOfKind(returnType, TypeFlags.Void | TypeFlags.Any)) {
+                    // The function has a return type, but the return statement doesn't have an expression.
+                    error(node, Diagnostics.Not_all_code_paths_return_a_value);
                 }
             }
         }
