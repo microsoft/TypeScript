@@ -827,6 +827,13 @@ const _super = (function (geti, seti) {
                 else {
                     write(text);
                 }
+
+                if (node.kind === SyntaxKind.NumericLiteral) {
+                    const trailingComment = (<NumericLiteral>node).trailingComment;
+                    if (trailingComment) {
+                        write(` /*${trailingComment}*/`);
+                    }
+                }
             }
 
             //
@@ -1893,13 +1900,21 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
-                if (statements.length === 1 && rangeStartPositionsAreOnSameLine(parentNode, statements[0])) {
+                if (statements.length === 1 && shouldEmitCaseOrDefaultClauseStatementOnSameLine(parentNode, statements[0])) {
                     write(" ");
                     emit(statements[0]);
                 }
                 else {
                     emitList(parentNode, statements, ListFormat.CaseOrDefaultClauseStatements);
                 }
+            }
+
+            function shouldEmitCaseOrDefaultClauseStatementOnSameLine(parentNode: Node, statement: Statement) {
+                if (statement.startsOnNewLine || nodeIsSynthesized(parentNode)) {
+                    return false;
+                }
+
+                return nodeIsSynthesized(statement) || rangeStartPositionsAreOnSameLine(parentNode, statement);
             }
 
             function emitHeritageClause(node: HeritageClause) {

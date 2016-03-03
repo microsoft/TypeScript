@@ -1498,6 +1498,10 @@ namespace ts {
     }
 
     export function parenthesizeExpressionForList(expression: Expression) {
+        if (expression.kind === SyntaxKind.OmittedExpression) {
+            return expression;
+        }
+
         const expressionPrecedence = getExpressionPrecedence(expression);
         const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
         return expressionPrecedence > commaPrecedence

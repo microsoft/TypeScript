@@ -283,6 +283,7 @@ namespace ts {
         //
         let blockIndex = 0; // The index of the current block.
         let labelNumber = 0; // The current label number.
+        let labelNumbers: number[][];
         let lastOperationWasAbrupt: boolean; // Indicates whether the last operation was abrupt (break/continue).
         let lastOperationWasCompletion: boolean; // Indicates whether the last operation was a completion (return/throw).
         let clauses: CaseClause[]; // The case clauses generated for labels.
@@ -391,7 +392,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
                 default:
-                    if (node.transformFlags & TransformFlags.ContainsGenerators) {
+                    if (node.transformFlags & TransformFlags.ContainsGenerators || containsYield(node)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -2497,6 +2498,7 @@ namespace ts {
         function build() {
             blockIndex = 0;
             labelNumber = 0;
+            labelNumbers = undefined;
             lastOperationWasAbrupt = false;
             lastOperationWasCompletion = false;
             clauses = undefined;
@@ -2536,7 +2538,6 @@ namespace ts {
             else {
                 flushFinalLabel(0);
             }
-
 
             if (clauses) {
                 const state = getState();
@@ -2590,6 +2591,8 @@ namespace ts {
             if (statements && clauses) {
                 appendLabel(/*markLabelEnd*/ false);
             }
+
+            updateLabelExpressions();
         }
 
         /**
@@ -2674,11 +2677,33 @@ namespace ts {
             for (let label = 0; label < labelOffsets.length; label++) {
                 if (labelOffsets[label] === operationIndex) {
                     flushLabel();
-                    if (labelExpressions !== undefined) {
-                        const expressions = labelExpressions[label];
-                        if (expressions !== undefined) {
-                            for (const expression of expressions) {
-                                expression.text = String(labelNumber);
+                    if (labelNumbers === undefined) {
+                        labelNumbers = [];
+                    }
+                    if (labelNumbers[labelNumber] === undefined) {
+                        labelNumbers[labelNumber] = [label]
+                    }
+                    else {
+                        labelNumbers[labelNumber].push(label);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Updates literal expressions for labels with actual label numbers.
+         */
+        function updateLabelExpressions() {
+            if (labelExpressions !== undefined && labelNumbers !== undefined) {
+                for (let labelNumber = 0; labelNumber < labelNumbers.length; labelNumber++) {
+                    const labels = labelNumbers[labelNumber];
+                    if (labels !== undefined) {
+                        for (const label of labels) {
+                            const expressions = labelExpressions[label];
+                            if (expressions !== undefined) {
+                                for (const expression of expressions) {
+                                    expression.text = String(labelNumber);
+                                }
                             }
                         }
                     }

@@ -163,6 +163,9 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return visitTemplateExpression(<TemplateExpression>node);
 
+                case SyntaxKind.YieldExpression:
+                    return visitYieldExpression(<YieldExpression>node);
+
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword(<PrimaryExpression>node);
 
@@ -1494,6 +1497,16 @@ namespace ts {
                 getSynthesizedClone(node.name),
                 /*location*/ node
             );
+        }
+
+        /**
+         * Visits a YieldExpression node.
+         *
+         * @param node A YieldExpression node.
+         */
+        function visitYieldExpression(node: YieldExpression): Expression {
+            // `yield` expressions are transformed using the generators transformer.
+            return visitEachChild(node, visitor, context);
         }
 
         /**
