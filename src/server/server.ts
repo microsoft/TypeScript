@@ -176,6 +176,50 @@ namespace ts.server {
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
+    
+    const serverHost: ServerHost = <ServerHost>ts.sys;
+    serverHost.globalTypingCachePath = toPath(
+        ".typingCache",
+        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
+        createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+
+    let tsd: any;
+    serverHost.getTsd = () => {
+        if (tsd !== undefined) {
+            return tsd;
+        }
+        try {
+            tsd = require("tsd");
+            return tsd;
+        }
+        catch (e) {
+            logger.msg("Failed to require tsd.");
+        }
+        return undefined;
+    };
+    serverHost.cachedTsdJson = {};
+    serverHost.getTsdJson = (tsdJsonPath: Path) => {
+        if (hasProperty(serverHost.cachedTsdJson, tsdJsonPath)) {
+            return serverHost.cachedTsdJson[tsdJsonPath];
+        }
+        else {
+            const { config } = readConfigFile(tsdJsonPath, (path: string) => serverHost.readFile(path));
+            if (config && config.installed) {
+                const typingsFolderPath = combinePaths(getDirectoryPath(tsdJsonPath), "typings");
+                const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+                const installedKeys = getKeys(config.installed);
+                const packageNameToTypingPath: Map<Path> = {};
+                for (const installedKey of installedKeys) {
+                    const packageName = installedKey.substr(0, installedKey.indexOf("/"));
+                    const typingFilePath = toPath(installedKey, typingsFolderPath, getCanonicalFileName);
+                    packageNameToTypingPath[packageName] = typingFilePath;
+                }
+                serverHost.cachedTsdJson[tsdJsonPath] = { packageNameToTypingPath };
+                return serverHost.cachedTsdJson[tsdJsonPath];
+            }
+        }
+        return undefined;
+    }
 
     const ioSession = new IOSession(ts.sys, logger);
     process.on("uncaughtException", function(err: Error) {

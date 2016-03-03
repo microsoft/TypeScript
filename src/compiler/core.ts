@@ -281,7 +281,9 @@ namespace ts {
     export function getKeys<T>(map: Map<T>): string[] {
         const keys: string[] = [];
         for (const key in map) {
-            keys.push(key);
+            if (hasProperty(map, key)) {
+                keys.push(key);
+            }
         }
         return keys;
     }

@@ -124,7 +124,15 @@ namespace ts.server {
         export const NoProject = new Error("No Project.");
     }
 
+    export interface TsdJson {
+        packageNameToTypingPath: Map<Path>;
+    }
+
     export interface ServerHost extends ts.System {
+        globalTypingCachePath?: Path;
+        getTsd?: () => any;
+        cachedTsdJson?: Map<TsdJson>;
+        getTsdJson?: (tsdJsonPath: Path) => TsdJson;
     }
 
     export class Session {

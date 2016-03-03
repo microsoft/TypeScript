@@ -16,6 +16,7 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
+    const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -331,7 +332,8 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        compilerOptions?: ts.CompilerOptions;
+        compilerOptions?: CompilerOptions;
+        typingOptions?: TypingOptions;
     }
 
     export class Project {
@@ -754,6 +756,99 @@ namespace ts.server {
             return false;
         }
 
+        acquireTypingForJs(project: Project) {
+            const tsd = this.host.getTsd();
+            if (project === undefined || tsd === undefined) {
+                return;
+            }
+
+            let typingOptions: TypingOptions;
+            let compilerOptions: CompilerOptions;
+            let projectRootPath: Path;
+            if (project.isConfiguredProject()) {
+                projectRootPath = toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName);
+                typingOptions = project.projectOptions.typingOptions;
+                compilerOptions = project.projectOptions.compilerOptions;
+            }
+            else {
+                projectRootPath = undefined;
+                typingOptions = { enableAutoDiscovery: true };
+                compilerOptions = undefined;
+            }
+
+            // Todo: add support for local cache path
+            const cachePath = this.host.globalTypingCachePath;
+            const tsdJsonPath = toPath("tsd.json", cachePath, getCanonicalFileName);
+            const tsdJson = this.host.getTsdJson(tsdJsonPath);
+            const { cachedTypingPaths, newTypingNames, filesToWatch } = JsTyping.discoverTypings(
+                sys,
+                /* fileNames */ project.getFileNames(),
+                /* projectRootPath */ projectRootPath,
+                /* safeListPath */ undefined,
+                /* packageNameToTypingLocation */ tsdJson ? tsdJson.packageNameToTypingPath : undefined,
+                typingOptions,
+                compilerOptions
+            );
+
+            this.log("Cached typings include: " + cachedTypingPaths);
+            this.log("New typings to download: " + newTypingNames);
+            // Bail out when no actions are needed
+            if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            if (!sys.directoryExists(cachePath)) {
+                sys.createDirectory(cachePath);
+            }
+
+            // Inject the cached ones first
+            cachedTypingPaths.forEach(p => addTypingToProject(p, project));
+
+            if (newTypingNames && newTypingNames.length > 0) {
+                const typingsFolderPath = toPath("typings", this.host.globalTypingCachePath, getCanonicalFileName);
+                const query = new tsd.Query();
+                const api = tsd.getAPI(tsdJsonPath);
+                const options = new tsd.Options();
+                options.resolveDependencies = true;
+                options.overwriteFiles = true;
+                options.saveToConfig = true;
+
+                for (const newTypingName of newTypingNames) {
+                    query.addNamePattern(newTypingName);
+                }
+
+                let promise: any;
+                if (!sys.fileExists(tsdJsonPath)) {
+                    promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
+                }
+                else {
+                    promise = api.readConfig();
+                }
+
+                promise
+                    .then(() => api.select(query, options))
+                    .then((selection: any) => api.install(selection, options))
+                    .then((installResult: any) => {
+                        const keys = getKeys(installResult.written.dict);
+                        for (const key of keys) {
+                            addTypingToProject(toPath(key, typingsFolderPath, getCanonicalFileName), project);
+                        }
+                        project.projectService.updateProjectStructure();
+                    })
+                    .catch((e: any) => this.log(e));
+            }
+
+            function addTypingToProject(fileName: string, project: Project) {
+                const script = project.projectService.openFile(fileName, /*openedByClient*/ false);
+                if (script.defaultProject !== project) {
+                    project.addRoot(script);
+                }
+                if (project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
+                    project.projectService.openFileRootsConfigured.push(script);
+                }
+            }
+        }
+
         addOpenFile(info: ScriptInfo) {
             if (this.setConfiguredProjectRoot(info)) {
                 this.openFileRootsConfigured.push(info);
@@ -786,6 +881,10 @@ namespace ts.server {
                     }
                     this.openFileRoots = openFileRoots;
                     this.openFileRoots.push(info);
+                }
+
+                if (hasJavaScriptFileExtension(info.fileName)) {
+                    this.acquireTypingForJs(info.defaultProject);
                 }
             }
             this.updateConfiguredProjectList();
@@ -1207,7 +1306,6 @@ namespace ts.server {
                     return { succeeded: true, projectOptions };
                 }
             }
-
         }
 
         openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
@@ -1236,6 +1334,12 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                // Acquire typings for JS files
+                if (projectOptions.typingOptions) {
+                    this.acquireTypingForJs(project);
+                }
+
                 return { success: true, project: project };
             }
         }
