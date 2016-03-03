@@ -992,7 +992,6 @@ namespace ts {
                 return ts.JsTyping.discoverTypings(
                     this.host,
                     info.fileNames,
-                    toPath(info.cachePath, info.cachePath, getCanonicalFileName),
                     toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
                     toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
                     info.packageNameToTypingLocation,
