@@ -171,6 +171,7 @@ namespace ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
+        UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
