@@ -1417,7 +1417,7 @@ namespace ts {
             }
             else {
                 const parent = node.parent as SourceFile;
-                
+
                 if (!isExternalModule(<SourceFile>node.parent)) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
                     return;
