@@ -1411,6 +1411,10 @@
         "category": "Error",
         "code": 2453
     },
+    "Variable '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2454
+    },
     "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
         "category": "Error",
         "code": 2455

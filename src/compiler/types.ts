@@ -2035,7 +2035,9 @@ namespace ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // true if module exports some value (not just types)
+        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        firstAssignmentChecked?: boolean;   // True if first assignment node has been computed
+        firstAssignment?: Node;             // First assignment node (undefined if no assignments)
     }
 
     /* @internal */

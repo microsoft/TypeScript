@@ -6929,9 +6929,9 @@ namespace ts {
             visit(node);
             return assignmentMap;
 
-            function visitBinaryExpression(node: BinaryExpression) {
-                if (node.operatorToken.kind >= SyntaxKind.FirstAssignment && node.operatorToken.kind <= SyntaxKind.LastAssignment) {
-                    const key = getAssignmentKey(skipParenthesizedNodes(node.left));
+            function visitReference(node: Identifier | PropertyAccessExpression) {
+                if (isAssignmentTarget(node) || isCompoundAssignmentTarget(node)) {
+                    const key = getAssignmentKey(node);
                     if (key) {
                         assignmentMap[key] = true;
                     }
@@ -6948,18 +6948,19 @@ namespace ts {
 
             function visit(node: Node) {
                 switch (node.kind) {
-                    case SyntaxKind.BinaryExpression:
-                        visitBinaryExpression(<BinaryExpression>node);
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccessExpression:
+                        visitReference(<Identifier | PropertyAccessExpression>node);
                         break;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
                         visitVariableDeclaration(<VariableLikeDeclaration>node);
                         break;
+                    case SyntaxKind.BinaryExpression:
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
                     case SyntaxKind.ArrayLiteralExpression:
                     case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
@@ -7396,6 +7397,93 @@ namespace ts {
             return expression;
         }
 
+        function findFirstAssignment(symbol: Symbol, container: Node): Node {
+            return visit(isFunctionLike(container) ? (<FunctionLikeDeclaration>container).body : container);
+
+            function visit(node: Node): Node {
+                switch (node.kind) {
+                    case SyntaxKind.Identifier:
+                        const assignment = getAssignmentRoot(node);
+                        return assignment && getResolvedSymbol(<Identifier>node) === symbol ? assignment : undefined;
+                    case SyntaxKind.BinaryExpression:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                    case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.ObjectLiteralExpression:
+                    case SyntaxKind.PropertyAccessExpression:
+                    case SyntaxKind.ElementAccessExpression:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                    case SyntaxKind.TypeAssertionExpression:
+                    case SyntaxKind.AsExpression:
+                    case SyntaxKind.NonNullExpression:
+                    case SyntaxKind.ParenthesizedExpression:
+                    case SyntaxKind.PrefixUnaryExpression:
+                    case SyntaxKind.DeleteExpression:
+                    case SyntaxKind.AwaitExpression:
+                    case SyntaxKind.TypeOfExpression:
+                    case SyntaxKind.VoidExpression:
+                    case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.YieldExpression:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.SpreadElementExpression:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.DefaultClause:
+                    case SyntaxKind.LabeledStatement:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.TryStatement:
+                    case SyntaxKind.CatchClause:
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxSpreadAttribute:
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxExpression:
+                    case SyntaxKind.Block:
+                    case SyntaxKind.SourceFile:
+                        return forEachChild(node, visit);
+                }
+                return undefined;
+            }
+        }
+
+        function checkVariableAssignedBefore(symbol: Symbol, reference: Node) {
+            if (!(symbol.flags & SymbolFlags.Variable)) {
+                return;
+            }
+            const declaration = symbol.valueDeclaration;
+            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration || (<VariableDeclaration>declaration).initializer) {
+                return;
+            }
+            const declarationContainer = getContainingFunction(declaration) || getSourceFileOfNode(declaration);
+            const referenceContainer = getContainingFunction(reference) || getSourceFileOfNode(reference);
+            if (declarationContainer !== referenceContainer) {
+                return;
+            }
+            const links = getSymbolLinks(symbol);
+            if (!links.firstAssignmentChecked) {
+                links.firstAssignmentChecked = true;
+                links.firstAssignment = findFirstAssignment(symbol, declarationContainer);
+            }
+            if (links.firstAssignment && links.firstAssignment.end <= reference.pos) {
+                return;
+            }
+            error(reference, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
 
@@ -7447,7 +7535,11 @@ namespace ts {
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            return getNarrowedTypeOfReference(getTypeOfSymbol(localOrExportSymbol), node);
+            const type = getTypeOfSymbol(localOrExportSymbol);
+            if (strictNullChecks && !isAssignmentTarget(node) && !(type.flags & TypeFlags.Any) && !isNullableType(type)) {
+                checkVariableAssignedBefore(symbol, node);
+            }
+            return getNarrowedTypeOfReference(type, node);
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -8344,19 +8436,40 @@ namespace ts {
             return mapper && mapper.context;
         }
 
+        // Return the root assignment node of an assignment target
+        function getAssignmentRoot(node: Node): Node {
+            while (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
+                node = node.parent;
+            }
+            while (true) {
+                if (node.parent.kind === SyntaxKind.PropertyAssignment) {
+                    node = node.parent.parent;
+                }
+                else if (node.parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                    node = node.parent;
+                }
+                else {
+                    break;
+                }
+            }
+            const parent = node.parent;
+            return parent.kind === SyntaxKind.BinaryExpression &&
+                (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+                (<BinaryExpression>parent).left === node ? parent : undefined;
+        }
+
         // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
         // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
         // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
         function isAssignmentTarget(node: Node): boolean {
+            return !!getAssignmentRoot(node);
+        }
+
+        function isCompoundAssignmentTarget(node: Node) {
             const parent = node.parent;
-            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken && (<BinaryExpression>parent).left === node) {
-                return true;
-            }
-            if (parent.kind === SyntaxKind.PropertyAssignment) {
-                return isAssignmentTarget(parent.parent);
-            }
-            if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
-                return isAssignmentTarget(parent);
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                const operator = (<BinaryExpression>parent).operatorToken.kind;
+                return operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment;
             }
             return false;
         }
