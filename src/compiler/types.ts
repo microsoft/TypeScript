@@ -2442,7 +2442,6 @@ namespace ts {
 
     export interface DiscoverTypingsInfo {
         fileNames: string[];                            // The file names that belong to the same project.
-        cachePath: string;                              // The path to the typings cache
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
         packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
