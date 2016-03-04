@@ -2429,7 +2429,7 @@ namespace ts {
                         return false;
 
                     default:
-                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
+                        return false;
                 }
             }
         }
