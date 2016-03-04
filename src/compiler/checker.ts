@@ -6286,14 +6286,22 @@ namespace ts {
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
-            for (const type of types) {
-                if (candidate !== type && !isTypeSubtypeOf(type, candidate)) return false;
+            for (const t of types) {
+                if (candidate !== t && !isTypeSubtypeOf(t, candidate)) return false;
             }
             return true;
         }
 
         function getCommonSupertype(types: Type[]): Type {
-            return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+            if (!strictNullChecks) {
+                return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+            }
+            const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
+            if (!primaryTypes.length) {
+                return getUnionType(types);
+            }
+            const supertype = forEach(primaryTypes, t => isSupertypeOfEach(t, primaryTypes) ? t : undefined);
+            return supertype && addNullableKind(supertype, reduceLeft(types, (flags, t) => flags | t.flags, 0) & TypeFlags.Nullable);
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
