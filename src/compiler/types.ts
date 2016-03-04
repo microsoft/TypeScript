@@ -2096,7 +2096,8 @@ namespace ts {
         Number                  = 0x00000004,
         Boolean                 = 0x00000008,
         Void                    = 0x00000010,
-        Undefined               = 0x00000020,  // Undefined or null
+        Undefined               = 0x00000020,
+        Null                    = 0x00000040,
         Enum                    = 0x00000080,  // Enum type
         StringLiteral           = 0x00000100,  // String literal type
         TypeParameter           = 0x00000200,  // Type parameter
@@ -2114,7 +2115,7 @@ namespace ts {
         /* @internal */
         FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsUndefined       = 0x00200000,  // Type is or contains undefined type
+        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains undefined or null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
@@ -2124,18 +2125,20 @@ namespace ts {
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined,
+        Nullable = Undefined | Null,
         /* @internal */
-        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | StringLiteral | Enum,
+        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        /* @internal */
+        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefined | ContainsObjectLiteral,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
-        PropagatingFlags = ContainsUndefined | ContainsObjectLiteral | ContainsAnyFunctionType
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -2214,9 +2217,7 @@ namespace ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
-    export interface UnionType extends UnionOrIntersectionType {
-        nonNullableType?: Type;  // Cached non-nullable form of type
-    }
+    export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
 

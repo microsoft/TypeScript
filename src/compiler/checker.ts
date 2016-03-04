@@ -113,9 +113,9 @@ namespace ts {
         const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
-        const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "undefined");
-        const nullType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "null");
-        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefined, "undefined");
+        const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
+        const nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
+        const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -209,7 +209,7 @@ namespace ts {
             },
             "undefined": {
                 type: undefinedType,
-                flags: TypeFlags.ContainsUndefined
+                flags: TypeFlags.ContainsUndefinedOrNull
             }
         };
 
@@ -1883,7 +1883,7 @@ namespace ts {
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
                     }
-                    else if (isNullableType(type)) {
+                    else if (isNullableType(type) && (<UnionType>type).types.length > 2) {
                         writeType(getNonNullableType(type), TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.QuestionToken);
                     }
@@ -4805,7 +4805,7 @@ namespace ts {
             const id = getTypeListId(typeSet);
             let type = unionTypes[id];
             if (!type) {
-                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Undefined);
+                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | propagatedFlags);
                 type.types = typeSet;
             }
@@ -4840,7 +4840,7 @@ namespace ts {
             const id = getTypeListId(typeSet);
             let type = intersectionTypes[id];
             if (!type) {
-                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Undefined);
+                const propagatedFlags = getPropagatingFlagsOfTypes(typeSet, /*excludeKinds*/ TypeFlags.Nullable);
                 type = intersectionTypes[id] = <IntersectionType>createObjectType(TypeFlags.Intersection | propagatedFlags);
                 type.types = typeSet;
             }
@@ -5501,6 +5501,9 @@ namespace ts {
                 if (isTypeAny(target)) return Ternary.True;
                 if (source.flags & TypeFlags.Undefined) {
                     if (!strictNullChecks || target.flags & TypeFlags.Undefined || source === emptyArrayElementType) return Ternary.True;
+                }
+                if (source.flags & TypeFlags.Null) {
+                    if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
                 }
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
@@ -6325,7 +6328,7 @@ namespace ts {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return type.flags & TypeFlags.Reference && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType) ||
-                !(type.flags & TypeFlags.Undefined) && isTypeAssignableTo(type, anyReadonlyArrayType);
+                !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -6344,18 +6347,18 @@ namespace ts {
             return !!(type.flags & TypeFlags.Tuple);
         }
 
-        function isNullableType(type: Type): boolean {
-            if (type.flags & TypeFlags.Undefined) {
-                return true;
-            }
-            if (type.flags & TypeFlags.Union) {
+        function getNullableKind(type: Type): TypeFlags {
+            let flags = type.flags;
+            if (flags & TypeFlags.Union) {
                 for (const t of (type as UnionType).types) {
-                    if (t.flags & TypeFlags.Undefined) {
-                        return true;
-                    }
+                    flags |= t.flags;
                 }
             }
-            return false;
+            return flags & TypeFlags.Nullable;
+        }
+
+        function isNullableType(type: Type) {
+            return getNullableKind(type) === TypeFlags.Nullable;
         }
 
         function getNullableType(type: Type): Type {
@@ -6363,20 +6366,51 @@ namespace ts {
                 return type;
             }
             if (!type.nullableType) {
-                type.nullableType = isNullableType(type) ? type : getUnionType([type, undefinedType]);
+                type.nullableType = isNullableType(type) ? type : getUnionType([type, undefinedType, nullType]);
             }
             return type.nullableType;
         }
 
-        function getNonNullableTypeFromUnionType(type: UnionType): Type {
-            if (!type.nonNullableType) {
-                type.nonNullableType = removeTypesFromUnionOrIntersection(type, [undefinedType, nullType]);
+        function addNullableKind(type: Type, kind: TypeFlags): Type {
+            if ((getNullableKind(type) & kind) !== kind) {
+                const types = [type];
+                if (kind & TypeFlags.Undefined) {
+                    types.push(undefinedType);
+                }
+                if (kind & TypeFlags.Null) {
+                    types.push(nullType);
+                }
+                type = getUnionType(types);
             }
-            return type.nonNullableType;
+            return type;
+        }
+
+        function removeNullableKind(type: Type, kind: TypeFlags) {
+            if (type.flags & TypeFlags.Union && getNullableKind(type) & kind) {
+                let firstType: Type;
+                let types: Type[];
+                for (const t of (type as UnionType).types) {
+                    if (!(t.flags & kind)) {
+                        if (!firstType) {
+                            firstType = t;
+                        }
+                        else {
+                            if (!types) {
+                                types = [firstType];
+                            }
+                            types.push(t);
+                        }
+                    }
+                }
+                if (firstType) {
+                    type = types ? getUnionType(types) : firstType;
+                }
+            }
+            return type;
         }
 
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks && type.flags & TypeFlags.Union ? getNonNullableTypeFromUnionType(type as UnionType) : type;
+            return strictNullChecks ? removeNullableKind(type, TypeFlags.Nullable) : type;
         }
 
         /**
@@ -6433,12 +6467,12 @@ namespace ts {
         }
 
         function getWidenedConstituentType(type: Type): Type {
-            return type.flags & TypeFlags.Undefined ? type : getWidenedType(type);
+            return type.flags & TypeFlags.Nullable ? type : getWidenedType(type);
         }
 
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
-                if (type.flags & TypeFlags.Undefined) {
+                if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
                 if (type.flags & TypeFlags.ObjectLiteral) {
@@ -6490,7 +6524,7 @@ namespace ts {
             if (type.flags & TypeFlags.ObjectLiteral) {
                 for (const p of getPropertiesOfObjectType(type)) {
                     const t = getTypeOfSymbol(p);
-                    if (t.flags & TypeFlags.ContainsUndefined) {
+                    if (t.flags & TypeFlags.ContainsUndefinedOrNull) {
                         if (!reportWideningErrorsInType(t)) {
                             error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, p.name, typeToString(getWidenedType(t)));
                         }
@@ -6534,7 +6568,7 @@ namespace ts {
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
-            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefined) {
+            if (produceDiagnostics && compilerOptions.noImplicitAny && type.flags & TypeFlags.ContainsUndefinedOrNull) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
                     reportImplicitAnyError(declaration, type);
@@ -7542,7 +7576,7 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getTypeOfSymbol(localOrExportSymbol);
-            if (strictNullChecks && !isAssignmentTarget(node) && !(type.flags & TypeFlags.Any) && !isNullableType(type)) {
+            if (strictNullChecks && !isAssignmentTarget(node) && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined)) {
                 checkVariableAssignedBefore(symbol, node);
             }
             return getNarrowedTypeOfReference(type, node);
@@ -11524,8 +11558,8 @@ namespace ts {
                     // as having the primitive type Number. If one operand is the null or undefined value,
                     // it is treated as having the type of the other operand.
                     // The result is always of the Number primitive type.
-                    if (leftType.flags & TypeFlags.Undefined) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Undefined) rightType = leftType;
+                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
+                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
 
                     leftType = getNonNullableType(leftType);
                     rightType = getNonNullableType(rightType);
@@ -11555,8 +11589,8 @@ namespace ts {
                     // or at least one of the operands to be of type Any or the String primitive type.
 
                     // If one operand is the null or undefined value, it is treated as having the type of the other operand.
-                    if (leftType.flags & TypeFlags.Undefined) leftType = rightType;
-                    if (rightType.flags & TypeFlags.Undefined) rightType = leftType;
+                    if (leftType.flags & TypeFlags.Nullable) leftType = rightType;
+                    if (rightType.flags & TypeFlags.Nullable) rightType = leftType;
 
                     leftType = getNonNullableType(leftType);
                     rightType = getNonNullableType(rightType);
@@ -11618,7 +11652,7 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return isNullableType(leftType) ? getNullableType(rightType) : rightType;
+                    return addNullableKind(rightType, getNullableKind(leftType));
                 case SyntaxKind.BarBarToken:
                     return getUnionType([getNonNullableType(leftType), rightType]);
                 case SyntaxKind.EqualsToken:
