@@ -7525,6 +7525,10 @@ namespace ts {
             if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration || (<VariableDeclaration>declaration).initializer) {
                 return;
             }
+            const parentParentKind = declaration.parent.parent.kind;
+            if (parentParentKind === SyntaxKind.ForOfStatement || parentParentKind === SyntaxKind.ForInStatement) {
+                return;
+            }
             const declarationContainer = getContainingFunction(declaration) || getSourceFileOfNode(declaration);
             const referenceContainer = getContainingFunction(reference) || getSourceFileOfNode(reference);
             if (declarationContainer !== referenceContainer) {
