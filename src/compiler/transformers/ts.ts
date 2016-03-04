@@ -2105,21 +2105,24 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is exported from a TypeScript namespace.
          */
-        function visitVariableStatement(node: VariableStatement) {
-            Debug.assert(isNamespaceExport(node));
+        function visitVariableStatement(node: VariableStatement): Statement {
+            if (isNamespaceExport(node)) {
+                const variables = getInitializedVariables(node.declarationList);
+                if (variables.length === 0) {
+                    // elide statement if there are no initialized variables.
+                    return undefined;
+                }
 
-            const variables = getInitializedVariables(node.declarationList);
-            if (variables.length === 0) {
-                // elide statement if there are no initialized variables.
-                return undefined;
+                return createStatement(
+                    inlineExpressions(
+                        map(variables, transformInitializedVariable)
+                    ),
+                    /*location*/ node
+                );
             }
-
-            return createStatement(
-                inlineExpressions(
-                    map(variables, transformInitializedVariable)
-                ),
-                /*location*/ node
-            );
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function transformInitializedVariable(node: VariableDeclaration): Expression {
