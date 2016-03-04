@@ -107,14 +107,15 @@ namespace ts {
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
+        const nullableWideningFlags = strictNullChecks ? 0 : TypeFlags.ContainsUndefinedOrNull;
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
         const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
-        const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
-        const nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
+        const undefinedType = createIntrinsicType(TypeFlags.Undefined | nullableWideningFlags, "undefined");
+        const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
@@ -4719,9 +4720,20 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function addTypeToSet(typeSet: Type[], type: Type, typeSetKind: TypeFlags) {
+        interface TypeSet extends Array<Type> {
+            containsAny?: boolean;
+            containsUndefined?: boolean;
+            containsNull?: boolean;
+        }
+
+        function addTypeToSet(typeSet: TypeSet, type: Type, typeSetKind: TypeFlags) {
             if (type.flags & typeSetKind) {
                 addTypesToSet(typeSet, (<UnionOrIntersectionType>type).types, typeSetKind);
+            }
+            else if (type.flags & (TypeFlags.Any | TypeFlags.Undefined | TypeFlags.Null)) {
+                if (type.flags & TypeFlags.Any) typeSet.containsAny = true;
+                if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
+                if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
             else if (!contains(typeSet, type)) {
                 typeSet.push(type);
@@ -4730,7 +4742,7 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToSet(typeSet: Type[], types: Type[], typeSetKind: TypeFlags) {
+        function addTypesToSet(typeSet: TypeSet, types: Type[], typeSetKind: TypeFlags) {
             for (const type of types) {
                 addTypeToSet(typeSet, type, typeSetKind);
             }
@@ -4785,21 +4797,22 @@ namespace ts {
             if (types.length === 0) {
                 return emptyUnionType;
             }
-            const typeSet: Type[] = [];
+            const typeSet = [] as TypeSet;
             addTypesToSet(typeSet, types, TypeFlags.Union);
-            if (containsTypeAny(typeSet)) {
+            if (typeSet.containsAny) {
                 return anyType;
             }
-            if (noSubtypeReduction) {
-                if (!strictNullChecks) {
-                    removeAllButLast(typeSet, undefinedType);
-                    removeAllButLast(typeSet, nullType);
-                }
+            if (strictNullChecks) {
+                if (typeSet.containsNull) typeSet.push(nullType);
+                if (typeSet.containsUndefined) typeSet.push(undefinedType);
             }
-            else {
+            if (!noSubtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            if (typeSet.length === 1) {
+            if (typeSet.length === 0) {
+                return typeSet.containsNull ? nullType : undefinedType;
+            }
+            else if (typeSet.length === 1) {
                 return typeSet[0];
             }
             const id = getTypeListId(typeSet);
@@ -4829,10 +4842,14 @@ namespace ts {
             if (types.length === 0) {
                 return emptyObjectType;
             }
-            const typeSet: Type[] = [];
+            const typeSet = [] as TypeSet;
             addTypesToSet(typeSet, types, TypeFlags.Intersection);
-            if (containsTypeAny(typeSet)) {
+            if (typeSet.containsAny) {
                 return anyType;
+            }
+            if (strictNullChecks) {
+                if (typeSet.containsNull) typeSet.push(nullType);
+                if (typeSet.containsUndefined) typeSet.push(undefinedType);
             }
             if (typeSet.length === 1) {
                 return typeSet[0];
