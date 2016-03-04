@@ -987,6 +987,10 @@ namespace ts {
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
                     write("null");
                 }
+                else {
+                    writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
+                    resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                }
 
                 function getHeritageClauseVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;

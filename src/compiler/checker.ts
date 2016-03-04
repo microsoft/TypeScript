@@ -16244,6 +16244,15 @@ namespace ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
+        function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
+            resolveBaseTypesOfClass(classType);
+            const baseType = classType.resolvedBaseTypes[0];
+            if (baseType) {
+                getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
+            }
+        }
+
         function hasGlobalName(name: string): boolean {
             return hasProperty(globals, name);
         }
@@ -16276,6 +16285,7 @@ namespace ts {
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
+                writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
