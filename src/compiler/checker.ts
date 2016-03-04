@@ -4767,25 +4767,6 @@ namespace ts {
             }
         }
 
-        function containsTypeAny(types: Type[]): boolean {
-            for (const type of types) {
-                if (isTypeAny(type)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function removeAllButLast(types: Type[], typeToRemove: Type) {
-            let i = types.length;
-            while (i > 0 && types.length > 1) {
-                i--;
-                if (types[i] === typeToRemove) {
-                    types.splice(i, 1);
-                }
-            }
-        }
-
         // We reduce the constituent type set to only include types that aren't subtypes of other types, unless
         // the noSubtypeReduction flag is specified, in which case we perform a simple deduplication based on
         // object identity. Subtype reduction is possible only when union types are known not to circularly
