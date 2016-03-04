@@ -16247,10 +16247,8 @@ namespace ts {
         function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
             resolveBaseTypesOfClass(classType);
-            const baseType = classType.resolvedBaseTypes[0];
-            if (baseType) {
-                getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
-            }
+            const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
+            getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
         }
 
         function hasGlobalName(name: string): boolean {
