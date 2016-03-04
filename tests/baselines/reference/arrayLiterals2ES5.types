@@ -130,7 +130,7 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 
 var temp3 = [undefined, null, undefined];
 >temp3 : any[]
->[undefined, null, undefined] : undefined[]
+>[undefined, null, undefined] : null[]
 >undefined : undefined
 >null : null
 >undefined : undefined

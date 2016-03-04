@@ -572,7 +572,7 @@ var rj9 = null || null;       // null      || null is any
 
 var rj10 = undefined || null; // undefined || null is any
 >rj10 : any
->undefined || null : undefined
+>undefined || null : null
 >undefined : undefined
 >null : null
 
