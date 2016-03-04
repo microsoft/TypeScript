@@ -407,10 +407,6 @@ namespace ts {
         return createTextSpanFromBounds(pos, errorNode.end);
     }
 
-    export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined;
-    }
-
     export function isExternalOrCommonJsModule(file: SourceFile): boolean {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
     }
