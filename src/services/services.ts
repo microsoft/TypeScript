@@ -4539,7 +4539,8 @@ namespace ts {
             const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddVariableSignature(declarations, node, symbolKind, symbolName, containerName, result)) {
                 // Just add all the declarations.
                 forEach(declarations, declaration => {
                     result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
@@ -4578,13 +4579,22 @@ namespace ts {
                 return false;
             }
 
+           function tryAddVariableSignature(declarations: Declaration[], location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                forEach(declarations, declaration => {
+                    if (declaration.kind === ts.SyntaxKind.VariableDeclaration) {
+                        return tryAddSignature(symbol.declarations, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                    }
+                });
+                return false;
+            } 
+
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
                 const declarations: Declaration[] = [];
                 let definition: Declaration;
 
                 forEach(signatureDeclarations, d => {
                     if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature || d.kind === SyntaxKind.VariableDeclaration))) {
                         declarations.push(d);
                         if ((<FunctionLikeDeclaration>d).body) definition = d;
                     }
