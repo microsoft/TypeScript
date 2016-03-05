@@ -4539,8 +4539,7 @@ namespace ts {
             const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddDeclarationsWithSignatures(declarations, node, symbolKind, symbolName, containerName, result)) {
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
                 // Just add all the declarations.
                 forEach(declarations, declaration => {
                     result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
@@ -4576,15 +4575,6 @@ namespace ts {
                 if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
                     return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
                 }
-                return false;
-            }
-
-            function tryAddDeclarationsWithSignatures(declarations: Declaration[], location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                forEach(declarations, declaration => {
-                    if (declaration.kind === ts.SyntaxKind.VariableDeclaration) {
-                        return tryAddSignature(symbol.declarations, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
-                    }
-                });
                 return false;
             }
 
