@@ -6290,6 +6290,14 @@ namespace ts {
             return true;
         }
 
+        function getCombinedFlagsOfTypes(types: Type[]) {
+            let flags: TypeFlags = 0;
+            for (const t of types) {
+                flags |= t.flags;
+            }
+            return flags;
+        }
+
         function getCommonSupertype(types: Type[]): Type {
             if (!strictNullChecks) {
                 return forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
@@ -6299,7 +6307,7 @@ namespace ts {
                 return getUnionType(types);
             }
             const supertype = forEach(primaryTypes, t => isSupertypeOfEach(t, primaryTypes) ? t : undefined);
-            return supertype && addNullableKind(supertype, reduceLeft(types, (flags, t) => flags | t.flags, 0) & TypeFlags.Nullable);
+            return supertype && addNullableKind(supertype, getCombinedFlagsOfTypes(types) & TypeFlags.Nullable);
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
@@ -10931,7 +10939,8 @@ namespace ts {
                     }
                 }
                 else {
-                    types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync);
+                    const hasImplicitReturn = !!(func.flags & NodeFlags.HasImplicitReturn);
+                    types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync, hasImplicitReturn);
                     if (types.length === 0) {
                         if (isAsync) {
                             // For an async function, the return type will not be void, but rather a Promise for void.
@@ -11011,9 +11020,9 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper, isAsync?: boolean): Type[] {
+        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper: TypeMapper, isAsync: boolean, hasImplicitReturn: boolean): Type[] {
             const aggregatedTypes: Type[] = [];
-
+            let hasOmittedExpressions = false;
             forEachReturnStatement(body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
@@ -11025,13 +11034,19 @@ namespace ts {
                         // the native Promise<T> type by the caller.
                         type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
-
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
                 }
+                else {
+                    hasOmittedExpressions = true;
+                }
             });
-
+            if (strictNullChecks && aggregatedTypes.length && (hasOmittedExpressions || hasImplicitReturn)) {
+                if (!contains(aggregatedTypes, undefinedType)) {
+                    aggregatedTypes.push(undefinedType);
+                }
+            }
             return aggregatedTypes;
         }
 
