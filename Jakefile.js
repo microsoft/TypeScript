@@ -150,8 +150,8 @@ var harnessSources = harnessCoreSources.concat([
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
-    "tsconfigParsing.ts"
-].map(function (f) {
+    "tsconfigParsing.ts",
+    "commandlineParsing.ts"].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
     "protocol.d.ts",
