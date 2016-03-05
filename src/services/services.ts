@@ -4540,7 +4540,7 @@ namespace ts {
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddVariableSignature(declarations, node, symbolKind, symbolName, containerName, result)) {
+                !tryAddDeclarationsWithSignatures(declarations, node, symbolKind, symbolName, containerName, result)) {
                 // Just add all the declarations.
                 forEach(declarations, declaration => {
                     result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
@@ -4579,14 +4579,14 @@ namespace ts {
                 return false;
             }
 
-           function tryAddVariableSignature(declarations: Declaration[], location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+            function tryAddDeclarationsWithSignatures(declarations: Declaration[], location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
                 forEach(declarations, declaration => {
                     if (declaration.kind === ts.SyntaxKind.VariableDeclaration) {
                         return tryAddSignature(symbol.declarations, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
                     }
                 });
                 return false;
-            } 
+            }
 
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
                 const declarations: Declaration[] = [];
