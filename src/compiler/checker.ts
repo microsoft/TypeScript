@@ -6388,6 +6388,11 @@ namespace ts {
             return flags & TypeFlags.Nullable;
         }
 
+        function getNullableTypeOfKind(kind: TypeFlags) {
+            return kind & TypeFlags.Null ? kind & TypeFlags.Undefined ?
+                getUnionType([nullType, undefinedType]) : nullType : undefinedType;
+        }
+
         function isNullableType(type: Type) {
             return getNullableKind(type) === TypeFlags.Nullable;
         }
@@ -7216,12 +7221,11 @@ namespace ts {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
+                    case SyntaxKind.EqualsEqualsEqualsToken:
+                    case SyntaxKind.ExclamationEqualsEqualsToken:
                         if (isNullOrUndefinedLiteral(expr.right)) {
                             return narrowTypeByNullCheck(type, expr, assumeTrue);
                         }
-                        // Fall through
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
                         if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral) {
                             return narrowTypeByTypeof(type, expr, assumeTrue);
                         }
@@ -7237,14 +7241,22 @@ namespace ts {
             }
 
             function narrowTypeByNullCheck(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // We have '==' or '!=' operator with 'null' or 'undefined' on the right
-                if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken) {
+                // We have '==', '!=', '===', or '!==' operator with 'null' or 'undefined' on the right
+                const operator = expr.operatorToken.kind;
+                if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || assumeTrue || !isMatchingReference(expr.left, reference)) {
+                if (!strictNullChecks || !isMatchingReference(expr.left, reference)) {
                     return type;
                 }
-                return getNonNullableType(type);
+                const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
+                const exprNullableKind = doubleEquals ? TypeFlags.Nullable :
+                    expr.right.kind === SyntaxKind.NullKeyword ? TypeFlags.Null : TypeFlags.Undefined;
+                if (assumeTrue) {
+                    const nullableKind = getNullableKind(type) & exprNullableKind;
+                    return nullableKind ? getNullableTypeOfKind(nullableKind) : type;
+                }
+                return removeNullableKind(type, exprNullableKind);
             }
 
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
