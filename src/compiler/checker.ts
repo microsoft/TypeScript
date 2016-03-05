@@ -229,6 +229,7 @@ namespace ts {
 
         const subtypeRelation: Map<RelationComparisonResult> = {};
         const assignableRelation: Map<RelationComparisonResult> = {};
+        const comparableRelation: Map<RelationComparisonResult> = {};
         const identityRelation: Map<RelationComparisonResult> = {};
 
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
@@ -5267,12 +5268,20 @@ namespace ts {
             return checkTypeAssignableTo(source, target, /*errorNode*/ undefined);
         }
 
+        function isTypeComparableTo(source: Type, target: Type): boolean {
+            return checkTypeComparableTo(source, target, /*errorNode*/ undefined);
+        }
+
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
             return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
+        }
+
+        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, comparableRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isSignatureAssignableTo(source: Signature,
@@ -5432,7 +5441,7 @@ namespace ts {
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
          * @param target The right-hand-side of the relation.
-         * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', or 'subTypeRelation'.
+         * @param relation The relation considered. One of 'identityRelation', 'subtypeRelation', 'assignableRelation', or 'comparableRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
          * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
@@ -5510,7 +5519,7 @@ namespace ts {
                     }
                 }
                 if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
-                if (relation === assignableRelation) {
+                if (relation === assignableRelation || relation === comparableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                 }
@@ -5538,8 +5547,15 @@ namespace ts {
 
                 // Note that the "each" checks must precede the "some" checks to produce the correct results
                 if (source.flags & TypeFlags.Union) {
-                    if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
-                        return result;
+                    if (relation === comparableRelation) {
+                        if (result = someTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                            return result;
+                        }
+                    }
+                    else {
+                        if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                            return result;
+                        }
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
@@ -5634,7 +5650,8 @@ namespace ts {
             function isKnownProperty(type: Type, name: string): boolean {
                 if (type.flags & TypeFlags.ObjectType) {
                     const resolved = resolveStructuredTypeMembers(type);
-                    if (relation === assignableRelation && (type === globalObjectType || resolved.properties.length === 0) ||
+                    if ((relation === assignableRelation || relation === comparableRelation) &&
+                        (type === globalObjectType || resolved.properties.length === 0) ||
                         resolved.stringIndexInfo || resolved.numberIndexInfo || getPropertyOfType(type, name)) {
                         return true;
                     }
@@ -10774,12 +10791,8 @@ namespace ts {
             const targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
-
-                // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike = maybeTypeOfKind(targetType, TypeFlags.StringLike) &&
-                    maybeTypeOfKind(widenedType, TypeFlags.StringLike);
-                if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                if (!isTypeComparableTo(targetType, widenedType)) {
+                    checkTypeComparableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -11649,11 +11662,7 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (maybeTypeOfKind(leftType, TypeFlags.StringLike) && maybeTypeOfKind(rightType, TypeFlags.StringLike)) {
-                        return booleanType;
-                    }
-                    if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
+                    if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
                     return booleanType;
@@ -14180,17 +14189,12 @@ namespace ts {
                 if (produceDiagnostics && clause.kind === SyntaxKind.CaseClause) {
                     const caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014):5.9
-                    // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
+                    // In a 'switch' statement, each 'case' expression must be of a type that is comparable
+                    // to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
-
-                    const expressionTypeIsAssignableToCaseType =
-                        // Permit 'number[] | "foo"' to be asserted to 'string'.
-                        (expressionTypeIsStringLike && maybeTypeOfKind(caseType, TypeFlags.StringLike)) ||
-                        isTypeAssignableTo(expressionType, caseType);
-
-                    if (!expressionTypeIsAssignableToCaseType) {
-                        // 'expressionType is not assignable to caseType', try the reversed check and report errors if it fails
-                        checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
+                    if (!isTypeComparableTo(expressionType, caseType)) {
+                        // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
+                        checkTypeComparableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
