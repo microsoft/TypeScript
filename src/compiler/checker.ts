@@ -5701,7 +5701,19 @@ namespace ts {
 
             function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
                 const targetTypes = target.types;
-                for (let i = 0, len = targetTypes.length; i < len; i++) {
+                let len = targetTypes.length;
+                // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
+                // to produce the best possible errors we first check the nullable types, such that the last type we
+                // check and report errors from is a non-nullable type if one is present.
+                while (len >= 2 && targetTypes[len - 1].flags & TypeFlags.Nullable) {
+                    const related = isRelatedTo(source, targetTypes[len - 1], /*reportErrors*/ false);
+                    if (related) {
+                        return related;
+                    }
+                    len--;
+                }
+                // Now check the non-nullable types and report errors on the last one.
+                for (let i = 0; i < len; i++) {
                     const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
                     if (related) {
                         return related;
@@ -5725,7 +5737,19 @@ namespace ts {
 
             function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
                 const sourceTypes = source.types;
-                for (let i = 0, len = sourceTypes.length; i < len; i++) {
+                let len = sourceTypes.length;
+                // The null and undefined types are guaranteed to be at the end of the constituent type list. In order
+                // to produce the best possible errors we first check the nullable types, such that the last type we
+                // check and report errors from is a non-nullable type if one is present.
+                while (len >= 2 && sourceTypes[len - 1].flags & TypeFlags.Nullable) {
+                    const related = isRelatedTo(sourceTypes[len - 1], target, /*reportErrors*/ false);
+                    if (related) {
+                        return related;
+                    }
+                    len--;
+                }
+                // Now check the non-nullable types and report errors on the last one.
+                for (let i = 0; i < len; i++) {
                     const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
                     if (related) {
                         return related;
