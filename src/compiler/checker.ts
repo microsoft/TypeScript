@@ -5507,7 +5507,7 @@ namespace ts {
 
                 if (isTypeAny(target)) return Ternary.True;
                 if (source.flags & TypeFlags.Undefined) {
-                    if (!strictNullChecks || target.flags & TypeFlags.Undefined || source === emptyArrayElementType) return Ternary.True;
+                    if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
                 }
                 if (source.flags & TypeFlags.Null) {
                     if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
