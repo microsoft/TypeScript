@@ -131,7 +131,7 @@ namespace ts.server {
     export interface ServerHost extends ts.System {
         globalTypingCachePath?: Path;
         getTsd?: () => any;
-        cachedTsdJson?: Map<TsdJson>;
+        cachedTsdJsons?: Map<TsdJson>;
         getTsdJson?: (tsdJsonPath: Path) => TsdJson;
     }
 

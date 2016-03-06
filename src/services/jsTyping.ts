@@ -11,6 +11,7 @@ namespace ts.JsTyping {
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
         readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
+        useCaseSensitiveFileNames: boolean;
     };
 
     interface PackageJson {
@@ -41,13 +42,13 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeListPath: Path,
-        packageNameToTypingLocation: Map<string>,
+        packageNameToTypingLocation: Map<Path>,
         typingOptions: TypingOptions,
         compilerOptions: CompilerOptions):
-        { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
+        { cachedTypingPaths: Path[], newTypingNames: string[], filesToWatch: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<string> = {};
+        const inferredTypings: Map<Path> = {};
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
@@ -104,7 +105,7 @@ namespace ts.JsTyping {
         }
 
         const newTypingNames: string[] = [];
-        const cachedTypingPaths: string[] = [];
+        const cachedTypingPaths: Path[] = [];
         for (const typing in inferredTypings) {
             if (inferredTypings[typing] !== undefined) {
                 cachedTypingPaths.push(inferredTypings[typing]);
@@ -213,7 +214,7 @@ namespace ts.JsTyping {
                     continue;
                 }
                 if (packageJson.typings) {
-                    const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
+                    const absolutePath = toPath(packageJson.typings, getDirectoryPath(normalizedFileName), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
                     inferredTypings[packageJson.name] = absolutePath;
                 }
                 else {

@@ -197,10 +197,10 @@ namespace ts.server {
         }
         return undefined;
     };
-    serverHost.cachedTsdJson = {};
+    serverHost.cachedTsdJsons = {};
     serverHost.getTsdJson = (tsdJsonPath: Path) => {
-        if (hasProperty(serverHost.cachedTsdJson, tsdJsonPath)) {
-            return serverHost.cachedTsdJson[tsdJsonPath];
+        if (hasProperty(serverHost.cachedTsdJsons, tsdJsonPath)) {
+            return serverHost.cachedTsdJsons[tsdJsonPath];
         }
         else {
             const { config } = readConfigFile(tsdJsonPath, (path: string) => serverHost.readFile(path));
@@ -214,8 +214,8 @@ namespace ts.server {
                     const typingFilePath = toPath(installedKey, typingsFolderPath, getCanonicalFileName);
                     packageNameToTypingPath[packageName] = typingFilePath;
                 }
-                serverHost.cachedTsdJson[tsdJsonPath] = { packageNameToTypingPath };
-                return serverHost.cachedTsdJson[tsdJsonPath];
+                serverHost.cachedTsdJsons[tsdJsonPath] = { packageNameToTypingPath };
+                return serverHost.cachedTsdJsons[tsdJsonPath];
             }
         }
         return undefined;

@@ -762,19 +762,10 @@ namespace ts.server {
                 return;
             }
 
-            let typingOptions: TypingOptions;
-            let compilerOptions: CompilerOptions;
-            let projectRootPath: Path;
-            if (project.isConfiguredProject()) {
-                projectRootPath = toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName);
-                typingOptions = project.projectOptions.typingOptions;
-                compilerOptions = project.projectOptions.compilerOptions;
-            }
-            else {
-                projectRootPath = undefined;
-                typingOptions = { enableAutoDiscovery: true };
-                compilerOptions = undefined;
-            }
+            const typingOptions: TypingOptions = project.projectOptions.typingOptions 
+                ? project.projectOptions.typingOptions
+                : { enableAutoDiscovery: true };
+            const projectRootPath: Path = project.isConfiguredProject() ? getDirectoryPath(<Path>project.projectFilename) : undefined;
 
             // Todo: add support for local cache path
             const cachePath = this.host.globalTypingCachePath;
@@ -787,11 +778,12 @@ namespace ts.server {
                 /* safeListPath */ undefined,
                 /* packageNameToTypingLocation */ tsdJson ? tsdJson.packageNameToTypingPath : undefined,
                 typingOptions,
-                compilerOptions
+                project.projectOptions.compilerOptions
             );
 
             this.log("Cached typings include: " + cachedTypingPaths);
             this.log("New typings to download: " + newTypingNames);
+
             // Bail out when no actions are needed
             if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
                 return;
@@ -819,7 +811,7 @@ namespace ts.server {
 
                 let promise: any;
                 if (!sys.fileExists(tsdJsonPath)) {
-                    promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
+                    promise = api.initConfig(/*overwrite*/ true).then((paths: string[]) => api.readConfig());
                 }
                 else {
                     promise = api.readConfig();
@@ -838,8 +830,8 @@ namespace ts.server {
                     .catch((e: any) => this.log(e));
             }
 
-            function addTypingToProject(fileName: string, project: Project) {
-                const script = project.projectService.openFile(fileName, /*openedByClient*/ false);
+            function addTypingToProject(filePath: Path, project: Project) {
+                const script = project.projectService.openFile(filePath, /*openedByClient*/ false);
                 if (script.defaultProject !== project) {
                     project.addRoot(script);
                 }
