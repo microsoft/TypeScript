@@ -26,7 +26,7 @@ namespace ts.JsTyping {
 
     // A map of loose file names to library names
     // that we are confident require typings
-    let safeList: Map<string>;
+    let safeList: { notFound: boolean, content?: Map<string> };
 
     /**
      * @param host is the object providing I/O related operations.
@@ -60,10 +60,10 @@ namespace ts.JsTyping {
         if (!safeList && safeListPath) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
             if (result.config) {
-                safeList = result.config;
+                safeList = { notFound: false, content: result.config };
             }
             else {
-                safeList = undefined;
+                safeList = { notFound: true };
             };
         }
 
@@ -164,11 +164,11 @@ namespace ts.JsTyping {
             const jsFileNames = filter(fileNames, hasJavaScriptFileExtension);
             const inferredTypingNames = map(jsFileNames, f => removeFileExtension(getBaseFileName(f.toLowerCase())));
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-            if (safeList === undefined) {
+            if (!safeList || safeList.notFound) {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
+                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList.content, f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
