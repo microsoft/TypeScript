@@ -1091,6 +1091,10 @@
         "category": "Error",
         "code": 2365
     },
+    "Function lacks ending return statement and return type does not include 'undefined'.": {
+        "category": "Error",
+        "code": 2366
+    },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
         "code": 2368

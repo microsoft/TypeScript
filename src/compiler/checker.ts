@@ -11095,6 +11095,9 @@ namespace ts {
                 // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
+            else if (returnType && strictNullChecks && !isTypeAssignableTo(undefinedType, returnType)) {
+                error(func.type, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
+            }
             else if (compilerOptions.noImplicitReturns) {
                 if (!returnType) {
                     // If return type annotation is omitted check if function has any explicit return statements.
