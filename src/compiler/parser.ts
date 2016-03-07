@@ -1824,7 +1824,7 @@ namespace ts {
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             let entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -3648,7 +3648,7 @@ namespace ts {
             let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
                 node.left = elementName;
                 node.right = parseIdentifierName();
                 elementName = finishNode(node);

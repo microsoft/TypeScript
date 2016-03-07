@@ -828,7 +828,7 @@ namespace ts {
                 bind(node.right);
                 currentReachabilityState = or(currentReachabilityState, preRightState);
             }
-            else if (isAssignmentOperator(node.operatorToken.kind) && node.left.kind === SyntaxKind.Identifier) {
+            else if (isAssignmentOperator(node.operatorToken.kind) && (node.left.kind === SyntaxKind.Identifier || node.left.kind === SyntaxKind.ArrayLiteralExpression || node.left.kind === SyntaxKind.ObjectLiteralExpression)) {
                 bind(node.right);
                 bind(node.left);
             }
@@ -1752,7 +1752,10 @@ namespace ts {
 
         function bindIdentifier(node: Identifier) {
             checkStrictModeIdentifier(node);
-            if (isExpression(node) || (node.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node.parent).name === node)) {
+            if (isExpression(node)
+                || (node.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>node.parent).name === node)
+                || (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>node.parent).name === node)) {
+
                 if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression> node.parent).name === node) {
                     return;
                 }

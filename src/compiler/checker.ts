@@ -7002,8 +7002,12 @@ namespace ts {
                     nodeId = getNodeId(<Node>location);
                     if (visited[nodeId]) return;
 
-                    const otherSymbol = getSymbolAtLocation(<Node>location);
-                    const isSameIdentifier = location !== where && (<Node>location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
+                    let isSameIdentifier = false;
+                    if ((<Node>location).kind === SyntaxKind.Identifier) {
+                        const identifier = <Identifier>location;
+                        const otherSymbol = resolveName(identifier, identifier.text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined)
+                        isSameIdentifier = identifier !== where && (identifier).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
+                    }
                     if (isSameIdentifier || isBranchStart(<Node>location)) {
                         stop = callback(<Identifier> location, guards);
                         return;
@@ -7147,10 +7151,16 @@ namespace ts {
                 else if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
                     return hasInitializer(<VariableDeclaration>parent);
                 }
-                else if ((parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<ObjectLiteralElement>parent).name === node) {
+                else if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ObjectLiteralElement>parent).name === node) {
+                    return isLeftHandSideOfAssignment(parent.parent);
+                }
+                else if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
                     return isLeftHandSideOfAssignment(parent.parent);
                 }
                 else if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                    return isLeftHandSideOfAssignment(parent);
+                }
+                else if (parent.kind === SyntaxKind.SpreadElementExpression) {
                     return isLeftHandSideOfAssignment(parent);
                 }
             }
@@ -7370,14 +7380,20 @@ namespace ts {
                 }
                 return type;
             }
-            function getAssignedTypeAtLocation(node: Identifier) {
+            function getAssignedTypeAtLocation(node: Node): Type {
                 // Only union types can be narrowed by assignments.
                 // Other types will always fall back to their initial type.
 
                 const { parent } = node;
                 if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
-                    if ((<VariableDeclaration>parent).initializer && !isUnion) {
-                        return checkExpressionCached((<VariableDeclaration>parent).initializer);
+                    if ((<VariableDeclaration>parent).initializer && isUnion) {
+                        if (!(<VariableDeclaration>parent).type) {
+                            // The type of the variable was infered by this initializer.
+                            // Thus, we don't have to check the type of the initializer again.
+                            return unknownType;
+                        } else {
+                            return checkExpressionCached((<VariableDeclaration>parent).initializer);
+                        }
                     }
                     else {
                         // This catches these constructs:
@@ -7385,27 +7401,74 @@ namespace ts {
                         // - for (let y in z) {}
                         // - for (let y of z) {}
                         // - Other cases where `initialType` is not a union type
-                        return initialType;
+                        return unknownType;
                     }
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    if (!isUnion) return initialType;
+                    if (!isUnion) return unknownType;
                     return checkExpressionCached((<BinaryExpression>parent).right);
                 }
                 if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
                     // for (x in z) {}
-                    if (!isUnion) return initialType;
+                    if (!isUnion) return unknownType;
                     return globalStringType;
                 }
                 if (parent.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>parent).initializer === node) {
                     // for (x of z) {}
-                    if (!isUnion) return initialType;
+                    if (!isUnion) return unknownType;
                     return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
                 }
+                
+                if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
+                    // {z: x} = y;
+                    const type = getAssignedTypeAtLocation(parent.parent);
+                    if (!type) return undefined;
+                    return getPropertyAssignmentType(type, <PropertyAssignment>parent) || unknownType;
+                }
+                if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>parent).name === node) {
+                    // {x} = y;
+                    const type = getAssignedTypeAtLocation(parent.parent);
+                    if (!type) return undefined;
+                    return getPropertyAssignmentType(type, <ShorthandPropertyAssignment>parent) || unknownType;
+                }
+                
+                if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                    // [x] = y;
+                    const type = getAssignedTypeAtLocation(parent);
+                    if (!type) return undefined;
+                    const index = (<ArrayLiteralExpression>parent).elements.indexOf(<Expression>node);
+                    const property = getPropertyOfType(type, index.toString());
+                    if (property) {
+                        return getTypeOfSymbol(property) || unknownType;
+                    }
+                    const elementType = getElementTypeOfIterable(type, undefined) || checkElementTypeOfArrayOrString(type, undefined);
+                    return elementType || unknownType;
+                }
+                if (parent.kind === SyntaxKind.SpreadElementExpression) {
+                    if (parent.parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                        // [...x] = y;
+                        const type = getAssignedTypeAtLocation(parent.parent);
+                        if (!type) return undefined;
+                        if (!isUnion) return unknownType;
+                        
+                        const elementType = getElementTypeOfIterator(type, undefined) || checkElementTypeOfArrayOrString(type, undefined);
+                        if (!elementType) return unknownType;
+                        return createArrayType(elementType);
+                    }
+                }
+                return undefined;
+            }
+            function getPropertyAssignmentType(parentType: Type, property: PropertyAssignment | ShorthandPropertyAssignment) {
+                const name = property.name;
+                if (name.kind === SyntaxKind.Identifier) {
+                    const property = getPropertyOfType(parentType, (<Identifier>name).text);
+                    if (property) return getTypeOfSymbol(property);
+                }
+                return undefined;
             }
             function narrowTypeByAssignment(assignedType: Type) {
                 // Narrow union types only
-                if (!isUnion) return initialType;
+                if (!isUnion || assignedType === anyType || assignedType === unknownType) return initialType;
 
                 const assignedTypes = (assignedType.flags & TypeFlags.Union) ? (<UnionType> assignedType).types : [assignedType];
 
