@@ -7165,12 +7165,11 @@ namespace ts {
             if (!leftmostIdentifier) {
                 return type;
             }
-            const leftmostSymbol = getResolvedSymbol(leftmostIdentifier);
-            if (!(leftmostSymbol.flags & SymbolFlags.Variable)) {
+            const declaration = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(leftmostIdentifier)).valueDeclaration;
+            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
                 return type;
             }
-            const declaration = getDeclarationOfKind(leftmostSymbol, SyntaxKind.VariableDeclaration);
-            const top = declaration && getDeclarationContainer(declaration);
+            const top = getDeclarationContainer(declaration);
             const originalType = type;
             const nodeStack: { node: Node, child: Node }[] = [];
             let node: Node = reference;
