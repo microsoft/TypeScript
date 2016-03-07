@@ -1,0 +1,68 @@
+=== tests/cases/compiler/narrowByTypeConstraint.ts ===
+interface Base { b }
+>Base : Base
+>b : any
+
+interface Derived extends Base { d }
+>Derived : Derived
+>Base : Base
+>d : any
+
+declare function isDerived(b: Base): b is Derived;
+>isDerived : (b: Base) => b is Derived
+>b : Base
+>Base : Base
+>b : any
+>Derived : Derived
+
+function f<T extends Base>(x: T, y: T) {
+>f : <T extends Base>(x: T, y: T) => boolean
+>T : T
+>Base : Base
+>x : T
+>T : T
+>y : T
+>T : T
+
+	return isDerived(x) && isDerived(y) && x.d === y.d; 
+>isDerived(x) && isDerived(y) && x.d === y.d : boolean
+>isDerived(x) && isDerived(y) : boolean
+>isDerived(x) : boolean
+>isDerived : (b: Base) => b is Derived
+>x : T
+>isDerived(y) : boolean
+>isDerived : (b: Base) => b is Derived
+>y : T
+>x.d === y.d : boolean
+>x.d : any
+>x : T
+>d : any
+>y.d : any
+>y : T
+>d : any
+}
+function g(z: Base, ka: Base) {
+>g : (z: Base, ka: Base) => boolean
+>z : Base
+>Base : Base
+>ka : Base
+>Base : Base
+
+	return isDerived(z) && isDerived(ka) && z.d === ka.d;
+>isDerived(z) && isDerived(ka) && z.d === ka.d : boolean
+>isDerived(z) && isDerived(ka) : boolean
+>isDerived(z) : boolean
+>isDerived : (b: Base) => b is Derived
+>z : Base
+>isDerived(ka) : boolean
+>isDerived : (b: Base) => b is Derived
+>ka : Base
+>z.d === ka.d : boolean
+>z.d : any
+>z : Derived
+>d : any
+>ka.d : any
+>ka : Derived
+>d : any
+}
+
