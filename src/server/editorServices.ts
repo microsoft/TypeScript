@@ -192,6 +192,10 @@ namespace ts.server {
             return this.roots.map(root => root.fileName);
         }
 
+        getScriptKind() {
+            return ScriptKind.Unknown;
+        }
+
         getScriptVersion(filename: string) {
             return this.getScriptInfo(filename).svc.latestVersion().toString();
         }
