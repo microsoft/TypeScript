@@ -422,6 +422,7 @@ namespace ts {
      * @param opt
      * @param errors
      */
+    /* @internal */
     export function tryParseLibCommandLineFlag(argument: string, opt: CommandLineOption, errors: Diagnostic[]): string[] {
         // --library option can take multiple arguments.
         // i.e --library es5
