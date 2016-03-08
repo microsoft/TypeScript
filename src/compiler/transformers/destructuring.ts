@@ -236,7 +236,7 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = cloneNode(<Identifier>target, /*location*/ target, /*flags*/ undefined, /*parent*/ undefined, /*original*/ target);
+                const name = getRelocatedClone(<Identifier>target, /*location*/ target);
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }
@@ -326,7 +326,7 @@ namespace ts {
                 }
             }
             else {
-                const clonedName = cloneNode(name, /*location*/ undefined, /*flags*/ undefined, /*parent*/ undefined, /*original*/ name);
+                const clonedName = getSynthesizedClone(name);
                 emitAssignment(clonedName, value, target, target);
             }
         }
@@ -365,7 +365,7 @@ namespace ts {
                 // otherwise occur when the identifier is emitted.
                 return createElementAccess(
                     expression,
-                    cloneNode(propertyName)
+                    getSynthesizedClone(propertyName)
                 );
             }
         }

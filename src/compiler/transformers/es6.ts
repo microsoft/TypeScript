@@ -16,6 +16,7 @@ namespace ts {
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
+            getNodeEmitFlags,
             setNodeEmitFlags,
         } = context;
 
@@ -50,6 +51,7 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
+            enclosingBlockScopeContainer = node;
             return visitEachChild(node, visitor, context);
         }
 
@@ -772,7 +774,9 @@ namespace ts {
                 enableSubstitutionsForCapturedThis();
             }
 
-            return transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
+            return func;
         }
 
         /**
@@ -1514,7 +1518,7 @@ namespace ts {
          * @param node A template literal.
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
-            return createLiteral(node.text);
+            return createLiteral(node.text, /*location*/ node);
         }
 
         /**
@@ -1579,7 +1583,7 @@ namespace ts {
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
             text = text.replace(/\r\n?/g, "\n");
             text = escapeString(text);
-            return createLiteral(text);
+            return createLiteral(text, /*location*/ node);
         }
 
         /**
@@ -1689,7 +1693,7 @@ namespace ts {
             addCaptureThisForNodeIfNeeded(statements, node);
             addRange(statements, visitNodes(createNodeArray(remaining), visitor, isStatement));
             addRange(statements, endLexicalEnvironment());
-            const clone = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
+            const clone = getMutableClone(node);
             clone.statements = createNodeArray(statements, /*location*/ node.statements);
             return clone;
         }
@@ -1705,7 +1709,7 @@ namespace ts {
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, push a bit that indicates whether the
                 // containing function is an arrow function.
-                useCapturedThis = node.kind === SyntaxKind.ArrowFunction;
+                useCapturedThis = (getNodeEmitFlags(node) & NodeEmitFlags.CapturesThis) !== 0;
             }
 
             previousOnEmitNode(node, emit);

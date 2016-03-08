@@ -110,21 +110,15 @@ namespace ts {
     }
 
     /**
-     * Creates a shallow, memberwise clone of a node. The "kind", "pos", "end", "flags", and "parent"
-     * properties are excluded by default, and can be provided via the "location", "flags", and
-     * "parent" parameters.
-     *
-     * @param node The node to clone.
-     * @param location An optional TextRange to use to supply the new position.
-     * @param flags The NodeFlags to use for the cloned node.
-     * @param parent The parent for the new node.
-     * @param original An optional pointer to the original source tree node.
+     * Creates a shallow, memberwise clone of a node with no source map location.
      */
-    export function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags, parent?: Node, original?: Node): T {
+    export function getSynthesizedClone<T extends Node>(node: T): T {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createNode(node.kind, location);
+        const clone = <T>createSynthesizedNode(node.kind);
+        clone.flags = node.flags;
+        clone.original = node;
 
         for (const key in node) {
             if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
@@ -134,18 +128,6 @@ namespace ts {
             (<any>clone)[key] = (<any>node)[key];
         }
 
-        if (flags !== undefined) {
-            clone.flags = flags;
-        }
-
-        if (parent !== undefined) {
-            clone.parent = parent;
-        }
-
-        if (original !== undefined) {
-            clone.original = original;
-        }
-
         return clone;
     }
 
@@ -153,21 +135,21 @@ namespace ts {
      * Creates a shallow, memberwise clone of a node for mutation.
      */
     export function getMutableClone<T extends Node>(node: T): T {
-        return cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
-    }
-
-    /**
-     * Creates a shallow, memberwise clone of a node with no source map location.
-     */
-    export function getSynthesizedClone<T extends Node>(node: T): T {
-        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags, /*parent*/ undefined, /*original*/ node);
+        const clone = getSynthesizedClone(node);
+        clone.pos = node.pos;
+        clone.end = node.end;
+        clone.parent = node.parent;
+        return clone;
     }
 
     /**
      * Creates a shallow, memberwise clone of a node at the specified source map location.
      */
     export function getRelocatedClone<T extends Node>(node: T, location: TextRange): T {
-        return cloneNode(node, location, node.flags, /*parent*/ undefined, /*original*/ node);
+        const clone = getSynthesizedClone(node);
+        clone.pos = location.pos;
+        clone.end = location.end;
+        return clone;
     }
 
     export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
@@ -718,8 +700,8 @@ namespace ts {
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         return isIdentifier(memberName)
-            ? createPropertyAccess(target, cloneNode(memberName), location)
-            : createElementAccess(target, cloneNode(isComputedPropertyName(memberName) ? memberName.expression : memberName), location);
+            ? createPropertyAccess(target, getSynthesizedClone(memberName), location)
+            : createElementAccess(target, getSynthesizedClone(isComputedPropertyName(memberName) ? memberName.expression : memberName), location);
     }
 
     export function createRestParameter(name: string | Identifier) {
@@ -1154,15 +1136,15 @@ namespace ts {
         return isQualifiedName(node)
             ? createPropertyAccess(
                 createExpressionFromEntityName(node.left),
-                cloneNode(node.right)
+                getSynthesizedClone(node.right)
             )
-            : cloneNode(node);
+            : getSynthesizedClone(node);
     }
 
     export function createExpressionForPropertyName(memberName: PropertyName, location?: TextRange): Expression {
         return isIdentifier(memberName) ? createLiteral(memberName.text, location)
-             : isComputedPropertyName(memberName) ? cloneNode(memberName.expression, location)
-             : cloneNode(memberName, location);
+             : isComputedPropertyName(memberName) ? getRelocatedClone(memberName.expression, location)
+             : getRelocatedClone(memberName, location);
     }
 
     // Utilities
@@ -1370,7 +1352,7 @@ namespace ts {
             const callee = expression.expression;
             if (callee.kind === SyntaxKind.FunctionExpression
                 || callee.kind === SyntaxKind.ArrowFunction) {
-                const clone = cloneNode(expression, expression, expression.flags, expression.parent, expression);
+                const clone = getMutableClone(expression);
                 clone.expression = createParen(callee, /*location*/ callee);
                 return clone;
             }

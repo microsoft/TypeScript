@@ -516,7 +516,7 @@ namespace ts {
             return undefined;
         }
 
-        Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
+        Debug.assert(test === undefined || test(visited), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(visited.kind)} did not pass test ${(<any>test).name}.`);
         aggregateTransformFlags(visited);
         return visited;
     }
@@ -717,7 +717,7 @@ namespace ts {
                 from = parenthesize(from, parentNode);
             }
 
-            Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+            Debug.assert(test === undefined || test(from), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(from.kind)} did not pass test ${(<any>test).name}.`);
 
             if (startOnNewLine) {
                 from.startsOnNewLine = true;
@@ -774,7 +774,7 @@ namespace ts {
      */
     export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]) {
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.statements = mergeStatements(mutableNode.statements, declarations);
             return mutableNode;
         }
@@ -791,7 +791,7 @@ namespace ts {
     export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]) {
         Debug.assert(node.body.kind === SyntaxKind.ModuleBlock);
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.body = mergeBlockLexicalEnvironment(<ModuleBlock>node.body, declarations);
             return mutableNode;
         }
@@ -808,7 +808,7 @@ namespace ts {
     function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]) {
         Debug.assert(node.body !== undefined);
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.body = mergeConciseBodyLexicalEnvironment(mutableNode.body, declarations);
             return mutableNode;
         }
@@ -859,7 +859,7 @@ namespace ts {
      * @param declarations The lexical declarations to merge.
      */
     function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]) {
-        const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+        const mutableNode = getMutableClone(node);
         mutableNode.statements = mergeStatements(node.statements, declarations);
         return mutableNode;
     }

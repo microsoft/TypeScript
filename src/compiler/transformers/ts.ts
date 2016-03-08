@@ -198,8 +198,11 @@ namespace ts {
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 
+                case SyntaxKind.SemicolonClassElement:
+                    return node;
+
                 default:
-                    Debug.fail("Unexpected node.");
+                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
                     break;
             }
         }
@@ -867,7 +870,7 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
 
-            const name = cloneNode(<Identifier>node.name);
+            const name = getSynthesizedClone(<Identifier>node.name);
             return startOnNewLine(
                 createStatement(
                     createAssignment(
@@ -1730,10 +1733,7 @@ namespace ts {
                 );
             }
             else {
-                return setOriginalNode(
-                    cloneNode(name),
-                    name
-                );
+                return getSynthesizedClone(name);
             }
         }
 
@@ -2347,7 +2347,7 @@ namespace ts {
 
         function trackChildOfNotEmittedNode<T extends Node>(parent: Node, child: T, original: T) {
             if (!child.parent && !child.original) {
-                child = cloneNode(child, child, child.flags, child.parent, original);
+                child = getMutableClone(child);
             }
 
             setNodeEmitFlags(parent, NodeEmitFlags.IsNotEmittedNode);
@@ -2403,7 +2403,7 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                moduleParam = createAssignment(cloneNode(node.name), moduleParam);
+                moduleParam = createAssignment(getSynthesizedClone(node.name), moduleParam);
             }
 
             currentNamespaceLocalName = getGeneratedNameForNode(node);
@@ -2710,7 +2710,7 @@ namespace ts {
                         if (declaration) {
                             const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
                             if (classAlias) {
-                                return cloneNode(classAlias);
+                                return getRelocatedClone(classAlias, /*location*/ node);
                             }
                         }
                     }

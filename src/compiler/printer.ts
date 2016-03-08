@@ -675,7 +675,7 @@ const _super = (function (geti, seti) {
             //
 
             function emitIdentifier(node: Identifier) {
-                if (getNodeEmitFlags(node) && NodeEmitFlags.UMDDefine) {
+                if (getNodeEmitFlags(node) & NodeEmitFlags.UMDDefine) {
                     writeLines(umdHelper);
                 }
                 else {
@@ -1411,6 +1411,10 @@ const _super = (function (geti, seti) {
             }
 
             function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+                if (body.multiLine) {
+                    return false;
+                }
+
                 const originalNode = getOriginalNode(parentNode);
                 if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode)) {
                     const body = originalNode.body;

@@ -1666,11 +1666,11 @@ namespace ts {
      * @param parent The parent for the cloned node.
      */
     export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
-        const clone = cloneNode(node, node, node.flags, parent);
+        const clone = getMutableClone(node);
         if (isQualifiedName(clone)) {
             const { left, right } = clone;
             clone.left = cloneEntityName(left, clone);
-            clone.right = cloneNode(right, right, right.flags, parent);
+            clone.right = getMutableClone(right);
         }
 
         return clone;
@@ -3066,7 +3066,8 @@ namespace ts {
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.IndexSignature;
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.SemicolonClassElement;
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {

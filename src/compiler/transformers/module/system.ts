@@ -1271,7 +1271,7 @@ namespace ts {
         }
 
         function updateSourceFile(node: SourceFile, statements: Statement[]) {
-            const updated = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
+            const updated = getMutableClone(node);
             updated.statements = createNodeArray(statements, node.statements);
             return updated;
         }
