@@ -2,10 +2,10 @@
 /// <reference path="foo.d.ts" />
 let y: number = Foo.fn();
 >y : number
->Foo.fn() : any
->Foo.fn : any
->Foo : any
->fn : any
+>Foo.fn() : number
+>Foo.fn : () => number
+>Foo : typeof Foo
+>fn : () => number
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
 

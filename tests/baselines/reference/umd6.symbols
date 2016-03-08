@@ -2,7 +2,9 @@
 /// <reference path="foo.d.ts" />
 let y: number = Foo.fn();
 >y : Symbol(y, Decl(a.ts, 1, 3))
+>Foo.fn : Symbol(Foo.fn, Decl(foo.d.ts, 1, 25))
 >Foo : Symbol(Foo, Decl(foo.d.ts, 4, 15))
+>fn : Symbol(Foo.fn, Decl(foo.d.ts, 1, 25))
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
 

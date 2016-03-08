@@ -982,13 +982,7 @@ namespace ts {
         }
 
         function getTargetOfGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration): Symbol {
-            const moduleSymbol = node.parent.symbol;
-            if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports["export="]) {
-                return getMergedSymbol(moduleSymbol.exports["export="].exportSymbol);
-            }
-            else {
-                return getMergedSymbol(moduleSymbol);
-            }
+            return resolveExternalModuleSymbol(node.parent.symbol);
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
