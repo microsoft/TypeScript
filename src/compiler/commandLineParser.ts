@@ -334,7 +334,7 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
-            name: "library",
+            name: "lib",
             shortName: "l",
             type: {
                 // JavaScript only
@@ -357,6 +357,7 @@ namespace ts {
                 "es6.proxy": "lib.es6.proxy.d.ts",
                 "es6.reflect": "lib.es6.reflect.d.ts",
                 "es6.regexp": "lib.es6.regexp.d.ts",
+                "es6.string": "lib.es6.string.d.ts",
                 "es6.symbol": "lib.es6.symbol.d.ts",
                 "es6.symbol.wellknown": "lib.es6.symbol.wellknown.d.ts",
                 "es7.array.include": "lib.es7.array.include.d.ts"
@@ -402,7 +403,7 @@ namespace ts {
         }
         const { optionNameMap } = getOptionNameMap();
 
-        const libraryOpt = optionNameMap["library"];
+        const libraryOpt = optionNameMap["lib"];
         const types = <Map<number>>libraryOpt.type;
         const typeNames: string[] = [];
         for (const name in types) {
@@ -421,7 +422,7 @@ namespace ts {
      * @param opt
      * @param errors
      */
-    function tryParseLibCommandLineFlag(argument: string, opt: CommandLineOption, errors: Diagnostic[]): string[] {
+    export function tryParseLibCommandLineFlag(argument: string, opt: CommandLineOption, errors: Diagnostic[]): string[] {
         // --library option can take multiple arguments.
         // i.e --library es5
         //     --library es5,es6.array  // Note: space is not allow between comma

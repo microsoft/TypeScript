@@ -632,7 +632,7 @@ namespace ts {
 
         function getUserDefinedLibFileName(options: CompilerOptions): string[] {
             const directoryPath = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
-            return options.library.map(fileName => {
+            return options.lib.map(fileName => {
                 return combinePaths(directoryPath, fileName);
             });
         }
@@ -761,7 +761,7 @@ namespace ts {
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
-            if (!skipDefaultLib && !options.library) {
+            if (!skipDefaultLib && !options.lib) {
                 processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
             }
             else {
@@ -1485,7 +1485,7 @@ namespace ts {
 
                 const basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
-                    processReferencedFiles(file, basePath);
+                    processReferencedFiles(file, basePath, /*isDefaultLib*/ isDefaultLib);
                 }
 
                 // always process imported modules to record module name resolutions
@@ -1502,10 +1502,10 @@ namespace ts {
             return file;
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string) {
+        function processReferencedFiles(file: SourceFile, basePath: string, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
             });
         }
 

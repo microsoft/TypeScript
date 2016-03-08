@@ -87,19 +87,19 @@ namespace ts {
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "library": "es5"
+                        "lib": "es5"
                     }
                 }`, {
-                    config: { compilerOptions: { library: "es5" } }
+                    config: { compilerOptions: { lib: "es5" } }
                 });
 
             assertParseResult(
                 `{
                     "compilerOptions": {
-                        "library": "es5,es6"
+                        "lib": "es5,es6"
                     }
                 }`, {
-                    config: { compilerOptions: { library: "es5,es6" } }
+                    config: { compilerOptions: { lib: "es5,es6" } }
                 });
         });
     });

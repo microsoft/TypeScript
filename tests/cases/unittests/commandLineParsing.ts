@@ -30,31 +30,31 @@ namespace ts {
 
         it("Parse single option of library flag ", () => {
             // --library es6 0.ts
-            assertParseResult(["--library", "es6", "0.ts"],
+            assertParseResult(["--lib", "es6", "0.ts"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        library: ["lib.es6.d.ts"]
+                        lib: ["lib.es6.d.ts"]
                     }
                 });
         });
 
         it("Parse multiple options of library flags ", () => {
             // --library es5,es6.symbol.wellknown 0.ts
-            assertParseResult(["--library", "es5,es6.symbol.wellknown", "0.ts"],
+            assertParseResult(["--lib", "es5,es6.symbol.wellknown", "0.ts"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        library: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"]
                     }
                 });
         });
 
         it("Parse unavailable options of library flags ", () => {
             // --library es5,es7 0.ts
-            assertParseResult(["--library", "es5,es7", "0.ts"],
+            assertParseResult(["--lib", "es5,es8", "0.ts"],
                 {
                     errors: [{
                         messageText: "",
@@ -67,31 +67,31 @@ namespace ts {
                     }],
                     fileNames: ["0.ts"],
                     options: {
-                        library: ["lib.es5.d.ts"]
+                        lib: ["lib.es5.d.ts"]
                     }
                 });
         });
 
         it("Parse incorrect form of library flags ", () => {
             // --library es5, es7 0.ts
-            assertParseResult(["--library", "es5,", "es7", "0.ts"],
+            assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [],
                     fileNames: ["es7", "0.ts"],
                     options: {
-                        library: ["lib.es5.d.ts"]
+                        lib: ["lib.es5.d.ts"]
                     }
                 });
         });
 
         it("Parse multiple compiler flags with input files at the end", () => {
             // --library es5,es6.symbol.wellknown --target es5 0.ts
-            assertParseResult(["--library", "es5,es6.symbol.wellknown", "--target", "es5", "0.ts"],
+            assertParseResult(["--lib", "es5,es6.symbol.wellknown", "--target", "es5", "0.ts"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        library: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
                         target: ts.ScriptTarget.ES5,
                     }
                 });
@@ -99,42 +99,42 @@ namespace ts {
 
         it("Parse multiple compiler flags with input files in the middle", () => {
             // --module commonjs --target es5 0.ts --library es5,es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--library", "es5,es6.symbol.wellknown"],
+            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es6.symbol.wellknown"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
-                        library: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
                     }
                 });
         });
 
-        it("Parse incorrect for of multiple compiler flags with input files in the middle", () => {
+        it("Parse incorrect form of multiple compiler flags with input files in the middle", () => {
             // --module commonjs --target es5 0.ts --library es5, es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--library", "es5,", "es6.symbol.wellknown"],
+            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,", "es6.symbol.wellknown"],
                 {
                     errors: [],
                     fileNames: ["0.ts", "es6.symbol.wellknown"],
                     options: {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
-                        library: ["lib.es5.d.ts"],
+                        lib: ["lib.es5.d.ts"],
                     }
                 });
         });
 
         it("Parse multiple library compiler flags ", () => {
             // --module commonjs --target es5 --library es5 0.ts --library es6.array,es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "--library", "es5", "0.ts", "--library", "es6.array,es6.symbol.wellknown"],
+            assertParseResult(["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es6.array,es6.symbol.wellknown"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
-                        library: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.wellknown.d.ts"],
                     }
                 });
         });
