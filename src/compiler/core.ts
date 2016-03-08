@@ -769,6 +769,32 @@ namespace ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
+    export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
+        // Using scriptKind as a condition handles both:
+        // - 'scriptKind' is unspecified and thus it is `undefined`
+        // - 'scriptKind' is set and it is `Unknown` (0)
+        // If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
+        // to get the ScriptKind from the file name. If it cannot be resolved
+        // from the file name then the default 'TS' script kind is returned.
+        return (scriptKind || getScriptKindFromFileName(fileName)) || ScriptKind.TS;
+    }
+
+    export function getScriptKindFromFileName(fileName: string): ScriptKind {
+        const ext = fileName.substr(fileName.lastIndexOf("."));
+        switch (ext.toLowerCase()) {
+            case ".js":
+                return ScriptKind.JS;
+            case ".jsx":
+                return ScriptKind.JSX;
+            case ".ts":
+                return ScriptKind.TS;
+            case ".tsx":
+                return ScriptKind.TSX;
+            default:
+                return ScriptKind.Unknown;
+        }
+    }
+
     /**
      *  List of supported extensions in order of file resolution precedence.
      */

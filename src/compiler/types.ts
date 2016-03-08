@@ -2449,6 +2449,13 @@ namespace ts {
         [option: string]: string | number | boolean;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: any;
+    }
+
     export const enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2507,6 +2514,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
