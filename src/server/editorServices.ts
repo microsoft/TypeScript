@@ -774,7 +774,7 @@ namespace ts.server {
             const cachePath = this.host.globalTypingCachePath;
             const tsdJsonPath = toPath("tsd.json", cachePath, getCanonicalFileName);
             const tsdJson = this.host.getTsdJson(tsdJsonPath);
-            const { cachedTypingPaths, newTypingNames, filesToWatch } = JsTyping.discoverTypings(
+            const { cachedTypingPaths, newTypingNames } = JsTyping.discoverTypings(
                 sys,
                 /* fileNames */ project.getFileNames(),
                 /* projectRootPath */ projectRootPath,
@@ -1302,7 +1302,8 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        compilerOptions: parsedCommandLine.options,
+                        typingOptions: parsedCommandLine.typingOptions
                     };
                     return { succeeded: true, projectOptions };
                 }
@@ -1395,6 +1396,11 @@ namespace ts.server {
 
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
+
+                    // Acquire typings for JS files
+                    if (projectOptions.typingOptions) {
+                        this.acquireTypingForJs(project);
+                    }
                 }
             }
         }
