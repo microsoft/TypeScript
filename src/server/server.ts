@@ -179,7 +179,7 @@ namespace ts.server {
     
     const serverHost: ServerHost = <ServerHost>ts.sys;
     serverHost.globalTypingCachePath = toPath(
-        ".typingCache",
+        ".typingsCache",
         process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
         createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
 

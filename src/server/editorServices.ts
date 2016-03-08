@@ -762,9 +762,12 @@ namespace ts.server {
                 return;
             }
 
-            const typingOptions: TypingOptions = project.projectOptions.typingOptions 
+            const typingOptions: TypingOptions = project.projectOptions
                 ? project.projectOptions.typingOptions
                 : { enableAutoDiscovery: true };
+            const compilerOptions: CompilerOptions = project.projectOptions
+                ? project.projectOptions.compilerOptions
+                : undefined;
             const projectRootPath: Path = project.isConfiguredProject() ? getDirectoryPath(<Path>project.projectFilename) : undefined;
 
             // Todo: add support for local cache path
@@ -778,7 +781,7 @@ namespace ts.server {
                 /* safeListPath */ undefined,
                 /* packageNameToTypingLocation */ tsdJson ? tsdJson.packageNameToTypingPath : undefined,
                 typingOptions,
-                project.projectOptions.compilerOptions
+                compilerOptions
             );
 
             this.log("Cached typings include: " + cachedTypingPaths);
@@ -823,7 +826,13 @@ namespace ts.server {
                     .then((installResult: any) => {
                         const keys = getKeys(installResult.written.dict);
                         for (const key of keys) {
-                            addTypingToProject(toPath(key, typingsFolderPath, getCanonicalFileName), project);
+                            const installedTypingPath = toPath(key, typingsFolderPath, getCanonicalFileName);
+                            // If the tsd.json was just created (after calling the init api), then
+                            // the it is not cached yet, the `tsdJson` variable will be undefined
+                            if (tsdJson) {
+                                tsdJson.packageNameToTypingPath[key] = installedTypingPath;
+                            }
+                            addTypingToProject(installedTypingPath, project);
                         }
                         project.projectService.updateProjectStructure();
                     })
