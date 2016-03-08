@@ -346,10 +346,10 @@ namespace ts {
         }
 
         public getScriptKind(fileName: string): ScriptKind {
-            try {
+            if ("getScriptKind" in this.shimHost) {
                 return this.shimHost.getScriptKind(fileName);
             }
-            catch (e) {
+            else {
                 return ScriptKind.Unknown;
             }
         }

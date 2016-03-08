@@ -805,6 +805,7 @@ namespace ts {
         public identifierCount: number;
         public symbolCount: number;
         public version: string;
+        public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
@@ -818,8 +819,8 @@ namespace ts {
             super(kind, pos, end);
         }
 
-        public update(newText: string, textChangeRange: TextChangeRange, scriptKind?: ScriptKind): SourceFile {
-            return updateSourceFile(this, newText, textChangeRange, /*aggressiveChecks*/ undefined, scriptKind);
+        public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+            return updateSourceFile(this, newText, textChangeRange);
         }
 
         public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
@@ -1833,7 +1834,7 @@ namespace ts {
             else if (this.currentFileVersion !== version) {
                 // This is the same file, just a newer version. Incrementally parse the file.
                 const editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange, /*aggressiveChecks*/ undefined, scriptKind);
+                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
             }
 
             if (sourceFile) {
@@ -1968,7 +1969,7 @@ namespace ts {
 
     export let disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean, scriptKind?: ScriptKind): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then
         // incrementally parse this file.
         if (textChangeRange) {
@@ -2002,7 +2003,7 @@ namespace ts {
                                 : (changedText + suffix);
                     }
 
-                    const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks, scriptKind);
+                    const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -2023,7 +2024,7 @@ namespace ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, scriptKind);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
@@ -2103,7 +2104,7 @@ namespace ts {
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
                     entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot), /*aggressiveChecks*/ undefined, scriptKind);
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
                 }
             }
 
