@@ -7165,7 +7165,11 @@ namespace ts {
             if (!leftmostIdentifier) {
                 return type;
             }
-            const declaration = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(leftmostIdentifier)).valueDeclaration;
+            const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(leftmostIdentifier));
+            if (!leftmostSymbol) {
+                return type;
+            }
+            const declaration = leftmostSymbol.valueDeclaration;
             if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
                 return type;
             }
