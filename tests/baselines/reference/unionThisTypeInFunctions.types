@@ -1,0 +1,35 @@
+=== tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts ===
+interface Real {
+>Real : Real
+
+    method(n: number): void;
+>method : (this: this, n: number) => void
+>n : number
+
+    data: string;
+>data : string
+}
+interface Fake {
+>Fake : Fake
+
+    method(n: number): void;
+>method : (this: this, n: number) => void
+>n : number
+
+    data: number;
+>data : number
+}
+function test(r: Real | Fake) {
+>test : (this: void, r: Real | Fake) => void
+>r : Real | Fake
+>Real : Real
+>Fake : Fake
+
+    r.method(12);
+>r.method(12) : void
+>r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
+>r : Real | Fake
+>method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
+>12 : number
+}
+
