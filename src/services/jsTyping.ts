@@ -22,7 +22,7 @@ namespace ts.JsTyping {
         if (host.fileExists(jsonPath)) {
             try {
                 // Strip out single-line comments
-                const contents = host.readFile(jsonPath).replace(/^\/\/(.*)$/gm, "");
+                const contents = host.readFile(jsonPath).replace(/^\s*\/\/(.*)$/gm, "");
                 return JSON.parse(contents);
             }
             catch (e) { }
@@ -65,7 +65,7 @@ namespace ts.JsTyping {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
-        const cachePath = projectRootPath ? projectRootPath : globalCachePath;
+        const cachePath = projectRootPath || globalCachePath;
         // Only infer typings for .js and .jsx files
         fileNames = fileNames
             .map(ts.normalizePath)
@@ -82,7 +82,7 @@ namespace ts.JsTyping {
         let exclude: string[] = [];
 
         mergeTypings(typingOptions.include);
-        exclude = typingOptions.exclude ? typingOptions.exclude : [];
+        exclude = typingOptions.exclude || [];
 
         if (typingOptions.enableAutoDiscovery) {
             const possibleSearchDirs = fileNames.map(ts.getDirectoryPath);

@@ -590,10 +590,10 @@ namespace ts {
                         }
                     }
                     else if (id === "include") {
-                        options.include = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
+                        options.include = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else if (id === "exclude") {
-                        options.exclude = isArray(jsonTypingOptions[id]) ? <string[]>jsonTypingOptions[id] : [];
+                        options.exclude = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
@@ -636,8 +636,8 @@ namespace ts {
                         }
                     }
                     if (opt.isFilePath) {
-                        value = normalizePath(combinePaths(basePath, value));
-                        if (value === "") {
+                       value = normalizePath(combinePaths(basePath, value));
+                       if (value === "") {
                             value = ".";
                         }
                     }
@@ -653,5 +653,29 @@ namespace ts {
         }
 
         return { options, errors };
+    }
+
+    function ConvertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
+        let items: string[] = [];
+        let invalidOptionType = false;
+        if (!isArray(optionJson)) {
+            invalidOptionType = true;
+        }
+        else {
+            for (const element of <any[]>optionJson) {
+                if (typeof element === "string") {
+                    const item = func ? func(element) : element;
+                    items.push(item);
+                }
+                else {
+                    invalidOptionType = true;
+                    break;
+                }
+            }
+        }
+        if (invalidOptionType) {
+            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_should_have_array_of_strings_as_a_value, optionName));
+        }
+        return items;
     }
 }
