@@ -11,6 +11,7 @@ module ts {
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                 let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
+
                 assert.equal(result, expected);
             }
 
@@ -998,7 +999,7 @@ module ts {
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, 4);
-                
+
                 if (result !== expected) {
                     // Turn on a human-readable diff
                     if (typeof require !== 'undefined') {

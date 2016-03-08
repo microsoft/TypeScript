@@ -2,8 +2,11 @@
 // @declaration: true
 
 namespace JSX {
-    interface IntrinsicElements {
+    export interface IntrinsicElements {
         span: {};
+    }
+    export interface Element {
+		something?: any;
     }
 }
 

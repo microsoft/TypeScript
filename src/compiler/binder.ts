@@ -708,10 +708,14 @@ namespace ts {
         function bindCaseBlock(n: CaseBlock): void {
             const startState = currentReachabilityState;
 
-            for (const clause of n.clauses) {
+            for (let i = 0; i < n.clauses.length; i++) {
+                const clause = n.clauses[i];
                 currentReachabilityState = startState;
                 bind(clause);
-                if (clause.statements.length && currentReachabilityState === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
+                if (clause.statements.length &&
+                    i !== n.clauses.length - 1 && // allow fallthrough from the last case
+                    currentReachabilityState === Reachability.Reachable &&
+                    options.noFallthroughCasesInSwitch) {
                     errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
@@ -1221,7 +1225,7 @@ namespace ts {
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {

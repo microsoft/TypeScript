@@ -1159,7 +1159,7 @@ namespace ts {
 
             const isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                const symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
                 if (symbol) {
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(symbol);
@@ -1642,7 +1642,7 @@ namespace ts {
         function isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
-            if (entityName.parent.kind === SyntaxKind.TypeQuery) {
+            if (entityName.parent.kind === SyntaxKind.TypeQuery || isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent)) {
                 // Typeof value
                 meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
             }
@@ -2429,7 +2429,7 @@ namespace ts {
                         return false;
 
                     default:
-                        Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
+                        return false;
                 }
             }
         }
@@ -2604,7 +2604,7 @@ namespace ts {
             return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
         }
 
-        // Return the inferred type for a binding element
+        /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type {
             const pattern = <BindingPattern>declaration.parent;
             const parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
@@ -2629,6 +2629,9 @@ namespace ts {
                 if (isComputedNonLiteralName(name)) {
                     // computed properties with non-literal names are treated as 'any'
                     return anyType;
+                }
+                if (declaration.initializer) {
+                    getContextualType(declaration.initializer);
                 }
 
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
@@ -2955,12 +2958,22 @@ namespace ts {
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
+                const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
+                const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
+
+                if (getter && getter.flags & NodeFlags.JavaScriptFile) {
+                    const jsDocType = getTypeForVariableLikeDeclarationFromJSDocComment(getter);
+                    if (jsDocType) {
+                        return links.type = jsDocType;
+                    }
+                }
+
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
-                const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
-                const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
+
                 let type: Type;
+
                 // First try to see if the user specified a return type on the get-accessor.
                 const getterReturnType = getAnnotatedAccessorType(getter);
                 if (getterReturnType) {
@@ -5334,7 +5347,7 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
                 const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
-                const related = compareTypes(t, s, /*reportErrors*/ false) || compareTypes(s, t, reportErrors);
+                const related = compareTypes(s, t, /*reportErrors*/ false) || compareTypes(t, s, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -6582,6 +6595,7 @@ namespace ts {
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
+            const maxDepth = 5;
             let depth = 0;
             let inferiority = 0;
             const visited: Map<boolean> = {};
@@ -6708,6 +6722,11 @@ namespace ts {
                         // If source is an object type, and target is a type reference with type arguments, a tuple type,
                         // the type of a method, or a type literal, infer from members
                         if (isInProcess(source, target)) {
+                            return;
+                        }
+                        // we delibirately limit the depth we examine to infer types: this speeds up the overall inference process
+                        // and user rarely expects inferences to be made from the deeply nested constituents.
+                        if (depth > maxDepth) {
                             return;
                         }
                         if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
@@ -7825,11 +7844,14 @@ namespace ts {
             return undefined;
         }
 
-        // In a variable, parameter or property declaration with a type annotation, the contextual type of an initializer
-        // expression is the type of the variable, parameter or property. Otherwise, in a parameter declaration of a
-        // contextually typed function expression, the contextual type of an initializer expression is the contextual type
-        // of the parameter. Otherwise, in a variable or parameter declaration with a binding pattern name, the contextual
-        // type of an initializer expression is the type implied by the binding pattern.
+        // In a variable, parameter or property declaration with a type annotation,
+        //   the contextual type of an initializer expression is the type of the variable, parameter or property. 
+        // Otherwise, in a parameter declaration of a contextually typed function expression, 
+        //   the contextual type of an initializer expression is the contextual type of the parameter. 
+        // Otherwise, in a variable or parameter declaration with a binding pattern name,
+        //   the contextual type of an initializer expression is the type implied by the binding pattern.
+        // Otherwise, in a binding pattern inside a variable or parameter declaration,
+        //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
         function getContextualTypeForInitializerExpression(node: Expression): Type {
             const declaration = <VariableLikeDeclaration>node.parent;
             if (node === declaration.initializer) {
@@ -7844,6 +7866,18 @@ namespace ts {
                 }
                 if (isBindingPattern(declaration.name)) {
                     return getTypeFromBindingPattern(<BindingPattern>declaration.name, /*includePatternInType*/ true);
+                }
+                if (isBindingPattern(declaration.parent)) {
+                    const parentDeclaration = declaration.parent.parent;
+                    const name = declaration.propertyName || declaration.name;
+                    if (isVariableLike(parentDeclaration) &&
+                        parentDeclaration.type &&
+                        !isBindingPattern(name)) {
+                        const text = getTextOfPropertyName(name);
+                        if (text) {
+                            return getTypeOfPropertyOfType(getTypeFromTypeNode(parentDeclaration.type), text);
+                        }
+                    }
                 }
             }
             return undefined;
@@ -8779,18 +8813,20 @@ namespace ts {
                     if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
                         // Is this is a stateless function component? See if its single signature's return type is
                         // assignable to the JSX Element Type
-                        const elemType = checkExpression(node.tagName);
-                        const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
-                        const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
-                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
-                            // Intersect in JSX.IntrinsicAttributes if it exists
-                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                            if (intrinsicAttributes !== unknownType) {
-                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                        if (jsxElementType) {
+                            const elemType = checkExpression(node.tagName);
+                            const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                            const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
+                            const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                            let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                            if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                                // Intersect in JSX.IntrinsicAttributes if it exists
+                                const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                                if (intrinsicAttributes !== unknownType) {
+                                    paramType = intersectTypes(intrinsicAttributes, paramType);
+                                }
+                                return links.resolvedJsxType = paramType;
                             }
-                            return links.resolvedJsxType = paramType;
                         }
                     }
 
@@ -11795,9 +11831,12 @@ namespace ts {
                             Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
+                        const leadingError = chainDiagnosticMessages(undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
                             getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
-                            node.type);
+                            node.type,
+                            /*headMessage*/ undefined,
+                            leadingError);
                     }
                 }
                 else if (parameterName) {
@@ -13819,11 +13858,11 @@ namespace ts {
                 }
             }
 
-            if (node.expression) {
-                const func = getContainingFunction(node);
-                if (func) {
-                    const signature = getSignatureFromDeclaration(func);
-                    const returnType = getReturnTypeOfSignature(signature);
+            const func = getContainingFunction(node);
+            if (func) {
+                const signature = getSignatureFromDeclaration(func);
+                const returnType = getReturnTypeOfSignature(signature);
+                if (node.expression) {
                     const exprType = checkExpressionCached(node.expression);
 
                     if (func.asteriskToken) {
@@ -13857,6 +13896,10 @@ namespace ts {
                             checkTypeAssignableTo(exprType, returnType, node.expression);
                         }
                     }
+                }
+                else if (compilerOptions.noImplicitReturns && !maybeTypeOfKind(returnType, TypeFlags.Void | TypeFlags.Any)) {
+                    // The function has a return type, but the return statement doesn't have an expression.
+                    error(node, Diagnostics.Not_all_code_paths_return_a_value);
                 }
             }
         }
@@ -16207,8 +16250,15 @@ namespace ts {
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
-            const type = getTypeOfExpression(expr);
+            const type = getWidenedType(getTypeOfExpression(expr));
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+        }
+
+        function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
+            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
+            resolveBaseTypesOfClass(classType);
+            const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
+            getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
         }
 
         function hasGlobalName(name: string): boolean {
@@ -16243,6 +16293,7 @@ namespace ts {
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
+                writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
