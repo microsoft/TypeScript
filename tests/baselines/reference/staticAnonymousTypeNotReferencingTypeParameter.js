@@ -1,4 +1,7 @@
 //// [staticAnonymousTypeNotReferencingTypeParameter.ts]
+// This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
+// this would cause the compiler to run out of memory.
+
 function outer<T>(x: T) {
   class Inner {
     static y: T = x;
@@ -139,6 +142,8 @@ interface Array<T> {
 }
 
 //// [staticAnonymousTypeNotReferencingTypeParameter.js]
+// This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
+// this would cause the compiler to run out of memory.
 function outer(x) {
     var Inner = (function () {
         function Inner() {
