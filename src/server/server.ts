@@ -176,7 +176,7 @@ namespace ts.server {
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
-    
+
     const serverHost: ServerHost = <ServerHost>ts.sys;
     serverHost.globalTypingCachePath = toPath(
         ".typingsCache",
@@ -219,9 +219,9 @@ namespace ts.server {
             }
         }
         return undefined;
-    }
+    };
 
-    const ioSession = new IOSession(ts.sys, logger);
+    const ioSession = new IOSession(serverHost, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });

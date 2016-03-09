@@ -757,6 +757,9 @@ namespace ts.server {
         }
 
         acquireTypingForJs(project: Project) {
+            if (!this.host.getTsd) {
+                return;
+            }
             const tsd = this.host.getTsd();
             if (project === undefined || tsd === undefined) {
                 return;
