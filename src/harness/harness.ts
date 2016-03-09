@@ -285,6 +285,10 @@ namespace Utils {
                         // data we don't care about in the dump.  We only care what the parser set directly
                         // on the ast.
                         let value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
+
+                        // Remove the JavaScriptFile flag, as this is just noise for JSDocParser and Test262 tests
+                        // (which are the only tests that use this function).
+                        value = value & ~ts.ParserContextFlags.JavaScriptFile;
                         if (value) {
                             o[propertyName] = getParserContextFlagName(value);
                         }
