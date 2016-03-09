@@ -134,6 +134,10 @@ namespace ts {
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
+
+        const identityMapper: TypeMapper = <TypeMapper>((t: TypeParameter) => <Type>t);
+        identityMapper.mapsType = t => false;
+
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const globals: SymbolTable = {};
@@ -5038,11 +5042,15 @@ namespace ts {
         }
 
         function createUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return t => t === source ? target : t;
+            const mapper = <TypeMapper>(t => t === source ? target : t);
+            mapper.mapsType = t => t === source;
+            return mapper;
         }
 
         function createBinaryTypeMapper(source1: Type, target1: Type, source2: Type, target2: Type): TypeMapper {
-            return t => t === source1 ? target1 : t === source2 ? target2 : t;
+            const mapper = <TypeMapper>(t => t === source1 ? target1 : t === source2 ? target2 : t);
+            mapper.mapsType = t => t === source1 || t === source2;
+            return mapper;
         }
 
         function createTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
@@ -5050,22 +5058,28 @@ namespace ts {
                 case 1: return createUnaryTypeMapper(sources[0], targets[0]);
                 case 2: return createBinaryTypeMapper(sources[0], targets[0], sources[1], targets[1]);
             }
-            return t => {
+            const mapper = <TypeMapper>(t => {
                 for (let i = 0; i < sources.length; i++) {
                     if (t === sources[i]) {
                         return targets[i];
                     }
                 }
                 return t;
-            };
+            });
+            mapper.mapsType = t => forEach(sources, source => t === source);
+            return mapper;
         }
 
         function createUnaryTypeEraser(source: Type): TypeMapper {
-            return t => t === source ? anyType : t;
+            const eraser = <TypeMapper>(t => t === source ? <Type>anyType : <Type>t);
+            eraser.mapsType = t => t === source;
+            return eraser;
         }
 
         function createBinaryTypeEraser(source1: Type, source2: Type): TypeMapper {
-            return t => t === source1 || t === source2 ? anyType : t;
+            const eraser = <TypeMapper>(t => t === source1 || t === source2 ? <Type>anyType : <Type>t);
+            eraser.mapsType = t => t === source1 || t === source2;
+            return eraser;
         }
 
         function createTypeEraser(sources: Type[]): TypeMapper {
@@ -5073,19 +5087,21 @@ namespace ts {
                 case 1: return createUnaryTypeEraser(sources[0]);
                 case 2: return createBinaryTypeEraser(sources[0], sources[1]);
             }
-            return t => {
+            const mapper = <TypeMapper>(t => {
                 for (const source of sources) {
                     if (t === source) {
-                        return anyType;
+                        return <Type>anyType;
                     }
                 }
-                return t;
-            };
+                return <Type>t;
+            });
+            mapper.mapsType = t => forEach(sources, source => t === source);
+            return mapper;
         }
 
         function getInferenceMapper(context: InferenceContext): TypeMapper {
             if (!context.mapper) {
-                const mapper: TypeMapper = t => {
+                const mapper = <TypeMapper>(t => {
                     const typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (t === typeParameters[i]) {
@@ -5094,19 +5110,18 @@ namespace ts {
                         }
                     }
                     return t;
-                };
+                });
                 mapper.context = context;
+                mapper.mapsType = t => forEach(context.typeParameters, param => t === param);
                 context.mapper = mapper;
             }
             return context.mapper;
         }
 
-        function identityMapper(type: Type): Type {
-            return type;
-        }
-
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return t => instantiateType(mapper1(t), mapper2);
+            const mapper = <TypeMapper>(t => instantiateType(mapper1(t), mapper2));
+            mapper.mapsType = t => mapper1.mapsType(t) || mapper2.mapsType(t);
+            return mapper;
         }
 
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
@@ -5207,7 +5222,9 @@ namespace ts {
                     return mapper(<TypeParameter>type);
                 }
                 if (type.flags & TypeFlags.Anonymous) {
-                    return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
+                    return type.symbol &&
+                            type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) &&
+                            hasTypeParametersInScope(<AnonymousType>type, mapper) ?
                         instantiateAnonymousType(<AnonymousType>type, mapper) : type;
                 }
                 if (type.flags & TypeFlags.Reference) {
@@ -5224,6 +5241,51 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function hasTypeParametersInScope(type: AnonymousType, mapper: TypeMapper) {
+            for (const original of type.symbol.declarations) {
+                let node: Node = original;
+                while (node !== undefined) {
+                    switch (node.kind) {
+                        case SyntaxKind.FunctionType:
+                        case SyntaxKind.ConstructorType:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.JSDocFunctionType:
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                        case SyntaxKind.TypeAliasDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                            const decl = <SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration>node;
+                            const typeParameters = map(decl.typeParameters, parameter => {
+                                const t = <TypeParameter>getTypeOfNode(parameter);
+                                return type.mapper ? type.mapper(t) : t;
+                            });
+                            if (forEach(typeParameters, mapper.mapsType)) {
+                                return true;
+                            }
+                            if (isClassLike(node) || node.kind === SyntaxKind.InterfaceDeclaration) {
+                                const classLikeType = <InterfaceType>getTypeOfNode(node);
+                                if (mapper.mapsType(classLikeType.thisType)) {
+                                    return true;
+                                }
+                                break;
+                            }
+                    }
+                    node = node.parent;
+                }
+            }
+            return false;
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
