@@ -91,10 +91,10 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
   Types of parameters 'this' and 'this' are incompatible.
     Type 'Base1' is not assignable to type 'Base2'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(179,16): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(180,24): error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(184,17): error TS2674: A constructor cannot have a 'this' parameter.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,30): error TS2673: 'this' parameter must be the first parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(179,16): error TS2678: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(180,24): error TS2678: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(184,17): error TS2680: A constructor cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,30): error TS2679: 'this' parameter must be the first parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(187,61): error TS2339: Property 'n' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(190,26): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(190,30): error TS1005: ',' expected.
@@ -443,21 +443,21 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(197,35): e
     }
     let voidThis = new VoidThis();
                    ~~~~~~~~~~~~~~
-!!! error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+!!! error TS2678: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
     let implicitVoidThis = new ImplicitVoidThis();
                            ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2672: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
+!!! error TS2678: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
     
     ///// syntax-ish errors /////
     class ThisConstructor {
         constructor(this: ThisConstructor, private n: number) {
                     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2674: A constructor cannot have a 'this' parameter.
+!!! error TS2680: A constructor cannot have a 'this' parameter.
         }
     }
     function notFirst(a: number, this: C): number { return this.n; }
                                  ~~~~~~~
-!!! error TS2673: 'this' parameter must be the first parameter.
+!!! error TS2679: 'this' parameter must be the first parameter.
                                                                 ~
 !!! error TS2339: Property 'n' does not exist on type 'void'.
     
