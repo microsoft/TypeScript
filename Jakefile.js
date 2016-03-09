@@ -927,6 +927,7 @@ var servicesLintTargets = [
     "patternMatcher.ts",
     "services.ts",
     "shims.ts",
+    "jsTyping.ts"
 ].map(function (s) {
     return path.join(servicesDirectory, s);
 });
