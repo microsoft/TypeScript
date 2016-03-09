@@ -761,14 +761,18 @@ namespace ts {
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
-            if (!skipDefaultLib && !options.lib) {
-                processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
-            }
-            else {
-                const libFileNames = host.getUserDefinedLibFileName(options);
-                libFileNames.forEach(libFileName => {
-                    processRootFile(libFileName, /*isDefaultLib*/ true);
-                });
+            if (!skipDefaultLib) {
+                // If '--lib' is not specified, include default library file according to '--target'
+                // otherwise, using options specified in '--lib' instead of '--target' default library file
+                if (!options.lib) {
+                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                }
+                else {
+                    const libFileNames = host.getUserDefinedLibFileName(options);
+                    libFileNames.forEach(libFileName => {
+                        processRootFile(libFileName, /*isDefaultLib*/ true);
+                    });
+                }
             }
         }
 
@@ -1700,6 +1704,10 @@ namespace ts {
                 if (options.out || options.outFile) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile"));
                 }
+            }
+
+            if (options.lib && options.noLib) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib"));
             }
 
             const languageVersion = options.target || ScriptTarget.ES3;

@@ -348,6 +348,7 @@ namespace ts {
                 // ES6 Or ESNext By-feature options
                 "es6.array": "lib.es6.array.d.ts",
                 "es6.collection": "lib.es6.collection.d.ts",
+                "es6.generator": "lib.es6.generator.d.ts",
                 "es6.function": "lib.es6.function.d.ts",
                 "es6.iterable": "lib.es6.iterable.d.ts",
                 "es6.math": "lib.es6.math.d.ts",

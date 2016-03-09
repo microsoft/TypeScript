@@ -28,7 +28,7 @@ namespace ts {
             }
         }
 
-        it("Parse single option of library flag ", () => {
+        it("Parse single option of lib flag ", () => {
             // --library es6 0.ts
             assertParseResult(["--lib", "es6", "0.ts"],
                 {
@@ -40,7 +40,7 @@ namespace ts {
                 });
         });
 
-        it("Parse multiple options of library flags ", () => {
+        it("Parse multiple options of lib flag ", () => {
             // --library es5,es6.symbol.wellknown 0.ts
             assertParseResult(["--lib", "es5,es6.symbol.wellknown", "0.ts"],
                 {
@@ -52,7 +52,7 @@ namespace ts {
                 });
         });
 
-        it("Parse unavailable options of library flags ", () => {
+        it("Parse unavailable options of lib flag ", () => {
             // --library es5,es7 0.ts
             assertParseResult(["--lib", "es5,es8", "0.ts"],
                 {
@@ -72,7 +72,7 @@ namespace ts {
                 });
         });
 
-        it("Parse incorrect form of library flags ", () => {
+        it("Parse incorrect form of lib flag ", () => {
             // --library es5, es7 0.ts
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
@@ -125,7 +125,7 @@ namespace ts {
                 });
         });
 
-        it("Parse multiple library compiler flags ", () => {
+        it("Parse multiple lib compiler flags ", () => {
             // --module commonjs --target es5 --library es5 0.ts --library es6.array,es6.symbol.wellknown
             assertParseResult(["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es6.array,es6.symbol.wellknown"],
                 {
@@ -135,6 +135,19 @@ namespace ts {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
                         lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                    }
+                });
+        });
+
+        it("Parse lib compiler flags and noLib compiler flag", () => {
+            // --lib es5,es6.array --nolib
+            assertParseResult(["--lib", "es5,es6.array", "--nolib", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: {
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts"],
+                        noLib: true,
                     }
                 });
         });

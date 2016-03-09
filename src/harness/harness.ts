@@ -810,20 +810,21 @@ namespace Harness {
 
         export const defaultLibFileName = "lib.d.ts";
         // TODO(yuisu): remove this when we merge breaking library
-        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
         export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
 
         export const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
             "lib.es5.d.ts": createSourceFileAndAssertInvariants("lib.es5.d.ts", IO.readFile(libFolder + "lib.es5.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.d.ts": createSourceFileAndAssertInvariants("lib.es6.d.ts", IO.readFile(libFolder + "lib.es6.d.ts"), ts.ScriptTarget.Latest),
-            //"lib.es7.d.ts": createSourceFileAndAssertInvariants("lib.es7.d.ts", IO.readFile(libFolder + "lib.es7.d.ts"), ts.ScriptTarget.Latest),
-            //"lib.dom.d.ts": createSourceFileAndAssertInvariants("lib.dom.d.ts", IO.readFile(libFolder + "lib.dom.d.ts"), ts.ScriptTarget.Latest),
-            //"lib.webworker.d.ts": createSourceFileAndAssertInvariants("lib.webworker.d.ts", IO.readFile(libFolder + "lib.webworker.d.ts"), ts.ScriptTarget.Latest),
-            //"lib.scripthost.d.ts": createSourceFileAndAssertInvariants("lib.scripthost.d.ts", IO.readFile(libFolder + "lib.scripthost.d.ts"), ts.ScriptTarget.Latest),
+            "lib.es7.d.ts": createSourceFileAndAssertInvariants("lib.es7.d.ts", IO.readFile(libFolder + "lib.es7.d.ts"), ts.ScriptTarget.Latest),
+            "lib.dom.d.ts": createSourceFileAndAssertInvariants("lib.dom.d.ts", IO.readFile(libFolder + "lib.dom.d.ts"), ts.ScriptTarget.Latest),
+            "lib.webworker.d.ts": createSourceFileAndAssertInvariants("lib.webworker.d.ts", IO.readFile(libFolder + "lib.webworker.d.ts"), ts.ScriptTarget.Latest),
+            "lib.scripthost.d.ts": createSourceFileAndAssertInvariants("lib.scripthost.d.ts", IO.readFile(libFolder + "lib.scripthost.d.ts"), ts.ScriptTarget.Latest),
             // ES6 Or ESNext By-feature options
             "lib.es6.array.d.ts": createSourceFileAndAssertInvariants("lib.es6.array.d.ts", IO.readFile(libFolder + "lib.es6.array.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.collection.d.ts": createSourceFileAndAssertInvariants("lib.es6.collection.d.ts", IO.readFile(libFolder + "lib.es6.collection.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.function.d.ts": createSourceFileAndAssertInvariants("lib.es6.function.d.ts", IO.readFile(libFolder + "lib.es6.function.d.ts"), ts.ScriptTarget.Latest),
+            "lib.es6.generator.d.ts": createSourceFileAndAssertInvariants("lib.es6.generator.d.ts", IO.readFile(libFolder + "lib.es6.generator.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.iterable.d.ts": createSourceFileAndAssertInvariants("lib.es6.iterable.d.ts", IO.readFile(libFolder + "lib.es6.iterable.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.math.d.ts": createSourceFileAndAssertInvariants("lib.es6.math.d.ts", IO.readFile(libFolder + "lib.es6.math.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.number.d.ts": createSourceFileAndAssertInvariants("lib.es6.number.d.ts", IO.readFile(libFolder + "lib.es6.number.d.ts"), ts.ScriptTarget.Latest),
@@ -835,8 +836,8 @@ namespace Harness {
             "lib.es6.string.d.ts": createSourceFileAndAssertInvariants("lib.es6.string.d.ts", IO.readFile(libFolder + "lib.es6.string.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.symbol.d.ts": createSourceFileAndAssertInvariants("lib.es6.symbol.d.ts", IO.readFile(libFolder + "lib.es6.symbol.d.ts"), ts.ScriptTarget.Latest),
             "lib.es6.symbol.wellknown.d.ts": createSourceFileAndAssertInvariants("lib.es6.symbol.wellknown.d.ts", IO.readFile(libFolder + "lib.es6.symbol.wellknown.d.ts"), ts.ScriptTarget.Latest),
-            //"lib.es7.array.include.d.ts": createSourceFileAndAssertInvariants("lib.es7.array.include.d.ts", IO.readFile(libFolder + "lib.es7.array.include.d.ts"), ts.ScriptTarget.Latest),
-        }
+            "lib.es7.array.include.d.ts": createSourceFileAndAssertInvariants("lib.es7.array.include.d.ts", IO.readFile(libFolder + "lib.es7.array.include.d.ts"), ts.ScriptTarget.Latest),
+        };
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
@@ -882,8 +883,7 @@ namespace Harness {
                 else {
                     if (fileName === defaultLibFileName) {
                         return languageVersion === ts.ScriptTarget.ES6 ?
-                            libFileNameSourceFileMap["lib.es6.d.ts"] : libFileNameSourceFileMap["lib.es5.d.ts"] 
-                            //defaultES6LibSourceFile : defaultLibSourceFile;
+                            defaultES6LibSourceFile : defaultLibSourceFile;
                     }
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                     return libFileNameSourceFileMap[fileName];
