@@ -6990,17 +6990,25 @@ namespace ts {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
             const guards: BranchFlow[] = [];
-
-            worker(where);
-            return stop;
-
-            function worker(location: FlowMarkerTarget) {
-                if (stop) return;
+            
+            const stack: [FlowMarkerTarget, boolean][] = [[where, true]];
+            while (stack.length !== 0) {
+                const [location, isStart] = stack.pop();
+                if (!isStart) {
+                    if ((<Node>location).kind !== undefined) {
+                        visited[getNodeId(<Node>location)] = false;
+                    }
+                    else {
+                        guards.pop();
+                    }
+                    continue;
+                }
+                
                 let isGuard = false;
                 let nodeId: number;
                 if ((<Node>location).kind !== undefined) {
                     nodeId = getNodeId(<Node>location);
-                    if (visited[nodeId]) return;
+                    if (visited[nodeId]) continue;
 
                     let isSameIdentifier = false;
                     if ((<Node>location).kind === SyntaxKind.Identifier) {
@@ -7009,33 +7017,41 @@ namespace ts {
                         isSameIdentifier = identifier !== where && (identifier).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
                     }
                     if (isSameIdentifier || isBranchStart(<Node>location)) {
-                        stop = callback(<Identifier> location, guards);
-                        return;
+                        if (callback(<Identifier> location, guards)) {
+                            stop = true;
+                            break;
+                        }
+                        else {
+                            continue;
+                        }
                     }
                     visited[nodeId] = true;
                 }
                 else {
-                    if (guards.indexOf(<BranchFlow>location) !== -1) return;
+                    if (guards.indexOf(<BranchFlow>location) !== -1) continue;
                     isGuard = true;
                     guards.push(<BranchFlow>location);
                 }
                 if (location.previous === undefined) {
                     // We cannot do analysis in a catch or finally block
-                    stop = callback(undefined, guards);
-                    if (!isGuard) visited[nodeId] = false;
-                    return;
+                    if (callback(undefined, guards)) {
+                        stop = true;
+                        break;
+                    }
+                    else {
+                        if (!isGuard) visited[nodeId] = false;
+                        continue;
+                    }
                 }
-                for (const item of location.previous) {
-                    worker(item);
+                stack.push([location, false]);
+                for (let i = location.previous.length - 1; i >= 0; i--) {
+                    const item = location.previous[i];
+                    stack.push([item, true]);
                 }
-                if (isGuard) {
-                    guards.pop();
-                }
-                else {
-                    visited[nodeId] = false;
-                }
-                return;
             }
+
+            return stop;
+
             function isBranchStart(node: Node) {
                 const guard = guards[guards.length - 1];
                 if (!guard) return false;
