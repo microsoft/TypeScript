@@ -13,7 +13,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.4";
+    export const servicesVersion = "0.5";
 
     export interface Node {
         getSourceFile(): SourceFile;
