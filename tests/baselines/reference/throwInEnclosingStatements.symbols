@@ -89,6 +89,7 @@ var aa = {
 >biz : Symbol(biz, Decl(throwInEnclosingStatements.ts, 41, 10))
 
         throw this;
+>this : Symbol(, Decl(throwInEnclosingStatements.ts, 40, 8))
     }
 }
 
