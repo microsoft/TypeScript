@@ -296,11 +296,11 @@ namespace ts {
      * If loop contains block scoped binding captured in some function then loop body is converted to a function.
      * Lexical bindings declared in loop initializer will be passed into the loop body function as parameters,
      * however if this binding is modified inside the body - this new value should be propagated back to the original binding.
-     * This is done by declaring new variable (out parameter holder) outside of the loop for every binding that is reassigned inside the body. 
+     * This is done by declaring new variable (out parameter holder) outside of the loop for every binding that is reassigned inside the body.
      * On every iteration this variable is initialized with value of corresponding binding.
      * At every point where control flow leaves the loop either explicitly (break/continue) or implicitly (at the end of loop body)
      * we copy the value inside the loop to the out parameter holder.
-     * 
+     *
      * for (let x;;) {
      *     let a = 1;
      *     let b = () => a;
@@ -308,9 +308,9 @@ namespace ts {
      *     if (...) break;
      *     ...
      * }
-     * 
+     *
      * will be converted to
-     * 
+     *
      * var out_x;
      * var loop = function(x) {
      *     var a = 1;
@@ -326,7 +326,7 @@ namespace ts {
      *     x = out_x;
      *     if (state === "break") break;
      * }
-     * 
+     *
      * NOTE: values to out parameters are not copies if loop is abrupted with 'return' - in this case this will end the entire enclosing function
      * so nobody can observe this new value.
      */
@@ -2138,6 +2138,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return container && container.kind !== SyntaxKind.SourceFile;
             }
 
+            // Return true if identifier resolves to an imported identifier
+            function isImportedReference(node: Identifier) {
+                const declaration = resolver.getReferencedImportDeclaration(node);
+                return declaration && (declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.ImportSpecifier);
+            }
+
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 // The name property of a short-hand property assignment is considered an expression position, so here
                 // we manually emit the identifier to avoid rewriting.
@@ -2151,7 +2157,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 //       let obj = { y };
                 //   }
                 // Here we need to emit obj = { y : m.y } regardless of the output target.
-                if (modulekind !== ModuleKind.ES6 || isNamespaceExportReference(node.name)) {
+                // The same rules apply for imported identifiers when targeting module formats with indirect access to
+                // the imported identifiers. For example, when targeting CommonJS:
+                //
+                //   import {foo} from './foo';
+                //   export const baz = { foo };
+                //
+                // Must be transformed into:
+                //
+                //   const foo_1 = require('./foo');
+                //   exports.baz = { foo: foo_1.foo };
+                //
+                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
                     // Emit identifier as an identifier
                     write(": ");
                     emit(node.name);
@@ -3073,7 +3090,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 writeLine();
-                // end of loop body -> copy out parameter 
+                // end of loop body -> copy out parameter
                 copyLoopOutParameters(convertedLoopState, CopyDirection.ToOutParameter, /*emitAsStatements*/true);
 
                 decreaseIndent();
@@ -3572,7 +3589,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             }
                             else {
                                 convertedLoopState.nonLocalJumps |= Jump.Continue;
-                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.     
+                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.
                                 write(`"continue";`);
                             }
                         }
@@ -7267,7 +7284,7 @@ const _super = (function (geti, seti) {
                     }
 
                     // text should be quoted string
-                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same                     
+                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
                     if (hasProperty(groupIndices, key)) {
