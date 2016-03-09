@@ -779,10 +779,10 @@ namespace ts.server {
             const tsdJson = this.host.getTsdJson(tsdJsonPath);
             const { cachedTypingPaths, newTypingNames } = JsTyping.discoverTypings(
                 sys,
-                /* fileNames */ project.getFileNames(),
-                /* projectRootPath */ projectRootPath,
+                project.getFileNames(),
+                projectRootPath,
                 /* safeListPath */ undefined,
-                /* packageNameToTypingLocation */ tsdJson ? tsdJson.packageNameToTypingPath : undefined,
+                tsdJson ? tsdJson.packageNameToTypingPath : undefined,
                 typingOptions,
                 compilerOptions
             );
@@ -827,6 +827,9 @@ namespace ts.server {
                     .then(() => api.select(query, options))
                     .then((selection: any) => api.install(selection, options))
                     .then((installResult: any) => {
+                        if (!installResult || !installResult.written) {
+                            return;
+                        }
                         const keys = getKeys(installResult.written.dict);
                         for (const key of keys) {
                             const installedTypingPath = toPath(key, typingsFolderPath, getCanonicalFileName);
@@ -847,7 +850,7 @@ namespace ts.server {
                 if (script.defaultProject !== project) {
                     project.addRoot(script);
                 }
-                if (project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
+                if (project.isConfiguredProject() && project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
                     project.projectService.openFileRootsConfigured.push(script);
                 }
             }
@@ -1341,9 +1344,7 @@ namespace ts.server {
                 );
 
                 // Acquire typings for JS files
-                if (projectOptions.typingOptions) {
-                    this.acquireTypingForJs(project);
-                }
+                this.acquireTypingForJs(project);
 
                 return { success: true, project: project };
             }
@@ -1401,9 +1402,7 @@ namespace ts.server {
                     project.finishGraph();
 
                     // Acquire typings for JS files
-                    if (projectOptions.typingOptions) {
-                        this.acquireTypingForJs(project);
-                    }
+                    this.acquireTypingForJs(project);
                 }
             }
         }

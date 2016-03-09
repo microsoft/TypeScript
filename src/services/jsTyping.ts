@@ -69,10 +69,9 @@ namespace ts.JsTyping {
 
         // Directories to search for package.json, bower.json and other typing information
         let searchDirs: string[] = [];
-        let exclude: string[] = [];
 
         mergeTypings(typingOptions.include);
-        exclude = typingOptions.exclude || [];
+        const exclude = typingOptions.exclude || [];
 
         const possibleSearchDirs = map(fileNames, getDirectoryPath);
         if (projectRootPath !== undefined) {
