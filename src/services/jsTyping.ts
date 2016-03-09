@@ -63,7 +63,7 @@ namespace ts.JsTyping {
             }
             else {
                 safeList = {};
-            };
+            }
         }
 
         const filesToWatch: string[] = [];
