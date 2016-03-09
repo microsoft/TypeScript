@@ -418,18 +418,19 @@ namespace ts {
     }
 
     /**
-     * 
-     * @param argument
-     * @param opt
-     * @param errors
+     * Try parsing "--lib" command-line flag; If success, return array of mapped library file-name with the given "--lib" option.
+     * Otherwise, return undefined.
+     * @param argument the given argument to the current command-line flag which is the second parameter "option"
+     * @param option current parsing command-line flag
+     * @param errors an array containing an error which may occur during parsing of "--lib" flag
      */
     /* @internal */
-    export function tryParseLibCommandLineFlag(argument: string, opt: CommandLineOption, errors: Diagnostic[]): string[] {
+    export function tryParseLibCommandLineFlag(argument: string, option: CommandLineOption, errors: Diagnostic[]): string[] {
         // --library option can take multiple arguments.
         // i.e --library es5
         //     --library es5,es6.array  // Note: space is not allow between comma
-        if (opt.paramType === Diagnostics.LIBRARY) {
-            const libOptionFileNameMap = <Map<string>>opt.type;
+        if (option.paramType === Diagnostics.LIBRARY) {
+            const libOptionFileNameMap = <Map<string>>option.type;
             const libFileNames: string[] = [];
             const inputs = argument.split(",");
             for (const input of inputs) {
@@ -442,7 +443,7 @@ namespace ts {
                         libFileNames.push(libraryFileName);
                     }
                     else {
-                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error, convertLibFlagTypeToLibOptionNameArray()));
+                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>option).error, convertLibFlagTypeToLibOptionNameArray()));
                         break;
                     }
                 }

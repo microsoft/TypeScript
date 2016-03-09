@@ -809,7 +809,6 @@ namespace Harness {
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
-        // TODO(yuisu): remove this when we merge breaking library
         export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
         export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
 
