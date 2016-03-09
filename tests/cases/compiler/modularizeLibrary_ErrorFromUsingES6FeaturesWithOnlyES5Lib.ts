@@ -1,6 +1,7 @@
-﻿// @lib: es6
-// @target: es5
+﻿// @lib: es5
+// @target: es6
 
+// All will be error from using ES6 features but only include ES5 library
 // Using Es6 array
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

@@ -1,9 +1,9 @@
 ﻿// @lib: es6.array
 // @target: es5
 
-// Using Es6 array
+// Error missing basic JavaScript objects
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);
 }
 
-f(1, 2, 3);  // no error
+f(1, 2, 3);
