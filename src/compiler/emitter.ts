@@ -379,7 +379,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
-        const hasIndirectAccessToImportedIdentifiers = modulekind !== ModuleKind.ES6 && modulekind !== ModuleKind.System;
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         let emitSkipped = false;
@@ -1576,7 +1575,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
                         // Identifier references module export
-                        if (hasIndirectAccessToImportedIdentifiers) {
+                        if (modulekind !== ModuleKind.ES6 && modulekind !== ModuleKind.System) {
                             write("exports.");
                         }
                     }
@@ -2169,7 +2168,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 //   const foo_1 = require('./foo');
                 //   exports.baz = { foo: foo_1.foo };
                 //
-                if (languageVersion < ScriptTarget.ES6 || (hasIndirectAccessToImportedIdentifiers && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
+                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
                     // Emit identifier as an identifier
                     write(": ");
                     emit(node.name);
