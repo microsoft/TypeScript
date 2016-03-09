@@ -685,7 +685,7 @@ namespace ts {
             // post catch/finally state is reachable if
             // - post try state is reachable - control flow can fall out of try block
             // - post catch state is reachable - control flow can fall out of catch block
-            currentReachabilityState = or(postTryState, postCatchState);
+            currentReachabilityState = n.catchClause ? or(postTryState, postCatchState) : postTryState;
         }
 
         function bindSwitchStatement(n: SwitchStatement): void {
@@ -708,10 +708,14 @@ namespace ts {
         function bindCaseBlock(n: CaseBlock): void {
             const startState = currentReachabilityState;
 
-            for (const clause of n.clauses) {
+            for (let i = 0; i < n.clauses.length; i++) {
+                const clause = n.clauses[i];
                 currentReachabilityState = startState;
                 bind(clause);
-                if (clause.statements.length && currentReachabilityState === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
+                if (clause.statements.length &&
+                    i !== n.clauses.length - 1 && // allow fallthrough from the last case
+                    currentReachabilityState === Reachability.Reachable &&
+                    options.noFallthroughCasesInSwitch) {
                     errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
@@ -749,6 +753,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -896,7 +901,12 @@ namespace ts {
                 if (node.flags & NodeFlags.Export) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
-                declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                if (isExternalModuleAugmentation(node)) {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                }
+                else {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                }
             }
             else {
                 const state = getModuleInstanceState(node);
@@ -1221,7 +1231,7 @@ namespace ts {
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {

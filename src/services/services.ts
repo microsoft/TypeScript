@@ -7,6 +7,7 @@
 /// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
+/// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -807,6 +808,7 @@ namespace ts {
         public identifierCount: number;
         public symbolCount: number;
         public version: string;
+        public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
@@ -1020,6 +1022,7 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
@@ -1469,7 +1472,8 @@ namespace ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
@@ -1487,7 +1491,8 @@ namespace ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
 
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
@@ -1658,6 +1663,7 @@ namespace ts {
         hostFileName: string;
         version: string;
         scriptSnapshot: IScriptSnapshot;
+        scriptKind: ScriptKind;
     }
 
     interface DocumentRegistryEntry {
@@ -1752,7 +1758,8 @@ namespace ts {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot: scriptSnapshot
+                    scriptSnapshot: scriptSnapshot,
+                    scriptKind: getScriptKind(fileName, this.host)
                 };
             }
 
@@ -1818,12 +1825,13 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
 
+            const scriptKind = getScriptKind(fileName, this.host);
             const version = this.host.getScriptVersion(fileName);
             let sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
                 // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true);
+                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true, scriptKind);
             }
             else if (this.currentFileVersion !== version) {
                 // This is the same file, just a newer version. Incrementally parse the file.
@@ -1954,9 +1962,9 @@ namespace ts {
         return output.outputText;
     }
 
-    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
+    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
         const text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
-        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
+        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
@@ -2018,7 +2026,7 @@ namespace ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
@@ -2060,12 +2068,12 @@ namespace ts {
             return JSON.stringify(bucketInfoArray, undefined, 2);
         }
 
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true);
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
         }
 
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false);
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
         }
 
         function acquireOrUpdateDocument(
@@ -2073,7 +2081,8 @@ namespace ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            acquiring: boolean): SourceFile {
+            acquiring: boolean,
+            scriptKind?: ScriptKind): SourceFile {
 
             const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -2082,7 +2091,7 @@ namespace ts {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false);
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
 
                 entry = {
                     sourceFile: sourceFile,
@@ -2830,7 +2839,7 @@ namespace ts {
                     if (oldSourceFile) {
                         // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
-                        // address the following 'race'.  Specifically, say we have the following:
+                        // address the following race-condition.  Specifically, say we have the following:
                         //
                         //      LS1
                         //          \
@@ -2849,14 +2858,20 @@ namespace ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the
                         // host says should be used.
-                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+
+                        // We do not support the scenario where a host can modify a registered
+                        // file's script kind, i.e. in one project some file is treated as ".ts"
+                        // and in another as ".js"
+                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + fileName);
+
+                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
@@ -3120,7 +3135,7 @@ namespace ts {
             else if (isRightOfOpenTag) {
                 const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
-                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
                 }
                 else {
                     symbols = tagSymbols;

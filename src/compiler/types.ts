@@ -1,3 +1,4 @@
+
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -410,7 +411,7 @@ namespace ts {
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -1207,6 +1208,8 @@ namespace ts {
         block: Block;
     }
 
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
+
     export interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -1530,6 +1533,7 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+        /* @internal */ scriptKind: ScriptKind;
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
@@ -1680,6 +1684,7 @@ namespace ts {
 
     export interface EmitResult {
         emitSkipped: boolean;
+        /** Contains declaration emit diagnostics */
         diagnostics: Diagnostic[];
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
@@ -1886,6 +1891,7 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -2283,6 +2289,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        mappedTypes?: Type[];       // Types mapped by this mapper
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -2369,6 +2376,7 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
+        declarationDir?: string;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
@@ -2431,6 +2439,22 @@ namespace ts {
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean;
+    }
+
+    export interface DiscoverTypingsInfo {
+        fileNames: string[];                            // The file names that belong to the same project.
+        projectRootPath: string;                        // The path to the project root directory
+        safeListPath: string;                           // The path used to retrieve the safe list
+        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
+        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        compilerOptions: CompilerOptions;               // Used as a source for typing inference
+    }
+
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2460,6 +2484,14 @@ namespace ts {
         character: number;
     }
 
+    export const enum ScriptKind {
+        Unknown = 0,
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4
+    }
+
     export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
@@ -2481,6 +2513,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
