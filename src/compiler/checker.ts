@@ -13440,7 +13440,7 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const conditionType = checkExpression(node.expression);
-            checkConditionOfBranchingStatementOrConditionalExpression(node, node.expression, conditionType);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
 
             checkSourceElement(node.thenStatement);
 
@@ -13457,7 +13457,7 @@ namespace ts {
 
             checkSourceElement(node.statement);
             const conditionType = checkExpression(node.expression);
-            checkConditionOfBranchingStatementOrConditionalExpression(node, node.expression, conditionType);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
         }
 
         function checkWhileStatement(node: WhileStatement) {
@@ -13465,7 +13465,7 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const conditionType = checkExpression(node.expression);
-            checkConditionOfBranchingStatementOrConditionalExpression(node, node.expression, conditionType);
+            checkConditionOfBranchingStatement(node, node.expression, conditionType);
             checkSourceElement(node.statement);
         }
 
@@ -13488,14 +13488,14 @@ namespace ts {
 
             if (node.condition) {
                 const conditionType = checkExpression(node.condition);
-                checkConditionOfBranchingStatementOrConditionalExpression(node, node.condition, conditionType);
+                checkConditionOfBranchingStatement(node, node.condition, conditionType);
             }
             if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
         }
 
-        function checkConditionOfBranchingStatementOrConditionalExpression(
-            statementOrConditional: IfStatement | ForStatement | DoStatement,
+        function checkConditionOfBranchingStatement(
+            statementOrConditional: IfStatement | IterationStatement,
             condition: Expression,
             conditionType: Type): void {
 
