@@ -193,8 +193,8 @@ namespace ts.JsTyping {
                 mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList, f)));
             }
 
-            const jsxFileNames = filter(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
-            if (jsxFileNames.length > 0) {
+            const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
+            if (hasJsxFile) {
                 mergeTypings(["react"]);
             }
         }
@@ -214,6 +214,7 @@ namespace ts.JsTyping {
                 filter(
                     host.readDirectory(nodeModulesPath, /*extension*/ undefined, /*exclude*/ undefined, /*depth*/ 2),
                     f => ts.getBaseFileName(f) === "package.json");
+
             for (const packageJsonFile of packageJsonFiles) {
                 const packageJsonDict = tryParseJson(packageJsonFile, host);
                 if (!packageJsonDict) { continue; }
@@ -246,13 +247,6 @@ namespace ts.JsTyping {
             const typingNames: string[] = [];
             if (!options) {
                 return;
-            }
-
-            if (options.jsx === JsxEmit.React) {
-                typingNames.push("react");
-            }
-            if (options.moduleResolution === ModuleResolutionKind.NodeJs) {
-                typingNames.push("node");
             }
             mergeTypings(typingNames);
         }

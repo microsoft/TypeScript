@@ -590,10 +590,10 @@ namespace ts {
                         }
                     }
                     else if (id === "include") {
-                        options.include = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
+                        options.include = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else if (id === "exclude") {
-                        options.exclude = ConvertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
+                        options.exclude = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
                     }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
@@ -636,9 +636,9 @@ namespace ts {
                         }
                     }
                     if (opt.isFilePath) {
-                       value = normalizePath(combinePaths(basePath, value));
+                        value = normalizePath(combinePaths(basePath, value));
                        if (value === "") {
-                            value = ".";
+                           value = ".";
                         }
                     }
                     options[opt.name] = value;
@@ -655,7 +655,7 @@ namespace ts {
         return { options, errors };
     }
 
-    function ConvertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
+    function convertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
         const items: string[] = [];
         let invalidOptionType = false;
         if (!isArray(optionJson)) {
