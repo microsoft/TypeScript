@@ -378,7 +378,7 @@ namespace ts {
 
         function mergeModuleAugmentation(moduleName: LiteralExpression): void {
             const moduleAugmentation = <ModuleDeclaration>moduleName.parent;
-            if (moduleAugmentation.symbol.valueDeclaration !== moduleAugmentation) {
+            if (moduleAugmentation.symbol.declarations[0] !== moduleAugmentation) {
                 // this is a combined symbol for multiple augmentations within the same file.
                 // its symbol already has accumulated information for all declarations
                 // so we need to add it just once - do the work only for first declaration
@@ -4498,7 +4498,7 @@ namespace ts {
 
         // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
-            const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
+            const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
@@ -14936,7 +14936,7 @@ namespace ts {
                             }
                             else {
                                 // symbol should not originate in augmentation
-                                reportError = isExternalModuleAugmentation(symbol.parent.valueDeclaration);
+                                reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
                             }
                         }
                         if (reportError) {
