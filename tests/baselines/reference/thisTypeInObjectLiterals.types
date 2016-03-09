@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
+let o = {
+>o : { d: string; m(): number; }
+>{    d: "bar",    m() {        return this.d.length;    }} : { d: string; m(): number; }
+
+    d: "bar",
+>d : string
+>"bar" : string
+
+    m() {
+>m : () => number
+
+        return this.d.length;
+>this.d.length : number
+>this.d : string
+>this : { d: string; m(): number; }
+>d : string
+>length : number
+    }
+}
+

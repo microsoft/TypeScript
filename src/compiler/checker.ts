@@ -7494,6 +7494,14 @@ namespace ts {
                 const symbol = getSymbolOfNode(container.parent);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
             }
+            if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                // Note: this works because object literal methods are deferred,
+                // which means that the type of the containing object literal is already known.
+                const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
+                if (type) {
+                    return type;
+                }
+            }
 
             if (isInJavaScriptFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);

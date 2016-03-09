@@ -1,0 +1,19 @@
+=== tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
+let o = {
+>o : Symbol(o, Decl(thisTypeInObjectLiterals.ts, 0, 3))
+
+    d: "bar",
+>d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+
+    m() {
+>m : Symbol(m, Decl(thisTypeInObjectLiterals.ts, 1, 13))
+
+        return this.d.length;
+>this.d.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>this.d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>this : Symbol(, Decl(thisTypeInObjectLiterals.ts, 0, 7))
+>d : Symbol(d, Decl(thisTypeInObjectLiterals.ts, 0, 9))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+    }
+}
+
