@@ -4,7 +4,7 @@ class C1 {
 
     [Symbol.toStringTag]() {
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 
         return { x: "" };
@@ -25,7 +25,7 @@ var obj = c[Symbol.toStringTag]().x;
 >c[Symbol.toStringTag]().x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
 >c : Symbol(c, Decl(symbolProperty28.ts, 8, 3))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty28.ts, 2, 16))
 

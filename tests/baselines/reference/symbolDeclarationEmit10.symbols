@@ -4,12 +4,12 @@ var obj = {
 
     get [Symbol.isConcatSpreadable]() { return '' },
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
 
     set [Symbol.isConcatSpreadable](x) { }
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit10.ts, 2, 36))
 }

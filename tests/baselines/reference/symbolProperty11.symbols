@@ -7,7 +7,7 @@ interface I {
 
     [Symbol.iterator]?: { x };
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty11.ts, 2, 25))
 }

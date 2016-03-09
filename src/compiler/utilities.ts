@@ -407,10 +407,6 @@ namespace ts {
         return createTextSpanFromBounds(pos, errorNode.end);
     }
 
-    export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined;
-    }
-
     export function isExternalOrCommonJsModule(file: SourceFile): boolean {
         return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
     }
@@ -2633,7 +2629,7 @@ namespace ts {
 
 namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+        return options.target === ScriptTarget.ES6 ? "lib.full.es6.d.ts" : "lib.d.ts";
     }
 
     export function textSpanEnd(span: TextSpan) {

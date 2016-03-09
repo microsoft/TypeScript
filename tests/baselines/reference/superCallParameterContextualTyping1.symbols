@@ -22,7 +22,7 @@ class B extends A<number, string> {
     constructor() { super(value => String(value.toExponential())); }
 >super : Symbol(A, Decl(superCallParameterContextualTyping1.ts, 0, 0))
 >value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >value.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))

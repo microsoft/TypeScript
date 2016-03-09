@@ -4,6 +4,6 @@ class C {
 
     [Symbol.toStringTag]: string = "";
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 }

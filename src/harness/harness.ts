@@ -1640,7 +1640,7 @@ namespace Harness {
     }
 
     export function isLibraryFile(filePath: string): boolean {
-        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.core.d.ts");
+        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.es5.d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
