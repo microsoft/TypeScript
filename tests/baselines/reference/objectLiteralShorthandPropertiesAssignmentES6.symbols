@@ -3,7 +3,7 @@ var id: number = 10000;
 >id : Symbol(id, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 0, 3))
 
 var name: string = "my name";
->name : Symbol(name, Decl(lib.d.ts, --, --), Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 1, 3))
+>name : Symbol(name, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 1, 3))
 
 var person: { name: string; id: number } = { name, id };
 >person : Symbol(person, Decl(objectLiteralShorthandPropertiesAssignmentES6.ts, 3, 3))

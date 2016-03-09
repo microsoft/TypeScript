@@ -3,16 +3,16 @@ class C {
 >C : Symbol(C, Decl(symbolProperty45.ts, 0, 0))
 
     get [Symbol.hasInstance]() {
->Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.d.ts, --, --))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.symbol.wellknown.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
 
         return "";
     }
     get [Symbol.toPrimitive]() {
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es6.symbol.wellknown.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
 
         return "";
     }
