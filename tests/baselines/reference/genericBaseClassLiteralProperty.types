@@ -23,14 +23,14 @@ class SubClass extends BaseClass<number> {
 >x : number
 >this._getValue1() : number
 >this._getValue1 : () => number
->this : this
+>this : SubClass
 >_getValue1 : () => number
 
         var y : number = this._getValue2();
 >y : number
 >this._getValue2() : number
 >this._getValue2 : () => number
->this : this
+>this : SubClass
 >_getValue2 : () => number
     }
 }

@@ -180,7 +180,7 @@ class C {
         this.foo(x, y);
 >this.foo(x, y) : void
 >this.foo : (x: number, y: number, ...z: string[]) => void
->this : this
+>this : C
 >foo : (x: number, y: number, ...z: string[]) => void
 >x : number
 >y : number
@@ -188,7 +188,7 @@ class C {
         this.foo(x, y, ...z);
 >this.foo(x, y, ...z) : void
 >this.foo : (x: number, y: number, ...z: string[]) => void
->this : this
+>this : C
 >foo : (x: number, y: number, ...z: string[]) => void
 >x : number
 >y : number

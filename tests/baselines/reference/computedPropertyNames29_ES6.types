@@ -15,7 +15,7 @@ class C {
                 [this.bar()]() { } // needs capture
 >this.bar() : number
 >this.bar : () => number
->this : this
+>this : C
 >bar : () => number
 
             };

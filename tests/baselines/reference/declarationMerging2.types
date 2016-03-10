@@ -9,7 +9,7 @@ export class A {
     getF() { return this._f; }
 >getF : () => number
 >this._f : number
->this : this
+>this : A
 >_f : number
 }
 

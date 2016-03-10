@@ -8,7 +8,7 @@ class A extends B {
 >foo : () => void
 >this.bar() : void
 >this.bar : () => void
->this : this
+>this : A
 >bar : () => void
 
 }
