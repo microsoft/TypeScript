@@ -2450,11 +2450,14 @@
         "category": "Message",
         "code": 6084
     },
+    "Option '{0}' should have array of strings as a value.": {
+        "category": "Error",
+        "code": 6103
+    },
     "Do not emit 'use strict' directives in module output.": {
         "category": "Message",
         "code": 6112
     },
-
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2654,5 +2657,9 @@
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }

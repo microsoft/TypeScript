@@ -1,3 +1,4 @@
+
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -1559,6 +1560,7 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+        /* @internal */ scriptKind: ScriptKind;
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
@@ -2447,6 +2449,22 @@ namespace ts {
         [option: string]: string | number | boolean;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean;
+    }
+
+    export interface DiscoverTypingsInfo {
+        fileNames: string[];                            // The file names that belong to the same project.
+        projectRootPath: string;                        // The path to the project root directory
+        safeListPath: string;                           // The path used to retrieve the safe list
+        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
+        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        compilerOptions: CompilerOptions;               // Used as a source for typing inference
+    }
+
     export const enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2476,6 +2494,14 @@ namespace ts {
         character: number;
     }
 
+    export const enum ScriptKind {
+        Unknown = 0,
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4
+    }
+
     export const enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
@@ -2497,6 +2523,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
