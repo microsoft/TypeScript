@@ -102,12 +102,6 @@ namespace ts {
         return clone;
     }
 
-    export function createNodeArrayNode<T extends Node>(elements: T[]): NodeArrayNode<T> {
-        const node = <NodeArrayNode<T>>createSynthesizedNode(SyntaxKind.NodeArrayNode);
-        node.nodes = createNodeArray(elements);
-        return node;
-    }
-
     // Literals
 
     export function createLiteral(value: string, location?: TextRange): StringLiteral;

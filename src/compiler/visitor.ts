@@ -3,7 +3,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMany<T extends Node> = T | NodeArrayNode<T> | T[];
+    export type OneOrMany<T extends Node> = T | T[];
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -512,9 +512,6 @@ namespace ts {
         if (isArray(visited)) {
             visitedNode = (lift || extractSingleNode)(<NodeArray<Node>>visited);
         }
-        else if (isNodeArrayNode(visited)) {
-            visitedNode = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
-        }
         else {
             visitedNode = visited;
         }
@@ -668,7 +665,7 @@ namespace ts {
         if (nodes) {
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i];
-                if (result || node === undefined || isArray(node) || isNodeArrayNode(node)) {
+                if (result || node === undefined || isArray(node)) {
                     if (!result) {
                         result = <T[]>nodes.slice(0, i);
                     }
@@ -704,9 +701,6 @@ namespace ts {
         if (to && from) {
             if (isArray(from)) {
                 addNodesWorker(to, from, startOnNewLine, test, parenthesize, parentNode, isVisiting);
-            }
-            else if (isNodeArrayNode(from)) {
-                addNodesWorker(to, from.nodes, startOnNewLine, test, parenthesize, parentNode, isVisiting);
             }
             else {
                 const node = parenthesize !== undefined ? parenthesize(from, parentNode) : from;

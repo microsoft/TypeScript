@@ -3471,13 +3471,6 @@ namespace ts {
     export function isEnumMember(node: Node): node is EnumMember {
         return node.kind === SyntaxKind.EnumMember;
     }
-
-
-    // Synthesized
-
-    export function isNodeArrayNode<T extends Node>(node: Node): node is NodeArrayNode<T> {
-        return node.kind === SyntaxKind.NodeArrayNode;
-    }
 }
 
 namespace ts {

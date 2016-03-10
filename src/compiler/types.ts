@@ -342,7 +342,7 @@ namespace ts {
 
         // Synthesized list
         SyntaxList,
-        NodeArrayNode,
+
         // Enum value count
         Count,
         // Markers
@@ -467,19 +467,6 @@ namespace ts {
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
-    }
-
-    /**
-     * A NodeArrayNode is a transient node used during transformations to indicate that more than
-     * one node will substitute a single node in the source. When the source is a NodeArray (as
-     * part of a call to `visitNodes`), the nodes of a NodeArrayNode will be spread into the
-     * result array. When the source is a Node (as part of a call to `visitNode`), the NodeArrayNode
-     * must be converted into a compatible node via the `lift` callback.
-     */
-    /* @internal */
-    // @kind(SyntaxKind.NodeArrayNode)
-    export interface NodeArrayNode<T extends Node> extends Node {
-        nodes: NodeArray<T>;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)

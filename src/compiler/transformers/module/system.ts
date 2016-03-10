@@ -506,7 +506,7 @@ namespace ts {
             if (!node.moduleSpecifier) {
                 const statements: Statement[] = [];
                 addNodes(statements, map(node.exportClause.elements, visitExportSpecifier));
-                return createNodeArrayNode(statements);
+                return statements;
             }
 
             return undefined;
@@ -648,7 +648,7 @@ namespace ts {
                 addNode(statements, createDeclarationExport(node));
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**

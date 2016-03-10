@@ -281,7 +281,7 @@ namespace ts {
                 }
 
                 addExportImportAssignments(statements, node);
-                return createNodeArrayNode(statements);
+                return statements;
             }
 
             return undefined;
@@ -329,7 +329,7 @@ namespace ts {
                 }
 
                 addExportImportAssignments(statements, node);
-                return createNodeArrayNode(statements);
+                return statements;
             }
 
             return undefined;
@@ -370,7 +370,7 @@ namespace ts {
                         }
                     }
 
-                    return createNodeArrayNode(statements);
+                    return statements;
                 }
                 else {
                     // export * from "mod";
@@ -395,7 +395,7 @@ namespace ts {
             if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
                 const statements: Statement[] = [];
                 addExportDefault(statements, node.expression, /*location*/ node);
-                return createNodeArrayNode(statements);
+                return statements;
             }
 
             return undefined;
@@ -540,7 +540,7 @@ namespace ts {
                     /*location*/ node
                 );
             }
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
@@ -580,7 +580,7 @@ namespace ts {
                 );
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         function substituteExpression(node: Expression) {

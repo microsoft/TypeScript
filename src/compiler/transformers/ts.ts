@@ -408,7 +408,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassDeclaration(node: ClassDeclaration): NodeArrayNode<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
 
@@ -471,7 +471,7 @@ namespace ts {
                 }
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -1870,10 +1870,10 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                return createNodeArrayNode([
+                return [
                     func,
                     createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
-                ]);
+                ];
             }
 
             return func;
@@ -2150,7 +2150,7 @@ namespace ts {
          *
          * @param node The enum declaration node.
          */
-        function visitEnumDeclaration(node: EnumDeclaration) {
+        function visitEnumDeclaration(node: EnumDeclaration): OneOrMany<Statement> {
             if (shouldElideEnumDeclaration(node)) {
                 return undefined;
             }
@@ -2215,7 +2215,7 @@ namespace ts {
             }
 
             currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -2362,7 +2362,7 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function visitModuleDeclaration(node: ModuleDeclaration) {
+        function visitModuleDeclaration(node: ModuleDeclaration): OneOrMany<Statement> {
             if (shouldElideModuleDeclaration(node)) {
                 return undefined;
             }
@@ -2435,7 +2435,7 @@ namespace ts {
             );
 
             currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**

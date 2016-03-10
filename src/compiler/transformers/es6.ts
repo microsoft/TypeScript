@@ -1047,9 +1047,7 @@ namespace ts {
             // If we are here it is because the name contains a binding pattern.
             Debug.assert(isBindingPattern(node.name));
 
-            return createNodeArrayNode(
-                flattenVariableDestructuring(node, /*value*/ undefined, visitor)
-            );
+            return flattenVariableDestructuring(node, /*value*/ undefined, visitor);
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
