@@ -7485,11 +7485,10 @@ namespace ts {
 
             // check if node is used as LHS in some assignment expression
             let isAssigned = false;
-            if (current.parent.kind === SyntaxKind.BinaryExpression) {
-                isAssigned = (<BinaryExpression>current.parent).left === current && isAssignmentOperator((<BinaryExpression>current.parent).operatorToken.kind);
+            if (isAssignmentTarget(current)) {
+                isAssigned = true;
             }
-
-            if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
+            else if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
                 const expr = <PrefixUnaryExpression | PostfixUnaryExpression>current.parent;
                 isAssigned = expr.operator === SyntaxKind.PlusPlusToken || expr.operator === SyntaxKind.MinusMinusToken;
             }
