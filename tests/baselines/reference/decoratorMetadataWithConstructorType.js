@@ -18,12 +18,13 @@ export class B {
 
 
 //// [decoratorMetadataWithConstructorType.js]
+"use strict";
 var A = (function () {
     function A() {
         console.log('new A');
     }
     return A;
-})();
+}());
 function decorator(target, propertyKey) {
 }
 var B = (function () {
@@ -33,7 +34,7 @@ var B = (function () {
     __decorate([
         decorator, 
         __metadata('design:type', A)
-    ], B.prototype, "x");
+    ], B.prototype, "x", void 0);
     return B;
-})();
+}());
 exports.B = B;

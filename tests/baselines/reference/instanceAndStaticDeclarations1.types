@@ -17,7 +17,7 @@ class Point {
 >dx : number
 >this.x - p.x : number
 >this.x : number
->this : Point
+>this : this
 >x : number
 >p.x : number
 >p : Point
@@ -27,7 +27,7 @@ class Point {
 >dy : number
 >this.y - p.y : number
 >this.y : number
->this : Point
+>this : this
 >y : number
 >p.y : number
 >p : Point

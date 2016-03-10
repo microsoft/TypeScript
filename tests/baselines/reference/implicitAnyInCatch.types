@@ -12,7 +12,7 @@ try { } catch (error) {
 >2147024809 : number
 }
 for (var key in this) { }
->key : any
+>key : string
 >this : any
 
 class C {
@@ -22,8 +22,8 @@ class C {
 >temp : () => void
 
         for (var x in this) {
->x : any
->this : C
+>x : string
+>this : this
         }
     }
 }

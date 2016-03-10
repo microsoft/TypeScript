@@ -11,9 +11,11 @@ Foo();
 
 
 //// [10_lib.js]
+"use strict";
 function Foo() { }
 exports.Foo = Foo;
 //// [main.js]
+"use strict";
 var _10_lib_1 = require('./10_lib');
 _10_lib_1.Foo();
 

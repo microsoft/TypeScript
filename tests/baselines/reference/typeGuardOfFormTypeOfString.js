@@ -92,7 +92,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 ;
 var str;
 var bool;

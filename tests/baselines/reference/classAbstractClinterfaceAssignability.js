@@ -29,7 +29,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var AA;
 AA = I;
 var AAA;

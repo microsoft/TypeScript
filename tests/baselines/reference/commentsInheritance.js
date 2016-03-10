@@ -172,7 +172,7 @@ var c1 = (function () {
     c1.prototype.nc_f1 = function () {
     };
     return c1;
-})();
+}());
 var i1_i;
 var c1_i = new c1();
 // assign to interface
@@ -223,7 +223,7 @@ var c2 = (function () {
         configurable: true
     });
     return c2;
-})();
+}());
 var c3 = (function (_super) {
     __extends(c3, _super);
     function c3() {
@@ -250,7 +250,7 @@ var c3 = (function (_super) {
         configurable: true
     });
     return c3;
-})(c2);
+}(c2));
 var c2_i = new c2(10);
 var c3_i = new c3();
 // assign
@@ -261,7 +261,7 @@ var c4 = (function (_super) {
         _super.apply(this, arguments);
     }
     return c4;
-})(c2);
+}(c2));
 var c4_i = new c4(10);
 var i2_i;
 var i3_i;
@@ -316,19 +316,19 @@ declare class c2 {
     /** c2 c2_f1*/
     c2_f1(): void;
     /** c2 c2_prop*/
-    c2_prop: number;
+    readonly c2_prop: number;
     c2_nc_p1: number;
     c2_nc_f1(): void;
-    c2_nc_prop: number;
+    readonly c2_nc_prop: number;
     /** c2 p1*/
     p1: number;
     /** c2 f1*/
     f1(): void;
     /** c2 prop*/
-    prop: number;
+    readonly prop: number;
     nc_p1: number;
     nc_f1(): void;
-    nc_prop: number;
+    readonly nc_prop: number;
     /** c2 constructor*/
     constructor(a: number);
 }
@@ -339,10 +339,10 @@ declare class c3 extends c2 {
     /** c3 f1*/
     f1(): void;
     /** c3 prop*/
-    prop: number;
+    readonly prop: number;
     nc_p1: number;
     nc_f1(): void;
-    nc_prop: number;
+    readonly nc_prop: number;
 }
 declare var c2_i: c2;
 declare var c3_i: c3;

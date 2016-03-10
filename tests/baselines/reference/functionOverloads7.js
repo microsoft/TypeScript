@@ -20,4 +20,4 @@ var foo = (function () {
         foo = this.bar("test");
     };
     return foo;
-})();
+}());

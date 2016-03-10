@@ -40,7 +40,7 @@ var EndGate;
                 this._from = from.Clone();
             }
             return Tween;
-        })();
+        }());
         Tweening.Tween = Tween;
     })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));
@@ -54,7 +54,7 @@ var EndGate;
                 _super.call(this, from);
             }
             return NumberTween;
-        })(Tweening.Tween);
+        }(Tweening.Tween));
         Tweening.NumberTween = NumberTween;
     })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));

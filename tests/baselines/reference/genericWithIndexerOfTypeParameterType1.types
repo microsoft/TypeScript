@@ -8,14 +8,14 @@ class LazyArray<T> {
 ><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
 >objectId : string
 >T : T
->{} : { [x: string]: undefined; }
+>{} : {}
 
     array() {
 >array : () => { [objectId: string]: T; }
 
         return this.objects;
 >this.objects : { [objectId: string]: T; }
->this : LazyArray<T>
+>this : this
 >objects : { [objectId: string]: T; }
     }
 }

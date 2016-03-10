@@ -37,13 +37,12 @@ var P;
     {
         var v;
         function foo() { }
-        __export(require("ambient"));
         P["default"] = v;
         var C = (function () {
             function C() {
             }
             return C;
-        })();
+        }());
         exports["default"] = C;
         function bee() { }
         P.bee = bee;

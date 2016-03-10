@@ -1,6 +1,7 @@
 === tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts ===
+
 for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
     continue;
@@ -10,7 +11,7 @@ ONE:
 >ONE : any
 
 for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
     continue ONE;
@@ -24,7 +25,7 @@ THREE:
 >THREE : any
 
 for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
     continue THREE;
@@ -35,14 +36,14 @@ FOUR:
 >FOUR : any
 
 for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
     FIVE:
 >FIVE : any
 
     for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
         continue FOUR;
@@ -51,14 +52,14 @@ for(var x in {}) {
 }
 
 for(var x in {}) {
->x : any
+>x : string
 >{} : {}
 
     SIX:
 >SIX : any
 
     for(var x in {}) continue SIX;
->x : any
+>x : string
 >{} : {}
 >SIX : any
 }
@@ -67,11 +68,11 @@ SEVEN:
 >SEVEN : any
 
 for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
->x : any
+>x : string
 >{} : {}
->x : any
+>x : string
 >{} : {}
->x : any
+>x : string
 >{} : {}
 >SEVEN : any
 
@@ -79,7 +80,7 @@ EIGHT:
 >EIGHT : any
 
 for (var x in {}){
->x : any
+>x : string
 >{} : {}
 
     var fn = function () { }

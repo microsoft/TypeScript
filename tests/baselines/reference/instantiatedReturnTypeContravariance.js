@@ -43,7 +43,7 @@ var c = (function () {
         return null;
     };
     return c;
-})();
+}());
 var d = (function (_super) {
     __extends(d, _super);
     function d() {
@@ -53,4 +53,4 @@ var d = (function (_super) {
         return null;
     };
     return d;
-})(c);
+}(c));

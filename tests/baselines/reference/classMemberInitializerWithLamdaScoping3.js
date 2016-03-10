@@ -20,6 +20,7 @@ export class Test1 {
 //// [classMemberInitializerWithLamdaScoping3_0.js]
 var field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
+"use strict";
 var Test1 = (function () {
     function Test1(field1) {
         this.field1 = field1;
@@ -30,5 +31,5 @@ var Test1 = (function () {
         };
     }
     return Test1;
-})();
+}());
 exports.Test1 = Test1;

@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // @target: es5
 
 function f1(): string {
@@ -90,6 +92,17 @@ function f18() {
     return "Okay, not type annotated.";
 }
 
+function f19(): void | number {
+    // Okay; function return type is union containing void
+}
+
+function f20(): any | number {
+    // Okay; function return type is union containing any
+}
+
+function f21(): number | string {
+    // Not okay; union does not contain void or any
+}
 
 class C {
     public get m1() {

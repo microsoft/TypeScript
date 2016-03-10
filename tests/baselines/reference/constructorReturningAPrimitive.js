@@ -27,7 +27,7 @@ var A = (function () {
         return 1;
     }
     return A;
-})();
+}());
 var a = new A();
 var B = (function () {
     function B() {
@@ -35,5 +35,5 @@ var B = (function () {
         return x;
     }
     return B;
-})();
+}());
 var b = new B();

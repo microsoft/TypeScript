@@ -21,12 +21,17 @@ export { x as a, from
     "./t1";
 
 //// [t1.js]
+"use strict";
 exports.x = "x";
 //// [t2.js]
+"use strict";
 "./t1";
 //// [t3.js]
+"use strict";
 "./t1";
 //// [t4.js]
+"use strict";
 "./t1";
 //// [t5.js]
+"use strict";
 "./t1";

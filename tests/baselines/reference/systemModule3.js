@@ -18,7 +18,9 @@ export default class C {}
 export default class {}
 
 //// [file1.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     function default_1() { }
     exports_1("default", default_1);
     return {
@@ -28,7 +30,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     function f() { }
     exports_1("default", f);
     return {
@@ -38,7 +42,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var C;
     return {
         setters:[],
@@ -47,13 +53,15 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("default", C);
         }
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var default_1;
     return {
         setters:[],
@@ -62,7 +70,7 @@ System.register([], function(exports_1) {
                 function default_1() {
                 }
                 return default_1;
-            })();
+            }());
             exports_1("default", default_1);
         }
     }

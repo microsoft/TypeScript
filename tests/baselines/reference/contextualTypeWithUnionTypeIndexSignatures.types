@@ -69,7 +69,7 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a };
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >IWithNoStringIndexSignature : IWithNoStringIndexSignature
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
->{ z: a => a } : { [x: string]: (a: number) => number; z: (a: number) => number; }
+>{ z: a => a } : { z: (a: number) => number; }
 >z : (a: number) => number
 >a => a : (a: number) => number
 >a : number
@@ -79,7 +79,7 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a 
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >IWithNoStringIndexSignature : IWithNoStringIndexSignature
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
->{ foo: a => a } : { [x: string]: (a: any) => any; foo: (a: any) => any; }
+>{ foo: a => a } : { foo: (a: any) => any; }
 >foo : (a: any) => any
 >a => a : (a: any) => any
 >a : any
@@ -89,7 +89,7 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello"
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >IWithNoStringIndexSignature : IWithNoStringIndexSignature
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
->{ foo: "hello" } : { [x: string]: string; foo: string; }
+>{ foo: "hello" } : { foo: string; }
 >foo : string
 >"hello" : string
 
@@ -97,7 +97,7 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.to
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
 >IWithStringIndexSignature2 : IWithStringIndexSignature2
->{ z: a => a.toString() } : { [x: string]: (a: number) => string; z: (a: number) => string; }
+>{ z: a => a.toString() } : { z: (a: number) => string; }
 >z : (a: number) => string
 >a => a.toString() : (a: number) => string
 >a : number
@@ -110,7 +110,7 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a };
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >IWithStringIndexSignature1 : IWithStringIndexSignature1
 >IWithStringIndexSignature2 : IWithStringIndexSignature2
->{ z: a => a } : { [x: string]: (a: number) => number; z: (a: number) => number; }
+>{ z: a => a } : { z: (a: number) => number; }
 >z : (a: number) => number
 >a => a : (a: number) => number
 >a : number
@@ -124,7 +124,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
->{ 1: a => a } : { [x: number]: (a: number) => number; 1: (a: number) => number; }
+>{ 1: a => a } : { 1: (a: number) => number; }
 >a => a : (a: number) => number
 >a : number
 >a : number
@@ -133,7 +133,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
->{ 0: a => a } : { [x: number]: (a: any) => any; 0: (a: any) => any; }
+>{ 0: a => a } : { 0: (a: any) => any; }
 >a => a : (a: any) => any
 >a : any
 >a : any
@@ -142,14 +142,14 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" 
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >IWithNoNumberIndexSignature : IWithNoNumberIndexSignature
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
->{ 0: "hello" } : { [x: number]: string; 0: string; }
+>{ 0: "hello" } : { 0: string; }
 >"hello" : string
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >IWithNumberIndexSignature2 : IWithNumberIndexSignature2
->{ 1: a => a.toString() } : { [x: number]: (a: number) => string; 1: (a: number) => string; }
+>{ 1: a => a.toString() } : { 1: (a: number) => string; }
 >a => a.toString() : (a: number) => string
 >a : number
 >a.toString() : string
@@ -161,7 +161,7 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a };
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >IWithNumberIndexSignature1 : IWithNumberIndexSignature1
 >IWithNumberIndexSignature2 : IWithNumberIndexSignature2
->{ 1: a => a } : { [x: number]: (a: number) => number; 1: (a: number) => number; }
+>{ 1: a => a } : { 1: (a: number) => number; }
 >a => a : (a: number) => number
 >a : number
 >a : number

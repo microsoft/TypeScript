@@ -18,11 +18,11 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var C = (function (_super) {
     __extends(class_1, _super);
     function class_1() {
         _super.apply(this, arguments);
     }
     return class_1;
-})(A);
+}(A));

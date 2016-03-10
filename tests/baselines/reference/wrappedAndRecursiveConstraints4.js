@@ -24,7 +24,7 @@ var C = (function () {
         return bar;
     };
     return C;
-})();
+}());
 var c = new C({ length: 2 });
 var r = c.foo('');
 var r2 = r({ length: 3, charAt: function (x) {

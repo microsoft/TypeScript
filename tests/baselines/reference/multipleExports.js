@@ -13,6 +13,7 @@ export module M {
 
 
 //// [multipleExports.js]
+"use strict";
 var M;
 (function (M) {
     M.v = 0;

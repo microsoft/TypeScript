@@ -1,9 +1,9 @@
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2304: Cannot find name 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(17,15): error TS1003: Identifier expected.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts (6 errors) ====
@@ -22,7 +22,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
     class D {
         a = x; // error
             ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
         b: typeof x; // error
                   ~
 !!! error TS2304: Cannot find name 'x'.
@@ -41,6 +41,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
         a = this.x; // ok
         b = x; // error
             ~
-!!! error TS2304: Cannot find name 'x'.
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
         constructor(public x: T) { }
     }

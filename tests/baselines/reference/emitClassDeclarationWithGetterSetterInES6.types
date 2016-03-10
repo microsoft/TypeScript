@@ -10,7 +10,7 @@ class C {
 
         return this._name;
 >this._name : string
->this : C
+>this : this
 >_name : string
     }
     static get name2(): string {
@@ -25,25 +25,25 @@ class C {
         return "";
 >"" : string
     }
-    get ["computedname"]() {
->"computedname" : string
+    get ["computedname1"]() {
+>"computedname1" : string
 
         return "";
 >"" : string
     }
-    get ["computedname"]() {
->"computedname" : string
+    get ["computedname2"]() {
+>"computedname2" : string
 
         return "";
 >"" : string
     }
 
-    set ["computedname"](x: any) {
->"computedname" : string
+    set ["computedname3"](x: any) {
+>"computedname3" : string
 >x : any
     }
-    set ["computedname"](y: string) {
->"computedname" : string
+    set ["computedname4"](y: string) {
+>"computedname4" : string
 >y : string
     }
 

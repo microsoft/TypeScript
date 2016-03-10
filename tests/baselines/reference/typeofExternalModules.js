@@ -17,20 +17,23 @@ var y2: typeof exp = exp;
 y2 = ext;
 
 //// [typeofExternalModules_external.js]
+"use strict";
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 exports.C = C;
 //// [typeofExternalModules_exportAssign.js]
+"use strict";
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 module.exports = D;
 //// [typeofExternalModules_core.js]
+"use strict";
 var ext = require('./typeofExternalModules_external');
 var exp = require('./typeofExternalModules_exportAssign');
 var y1 = ext;

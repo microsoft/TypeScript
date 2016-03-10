@@ -20,7 +20,10 @@ module ts {
     }
 
     describe('VersionCache TS code', () => {
-        var testContent = `/// <reference path="z.ts" />
+        let validateEditAtLineCharIndex: (line: number, char: number, deleteLength: number, insertString: string) => void;
+        
+        before(() => {
+            let testContent = `/// <reference path="z.ts" />
 var x = 10;
 var y = { zebra: 12, giraffe: "ell" };
 z.a;
@@ -31,16 +34,21 @@ k=y;
 var p:Point=new Point();
 var q:Point=<Point>p;`
 
-        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
-        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+            let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        let lineIndex = new server.LineIndex();
-        lineIndex.load(lines);
+            let lineIndex = new server.LineIndex();
+            lineIndex.load(lines);
 
-        function validateEditAtLineCharIndex(line: number, char: number, deleteLength: number, insertString: string): void {
-            let position = lineColToPosition(lineIndex, line, char);
-            validateEdit(lineIndex, testContent, position, deleteLength, insertString);
-        }
+            validateEditAtLineCharIndex = (line: number, char: number, deleteLength: number, insertString: string) => {
+                let position = lineColToPosition(lineIndex, line, char);
+                validateEdit(lineIndex, testContent, position, deleteLength, insertString);
+            };
+        });
+
+        after(() => {
+            validateEditAtLineCharIndex = undefined;
+        })
 
         it('change 9 1 0 1 {"y"}', () => {
             validateEditAtLineCharIndex(9, 1, 0, "y");
@@ -68,22 +76,35 @@ var q:Point=<Point>p;`
     });
 
     describe('VersionCache simple text', () => {
-        let testContent = `in this story:
+        let validateEditAtPosition: (position: number, deleteLength: number, insertString: string) => void;
+        let testContent: string;
+        let lines: string[];
+        let lineMap: number[];
+        before(() => {
+            testContent = `in this story:
 the lazy brown fox
 jumped over the cow
 that ate the grass
 that was purple at the tips
 and grew 1cm per day`;
 
-        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
-        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+            ({lines, lineMap} = server.LineIndex.linesFromText(testContent));
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        let lineIndex = new server.LineIndex();
-        lineIndex.load(lines);
+            let lineIndex = new server.LineIndex();
+            lineIndex.load(lines);
 
-        function validateEditAtPosition(position: number, deleteLength: number, insertString: string): void {
-            validateEdit(lineIndex, testContent, position, deleteLength, insertString);
-        }
+            validateEditAtPosition = (position: number, deleteLength: number, insertString: string) => {
+                validateEdit(lineIndex, testContent, position, deleteLength, insertString);
+            }
+        });
+
+        after(() => {
+           validateEditAtPosition = undefined;
+           testContent = undefined;
+           lines = undefined;
+           lineMap = undefined; 
+        });
 
         it('Insert at end of file', () => {
             validateEditAtPosition(testContent.length, 0, "hmmmm...\r\n");
@@ -159,50 +180,69 @@ and grew 1cm per day`;
     });
 
     describe('VersionCache stress test', () => {
-        const iterationCount = 20;
-        //const interationCount = 20000; // uncomment for testing
-
-        // Use scanner.ts, decent size, does not change frequentlly
-        let testFileName = "src/compiler/scanner.ts";
-        let testContent = Harness.IO.readFile(testFileName);
-        let totalChars = testContent.length;
-        assert.isTrue(totalChars > 0, "Failed to read test file.");
-
-        let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
-        assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
-
-        let lineIndex = new server.LineIndex();
-        lineIndex.load(lines);
-
         let rsa: number[] = [];
         let la: number[] = [];
         let las: number[] = [];
         let elas: number[] = [];
         let ersa: number[] = [];
         let ela: number[] = [];
-        let etotalChars = totalChars;
+        const iterationCount = 20;
+        //const iterationCount = 20000; // uncomment for testing
+        let lines: string[];
+        let lineMap: number[];
+        let lineIndex: server.LineIndex;
+        let testContent: string;
 
-        for (let j = 0; j < 100000; j++) {
-            rsa[j] = Math.floor(Math.random() * totalChars);
-            la[j] = Math.floor(Math.random() * (totalChars - rsa[j]));
-            if (la[j] > 4) {
-                las[j] = 4;
-            }
-            else {
-                las[j] = la[j];
-            }
-            if (j < 4000) {
-                ersa[j] = Math.floor(Math.random() * etotalChars);
-                ela[j] = Math.floor(Math.random() * (etotalChars - ersa[j]));
-                if (ela[j] > 4) {
-                    elas[j] = 4;
+        before(() => {
+            // Use scanner.ts, decent size, does not change frequently
+            let testFileName = "src/compiler/scanner.ts";
+            testContent = Harness.IO.readFile(testFileName);
+            let totalChars = testContent.length;
+            assert.isTrue(totalChars > 0, "Failed to read test file.");
+
+            ({lines, lineMap} = server.LineIndex.linesFromText(testContent));
+            assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
+
+            lineIndex = new server.LineIndex();
+            lineIndex.load(lines);
+
+            let etotalChars = totalChars;
+
+            for (let j = 0; j < 100000; j++) {
+                rsa[j] = Math.floor(Math.random() * totalChars);
+                la[j] = Math.floor(Math.random() * (totalChars - rsa[j]));
+                if (la[j] > 4) {
+                    las[j] = 4;
                 }
                 else {
-                    elas[j] = ela[j];
+                    las[j] = la[j];
                 }
-                etotalChars += (las[j] - elas[j]);
+                if (j < 4000) {
+                    ersa[j] = Math.floor(Math.random() * etotalChars);
+                    ela[j] = Math.floor(Math.random() * (etotalChars - ersa[j]));
+                    if (ela[j] > 4) {
+                        elas[j] = 4;
+                    }
+                    else {
+                        elas[j] = ela[j];
+                    }
+                    etotalChars += (las[j] - elas[j]);
+                }
             }
-        }
+        });
+
+        after(() => {
+            rsa = undefined;
+            la = undefined;
+            las = undefined;
+            elas = undefined;
+            ersa = undefined;
+            ela = undefined;
+            lines = undefined;
+            lineMap = undefined;
+            lineIndex = undefined;
+            testContent = undefined;
+        });
 
         it("Range (average length 1/4 file size)", () => {
             for (let i = 0; i < iterationCount; i++) {

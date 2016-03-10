@@ -22,14 +22,14 @@ function foo(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 
                 ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
                 : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         } ();
 }
@@ -55,14 +55,14 @@ function foo2(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 
                 ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
                 : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         } (x); // x here is narrowed to number | boolean
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
@@ -86,14 +86,14 @@ function foo3(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 
                 ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
                 : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         })();
 }
@@ -118,19 +118,19 @@ function foo4(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 
                 ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
                 : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         })(x); // x here is narrowed to number | boolean
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 }
-// Type guards affect nested function expressions, but not nested function declarations
+// Type guards affect nested function expressions and nested function declarations
 function foo5(x: number | string | boolean) {
 >foo5 : Symbol(foo5, Decl(typeGuardsInFunctionAndModuleBlock.ts, 41, 1))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
@@ -145,7 +145,7 @@ function foo5(x: number | string | boolean) {
         function foo() {
 >foo : Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 18))
 
-            var z = x; // number | string | boolean, type guard has no effect
+            var z = x; // string
 >z : Symbol(z, Decl(typeGuardsInFunctionAndModuleBlock.ts, 47, 15))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
         }
@@ -180,14 +180,14 @@ module m {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 
             ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
             : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
         }
     }
 }
@@ -221,14 +221,14 @@ module m1 {
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 
             ? x.toString() // boolean
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
             : x.toString(); // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
         }
     }
 }

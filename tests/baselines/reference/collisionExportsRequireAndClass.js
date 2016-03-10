@@ -38,17 +38,18 @@ module m4 {
 
 //// [collisionExportsRequireAndClass_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var require = (function () {
         function require() {
         }
         return require;
-    })();
+    }());
     exports.require = require;
     var exports = (function () {
         function exports() {
         }
         return exports;
-    })();
+    }());
     exports.exports = exports;
     var m1;
     (function (m1) {
@@ -56,12 +57,12 @@ define(["require", "exports"], function (require, exports) {
             function require() {
             }
             return require;
-        })();
+        }());
         var exports = (function () {
             function exports() {
             }
             return exports;
-        })();
+        }());
     })(m1 || (m1 = {}));
     var m2;
     (function (m2) {
@@ -69,13 +70,13 @@ define(["require", "exports"], function (require, exports) {
             function require() {
             }
             return require;
-        })();
+        }());
         m2.require = require;
         var exports = (function () {
             function exports() {
             }
             return exports;
-        })();
+        }());
         m2.exports = exports;
     })(m2 || (m2 = {}));
 });
@@ -84,24 +85,24 @@ var require = (function () {
     function require() {
     }
     return require;
-})();
+}());
 var exports = (function () {
     function exports() {
     }
     return exports;
-})();
+}());
 var m3;
 (function (m3) {
     var require = (function () {
         function require() {
         }
         return require;
-    })();
+    }());
     var exports = (function () {
         function exports() {
         }
         return exports;
-    })();
+    }());
 })(m3 || (m3 = {}));
 var m4;
 (function (m4) {
@@ -109,12 +110,12 @@ var m4;
         function require() {
         }
         return require;
-    })();
+    }());
     m4.require = require;
     var exports = (function () {
         function exports() {
         }
         return exports;
-    })();
+    }());
     m4.exports = exports;
 })(m4 || (m4 = {}));

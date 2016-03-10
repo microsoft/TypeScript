@@ -47,6 +47,6 @@ var A = (function () {
         [1, 2].forEach(function (p) { return _this.bar; });
     };
     return A;
-})();
+}());
 var a = new A();
 a.baz();

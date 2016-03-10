@@ -49,7 +49,7 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }
 
@@ -79,6 +79,6 @@ class StringIterator {
 >iterator : symbol
 
         return this;
->this : StringIterator
+>this : this
     }
 }

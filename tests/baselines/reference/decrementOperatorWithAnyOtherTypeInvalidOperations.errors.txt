@@ -36,15 +36,21 @@ tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOp
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(60,24): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(63,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(65,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(70,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(71,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,3): error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,7): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(67,9): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,7): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(68,9): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,7): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(69,9): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(70,10): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(70,12): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(71,10): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(71,12): error TS1109: Expression expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,10): error TS1005: ';' expected.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(72,12): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts (44 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts (50 errors) ====
     // -- operator on any type
     var ANY1;
     var ANY2: any[] = ["", ""];
@@ -188,20 +194,32 @@ tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOp
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
     
     --ANY1--;
-      ~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+          ~~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1109: Expression expected.
     --ANY1++;
-      ~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+          ~~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1109: Expression expected.
     ++ANY1--;
-      ~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+          ~~
+!!! error TS1005: ';' expected.
+            ~
+!!! error TS1109: Expression expected.
     --ANY2[0]--;
-      ~~~~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+             ~~
+!!! error TS1005: ';' expected.
+               ~
+!!! error TS1109: Expression expected.
     --ANY2[0]++;
-      ~~~~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+             ~~
+!!! error TS1005: ';' expected.
+               ~
+!!! error TS1109: Expression expected.
     ++ANY2[0]--;
-      ~~~~~~~~~
-!!! error TS2357: The operand of an increment or decrement operator must be a variable, property or indexer.
+             ~~
+!!! error TS1005: ';' expected.
+               ~
+!!! error TS1109: Expression expected.

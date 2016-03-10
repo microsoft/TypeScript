@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmitEntities.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 
@@ -17,6 +17,11 @@ declare var React: any;
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
 ><div>Dot goes here: &middot; &notAnEntity; </div> : JSX.Element
+>div : any
+>div : any
+
+<div>Be careful of &quot;-ed strings!</div>;
+><div>Be careful of &quot;-ed strings!</div> : JSX.Element
 >div : any
 >div : any
 

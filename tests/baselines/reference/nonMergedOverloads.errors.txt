@@ -1,0 +1,17 @@
+tests/cases/compiler/nonMergedOverloads.ts(1,5): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nonMergedOverloads.ts(3,17): error TS2300: Duplicate identifier 'f'.
+tests/cases/compiler/nonMergedOverloads.ts(4,17): error TS2300: Duplicate identifier 'f'.
+
+
+==== tests/cases/compiler/nonMergedOverloads.ts (3 errors) ====
+    var f = 10;
+        ~
+!!! error TS2300: Duplicate identifier 'f'.
+    
+    export function f();
+                    ~
+!!! error TS2300: Duplicate identifier 'f'.
+    export function f() {
+                    ~
+!!! error TS2300: Duplicate identifier 'f'.
+    }

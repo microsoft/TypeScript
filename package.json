@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "1.7.0",
+    "version": "1.9.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -35,7 +35,8 @@
         "browserify": "latest",
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
-        "tslint": "latest",
+        "tslint": "next",
+        "typescript": "next",
         "tsd": "latest"
     },
     "scripts": {
@@ -44,7 +45,10 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
-        "clean": "jake clean"
+        "clean": "jake clean",
+        "jake": "jake",
+        "lint": "jake lint",
+        "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
         "buffer": false,

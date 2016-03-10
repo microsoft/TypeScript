@@ -14,8 +14,8 @@ module Test {
 >doSomething : () => void
  
             var that = this;                      
->that : Example
->this : Example
+>that : this
+>this : this
 
             function innerFunction() {
 >innerFunction : () => void
@@ -23,7 +23,7 @@ module Test {
                 var num = that.someNumber;
 >num : number
 >that.someNumber : number
->that : Example
+>that : this
 >someNumber : number
  
             }
@@ -45,7 +45,7 @@ class C {
     getX() { return this.x; }
 >getX : () => number
 >this.x : number
->this : C
+>this : this
 >x : number
 
     clone(other: C) {
@@ -56,7 +56,7 @@ class C {
         this.x = other.x;
 >this.x = other.x : number
 >this.x : number
->this : C
+>this : this
 >x : number
 >other.x : number
 >other : C

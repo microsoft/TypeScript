@@ -29,7 +29,9 @@ export declare module M { var v: number; }
 
 
 //// [file1.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var promise, foo, c, e;
     return {
         setters:[],
@@ -43,7 +45,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     return {
         setters:[],
         execute: function() {
@@ -51,7 +55,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     return {
         setters:[],
         execute: function() {
@@ -59,7 +65,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     return {
         setters:[],
         execute: function() {
@@ -67,7 +75,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file5.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     return {
         setters:[],
         execute: function() {
@@ -75,7 +85,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file6.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     return {
         setters:[],
         execute: function() {

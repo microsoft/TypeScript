@@ -35,14 +35,15 @@ export let h1: D = new D;
 
 
 //// [exportNonInitializedVariablesUMD.js]
-(function (deps, factory) {
+(function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
+        define(["require", "exports"], factory);
     }
-})(["require", "exports"], function (require, exports) {
+})(function (require, exports) {
+    "use strict";
     var ;
     let;
     var ;
@@ -50,7 +51,7 @@ export let h1: D = new D;
         function A() {
         }
         return A;
-    })();
+    }());
     var B;
     (function (B) {
         B.a = 1, B.c = 2;
@@ -68,7 +69,7 @@ export let h1: D = new D;
         function D() {
         }
         return D;
-    })();
+    }());
     exports.e1 = new D;
     exports.f1 = new D;
     exports.g1 = new D;

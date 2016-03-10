@@ -24,15 +24,17 @@ X.A.q;
 X.A.r; // Error
 
 //// [exportStarFromEmptyModule_module1.js]
+"use strict";
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
 // empty
 //// [exportStarFromEmptyModule_module3.js]
+"use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
@@ -42,9 +44,10 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
+"use strict";
 var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;

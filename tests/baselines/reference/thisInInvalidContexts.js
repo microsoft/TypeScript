@@ -12,7 +12,7 @@ class ClassWithNoInitializer extends BaseErrClass {
     t;
     //'this' in optional super call
     constructor() {
-        super(this); // OK
+        super(this); // Error
     }
 }
 
@@ -60,20 +60,20 @@ var ErrClass1 = (function () {
     }
     ErrClass1.t = this; // Error
     return ErrClass1;
-})();
+}());
 var BaseErrClass = (function () {
     function BaseErrClass(t) {
     }
     return BaseErrClass;
-})();
+}());
 var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
-        _super.call(this, this); // OK
+        _super.call(this, this); // Error
     }
     return ClassWithNoInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var ClassWithInitializer = (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
@@ -82,7 +82,7 @@ var ClassWithInitializer = (function (_super) {
         this.t = 4;
     }
     return ClassWithInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var M;
 (function (M) {
     //'this' in module variable
@@ -92,14 +92,14 @@ var M;
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
 function genericFunc(x) { }
-genericFunc < this > (undefined); // Should be an error
+genericFunc(undefined); // Should be an error
 var ErrClass3 = (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {
         _super.apply(this, arguments);
     }
     return ErrClass3;
-})(this);
+}(this));
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {

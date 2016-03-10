@@ -52,7 +52,7 @@ var TypeScript2;
             return undefined;
         };
         return PullSymbol;
-    })();
+    }());
     TypeScript2.PullSymbol = PullSymbol;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
@@ -60,6 +60,6 @@ var TypeScript2;
             _super.apply(this, arguments);
         }
         return PullTypeSymbol;
-    })(PullSymbol);
+    }(PullSymbol));
     TypeScript2.PullTypeSymbol = PullTypeSymbol;
 })(TypeScript2 || (TypeScript2 = {}));

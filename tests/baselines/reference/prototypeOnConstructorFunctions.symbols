@@ -15,9 +15,9 @@ var i: I1;
 
 
 i.const.prototype.prop = "yo";
->i.const.prototype : Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
+>i.const.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
 >i.const : Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
 >i : Symbol(i, Decl(prototypeOnConstructorFunctions.ts, 5, 3))
 >const : Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
+>prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
 

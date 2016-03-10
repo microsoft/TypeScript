@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
@@ -30,6 +29,7 @@
         "shims.ts",
         "signatureHelp.ts",
         "utilities.ts",
+        "jsTyping.ts",
         "formatting/formatting.ts",
         "formatting/formattingContext.ts",
         "formatting/formattingRequestKind.ts",

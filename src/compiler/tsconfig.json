@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
@@ -8,9 +7,10 @@
         "sourceMap": true
     },
     "files": [
+        "types.ts",
         "core.ts",
         "sys.ts",
-        "types.ts",
+        "diagnosticInformationMap.generated.ts",
         "scanner.ts",
         "parser.ts",
         "utilities.ts",
@@ -19,7 +19,6 @@
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
-        "tsc.ts",
-        "diagnosticInformationMap.generated.ts"
+        "tsc.ts"
     ]
 }

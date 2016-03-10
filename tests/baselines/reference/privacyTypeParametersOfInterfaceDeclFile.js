@@ -191,27 +191,28 @@ module privateModule {
 }
 
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var privateClassT = (function () {
     function privateClassT() {
     }
     return privateClassT;
-})();
+}());
 var publicClassT = (function () {
     function publicClassT() {
     }
     return publicClassT;
-})();
+}());
 exports.publicClassT = publicClassT;
 var publicModule;
 (function (publicModule) {
@@ -219,23 +220,23 @@ var publicModule;
         function privateClassInPublicModule() {
         }
         return privateClassInPublicModule;
-    })();
+    }());
     var publicClassInPublicModule = (function () {
         function publicClassInPublicModule() {
         }
         return publicClassInPublicModule;
-    })();
+    }());
     publicModule.publicClassInPublicModule = publicClassInPublicModule;
     var privateClassInPublicModuleT = (function () {
         function privateClassInPublicModuleT() {
         }
         return privateClassInPublicModuleT;
-    })();
+    }());
     var publicClassInPublicModuleT = (function () {
         function publicClassInPublicModuleT() {
         }
         return publicClassInPublicModuleT;
-    })();
+    }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
@@ -244,22 +245,22 @@ var privateModule;
         function privateClassInPrivateModule() {
         }
         return privateClassInPrivateModule;
-    })();
+    }());
     var publicClassInPrivateModule = (function () {
         function publicClassInPrivateModule() {
         }
         return publicClassInPrivateModule;
-    })();
+    }());
     privateModule.publicClassInPrivateModule = publicClassInPrivateModule;
     var privateClassInPrivateModuleT = (function () {
         function privateClassInPrivateModuleT() {
         }
         return privateClassInPrivateModuleT;
-    })();
+    }());
     var publicClassInPrivateModuleT = (function () {
         function publicClassInPrivateModuleT() {
         }
         return publicClassInPrivateModuleT;
-    })();
+    }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
 })(privateModule || (privateModule = {}));

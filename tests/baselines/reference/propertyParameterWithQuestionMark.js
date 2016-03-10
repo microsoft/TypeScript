@@ -15,7 +15,7 @@ var C = (function () {
         this.x = x;
     }
     return C;
-})();
+}());
 // x should not be an optional property
 var v = {}; // Should fail
 var v2;

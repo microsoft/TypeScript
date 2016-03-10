@@ -50,17 +50,19 @@ export module M.Q {
 }
 
 //// [declarationEmit_nameConflicts_1.js]
+"use strict";
 var f;
 (function (f) {
     var c = (function () {
         function c() {
         }
         return c;
-    })();
+    }());
     f.c = c;
 })(f || (f = {}));
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
+"use strict";
 var im = require('./declarationEmit_nameConflicts_1');
 var M;
 (function (M) {
@@ -70,7 +72,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
     var N;
     (function (N) {
@@ -93,7 +95,7 @@ var M;
             function C() {
             }
             return C;
-        })();
+        }());
         P.C = C;
         var N;
         (function (N) {
@@ -119,7 +121,7 @@ var M;
             function C() {
             }
             return C;
-        })();
+        }());
         Q.C = C;
         var N;
         (function (N) {

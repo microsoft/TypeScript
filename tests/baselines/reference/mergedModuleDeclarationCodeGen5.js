@@ -44,7 +44,7 @@ var M;
                 function fudge() {
                 }
                 return fudge;
-            })();
+            }());
             plop_1.fudge = fudge;
             (function (plop) {
             })(plop_1.plop || (plop_1.plop = {}));
