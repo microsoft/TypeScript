@@ -2434,7 +2434,9 @@ namespace ts {
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
 
-        [option: string]: string | number | boolean | TsConfigOnlyOptions;
+        list?: string[];
+
+        [option: string]: string | number | boolean | TsConfigOnlyOptions | string[] | number[];
     }
 
     export interface TypingOptions {
@@ -2544,13 +2546,13 @@ namespace ts {
         type: "object";
     }
 
-    export interface CommandlineOptionOfListType extends CommandLineOptionBase {
+    export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list",
-        elementType: Map<number> | "string" | "number";
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandlineOptionOfListType;
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {
