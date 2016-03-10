@@ -1035,7 +1035,12 @@ namespace ts {
     }
 
     export namespace Debug {
-        const currentAssertionLevel = AssertionLevel.None;
+        declare var process: any;
+        declare var require: any;
+
+        const currentAssertionLevel = getDevelopmentMode() === "development"
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -1054,6 +1059,17 @@ namespace ts {
 
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
+        }
+
+        function getDevelopmentMode() {
+            return typeof require !== "undefined"
+                && typeof process !== "undefined"
+                && !process.browser
+                && process.nextTick
+                && process.env
+                && process.env.NODE_ENV
+                    ? String(process.env.NODE_ENV).toLowerCase()
+                    : undefined;
         }
     }
 

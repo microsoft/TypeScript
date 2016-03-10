@@ -123,7 +123,7 @@ namespace ts {
                 createStatement(
                     createCall(
                         define,
-                        flattenNodes([
+                        flatten([
                             // Add the module name (if provided).
                             moduleName,
 
@@ -142,7 +142,7 @@ namespace ts {
                                 setNodeEmitFlags(
                                     setMultiLine(
                                         createBlock(
-                                            flattenNodes([
+                                            flatten([
                                                 // Visit each statement of the module body.
                                                 ...visitNodes(node.statements, visitor, isStatement),
 
@@ -173,7 +173,7 @@ namespace ts {
          *
          * @param node The node.
          */
-        function visitor(node: Node): OneOrMany<Node> {
+        function visitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
@@ -208,7 +208,7 @@ namespace ts {
          *
          * @param node The ImportDeclaration node.
          */
-        function visitImportDeclaration(node: ImportDeclaration): OneOrMany<Statement> {
+        function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
             if (contains(externalImports, node)) {
                 const statements: Statement[] = [];
                 const namespaceDeclaration = getNamespaceDeclarationNode(node);
@@ -287,7 +287,7 @@ namespace ts {
             return undefined;
         }
 
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMany<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             if (contains(externalImports, node)) {
                 const statements: Statement[] = [];
                 if (moduleKind !== ModuleKind.AMD) {
@@ -335,7 +335,7 @@ namespace ts {
             return undefined;
         }
 
-        function visitExportDeclaration(node: ExportDeclaration): OneOrMany<Statement> {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (contains(externalImports, node)) {
                 const generatedName = getGeneratedNameForNode(node);
                 if (node.exportClause) {
@@ -391,7 +391,7 @@ namespace ts {
             return undefined;
         }
 
-        function visitExportAssignment(node: ExportAssignment): OneOrMany<Statement> {
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
             if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
                 const statements: Statement[] = [];
                 addExportDefault(statements, node.expression, /*location*/ node);
@@ -470,7 +470,7 @@ namespace ts {
             }
         }
 
-        function visitVariableStatement(node: VariableStatement): OneOrMany<Statement> {
+        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             const variables = getInitializedVariables(node.declarationList);
             if (variables.length === 0) {
                 // elide statement if there are no initialized variables
@@ -502,7 +502,7 @@ namespace ts {
             }
         }
 
-        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             if (node.name) {
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -543,7 +543,7 @@ namespace ts {
             return statements;
         }
 
-        function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             if (node.name) {
                 if (hasModifier(node, ModifierFlags.Export)) {

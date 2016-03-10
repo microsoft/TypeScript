@@ -2735,6 +2735,8 @@ namespace ts {
 
     /* @internal */
     export const enum TransformFlags {
+        None = 0,
+
         // Facts
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
         TypeScript = 1 << 0,

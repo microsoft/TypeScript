@@ -16,7 +16,7 @@ namespace ts {
         node: BinaryExpression,
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
-        visitor?: (node: Node) => OneOrMany<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>) {
 
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
             return node.right;
@@ -79,7 +79,7 @@ namespace ts {
      * @param value The rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => OneOrMany<Node>) {
+    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
         flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
@@ -110,7 +110,7 @@ namespace ts {
      * @param value An optional rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => OneOrMany<Node>) {
+    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
         flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
@@ -151,7 +151,7 @@ namespace ts {
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
         nameSubstitution?: (name: Identifier) => Expression,
-        visitor?: (node: Node) => OneOrMany<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>) {
 
         const pendingAssignments: Expression[] = [];
 
@@ -191,7 +191,7 @@ namespace ts {
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
-        visitor?: (node: Node) => OneOrMany<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>) {
         if (value && visitor) {
             value = visitNode(value, visitor, isExpression);
         }

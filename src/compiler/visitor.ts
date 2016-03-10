@@ -3,7 +3,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMany<T extends Node> = T | T[];
+    export type VisitResult<T extends Node> = T | T[];
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -448,7 +448,7 @@ namespace ts {
      * @param f The callback function
      * @param initial The initial value to supply to the reduction.
      */
-    export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {
+    export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T): T {
         if (node === undefined) {
             return undefined;
         }
@@ -478,7 +478,7 @@ namespace ts {
      * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         return <T>visitNodeWorker(node, visitor, test, optional, lift, /*parenthesize*/ undefined, /*parentNode*/ undefined);
     }
 
@@ -493,24 +493,26 @@ namespace ts {
      * @param parenthesize A callback used to parenthesize the node if needed.
      * @param parentNode A parentNode for the node.
      */
-    function visitNodeWorker(node: Node, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
+    function visitNodeWorker(node: Node, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: Node[]) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
         if (node === undefined) {
             return undefined;
         }
 
-        let visited = visitor(node);
+        const visited = visitor(node);
         if (visited === node) {
             return node;
         }
 
+        let visitedNode: Node;
         if (visited === undefined) {
-            Debug.assert(optional, "Node not optional.");
+            if (!optional) {
+                Debug.failNotOptional();
+            }
+
             return undefined;
         }
-
-        let visitedNode: Node;
-        if (isArray(visited)) {
-            visitedNode = (lift || extractSingleNode)(<NodeArray<Node>>visited);
+        else if (isArray(visited)) {
+            visitedNode = (lift || extractSingleNode)(visited);
         }
         else {
             visitedNode = visited;
@@ -520,7 +522,7 @@ namespace ts {
             visitedNode = parenthesize(visitedNode, parentNode);
         }
 
-        Debug.assert(test === undefined || test(visitedNode), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(visitedNode.kind)} did not pass test ${(<any>test).name}.`);
+        Debug.assertNode(visitedNode, test);
         aggregateTransformFlags(visitedNode);
         return visitedNode;
     }
@@ -534,7 +536,7 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, start?: number, count?: number): TArray {
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): TArray {
         return <TArray>visitNodesWorker(nodes, visitor, test, /*parenthesize*/ undefined, /*parentNode*/ undefined, start, count);
     }
 
@@ -547,12 +549,12 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
+    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
         if (nodes === undefined) {
             return undefined;
         }
 
-        let updated: Node[];
+        let updated: NodeArray<Node>;
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -564,9 +566,12 @@ namespace ts {
             count = length - start;
         }
 
-        // If we are not visiting all of the original nodes, we must always create a new array.
         if (start > 0 || count < length) {
-            updated = [];
+            // If we are not visiting all of the original nodes, we must always create a new array.
+            // Since this is a fragment of a node array, we do not copy over the previous location
+            // and will only copy over `hasTrailingComma` if we are including the last element.
+            updated = createNodeArray<Node>([], /*location*/ undefined,
+                /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
         }
 
         // Visit each original node.
@@ -576,18 +581,14 @@ namespace ts {
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
-                    updated = nodes.slice(0, i);
+                    updated = createNodeArray(nodes.slice(0, i), /*location*/ nodes, nodes.hasTrailingComma);
                 }
 
                 addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test, parenthesize, parentNode, /*isVisiting*/ visited !== node);
             }
         }
 
-        if (updated !== undefined) {
-            return createNodeArray(updated, nodes, nodes.hasTrailingComma);
-        }
-
-        return nodes;
+        return updated || nodes;
     }
 
     /**
@@ -597,8 +598,8 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => OneOrMany<Node>, context: LexicalEnvironment): T;
-    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => OneOrMany<Node>, context: LexicalEnvironment): T {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
+    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T {
         if (node === undefined) {
             return undefined;
         }
@@ -658,32 +659,12 @@ namespace ts {
     }
 
     /**
-     * Flattens an array of nodes that could contain NodeArrayNodes.
-     */
-    export function flattenNodes<T extends Node>(nodes: OneOrMany<T>[]): T[] {
-        let result: T[];
-        if (nodes) {
-            for (let i = 0; i < nodes.length; i++) {
-                const node = nodes[i];
-                if (result || node === undefined || isArray(node)) {
-                    if (!result) {
-                        result = <T[]>nodes.slice(0, i);
-                    }
-                    addNode(result, node);
-                }
-            }
-        }
-
-        return result || <T[]>nodes;
-    }
-
-    /**
      * Appends a node to an array.
      *
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
+    export function addNode<T extends Node>(to: T[], from: VisitResult<T>, startOnNewLine?: boolean): void {
         addNodeWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
@@ -693,18 +674,21 @@ namespace ts {
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
+    export function addNodes<T extends Node>(to: T[], from: VisitResult<T>[], startOnNewLine?: boolean): void {
         addNodesWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
-    function addNodeWorker(to: Node[], from: OneOrMany<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean) {
+    function addNodeWorker(to: Node[], from: VisitResult<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void {
         if (to && from) {
             if (isArray(from)) {
                 addNodesWorker(to, from, startOnNewLine, test, parenthesize, parentNode, isVisiting);
             }
             else {
-                const node = parenthesize !== undefined ? parenthesize(from, parentNode) : from;
-                Debug.assert(test === undefined || test(node), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(node.kind)} did not pass test ${(<any>test).name}.`);
+                const node = parenthesize !== undefined
+                    ? parenthesize(from, parentNode)
+                    : from;
+
+                Debug.assertNode(node, test);
 
                 if (startOnNewLine) {
                     node.startsOnNewLine = true;
@@ -719,7 +703,7 @@ namespace ts {
         }
     }
 
-    function addNodesWorker(to: Node[], from: OneOrMany<Node>[], startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean) {
+    function addNodesWorker(to: Node[], from: VisitResult<Node>[], startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void {
         if (to && from) {
             for (const node of from) {
                 addNodeWorker(to, node, startOnNewLine, test, parenthesize, parentNode, isVisiting);
@@ -760,7 +744,7 @@ namespace ts {
      * @param node The SourceFile node.
      * @param declarations The generated lexical declarations.
      */
-    export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]) {
+    export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]): SourceFile {
         if (declarations !== undefined && declarations.length) {
             const mutableNode = getMutableClone(node);
             mutableNode.statements = mergeStatements(mutableNode.statements, declarations);
@@ -776,7 +760,7 @@ namespace ts {
      * @param node The ModuleDeclaration node.
      * @param declarations The generated lexical declarations.
      */
-    export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]) {
+    export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]): ModuleDeclaration {
         Debug.assert(node.body.kind === SyntaxKind.ModuleBlock);
         if (declarations !== undefined && declarations.length) {
             const mutableNode = getMutableClone(node);
@@ -793,7 +777,7 @@ namespace ts {
      * @param node The function-like node.
      * @param declarations The generated lexical declarations.
      */
-    function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]) {
+    function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]): FunctionLikeDeclaration {
         Debug.assert(node.body !== undefined);
         if (declarations !== undefined && declarations.length) {
             const mutableNode = getMutableClone(node);
@@ -810,7 +794,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]) {
+    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody {
         if (declarations !== undefined && declarations.length > 0) {
             return mergeBlockLexicalEnvironment(body, declarations);
         }
@@ -824,7 +808,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]) {
+    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
         if (declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
                 return mergeBlockLexicalEnvironment(body, declarations);
@@ -846,7 +830,7 @@ namespace ts {
      * @param node The block into which to merge lexical declarations.
      * @param declarations The lexical declarations to merge.
      */
-    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]) {
+    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]): T {
         const mutableNode = getMutableClone(node);
         mutableNode.statements = mergeStatements(node.statements, declarations);
         return mutableNode;
@@ -858,7 +842,7 @@ namespace ts {
      * @param statements The node array to concatentate with the supplied lexical declarations.
      * @param declarations The lexical declarations to merge.
      */
-    function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
+    function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement> {
         return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
     }
 
@@ -867,7 +851,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    export function liftToBlock(nodes: NodeArray<Node>) {
+    export function liftToBlock(nodes: Node[]): Block {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }
@@ -877,9 +861,9 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function extractSingleNode(nodes: NodeArray<Node>) {
+    function extractSingleNode(nodes: Node[]): Node {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
-        return nodes.length > 0 ? nodes[0] : undefined;
+        return singleOrUndefined(nodes);
     }
 
     /**
@@ -916,11 +900,11 @@ namespace ts {
         // We do not transform ambient declarations or types, so there is no need to
         // recursively aggregate transform flags.
         if (hasModifier(node, ModifierFlags.Ambient) || isTypeNode(node)) {
-            return <TransformFlags>0;
+            return TransformFlags.None;
         }
 
         // Aggregate the transform flags of each child.
-        return reduceEachChild<TransformFlags>(node, aggregateTransformFlagsForChildNode, 0);
+        return reduceEachChild(node, aggregateTransformFlagsForChildNode, TransformFlags.None);
     }
 
     /**
@@ -929,5 +913,44 @@ namespace ts {
      */
     function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
         return transformFlags | aggregateTransformFlagsForNode(child);
+    }
+
+    export namespace Debug {
+        export function failNotOptional(message?: string) {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(false, message || "Node not optional.");
+            }
+        }
+
+        export function failBadSyntaxKind(node: Node, message?: string) {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(false,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`);
+            }
+        }
+
+        export function assertNode<T extends Node>(node: Node, test: (node: Node) => boolean, message?: string): void {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(
+                    test === undefined || test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`);
+            };
+        }
+
+        function getFunctionName(func: Function) {
+            if (typeof func !== "function") {
+                return "";
+            }
+            else if (func.hasOwnProperty("name")) {
+                return (<any>func).name;
+            }
+            else {
+                const text = Function.prototype.toString.call(func);
+                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
+                return match ? match[1] : "";
+            }
+        }
     }
 }

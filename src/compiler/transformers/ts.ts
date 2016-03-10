@@ -92,7 +92,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitWithStack(node: Node, visitor: (node: Node) => OneOrMany<Node>): OneOrMany<Node> {
+        function visitWithStack(node: Node, visitor: (node: Node) => VisitResult<Node>): VisitResult<Node> {
             // Save state
             const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
@@ -118,7 +118,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): OneOrMany<Node> {
+        function visitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, visitorWorker);
         }
 
@@ -127,7 +127,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): OneOrMany<Node> {
+        function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
                 return visitTypeScript(node);
@@ -145,7 +145,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): OneOrMany<Node> {
+        function namespaceElementVisitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, namespaceElementVisitorWorker);
         }
 
@@ -154,7 +154,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): OneOrMany<Node> {
+        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
@@ -173,7 +173,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitor(node: Node): OneOrMany<Node> {
+        function classElementVisitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, classElementVisitorWorker);
         }
 
@@ -182,7 +182,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node): OneOrMany<Node> {
+        function classElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are transformed in `transformClassDeclaration`.
@@ -202,8 +202,8 @@ namespace ts {
                     return node;
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
         }
 
@@ -212,7 +212,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): OneOrMany<Node> {
+        function visitTypeScript(node: Node): VisitResult<Node> {
             if (hasModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided.
                 return undefined;
@@ -373,8 +373,8 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
         }
 
@@ -408,7 +408,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
 
@@ -1553,7 +1553,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                    Debug.failBadSyntaxKind(node);
                     break;
             }
 
@@ -1855,7 +1855,7 @@ namespace ts {
          *
          * @param node The function node.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             if (shouldElideFunctionLikeDeclaration(node)) {
                 return undefined;
             }
@@ -2150,7 +2150,7 @@ namespace ts {
          *
          * @param node The enum declaration node.
          */
-        function visitEnumDeclaration(node: EnumDeclaration): OneOrMany<Statement> {
+        function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
             if (shouldElideEnumDeclaration(node)) {
                 return undefined;
             }
@@ -2362,7 +2362,7 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function visitModuleDeclaration(node: ModuleDeclaration): OneOrMany<Statement> {
+        function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
             if (shouldElideModuleDeclaration(node)) {
                 return undefined;
             }
@@ -2481,7 +2481,7 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMany<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(!isExternalModuleImportEqualsDeclaration(node));
             if (shouldElideImportEqualsDeclaration(node)) {
                 return undefined;

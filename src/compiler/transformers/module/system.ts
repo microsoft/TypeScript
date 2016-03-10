@@ -408,7 +408,7 @@ namespace ts {
             return createArrayLiteral(setters);
         }
 
-        function visitSourceElement(node: Node): OneOrMany<Node> {
+        function visitSourceElement(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
@@ -427,7 +427,7 @@ namespace ts {
             }
         }
 
-        function visitNestedNode(node: Node): OneOrMany<Node> {
+        function visitNestedNode(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
@@ -502,7 +502,7 @@ namespace ts {
             return undefined;
         }
 
-        function visitExportDeclaration(node: ExportDeclaration): OneOrMany<Statement> {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.moduleSpecifier) {
                 const statements: Statement[] = [];
                 addNodes(statements, map(node.exportClause.elements, visitExportSpecifier));
@@ -541,7 +541,7 @@ namespace ts {
          *
          * @param node The variable statement to visit.
          */
-        function visitVariableStatement(node: VariableStatement): OneOrMany<Statement> {
+        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             const isExported = hasModifier(node, ModifierFlags.Export);
             const expressions: Expression[] = [];
             for (const variable of node.declarationList.declarations) {
@@ -616,7 +616,7 @@ namespace ts {
          *
          * @param node The class declaration to visit.
          */
-        function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             // Hoist the name of the class declaration to the outer module body function.
             const name = getDeclarationName(node);
             hoistVariableDeclaration(name);

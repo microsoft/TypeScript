@@ -55,7 +55,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): OneOrMany<Node> {
+        function visitor(node: Node): VisitResult<Node> {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
@@ -74,7 +74,7 @@ namespace ts {
             return visited;
         }
 
-        function visitorWorker(node: Node): OneOrMany<Node> {
+        function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.ES6) {
                 return visitJavaScript(node);
             }
@@ -86,7 +86,7 @@ namespace ts {
             }
         }
 
-        function visitJavaScript(node: Node): OneOrMany<Node> {
+        function visitJavaScript(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
@@ -174,9 +174,12 @@ namespace ts {
 
                 case SyntaxKind.SourceFile:
                     return visitSourceFileNode(<SourceFile>node);
+
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
             }
 
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
         function onBeforeVisitNode(node: Node) {
@@ -695,7 +698,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                        Debug.failBadSyntaxKind(node);
                         break;
                 }
             }
@@ -936,7 +939,7 @@ namespace ts {
             enableSubstitutionsForBlockScopedBindings();
             return setOriginalNode(
                 createVariableDeclarationList(
-                    flattenNodes(map(node.declarations, visitVariableDeclarationInLetDeclarationList)),
+                    flatten(map(node.declarations, visitVariableDeclarationInLetDeclarationList)),
                     /*location*/ node
                 ),
                 node
@@ -1043,7 +1046,7 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclaration(node: VariableDeclaration): OneOrMany<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             Debug.assert(isBindingPattern(node.name));
 
@@ -1293,7 +1296,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                        Debug.failBadSyntaxKind(node);
                         break;
                 }
             }
