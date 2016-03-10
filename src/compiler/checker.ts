@@ -9576,7 +9576,7 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            let type = checkNonNullExpression(left);
+            const type = checkNonNullExpression(left);
             if (isTypeAny(type)) {
                 return type;
             }
