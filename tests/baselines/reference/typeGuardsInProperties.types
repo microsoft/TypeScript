@@ -29,32 +29,32 @@ class C1 {
 >method : () => void
 
         strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
->strOrNum = typeof this.pp1 === "string" && this.pp1 : string | number
+>strOrNum = typeof this.pp1 === "string" && this.pp1 : string
 >strOrNum : string | number
->typeof this.pp1 === "string" && this.pp1 : string | number
+>typeof this.pp1 === "string" && this.pp1 : string
 >typeof this.pp1 === "string" : boolean
 >typeof this.pp1 : string
 >this.pp1 : string | number
 >this : this
 >pp1 : string | number
 >"string" : string
->this.pp1 : string | number
+>this.pp1 : string
 >this : this
->pp1 : string | number
+>pp1 : string
 
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
->strOrNum = typeof this.pp2 === "string" && this.pp2 : string | number
+>strOrNum = typeof this.pp2 === "string" && this.pp2 : string
 >strOrNum : string | number
->typeof this.pp2 === "string" && this.pp2 : string | number
+>typeof this.pp2 === "string" && this.pp2 : string
 >typeof this.pp2 === "string" : boolean
 >typeof this.pp2 : string
 >this.pp2 : string | number
 >this : this
 >pp2 : string | number
 >"string" : string
->this.pp2 : string | number
+>this.pp2 : string
 >this : this
->pp2 : string | number
+>pp2 : string
 
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
 >strOrNum = typeof this.pp3 === "string" && this.pp3 : string | number
