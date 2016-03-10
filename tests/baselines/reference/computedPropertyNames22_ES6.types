@@ -12,7 +12,7 @@ class C {
             [this.bar()]() { }
 >this.bar() : number
 >this.bar : () => number
->this : C
+>this : this
 >bar : () => number
 
         };

@@ -32,7 +32,7 @@ class Bug {
         this.name = name;
 >this.name = name : string
 >this.name : string
->this : Bug
+>this : this
 >name : string
 >name : string
     }

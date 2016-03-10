@@ -36,7 +36,7 @@ class Test {
         this.bar = new foo.Foo();
 >this.bar = new foo.Foo() : foo.Foo
 >this.bar : foo.Foo
->this : Test
+>this : this
 >bar : foo.Foo
 >new foo.Foo() : foo.Foo
 >foo.Foo : typeof foo.Foo

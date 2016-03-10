@@ -8,7 +8,7 @@ class A {
     getF() { return this._f; }
 >getF : () => number
 >this._f : number
->this : A
+>this : this
 >_f : number
 }
 

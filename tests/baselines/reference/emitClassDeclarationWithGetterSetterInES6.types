@@ -10,7 +10,7 @@ class C {
 
         return this._name;
 >this._name : string
->this : C
+>this : this
 >_name : string
     }
     static get name2(): string {

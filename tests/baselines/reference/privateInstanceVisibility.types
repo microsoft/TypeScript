@@ -45,7 +45,7 @@ class C {
     getX() { return this.x; }
 >getX : () => number
 >this.x : number
->this : C
+>this : this
 >x : number
 
     clone(other: C) {
@@ -56,7 +56,7 @@ class C {
         this.x = other.x;
 >this.x = other.x : number
 >this.x : number
->this : C
+>this : this
 >x : number
 >other.x : number
 >other : C

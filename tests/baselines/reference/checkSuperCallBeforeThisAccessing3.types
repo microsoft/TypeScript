@@ -20,7 +20,7 @@ class Derived extends Based {
                 this.y = true;
 >this.y = true : boolean
 >this.y : boolean
->this : innver
+>this : this
 >y : boolean
 >true : boolean
             }

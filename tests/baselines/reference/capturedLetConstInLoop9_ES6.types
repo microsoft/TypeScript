@@ -319,7 +319,7 @@ class C {
 >() => this.N * i : () => number
 >this.N * i : number
 >this.N : number
->this : C
+>this : this
 >N : number
 >i : number
         }

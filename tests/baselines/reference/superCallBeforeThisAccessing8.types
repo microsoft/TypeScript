@@ -26,7 +26,7 @@ class D extends Base {
             j: this._t,  // no error
 >j : any
 >this._t : any
->this : D
+>this : this
 >_t : any
         }
     }

@@ -30,7 +30,7 @@ class Foo {
         return this.method(0);
 >this.method(0) : string
 >this.method : (a: number) => string
->this : Foo
+>this : this
 >method : (a: number) => string
 >0 : number
     }
@@ -46,7 +46,7 @@ class Bar extends Foo {
 
         return this.optionalProperty;
 >this.optionalProperty : string
->this : Bar
+>this : this
 >optionalProperty : string
     }
 }
