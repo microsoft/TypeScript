@@ -352,6 +352,29 @@ namespace ts {
         }
     ];
 
+    export let typingOptionDeclarations: CommandLineOption[] = [
+        {
+            name: "enableAutoDiscovery",
+            type: "boolean",
+        },
+        {
+            name: "include",
+            type: "list",
+            element: {
+                name: "include",
+                type: "string"
+            }
+        },
+        {
+            name: "exclude",
+            type: "list",
+            element: {
+                name: "include",
+                type: "string"
+            }
+        }
+    ];
+
     /* @internal */
     export interface OptionNameMap {
         optionNameMap: Map<CommandLineOption>;
@@ -537,7 +560,6 @@ namespace ts {
         }
     }
 
-
     /**
      * Remove the comments from a json like text.
      * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
@@ -571,18 +593,20 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
-        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
-
+        const errors: Diagnostic[] = [];
+        const optionsFromJsonConfigFile = convertOptionsFromJson<CompilerOptions>(optionDeclarations, json["compilerOptions"], basePath, configFileName, errors);
+        const typingOptions = convertOptionsFromJson<TypingOptions>(typingOptionDeclarations, json["typingOptions"], basePath, configFileName, errors);
+        const fileNames = getFileNames(errors);
         const options = extend(existingOptions, optionsFromJsonConfigFile);
 
         return {
             options,
-            fileNames: getFileNames(),
-            typingOptions: getTypingOptions(),
+            fileNames,
+            typingOptions,
             errors
         };
 
-        function getFileNames(): string[] {
+        function getFileNames(errors: Diagnostic[]): string[] {
             let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
@@ -643,47 +667,24 @@ namespace ts {
             }
             return fileNames;
         }
-
-        function getTypingOptions(): TypingOptions {
-            const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
-                ? { enableAutoDiscovery: true, include: [], exclude: [] }
-                : { enableAutoDiscovery: false, include: [], exclude: [] };
-            const jsonTypingOptions = json["typingOptions"];
-            if (jsonTypingOptions) {
-                for (const id in jsonTypingOptions) {
-                    if (id === "enableAutoDiscovery") {
-                        if (typeof jsonTypingOptions[id] === "boolean") {
-                            options.enableAutoDiscovery = jsonTypingOptions[id];
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
-                        }
-                    }
-                    else if (id === "include") {
-                        options.include = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
-                    }
-                    else if (id === "exclude") {
-                        options.exclude = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
-                    }
-                    else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
-                    }
-                }
-            }
-            return options;
-        }
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
-        const options: CompilerOptions = {};
-        const errors: Diagnostic[] = [];
+        const errors: Diagnostic[] = []
+        const options = convertOptionsFromJson<CompilerOptions>(optionDeclarations, jsonOptions, basePath, configFileName, errors);
 
-        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
+        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json" && typeof options.allowJs === "undefined") {
             options.allowJs = true;
         }
 
+        return { options, errors };
+    }
+
+    function convertOptionsFromJson<T extends CompilerOptions | TypingOptions>(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string, configFileName: string, errors: Diagnostic[]): T {
+        const options = {} as T;
+
         if (!jsonOptions) {
-            return { options, errors };
+            return options;
         }
 
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
@@ -698,7 +699,7 @@ namespace ts {
             }
         }
 
-        return { options, errors };
+        return options;
     }
 
     function convertJsonOption(opt: CommandLineOption, value: any, basePath:string, errors: Diagnostic[]): number | string | number[] | string[] {
@@ -739,29 +740,5 @@ namespace ts {
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath:string, errors: Diagnostic[]): any[] {
         return ts.map(values, v => convertJsonOption(option.element, v, basePath, errors));
-    }
-
-    function convertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
-        const items: string[] = [];
-        let invalidOptionType = false;
-        if (!isArray(optionJson)) {
-            invalidOptionType = true;
-        }
-        else {
-            for (const element of <any[]>optionJson) {
-                if (typeof element === "string") {
-                    const item = func ? func(element) : element;
-                    items.push(item);
-                }
-                else {
-                    invalidOptionType = true;
-                    break;
-                }
-            }
-        }
-        if (invalidOptionType) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_should_have_array_of_strings_as_a_value, optionName));
-        }
-        return items;
     }
 }
