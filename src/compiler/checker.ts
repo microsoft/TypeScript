@@ -7144,6 +7144,9 @@ namespace ts {
                 const symbol = getResolvedSymbol(<Identifier>node);
                 return symbol !== unknownSymbol ? "" + getSymbolId(symbol) : undefined;
             }
+            if (node.kind === SyntaxKind.ThisKeyword) {
+                return "0";
+            }
             if (node.kind === SyntaxKind.PropertyAccessExpression) {
                 const key = getAssignmentKey((<PropertyAccessExpression>node).expression);
                 return key && key + "." + (<PropertyAccessExpression>node).name.text;
@@ -7242,10 +7245,12 @@ namespace ts {
         }
 
         function isReferenceAssignedWithin(reference: Node, node: Node): boolean {
-            const key = getAssignmentKey(reference);
-            if (key) {
-                const links = getNodeLinks(node);
-                return (links.assignmentMap || (links.assignmentMap = getAssignmentMap(node)))[key];
+            if (reference.kind !== SyntaxKind.ThisKeyword) {
+                const key = getAssignmentKey(reference);
+                if (key) {
+                    const links = getNodeLinks(node);
+                    return (links.assignmentMap || (links.assignmentMap = getAssignmentMap(node)))[key];
+                }
             }
             return false;
         }
@@ -7267,47 +7272,53 @@ namespace ts {
                 node.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>node) === undefinedSymbol;
         }
 
-        function getLeftmostIdentifier(node: Node): Identifier {
+        function getLeftmostIdentifierOrThis(node: Node): Node {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return <Identifier>node;
+                case SyntaxKind.ThisKeyword:
+                    return node;
                 case SyntaxKind.PropertyAccessExpression:
-                    return getLeftmostIdentifier((<PropertyAccessExpression>node).expression);
+                    return getLeftmostIdentifierOrThis((<PropertyAccessExpression>node).expression);
             }
             return undefined;
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
             if (source.kind === target.kind) {
-                if (source.kind === SyntaxKind.Identifier) {
-                    return getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target);
-                }
-                if (source.kind === SyntaxKind.PropertyAccessExpression) {
-                    return (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
-                        isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
+                switch (source.kind) {
+                    case SyntaxKind.Identifier:
+                        return getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target);
+                    case SyntaxKind.ThisKeyword:
+                        return true;
+                    case SyntaxKind.PropertyAccessExpression:
+                        return (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
+                            isMatchingReference((<PropertyAccessExpression>source).expression, (<PropertyAccessExpression>target).expression);
                 }
             }
             return false;
         }
 
         // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfReference(type: Type, reference: IdentifierOrPropertyAccess) {
+        function getNarrowedTypeOfReference(type: Type, reference: Node) {
             if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
                 return type;
             }
-            const leftmostIdentifier = getLeftmostIdentifier(reference);
-            if (!leftmostIdentifier) {
+            const leftmostNode = getLeftmostIdentifierOrThis(reference);
+            if (!leftmostNode) {
                 return type;
             }
-            const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(leftmostIdentifier));
-            if (!leftmostSymbol) {
-                return type;
+            let top: Node;
+            if (leftmostNode.kind === SyntaxKind.Identifier) {
+                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
+                if (!leftmostSymbol) {
+                    return type;
+                }
+                const declaration = leftmostSymbol.valueDeclaration;
+                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
+                    return type;
+                }
+                top = getDeclarationContainer(declaration);
             }
-            const declaration = leftmostSymbol.valueDeclaration;
-            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                return type;
-            }
-            const top = getDeclarationContainer(declaration);
             const originalType = type;
             const nodeStack: { node: Node, child: Node }[] = [];
             let node: Node = reference;
@@ -7322,11 +7333,12 @@ namespace ts {
                         break;
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.ModuleDeclaration:
-                        // Stop at the first containing file or module declaration
                         break loop;
-                }
-                if (node === top) {
-                    break;
+                    default:
+                        if (node === top || isFunctionLikeKind(node.kind)) {
+                            break loop;
+                        }
+                        break;
                 }
             }
 
@@ -7374,7 +7386,7 @@ namespace ts {
 
             return type;
 
-            function narrowTypeByTruthiness(type: Type, expr: Identifier, assumeTrue: boolean): Type {
+            function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
             }
 
@@ -7551,7 +7563,8 @@ namespace ts {
                     }
                 }
 
-                if (isTypeAssignableTo(narrowedTypeCandidate, originalType)) {
+                const targetType = originalType.flags & TypeFlags.TypeParameter ? getApparentType(originalType) : originalType;
+                if (isTypeAssignableTo(narrowedTypeCandidate, targetType)) {
                     // Narrow to the target type if it's assignable to the current type
                     return narrowedTypeCandidate;
                 }
@@ -7592,8 +7605,9 @@ namespace ts {
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
+                    case SyntaxKind.ThisKeyword:
                     case SyntaxKind.PropertyAccessExpression:
-                        return narrowTypeByTruthiness(type, <Identifier>expr, assumeTrue);
+                        return narrowTypeByTruthiness(type, expr, assumeTrue);
                     case SyntaxKind.CallExpression:
                         return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
@@ -8007,7 +8021,8 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
+                const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
+                return getNarrowedTypeOfReference(type, node);
             }
 
             if (isInJavaScriptFile(node)) {
