@@ -5428,8 +5428,8 @@ namespace ts {
             const sourceParams = source.parameters;
             const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
-                const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
-                const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
+                const s = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
+                const t = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
                 const related = compareTypes(s, t, /*reportErrors*/ false) || compareTypes(t, s, reportErrors);
                 if (!related) {
                     if (reportErrors) {
@@ -6409,8 +6409,8 @@ namespace ts {
             let result = Ternary.True;
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
-                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
-                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
+                const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
+                const t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfParameter(target.parameters[i]);
                 const related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
@@ -6777,8 +6777,8 @@ namespace ts {
                 count = sourceMax < targetMax ? sourceMax : targetMax;
             }
             for (let i = 0; i < count; i++) {
-                const s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
-                const t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
+                const s = i < sourceMax ? getTypeOfParameter(source.parameters[i]) : getRestTypeOfSignature(source);
+                const t = i < targetMax ? getTypeOfParameter(target.parameters[i]) : getRestTypeOfSignature(target);
                 callback(s, t);
             }
         }
@@ -11023,10 +11023,21 @@ namespace ts {
             return getNonNullableType(checkExpression(node.expression));
         }
 
+        function getTypeOfParameter(symbol: Symbol) {
+            const type = getTypeOfSymbol(symbol);
+            if (strictNullChecks) {
+                const declaration = symbol.valueDeclaration;
+                if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
+                    return addNullableKind(type, TypeFlags.Undefined);
+                }
+            }
+            return type;
+        }
+
         function getTypeAtPosition(signature: Signature, pos: number): Type {
             return signature.hasRestParameter ?
-                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+                pos < signature.parameters.length - 1 ? getTypeOfParameter(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length ? getTypeOfParameter(signature.parameters[pos]) : anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
