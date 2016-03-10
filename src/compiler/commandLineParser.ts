@@ -268,6 +268,16 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
+            name: "list",
+            elementType: {
+                "node": ModuleResolutionKind.NodeJs,
+                "classic": ModuleResolutionKind.Classic,
+            },
+            type: "list",
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        },
+        {
             name: "allowUnusedLabels",
             type: "boolean",
             description: Diagnostics.Do_not_report_errors_on_unused_labels
@@ -391,42 +401,7 @@ namespace ts {
                     }
 
                     if (hasProperty(optionNameMap, s)) {
-                        const opt = optionNameMap[s];
-
-                        if (opt.isTSConfigOnly) {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
-                        }
-                        else {
-                            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                            if (!args[i] && opt.type !== "boolean") {
-                                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
-                            }
-
-                            switch (opt.type) {
-                                case "number":
-                                    options[opt.name] = parseInt(args[i]);
-                                    i++;
-                                    break;
-                                case "boolean":
-                                    options[opt.name] = true;
-                                    break;
-                                case "string":
-                                    options[opt.name] = args[i] || "";
-                                    i++;
-                                    break;
-                                // If not a primitive, the possible types are specified in what is effectively a map of options.
-                                default:
-                                    let map = <Map<number>>opt.type;
-                                    let key = (args[i] || "").toLowerCase();
-                                    i++;
-                                    if (hasProperty(map, key)) {
-                                        options[opt.name] = map[key];
-                                    }
-                                    else {
-                                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                    }
-                            }
-                        }
+                        parseString(optionNameMap[s], args[i]);
                     }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, s));
@@ -434,6 +409,41 @@ namespace ts {
                 }
                 else {
                     fileNames.push(s);
+                }
+            }
+
+            function parseString(opt: CommandLineOption, value: string) {
+                // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
+                if (!value && opt.type !== "boolean") {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                }
+
+                switch (opt.type) {
+                    case "number":
+                        options[opt.name] = parseInt(value);
+                        i++;
+                        break;
+                    case "boolean":
+                        options[opt.name] = true;
+                        break;
+                    case "string":
+                        options[opt.name] = value || "";
+                        i++;
+                        break;
+                    case "list":
+                        forEach((value || "").split(","), s => parseString(opt.name, opti );
+                        break;
+                    // If not a primitive, the possible types are specified in what is effectively a map of options.
+                    default:
+                        let map = <Map<number>>opt.type;
+                        let key = (value || "").toLowerCase();
+                        i++;
+                        if (hasProperty(map, key)) {
+                            options[opt.name] = map[key];
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                        }
                 }
             }
         }
