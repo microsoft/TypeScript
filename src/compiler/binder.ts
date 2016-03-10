@@ -1356,6 +1356,8 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return bindGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -1403,6 +1405,33 @@ namespace ts {
                 // An export default clause with an expression exports a value
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
+        }
+
+        function bindGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+            if (node.modifiers && node.modifiers.length) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
+            }
+
+            if (node.parent.kind !== SyntaxKind.SourceFile) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
+                return;
+            }
+            else {
+                const parent = node.parent as SourceFile;
+
+                if (!isExternalModule(parent)) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
+                    return;
+                }
+
+                if (!parent.isDeclarationFile) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
+                    return;
+                }
+            }
+
+            file.symbol.globalExports = file.symbol.globalExports || {};
+            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {

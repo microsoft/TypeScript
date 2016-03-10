@@ -992,6 +992,10 @@ namespace ts {
             return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
         }
 
+        function getTargetOfGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration): Symbol {
+            return resolveExternalModuleSymbol(node.parent.symbol);
+        }
+
         function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
             return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
                 getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
@@ -1016,6 +1020,8 @@ namespace ts {
                     return getTargetOfExportSpecifier(<ExportSpecifier>node);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return getTargetOfGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
             }
         }
 
@@ -15282,7 +15288,6 @@ namespace ts {
             }
         }
 
-
         function checkSourceElement(node: Node): void {
             if (!node) {
                 return;
@@ -16392,6 +16397,9 @@ namespace ts {
                 }
                 if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                }
+                if (file.wasReferenced && file.symbol && file.symbol.globalExports) {
+                    mergeSymbolTable(globals, file.symbol.globalExports);
                 }
             });
 
