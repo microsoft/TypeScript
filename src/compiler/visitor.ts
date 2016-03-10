@@ -3,7 +3,7 @@
 
 /* @internal */
 namespace ts {
-    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
+    export type OneOrMany<T extends Node> = T | NodeArrayNode<T> | T[];
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -478,7 +478,7 @@ namespace ts {
      * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
         return <T>visitNodeWorker(node, visitor, test, optional, lift, /*parenthesize*/ undefined, /*parentNode*/ undefined);
     }
 
@@ -493,7 +493,7 @@ namespace ts {
      * @param parenthesize A callback used to parenthesize the node if needed.
      * @param parentNode A parentNode for the node.
      */
-    function visitNodeWorker(node: Node, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
+    function visitNodeWorker(node: Node, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: NodeArray<Node>) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -503,22 +503,29 @@ namespace ts {
             return node;
         }
 
-        if (visited !== undefined && isNodeArrayNode(visited)) {
-            visited = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
-        }
-
-        if (parenthesize !== undefined && visited !== undefined) {
-            visited = parenthesize(visited, parentNode);
-        }
-
         if (visited === undefined) {
             Debug.assert(optional, "Node not optional.");
             return undefined;
         }
 
-        Debug.assert(test === undefined || test(visited), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(visited.kind)} did not pass test ${(<any>test).name}.`);
-        aggregateTransformFlags(visited);
-        return visited;
+        let visitedNode: Node;
+        if (isArray(visited)) {
+            visitedNode = (lift || extractSingleNode)(<NodeArray<Node>>visited);
+        }
+        else if (isNodeArrayNode(visited)) {
+            visitedNode = (lift || extractSingleNode)((<NodeArrayNode<Node>>visited).nodes);
+        }
+        else {
+            visitedNode = visited;
+        }
+
+        if (parenthesize !== undefined) {
+            visitedNode = parenthesize(visitedNode, parentNode);
+        }
+
+        Debug.assert(test === undefined || test(visitedNode), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(visitedNode.kind)} did not pass test ${(<any>test).name}.`);
+        aggregateTransformFlags(visitedNode);
+        return visitedNode;
     }
 
     /**
@@ -530,7 +537,7 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test: (node: Node) => boolean, start?: number, count?: number): TArray {
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, start?: number, count?: number): TArray {
         return <TArray>visitNodesWorker(nodes, visitor, test, /*parenthesize*/ undefined, /*parentNode*/ undefined, start, count);
     }
 
@@ -543,7 +550,7 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => Node, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
+    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => OneOrMany<Node>, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
         if (nodes === undefined) {
             return undefined;
         }
@@ -593,8 +600,8 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => Node, context: LexicalEnvironment): T;
-    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => Node, context: LexicalEnvironment): T {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => OneOrMany<Node>, context: LexicalEnvironment): T;
+    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => OneOrMany<Node>, context: LexicalEnvironment): T {
         if (node === undefined) {
             return undefined;
         }
@@ -661,7 +668,7 @@ namespace ts {
         if (nodes) {
             for (let i = 0; i < nodes.length; i++) {
                 const node = nodes[i];
-                if (result || node === undefined || isNodeArrayNode(node)) {
+                if (result || node === undefined || isArray(node) || isNodeArrayNode(node)) {
                     if (!result) {
                         result = <T[]>nodes.slice(0, i);
                     }
@@ -695,26 +702,26 @@ namespace ts {
 
     function addNodeWorker(to: Node[], from: OneOrMany<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean) {
         if (to && from) {
-            if (isNodeArrayNode(from)) {
+            if (isArray(from)) {
+                addNodesWorker(to, from, startOnNewLine, test, parenthesize, parentNode, isVisiting);
+            }
+            else if (isNodeArrayNode(from)) {
                 addNodesWorker(to, from.nodes, startOnNewLine, test, parenthesize, parentNode, isVisiting);
-                return;
             }
+            else {
+                const node = parenthesize !== undefined ? parenthesize(from, parentNode) : from;
+                Debug.assert(test === undefined || test(node), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(node.kind)} did not pass test ${(<any>test).name}.`);
 
-            if (parenthesize !== undefined) {
-                from = parenthesize(from, parentNode);
+                if (startOnNewLine) {
+                    node.startsOnNewLine = true;
+                }
+
+                if (isVisiting) {
+                    aggregateTransformFlags(node);
+                }
+
+                to.push(node);
             }
-
-            Debug.assert(test === undefined || test(from), "Wrong node type after visit.", () => `Node ${formatSyntaxKind(from.kind)} did not pass test ${(<any>test).name}.`);
-
-            if (startOnNewLine) {
-                from.startsOnNewLine = true;
-            }
-
-            if (isVisiting) {
-                aggregateTransformFlags(from);
-            }
-
-            to.push(from);
         }
     }
 

@@ -408,7 +408,7 @@ namespace ts {
             return createArrayLiteral(setters);
         }
 
-        function visitSourceElement(node: Node): Node {
+        function visitSourceElement(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
@@ -427,7 +427,7 @@ namespace ts {
             }
         }
 
-        function visitNestedNode(node: Node): Node {
+        function visitNestedNode(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);

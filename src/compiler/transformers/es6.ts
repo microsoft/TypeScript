@@ -55,7 +55,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): OneOrMany<Node> {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
@@ -63,17 +63,18 @@ namespace ts {
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
 
             onBeforeVisitNode(node);
-            node = visitorWorker(node);
+
+            const visited = visitorWorker(node);
 
             containingNonArrowFunction = savedContainingNonArrowFunction;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
             enclosingBlockScopeContainerParent = savedEnclosingBlockScopeContainerParent;
-            return node;
+            return visited;
         }
 
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): OneOrMany<Node> {
             if (node.transformFlags & TransformFlags.ES6) {
                 return visitJavaScript(node);
             }
@@ -85,7 +86,7 @@ namespace ts {
             }
         }
 
-        function visitJavaScript(node: Node): Node {
+        function visitJavaScript(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);

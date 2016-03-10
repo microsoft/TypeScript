@@ -12,7 +12,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): OneOrMany<Node> {
             if (node.transformFlags & TransformFlags.ES7) {
                 return visitorWorker(node);
             }
@@ -24,7 +24,7 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node) {
+        function visitorWorker(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);

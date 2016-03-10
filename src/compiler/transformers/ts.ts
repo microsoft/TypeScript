@@ -92,7 +92,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitWithStack(node: Node, visitor: (node: Node) => Node): Node {
+        function visitWithStack(node: Node, visitor: (node: Node) => OneOrMany<Node>): OneOrMany<Node> {
             // Save state
             const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
@@ -102,7 +102,7 @@ namespace ts {
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
 
-            node = visitor(node);
+            const visited = visitor(node);
 
             // Restore state
             currentNamespace = savedCurrentNamespace;
@@ -110,7 +110,7 @@ namespace ts {
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
 
-            return node;
+            return visited;
         }
 
         /**
@@ -118,7 +118,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): Node {
+        function visitor(node: Node): OneOrMany<Node> {
             return visitWithStack(node, visitorWorker);
         }
 
@@ -127,14 +127,14 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): OneOrMany<Node> {
             if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -145,7 +145,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): Node {
+        function namespaceElementVisitor(node: Node): OneOrMany<Node> {
             return visitWithStack(node, namespaceElementVisitorWorker);
         }
 
@@ -154,15 +154,15 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): Node {
+        function namespaceElementVisitorWorker(node: Node): OneOrMany<Node> {
             if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -173,7 +173,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitor(node: Node) {
+        function classElementVisitor(node: Node): OneOrMany<Node> {
             return visitWithStack(node, classElementVisitorWorker);
         }
 
@@ -182,7 +182,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node) {
+        function classElementVisitorWorker(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are transformed in `transformClassDeclaration`.
@@ -212,7 +212,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): Node {
+        function visitTypeScript(node: Node): OneOrMany<Node> {
             if (hasModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided.
                 return undefined;

@@ -18,7 +18,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): OneOrMany<Node> {
             if (node.transformFlags & TransformFlags.Jsx) {
                 return visitorWorker(node);
             }
@@ -30,7 +30,7 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
                     return visitJsxElement(<JsxElement>node);

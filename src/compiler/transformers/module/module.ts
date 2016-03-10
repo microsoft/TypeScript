@@ -173,7 +173,7 @@ namespace ts {
          *
          * @param node The node.
          */
-        function visitor(node: Node) {
+        function visitor(node: Node): OneOrMany<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
