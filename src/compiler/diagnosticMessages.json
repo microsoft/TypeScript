@@ -1715,6 +1715,10 @@
         "category": "Error",
         "code": 2530
     },
+    "Object is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2531
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

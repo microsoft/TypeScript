@@ -7222,6 +7222,7 @@ namespace ts {
                     case SyntaxKind.ReturnStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.DefaultClause:
                     case SyntaxKind.LabeledStatement:
@@ -7683,6 +7684,7 @@ namespace ts {
                     case SyntaxKind.ReturnStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.CaseBlock:
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.DefaultClause:
                     case SyntaxKind.LabeledStatement:
@@ -9541,6 +9543,15 @@ namespace ts {
             return true;
         }
 
+        function checkNonNullExpression(node: Expression | QualifiedName) {
+            const type = checkExpression(node);
+            if (strictNullChecks && getNullableKind(type)) {
+                error(node, Diagnostics.Object_is_possibly_null_or_undefined);
+                return getNonNullableType(type);
+            }
+            return type;
+        }
+
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
             return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
         }
@@ -9550,7 +9561,7 @@ namespace ts {
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
-            const type = checkExpression(left);
+            let type = checkNonNullExpression(left);
             if (isTypeAny(type)) {
                 return type;
             }
@@ -9661,7 +9672,7 @@ namespace ts {
             }
 
             // Obtain base constraint such that we can bail out if the constraint is an unknown type
-            const objectType = getApparentType(checkExpression(node.expression));
+            const objectType = getApparentType(checkNonNullExpression(node.expression));
             const indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
             if (objectType === unknownType) {
@@ -10676,7 +10687,7 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
-            const funcType = checkExpression(node.expression);
+            const funcType = checkNonNullExpression(node.expression);
             const apparentType = getApparentType(funcType);
 
             if (apparentType === unknownType) {
@@ -10729,7 +10740,7 @@ namespace ts {
                 }
             }
 
-            let expressionType = checkExpression(node.expression);
+            let expressionType = checkNonNullExpression(node.expression);
 
             // If expressionType's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
@@ -10993,7 +11004,7 @@ namespace ts {
             return targetType;
         }
 
-        function checkNonNullExpression(node: NonNullExpression) {
+        function checkNonNullAssertion(node: NonNullExpression) {
             return getNonNullableType(checkExpression(node.expression));
         }
 
@@ -12178,7 +12189,7 @@ namespace ts {
                 case SyntaxKind.AsExpression:
                     return checkAssertion(<AssertionExpression>node);
                 case SyntaxKind.NonNullExpression:
-                    return checkNonNullExpression(<NonNullExpression>node);
+                    return checkNonNullAssertion(<NonNullExpression>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
@@ -14048,7 +14059,7 @@ namespace ts {
                 }
             }
 
-            const rightType = checkExpression(node.expression);
+            const rightType = checkNonNullExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
             if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
@@ -14068,7 +14079,7 @@ namespace ts {
         }
 
         function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
-            const expressionType = getTypeOfExpression(rhsExpression);
+            const expressionType = checkNonNullExpression(rhsExpression);
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
         }
 
@@ -14339,7 +14350,7 @@ namespace ts {
                 const signature = getSignatureFromDeclaration(func);
                 const returnType = getReturnTypeOfSignature(signature);
                 if (strictNullChecks || node.expression) {
-                    const exprType = checkExpressionCached(node.expression);
+                    const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
 
                     if (func.asteriskToken) {
                         // A generator does not need its return expressions checked against its return type.
