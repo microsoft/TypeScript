@@ -2678,6 +2678,11 @@ namespace ts {
                     type = createArrayType(elementType);
                 }
             }
+            // In strict null checking mode, if a default value of a non-undefined type is specified, remove
+            // undefined from the final type.
+            if (strictNullChecks && declaration.initializer && !(getNullableKind(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
+                type = removeNullableKind(type, TypeFlags.Undefined);
+            }
             return type;
         }
 
