@@ -335,7 +335,6 @@ namespace ts {
         },
         {
             name: "lib",
-            shortName: "l",
             type: {
                 // JavaScript only
                 "es5": "lib.es5.d.ts",
