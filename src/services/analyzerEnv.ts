@@ -2,6 +2,8 @@
 
 var ActiveXObject: { new(...args: any[]): any }
 
+declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
+
 declare module Intl {
     interface CollatorOptions {
         usage?: string;

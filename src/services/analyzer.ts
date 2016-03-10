@@ -86,6 +86,11 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         error: (s) => { }
     };
 
+    const cancellationToken: ts.CancellationToken = {
+        isCancellationRequested: () => false,
+        throwIfCancellationRequested: () => {}
+    }
+
     let documentRegistry: ts.DocumentRegistry = {
         acquireDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName),
         releaseDocument: (fileName, settings) => { },
@@ -358,10 +363,6 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         return fileName + "|" + start;
     }
 
-    const cancellationToken: ts.CancellationToken = {
-        isCancellationRequested: () => false,
-        throwIfCancellationRequested: () => {}
-    }
     function createProgram(files: string[]): ts.Program {
         let host: ts.CompilerHost = {
             getSourceFile: (filename, languageVersion) => {
