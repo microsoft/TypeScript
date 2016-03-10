@@ -542,7 +542,7 @@ namespace ts {
          * @param node The variable statement to visit.
          */
         function visitVariableStatement(node: VariableStatement): OneOrMany<Statement> {
-            const isExported = (node.flags & NodeFlags.Export) !== 0;
+            const isExported = hasModifier(node, ModifierFlags.Export);
             const expressions: Expression[] = [];
             for (const variable of node.declarationList.declarations) {
                 addNode(expressions, transformVariable(variable, isExported));
@@ -587,7 +587,7 @@ namespace ts {
          * @param node The function declaration to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Node {
-            if (node.flags & NodeFlags.Export) {
+            if (hasModifier(node, ModifierFlags.Export)) {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
                 node = createFunctionDeclaration(
@@ -601,7 +601,7 @@ namespace ts {
                 // Record a declaration export in the outer module body function.
                 recordExportedFunctionDeclaration(node);
 
-                if ((node.flags & NodeFlags.Default) === 0) {
+                if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
             }
@@ -640,8 +640,8 @@ namespace ts {
             );
 
             // If the class was exported, write a declaration export to the inner module body function.
-            if (node.flags & NodeFlags.Export) {
-                if ((node.flags & NodeFlags.Default) === 0) {
+            if (hasModifier(node, ModifierFlags.Export)) {
+                if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
 
@@ -1179,7 +1179,7 @@ namespace ts {
          */
         function createDeclarationExport(node: DeclarationStatement) {
             const declarationName = getDeclarationName(node);
-            const exportName = node.flags & NodeFlags.Default ? createLiteral("default") : declarationName;
+            const exportName = hasModifier(node, ModifierFlags.Default) ? createLiteral("default") : declarationName;
             return createExportStatement(exportName, declarationName);
         }
 

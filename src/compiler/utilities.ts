@@ -491,6 +491,25 @@ namespace ts {
         return node;
     }
 
+    export function getCombinedModifierFlags(node: Node): ModifierFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+        let flags = getModifierFlags(node);
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= getModifierFlags(node);
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= getModifierFlags(node);
+        }
+
+        return flags;
+    }
+
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
@@ -519,7 +538,8 @@ namespace ts {
     }
 
     export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
+            || !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
@@ -1390,7 +1410,7 @@ namespace ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & NodeFlags.Ambient || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
+            if (hasModifier(node, ModifierFlags.Ambient) || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
                 return true;
             }
             node = node.parent;
@@ -1558,7 +1578,7 @@ namespace ts {
     }
 
     export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
+        return isFunctionLike(node) && hasModifier(node, ModifierFlags.Async) && !isAccessor(node);
     }
 
     export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
@@ -1667,10 +1687,12 @@ namespace ts {
      */
     export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
         const clone = getMutableClone(node);
+        clone.parent = parent;
         if (isQualifiedName(clone)) {
             const { left, right } = clone;
             clone.left = cloneEntityName(left, clone);
             clone.right = getMutableClone(right);
+            clone.right.parent = clone;
         }
 
         return clone;
@@ -2301,7 +2323,7 @@ namespace ts {
         else {
             forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
-                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -2534,21 +2556,42 @@ namespace ts {
         return currentLineIndent;
     }
 
-    export function modifierToFlag(token: SyntaxKind): NodeFlags {
-        switch (token) {
-            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
-            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
-            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
-            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
-            case SyntaxKind.AbstractKeyword: return NodeFlags.Abstract;
-            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
-            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
-            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
-            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
-            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
-            case SyntaxKind.ReadonlyKeyword: return NodeFlags.Readonly;
+    export function hasModifiers(node: Node) {
+        return getModifierFlags(node) !== ModifierFlags.None;
+    }
+
+    export function hasModifier(node: Node, flags: ModifierFlags) {
+        return (getModifierFlags(node) & flags) != 0;
+    }
+
+    export function getModifierFlags(node: Node): ModifierFlags {
+        let flags = ModifierFlags.None;
+        if (node.modifiers) {
+            for (const modifier of node.modifiers) {
+                flags |= modifierToFlag(modifier.kind);
+            }
         }
-        return 0;
+        if (node.flags & NodeFlags.NestedNamespace) {
+            flags |= ModifierFlags.Export;
+        }
+        return flags;
+    }
+
+    export function modifierToFlag(token: SyntaxKind): ModifierFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return ModifierFlags.Static;
+            case SyntaxKind.PublicKeyword: return ModifierFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return ModifierFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return ModifierFlags.Private;
+            case SyntaxKind.AbstractKeyword: return ModifierFlags.Abstract;
+            case SyntaxKind.ExportKeyword: return ModifierFlags.Export;
+            case SyntaxKind.DeclareKeyword: return ModifierFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return ModifierFlags.Const;
+            case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
+            case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
+            case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+        }
+        return ModifierFlags.None;
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {
@@ -2608,7 +2651,7 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -3673,6 +3716,6 @@ namespace ts {
     }
 
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
-        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+        return hasModifier(node, ModifierFlags.AccessibilityModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 }

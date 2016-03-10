@@ -51,20 +51,13 @@ namespace ts {
     }
 
     export function createModifiersArray(elements?: Modifier[], location?: TextRange): ModifiersArray {
-        let flags: NodeFlags;
         if (elements) {
             if (isModifiersArray(elements)) {
                 return elements;
             }
-
-            flags = 0;
-            for (const modifier of elements) {
-                flags |= modifierToFlag(modifier.kind);
-            }
         }
         else {
             elements = [];
-            flags = 0;
         }
 
         const array = <ModifiersArray>elements;
@@ -78,7 +71,6 @@ namespace ts {
         }
 
         array.arrayKind = ArrayKind.ModifiersArray;
-        array.flags = flags;
         return array;
     }
 
@@ -86,7 +78,6 @@ namespace ts {
         if (modifiers) {
             const array = createModifiersArray(modifiers);
             node.modifiers = array;
-            node.flags |= array.flags;
         }
         else {
             node.modifiers = undefined;
@@ -1079,9 +1070,9 @@ namespace ts {
             thisArg = createThis(/*location*/ callee.expression);
             target = callee;
         }
-        else if (isSuperCall(callee)) {
+        else if (callee.kind === SyntaxKind.SuperKeyword) {
             thisArg = createThis(/*location*/ callee);
-            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : callee;
+            target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
         }
         else {
             switch (callee.kind) {

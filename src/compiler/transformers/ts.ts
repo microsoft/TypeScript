@@ -213,7 +213,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): Node {
-            if (node.flags & NodeFlags.Ambient) {
+            if (hasModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided.
                 return undefined;
             }
@@ -858,7 +858,7 @@ namespace ts {
          * @param parameter The parameter node.
          */
         function isParameterWithPropertyAssignment(parameter: ParameterDeclaration) {
-            return parameter.flags & NodeFlags.AccessibilityModifier
+            return hasModifier(parameter, ModifierFlags.AccessibilityModifier)
                 && isIdentifier(parameter.name);
         }
 
@@ -917,7 +917,7 @@ namespace ts {
          */
         function isInitializedProperty(member: ClassElement, isStatic: boolean) {
             return member.kind === SyntaxKind.PropertyDeclaration
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0)
+                && isStatic === hasModifier(member, ModifierFlags.Static)
                 && (<PropertyDeclaration>member).initializer !== undefined;
         }
 
@@ -1015,7 +1015,7 @@ namespace ts {
          */
         function isDecoratedClassElement(member: ClassElement, isStatic: boolean) {
             return nodeOrChildIsDecorated(member)
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0);
+                && isStatic === hasModifier(member, ModifierFlags.Static);
         }
 
         /**
@@ -1905,7 +1905,7 @@ namespace ts {
          */
         function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
             return node.body === undefined
-                || node.flags & (NodeFlags.Abstract | NodeFlags.Ambient);
+                || hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
         /**
@@ -2534,7 +2534,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExported(node: Node) {
-            return (node.flags & NodeFlags.Export) !== 0;
+            return hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2562,7 +2562,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) === 0;
+                && hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2572,7 +2572,7 @@ namespace ts {
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) !== 0;
+                && hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2624,7 +2624,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return member.flags & NodeFlags.Static
+            return hasModifier(member, ModifierFlags.Static)
                 ? getDeclarationName(node)
                 : getClassPrototype(node);
         }

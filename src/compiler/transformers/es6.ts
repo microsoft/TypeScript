@@ -1680,7 +1680,7 @@ namespace ts {
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
             return containingNonArrowFunction
                 && isClassElement(containingNonArrowFunction)
-                && (containingNonArrowFunction.flags & NodeFlags.Static) === 0
+                && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
         }
@@ -1840,7 +1840,7 @@ namespace ts {
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const expression = getDeclarationName(node);
-            return member.flags & NodeFlags.Static ? expression : createPropertyAccess(expression, "prototype");
+            return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {

@@ -291,7 +291,7 @@ namespace ts {
             if (contains(externalImports, node)) {
                 const statements: Statement[] = [];
                 if (moduleKind !== ModuleKind.AMD) {
-                    if (node.flags & NodeFlags.Export) {
+                    if (hasModifier(node, ModifierFlags.Export)) {
                         addNode(statements,
                             createStatement(
                                 createExportAssignment(
@@ -318,7 +318,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (node.flags & NodeFlags.Export) {
+                    if (hasModifier(node, ModifierFlags.Export)) {
                         addNode(statements,
                             createStatement(
                                 createExportAssignment(node.name, node.name),
@@ -505,7 +505,7 @@ namespace ts {
         function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
             const statements: Statement[] = [];
             if (node.name) {
-                if (node.flags & NodeFlags.Export) {
+                if (hasModifier(node, ModifierFlags.Export)) {
                     addNode(statements,
                         createFunctionDeclaration(
                             /*modifiers*/ undefined,
@@ -517,7 +517,7 @@ namespace ts {
                         )
                     );
 
-                    if (node.flags & NodeFlags.Default) {
+                    if (hasModifier(node, ModifierFlags.Default)) {
                         addExportDefault(statements, getSynthesizedClone(node.name), /*location*/ node);
                     }
                 }
@@ -528,7 +528,7 @@ namespace ts {
                 addExportMemberAssignments(statements, node.name);
             }
             else {
-                Debug.assert((node.flags & NodeFlags.Default) !== 0);
+                Debug.assert(hasModifier(node, ModifierFlags.Default));
                 addExportDefault(statements,
                     createFunctionExpression(
                         /*asteriskToken*/ undefined,
@@ -546,7 +546,7 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
             const statements: Statement[] = [];
             if (node.name) {
-                if (node.flags & NodeFlags.Export) {
+                if (hasModifier(node, ModifierFlags.Export)) {
                     addNode(statements,
                         createClassDeclaration(
                             /*modifiers*/ undefined,
@@ -557,7 +557,7 @@ namespace ts {
                         )
                     );
 
-                    if (node.flags & NodeFlags.Default) {
+                    if (hasModifier(node, ModifierFlags.Default)) {
                         addExportDefault(statements, getSynthesizedClone(node.name), /*location*/ node);
                     }
                 }
@@ -568,7 +568,7 @@ namespace ts {
                 addExportMemberAssignments(statements, node.name);
             }
             else {
-                Debug.assert((node.flags & NodeFlags.Default) !== 0);
+                Debug.assert(hasModifier(node, ModifierFlags.Default));
                 addExportDefault(statements,
                     createClassExpression(
                         /*name*/ undefined,

@@ -373,18 +373,9 @@ namespace ts {
 
     export const enum NodeFlags {
         None =               0,
-        Export =             1 << 0,  // Declarations
-        Ambient =            1 << 1,  // Declarations
-        Public =             1 << 2,  // Property/Method
-        Private =            1 << 3,  // Property/Method
-        Protected =          1 << 4,  // Property/Method
-        Static =             1 << 5,  // Property/Method
-        Readonly =           1 << 6,  // Property/Method
-        Abstract =           1 << 7,  // Class/Method/ConstructSignature
-        Async =              1 << 8,  // Property/Method/Function
-        Default =            1 << 9,  // Function/Class (export default declaration)
-        Let =                1 << 10,  // Variable declaration
-        Const =              1 << 11,  // Variable declaration
+        Let =                1 << 0,   // Variable declaration
+        Const =              1 << 1,   // Variable declaration
+        NestedNamespace =    1 << 2,   // Namespace declaration
         Namespace =          1 << 12,  // Namespace declaration
         ExportContext =      1 << 13,  // Export context (initialized by binding)
         ContainsThis =       1 << 14,  // Interface contains references to "this"
@@ -404,8 +395,6 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
-        AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
@@ -416,6 +405,24 @@ namespace ts {
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+    }
+
+    export const enum ModifierFlags {
+        None =               0,
+        Export =             1 << 0,  // Declarations
+        Ambient =            1 << 1,  // Declarations
+        Public =             1 << 2,  // Property/Method
+        Private =            1 << 3,  // Property/Method
+        Protected =          1 << 4,  // Property/Method
+        Static =             1 << 5,  // Property/Method
+        Readonly =           1 << 6,  // Property/Method
+        Abstract =           1 << 7,  // Class/Method/ConstructSignature
+        Async =              1 << 8,  // Property/Method/Function
+        Default =            1 << 9,  // Function/Class (export default declaration)
+        Const =              1 << 11,  // Variable declaration
+
+        AccessibilityModifier = Public | Private | Protected,
+        NonPublicAccessibilityModifier = Private | Protected,
     }
 
     export const enum JsxFlags {
@@ -482,7 +489,7 @@ namespace ts {
     }
 
     export interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
+        // flags: number;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)

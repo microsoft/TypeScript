@@ -1009,7 +1009,6 @@ namespace ts {
             array.pos = pos;
             array.end = pos;
             array.arrayKind = ArrayKind.ModifiersArray;
-            array.flags = 0;
             return array;
         }
 
@@ -2021,7 +2020,6 @@ namespace ts {
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
             if (modifiers) {
-                node.flags |= modifiers.flags;
                 node.modifiers = modifiers;
             }
         }
@@ -2826,7 +2824,7 @@ namespace ts {
                 return undefined;
             }
 
-            const isAsync = !!(arrowFunction.flags & NodeFlags.Async);
+            const isAsync = !!(getModifierFlags(arrowFunction) & ModifierFlags.Async);
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
@@ -2972,7 +2970,7 @@ namespace ts {
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             setModifiers(node, parseModifiersForArrowFunction());
-            const isAsync = !!(node.flags & NodeFlags.Async);
+            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
 
             // Arrow functions are never generators.
             //
@@ -4032,7 +4030,7 @@ namespace ts {
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
 
             const isGenerator = !!node.asteriskToken;
-            const isAsync = !!(node.flags & NodeFlags.Async);
+            const isAsync = !!(getModifierFlags(node) & ModifierFlags.Async);
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
                 isGenerator ? doInYieldContext(parseOptionalIdentifier) :
@@ -4765,9 +4763,9 @@ namespace ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
+            node.name = hasModifier(node, ModifierFlags.Default) ? parseOptionalIdentifier() : parseIdentifier();
             const isGenerator = !!node.asteriskToken;
-            const isAsync = !!(node.flags & NodeFlags.Async);
+            const isAsync = hasModifier(node, ModifierFlags.Async);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
             return addJSDocComment(finishNode(node));
@@ -4791,7 +4789,7 @@ namespace ts {
             method.name = name;
             method.questionToken = questionToken;
             const isGenerator = !!asteriskToken;
-            const isAsync = !!(method.flags & NodeFlags.Async);
+            const isAsync = hasModifier(method, ModifierFlags.Async);
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);
             return addJSDocComment(finishNode(method));
@@ -4814,7 +4812,7 @@ namespace ts {
             //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initialiser_opt[In, ?Yield];
             //
             // The checker may still error in the static case to explicitly disallow the yield expression.
-            property.initializer = modifiers && modifiers.flags & NodeFlags.Static
+            property.initializer = hasModifier(property, ModifierFlags.Static)
                 ? allowInAnd(parseNonParameterInitializer)
                 : doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.DisallowInContext, parseNonParameterInitializer);
 
@@ -4964,7 +4962,6 @@ namespace ts {
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
         function parseModifiers(permitInvalidConstAsModifier?: boolean): ModifiersArray {
-            let flags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 const modifierStart = scanner.getStartPos();
@@ -4983,7 +4980,6 @@ namespace ts {
                     }
                 }
 
-                flags |= modifierToFlag(modifierKind);
                 const modifier = finishNode(createNode(modifierKind, modifierStart));
                 if (!modifiers) {
                     modifiers = createModifiersArray([modifier], modifierStart);
@@ -4993,7 +4989,6 @@ namespace ts {
                 }
             }
             if (modifiers) {
-                modifiers.flags = flags;
                 modifiers.end = scanner.getStartPos();
             }
             return modifiers;
@@ -5007,7 +5002,6 @@ namespace ts {
                 nextToken();
                 const modifier = finishNode(createNode(modifierKind, modifierStart));
                 modifiers = createModifiersArray([modifier], modifierStart);
-                modifiers.flags = modifierToFlag(modifierKind);
                 modifiers.end = scanner.getStartPos();
             }
 
@@ -5223,7 +5217,7 @@ namespace ts {
             node.flags |= flags;
             node.name = parseIdentifier();
             node.body = parseOptional(SyntaxKind.DotToken)
-                ? parseModuleOrNamespaceDeclaration(getNodePos(), /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.Export | namespaceFlag)
+                ? parseModuleOrNamespaceDeclaration(getNodePos(), /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag)
                 : parseModuleBlock();
             return finishNode(node);
         }
@@ -5245,7 +5239,7 @@ namespace ts {
         }
 
         function parseModuleDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ModuleDeclaration {
-            let flags = modifiers ? modifiers.flags : 0;
+            let flags: NodeFlags = 0;
             if (token === SyntaxKind.GlobalKeyword) {
                 // global augmentation
                 return parseAmbientExternalModuleDeclaration(fullStart, decorators, modifiers);
@@ -5541,7 +5535,7 @@ namespace ts {
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
-                node.flags & NodeFlags.Export
+                hasModifier(node, ModifierFlags.Export)
                     || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                     || node.kind === SyntaxKind.ImportDeclaration
                     || node.kind === SyntaxKind.ExportAssignment

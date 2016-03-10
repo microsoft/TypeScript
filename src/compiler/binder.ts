@@ -37,7 +37,7 @@ namespace ts {
             return ModuleInstanceState.ConstEnumOnly;
         }
         // 3. non-exported import declarations
-        else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && !(node.flags & NodeFlags.Export)) {
+        else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && !(getModifierFlags(node) & ModifierFlags.Export)) {
             return ModuleInstanceState.NonInstantiated;
         }
         // 4. other uninstantiated module declarations.
@@ -256,7 +256,7 @@ namespace ts {
 
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
-                    return node.flags & NodeFlags.Default ? "default" : undefined;
+                    return getModifierFlags(node) & ModifierFlags.Default ? "default" : undefined;
                 case SyntaxKind.JSDocFunctionType:
                     return isJSDocConstructSignature(node) ? "__new" : "__call";
                 case SyntaxKind.Parameter:
@@ -284,7 +284,7 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            const isDefaultExport = node.flags & NodeFlags.Default;
+            const isDefaultExport = getModifierFlags(node) & ModifierFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
@@ -329,7 +329,7 @@ namespace ts {
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
-                        if (declaration.flags & NodeFlags.Default) {
+                        if (getModifierFlags(declaration) & ModifierFlags.Default) {
                             message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                         }
                     });
@@ -353,7 +353,7 @@ namespace ts {
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            const hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
+            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
@@ -862,7 +862,7 @@ namespace ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return node.flags & NodeFlags.Static
+            return getModifierFlags(node) & ModifierFlags.Static
                 ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
         }
@@ -899,7 +899,7 @@ namespace ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (isAmbientModule(node)) {
-                if (node.flags & NodeFlags.Export) {
+                if (getModifierFlags(node) & ModifierFlags.Export) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
@@ -1800,7 +1800,7 @@ namespace ts {
      */
     export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags): TransformFlags {
         // Ambient nodes are TypeScript syntax and the flags of their subtree are ignored.
-        if (node.flags & NodeFlags.Ambient) {
+        if (getModifierFlags(node) & ModifierFlags.Ambient) {
             return (node.transformFlags = TransformFlags.AssertTypeScript)
                 & ~(node.excludeTransformFlags = TransformFlags.NodeExcludes);
         }
@@ -2008,7 +2008,7 @@ namespace ts {
                 }
 
                 // If a parameter has an accessibility modifier, then it is TypeScript syntax.
-                if ((<ParameterDeclaration>node).flags & NodeFlags.AccessibilityModifier) {
+                if (getModifierFlags(node) & ModifierFlags.AccessibilityModifier) {
                     transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
                 }
 
@@ -2033,7 +2033,7 @@ namespace ts {
                 }
 
                 // An async arrow function is TypeScript syntax.
-                if (node.flags & NodeFlags.Async) {
+                if (getModifierFlags(node) & ModifierFlags.Async) {
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 
@@ -2052,7 +2052,7 @@ namespace ts {
                 }
 
                 // An async function expression is TypeScript syntax.
-                if (node.flags & NodeFlags.Async) {
+                if (getModifierFlags(node) & ModifierFlags.Async) {
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 
@@ -2072,14 +2072,14 @@ namespace ts {
                 // subtree has marked the container as needing to capture the lexical `this`,
                 // then this node is ES6 syntax.
                 if ((<FunctionDeclaration>node).asteriskToken
-                    || node.flags & NodeFlags.Export
+                    || getModifierFlags(node) & ModifierFlags.Export
                     || subtreeFlags & TransformFlags.ContainsCapturedLexicalThis
                     || subtreeFlags & TransformFlags.ContainsDefaultValueAssignments) {
                     transformFlags |= TransformFlags.AssertES6;
                 }
 
                 // An async function declaration is TypeScript syntax.
-                if (node.flags & NodeFlags.Async) {
+                if (getModifierFlags(node) & ModifierFlags.Async) {
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 
@@ -2103,7 +2103,7 @@ namespace ts {
 
             case SyntaxKind.VariableStatement:
                 // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
-                if (node.flags & NodeFlags.Export) {
+                if (getModifierFlags(node) & ModifierFlags.Export) {
                     transformFlags |= TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
                 }
 
@@ -2204,8 +2204,7 @@ namespace ts {
                 // generic, or has both a computed property name and a decorator.
                 if ((<MethodDeclaration>node).body === undefined
                     || (<MethodDeclaration>node).typeParameters !== undefined
-                    || node.flags & NodeFlags.Async
-                    || node.flags & NodeFlags.Abstract
+                    || getModifierFlags(node) & (ModifierFlags.Async | ModifierFlags.Abstract)
                     || (subtreeFlags & TransformFlags.ContainsDecorators
                         && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
                     transformFlags |= TransformFlags.AssertTypeScript;
@@ -2220,7 +2219,7 @@ namespace ts {
 
                 // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
                 // or has both a computed property name and a decorator.
-                if (node.flags & NodeFlags.Abstract ||
+                if (getModifierFlags(node) & ModifierFlags.Abstract ||
                     subtreeFlags & TransformFlags.ContainsDecorators &&
                     subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
                     transformFlags |= TransformFlags.AssertTypeScript;

@@ -611,17 +611,12 @@ namespace ts {
 
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
-            let modifiers: NodeFlags;
             for (const edge of edgeTraversalPath) {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     let visited: Node | NodeArray<Node>;
                     if (isArray(value)) {
                         const visitedArray = visitNodesWorker(value, visitor, edge.test, edge.parenthesize, node, 0, value.length);
-                        if (isModifiersArray(visitedArray)) {
-                            modifiers = visitedArray.flags;
-                        }
-
                         visited = visitedArray;
                     }
                     else {
@@ -631,12 +626,6 @@ namespace ts {
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
                             updated = getMutableClone(node);
-                            updated.flags &= ~NodeFlags.Modifier;
-                        }
-
-                        if (modifiers) {
-                            updated.flags |= modifiers;
-                            modifiers = undefined;
                         }
 
                         if (visited !== value) {
@@ -927,7 +916,7 @@ namespace ts {
     function aggregateTransformFlagsForSubtree(node: Node): TransformFlags {
         // We do not transform ambient declarations or types, so there is no need to
         // recursively aggregate transform flags.
-        if (node.flags & NodeFlags.Ambient || isTypeNode(node)) {
+        if (hasModifier(node, ModifierFlags.Ambient) || isTypeNode(node)) {
             return <TransformFlags>0;
         }
 
