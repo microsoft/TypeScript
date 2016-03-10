@@ -453,7 +453,7 @@ namespace ts {
         /* @internal */ transformFlags?: TransformFlags;
         /* @internal */ excludeTransformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                     // Array of modifiers
+        modifiers?: NodeArray<Modifier>;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
@@ -465,13 +465,7 @@ namespace ts {
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export const enum ArrayKind {
-        NodeArray = 1,
-        ModifiersArray = 2,
-    }
-
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
-        arrayKind: ArrayKind;
         hasTrailingComma?: boolean;
     }
 
@@ -486,10 +480,6 @@ namespace ts {
     // @kind(SyntaxKind.NodeArrayNode)
     export interface NodeArrayNode<T extends Node> extends Node {
         nodes: NodeArray<T>;
-    }
-
-    export interface ModifiersArray extends NodeArray<Modifier> {
-        // flags: number;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)

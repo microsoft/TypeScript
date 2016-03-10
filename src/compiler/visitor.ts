@@ -580,9 +580,7 @@ namespace ts {
         }
 
         if (updated !== undefined) {
-            return isModifiersArray(nodes)
-                ? createModifiersArray(updated, nodes)
-                : createNodeArray(updated, nodes, nodes.hasTrailingComma);
+            return createNodeArray(updated, nodes, nodes.hasTrailingComma);
         }
 
         return nodes;

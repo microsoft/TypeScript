@@ -1958,7 +1958,7 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitModifiers(node: Node, modifiers: ModifiersArray) {
+            function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
                 if (modifiers && modifiers.length) {
                     emitList(node, modifiers, ListFormat.SingleLine);
                     write(" ");

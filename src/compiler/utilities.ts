@@ -2987,11 +2987,8 @@ namespace ts {
     // Node Arrays
 
     export function isNodeArray<T extends Node>(array: T[]): array is NodeArray<T> {
-        return (<NodeArray<T>>array).arrayKind === ArrayKind.NodeArray;
-    }
-
-    export function isModifiersArray(array: Modifier[]): array is ModifiersArray {
-        return (<ModifiersArray>array).arrayKind === ArrayKind.ModifiersArray;
+        return array.hasOwnProperty("pos")
+            && array.hasOwnProperty("end");
     }
 
     // Literals

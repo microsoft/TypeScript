@@ -46,44 +46,7 @@ namespace ts {
             array.hasTrailingComma = true;
         }
 
-        array.arrayKind = ArrayKind.NodeArray;
         return array;
-    }
-
-    export function createModifiersArray(elements?: Modifier[], location?: TextRange): ModifiersArray {
-        if (elements) {
-            if (isModifiersArray(elements)) {
-                return elements;
-            }
-        }
-        else {
-            elements = [];
-        }
-
-        const array = <ModifiersArray>elements;
-        if (location) {
-            array.pos = location.pos;
-            array.end = location.end;
-        }
-        else {
-            array.pos = -1;
-            array.end = -1;
-        }
-
-        array.arrayKind = ArrayKind.ModifiersArray;
-        return array;
-    }
-
-    export function setModifiers<T extends Node>(node: T, modifiers: Modifier[]) {
-        if (modifiers) {
-            const array = createModifiersArray(modifiers);
-            node.modifiers = array;
-        }
-        else {
-            node.modifiers = undefined;
-        }
-
-        return node;
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
@@ -94,10 +57,6 @@ namespace ts {
 
     export function createSynthesizedNodeArray<T extends Node>(elements?: T[]): NodeArray<T> {
         return createNodeArray(elements, /*location*/ undefined);
-    }
-
-    export function createSynthesizedModifiersArray(elements?: Modifier[]): ModifiersArray {
-        return createModifiersArray(elements, /*location*/ undefined);
     }
 
     /**
@@ -238,7 +197,7 @@ namespace ts {
     export function createMethod(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
@@ -260,7 +219,7 @@ namespace ts {
     export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, body: Block, location?: TextRange) {
         const node = <GetAccessorDeclaration>createNode(SyntaxKind.GetAccessor, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray<ParameterDeclaration>();
@@ -271,7 +230,7 @@ namespace ts {
     export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameter: ParameterDeclaration, body: Block, location?: TextRange) {
         const node = <SetAccessorDeclaration>createNode(SyntaxKind.SetAccessor, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray([parameter]);
@@ -463,7 +422,7 @@ namespace ts {
     export function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList, location?: TextRange): VariableStatement {
         const node = <VariableStatement>createNode(SyntaxKind.VariableStatement, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.declarationList = declarationList;
         return node;
     }
@@ -562,7 +521,7 @@ namespace ts {
     export function createFunctionDeclaration(modifiers: Modifier[], asteriskToken: Node, name: string | Identifier, parameters: ParameterDeclaration[], body: Block, location?: TextRange, original?: Node) {
         const node = <FunctionDeclaration>createNode(SyntaxKind.FunctionDeclaration, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.asteriskToken = asteriskToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
@@ -578,7 +537,7 @@ namespace ts {
     export function createClassDeclaration(modifiers: Modifier[], name: Identifier, heritageClauses: HeritageClause[], members: ClassElement[], location?: TextRange) {
         const node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, location);
         node.decorators = undefined;
-        setModifiers(node, modifiers);
+        node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = name;
         node.typeParameters = undefined;
         node.heritageClauses = createNodeArray(heritageClauses);
