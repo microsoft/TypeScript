@@ -991,7 +991,11 @@ namespace ts {
                 }
 
                 if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return { diagnostics, sourceMaps: undefined, emitSkipped: true };
+                    return {
+                        diagnostics: concatenate(diagnostics, declarationDiagnostics),
+                        sourceMaps: undefined,
+                        emitSkipped: true
+                    };
                 }
             }
 
