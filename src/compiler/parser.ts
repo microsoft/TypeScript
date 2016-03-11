@@ -112,6 +112,8 @@ namespace ts {
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypeUnaryPrefix:
+                return visitNode(cbNode, (<TypeUnaryPrefix>node).operand);
             case SyntaxKind.TypePredicate:
                 return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
                     visitNode(cbNode, (<TypePredicateNode>node).type);
@@ -2371,20 +2373,17 @@ namespace ts {
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
-        function parseSignedNumericLiteral(): NumericLiteralTypeNode {
+        // We can't just add a `-` to the text of the literal, as this breaks on hex and octal literals (and returns NaN)
+        function parseSignedNumericLiteral(): TypeUnaryPrefix {
+            const node = createNode(SyntaxKind.TypeUnaryPrefix) as TypeUnaryPrefix;
+            node.operator = token;
             nextToken();
-            // Since we don't allow reference types after a `-` (other than Infinity), we special case it here
-            if (token == SyntaxKind.Identifier && scanner.getTokenText() === (Infinity).toString()) {
-                return parseNumericLiteralTypeNode();
+            // Since we don't allow reference types after a `-` or `+` (other than Infinity), we special case it here
+            if (!(token == SyntaxKind.Identifier && scanner.getTokenText() === (Infinity).toString())) {
+                parseExpected(SyntaxKind.NumericLiteral, Diagnostics.Numeric_literal_expected, /*shouldAdvance*/false);
             }
-            parseExpected(SyntaxKind.NumericLiteral, Diagnostics.Numeric_literal_expected, /*shouldAdvance*/false);
-            return parseNumericLiteralTypeNode();
-        }
-
-        function parseMinusSignedNumericLiteral(): NumericLiteralTypeNode {
-            const node = parseSignedNumericLiteral();
-            node.text = `-${node.text}`;
-            return node;
+            node.operand = parseNumericLiteralTypeNode();
+            return finishNode(node);
         }
 
         function parseNonArrayType(): TypeNode {
@@ -2423,9 +2422,8 @@ namespace ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 case SyntaxKind.PlusToken:
-                    return parseSignedNumericLiteral();
                 case SyntaxKind.MinusToken:
-                    return parseMinusSignedNumericLiteral();
+                    return parseSignedNumericLiteral();
                 default:
                     return parseTypeReference();
             }

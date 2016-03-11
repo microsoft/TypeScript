@@ -211,6 +211,7 @@ namespace ts {
         ThisType,
         StringLiteralType,
         NumericLiteralType,
+        TypeUnaryPrefix,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -818,8 +819,16 @@ namespace ts {
 
     // @kind(SyntaxKind.PrefixUnaryExpression)
     export interface PrefixUnaryExpression extends IncrementExpression {
+        _prefixUnaryExpressionBrand: any;
         operator: SyntaxKind;
         operand: UnaryExpression;
+    }
+
+    // @kind(SyntaxKind.TypeUnaryPrefix)
+    export interface TypeUnaryPrefix extends TypeNode {
+        _typeUnaryPrefixBrand: any;
+        operator: SyntaxKind;
+        operand: NumericLiteralTypeNode;
     }
 
     // @kind(SyntaxKind.PostfixUnaryExpression)

@@ -5139,6 +5139,31 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromTypeUnaryPrefixNode(node: TypeUnaryPrefix): NumericLiteralType {
+            const type = getTypeFromNumericLiteralTypeNode(node.operand) as NumericLiteralType;
+            if (node.operator === SyntaxKind.MinusToken) {
+                const text = "-"+type.text;
+                if (hasProperty(numericLiteralTypes, text)) {
+                    return numericLiteralTypes[text];
+                }
+
+                const newType = numericLiteralTypes[text] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+                newType.number = -type.number;
+                newType.text = text;
+                
+                return newType;
+            }
+            return type;
+        }
+
+        function getTypeFromTypeUnaryPrefix(node: TypeUnaryPrefix): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getTypeFromTypeUnaryPrefixNode(node);
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -5204,6 +5229,8 @@ namespace ts {
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
                 case SyntaxKind.NumericLiteralType:
                     return getTypeFromNumericLiteralTypeNode(node as NumericLiteralTypeNode);
+                case SyntaxKind.TypeUnaryPrefix:
+                    return getTypeFromTypeUnaryPrefix(node as TypeUnaryPrefix);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
@@ -8898,6 +8925,10 @@ namespace ts {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((parent as PrefixUnaryExpression).operator === SyntaxKind.MinusToken) {
+                        return getContextualType(parent as PrefixUnaryExpression);
+                    }
             }
             return undefined;
         }
