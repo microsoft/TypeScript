@@ -753,9 +753,9 @@ namespace ts {
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
-                    write("\"");
+                    write('"');
                     write(moduleName);
-                    write("\"");
+                    write('"');
                     return;
                 }
             }
@@ -986,6 +986,10 @@ namespace ts {
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
                     write("null");
+                }
+                else {
+                    writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
+                    resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }
 
                 function getHeritageClauseVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
@@ -1679,7 +1683,7 @@ namespace ts {
                     host.getCanonicalFileName,
                     /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+                referencePathsOutput += '/// <reference path="' + declFileName + '" />' + newLine;
             }
             return addedBundledEmitReference;
 

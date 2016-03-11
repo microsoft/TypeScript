@@ -325,6 +325,7 @@ namespace ts {
             Debug.assert(!hasDynamicName(node));
 
             const isDefaultExport = node.flags & NodeFlags.Default;
+
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
@@ -794,10 +795,14 @@ namespace ts {
         function bindCaseBlock(n: CaseBlock): void {
             const startState = currentReachabilityState;
 
-            for (const clause of n.clauses) {
+            for (let i = 0; i < n.clauses.length; i++) {
+                const clause = n.clauses[i];
                 currentReachabilityState = startState;
                 bind(clause);
-                if (clause.statements.length && currentReachabilityState.reachability === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
+                if (clause.statements.length &&
+                    i !== n.clauses.length - 1 && // allow fallthrough from the last case
+                    currentReachabilityState.reachability === Reachability.Reachable &&
+                    options.noFallthroughCasesInSwitch) {
                     errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
@@ -874,6 +879,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -1021,7 +1027,12 @@ namespace ts {
                 if (node.flags & NodeFlags.Export) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
-                declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                if (isExternalModuleAugmentation(node)) {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                }
+                else {
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                }
             }
             else {
                 const state = getModuleInstanceState(node);
@@ -1350,7 +1361,7 @@ namespace ts {
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
-            return nodeText === "\"use strict\"" || nodeText === "'use strict'";
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function bindWorker(node: Node) {
@@ -1474,6 +1485,8 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return bindGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -1523,6 +1536,33 @@ namespace ts {
             }
         }
 
+        function bindGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration) {
+            if (node.modifiers && node.modifiers.length) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
+            }
+
+            if (node.parent.kind !== SyntaxKind.SourceFile) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
+                return;
+            }
+            else {
+                const parent = node.parent as SourceFile;
+
+                if (!isExternalModule(parent)) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
+                    return;
+                }
+
+                if (!parent.isDeclarationFile) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
+                    return;
+                }
+            }
+
+            file.symbol.globalExports = file.symbol.globalExports || {};
+            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+        }
+
         function bindExportDeclaration(node: ExportDeclaration) {
             if (!container.symbol || !container.symbol.exports) {
                 // Export * in some sort of block construct
@@ -1557,7 +1597,7 @@ namespace ts {
         function bindModuleExportsAssignment(node: BinaryExpression) {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            bindExportAssignment(node);
+            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.Property | SymbolFlags.Export | SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {

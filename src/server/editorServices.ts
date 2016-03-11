@@ -1317,6 +1317,7 @@ namespace ts.server {
             else {
                 const defaultOpts = ts.getDefaultCompilerOptions();
                 defaultOpts.allowNonTsExtensions = true;
+                defaultOpts.allowJs = true;
                 this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);

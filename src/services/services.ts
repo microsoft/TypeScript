@@ -7,6 +7,7 @@
 /// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
+/// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -1751,14 +1752,13 @@ namespace ts {
 
         private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
-            const scriptKind = this.host.getScriptKind ? this.host.getScriptKind(fileName) : ScriptKind.Unknown;
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
                     scriptSnapshot: scriptSnapshot,
-                    scriptKind: scriptKind ? scriptKind : getScriptKindFromFileName(fileName)
+                    scriptKind: getScriptKind(fileName, this.host)
                 };
             }
 
@@ -1824,7 +1824,7 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
 
-            const scriptKind = this.host.getScriptKind ? this.host.getScriptKind(fileName) : ScriptKind.Unknown;
+            const scriptKind = getScriptKind(fileName, this.host);
             const version = this.host.getScriptVersion(fileName);
             let sourceFile: SourceFile;
 
@@ -3134,7 +3134,7 @@ namespace ts {
             else if (isRightOfOpenTag) {
                 const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
-                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
                 }
                 else {
                     symbols = tagSymbols;

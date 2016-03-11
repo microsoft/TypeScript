@@ -274,6 +274,7 @@ namespace ts {
         ModuleDeclaration,
         ModuleBlock,
         CaseBlock,
+        GlobalModuleExportDeclaration,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -411,7 +412,7 @@ namespace ts {
         EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -1228,6 +1229,8 @@ namespace ts {
         block: Block;
     }
 
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
+
     export interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -1342,6 +1345,12 @@ namespace ts {
     // @kind(SyntaxKind.NamespaceImport)
     export interface NamespaceImport extends Declaration {
         name: Identifier;
+    }
+
+    // @kind(SyntaxKind.GlobalModuleImport)
+    export interface GlobalModuleExportDeclaration extends DeclarationStatement {
+        name: Identifier;
+        moduleReference: LiteralLikeNode;
     }
 
     // @kind(SyntaxKind.ExportDeclaration)
@@ -1557,6 +1566,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
+        // True if the file was a root file in a compilation or a /// reference targets
+        /* @internal */ wasReferenced?: boolean;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -1909,6 +1920,7 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -2014,6 +2026,7 @@ namespace ts {
 
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        globalExports?: SymbolTable;            // Conditional global UMD exports
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
@@ -2305,6 +2318,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        mappedTypes?: Type[];       // Types mapped by this mapper
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
@@ -2453,6 +2467,22 @@ namespace ts {
         [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
+    export interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean;
+    }
+
+    export interface DiscoverTypingsInfo {
+        fileNames: string[];                            // The file names that belong to the same project.
+        projectRootPath: string;                        // The path to the project root directory
+        safeListPath: string;                           // The path used to retrieve the safe list
+        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
+        typingOptions: TypingOptions;                   // Used to customize the typing inference process
+        compilerOptions: CompilerOptions;               // Used as a source for typing inference
+    }
+
     export enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -2511,6 +2541,7 @@ namespace ts {
 
     export interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
