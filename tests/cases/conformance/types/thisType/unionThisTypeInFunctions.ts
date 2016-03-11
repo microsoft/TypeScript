@@ -1,4 +1,4 @@
-// @strictThis: true
+// @strictThisChecks: true
 interface Real {
     method(n: number): void;
     data: string;

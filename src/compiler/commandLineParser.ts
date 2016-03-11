@@ -138,7 +138,7 @@ namespace ts {
             type: "boolean",
         },
         {
-            name: "strictThis",
+            name: "strictThisChecks",
             type: "boolean",
         },
         {

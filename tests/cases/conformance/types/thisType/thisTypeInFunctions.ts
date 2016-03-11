@@ -1,4 +1,4 @@
-// @strictThis: true
+// @strictThisChecks: true
 // body checking
 class B {
     n: number;

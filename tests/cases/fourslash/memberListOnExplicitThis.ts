@@ -1,4 +1,4 @@
-// @strictThis: true
+// @strictThisChecks: true
 /// <reference path='fourslash.ts'/>
 
 ////interface Restricted {

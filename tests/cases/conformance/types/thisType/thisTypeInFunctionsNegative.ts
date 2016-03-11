@@ -1,4 +1,4 @@
-// @strictThis: true
+// @strictThisChecks: true
 class C {
     n: number;
     explicitThis(this: this, m: number): number {

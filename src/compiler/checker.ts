@@ -3520,7 +3520,7 @@ namespace ts {
                             return isIndependentVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
-                            return compilerOptions.strictThis ? false : isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
+                            return compilerOptions.strictThisChecks ? false : isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                         case SyntaxKind.Constructor:
                             return isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                     }
@@ -4234,7 +4234,7 @@ namespace ts {
                 if (minArgumentCount < 0) {
                     minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
                 }
-                if (!hasThisParameter && compilerOptions.strictThis) {
+                if (!hasThisParameter && compilerOptions.strictThisChecks) {
                     if (declaration.kind === SyntaxKind.FunctionDeclaration ||
                         declaration.kind === SyntaxKind.CallSignature ||
                         declaration.kind == SyntaxKind.FunctionExpression ||
