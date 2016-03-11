@@ -525,7 +525,7 @@ task("clean", function() {
 
 var analyzerFile = path.join(builtLocalDirectory, "analyzer.js");
 var analyserSourceFile = "src/services/analyzer.ts";
-compileFile(analyzerFile, [analyserSourceFile], [builtLocalDirectory, analyserSourceFile].concat(servicesSources), [], false, false, true);
+compileFile(analyzerFile, [analyserSourceFile], [builtLocalDirectory, analyserSourceFile].concat(servicesSources), []);
 
 desc("Builds analyzer");
 task("analyzer", [analyzerFile]);
