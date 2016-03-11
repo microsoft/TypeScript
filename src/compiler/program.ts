@@ -748,7 +748,24 @@ namespace ts {
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+            let programSize = 0;
+            const maxProgramSize = 33554432; // 32 * 1024 * 1024 byte = 32 Mb
+            for (const name of rootNames) {
+                const path = toPath(name, currentDirectory, getCanonicalFileName);
+                if (programSize <= maxProgramSize) {
+                    processRootFile(name, /*isDefaultLib*/ false);
+                    if (hasJavaScriptFileExtension(path) && filesByName.get(path)) {
+                        programSize += filesByName.get(path).text.length;
+                    }
+                }
+                else {
+                    // Add global diagnostics
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_files_are_included_in_the_project_Consider_add_more_folders_to_the_exclude_list));
+                    // Keep a record of the file name, which can be used to compare project changes later
+                    filesByName.set(path, undefined);
+                }
+            }
+
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in

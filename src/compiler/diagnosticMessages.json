@@ -2824,5 +2824,9 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Too many files are included in the project. Consider add more folders to the `exclude` list.": {
+        "category": "Error",
+        "code": 17012
     }
 }
