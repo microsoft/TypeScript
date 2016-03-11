@@ -771,7 +771,7 @@ _.isFinite(-Infinity);
 >_.isFinite : Symbol(Underscore.Static.isFinite, Decl(underscoreTest1_underscore.ts, 609, 39))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isFinite : Symbol(Underscore.Static.isFinite, Decl(underscoreTest1_underscore.ts, 609, 39))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity)
 
 _.isBoolean(null);
 >_.isBoolean : Symbol(Underscore.Static.isBoolean, Decl(underscoreTest1_underscore.ts, 610, 39))
@@ -793,7 +793,7 @@ _.isNaN(NaN);
 >_.isNaN : Symbol(Underscore.Static.isNaN, Decl(underscoreTest1_underscore.ts, 613, 39))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isNaN : Symbol(Underscore.Static.isNaN, Decl(underscoreTest1_underscore.ts, 613, 39))
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 isNaN(undefined);
 >isNaN : Symbol(isNaN, Decl(lib.d.ts, --, --))

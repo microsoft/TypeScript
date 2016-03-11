@@ -1,0 +1,206 @@
+=== tests/cases/conformance/types/primitives/numericLiteral/numericLiteralTypes.ts ===
+interface NumericMember {
+>NumericMember : Symbol(NumericMember, Decl(numericLiteralTypes.ts, 0, 0))
+
+    member: 255;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 0, 25))
+}
+
+interface HexMember {
+>HexMember : Symbol(HexMember, Decl(numericLiteralTypes.ts, 2, 1))
+
+    member: 0xFF;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 4, 21))
+}
+
+interface OctalMember {
+>OctalMember : Symbol(OctalMember, Decl(numericLiteralTypes.ts, 6, 1))
+
+    member: 0o377;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 8, 23))
+}
+
+interface NumberMember {
+>NumberMember : Symbol(NumberMember, Decl(numericLiteralTypes.ts, 10, 1))
+
+    member: number;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 12, 24))
+}
+
+var a: NumericMember;
+>a : Symbol(a, Decl(numericLiteralTypes.ts, 16, 3))
+>NumericMember : Symbol(NumericMember, Decl(numericLiteralTypes.ts, 0, 0))
+
+var b: HexMember;
+>b : Symbol(b, Decl(numericLiteralTypes.ts, 17, 3))
+>HexMember : Symbol(HexMember, Decl(numericLiteralTypes.ts, 2, 1))
+
+var c: OctalMember;
+>c : Symbol(c, Decl(numericLiteralTypes.ts, 18, 3))
+>OctalMember : Symbol(OctalMember, Decl(numericLiteralTypes.ts, 6, 1))
+
+var d: NumberMember;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>NumberMember : Symbol(NumberMember, Decl(numericLiteralTypes.ts, 10, 1))
+
+a = b = c = {member: 2.55e2};
+>a : Symbol(a, Decl(numericLiteralTypes.ts, 16, 3))
+>b : Symbol(b, Decl(numericLiteralTypes.ts, 17, 3))
+>c : Symbol(c, Decl(numericLiteralTypes.ts, 18, 3))
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 21, 13))
+
+d = a;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>a : Symbol(a, Decl(numericLiteralTypes.ts, 16, 3))
+
+d = b;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>b : Symbol(b, Decl(numericLiteralTypes.ts, 17, 3))
+
+d = c;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>c : Symbol(c, Decl(numericLiteralTypes.ts, 18, 3))
+
+interface NegativeNumericMember {
+>NegativeNumericMember : Symbol(NegativeNumericMember, Decl(numericLiteralTypes.ts, 25, 6))
+
+    member: -255;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 27, 33))
+}
+
+interface NegativeHexMember {
+>NegativeHexMember : Symbol(NegativeHexMember, Decl(numericLiteralTypes.ts, 29, 1))
+
+    member: -0xFF;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 31, 29))
+}
+
+interface NegativeOctalMember {
+>NegativeOctalMember : Symbol(NegativeOctalMember, Decl(numericLiteralTypes.ts, 33, 1))
+
+    member: -0o377;
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 35, 31))
+}
+
+var na: NegativeNumericMember;
+>na : Symbol(na, Decl(numericLiteralTypes.ts, 39, 3))
+>NegativeNumericMember : Symbol(NegativeNumericMember, Decl(numericLiteralTypes.ts, 25, 6))
+
+var nb: NegativeHexMember;
+>nb : Symbol(nb, Decl(numericLiteralTypes.ts, 40, 3))
+>NegativeHexMember : Symbol(NegativeHexMember, Decl(numericLiteralTypes.ts, 29, 1))
+
+var nc: NegativeOctalMember;
+>nc : Symbol(nc, Decl(numericLiteralTypes.ts, 41, 3))
+>NegativeOctalMember : Symbol(NegativeOctalMember, Decl(numericLiteralTypes.ts, 33, 1))
+
+na = nb = nc = {member: -2.55e2};
+>na : Symbol(na, Decl(numericLiteralTypes.ts, 39, 3))
+>nb : Symbol(nb, Decl(numericLiteralTypes.ts, 40, 3))
+>nc : Symbol(nc, Decl(numericLiteralTypes.ts, 41, 3))
+>member : Symbol(member, Decl(numericLiteralTypes.ts, 43, 16))
+
+d = na;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>na : Symbol(na, Decl(numericLiteralTypes.ts, 39, 3))
+
+d = nb;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>nb : Symbol(nb, Decl(numericLiteralTypes.ts, 40, 3))
+
+d = nc;
+>d : Symbol(d, Decl(numericLiteralTypes.ts, 19, 3))
+>nc : Symbol(nc, Decl(numericLiteralTypes.ts, 41, 3))
+
+const zero: 0 = 0;
+>zero : Symbol(zero, Decl(numericLiteralTypes.ts, 49, 5))
+
+let one: 1 = 1;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+
+const two: 2 = 2;
+>two : Symbol(two, Decl(numericLiteralTypes.ts, 51, 5))
+
+const three: 3 = 3;
+>three : Symbol(three, Decl(numericLiteralTypes.ts, 52, 5))
+
+const four: 4 = 4;
+>four : Symbol(four, Decl(numericLiteralTypes.ts, 53, 5))
+
+const ten: 10 = 10;
+>ten : Symbol(ten, Decl(numericLiteralTypes.ts, 54, 5))
+
+const twenty: 20 = 20;
+>twenty : Symbol(twenty, Decl(numericLiteralTypes.ts, 55, 5))
+
+one = one * one;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+
+one = one ** zero;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>zero : Symbol(zero, Decl(numericLiteralTypes.ts, 49, 5))
+
+one = one / one;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+
+one = one % twenty;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>twenty : Symbol(twenty, Decl(numericLiteralTypes.ts, 55, 5))
+
+one = one + zero;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>zero : Symbol(zero, Decl(numericLiteralTypes.ts, 49, 5))
+
+one = one - zero;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>zero : Symbol(zero, Decl(numericLiteralTypes.ts, 49, 5))
+
+one = one & one;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+
+one = one ^ zero;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>zero : Symbol(zero, Decl(numericLiteralTypes.ts, 49, 5))
+
+one = one | one;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+
+one = (((two ** two) - four) + (ten * two)) % three / two;
+>one : Symbol(one, Decl(numericLiteralTypes.ts, 50, 3))
+>two : Symbol(two, Decl(numericLiteralTypes.ts, 51, 5))
+>two : Symbol(two, Decl(numericLiteralTypes.ts, 51, 5))
+>four : Symbol(four, Decl(numericLiteralTypes.ts, 53, 5))
+>ten : Symbol(ten, Decl(numericLiteralTypes.ts, 54, 5))
+>two : Symbol(two, Decl(numericLiteralTypes.ts, 51, 5))
+>three : Symbol(three, Decl(numericLiteralTypes.ts, 52, 5))
+>two : Symbol(two, Decl(numericLiteralTypes.ts, 51, 5))
+
+/*type True = 1;
+type False = 0;
+
+function isTrue(x: True | False): x is True {
+    return !!x;
+}
+
+let x: True | False;
+
+if (isTrue(x)) {
+    let y: True = x;
+}
+else {
+    let z: False = x;
+}
+*/

@@ -1426,8 +1426,8 @@ _.isFinite(-Infinity);
 >_.isFinite : (object: any) => boolean
 >_ : Underscore.Static
 >isFinite : (object: any) => boolean
->-Infinity : number
->Infinity : number
+>-Infinity : -Infinity
+>Infinity : Infinity
 
 _.isBoolean(null);
 >_.isBoolean(null) : boolean
@@ -1456,7 +1456,7 @@ _.isNaN(NaN);
 >_.isNaN : (object: any) => boolean
 >_ : Underscore.Static
 >isNaN : (object: any) => boolean
->NaN : number
+>NaN : NaN
 
 isNaN(undefined);
 >isNaN(undefined) : boolean

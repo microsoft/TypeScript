@@ -1,0 +1,95 @@
+=== tests/cases/conformance/types/primitives/numericLiteral/InfinityLiteralTypes.ts ===
+interface PositiveInfinityMember {
+>PositiveInfinityMember : Symbol(PositiveInfinityMember, Decl(InfinityLiteralTypes.ts, 0, 0))
+
+    member: Infinity
+>member : Symbol(member, Decl(InfinityLiteralTypes.ts, 0, 34))
+>Infinity : Symbol(Infinity)
+}
+
+interface NegativeInfinityMember {
+>NegativeInfinityMember : Symbol(NegativeInfinityMember, Decl(InfinityLiteralTypes.ts, 2, 1))
+
+    member: -Infinity
+>member : Symbol(member, Decl(InfinityLiteralTypes.ts, 4, 34))
+}
+
+function invertInfinity(x: -Infinity): Infinity;
+>invertInfinity : Symbol(invertInfinity, Decl(InfinityLiteralTypes.ts, 6, 1), Decl(InfinityLiteralTypes.ts, 8, 48), Decl(InfinityLiteralTypes.ts, 9, 48))
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 8, 24))
+>Infinity : Symbol(Infinity)
+
+function invertInfinity(x: Infinity): -Infinity;
+>invertInfinity : Symbol(invertInfinity, Decl(InfinityLiteralTypes.ts, 6, 1), Decl(InfinityLiteralTypes.ts, 8, 48), Decl(InfinityLiteralTypes.ts, 9, 48))
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 9, 24))
+>Infinity : Symbol(Infinity)
+
+function invertInfinity(x: number): number {
+>invertInfinity : Symbol(invertInfinity, Decl(InfinityLiteralTypes.ts, 6, 1), Decl(InfinityLiteralTypes.ts, 8, 48), Decl(InfinityLiteralTypes.ts, 9, 48))
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 10, 24))
+
+    return -x;
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 10, 24))
+}
+
+let a: PositiveInfinityMember;
+>a : Symbol(a, Decl(InfinityLiteralTypes.ts, 14, 3))
+>PositiveInfinityMember : Symbol(PositiveInfinityMember, Decl(InfinityLiteralTypes.ts, 0, 0))
+
+let b: NegativeInfinityMember;
+>b : Symbol(b, Decl(InfinityLiteralTypes.ts, 15, 3))
+>NegativeInfinityMember : Symbol(NegativeInfinityMember, Decl(InfinityLiteralTypes.ts, 2, 1))
+
+a = {member: Infinity};
+>a : Symbol(a, Decl(InfinityLiteralTypes.ts, 14, 3))
+>member : Symbol(member, Decl(InfinityLiteralTypes.ts, 17, 5))
+>Infinity : Symbol(Infinity)
+
+b = {member: -Infinity}
+>b : Symbol(b, Decl(InfinityLiteralTypes.ts, 15, 3))
+>member : Symbol(member, Decl(InfinityLiteralTypes.ts, 18, 5))
+>Infinity : Symbol(Infinity)
+
+let c: -Infinity = invertInfinity(a.member);
+>c : Symbol(c, Decl(InfinityLiteralTypes.ts, 20, 3))
+>invertInfinity : Symbol(invertInfinity, Decl(InfinityLiteralTypes.ts, 6, 1), Decl(InfinityLiteralTypes.ts, 8, 48), Decl(InfinityLiteralTypes.ts, 9, 48))
+>a.member : Symbol(PositiveInfinityMember.member, Decl(InfinityLiteralTypes.ts, 0, 34))
+>a : Symbol(a, Decl(InfinityLiteralTypes.ts, 14, 3))
+>member : Symbol(PositiveInfinityMember.member, Decl(InfinityLiteralTypes.ts, 0, 34))
+
+let d: Infinity = invertInfinity(b.member);
+>d : Symbol(d, Decl(InfinityLiteralTypes.ts, 21, 3))
+>Infinity : Symbol(Infinity)
+>invertInfinity : Symbol(invertInfinity, Decl(InfinityLiteralTypes.ts, 6, 1), Decl(InfinityLiteralTypes.ts, 8, 48), Decl(InfinityLiteralTypes.ts, 9, 48))
+>b.member : Symbol(NegativeInfinityMember.member, Decl(InfinityLiteralTypes.ts, 4, 34))
+>b : Symbol(b, Decl(InfinityLiteralTypes.ts, 15, 3))
+>member : Symbol(NegativeInfinityMember.member, Decl(InfinityLiteralTypes.ts, 4, 34))
+
+let x = c + d;
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 23, 3))
+>c : Symbol(c, Decl(InfinityLiteralTypes.ts, 20, 3))
+>d : Symbol(d, Decl(InfinityLiteralTypes.ts, 21, 3))
+
+declare function stillNumber(x: number): boolean;
+>stillNumber : Symbol(stillNumber, Decl(InfinityLiteralTypes.ts, 23, 14))
+>x : Symbol(x, Decl(InfinityLiteralTypes.ts, 24, 29))
+
+stillNumber(c);
+>stillNumber : Symbol(stillNumber, Decl(InfinityLiteralTypes.ts, 23, 14))
+>c : Symbol(c, Decl(InfinityLiteralTypes.ts, 20, 3))
+
+stillNumber(d);
+>stillNumber : Symbol(stillNumber, Decl(InfinityLiteralTypes.ts, 23, 14))
+>d : Symbol(d, Decl(InfinityLiteralTypes.ts, 21, 3))
+
+/*declare function isInfinity(x: number): x is (Infinity | -Infinity) {
+    return x !== x;
+}
+
+let y: number;
+if (isInfinity(y)) {
+    let a: (Infinity | -Infinity) = y;
+}
+else {
+    let b: number = y;
+}*/

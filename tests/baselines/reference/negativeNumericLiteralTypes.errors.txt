@@ -1,0 +1,214 @@
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(51,1): error TS2322: Type 'NumericMember' is not assignable to type 'NegativeNumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(53,1): error TS2322: Type 'NegativeNumericMember' is not assignable to type 'NumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(55,1): error TS2322: Type 'HexMember' is not assignable to type 'NegativeHexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(57,1): error TS2322: Type 'NegativeHexMember' is not assignable to type 'HexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(59,1): error TS2322: Type 'OctalMember' is not assignable to type 'NegativeOctalMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(61,1): error TS2322: Type 'NegativeOctalMember' is not assignable to type 'OctalMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(63,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeNumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(65,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeHexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(67,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeOctalMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(69,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'NumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(71,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'HexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(73,1): error TS2322: Type '{ member: 42; }' is not assignable to type 'OctalMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(75,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeNumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(77,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeHexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(79,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeOctalMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(81,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'NumericMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(83,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'HexMember'.
+  Types of property 'member' are incompatible.
+tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts(85,1): error TS2322: Type '{ member: -42; }' is not assignable to type 'OctalMember'.
+  Types of property 'member' are incompatible.
+
+
+==== tests/cases/conformance/types/primitives/numericLiteral/negativeNumericLiteralTypes.ts (18 errors) ====
+    interface NumericMember {
+        member: 255;
+    }
+    
+    interface HexMember {
+        member: 0xFF;
+    }
+    
+    interface OctalMember {
+        member: 0o377;
+    }
+    
+    interface NumberMember {
+        member: number;
+    }
+    
+    var a: NumericMember;
+    var b: HexMember;
+    var c: OctalMember;
+    var d: NumberMember;
+    
+    a = b = c = {member: 2.55e2};
+    
+    d = a;
+    d = b;
+    d = c;
+    
+    interface NegativeNumericMember {
+        member: -255;
+    }
+    
+    interface NegativeHexMember {
+        member: -0xFF;
+    }
+    
+    interface NegativeOctalMember {
+        member: -0o377;
+    }
+    
+    var na: NegativeNumericMember;
+    var nb: NegativeHexMember;
+    var nc: NegativeOctalMember;
+    
+    na = nb = nc = {member: -2.55e2};
+    
+    d = na;
+    d = nb;
+    d = nc;
+    
+    // All asignments should fail after this point
+    na = a;
+    ~~
+!!! error TS2322: Type 'NumericMember' is not assignable to type 'NegativeNumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    a = na;
+    ~
+!!! error TS2322: Type 'NegativeNumericMember' is not assignable to type 'NumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nb = b;
+    ~~
+!!! error TS2322: Type 'HexMember' is not assignable to type 'NegativeHexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    b = nb;
+    ~
+!!! error TS2322: Type 'NegativeHexMember' is not assignable to type 'HexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nc = c;
+    ~~
+!!! error TS2322: Type 'OctalMember' is not assignable to type 'NegativeOctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    c = nc;
+    ~
+!!! error TS2322: Type 'NegativeOctalMember' is not assignable to type 'OctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    na = {member: 42};
+    ~~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeNumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nb = {member: 42};
+    ~~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeHexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nc = {member: 42};
+    ~~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'NegativeOctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    a = {member: 42};
+    ~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'NumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    b = {member: 42};
+    ~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'HexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    c = {member: 42};
+    ~
+!!! error TS2322: Type '{ member: 42; }' is not assignable to type 'OctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    na = {member: -42};
+    ~~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeNumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nb = {member: -42};
+    ~~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeHexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    nc = {member: -42};
+    ~~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'NegativeOctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    a = {member: -42};
+    ~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'NumericMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    b = {member: -42};
+    ~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'HexMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    c = {member: -42};
+    ~
+!!! error TS2322: Type '{ member: -42; }' is not assignable to type 'OctalMember'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+    
+    const zero: 0 = 0;
+    const one: 1 = 1;
+    let two: 2 = 2;
+    const three: 3 = 3;
+    const four: 4 = 4;
+    const ten: 10 = 10;
+    const twenty: 20 = 20;
+    two = one * one;
+    two = one ** zero;
+    two = one / one;
+    two = one % twenty;
+    two = one + zero;
+    two = one - zero;
+    two = one & one;
+    two = one ^ zero;
+    two = one | one;
+    two = (((two ** two) - four) + (ten * two)) % three / two;
+    
+    
+    /*type True = 1;
+    type False = 0;
+    
+    function isTrue(x: True | False): x is True {
+        return !!x;
+    }
+    
+    let x: True | False;
+    
+    if (isTrue(x)) {
+        let y: False = x;
+    }
+    else {
+        let z: True = x;
+    }
+    */

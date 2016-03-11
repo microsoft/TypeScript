@@ -1,0 +1,106 @@
+=== tests/cases/conformance/types/primitives/numericLiteral/InfinityLiteralTypes.ts ===
+interface PositiveInfinityMember {
+>PositiveInfinityMember : PositiveInfinityMember
+
+    member: Infinity
+>member : Infinity
+>Infinity : Infinity
+}
+
+interface NegativeInfinityMember {
+>NegativeInfinityMember : NegativeInfinityMember
+
+    member: -Infinity
+>member : -Infinity
+}
+
+function invertInfinity(x: -Infinity): Infinity;
+>invertInfinity : { (x: -Infinity): Infinity; (x: Infinity): -Infinity; }
+>x : -Infinity
+>Infinity : Infinity
+
+function invertInfinity(x: Infinity): -Infinity;
+>invertInfinity : { (x: -Infinity): Infinity; (x: Infinity): -Infinity; }
+>x : Infinity
+>Infinity : Infinity
+
+function invertInfinity(x: number): number {
+>invertInfinity : { (x: -Infinity): Infinity; (x: Infinity): -Infinity; }
+>x : number
+
+    return -x;
+>-x : number
+>x : number
+}
+
+let a: PositiveInfinityMember;
+>a : PositiveInfinityMember
+>PositiveInfinityMember : PositiveInfinityMember
+
+let b: NegativeInfinityMember;
+>b : NegativeInfinityMember
+>NegativeInfinityMember : NegativeInfinityMember
+
+a = {member: Infinity};
+>a = {member: Infinity} : { member: Infinity; }
+>a : PositiveInfinityMember
+>{member: Infinity} : { member: Infinity; }
+>member : Infinity
+>Infinity : Infinity
+
+b = {member: -Infinity}
+>b = {member: -Infinity} : { member: -Infinity; }
+>b : NegativeInfinityMember
+>{member: -Infinity} : { member: -Infinity; }
+>member : -Infinity
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+let c: -Infinity = invertInfinity(a.member);
+>c : -Infinity
+>invertInfinity(a.member) : -Infinity
+>invertInfinity : { (x: -Infinity): Infinity; (x: Infinity): -Infinity; }
+>a.member : Infinity
+>a : PositiveInfinityMember
+>member : Infinity
+
+let d: Infinity = invertInfinity(b.member);
+>d : Infinity
+>Infinity : Infinity
+>invertInfinity(b.member) : Infinity
+>invertInfinity : { (x: -Infinity): Infinity; (x: Infinity): -Infinity; }
+>b.member : -Infinity
+>b : NegativeInfinityMember
+>member : -Infinity
+
+let x = c + d;
+>x : NaN
+>c + d : NaN
+>c : -Infinity
+>d : Infinity
+
+declare function stillNumber(x: number): boolean;
+>stillNumber : (x: number) => boolean
+>x : number
+
+stillNumber(c);
+>stillNumber(c) : boolean
+>stillNumber : (x: number) => boolean
+>c : -Infinity
+
+stillNumber(d);
+>stillNumber(d) : boolean
+>stillNumber : (x: number) => boolean
+>d : Infinity
+
+/*declare function isInfinity(x: number): x is (Infinity | -Infinity) {
+    return x !== x;
+}
+
+let y: number;
+if (isInfinity(y)) {
+    let a: (Infinity | -Infinity) = y;
+}
+else {
+    let b: number = y;
+}*/

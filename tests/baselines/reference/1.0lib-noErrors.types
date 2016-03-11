@@ -20,12 +20,6 @@ and limitations under the License.
 /// ECMAScript APIs
 /////////////////////////////
 
-declare var NaN: number;
->NaN : number
-
-declare var Infinity: number;
->Infinity : number
-
 /**
   * Evaluates JavaScript code and executes it. 
   * @param x A String value that contains valid JavaScript code.

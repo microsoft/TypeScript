@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/primitives/numericLiteral/NaNLiteralTypes.ts ===
+interface NaNMember {
+>NaNMember : NaNMember
+
+    member: NaN
+>member : NaN
+>NaN : NaN
+}
+
+let x: NaNMember;
+>x : NaNMember
+>NaNMember : NaNMember
+
+x = {member: NaN}
+>x = {member: NaN} : { member: NaN; }
+>x : NaNMember
+>{member: NaN} : { member: NaN; }
+>member : NaN
+>NaN : NaN
+
+declare function stillNumber(x: number): boolean;
+>stillNumber : (x: number) => boolean
+>x : number
+
+stillNumber(x.member);
+>stillNumber(x.member) : boolean
+>stillNumber : (x: number) => boolean
+>x.member : NaN
+>x : NaNMember
+>member : NaN
+
+/*function isNaN(x: number): x is NaN {
+    return x !== x;
+}
+
+let y: number;
+if (isNaN(y)) {
+    let a: NaN = y;
+}
+else {
+    let b: number = y;
+}
+*/
