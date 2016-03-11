@@ -28,7 +28,7 @@ class MyClass {
         this.db = db;
 >this.db = db : database.db
 >this.db : database.db
->this : this
+>this : MyClass
 >db : database.db
 >db : database.db
 
@@ -36,7 +36,7 @@ class MyClass {
 >this.db.doSomething() : void
 >this.db.doSomething : () => void
 >this.db : database.db
->this : this
+>this : MyClass
 >db : database.db
 >doSomething : () => void
     }

@@ -56,7 +56,7 @@ class C {
     n = this.s;
 >n : Date
 >this.s : Date
->this : this
+>this : C
 >s : Date
 
     x() {
@@ -65,7 +65,7 @@ class C {
         var p = this.n;
 >p : Date
 >this.n : Date
->this : this
+>this : C
 >n : Date
 
         var p: Date;

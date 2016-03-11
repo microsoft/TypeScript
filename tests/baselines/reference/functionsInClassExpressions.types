@@ -7,7 +7,7 @@ let Foo = class {
         this.bar++;
 >this.bar++ : number
 >this.bar : number
->this : this
+>this : (Anonymous class)
 >bar : number
     }
     bar = 0;
@@ -21,12 +21,12 @@ let Foo = class {
         this.bar++;
 >this.bar++ : number
 >this.bar : number
->this : this
+>this : (Anonymous class)
 >bar : number
     }
     m() { return this.bar; }
 >m : () => number
 >this.bar : number
->this : this
+>this : (Anonymous class)
 >bar : number
 }

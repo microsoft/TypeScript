@@ -18,7 +18,7 @@ class D extends Base {
 >super : typeof Base
 >() => { this._t } : () => void
 >this._t : any
->this : this
+>this : D
 >_t : any
     }
 }

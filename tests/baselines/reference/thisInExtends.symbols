@@ -1,0 +1,35 @@
+=== tests/cases/compiler/thisInExtends.ts ===
+interface Constructed {
+>Constructed : Symbol(Constructed, Decl(thisInExtends.ts, 0, 0))
+
+    getThis(): this;
+>getThis : Symbol(getThis, Decl(thisInExtends.ts, 0, 23))
+}
+
+interface Constructor {
+>Constructor : Symbol(Constructor, Decl(thisInExtends.ts, 2, 1))
+
+    new(): Constructed;
+>Constructed : Symbol(Constructed, Decl(thisInExtends.ts, 0, 0))
+}
+
+declare function getConstructor(v: number): Constructor;
+>getConstructor : Symbol(getConstructor, Decl(thisInExtends.ts, 6, 1))
+>v : Symbol(v, Decl(thisInExtends.ts, 8, 32))
+>Constructor : Symbol(Constructor, Decl(thisInExtends.ts, 2, 1))
+
+class C extends getConstructor(42) {
+>C : Symbol(C, Decl(thisInExtends.ts, 8, 56))
+>getConstructor : Symbol(getConstructor, Decl(thisInExtends.ts, 6, 1))
+
+    f() {}
+>f : Symbol(f, Decl(thisInExtends.ts, 9, 36))
+}
+
+new C().getThis().f();
+>new C().getThis().f : Symbol(C.f, Decl(thisInExtends.ts, 9, 36))
+>new C().getThis : Symbol(Constructed.getThis, Decl(thisInExtends.ts, 0, 23))
+>C : Symbol(C, Decl(thisInExtends.ts, 8, 56))
+>getThis : Symbol(Constructed.getThis, Decl(thisInExtends.ts, 0, 23))
+>f : Symbol(C.f, Decl(thisInExtends.ts, 9, 36))
+

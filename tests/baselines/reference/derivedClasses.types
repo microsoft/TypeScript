@@ -11,7 +11,7 @@ class Red extends Color {
 >() => { return this.hue(); } : () => string
 >this.hue() : string
 >this.hue : () => string
->this : this
+>this : Red
 >hue : () => string
 
     	return getHue() + " red"; 
@@ -46,7 +46,7 @@ class Blue extends Color {
 >() => { return this.hue(); } : () => string
 >this.hue() : string
 >this.hue : () => string
->this : this
+>this : Blue
 >hue : () => string
 
     	return getHue() + " blue"; 

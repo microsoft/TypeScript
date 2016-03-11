@@ -18,7 +18,7 @@ class Road {
         this.cars = cars;
 >this.cars = cars : Car[]
 >this.cars : Car[]
->this : this
+>this : Road
 >cars : Car[]
 >cars : Car[]
     }

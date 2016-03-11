@@ -25,7 +25,7 @@ class Emitter {
         this.listeners = {};
 >this.listeners = {} : {}
 >this.listeners : IMap
->this : this
+>this : Emitter
 >listeners : IMap
 >{} : {}
     }

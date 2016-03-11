@@ -36,9 +36,9 @@ function foo<A>() {
 
     return x.m<number, boolean>();
 >x.m<number, boolean>() : X.m<number, boolean>.<Date>.Y<string>
->x.m : <B, C>() => X.m<B, C>.<Date>.Y<string>
+>x.m : <B, C>() => <Date>.Y<string>
 >x : X
->m : <B, C>() => X.m<B, C>.<Date>.Y<string>
+>m : <B, C>() => <Date>.Y<string>
 }
 var x = foo<void>();
 >x : foo<void>.X.m<number, boolean>.<Date>.Y<string>

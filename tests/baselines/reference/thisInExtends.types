@@ -1,0 +1,40 @@
+=== tests/cases/compiler/thisInExtends.ts ===
+interface Constructed {
+>Constructed : Constructed
+
+    getThis(): this;
+>getThis : () => this
+}
+
+interface Constructor {
+>Constructor : Constructor
+
+    new(): Constructed;
+>Constructed : Constructed
+}
+
+declare function getConstructor(v: number): Constructor;
+>getConstructor : (v: number) => Constructor
+>v : number
+>Constructor : Constructor
+
+class C extends getConstructor(42) {
+>C : C
+>getConstructor(42) : Constructed
+>getConstructor : (v: number) => Constructor
+>42 : number
+
+    f() {}
+>f : () => void
+}
+
+new C().getThis().f();
+>new C().getThis().f() : void
+>new C().getThis().f : () => void
+>new C().getThis() : C
+>new C().getThis : () => C
+>new C() : C
+>C : typeof C
+>getThis : () => C
+>f : () => void
+
