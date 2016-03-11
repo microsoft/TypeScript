@@ -2661,5 +2661,9 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Too many javascript files in the project. Consider add to the `exclude` list in the config file.": {
+        "category": "Error",
+        "code": 17012
     }
 }

@@ -1217,13 +1217,35 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
+                let programSize = 0;
+
+                // As the project openning might not be complete if there are too many files,
+                // therefore to surface the diagnostics we need to make sure the given client file is opened.
+                if (clientFileName) {
+                    const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
+                    project.addRoot(currentClientFileInfo);
+                    programSize += currentClientFileInfo.content.length;
+                }
+
                 for (const rootFilename of projectOptions.files) {
-                    if (this.host.fileExists(rootFilename)) {
-                        const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
-                        project.addRoot(info);
+                    if (rootFilename === clientFileName) {
+                        continue;
+                    }
+
+                    if (programSize <= maxProgramSize) {
+                        if (this.host.fileExists(rootFilename)) {
+                            const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                            project.addRoot(info);
+                            if (!hasTypeScriptFileExtension(rootFilename)) {
+                                programSize += info.content.length;
+                            }
+                        }
+                        else {
+                            return { errorMsg: "specified file " + rootFilename + " not found" };
+                        }
                     }
                     else {
-                        return { errorMsg: "specified file " + rootFilename + " not found" };
+                        break;
                     }
                 }
                 project.finishGraph();
@@ -1251,10 +1273,14 @@ namespace ts.server {
                     return error;
                 }
                 else {
-                    const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
+                    const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = projectOptions.files;
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
+
+                    if (fileNamesToAdd.length === 0 && fileNamesToRemove.length === 0) {
+                        return;
+                    }
 
                     for (const fileName of fileNamesToRemove) {
                         const info = this.getScriptInfo(fileName);
