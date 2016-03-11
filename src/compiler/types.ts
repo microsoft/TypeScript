@@ -387,7 +387,7 @@ namespace ts {
         Const =              1 << 11,  // Variable declaration
         Namespace =          1 << 12,  // Namespace declaration
         ExportContext =      1 << 13,  // Export context (initialized by binding)
-        ContainsThis =       1 << 14,  // Interface contains references to "this"
+        UsesThisTypeOrReference = 1 << 14,  // Class\interface contains references to "this"
         HasImplicitReturn =  1 << 15,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =  1 << 16,  // If function has explicit reachable return on one of codepaths (initialized by binding)
         GlobalAugmentation = 1 << 17,  // Set if module declaration is an augmentation for the global scope

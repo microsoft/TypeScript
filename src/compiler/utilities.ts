@@ -676,7 +676,11 @@ namespace ts {
     }
 
     export function isClassLike(node: Node): node is ClassLikeDeclaration {
-        return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
+        return node && isClassLikeKind(node.kind);
+    }
+
+    export function isClassLikeKind(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.ClassDeclaration || kind === SyntaxKind.ClassExpression;
     }
 
     export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
