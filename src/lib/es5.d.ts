@@ -2,9 +2,6 @@
 /// ECMAScript APIs
 /////////////////////////////
 
-declare const NaN: number;
-declare const Infinity: number;
-
 /**
   * Evaluates JavaScript code and executes it. 
   * @param x A String value that contains valid JavaScript code.

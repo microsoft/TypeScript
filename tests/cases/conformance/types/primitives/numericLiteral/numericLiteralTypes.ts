@@ -47,7 +47,7 @@ d = na;
 d = nb;
 d = nc;
 
-type True = 1;
+/*type True = 1;
 type False = 0;
 
 function isTrue(x: True | False): x is True {
@@ -62,3 +62,4 @@ if (isTrue(x)) {
 else {
     let z: False = x;
 }
+*/

@@ -2373,6 +2373,10 @@ namespace ts {
 
         function parseSignedNumericLiteral(): NumericLiteralTypeNode {
             nextToken();
+            // Since we don't allow reference types after a `-` (other than Infinity), we special case it here
+            if (token == SyntaxKind.Identifier && scanner.getTokenText() === (Infinity).toString()) {
+                return parseNumericLiteralTypeNode();
+            }
             parseExpected(SyntaxKind.NumericLiteral, Diagnostics.Numeric_literal_expected, /*shouldAdvance*/false);
             return parseNumericLiteralTypeNode();
         }

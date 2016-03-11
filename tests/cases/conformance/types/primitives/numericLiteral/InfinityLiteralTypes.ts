@@ -6,8 +6,8 @@ interface NegativeInfinityMember {
     member: -Infinity
 }
 
-invertInfinity(x: -Infinity): Infinity;
-invertInfinity(x: Infinity): -Infinity 
+function invertInfinity(x: -Infinity): Infinity;
+function invertInfinity(x: Infinity): -Infinity;
 function invertInfinity(x: number): number {
     return -x;
 }
@@ -26,7 +26,7 @@ declare function stillNumber(x: number): boolean;
 stillNumber(c);
 stillNumber(d);
 
-declare function isInfinity(x: number): x is (Infinity | -Infinity) {
+/*declare function isInfinity(x: number): x is (Infinity | -Infinity) {
     return x !== x;
 }
 
@@ -36,4 +36,4 @@ if (isInfinity(y)) {
 }
 else {
     let b: number = y;
-}
+}*/
