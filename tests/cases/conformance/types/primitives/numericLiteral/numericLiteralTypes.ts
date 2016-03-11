@@ -47,6 +47,24 @@ d = na;
 d = nb;
 d = nc;
 
+const zero: 0 = 0;
+let one: 1 = 1;
+const two: 2 = 2;
+const three: 3 = 3;
+const four: 4 = 4;
+const ten: 10 = 10;
+const twenty: 20 = 20;
+one = one * one;
+one = one ** zero;
+one = one / one;
+one = one % twenty;
+one = one + zero;
+one = one - zero;
+one = one & one;
+one = one ^ zero;
+one = one | one;
+one = (((two ** two) - four) + (ten * two)) % three / two;
+
 /*type True = 1;
 type False = 0;
 
