@@ -7262,6 +7262,10 @@ namespace ts {
                 else if (parent.kind === SyntaxKind.SpreadElementExpression) {
                     return isLeftHandSideOfAssignment(parent);
                 }
+                else if (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) {
+                    return (<ForInStatement | ForOfStatement>parent).initializer === node;
+                }
+                return false;
             }
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -11751,14 +11755,6 @@ namespace ts {
                     // Use default messages
                     if (ok) {
                         let leftOriginalType = leftType;
-                        if (left.kind === SyntaxKind.Identifier) {
-                            const symbol = getSymbolAtLocation(left);
-                            if (!symbol) {
-                                leftOriginalType = anyType;
-                            } else {
-                                leftOriginalType = getTypeOfSymbol(symbol);
-                            }
-                        }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
                         checkTypeAssignableTo(valueType, leftOriginalType, left, /*headMessage*/ undefined);
                     }
