@@ -1746,7 +1746,7 @@ namespace ts {
                 }
             }
 
-            if (options.allowJs && options.declaration) {
+            if (!options.noEmit && options.allowJs && options.declaration) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
             }
 
