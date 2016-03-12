@@ -1273,14 +1273,13 @@ namespace ts.server {
                     return error;
                 }
                 else {
+                    // if the project is too large, the root files might not have been all loaded if the total
+                    // program size reached the upper limit. In that case project.projectOptions.files should 
+                    // be more precise. However this would only happen for configured project.
                     const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = projectOptions.files;
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
-
-                    if (fileNamesToAdd.length === 0 && fileNamesToRemove.length === 0) {
-                        return;
-                    }
 
                     for (const fileName of fileNamesToRemove) {
                         const info = this.getScriptInfo(fileName);
