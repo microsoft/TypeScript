@@ -7096,7 +7096,7 @@ namespace ts {
                     let isSameIdentifier = false;
                     if ((<Node>location).kind === SyntaxKind.Identifier) {
                         const identifier = <Identifier>location;
-                        const otherSymbol = resolveName(identifier, identifier.text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined)
+                        const otherSymbol = resolveName(identifier, identifier.text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
                         isSameIdentifier = identifier !== where && (identifier).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
                     }
                     if (isSameIdentifier || isBranchStart(<Node>location)) {
@@ -7155,7 +7155,7 @@ namespace ts {
 
             let saveLocalType = false;
             if (location.kind === SyntaxKind.Identifier) {
-                const locationSymbol = getSymbolAtLocation(location);
+                const locationSymbol = resolveName(<Identifier>location, (<Identifier>location).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
                 if (locationSymbol && locationSymbol.id === symbol.id) {
                     if ((<Identifier>location).narrowingState === NarrowingState.Done) return (<Identifier>location).localType;
                     if ((<Identifier>location).narrowingState === NarrowingState.Narrowing) {
