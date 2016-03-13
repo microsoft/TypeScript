@@ -33,7 +33,7 @@ namespace ts.NavigationBar {
                 forEachChild(node, visitNode);
                 topItem = lastTop;
                 indent--;
-                
+
                 // If the last item added was an anonymous function expression, and it had no children, discard it.
                 if (newItem && newItem.text === anonFnText && newItem.childItems.length === 0) {
                     topItem.childItems.pop();
@@ -55,7 +55,7 @@ namespace ts.NavigationBar {
                     }
                     // If it is initialized with a function expression, handle it when we reach the function expression node
                     const varDecl = node as VariableDeclaration;
-                    if (varDecl.initializer && (varDecl.initializer.kind === SyntaxKind.FunctionExpression || 
+                    if (varDecl.initializer && (varDecl.initializer.kind === SyntaxKind.FunctionExpression ||
                                                 varDecl.initializer.kind === SyntaxKind.ArrowFunction )) {
                         return undefined;
                     }
@@ -64,11 +64,11 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.Constructor:
                     // TODO: Check behavior with names that are symbols, indexers, etc.
-                    const name = node.kind === SyntaxKind.Constructor ? 
+                    const name = node.kind === SyntaxKind.Constructor ?
                             "constructor" : declarationNameToString((node as (Declaration)).name);
 
-                    const elementKind = 
-                            node.kind === SyntaxKind.VariableDeclaration ? ScriptElementKind.variableElement : 
+                    const elementKind =
+                            node.kind === SyntaxKind.VariableDeclaration ? ScriptElementKind.variableElement :
                             node.kind === SyntaxKind.FunctionDeclaration ? ScriptElementKind.functionElement :
                             node.kind === SyntaxKind.ClassDeclaration ? ScriptElementKind.classElement : "constructor";
 
@@ -78,8 +78,8 @@ namespace ts.NavigationBar {
                     return getDefineModuleItem(node) || getFunctionExpressionItem(node);
                 case SyntaxKind.MethodDeclaration:
                     const methodDecl = node as MethodDeclaration;
-                    return getNavBarItem(declarationNameToString(methodDecl.name), 
-                                         ScriptElementKind.memberFunctionElement, 
+                    return getNavBarItem(declarationNameToString(methodDecl.name),
+                                         ScriptElementKind.memberFunctionElement,
                                          [getNodeSpan(node)]);
                 // TODO: Class properties/getters/setters, export defaults, import/export identifiers
                 default:
@@ -107,7 +107,7 @@ namespace ts.NavigationBar {
                 text, kind, kindModifiers, spans, childItems: [], indent, bolded: false, grayed: false
             }
         }
-        
+
         function getDefineModuleItem(node: Node): NavigationBarItem {
             if (node.kind !== SyntaxKind.FunctionExpression && node.kind !== SyntaxKind.ArrowFunction) {
                 return undefined;
@@ -116,12 +116,12 @@ namespace ts.NavigationBar {
             // No match if this is not a call expression to an identifier named 'define'
             if (node.parent.kind !== SyntaxKind.CallExpression) {
                 return undefined;
-            }            
+            }
             const callExpr = node.parent as CallExpression;
             if (callExpr.expression.kind !== SyntaxKind.Identifier || callExpr.expression.getText() !== 'define') {
                 return undefined;
             }
-            
+
             // Return a module of either the given text in the first argument, or of the source file path
             let defaultName = node.getSourceFile().fileName;
             if (callExpr.arguments[0].kind === SyntaxKind.StringLiteral) {
@@ -129,14 +129,14 @@ namespace ts.NavigationBar {
             }
             return getNavBarItem(defaultName, ScriptElementKind.moduleElement, [getNodeSpan(node.parent)]);
         }
-        
+
         function getFunctionExpressionItem(node: Node): NavigationBarItem {
             if (node.kind !== SyntaxKind.FunctionExpression && node.kind !== SyntaxKind.ArrowFunction) {
                 return undefined;
             }
 
             const fnExpr = node as FunctionExpression | ArrowFunction;
-            let fnName: string; 
+            let fnName: string;
             if (fnExpr.name && getFullWidth(fnExpr.name) > 0) {
                 // The function expression has an identifier, so use that as the name
                 fnName = declarationNameToString(fnExpr.name);
@@ -147,7 +147,7 @@ namespace ts.NavigationBar {
                     fnName = declarationNameToString((fnExpr.parent as VariableDeclaration).name);
                 }
                 // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
-                else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression && 
+                else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression &&
                          (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.FirstAssignment) {
                     fnName = (fnExpr.parent as BinaryExpression).left.getText();
                     if (fnName.length > 20) {
@@ -155,7 +155,7 @@ namespace ts.NavigationBar {
                     }
                 }
                 // See if it is a property assignment, and if so use the property name
-                else if (fnExpr.parent.kind === SyntaxKind.PropertyAssignment && 
+                else if (fnExpr.parent.kind === SyntaxKind.PropertyAssignment &&
                          (fnExpr.parent as PropertyAssignment).name) {
                     fnName = (fnExpr.parent as PropertyAssignment).name.getText();
                 }
@@ -163,7 +163,7 @@ namespace ts.NavigationBar {
                     fnName = anonFnText;
                 }
             }
-            return getNavBarItem(fnName, ScriptElementKind.functionElement, [getNodeSpan(node)]);       
+            return getNavBarItem(fnName, ScriptElementKind.functionElement, [getNodeSpan(node)]);
         }
 
         function getNodeSpan(node: Node) {
@@ -174,14 +174,14 @@ namespace ts.NavigationBar {
 
         return sourceFileItem.childItems;
     }
-    
+
     export function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[]  {
-        // TODO: Handle JS files differently in 'navbar' calls for now, but ideally we should unify 
+        // TODO: Handle JS files differently in 'navbar' calls for now, but ideally we should unify
         // the 'navbar' and 'navto' logic for TypeScript and JavaScript.
         if (isSourceFileJavaScript(sourceFile)) {
             return getJsNavigationBarItems(sourceFile, compilerOptions);
         }
-        
+
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.
         let hasGlobalNode = false;
@@ -309,7 +309,7 @@ namespace ts.NavigationBar {
 
             return topLevelNodes;
         }
-         
+
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
@@ -326,7 +326,7 @@ namespace ts.NavigationBar {
                 }
             });
         }
-        
+
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
@@ -357,8 +357,8 @@ namespace ts.NavigationBar {
 
         function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
-                // A function declaration is 'top level' if it contains any function declarations 
-                // within it. 
+                // A function declaration is 'top level' if it contains any function declarations
+                // within it.
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
                     if (forEach((<Block>functionDeclaration.body).statements,
@@ -377,7 +377,7 @@ namespace ts.NavigationBar {
 
             return false;
         }
-        
+
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             let items: ts.NavigationBarItem[] = [];
 
@@ -574,19 +574,19 @@ namespace ts.NavigationBar {
                 let result: string[] = [];
 
                 result.push(moduleDeclaration.name.text);
-                
+
                 while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
                     result.push(moduleDeclaration.name.text);
-                } 
+                }
 
                 return result.join(".");
             }
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 let moduleName = getModuleName(node);
-                
+
                 let childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
                 return getNavigationBarItem(moduleName,
