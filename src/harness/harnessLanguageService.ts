@@ -183,6 +183,7 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return ts.ScriptKind.Unknown; }
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
@@ -253,6 +254,7 @@ namespace Harness.LanguageService {
             const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return this.nativeHost.getScriptKind(fileName); }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 

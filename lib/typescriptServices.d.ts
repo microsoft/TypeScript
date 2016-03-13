@@ -1480,6 +1480,20 @@ declare namespace ts {
         noImplicitUseStrict?: boolean;
         [option: string]: string | number | boolean;
     }
+    interface TypingOptions {
+        enableAutoDiscovery?: boolean;
+        include?: string[];
+        exclude?: string[];
+        [option: string]: string[] | boolean;
+    }
+    interface DiscoverTypingsInfo {
+        fileNames: string[];
+        projectRootPath: string;
+        safeListPath: string;
+        packageNameToTypingLocation: Map<string>;
+        typingOptions: TypingOptions;
+        compilerOptions: CompilerOptions;
+    }
     enum ModuleKind {
         None = 0,
         CommonJS = 1,
@@ -1502,6 +1516,13 @@ declare namespace ts {
         line: number;
         character: number;
     }
+    enum ScriptKind {
+        Unknown = 0,
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4,
+    }
     enum ScriptTarget {
         ES3 = 0,
         ES5 = 1,
@@ -1515,6 +1536,7 @@ declare namespace ts {
     }
     interface ParsedCommandLine {
         options: CompilerOptions;
+        typingOptions?: TypingOptions;
         fileNames: string[];
         errors: Diagnostic[];
     }
@@ -1663,7 +1685,7 @@ declare namespace ts {
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
-    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
+    function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare namespace ts {
@@ -1798,6 +1820,7 @@ declare namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
@@ -2166,7 +2189,7 @@ declare namespace ts {
           * @parm version Current version of the file. Only used if the file was not found
           * in the registry and a new one was created.
           */
-        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+        acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
@@ -2179,7 +2202,7 @@ declare namespace ts {
           * @param scriptSnapshot Text of the file.
           * @param version Current version of the file.
           */
-        updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile;
+        updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
           *
@@ -2303,7 +2326,7 @@ declare namespace ts {
     }
     function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput;
     function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
-    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile;
+    function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     let disableIncrementalParsing: boolean;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;

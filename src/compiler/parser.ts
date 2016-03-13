@@ -399,9 +399,9 @@ namespace ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         const start = new Date().getTime();
-        const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+        const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
 
         parseTime += new Date().getTime() - start;
         return result;
@@ -533,23 +533,24 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
-            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0;
-            initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
+            scriptKind = ensureScriptKind(fileName, scriptKind);
 
-            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor, scriptKind);
+
+            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 
             clearState();
 
             return result;
         }
 
-        function getLanguageVariant(fileName: string) {
+        function getLanguageVariant(scriptKind: ScriptKind) {
             // .tsx and .jsx files are treated as jsx language variant.
-            return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx") || fileExtensionIs(fileName, ".js") ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
-        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
@@ -562,14 +563,14 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = isJavaScriptFile ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
+            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(getLanguageVariant(fileName));
+            scanner.setLanguageVariant(getLanguageVariant(scriptKind));
         }
 
         function clearState() {
@@ -585,8 +586,8 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
-            sourceFile = createSourceFile(fileName, languageVersion);
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion, scriptKind);
 
             if (contextFlags & ParserContextFlags.JavaScriptFile) {
                 sourceFile.parserContextFlags = ParserContextFlags.JavaScriptFile;
@@ -656,7 +657,7 @@ namespace ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
@@ -667,7 +668,8 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
+            sourceFile.languageVariant = getLanguageVariant(scriptKind);
+            sourceFile.scriptKind = scriptKind;
 
             return sourceFile;
         }
@@ -5604,7 +5606,7 @@ namespace ts {
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 scanner.setText(content, start, length);
                 token = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -5923,7 +5925,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDocComment = parseJSDocCommentWorker(start, length);
                 const diagnostics = parseDiagnostics;
@@ -6249,7 +6251,7 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true);
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -6313,7 +6315,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true);
+            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind);
 
             return result;
         }
