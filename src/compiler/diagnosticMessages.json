@@ -831,6 +831,18 @@
         "category": "Error",
         "code": 1313
     },
+    "Global module exports may only appear in module files.": {
+        "category": "Error",
+        "code": 1314
+    },
+    "Global module exports may only appear in declaration files.": {
+        "category": "Error",
+        "code": 1315
+    },
+    "Global module exports may only appear at top level.": {
+        "category": "Error",
+        "code": 1316
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1847,6 +1859,10 @@
         "category": "Error",
         "code": 2676
     },
+    "A type predicate's type must be assignable to its parameter's type.": {
+        "category": "Error",
+        "code": 2677
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2804,5 +2820,9 @@
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }
