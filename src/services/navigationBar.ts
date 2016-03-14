@@ -566,7 +566,7 @@ namespace ts.NavigationBar {
             }
 
             // Add a level if traversing into a container
-            if (isFunctionLike(node) || isClassLike(node)) {
+            if (newItem && (isFunctionLike(node) || isClassLike(node))) {
                 const lastTop = topItem;
                 indent++;
                 topItem = newItem;
@@ -606,6 +606,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                    // "export default function().." looks just like a regular function/class declaration, except with the 'default' flag set
                     const name = node.flags && (node.flags & NodeFlags.Default) ? "default" :
                             node.kind === SyntaxKind.Constructor ? "constructor" :
                             declarationNameToString((node as (Declaration)).name);
@@ -633,6 +634,7 @@ namespace ts.NavigationBar {
                                          ScriptElementKind.memberFunctionElement,
                                          [getNodeSpan(node)]);
                 case SyntaxKind.ExportAssignment:
+                    // e.g. "export default <expr>"
                     return getNavBarItem("default", ScriptElementKind.variableElement, [getNodeSpan(node)]);
                 case SyntaxKind.ImportClause:    // e.g. 'def' in: import def from 'mod' (in ImportDeclaration)
                     if (!(node as ImportClause).name) {
