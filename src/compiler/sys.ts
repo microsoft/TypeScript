@@ -478,17 +478,19 @@ namespace ts {
                         const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
                             // fs.statSync would throw an exception if the file is a symlink
-                            // whose linked file doesn't exist. fs.lstatSync would return a stat
-                            // object for the symlink file itself in this case
-                            const stat = _fs.lstatSync(name);
-                            if (stat.isFile()) {
-                                if (!extension || fileExtensionIs(name, extension)) {
-                                    result.push(name);
+                            // whose linked file doesn't exist.
+                            try {
+                                const stat = _fs.statSync(name);
+                                if (stat.isFile()) {
+                                    if (!extension || fileExtensionIs(name, extension)) {
+                                        result.push(name);
+                                    }
+                                }
+                                else if (stat.isDirectory()) {
+                                    directories.push(name);
                                 }
                             }
-                            else if (stat.isDirectory()) {
-                                directories.push(name);
-                            }
+                            catch (e) { }
                         }
                     }
                     for (const current of directories) {
