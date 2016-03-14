@@ -127,8 +127,7 @@ namespace ts {
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNodes, (<UnionOrIntersectionTypeNode>node).types);
             case SyntaxKind.ParenthesizedType:
-            case SyntaxKind.NullableType:
-                return visitNode(cbNode, (<ParenthesizedTypeNode | NullableTypeNode>node).type);
+                return visitNode(cbNode, (<ParenthesizedTypeNode>node).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNodes, (<BindingPattern>node).elements);
@@ -2426,21 +2425,11 @@ namespace ts {
 
         function parseArrayTypeOrHigher(): TypeNode {
             let type = parseNonArrayType();
-            while (!scanner.hasPrecedingLineBreak()) {
-                if (parseOptional(SyntaxKind.OpenBracketToken)) {
-                    parseExpected(SyntaxKind.CloseBracketToken);
-                    const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
-                    node.elementType = type;
-                    type = finishNode(node);
-                }
-                else if (parseOptional(SyntaxKind.QuestionToken)) {
-                    const node = <NullableTypeNode>createNode(SyntaxKind.NullableType, type.pos);
-                    node.type = type;
-                    type = finishNode(node);
-                }
-                else {
-                    break;
-                }
+            while (!scanner.hasPrecedingLineBreak() && parseOptional(SyntaxKind.OpenBracketToken)) {
+                parseExpected(SyntaxKind.CloseBracketToken);
+                const node = <ArrayTypeNode>createNode(SyntaxKind.ArrayType, type.pos);
+                node.elementType = type;
+                type = finishNode(node);
             }
             return type;
         }

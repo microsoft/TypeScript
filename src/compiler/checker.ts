@@ -2414,7 +2414,6 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
-                    case SyntaxKind.NullableType:
                         return isDeclarationVisible(<Declaration>node.parent);
 
                     // Default binding, import specifier and namespace import is visible
@@ -4779,14 +4778,6 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromNullableTypeNode(node: NullableTypeNode): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                links.resolvedType = getNullableType(getTypeFromTypeNode(node.type));
-            }
-            return links.resolvedType;
-        }
-
         interface TypeSet extends Array<Type> {
             containsAny?: boolean;
             containsUndefined?: boolean;
@@ -5029,8 +5020,6 @@ namespace ts {
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
-                case SyntaxKind.NullableType:
-                    return getTypeFromNullableTypeNode(<NullableTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
@@ -6544,16 +6533,6 @@ namespace ts {
 
         function isNullableType(type: Type) {
             return getNullableKind(type) === TypeFlags.Nullable;
-        }
-
-        function getNullableType(type: Type): Type {
-            if (!strictNullChecks) {
-                return type;
-            }
-            if (!type.nullableType) {
-                type.nullableType = isNullableType(type) ? type : getUnionType([type, undefinedType, nullType]);
-            }
-            return type.nullableType;
         }
 
         function addNullableKind(type: Type, kind: TypeFlags): Type {
@@ -15792,8 +15771,7 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.NullableType:
-                    return checkSourceElement((<ParenthesizedTypeNode | NullableTypeNode>node).type);
+                    return checkSourceElement((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
