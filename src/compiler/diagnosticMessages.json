@@ -2458,6 +2458,10 @@
         "category": "Message",
         "code": 6112
     },
+    "Disable the upper limit for the total file size of a project.": {
+        "category": "Message",
+        "code": 6113
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2661,5 +2665,9 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Too many JavaScript files in the project. Use an exact 'files' list, or use the 'exclude' setting in project configuration to limit included source folders. The likely folder to exclude is '{0}'. To disable the project size limit, set the 'disableSizeLimit' compiler option to 'true'": {
+        "category": "Error",
+        "code": 17012
     }
 }

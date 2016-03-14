@@ -394,13 +394,41 @@ namespace ts {
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||
                 (oldOptions.jsx !== options.jsx) ||
-                (oldOptions.allowJs !== options.allowJs)) {
+                (oldOptions.allowJs !== options.allowJs) ||
+                (oldOptions.disableSizeLimit !== options.disableSizeLimit)) {
                 oldProgram = undefined;
             }
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+            if (options.disableSizeLimit === true) {
+                forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+            }
+            else {
+                let programSize = 0;
+                for (const name of rootNames) {
+                    const path = toPath(name, currentDirectory, getCanonicalFileName);
+                    if (programSize <= maxProgramSize) {
+                        processRootFile(name, /*isDefaultLib*/ false);
+                        const file = filesByName.get(path);
+                        if (!hasTypeScriptFileExtension(name) && file && file.text) {
+                            programSize += file.text.length;
+                        }
+                    }
+                    else {
+                        // If the program size limit was reached when processing a file, this file is
+                        // likely in the problematic folder than contains too many files
+                        const commonSourceDirectory = getCommonSourceDirectory();
+                        let rootLevelDirectory = path.substring(0, Math.max(commonSourceDirectory.length, path.indexOf(directorySeparator, commonSourceDirectory.length)));
+                        if (rootLevelDirectory[rootLevelDirectory.length - 1] !== directorySeparator) {
+                            rootLevelDirectory += directorySeparator;
+                        }
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_JavaScript_files_in_the_project_Use_an_exact_files_list_or_use_the_exclude_setting_in_project_configuration_to_limit_included_source_folders_The_likely_folder_to_exclude_is_0_To_disable_the_project_size_limit_set_the_disableSizeLimit_compiler_option_to_true, rootLevelDirectory));
+                        break;
+                    }
+                }
+            }
+
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in

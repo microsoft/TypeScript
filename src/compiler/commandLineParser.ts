@@ -305,6 +305,11 @@ namespace ts {
             name: "noCustomAsyncPromise",
             type: "boolean",
             experimental: true
+        },
+        {
+            name: "disableSizeLimit",
+            type: "boolean",
+            description: Diagnostics.Disable_the_upper_limit_for_the_total_file_size_of_a_project
         }
     ];
 
@@ -534,7 +539,7 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
+                    exclude = ["node_modules", "bower_components"];
                     const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
                     if (outDir) {
                         exclude.push(outDir);
