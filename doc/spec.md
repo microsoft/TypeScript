@@ -903,7 +903,7 @@ namespace X {     // Namespace named X
 }
 ```
 
-A name that denotes a value has an associated type (section [3](#3)) and can be referenced in expressions (section [4.3](#4.3)). A name that denotes a type can be used by itself in a type reference or on the right hand side of a dot in a type reference ([3.8.2](#3.8.2)). A name that denotes a namespace can be used one the left hand side of a dot in a type reference.
+A name that denotes a value has an associated type (section [3](#3)) and can be referenced in expressions (section [4.3](#4.3)). A name that denotes a type can be used by itself in a type reference or on the right hand side of a dot in a type reference ([3.8.2](#3.8.2)). A name that denotes a namespace can be used on the left hand side of a dot in a type reference.
 
 When a name with multiple meanings is referenced, the context in which the reference occurs determines the meaning. For example:
 
