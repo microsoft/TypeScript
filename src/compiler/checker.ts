@@ -193,8 +193,8 @@ namespace ts {
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<StringLiteralType> = {};
         const numericLiteralTypes: Map<NumericLiteralType> = {};
-        const NaNLiteralType = getNumericLiteralTypeForText(NaN.toString());
-        const InfinityLiteralType = getNumericLiteralTypeForText(Infinity.toString());
+        const NaNLiteralType = getNumericLiteralTypeForNumber(NaN);
+        const InfinityLiteralType = getNumericLiteralTypeForNumber(Infinity);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -5110,9 +5110,10 @@ namespace ts {
         function getNumericLiteralTypeForText(text: string): NumericLiteralType {
             // Use +(string) rather than Number(string) to be consistient with what we use in the parser
             const num = +(text);
-            if (typeof num !== "number") {
-                return NaNLiteralType;
-            }
+            return getNumericLiteralTypeForNumber(num, text);
+        }
+
+        function getNumericLiteralTypeForNumber(num: number, text: string = num.toString()): NumericLiteralType {
             if (hasProperty(numericLiteralTypes, text)) {
                 return numericLiteralTypes[text];
             }
@@ -5134,7 +5135,7 @@ namespace ts {
         function getTypeFromNumericLiteralTypeNode(node: NumericLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getNumericLiteralTypeForText(node.text);
+                links.resolvedType = getNumericLiteralTypeForNumber(node.number, node.text);
             }
             return links.resolvedType;
         }
@@ -11877,13 +11878,13 @@ namespace ts {
                     if (operandType.flags & TypeFlags.NumericLiteral) {
                         const litType = operandType as NumericLiteralType;
                         const newNumber = -litType.number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.TildeToken:
                     if (operandType.flags & TypeFlags.NumericLiteral) {
                         const litType = operandType as NumericLiteralType;
                         const newNumber = ~litType.number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                     if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
@@ -11895,14 +11896,14 @@ namespace ts {
                     if (operandType.flags & TypeFlags.NumericLiteral) {
                         const litType = operandType as NumericLiteralType;
                         const newNumber = litType.number + 1;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                     // Intentional fallthrough
                 case SyntaxKind.MinusMinusToken:
                     if (operandType.flags & TypeFlags.NumericLiteral) {
                         const litType = operandType as NumericLiteralType;
                         const newNumber = litType.number - 1;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                     const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
                         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
@@ -12161,49 +12162,49 @@ namespace ts {
                 case SyntaxKind.AsteriskEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number * (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.AsteriskAsteriskEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number ** (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number / (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.PercentToken:
                 case SyntaxKind.PercentEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number % (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.MinusEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number - (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.BarToken:
                 case SyntaxKind.BarEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number | (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.CaretToken:
                 case SyntaxKind.CaretEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number ^ (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandEqualsToken:
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         const newNumber = (leftType as NumericLiteralType).number & (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.LessThanLessThanEqualsToken:
@@ -12246,7 +12247,7 @@ namespace ts {
                     if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
                         // TODO (weswig): add case for when 1 side is a string literal type and the other is a numeric literal, then cast as appropriate
                         const newNumber = (leftType as NumericLiteralType).number + (rightType as NumericLiteralType).number;
-                        return getNumericLiteralTypeForText(newNumber.toString());
+                        return getNumericLiteralTypeForNumber(newNumber);
                     }
                     // TypeScript 1.0 spec (April 2014): 4.19.2
                     // The binary + operator requires both operands to be of the Number primitive type or an enum type,

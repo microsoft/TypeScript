@@ -1907,9 +1907,10 @@ namespace ts {
 
         function parseNumericLiteralTypeNode(): NumericLiteralTypeNode {
             const node = createNode(SyntaxKind.NumericLiteralType) as NumericLiteralTypeNode;
-            // Get token text rather than value, this way number formatting is preserved
-            const text = scanner.getTokenText();
-            node.text = text;
+            // Get token text for node text rather than value, this way number formatting is preserved
+            node.text = scanner.getTokenText();
+            // But store the number on the node because we need it for comparisons later
+            node.number = +(scanner.getTokenValue());
             return finishLiteralLikeNode(node);
         }
 

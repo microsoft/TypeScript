@@ -787,6 +787,7 @@ namespace ts {
     // @kind(SyntaxKind.NumericLiteralTypeNode)
     export interface NumericLiteralTypeNode extends LiteralLikeNode, TypeNode {
         _numericLiteralTypeBrand: any;
+        number: number; // The value of the number
     }
 
     // @kind(SyntaxKind.StringLiteral)
