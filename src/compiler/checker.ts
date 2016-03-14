@@ -7211,7 +7211,7 @@ namespace ts {
                 visited.push(where);
                 const fallback = getPreviousOccurences(symbol, where, handleGuards);
                 visited.pop();
-                const type = fallback ? initialType : getUnionType(types);
+                const type = fallback || types.length === 0 ? initialType : getUnionType(types);
                 if (!loop && isIdentifier && (<Identifier>where).narrowingState !== NarrowingState.Failed) {
                     (<Identifier>where).localType = type;
                 }
