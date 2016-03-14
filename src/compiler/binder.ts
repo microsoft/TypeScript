@@ -509,7 +509,19 @@ namespace ts {
                 savedImplicitLabels = implicitLabels;
                 savedHasExplicitReturn = hasExplicitReturn;
 
-                currentReachabilityState = defaultReachable;
+                /*
+                 * This allows narrowing in nested functions:
+                 * let x: string | number;
+                 * if (typeof x === "number") {
+                 *     let f = (y: number) => x * y;
+                 * }
+                 * Since you cannot always know where `f` can be invoked, this narrowing is not entirely sound.
+                 * Though, removing this would be too strict and a breaking change.
+                 */
+                currentReachabilityState = {
+                    reachability: Reachability.Reachable,
+                    previous: currentReachabilityState.previous
+                };
                 hasExplicitReturn = false;
                 labelStack = labelIndexMap = implicitLabels = undefined;
             }
