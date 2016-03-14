@@ -1222,9 +1222,14 @@ namespace ts.server {
                 // As the project openning might not be complete if there are too many files,
                 // therefore to surface the diagnostics we need to make sure the given client file is opened.
                 if (clientFileName) {
-                    const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
-                    project.addRoot(currentClientFileInfo);
-                    programSize += currentClientFileInfo.content.length;
+                    if (this.host.fileExists(clientFileName)) {
+                        const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
+                        project.addRoot(currentClientFileInfo);
+                        programSize += currentClientFileInfo.content.length;
+                    }
+                    else {
+                        return { errorMsg: "specified file " + clientFileName + " not found" };
+                    }
                 }
 
                 for (const rootFilename of projectOptions.files) {
@@ -1232,8 +1237,12 @@ namespace ts.server {
                         continue;
                     }
 
-                    if (programSize <= maxProgramSize) {
-                        if (this.host.fileExists(rootFilename)) {
+                    if (this.host.fileExists(rootFilename)) {
+                        if (projectOptions.compilerOptions.disableSizeLimit === true) {
+                            const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                            project.addRoot(info);
+                        }
+                        else if (programSize <= maxProgramSize) {
                             const info = this.openFile(rootFilename, /*openedByClient*/ false);
                             project.addRoot(info);
                             if (!hasTypeScriptFileExtension(rootFilename)) {
@@ -1241,11 +1250,11 @@ namespace ts.server {
                             }
                         }
                         else {
-                            return { errorMsg: "specified file " + rootFilename + " not found" };
+                            break;
                         }
                     }
                     else {
-                        break;
+                        return { errorMsg: "specified file " + rootFilename + " not found" };
                     }
                 }
                 project.finishGraph();
