@@ -81,7 +81,32 @@ namespace ts.NavigationBar {
                     return getNavBarItem(declarationNameToString(methodDecl.name),
                                          ScriptElementKind.memberFunctionElement,
                                          [getNodeSpan(node)]);
-                // TODO: Class properties/getters/setters, export defaults, import/export identifiers
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    const accessor = node as GetAccessorDeclaration | SetAccessorDeclaration;
+                    let accessorName: string;
+                    if (accessor.name && getFullWidth(accessor.name) > 0) {
+                        accessorName = declarationNameToString(accessor.name);
+                    }
+                    else {
+                        accessorName = "<accessor>";
+                    }
+                    return getNavBarItem(accessorName, ScriptElementKind.memberGetAccessorElement, [getNodeSpan(node)]);
+                case SyntaxKind.ExportAssignment:
+                    return getNavBarItem("default", ScriptElementKind.variableElement, [getNodeSpan(node)]);
+                case SyntaxKind.ImportClause:    // e.g. 'def' in: import def from 'mod' (in ImportDeclaration)
+                    if (!(node as ImportClause).name) {
+                        // No default import (this node is still a parent of named & namespace imports, which are handled below)
+                        return undefined;
+                    }
+                case SyntaxKind.ImportSpecifier: // e.g. 'id' in: import {id} from 'mod' (in NamedImports, in ImportClause)
+                case SyntaxKind.NamespaceImport: // e.g. '* as ns' in: import * as ns from 'mod' (in ImportClause)
+                // TODO: Should export specifiers add a navbar item?
+                // They are often just references to items defined elsewhere in the file (unless renamed, or re-exported)
+                // case SyntaxKind.ExportSpecifier: // e.g. 'a' or 'b'  in: export {a, foo as b}
+                    const decl = node as (ImportSpecifier | ImportClause | NamespaceImport | ExportSpecifier);
+                    const declName = declarationNameToString(decl.name);
+                    return getNavBarItem(declName, ScriptElementKind.constElement, [getNodeSpan(node)]);
                 default:
                     return undefined;
             }
@@ -96,6 +121,8 @@ namespace ts.NavigationBar {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     return true;
                 default:
                     return false;
