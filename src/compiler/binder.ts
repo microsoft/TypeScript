@@ -1799,8 +1799,6 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression> node.parent).name === node) {
                     return;
                 }
-                node.narrowingState = NarrowingState.Uninitialized;
-                node.localType = undefined;
                 bindFlowMarker(node);
             }
         }

@@ -7154,16 +7154,18 @@ namespace ts {
             if (isLeftHandSideOfAssignment(location)) return initialType;
 
             let saveLocalType = false;
+            let nodeLinks: NodeLinks;
             if (location.kind === SyntaxKind.Identifier) {
                 const locationSymbol = resolveName(<Identifier>location, (<Identifier>location).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
                 if (locationSymbol && locationSymbol.id === symbol.id) {
-                    if ((<Identifier>location).narrowingState === NarrowingState.Done) return (<Identifier>location).localType;
-                    if ((<Identifier>location).narrowingState === NarrowingState.Narrowing) {
-                        (<Identifier>location).narrowingState = NarrowingState.Failed;
-                        return (<Identifier>location).localType = initialType;
+                    nodeLinks = getNodeLinks(location);
+                    if (nodeLinks.identifierNarrowingState === NarrowingState.Done) return nodeLinks.identifierLocalType;
+                    if (nodeLinks.identifierNarrowingState === NarrowingState.Narrowing) {
+                        nodeLinks.identifierNarrowingState = NarrowingState.Failed;
+                        return nodeLinks.identifierLocalType = initialType;
                     }
                     saveLocalType = true;
-                    (<Identifier>location).narrowingState = NarrowingState.Narrowing;
+                    nodeLinks.identifierNarrowingState = NarrowingState.Narrowing;
                 }
             }
             if (!symbol.declarations) return initialType;
@@ -7176,12 +7178,12 @@ namespace ts {
             let loop = false;
             const narrowedType = getType(location, false);
             if (saveLocalType) {
-                if ((<Identifier>location).narrowingState === NarrowingState.Failed) {
+                if (nodeLinks.identifierNarrowingState === NarrowingState.Failed) {
                     // During recursion, the narrowing of this node failed.
                     return initialType;
                 }
-                (<Identifier>location).narrowingState = NarrowingState.Done;
-                (<Identifier>location).localType = narrowedType;
+                nodeLinks.identifierNarrowingState = NarrowingState.Done;
+                nodeLinks.identifierLocalType = narrowedType;
             }
             return narrowedType;
 
@@ -7196,6 +7198,7 @@ namespace ts {
                     return undefined;
                 }
                 const isIdentifier = where.kind === SyntaxKind.Identifier;
+                let identifierNodeLinks: NodeLinks;
                 if (isIdentifier) {
                     if (after) {
                         const assignment = getAssignedTypeAtLocation(<Identifier>where);
@@ -7203,8 +7206,9 @@ namespace ts {
                             return cache[whereId] = narrowTypeByAssignment(assignment);
                         }
                     }
-                    if ((<Identifier>where).narrowingState === NarrowingState.Done) {
-                        return (<Identifier>where).localType;
+                    identifierNodeLinks = getNodeLinks(where);
+                    if (identifierNodeLinks.identifierNarrowingState === NarrowingState.Done) {
+                        return identifierNodeLinks.identifierLocalType;
                     }
                 }
                 let types: Type[] = [];
@@ -7212,8 +7216,8 @@ namespace ts {
                 const fallback = getPreviousOccurences(symbol, where, handleGuards);
                 visited.pop();
                 const type = fallback || types.length === 0 ? initialType : getUnionType(types);
-                if (!loop && isIdentifier && (<Identifier>where).narrowingState !== NarrowingState.Failed) {
-                    (<Identifier>where).localType = type;
+                if (!loop && isIdentifier && identifierNodeLinks.identifierNarrowingState !== NarrowingState.Failed) {
+                    identifierNodeLinks.identifierLocalType = type;
                 }
                 if (after) {
                     cache[whereId] = type;
