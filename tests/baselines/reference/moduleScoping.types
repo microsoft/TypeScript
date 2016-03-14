@@ -44,12 +44,12 @@ var t3 = file3.v3;
 >v3 : boolean
 
 var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
->v4 : { a: boolean; b: NaN; }
->{a: true, b: NaN} : { a: boolean; b: NaN; }
+>v4 : { a: boolean; b: number; }
+>{a: true, b: NaN} : { a: boolean; b: number; }
 >a : boolean
 >true : boolean
->b : NaN
->NaN : NaN
+>b : number
+>NaN : number
 
 === tests/cases/conformance/externalModules/file5.ts ===
 var x = v2; // Should be global v2 of type number again

@@ -11,20 +11,29 @@ let x: NaNMember;
 >x : Symbol(x, Decl(NaNLiteralTypes.ts, 4, 3))
 >NaNMember : Symbol(NaNMember, Decl(NaNLiteralTypes.ts, 0, 0))
 
-x = {member: NaN}
+x = {member: NaN as NaN}
 >x : Symbol(x, Decl(NaNLiteralTypes.ts, 4, 3))
 >member : Symbol(member, Decl(NaNLiteralTypes.ts, 5, 5))
 >NaN : Symbol(NaN)
+>NaN : Symbol(NaN)
 
 declare function stillNumber(x: number): boolean;
->stillNumber : Symbol(stillNumber, Decl(NaNLiteralTypes.ts, 5, 17))
+>stillNumber : Symbol(stillNumber, Decl(NaNLiteralTypes.ts, 5, 24))
 >x : Symbol(x, Decl(NaNLiteralTypes.ts, 7, 29))
 
 stillNumber(x.member);
->stillNumber : Symbol(stillNumber, Decl(NaNLiteralTypes.ts, 5, 17))
+>stillNumber : Symbol(stillNumber, Decl(NaNLiteralTypes.ts, 5, 24))
 >x.member : Symbol(NaNMember.member, Decl(NaNLiteralTypes.ts, 0, 21))
 >x : Symbol(x, Decl(NaNLiteralTypes.ts, 4, 3))
 >member : Symbol(NaNMember.member, Decl(NaNLiteralTypes.ts, 0, 21))
+
+//Check that NaN's declaration is still of type "number", while being "NaN" when used as a type, so its usage is opt-in
+let y = NaN;
+>y : Symbol(y, Decl(NaNLiteralTypes.ts, 11, 3))
+>NaN : Symbol(NaN)
+
+y = 42;
+>y : Symbol(y, Decl(NaNLiteralTypes.ts, 11, 3))
 
 /*function isNaN(x: number): x is NaN {
     return x !== x;

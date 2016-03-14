@@ -41,20 +41,25 @@ let b: NegativeInfinityMember;
 >b : NegativeInfinityMember
 >NegativeInfinityMember : NegativeInfinityMember
 
-a = {member: Infinity};
->a = {member: Infinity} : { member: Infinity; }
+a = {member: Infinity as Infinity};
+>a = {member: Infinity as Infinity} : { member: Infinity; }
 >a : PositiveInfinityMember
->{member: Infinity} : { member: Infinity; }
+>{member: Infinity as Infinity} : { member: Infinity; }
 >member : Infinity
+>Infinity as Infinity : Infinity
+>Infinity : number
 >Infinity : Infinity
 
-b = {member: -Infinity}
->b = {member: -Infinity} : { member: -Infinity; }
+b = {member: -(<Infinity>Infinity)}
+>b = {member: -(<Infinity>Infinity)} : { member: -Infinity; }
 >b : NegativeInfinityMember
->{member: -Infinity} : { member: -Infinity; }
+>{member: -(<Infinity>Infinity)} : { member: -Infinity; }
 >member : -Infinity
->-Infinity : -Infinity
+>-(<Infinity>Infinity) : -Infinity
+>(<Infinity>Infinity) : Infinity
+><Infinity>Infinity : Infinity
 >Infinity : Infinity
+>Infinity : number
 
 let c: -Infinity = invertInfinity(a.member);
 >c : -Infinity
@@ -92,6 +97,26 @@ stillNumber(d);
 >stillNumber(d) : boolean
 >stillNumber : (x: number) => boolean
 >d : Infinity
+
+//Check that Infinity's declaration is still of type "number", while being "Infinity" when used as a type, so its usage is opt-in
+let y = Infinity;
+>y : number
+>Infinity : number
+
+y = 42;
+>y = 42 : number
+>y : number
+>42 : number
+
+let z = -Infinity;
+>z : number
+>-Infinity : number
+>Infinity : number
+
+z = 42;
+>z = 42 : number
+>z : number
+>42 : number
 
 /*declare function isInfinity(x: number): x is (Infinity | -Infinity) {
     return x !== x;

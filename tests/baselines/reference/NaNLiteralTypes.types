@@ -11,11 +11,13 @@ let x: NaNMember;
 >x : NaNMember
 >NaNMember : NaNMember
 
-x = {member: NaN}
->x = {member: NaN} : { member: NaN; }
+x = {member: NaN as NaN}
+>x = {member: NaN as NaN} : { member: NaN; }
 >x : NaNMember
->{member: NaN} : { member: NaN; }
+>{member: NaN as NaN} : { member: NaN; }
 >member : NaN
+>NaN as NaN : NaN
+>NaN : number
 >NaN : NaN
 
 declare function stillNumber(x: number): boolean;
@@ -28,6 +30,16 @@ stillNumber(x.member);
 >x.member : NaN
 >x : NaNMember
 >member : NaN
+
+//Check that NaN's declaration is still of type "number", while being "NaN" when used as a type, so its usage is opt-in
+let y = NaN;
+>y : number
+>NaN : number
+
+y = 42;
+>y = 42 : number
+>y : number
+>42 : number
 
 /*function isNaN(x: number): x is NaN {
     return x !== x;

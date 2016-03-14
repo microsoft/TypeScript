@@ -17424,9 +17424,9 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedType;
-            getSymbolLinks(NaNSymbol).type = NaNLiteralType;
+            getSymbolLinks(NaNSymbol).type = numberType;
             getSymbolLinks(NaNSymbol).declaredType = NaNLiteralType;
-            getSymbolLinks(InfinitySymbol).type = InfinityLiteralType;
+            getSymbolLinks(InfinitySymbol).type = numberType;
             getSymbolLinks(InfinitySymbol).declaredType = InfinityLiteralType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;

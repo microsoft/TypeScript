@@ -40,14 +40,16 @@ let b: NegativeInfinityMember;
 >b : Symbol(b, Decl(InfinityLiteralTypes.ts, 15, 3))
 >NegativeInfinityMember : Symbol(NegativeInfinityMember, Decl(InfinityLiteralTypes.ts, 2, 1))
 
-a = {member: Infinity};
+a = {member: Infinity as Infinity};
 >a : Symbol(a, Decl(InfinityLiteralTypes.ts, 14, 3))
 >member : Symbol(member, Decl(InfinityLiteralTypes.ts, 17, 5))
 >Infinity : Symbol(Infinity)
+>Infinity : Symbol(Infinity)
 
-b = {member: -Infinity}
+b = {member: -(<Infinity>Infinity)}
 >b : Symbol(b, Decl(InfinityLiteralTypes.ts, 15, 3))
 >member : Symbol(member, Decl(InfinityLiteralTypes.ts, 18, 5))
+>Infinity : Symbol(Infinity)
 >Infinity : Symbol(Infinity)
 
 let c: -Infinity = invertInfinity(a.member);
@@ -81,6 +83,21 @@ stillNumber(c);
 stillNumber(d);
 >stillNumber : Symbol(stillNumber, Decl(InfinityLiteralTypes.ts, 23, 14))
 >d : Symbol(d, Decl(InfinityLiteralTypes.ts, 21, 3))
+
+//Check that Infinity's declaration is still of type "number", while being "Infinity" when used as a type, so its usage is opt-in
+let y = Infinity;
+>y : Symbol(y, Decl(InfinityLiteralTypes.ts, 29, 3))
+>Infinity : Symbol(Infinity)
+
+y = 42;
+>y : Symbol(y, Decl(InfinityLiteralTypes.ts, 29, 3))
+
+let z = -Infinity;
+>z : Symbol(z, Decl(InfinityLiteralTypes.ts, 31, 3))
+>Infinity : Symbol(Infinity)
+
+z = 42;
+>z : Symbol(z, Decl(InfinityLiteralTypes.ts, 31, 3))
 
 /*declare function isInfinity(x: number): x is (Infinity | -Infinity) {
     return x !== x;
