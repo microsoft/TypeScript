@@ -63,7 +63,7 @@ namespace ts {
         {
             name: "reactNamespace",
             type: "string",
-            description: Diagnostics.Specifies_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
+            description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
         },
         {
             name: "listFiles",
@@ -77,7 +77,7 @@ namespace ts {
             name: "mapRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
             paramType: Diagnostics.LOCATION,
         },
         {
@@ -102,7 +102,7 @@ namespace ts {
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             },
-            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
             error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
@@ -187,7 +187,7 @@ namespace ts {
             type: "string",
             isFilePath: true,
             paramType: Diagnostics.LOCATION,
-            description: Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
+            description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
             name: "isolatedModules",
@@ -202,7 +202,7 @@ namespace ts {
             name: "sourceRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
             paramType: Diagnostics.LOCATION,
         },
         {
@@ -231,7 +231,7 @@ namespace ts {
                 "es6": ScriptTarget.ES6,
                 "es2015": ScriptTarget.ES2015,
             },
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015_experimental,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
             error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES2015
         },
@@ -264,7 +264,7 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             },
-            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
