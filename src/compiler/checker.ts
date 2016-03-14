@@ -5142,7 +5142,7 @@ namespace ts {
         function getTypeFromTypeUnaryPrefixNode(node: TypeUnaryPrefix): NumericLiteralType {
             const type = getTypeFromNumericLiteralTypeNode(node.operand) as NumericLiteralType;
             if (node.operator === SyntaxKind.MinusToken) {
-                const text = "-"+type.text;
+                const text = "-" + type.text;
                 if (hasProperty(numericLiteralTypes, text)) {
                     return numericLiteralTypes[text];
                 }
@@ -5150,7 +5150,7 @@ namespace ts {
                 const newType = numericLiteralTypes[text] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
                 newType.number = -type.number;
                 newType.text = text;
-                
+
                 return newType;
             }
             return type;
@@ -5887,7 +5887,7 @@ namespace ts {
                     if (isNumericLiteralType(target)) return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
                     if (target === numberType) return Ternary.True;
                     if (target.flags & TypeFlags.Enum) {
-                        //TODO: If enum numeric value = numeric literal value, then true, else false
+                        // TODO (weswig): If enum numeric value = numeric literal value, then true, else false
                     }
                 }
                 if (relation === assignableRelation || relation === comparableRelation) {
@@ -8771,7 +8771,7 @@ namespace ts {
         function contextualTypeIsStringLiteralType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
-        
+
         function contextualTypeIsNumericLiteralType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isNumericLiteralType) : isNumericLiteralType(type));
         }
