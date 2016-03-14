@@ -1885,10 +1885,6 @@ namespace ts {
                     else if (type.flags & TypeFlags.Tuple) {
                         writeTupleType(<TupleType>type);
                     }
-                    else if (isNullableType(type) && (<UnionType>type).types.length > 2) {
-                        writeType(getNonNullableType(type), TypeFormatFlags.InElementType);
-                        writePunctuation(writer, SyntaxKind.QuestionToken);
-                    }
                     else if (type.flags & TypeFlags.UnionOrIntersection) {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
@@ -6529,10 +6525,6 @@ namespace ts {
         function getNullableTypeOfKind(kind: TypeFlags) {
             return kind & TypeFlags.Null ? kind & TypeFlags.Undefined ?
                 getUnionType([nullType, undefinedType]) : nullType : undefinedType;
-        }
-
-        function isNullableType(type: Type) {
-            return getNullableKind(type) === TypeFlags.Nullable;
         }
 
         function addNullableKind(type: Type, kind: TypeFlags): Type {
