@@ -606,30 +606,17 @@ namespace ts.NavigationBar {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    // "export default function().." looks just like a regular function/class declaration, except with the 'default' flag set
-                    const name = node.flags && (node.flags & NodeFlags.Default) ? "default" :
+                    // "export default function().." looks just like a regular function/class declaration, except with the 'default' flag
+                    const name = node.flags && (node.flags & NodeFlags.Default) && !(node as (Declaration)).name ? "default" :
                             node.kind === SyntaxKind.Constructor ? "constructor" :
                             declarationNameToString((node as (Declaration)).name);
-
-                    const elementKind =
-                            node.kind === SyntaxKind.VariableDeclaration ? ScriptElementKind.variableElement :
-                            node.kind === SyntaxKind.FunctionDeclaration ? ScriptElementKind.functionElement :
-                            node.kind === SyntaxKind.ClassDeclaration ? ScriptElementKind.classElement :
-                            node.kind === SyntaxKind.Constructor ? ScriptElementKind.constructorImplementationElement :
-                            node.kind === SyntaxKind.GetAccessor ? ScriptElementKind.memberGetAccessorElement :
-                            node.kind === SyntaxKind.SetAccessor ? ScriptElementKind.memberSetAccessorElement :
-                            "unknown";
-
-                    return getNavBarItem(name, elementKind, [getNodeSpan(node)]);
+                    return getNavBarItem(name, getScriptKindForElementKind(node.kind), [getNodeSpan(node)]);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ClassExpression:
                     return getDefineModuleItem(node) || getFunctionOrClassExpressionItem(node);
                 case SyntaxKind.MethodDeclaration:
                     const methodDecl = node as MethodDeclaration;
-                    if (!methodDecl.name) {
-                        return undefined;
-                    }
                     return getNavBarItem(declarationNameToString(methodDecl.name),
                                          ScriptElementKind.memberFunctionElement,
                                          [getNodeSpan(node)]);
@@ -710,10 +697,10 @@ namespace ts.NavigationBar {
                 }
                 // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
                 else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression &&
-                         (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.FirstAssignment) {
+                         (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                     fnName = (fnExpr.parent as BinaryExpression).left.getText();
                     if (fnName.length > 20) {
-                        fnName = fnName.substring(0,20) + "...";
+                        fnName = fnName.substring(0, 17) + "...";
                     }
                 }
                 // See if it is a property assignment, and if so use the property name
@@ -733,6 +720,25 @@ namespace ts.NavigationBar {
             return node.kind === SyntaxKind.SourceFile
                 ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
                 : createTextSpanFromBounds(node.getStart(), node.getEnd());
+        }
+
+        function getScriptKindForElementKind(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.VariableDeclaration:
+                    return ScriptElementKind.variableElement;
+                case SyntaxKind.FunctionDeclaration:
+                    return ScriptElementKind.functionElement;
+                case SyntaxKind.ClassDeclaration:
+                    return ScriptElementKind.classElement;
+                case SyntaxKind.Constructor:
+                    return ScriptElementKind.constructorImplementationElement;
+                case SyntaxKind.GetAccessor:
+                    return ScriptElementKind.memberGetAccessorElement;
+                case SyntaxKind.SetAccessor:
+                    return ScriptElementKind.memberSetAccessorElement;
+                default:
+                    return "unknown";
+            }
         }
 
         return sourceFileItem.childItems;
