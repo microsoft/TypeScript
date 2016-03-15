@@ -1033,8 +1033,10 @@ namespace ts {
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
                 else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
+                    if (hasTypeScriptFileExtension(fileName) || options.disableSizeLimit || programSizeForNonTsFiles !== -1){
+                        diagnostic = Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
+                    }
                 }
                 else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                     diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
@@ -1045,13 +1047,17 @@ namespace ts {
                 const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
-                        diagnostic = Diagnostics.File_0_not_found;
-                        diagnosticArgument = [fileName];
+                        if (options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
+                            diagnostic = Diagnostics.File_0_not_found;
+                            diagnosticArgument = [fileName];
+                        }
                     }
                     else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
-                        diagnostic = Diagnostics.File_0_not_found;
-                        fileName += ".ts";
-                        diagnosticArgument = [fileName];
+                        if (options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
+                            diagnostic = Diagnostics.File_0_not_found;
+                            fileName += ".ts";
+                            diagnosticArgument = [fileName];
+                        }
                     }
                 }
             }
@@ -1089,7 +1095,8 @@ namespace ts {
                 return file;
             }
 
-            if (!options.disableSizeLimit && programSizeForNonTsFiles === -1) {
+            const isNonTsFile = !hasTypeScriptFileExtension(fileName);
+            if (isNonTsFile && !options.disableSizeLimit && programSizeForNonTsFiles === -1) {
                 return undefined;
             }
 
@@ -1104,7 +1111,7 @@ namespace ts {
                 }
             });
 
-            if (!options.disableSizeLimit && file && file.text && !hasTypeScriptFileExtension(file.fileName)) {
+            if (isNonTsFile && !options.disableSizeLimit && file && file.text) {
                 programSizeForNonTsFiles += file.text.length;
                 if (programSizeForNonTsFiles > maxProgramSizeForNonTsFiles) {
                     // If the program size limit was reached when processing a file, this file is
