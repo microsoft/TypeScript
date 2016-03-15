@@ -348,6 +348,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+        const programSizeLimitExceeded = -1;
         let programSizeForNonTsFiles = 0;
 
         let skipDefaultLib = options.noLib;
@@ -443,6 +444,10 @@ namespace ts {
         programTime += new Date().getTime() - start;
 
         return program;
+
+        function exceedProgramSizeLimit() {
+            return !options.disableSizeLimit && programSizeForNonTsFiles === programSizeLimitExceeded;
+        }
 
         function getCommonSourceDirectory() {
             if (typeof commonSourceDirectory === "undefined") {
@@ -1033,7 +1038,7 @@ namespace ts {
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
                 else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
-                    if (hasTypeScriptFileExtension(fileName) || options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
+                    if (hasTypeScriptFileExtension(fileName) || !exceedProgramSizeLimit()) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
@@ -1047,13 +1052,13 @@ namespace ts {
                 const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
-                        if (options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
+                        if (!exceedProgramSizeLimit()) {
                             diagnostic = Diagnostics.File_0_not_found;
                             diagnosticArgument = [fileName];
                         }
                     }
                     else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
-                        if (options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
+                        if (!exceedProgramSizeLimit()) {
                             diagnostic = Diagnostics.File_0_not_found;
                             fileName += ".ts";
                             diagnosticArgument = [fileName];
@@ -1096,7 +1101,7 @@ namespace ts {
             }
 
             const isNonTsFile = !hasTypeScriptFileExtension(fileName);
-            if (isNonTsFile && !options.disableSizeLimit && programSizeForNonTsFiles === -1) {
+            if (isNonTsFile && exceedProgramSizeLimit()) {
                 return undefined;
             }
 
@@ -1125,7 +1130,7 @@ namespace ts {
                         rootLevelDirectory += directorySeparator;
                     }
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_JavaScript_files_in_the_project_Consider_specifying_the_exclude_setting_in_project_configuration_to_limit_included_source_folders_The_likely_folder_to_exclude_is_0_To_disable_the_project_size_limit_set_the_disableSizeLimit_compiler_option_to_true, rootLevelDirectory));
-                    programSizeForNonTsFiles = -1;
+                    programSizeForNonTsFiles = programSizeLimitExceeded;
                     return undefined;
                 }
             }
