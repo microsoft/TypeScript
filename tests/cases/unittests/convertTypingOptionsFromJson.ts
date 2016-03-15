@@ -3,13 +3,12 @@
 
 namespace ts {
     describe('convertTypingOptionsFromJson', () => {
-        function assertTypingOptions(json: any, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
+        function assertTypingOptions(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
             const actualErrors: Diagnostic[] = [];
-            const actualTypingOptions = convertOptionsFromJson<TypingOptions>(typingOptionDeclarations, json["typingOptions"], "/apath/", "tsconfig.json", actualErrors);
-            
+            const actualTypingOptions = convertTypingOptionsFromJson(typingOptionDeclarations, json["typingOptions"], "/apath/", configFileName, actualErrors);
             const parsedTypingOptions = JSON.stringify(actualTypingOptions);
             const expectedTypingOptions = JSON.stringify(expectedResult.typingOptions);
-            assert.equal(parsedTypingOptions, parsedTypingOptions);
+            assert.equal(parsedTypingOptions, expectedTypingOptions);
             
             const expectedErrors = expectedResult.errors;
             assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
@@ -20,25 +19,170 @@ namespace ts {
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
             }
         }
-        
-        const correctFormatOptions = {
-            "typingOptions": {
-                "enableAutoDiscovery": true,
-                "include": ["0.d.ts", "1.d.ts"],
-                "exclude": ["0.js", "1.js"]
-            }
-        }
-        
-        it("Convert correctly format JSON to compiler-options ", () => {
-            debugger;   
-            assertTypingOptions(correctFormatOptions, {
-                typingOptions: <TypingOptions>{
-                    enableAutoDiscovery: true,
-                    include: ["/apath/0.d.ts", "/apath/1.d.ts"],
-                    exclude: ["/apath/0.js", "/apath/1.js"]
+
+        // tsconfig.json
+        it("Convert correctly format tsconfig.json to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovery": true,
+                        "include": ["0.d.ts", "1.d.ts"],
+                        "exclude": ["0.js", "1.js"]
+                    }
                 },
-                errors: <Diagnostic[]>[]
+                "tsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: true,
+                        include: ["0.d.ts", "1.d.ts"],
+                        exclude: ["0.js", "1.js"]
+                    },
+                    errors: <Diagnostic[]>[]
             });
+        });
+ 
+        it("Convert incorrect format tsconfig.json to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovy": true,
+                    }
+                }, "tsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: false,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: [
+                        {
+                            category: Diagnostics.Unknown_typing_option_0.category,
+                            code: Diagnostics.Unknown_typing_option_0.code,
+                            file: undefined,
+                            start: 0,
+                            length: 0,
+                            messageText: undefined
+                        }
+                    ]
+                });
+        });
+
+        it("Convert default tsconfig.json to typing-options ", () => {
+            assertTypingOptions({}, "tsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: false,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: <Diagnostic[]>[]
+                });
+        });
+
+        it("Convert tsconfig.json with only enableAutoDiscovery property to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovery": true
+                    }
+                }, "tsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: true,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: <Diagnostic[]>[]
+                });
+        });
+
+        // jsconfig.json
+        it("Convert jsconfig.json to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovery": false,
+                        "include": ["0.d.ts"],
+                        "exclude": ["0.js"]
+                    }
+                }, "jsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: false,
+                        include: ["0.d.ts"],
+                        exclude: ["0.js"]
+                    },
+                    errors: <Diagnostic[]>[]
+                });
+        });
+
+        it("Convert default jsconfig.json to typing-options ", () => {
+            assertTypingOptions({ }, "jsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: true,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: <Diagnostic[]>[]
+                });
+        });
+
+        it("Convert incorrect format jsconfig.json to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovy": true,
+                    }
+                }, "jsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: true,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: [
+                        {
+                            category: Diagnostics.Unknown_compiler_option_0.category,
+                            code: Diagnostics.Unknown_typing_option_0.code,
+                            file: undefined,
+                            start: 0,
+                            length: 0,
+                            messageText: undefined
+                        }
+                    ]
+                });
+        });
+
+        it("Convert jsconfig.json with only enableAutoDiscovery property to typing-options ", () => {
+            assertTypingOptions(
+                {
+                    "typingOptions":
+                    {
+                        "enableAutoDiscovery": false
+                    }
+                }, "jsconfig.json",
+                {
+                    typingOptions:
+                    {
+                        enableAutoDiscovery: false,
+                        include: [],
+                        exclude: []
+                    },
+                    errors: <Diagnostic[]>[]
+                });
         });
     });
 }
