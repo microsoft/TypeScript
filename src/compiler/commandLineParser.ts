@@ -656,7 +656,7 @@ namespace ts {
         function getFileNames(errors: Diagnostic[]): string[] {
             let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
-                if (json["files"] instanceof Array) {
+                if (isArray(json["files"])) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
@@ -667,7 +667,7 @@ namespace ts {
                 const filesSeen: Map<boolean> = {};
 
                 let exclude: string[] = [];
-                if (json["exclude"] instanceof Array) {
+                if (isArray(json["exclude"])) {
                     exclude = json["exclude"];
                 }
                 else {
@@ -716,18 +716,8 @@ namespace ts {
         }
     }
 
-    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
-        const errors: Diagnostic[] = [];
-        const options = convertOptionsFromJson<CompilerOptions>(optionDeclarations, jsonOptions, basePath, configFileName, errors);
-
-        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json" && typeof options.allowJs === "undefined") {
-            options.allowJs = true;
-        }
-
-        return { options, errors };
-    }
-
-    function convertOptionsFromJson<T extends CompilerOptions | TypingOptions>(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string, configFileName: string, errors: Diagnostic[]): T {
+    /* @internal */
+    export function convertOptionsFromJson<T extends CompilerOptions | TypingOptions>(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string, configFileName: string, errors: Diagnostic[]): T {
         const options = {} as T;
 
         if (!jsonOptions) {
@@ -781,11 +771,10 @@ namespace ts {
         }
         else {
             errors.push(createCompilerDiagnostic(opt.error));
-            return 0;
         }
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
-        return ts.map(values, v => convertJsonOption(option.element, v, basePath, errors));
+        return ts.map(values, v => convertJsonOption(option.element, v, basePath, errors)).filter(v => { return v != undefined; });
     }
 }
