@@ -604,7 +604,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(`//# sourceMappingURL=${sourceMappingURL}`);
                 }
 
-                writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
+                writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM, sourceFiles);
 
                 // reset the state
                 sourceMap.reset();
@@ -748,16 +748,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             /** Write emitted output to disk */
-            function writeEmittedFiles(emitOutput: string, jsFilePath: string, sourceMapFilePath: string, writeByteOrderMark: boolean) {
+            function writeEmittedFiles(emitOutput: string, jsFilePath: string, sourceMapFilePath: string, writeByteOrderMark: boolean, sourceFiles: SourceFile[]) {
                 if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false);
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
                 }
 
                 if (sourceMapDataList) {
                     sourceMapDataList.push(sourceMap.getSourceMapData());
                 }
 
-                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark, sourceFiles);
             }
 
             // Create a temporary variable with a unique unused name.
