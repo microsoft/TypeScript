@@ -14213,7 +14213,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
+                else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
                     // The function has a return type, but the return statement doesn't have an expression.
                     error(node, Diagnostics.Not_all_code_paths_return_a_value);
                 }
