@@ -7512,8 +7512,15 @@ namespace ts {
                     }
                 }
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    // x = y
                     if (!isUnion) return unknownType;
-                    return checkExpressionCached((<BinaryExpression>parent).right);
+                    const type = checkExpressionCached((<BinaryExpression>parent).right);
+                    const parentType = getAssignedTypeAtLocation(parent);
+                    if (parentType) {
+                        // { z: x = y } = q
+                        return getUnionType([type, parentType]);
+                    }
+                    return type;
                 }
                 if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
                     // for (x in z) {}
@@ -7536,7 +7543,13 @@ namespace ts {
                     // {x} = y;
                     const type = getAssignedTypeAtLocation(parent.parent);
                     if (!type) return undefined;
-                    return getPropertyAssignmentType(type, <ShorthandPropertyAssignment>parent) || unknownType;
+                    if (!isUnion) return unknownType;
+                    const property = getPropertyAssignmentType(type, <ShorthandPropertyAssignment>parent) || unknownType;
+                    if ((<ShorthandPropertyAssignment>parent).objectAssignmentInitializer) {
+                        const initializer = checkExpressionCached((<ShorthandPropertyAssignment>parent).objectAssignmentInitializer);
+                        return getUnionType([property, initializer]);
+                    }
+                    return property;
                 }
                 
                 if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
@@ -7565,13 +7578,13 @@ namespace ts {
                 }
                 return undefined;
             }
-            function getPropertyAssignmentType(parentType: Type, property: PropertyAssignment | ShorthandPropertyAssignment) {
-                const name = property.name;
+            function getPropertyAssignmentType(parentType: Type, propertyAssignment: PropertyAssignment | ShorthandPropertyAssignment) {
+                const name = propertyAssignment.name;
                 if (name.kind === SyntaxKind.Identifier) {
                     const property = getPropertyOfType(parentType, (<Identifier>name).text);
                     if (property) return getTypeOfSymbol(property);
                 }
-                return undefined;
+                return unknownType;
             }
             function narrowTypeByAssignment(assignedType: Type) {
                 // Narrow union types only
