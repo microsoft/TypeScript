@@ -7234,7 +7234,18 @@ namespace ts {
                     }
                     for (let i = guards.length - 1; i >= 0; i--) {
                         const { expression, trueBranch } = guards[i];
-                        type = narrowType(type, expression, trueBranch);
+                        const narrowed = narrowType(type, expression, trueBranch);
+                        if (narrowed !== type && isVariableAssignedWithin(symbol, expression)) {
+                            // A variable could be reassigned in a type guard. Making this work would require some non-trivial
+                            // work. Instead, we fall back to the initial type, since no one would probably write such code.
+                            // Example:
+                            // let x: string | number | boolean;
+                            // if (typeof x === "string" || x = 42) { ... }
+                            type = initialType;
+                        }
+                        else {
+                            type = narrowed;
+                        }
                     }
                     if (type === initialType) {
                         return true;
