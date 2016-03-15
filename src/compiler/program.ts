@@ -1033,7 +1033,7 @@ namespace ts {
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
                 else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
-                    if (hasTypeScriptFileExtension(fileName) || options.disableSizeLimit || programSizeForNonTsFiles !== -1){
+                    if (hasTypeScriptFileExtension(fileName) || options.disableSizeLimit || programSizeForNonTsFiles !== -1) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }

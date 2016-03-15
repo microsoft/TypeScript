@@ -3,6 +3,12 @@
 /* @internal */
 namespace ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[]  {
+        // TODO: Handle JS files differently in 'navbar' calls for now, but ideally we should unify
+        // the 'navbar' and 'navto' logic for TypeScript and JavaScript.
+        if (isSourceFileJavaScript(sourceFile)) {
+            return getJsNavigationBarItems(sourceFile, compilerOptions);
+        }
+
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.
         let hasGlobalNode = false;
@@ -130,7 +136,7 @@ namespace ts.NavigationBar {
 
             return topLevelNodes;
         }
-         
+
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
@@ -147,7 +153,7 @@ namespace ts.NavigationBar {
                 }
             });
         }
-        
+
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
@@ -178,8 +184,8 @@ namespace ts.NavigationBar {
 
         function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
-                // A function declaration is 'top level' if it contains any function declarations 
-                // within it. 
+                // A function declaration is 'top level' if it contains any function declarations
+                // within it.
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
                     if (forEach((<Block>functionDeclaration.body).statements,
@@ -198,7 +204,7 @@ namespace ts.NavigationBar {
 
             return false;
         }
-        
+
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             let items: ts.NavigationBarItem[] = [];
 
@@ -395,19 +401,19 @@ namespace ts.NavigationBar {
                 let result: string[] = [];
 
                 result.push(moduleDeclaration.name.text);
-                
+
                 while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
                     result.push(moduleDeclaration.name.text);
-                } 
+                }
 
                 return result.join(".");
             }
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 let moduleName = getModuleName(node);
-                
+
                 let childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
                 return getNavigationBarItem(moduleName,
@@ -533,5 +539,207 @@ namespace ts.NavigationBar {
         function getTextOfNode(node: Node): string {
             return getTextOfNodeFromSourceText(sourceFile.text, node);
         }
+    }
+
+    export function getJsNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): NavigationBarItem[] {
+        const anonFnText = "<function>";
+        const anonClassText = "<class>";
+        let indent = 0;
+
+        let rootName = isExternalModule(sourceFile) ?
+            "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName)))) + "\""
+            : "<global>";
+
+        let sourceFileItem = getNavBarItem(rootName, ScriptElementKind.moduleElement, [getNodeSpan(sourceFile)]);
+        let topItem = sourceFileItem;
+
+        // Walk the whole file, because we want to also find function expressions - which may be in variable initializer,
+        // call arguments, expressions, etc...
+        forEachChild(sourceFile, visitNode);
+
+        function visitNode(node: Node) {
+            const newItem = createNavBarItem(node);
+
+            if (newItem) {
+                topItem.childItems.push(newItem);
+            }
+
+            // Add a level if traversing into a container
+            if (newItem && (isFunctionLike(node) || isClassLike(node))) {
+                const lastTop = topItem;
+                indent++;
+                topItem = newItem;
+                forEachChild(node, visitNode);
+                topItem = lastTop;
+                indent--;
+
+                // If the last item added was an anonymous function expression, and it had no children, discard it.
+                if (newItem && newItem.text === anonFnText && newItem.childItems.length === 0) {
+                    topItem.childItems.pop();
+                }
+            }
+            else {
+                forEachChild(node, visitNode);
+            }
+        }
+
+        function createNavBarItem(node: Node) : NavigationBarItem {
+            switch (node.kind) {
+                case SyntaxKind.VariableDeclaration:
+                    // Only add to the navbar if at the top-level of the file
+                    // Note: "const" and "let" are also SyntaxKind.VariableDeclarations
+                    if(node.parent/*VariableDeclarationList*/.parent/*VariableStatement*/
+                           .parent/*SourceFile*/.kind !== SyntaxKind.SourceFile) {
+                        return undefined;
+                    }
+                    // If it is initialized with a function expression, handle it when we reach the function expression node
+                    const varDecl = node as VariableDeclaration;
+                    if (varDecl.initializer && (varDecl.initializer.kind === SyntaxKind.FunctionExpression ||
+                                                varDecl.initializer.kind === SyntaxKind.ArrowFunction ||
+                                                varDecl.initializer.kind === SyntaxKind.ClassExpression)) {
+                        return undefined;
+                    }
+                    // Fall through
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // "export default function().." looks just like a regular function/class declaration, except with the 'default' flag
+                    const name = node.flags && (node.flags & NodeFlags.Default) && !(node as (Declaration)).name ? "default" :
+                            node.kind === SyntaxKind.Constructor ? "constructor" :
+                            declarationNameToString((node as (Declaration)).name);
+                    return getNavBarItem(name, getScriptKindForElementKind(node.kind), [getNodeSpan(node)]);
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.ClassExpression:
+                    return getDefineModuleItem(node) || getFunctionOrClassExpressionItem(node);
+                case SyntaxKind.MethodDeclaration:
+                    const methodDecl = node as MethodDeclaration;
+                    return getNavBarItem(declarationNameToString(methodDecl.name),
+                                         ScriptElementKind.memberFunctionElement,
+                                         [getNodeSpan(node)]);
+                case SyntaxKind.ExportAssignment:
+                    // e.g. "export default <expr>"
+                    return getNavBarItem("default", ScriptElementKind.variableElement, [getNodeSpan(node)]);
+                case SyntaxKind.ImportClause:    // e.g. 'def' in: import def from 'mod' (in ImportDeclaration)
+                    if (!(node as ImportClause).name) {
+                        // No default import (this node is still a parent of named & namespace imports, which are handled below)
+                        return undefined;
+                    }
+                    // fall through
+                case SyntaxKind.ImportSpecifier: // e.g. 'id' in: import {id} from 'mod' (in NamedImports, in ImportClause)
+                case SyntaxKind.NamespaceImport: // e.g. '* as ns' in: import * as ns from 'mod' (in ImportClause)
+                case SyntaxKind.ExportSpecifier: // e.g. 'a' or 'b'  in: export {a, foo as b} from 'mod'
+                    // Export specifiers are only interesting if they are reexports from another module, or renamed, else they are already globals
+                    if (node.kind === SyntaxKind.ExportSpecifier) {
+                        if (!(node.parent.parent as ExportDeclaration).moduleSpecifier && !(node as ExportSpecifier).propertyName) {
+                            return undefined;
+                        }
+                    }
+                    const decl = node as (ImportSpecifier | ImportClause | NamespaceImport | ExportSpecifier);
+                    if (!decl.name) {
+                        return undefined;
+                    }
+                    const declName = declarationNameToString(decl.name);
+                    return getNavBarItem(declName, ScriptElementKind.constElement, [getNodeSpan(node)]);
+                default:
+                    return undefined;
+            }
+        }
+
+        function getNavBarItem(text: string, kind: string, spans: TextSpan[], kindModifiers = ScriptElementKindModifier.none): NavigationBarItem {
+            return {
+                text, kind, kindModifiers, spans, childItems: [], indent, bolded: false, grayed: false
+            }
+        }
+
+        function getDefineModuleItem(node: Node): NavigationBarItem {
+            if (node.kind !== SyntaxKind.FunctionExpression && node.kind !== SyntaxKind.ArrowFunction) {
+                return undefined;
+            }
+
+            // No match if this is not a call expression to an identifier named 'define'
+            if (node.parent.kind !== SyntaxKind.CallExpression) {
+                return undefined;
+            }
+            const callExpr = node.parent as CallExpression;
+            if (callExpr.expression.kind !== SyntaxKind.Identifier || callExpr.expression.getText() !== 'define') {
+                return undefined;
+            }
+
+            // Return a module of either the given text in the first argument, or of the source file path
+            let defaultName = node.getSourceFile().fileName;
+            if (callExpr.arguments[0].kind === SyntaxKind.StringLiteral) {
+                defaultName = ((callExpr.arguments[0]) as StringLiteral).text;
+            }
+            return getNavBarItem(defaultName, ScriptElementKind.moduleElement, [getNodeSpan(node.parent)]);
+        }
+
+        function getFunctionOrClassExpressionItem(node: Node): NavigationBarItem {
+            if (node.kind !== SyntaxKind.FunctionExpression &&
+                    node.kind !== SyntaxKind.ArrowFunction &&
+                    node.kind !== SyntaxKind.ClassExpression) {
+                return undefined;
+            }
+
+            const fnExpr = node as FunctionExpression | ArrowFunction | ClassExpression;
+            let fnName: string;
+            if (fnExpr.name && getFullWidth(fnExpr.name) > 0) {
+                // The expression has an identifier, so use that as the name
+                fnName = declarationNameToString(fnExpr.name);
+            }
+            else {
+                // See if it is a var initializer. If so, use the var name.
+                if (fnExpr.parent.kind === SyntaxKind.VariableDeclaration) {
+                    fnName = declarationNameToString((fnExpr.parent as VariableDeclaration).name);
+                }
+                // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
+                else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression &&
+                         (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    fnName = (fnExpr.parent as BinaryExpression).left.getText();
+                    if (fnName.length > 20) {
+                        fnName = fnName.substring(0, 17) + "...";
+                    }
+                }
+                // See if it is a property assignment, and if so use the property name
+                else if (fnExpr.parent.kind === SyntaxKind.PropertyAssignment &&
+                         (fnExpr.parent as PropertyAssignment).name) {
+                    fnName = (fnExpr.parent as PropertyAssignment).name.getText();
+                }
+                else {
+                    fnName = node.kind === SyntaxKind.ClassExpression ? anonClassText : anonFnText;
+                }
+            }
+            const scriptKind = node.kind === SyntaxKind.ClassExpression ? ScriptElementKind.classElement : ScriptElementKind.functionElement;
+            return getNavBarItem(fnName, scriptKind, [getNodeSpan(node)]);
+        }
+
+        function getNodeSpan(node: Node) {
+            return node.kind === SyntaxKind.SourceFile
+                ? createTextSpanFromBounds(node.getFullStart(), node.getEnd())
+                : createTextSpanFromBounds(node.getStart(), node.getEnd());
+        }
+
+        function getScriptKindForElementKind(kind: SyntaxKind) {
+            switch (kind) {
+                case SyntaxKind.VariableDeclaration:
+                    return ScriptElementKind.variableElement;
+                case SyntaxKind.FunctionDeclaration:
+                    return ScriptElementKind.functionElement;
+                case SyntaxKind.ClassDeclaration:
+                    return ScriptElementKind.classElement;
+                case SyntaxKind.Constructor:
+                    return ScriptElementKind.constructorImplementationElement;
+                case SyntaxKind.GetAccessor:
+                    return ScriptElementKind.memberGetAccessorElement;
+                case SyntaxKind.SetAccessor:
+                    return ScriptElementKind.memberSetAccessorElement;
+                default:
+                    return "unknown";
+            }
+        }
+
+        return sourceFileItem.childItems;
     }
 }
