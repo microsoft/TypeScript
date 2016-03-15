@@ -9,6 +9,9 @@ function kindIs(kind: Kind, is: Kind): boolean {
 }
 
 var x: Kind = "A";
+var y = x;
+
+x = undefined;
 
 if (kindIs(x, "A")) {
     let a = x;
