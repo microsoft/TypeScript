@@ -1,4 +1,3 @@
-/// <reference path='utilities.ts' />
 /// <reference path='services.ts' />
 
 /* @internal */
