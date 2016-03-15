@@ -308,8 +308,7 @@ namespace ts {
         },
         {
             name: "disableSizeLimit",
-            type: "boolean",
-            description: Diagnostics.Disable_the_upper_limit_for_the_total_file_size_of_a_project
+            type: "boolean"
         }
     ];
 

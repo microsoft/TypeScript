@@ -2863,5 +2863,5 @@ namespace ts {
         return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 
-    export const maxProgramSize = 20 * 1024 * 1024;
+    export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 }

@@ -1217,7 +1217,7 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
-                let programSize = 0;
+                let programSizeForNonTsFiles = 0;
 
                 // As the project openning might not be complete if there are too many files,
                 // therefore to surface the diagnostics we need to make sure the given client file is opened.
@@ -1225,7 +1225,7 @@ namespace ts.server {
                     if (this.host.fileExists(clientFileName)) {
                         const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
                         project.addRoot(currentClientFileInfo);
-                        programSize += currentClientFileInfo.content.length;
+                        programSizeForNonTsFiles += currentClientFileInfo.content.length;
                     }
                     else {
                         return { errorMsg: "specified file " + clientFileName + " not found" };
@@ -1238,15 +1238,15 @@ namespace ts.server {
                     }
 
                     if (this.host.fileExists(rootFilename)) {
-                        if (projectOptions.compilerOptions.disableSizeLimit === true) {
+                        if (projectOptions.compilerOptions.disableSizeLimit) {
                             const info = this.openFile(rootFilename, /*openedByClient*/ false);
                             project.addRoot(info);
                         }
-                        else if (programSize <= maxProgramSize) {
+                        else if (programSizeForNonTsFiles <= maxProgramSizeForNonTsFiles) {
                             const info = this.openFile(rootFilename, /*openedByClient*/ false);
                             project.addRoot(info);
                             if (!hasTypeScriptFileExtension(rootFilename)) {
-                                programSize += info.content.length;
+                                programSizeForNonTsFiles += info.content.length;
                             }
                         }
                         else {

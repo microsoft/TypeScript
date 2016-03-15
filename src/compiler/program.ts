@@ -348,6 +348,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+        let programSizeForNonTsFiles = 0;
 
         let skipDefaultLib = options.noLib;
         const supportedExtensions = getSupportedExtensions(options);
@@ -401,34 +402,7 @@ namespace ts {
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            if (options.disableSizeLimit === true) {
-                forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
-            }
-            else {
-                let programSize = 0;
-                for (const name of rootNames) {
-                    const path = toPath(name, currentDirectory, getCanonicalFileName);
-                    if (programSize <= maxProgramSize) {
-                        processRootFile(name, /*isDefaultLib*/ false);
-                        const file = filesByName.get(path);
-                        if (!hasTypeScriptFileExtension(name) && file && file.text) {
-                            programSize += file.text.length;
-                        }
-                    }
-                    else {
-                        // If the program size limit was reached when processing a file, this file is
-                        // likely in the problematic folder than contains too many files
-                        const commonSourceDirectory = getCommonSourceDirectory();
-                        let rootLevelDirectory = path.substring(0, Math.max(commonSourceDirectory.length, path.indexOf(directorySeparator, commonSourceDirectory.length)));
-                        if (rootLevelDirectory[rootLevelDirectory.length - 1] !== directorySeparator) {
-                            rootLevelDirectory += directorySeparator;
-                        }
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_JavaScript_files_in_the_project_Use_an_exact_files_list_or_use_the_exclude_setting_in_project_configuration_to_limit_included_source_folders_The_likely_folder_to_exclude_is_0_To_disable_the_project_size_limit_set_the_disableSizeLimit_compiler_option_to_true, rootLevelDirectory));
-                        break;
-                    }
-                }
-            }
-
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
@@ -1115,6 +1089,27 @@ namespace ts {
                 return file;
             }
 
+            if (!options.disableSizeLimit) {
+                if (programSizeForNonTsFiles === -1) {
+                    return;
+                }
+                if (programSizeForNonTsFiles > maxProgramSizeForNonTsFiles) {
+                    // If the program size limit was reached when processing a file, this file is
+                    // likely in the problematic folder than contains too many files.
+                    // Normally the folder is one level down from the commonSourceDirectory, for example,
+                    // if the commonSourceDirectory is "/src/", and the last processed path was "/src/node_modules/a/b.js",
+                    // we should show in the error message "/src/node_modules/".
+                    const commonSourceDirectory = getCommonSourceDirectory();
+                    let rootLevelDirectory = path.substring(0, Math.max(commonSourceDirectory.length, path.indexOf(directorySeparator, commonSourceDirectory.length)));
+                    if (rootLevelDirectory[rootLevelDirectory.length - 1] !== directorySeparator) {
+                        rootLevelDirectory += directorySeparator;
+                    }
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_JavaScript_files_in_the_project_Consider_specifying_the_exclude_setting_in_project_configuration_to_limit_included_source_folders_The_likely_folder_to_exclude_is_0_To_disable_the_project_size_limit_set_the_disableSizeLimit_compiler_option_to_true, rootLevelDirectory));
+                    programSizeForNonTsFiles = -1;
+                    return;
+                }
+            }
+
             // We haven't looked for this file, do so now and cache result
             const file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                 if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
@@ -1125,6 +1120,10 @@ namespace ts {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
             });
+
+            if (!options.disableSizeLimit && file && file.text && !hasTypeScriptFileExtension(file.fileName)) {
+                programSizeForNonTsFiles += file.text.length;
+            }
 
             filesByName.set(path, file);
             if (file) {
