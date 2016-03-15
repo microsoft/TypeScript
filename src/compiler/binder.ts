@@ -710,15 +710,15 @@ namespace ts {
         function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): void {
             // bind expressions (don't affect reachability, do affect identfier flow)
             bind(n.expression);
+            const preInitializerState = currentReachabilityState;
             bind(n.initializer, true);
-            bindFlowMarker(n.initializer);
-
             const preStatementState = currentReachabilityState;
+
             const postStatementLabel = pushImplicitLabel(n);
 
             bind(n.statement);
             bindIterationFlowMarkerEnd(n.initializer);
-            popImplicitLabel(postStatementLabel, preStatementState, n.initializer);
+            popImplicitLabel(postStatementLabel, or(preInitializerState, preStatementState), n.initializer);
         }
 
         function bindIfStatement(n: IfStatement): void {
