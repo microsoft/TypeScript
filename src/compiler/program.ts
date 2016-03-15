@@ -7,6 +7,7 @@ namespace ts {
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
     /* @internal */ export let ioWriteTime = 0;
+    /* @internal */ export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
     /** The version of the TypeScript compiler release */
 
@@ -348,6 +349,8 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+        const programSizeLimitExceeded = -1;
+        let programSizeForNonTsFiles = 0;
 
         let skipDefaultLib = options.noLib;
         const supportedExtensions = getSupportedExtensions(options);
@@ -394,7 +397,8 @@ namespace ts {
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||
                 (oldOptions.jsx !== options.jsx) ||
-                (oldOptions.allowJs !== options.allowJs)) {
+                (oldOptions.allowJs !== options.allowJs) ||
+                (oldOptions.disableSizeLimit !== options.disableSizeLimit)) {
                 oldProgram = undefined;
             }
         }
@@ -441,6 +445,10 @@ namespace ts {
         programTime += new Date().getTime() - start;
 
         return program;
+
+        function exceedProgramSizeLimit() {
+            return !options.disableSizeLimit && programSizeForNonTsFiles === programSizeLimitExceeded;
+        }
 
         function getCommonSourceDirectory() {
             if (typeof commonSourceDirectory === "undefined") {
@@ -1054,7 +1062,7 @@ namespace ts {
                 }
             }
 
-            if (diagnostic) {
+            if (diagnostic && !exceedProgramSizeLimit()) {
                 if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
                     fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
                 }
@@ -1087,6 +1095,11 @@ namespace ts {
                 return file;
             }
 
+            const isNonTsFile = !hasTypeScriptFileExtension(fileName);
+            if (isNonTsFile && exceedProgramSizeLimit()) {
+                return undefined;
+            }
+
             // We haven't looked for this file, do so now and cache result
             const file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
                 if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
@@ -1097,6 +1110,25 @@ namespace ts {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
             });
+
+            if (isNonTsFile && !options.disableSizeLimit && file && file.text) {
+                programSizeForNonTsFiles += file.text.length;
+                if (programSizeForNonTsFiles > maxProgramSizeForNonTsFiles) {
+                    // If the program size limit was reached when processing a file, this file is
+                    // likely in the problematic folder than contains too many files.
+                    // Normally the folder is one level down from the commonSourceDirectory, for example,
+                    // if the commonSourceDirectory is "/src/", and the last processed path was "/src/node_modules/a/b.js",
+                    // we should show in the error message "/src/node_modules/".
+                    const commonSourceDirectory = getCommonSourceDirectory();
+                    let rootLevelDirectory = path.substring(0, Math.max(commonSourceDirectory.length, path.indexOf(directorySeparator, commonSourceDirectory.length)));
+                    if (rootLevelDirectory[rootLevelDirectory.length - 1] !== directorySeparator) {
+                        rootLevelDirectory += directorySeparator;
+                    }
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Too_many_JavaScript_files_in_the_project_Consider_specifying_the_exclude_setting_in_project_configuration_to_limit_included_source_folders_The_likely_folder_to_exclude_is_0_To_disable_the_project_size_limit_set_the_disableSizeLimit_compiler_option_to_true, rootLevelDirectory));
+                    programSizeForNonTsFiles = programSizeLimitExceeded;
+                    return undefined;
+                }
+            }
 
             filesByName.set(path, file);
             if (file) {

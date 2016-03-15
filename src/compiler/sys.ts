@@ -74,7 +74,7 @@ namespace ts {
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
     };
 
-    export var sys: System = (function () {
+    export var sys: System = (function() {
 
         function getWScriptSystem(): System {
 
@@ -407,8 +407,8 @@ namespace ts {
             const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): boolean {
-                 return parseInt(process.version.charAt(1)) >= 4;
-             }
+                return parseInt(process.version.charAt(1)) >= 4;
+            }
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -477,15 +477,20 @@ namespace ts {
                     for (const current of files) {
                         const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
-                            const stat = _fs.statSync(name);
-                            if (stat.isFile()) {
-                                if (!extension || fileExtensionIs(name, extension)) {
-                                    result.push(name);
+                            // fs.statSync would throw an exception if the file is a symlink
+                            // whose linked file doesn't exist.
+                            try {
+                                const stat = _fs.statSync(name);
+                                if (stat.isFile()) {
+                                    if (!extension || fileExtensionIs(name, extension)) {
+                                        result.push(name);
+                                    }
+                                }
+                                else if (stat.isDirectory()) {
+                                    directories.push(name);
                                 }
                             }
-                            else if (stat.isDirectory()) {
-                                directories.push(name);
-                            }
+                            catch (e) { }
                         }
                     }
                     for (const current of directories) {
@@ -509,7 +514,7 @@ namespace ts {
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
                     const watchSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
-                    const watchedFile =  watchSet.addFile(filePath, callback);
+                    const watchedFile = watchSet.addFile(filePath, callback);
                     return {
                         close: () => watchSet.removeFile(watchedFile)
                     };
@@ -539,7 +544,7 @@ namespace ts {
                         }
                     );
                 },
-                resolvePath: function (path: string): string {
+                resolvePath: function(path: string): string {
                     return _path.resolve(path);
                 },
                 fileExists(path: string): boolean {

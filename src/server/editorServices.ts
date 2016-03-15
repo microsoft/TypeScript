@@ -1217,10 +1217,45 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
+                let programSizeForNonTsFiles = 0;
+
+                // As the project openning might not be complete if there are too many files,
+                // therefore to surface the diagnostics we need to make sure the given client file is opened.
+                if (clientFileName) {
+                    if (this.host.fileExists(clientFileName)) {
+                        const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
+                        project.addRoot(currentClientFileInfo);
+                        if (!hasTypeScriptFileExtension(currentClientFileInfo.fileName) && currentClientFileInfo.content) {
+                            programSizeForNonTsFiles += currentClientFileInfo.content.length;
+                        }
+                    }
+                    else {
+                        return { errorMsg: "specified file " + clientFileName + " not found" };
+                    }
+                }
+
                 for (const rootFilename of projectOptions.files) {
+                    if (rootFilename === clientFileName) {
+                        continue;
+                    }
+
                     if (this.host.fileExists(rootFilename)) {
-                        const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
-                        project.addRoot(info);
+                        if (projectOptions.compilerOptions.disableSizeLimit) {
+                            const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                            project.addRoot(info);
+                        }
+                        else if (programSizeForNonTsFiles <= maxProgramSizeForNonTsFiles) {
+                            const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                            project.addRoot(info);
+                            if (!hasTypeScriptFileExtension(rootFilename)) {
+                                programSizeForNonTsFiles += info.content.length;
+                            }
+                        }
+                        else {
+                            // The project size is too large. Stop loading the files on the server,
+                            // and let the compiler issue an diagnostic via `createProgram`.
+                            break;
+                        }
                     }
                     else {
                         return { errorMsg: "specified file " + rootFilename + " not found" };
@@ -1251,7 +1286,10 @@ namespace ts.server {
                     return error;
                 }
                 else {
-                    const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
+                    // if the project is too large, the root files might not have been all loaded if the total
+                    // program size reached the upper limit. In that case project.projectOptions.files should
+                    // be more precise. However this would only happen for configured project.
+                    const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = projectOptions.files;
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);

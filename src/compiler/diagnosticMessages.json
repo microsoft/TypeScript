@@ -2661,5 +2661,9 @@
     "Unknown typing option '{0}'.": {
         "category": "Error",
         "code": 17010
+    },
+    "Too many JavaScript files in the project. Consider specifying the 'exclude' setting in project configuration to limit included source folders. The likely folder to exclude is '{0}'. To disable the project size limit, set the 'disableSizeLimit' compiler option to 'true'.": {
+        "category": "Error",
+        "code": 17012
     }
 }
