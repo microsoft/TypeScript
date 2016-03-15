@@ -1252,6 +1252,8 @@ namespace ts.server {
                             }
                         }
                         else {
+                            // The project size is too large. Stop loading the files on the server,
+                            // and let the compiler issue an diagnostic via `createProgram`.
                             break;
                         }
                     }
@@ -1285,7 +1287,7 @@ namespace ts.server {
                 }
                 else {
                     // if the project is too large, the root files might not have been all loaded if the total
-                    // program size reached the upper limit. In that case project.projectOptions.files should 
+                    // program size reached the upper limit. In that case project.projectOptions.files should
                     // be more precise. However this would only happen for configured project.
                     const oldFileNames = project.projectOptions ? project.projectOptions.files : project.compilerService.host.roots.map(info => info.fileName);
                     const newFileNames = projectOptions.files;
