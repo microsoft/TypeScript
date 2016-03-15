@@ -7,6 +7,7 @@ namespace ts {
     /* @internal */ export let emitTime = 0;
     /* @internal */ export let ioReadTime = 0;
     /* @internal */ export let ioWriteTime = 0;
+    /* @internal */ export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 
     /** The version of the TypeScript compiler release */
 
@@ -1038,10 +1039,8 @@ namespace ts {
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
                 else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
-                    if (hasTypeScriptFileExtension(fileName) || !exceedProgramSizeLimit()) {
-                        diagnostic = Diagnostics.File_0_not_found;
-                        diagnosticArgument = [fileName];
-                    }
+                    diagnostic = Diagnostics.File_0_not_found;
+                    diagnosticArgument = [fileName];
                 }
                 else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                     diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
@@ -1052,22 +1051,18 @@ namespace ts {
                 const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
-                        if (!exceedProgramSizeLimit()) {
-                            diagnostic = Diagnostics.File_0_not_found;
-                            diagnosticArgument = [fileName];
-                        }
+                        diagnostic = Diagnostics.File_0_not_found;
+                        diagnosticArgument = [fileName];
                     }
                     else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
-                        if (!exceedProgramSizeLimit()) {
-                            diagnostic = Diagnostics.File_0_not_found;
-                            fileName += ".ts";
-                            diagnosticArgument = [fileName];
-                        }
+                        diagnostic = Diagnostics.File_0_not_found;
+                        fileName += ".ts";
+                        diagnosticArgument = [fileName];
                     }
                 }
             }
 
-            if (diagnostic) {
+            if (diagnostic && !exceedProgramSizeLimit()) {
                 if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
                     fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
                 }

@@ -2862,6 +2862,4 @@ namespace ts {
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
         return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
-
-    export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 }
