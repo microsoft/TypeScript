@@ -1478,7 +1478,6 @@ declare namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
-        disableSizeLimit?: boolean;
         [option: string]: string | number | boolean;
     }
     interface TypingOptions {
@@ -1682,7 +1681,6 @@ declare namespace ts {
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
     function getTypeParameterOwner(d: Declaration): Declaration;
     function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean;
-    const maxProgramSizeForNonTsFiles: number;
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
