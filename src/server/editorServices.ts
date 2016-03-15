@@ -1225,7 +1225,9 @@ namespace ts.server {
                     if (this.host.fileExists(clientFileName)) {
                         const currentClientFileInfo = this.openFile(clientFileName, /*openedByClient*/ true);
                         project.addRoot(currentClientFileInfo);
-                        programSizeForNonTsFiles += currentClientFileInfo.content.length;
+                        if (!hasTypeScriptFileExtension(currentClientFileInfo.fileName) && currentClientFileInfo.content) {
+                            programSizeForNonTsFiles += currentClientFileInfo.content.length;
+                        }
                     }
                     else {
                         return { errorMsg: "specified file " + clientFileName + " not found" };
