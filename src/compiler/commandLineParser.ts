@@ -518,7 +518,7 @@ namespace ts {
                 }
 
                 function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string) {
-                    const map = <Map<number>>opt.type;
+                    const map = opt.type;
                     const key = (value || "").toLowerCase();
                     if (hasProperty(map, key)) {
                         return map[key];
@@ -529,12 +529,15 @@ namespace ts {
                     }
                 }
 
-                function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): number[] | string[] {
-                    const values = (value || "").split(",");
+                function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (number | string)[] {
+                    const values = (value || "").split(",").filter(v => { return v != undefined; });
                     switch (opt.element.type) {
-                        case "number": return ts.map(values, parseInt);
-                        case "string": return ts.map(values, v => v || "");
-                        default: return ts.map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v));
+                        case "number":
+                            return ts.map(values, parseInt);
+                        case "string":
+                            return ts.map(values, v => v || "");
+                        default:
+                            return ts.map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)).filter(v => { return v != undefined; });
                     }
                 }
             }

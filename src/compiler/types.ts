@@ -2437,6 +2437,7 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2446,7 +2447,7 @@ namespace ts {
 
         list?: string[];
 
-        [option: string]: string | number | boolean | TsConfigOnlyOptions | string[] | number[];
+        [option: string]: string | number | boolean | TsConfigOnlyOptions | (string | number)[];
     }
 
     export interface TypingOptions {
