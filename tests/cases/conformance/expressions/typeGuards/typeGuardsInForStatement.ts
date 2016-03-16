@@ -17,5 +17,5 @@ function c(x: string | number) {
         x; // string
         if (cond) break;
     }
-    x; // number | number
+    x; // string | number
 }

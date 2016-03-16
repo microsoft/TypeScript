@@ -32,5 +32,5 @@ function b() {
     else {
         x = "";
     }
-    x; // number
+    x; // string
 }
