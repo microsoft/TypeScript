@@ -212,6 +212,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
+var newLine = "";
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
@@ -273,6 +274,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             if (!opts.noMapRoot) {
                 options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
             }
+        }
+
+        if (newLine) {
+            options += " --newLine " + newLine;
         }
 
         if (opts.stripInternal) {
@@ -481,7 +486,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
                 var i = content.lastIndexOf("\n");
                 fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
-    
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -511,6 +516,8 @@ task("tsc", ["generate-diagnostics", "lib", tscFile]);
 desc("Sets release mode flag");
 task("release", function() {
     useDebugMode = false;
+    // Force LF for release builds to save on file size
+    newLine = "LF";
 });
 
 // Set the default task to "local"
