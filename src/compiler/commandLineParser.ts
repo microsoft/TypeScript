@@ -58,7 +58,6 @@ namespace ts {
             },
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
-            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
             name: "reactNamespace",
@@ -94,7 +93,6 @@ namespace ts {
             },
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_es2015_or_none
         },
         {
             name: "newLine",
@@ -104,7 +102,6 @@ namespace ts {
             },
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
-            error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",
@@ -233,7 +230,6 @@ namespace ts {
             },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES2015
         },
         {
             name: "version",
@@ -265,7 +261,6 @@ namespace ts {
                 "classic": ModuleResolutionKind.Classic,
             },
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
-            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
             name: "lib",
@@ -297,7 +292,6 @@ namespace ts {
                     "es6.symbol.wellknown": "lib.es6.symbol.wellknown.d.ts",
                     "es7.array.include": "lib.es7.array.include.d.ts"
                 },
-                error: Diagnostics.Arguments_for_library_option_must_be_Colon_0,
             },
             description: Diagnostics.Specify_library_to_be_included_in_the_compilation_Colon,
         },
@@ -423,25 +417,15 @@ namespace ts {
         return optionNameMapCache;
     }
 
-    // Cache between the name of commandline which is a custom type and a list of all possible custom types
-    const namesOfCustomTypeMapCache: Map<string[]> = {};
-
     /* @internal */
-    export function getNamesOfCustomTypeFromCommandLineOptionsOfCustomType(opt: CommandLineOptionOfCustomType): string[] {
-        if (hasProperty(namesOfCustomTypeMapCache, opt.name)) {
-            return namesOfCustomTypeMapCache[opt.name];
-        }
+    export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
 
-        const type = opt.type;
         const namesOfType: string[] = [];
-        for (const typeName in type) {
-            if (hasProperty(type, typeName)) {
-                namesOfType.push(typeName);
-            }
-        }
+        ts.forEachKey(opt.type, key => {
+            namesOfType.push(` '${key}'`);
+        });
 
-        namesOfCustomTypeMapCache[opt.name] = namesOfType;
-        return namesOfCustomTypeMapCache[opt.name];
+        return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
@@ -518,19 +502,18 @@ namespace ts {
                 }
 
                 function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string) {
+                    const key = (value || "").trim().toLowerCase();
                     const map = opt.type;
-                    const key = (value || "").toLowerCase();
                     if (hasProperty(map, key)) {
                         return map[key];
                     }
                     else {
-                        const suggestedOption = getNamesOfCustomTypeFromCommandLineOptionsOfCustomType(opt);
-                        errors.push(createCompilerDiagnostic(opt.error, suggestedOption ? suggestedOption : undefined));
+                        errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
                     }
                 }
 
                 function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (number | string)[] {
-                    const values = (value.trim() || "").split(",");
+                    const values = (value || "").trim().split(",");
                     switch (opt.element.type) {
                         case "number":
                             return ts.map(values, parseInt);
@@ -788,7 +771,7 @@ namespace ts {
             return opt.type[key];
         }
         else {
-            errors.push(createCompilerDiagnostic(opt.error));
+            errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
         }
     }
 

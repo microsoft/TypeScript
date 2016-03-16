@@ -2549,7 +2549,6 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
         type: Map<number | string>;             // an object literal mapping named values to actual values
-        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
     }
 
     /* @internal */

@@ -16,8 +16,9 @@ namespace ts {
             for (let i = 0; i < parsedErrors.length; ++i) {
                 const parsedError = parsedErrors[i];
                 const expectedError = expectedErrors[i]; 
-                assert.equal(parsedError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(parsedError.code)}.`);
-                assert.equal(parsedError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(parsedError.category)}.`);
+                assert.equal(parsedError.code, expectedError.code);
+                assert.equal(parsedError.category, expectedError.category);
+                assert.equal(parsedError.messageText, expectedError.messageText);
             }
 
             const parsedFileNames = parsed.fileNames;
@@ -26,7 +27,7 @@ namespace ts {
             for (let i = 0; i < parsedFileNames.length; ++i) {
                 const parsedFileName = parsedFileNames[i];
                 const expectedFileName = expectedFileNames[i]; 
-                assert.equal(parsedFileName, expectedFileName, `Expected filename: ${JSON.stringify(expectedFileName)}. Actual fileName: ${JSON.stringify(parsedFileName)}.`);
+                assert.equal(parsedFileName, expectedFileName);
             }
         }
 
@@ -59,9 +60,9 @@ namespace ts {
             assertParseResult(["--lib", "es5,es8", "0.ts"],
                 {
                     errors: [{
-                        messageText: "",
-                        category: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.category,
-                        code: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.code,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                         file: undefined,
                         start: undefined,
@@ -74,14 +75,172 @@ namespace ts {
                 });
         });
 
-        it("Parse incorrect form of library flags ", () => {
+        it("Parse empty options of --jsx ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--jsx"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'jsx' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                            messageText: "Argument for '--jsx' option must be:  'preserve', 'react'",
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
+
+        it("Parse empty options of --module ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--module"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'module' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                            messageText: "Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'", 
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
+
+        it("Parse empty options of --newLine ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--newLine"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'newLine' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                            messageText: "Argument for '--newLine' option must be:  'crlf', 'lf'",
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
+
+        it("Parse empty options of --target ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--target"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'target' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                            messageText: "Argument for '--target' option must be:  'es3', 'es5', 'es6', 'es2015'",
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
+
+        it("Parse empty options of --moduleResolution ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--moduleResolution"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'moduleResolution' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                            messageText: "Argument for '--moduleResolution' option must be:  'node', 'classic'",
+                            category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                            code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                            file: undefined,
+                            start: undefined,
+                            length: undefined,
+                        }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
+
+        it("Parse empty options of --lib ", () => {
+            // 0.ts --lib
+            assertParseResult(["0.ts", "--lib"],
+                {
+                    errors: [{
+                        messageText: "Compiler option 'lib' expects an argument.",
+                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
+                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }, {
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    fileNames: ["0.ts"],
+                    options: {
+                        lib: []
+                    }
+                });
+        });
+
+        it("Parse --lib option with extra comma ", () => {
             // --lib es5, es7 0.ts
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "",
-                        category: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.category,
-                        code: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.code,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                         file: undefined,
                         start: undefined,
@@ -94,14 +253,14 @@ namespace ts {
                 });
         });
 
-        it("Parse incorrect form of library flags with trailing white-space ", () => {
+        it("Parse --lib option with trailing white-space ", () => {
             // --lib es5, es7 0.ts
             assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "",
-                        category: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.category,
-                        code: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.code,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                         file: undefined,
                         start: undefined,
@@ -141,14 +300,14 @@ namespace ts {
                 });
         });
 
-        it("Parse incorrect form of multiple compiler flags with input files in the middle", () => {
+        it("Parse --lib as the last arguments", () => {
             // --module commonjs --target es5 0.ts --lib es5, es6.symbol.wellknown
             assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,", "es6.symbol.wellknown"],
                 {
                     errors: [{
-                        messageText: "",
-                        category: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.category,
-                        code: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.code,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
+                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
                         file: undefined,
                         start: undefined,

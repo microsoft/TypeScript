@@ -2364,13 +2364,9 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
+    "Argument for '{0}' option must be: {1}": {
         "category": "Error",
         "code": 6046
-    },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-        "category": "Error",
-        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
@@ -2423,10 +2419,6 @@
     "NEWLINE": {
         "category": "Message",
         "code": 6061
-    },
-    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error",
-        "code": 6062
     },
     "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
         "category": "Error",
