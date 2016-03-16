@@ -408,8 +408,16 @@ namespace ts {
              }
 
             const platform: string = _os.platform();
-            // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+
+            const useCaseSensitiveFileNames = testCaseSensitiveFileNames();
+            function testCaseSensitiveFileNames() {
+                const upperCaseExecutingFilePath = __filename.toUpperCase();
+                const lowerCaseExecutingFilePath = __filename.toLowerCase();
+                if (fileExists(upperCaseExecutingFilePath) && fileExists(lowerCaseExecutingFilePath)) {
+                    return false;
+                }
+                return true;
+            }
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!fileExists(fileName)) {
