@@ -1478,6 +1478,7 @@ declare namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        disableSizeLimit?: boolean;
         [option: string]: string | number | boolean;
     }
     interface TypingOptions {
