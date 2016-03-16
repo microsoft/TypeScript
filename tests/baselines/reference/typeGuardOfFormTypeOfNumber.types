@@ -152,7 +152,7 @@ else {
 if (typeof numOrBool !== "number") {
 >typeof numOrBool !== "number" : boolean
 >typeof numOrBool : string
->numOrBool : number | boolean
+>numOrBool : boolean | number
 >"number" : string
 
     var x: number | boolean = numOrBool; // number | boolean
@@ -168,7 +168,7 @@ else {
 if (typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : string | boolean | number
 >"number" : string
 
     strOrBool = strOrNumOrBool; // string | boolean
@@ -185,7 +185,7 @@ else {
 if (typeof numOrC !== "number") {
 >typeof numOrC !== "number" : boolean
 >typeof numOrC : string
->numOrC : number | C
+>numOrC : C | number
 >"number" : string
 
     c = numOrC; // C

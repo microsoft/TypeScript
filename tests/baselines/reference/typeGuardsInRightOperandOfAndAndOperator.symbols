@@ -106,17 +106,17 @@ function foo7(x: number | string | boolean) {
         // change value of x
         ? (x = 10 && x.toString()) // number | boolean | string
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 14))
->x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 14))
->toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
         // do not change value
         : (y = x && x.toString()))); // number | boolean | string
 >y : Symbol(y, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 34, 7))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 14))
->x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 14))
->toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 }
 function foo8(x: number | string) {
 >foo8 : Symbol(foo8, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 45, 1))

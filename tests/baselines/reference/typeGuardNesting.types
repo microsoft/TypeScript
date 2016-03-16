@@ -34,7 +34,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >(typeof strOrBool === 'boolean') : boolean
 >typeof strOrBool === 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
+>strOrBool : string | boolean
 >'boolean' : string
 >strOrBool : boolean
 >false : boolean
@@ -56,7 +56,7 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >(typeof strOrBool !== 'string') : boolean
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
+>strOrBool : string | boolean
 >'string' : string
 >strOrBool : boolean
 >false : boolean
@@ -68,7 +68,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >typeof strOrBool !== 'string' && !strOrBool : boolean
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : boolean | string
 >'string' : string
 >!strOrBool : boolean
 >strOrBool : boolean
@@ -94,7 +94,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >(typeof strOrBool === 'boolean') : boolean
 >typeof strOrBool === 'boolean' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
+>strOrBool : string | boolean
 >'boolean' : string
 >strOrBool : boolean
 >false : boolean
@@ -116,7 +116,7 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >(typeof strOrBool !== 'string') : boolean
 >typeof strOrBool !== 'string' : boolean
 >typeof strOrBool : string
->strOrBool : boolean | string
+>strOrBool : string | boolean
 >'string' : string
 >strOrBool : boolean
 >false : boolean

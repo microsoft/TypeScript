@@ -62,13 +62,15 @@ unionNumberString = undefined;
 
 // type parameters
 function foo<T, U>(t: T, u: U) {
-    t = u; // error
-    u = t; // error
+    let tt: T;
+    let uu: U;
+    tt = u; // error
+    uu = t; // error
     var x : T | U;
     x = t; // ok
     x = u; // ok
-    t = x; // error U not assignable to T
-    u = x; // error T not assignable to U
+    tt = x; // error U not assignable to T
+    uu = x; // error T not assignable to U
 }
 
 
@@ -152,11 +154,13 @@ unionDE = undefined;
 unionNumberString = undefined;
 // type parameters
 function foo(t, u) {
-    t = u; // error
-    u = t; // error
+    var tt;
+    var uu;
+    tt = u; // error
+    uu = t; // error
     var x;
     x = t; // ok
     x = u; // ok
-    t = x; // error U not assignable to T
-    u = x; // error T not assignable to U
+    tt = x; // error U not assignable to T
+    uu = x; // error T not assignable to U
 }

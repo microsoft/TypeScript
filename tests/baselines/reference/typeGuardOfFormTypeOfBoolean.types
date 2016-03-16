@@ -188,7 +188,7 @@ else {
 if (typeof boolOrC !== "boolean") {
 >typeof boolOrC !== "boolean" : boolean
 >typeof boolOrC : string
->boolOrC : boolean | C
+>boolOrC : C | boolean
 >"boolean" : string
 
     c = boolOrC; // C

@@ -35,6 +35,15 @@ var x: Kind = "A";
 >Kind : "A" | "B"
 >"A" : "A"
 
+var y = x;
+>y : "A"
+>x : "A"
+
+x = undefined;
+>x = undefined : undefined
+>x : "A" | "B"
+>undefined : undefined
+
 if (kindIs(x, "A")) {
 >kindIs(x, "A") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
@@ -55,7 +64,7 @@ if (!kindIs(x, "B")) {
 >!kindIs(x, "B") : boolean
 >kindIs(x, "B") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
->x : "A" | "B"
+>x : "B" | "A"
 >"B" : "B"
 
     let c = x;
