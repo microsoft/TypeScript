@@ -931,7 +931,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
-                    (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
+                    (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
             };
         }
