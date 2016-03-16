@@ -31,52 +31,8 @@ namespace ts {
             }
         }
 
-        it("Parse single option of library flag ", () => {
-            // --lib es6 0.ts
-            assertParseResult(["--lib", "es6", "0.ts"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: {
-                        lib: ["lib.es6.d.ts"]
-                    }
-                });
-        });
-
-        it("Parse multiple options of library flags ", () => {
-            // --lib es5,es6.symbol.wellknown 0.ts
-            assertParseResult(["--lib", "es5,es6.symbol.wellknown", "0.ts"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: {
-                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"]
-                    }
-                });
-        });
-
-        it("Parse unavailable options of library flags ", () => {
-            // --lib es5,es7 0.ts
-            assertParseResult(["--lib", "es5,es8", "0.ts"],
-                {
-                    errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }],
-                    fileNames: ["0.ts"],
-                    options: {
-                        lib: ["lib.es5.d.ts"]
-                    }
-                });
-        });
-
         it("Parse empty options of --jsx ", () => {
-            // 0.ts --lib
+            // 0.ts --jsx
             assertParseResult(["0.ts", "--jsx"],
                 {
                     errors: [{
@@ -102,7 +58,7 @@ namespace ts {
         });
 
         it("Parse empty options of --module ", () => {
-            // 0.ts --lib
+            // 0.ts --
             assertParseResult(["0.ts", "--module"],
                 {
                     errors: [{
@@ -128,7 +84,7 @@ namespace ts {
         });
 
         it("Parse empty options of --newLine ", () => {
-            // 0.ts --lib
+            // 0.ts --newLine
             assertParseResult(["0.ts", "--newLine"],
                 {
                     errors: [{
@@ -154,7 +110,7 @@ namespace ts {
         });
 
         it("Parse empty options of --target ", () => {
-            // 0.ts --lib
+            // 0.ts --target
             assertParseResult(["0.ts", "--target"],
                 {
                     errors: [{
@@ -180,7 +136,7 @@ namespace ts {
         });
 
         it("Parse empty options of --moduleResolution ", () => {
-            // 0.ts --lib
+            // 0.ts --moduleResolution
             assertParseResult(["0.ts", "--moduleResolution"],
                 {
                     errors: [{
@@ -205,133 +161,29 @@ namespace ts {
                 });
         });
 
-        it("Parse empty options of --lib ", () => {
-            // 0.ts --lib
-            assertParseResult(["0.ts", "--lib"],
-                {
-                    errors: [{
-                        messageText: "Compiler option 'lib' expects an argument.",
-                        category: ts.Diagnostics.Compiler_option_0_expects_an_argument.category,
-                        code: ts.Diagnostics.Compiler_option_0_expects_an_argument.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }, {
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }],
-                    fileNames: ["0.ts"],
-                    options: {
-                        lib: []
-                    }
-                });
-        });
-
-        it("Parse --lib option with extra comma ", () => {
-            // --lib es5, es7 0.ts
-            assertParseResult(["--lib", "es5,", "es7", "0.ts"],
-                {
-                    errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }],
-                    fileNames: ["es7", "0.ts"],
-                    options: {
-                        lib: ["lib.es5.d.ts"]
-                    }
-                });
-        });
-
-        it("Parse --lib option with trailing white-space ", () => {
-            // --lib es5, es7 0.ts
-            assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
-                {
-                    errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }],
-                    fileNames: ["es7", "0.ts"],
-                    options: {
-                        lib: ["lib.es5.d.ts"]
-                    }
-                });
-        });
-
         it("Parse multiple compiler flags with input files at the end", () => {
-            // --lib es5,es6.symbol.wellknown --target es5 0.ts
-            assertParseResult(["--lib", "es5,es6.symbol.wellknown", "--target", "es5", "0.ts"],
+            // --module commonjs --target es5 0.ts
+            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
-                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                        module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
                     }
                 });
         });
 
         it("Parse multiple compiler flags with input files in the middle", () => {
-            // --module commonjs --target es5 0.ts --lib es5,es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,es6.symbol.wellknown"],
+            // --module commonjs --target es5 0.ts --noImplicitAny
+            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--noImplicitAny"],
                 {
                     errors: [],
                     fileNames: ["0.ts"],
                     options: {
                         module: ts.ModuleKind.CommonJS,
                         target: ts.ScriptTarget.ES5,
-                        lib: ["lib.es5.d.ts", "lib.es6.symbol.wellknown.d.ts"],
-                    }
-                });
-        });
-
-        it("Parse --lib as the last arguments", () => {
-            // --module commonjs --target es5 0.ts --lib es5, es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "0.ts", "--lib", "es5,", "es6.symbol.wellknown"],
-                {
-                    errors: [{
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
-                        category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
-                        code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                    }],
-                    fileNames: ["0.ts", "es6.symbol.wellknown"],
-                    options: {
-                        module: ts.ModuleKind.CommonJS,
-                        target: ts.ScriptTarget.ES5,
-                        lib: ["lib.es5.d.ts"],
-                    }
-                });
-        });
-
-        it("Parse multiple library compiler flags ", () => {
-            // --module commonjs --target es5 --lib es5 0.ts --library es6.array,es6.symbol.wellknown
-            assertParseResult(["--module", "commonjs", "--target", "es5", "--lib", "es5", "0.ts", "--lib", "es6.array,es6.symbol.wellknown"],
-                {
-                    errors: [],
-                    fileNames: ["0.ts"],
-                    options: {
-                        module: ts.ModuleKind.CommonJS,
-                        target: ts.ScriptTarget.ES5,
-                        lib: ["lib.es6.array.d.ts", "lib.es6.symbol.wellknown.d.ts"],
+                        noImplicitAny: true,
                     }
                 });
         });

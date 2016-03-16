@@ -263,39 +263,6 @@ namespace ts {
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
-            name: "lib",
-            type: "list",
-            element: {
-                name: "lib",
-                type: {
-                    // JavaScript only
-                    "es5": "lib.es5.d.ts",
-                    "es6": "lib.es6.d.ts",
-                    "es7": "lib.es7.d.ts",
-                    // Host only
-                    "dom": "lib.dom.d.ts",
-                    "webworker": "lib.webworker.d.ts",
-                    "scripthost": "lib.scripthost.d.ts",
-                    // ES6 Or ESNext By-feature options
-                    "es6.array": "lib.es6.array.d.ts",
-                    "es6.collection": "lib.es6.collection.d.ts",
-                    "es6.function": "lib.es6.function.d.ts",
-                    "es6.iterable": "lib.es6.iterable.d.ts",
-                    "es6.math": "lib.es6.math.d.ts",
-                    "es6.number": "lib.es6.number.d.ts",
-                    "es6.object": "lib.es6.object.d.ts",
-                    "es6.promise": "lib.es6.promise.d.ts",
-                    "es6.proxy": "lib.es6.proxy.d.ts",
-                    "es6.reflect": "lib.es6.reflect.d.ts",
-                    "es6.regexp": "lib.es6.regexp.d.ts",
-                    "es6.symbol": "lib.es6.symbol.d.ts",
-                    "es6.symbol.wellknown": "lib.es6.symbol.wellknown.d.ts",
-                    "es7.array.include": "lib.es7.array.include.d.ts"
-                },
-            },
-            description: Diagnostics.Specify_library_to_be_included_in_the_compilation_Colon,
-        },
-        {
             name: "allowUnusedLabels",
             type: "boolean",
             description: Diagnostics.Do_not_report_errors_on_unused_labels
@@ -385,7 +352,7 @@ namespace ts {
             name: "exclude",
             type: "list",
             element: {
-                name: "include",
+                name: "exclude",
                 type: "string"
             }
         }
