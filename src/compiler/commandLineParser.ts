@@ -478,7 +478,7 @@ namespace ts {
                     }
                 }
 
-                function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (number | string)[] {
+                function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (string | number)[] {
                     const values = (value || "").trim().split(",");
                     switch (opt.element.type) {
                         case "number":
@@ -590,9 +590,9 @@ namespace ts {
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
         const errors: Diagnostic[] = [];
-        const compilerOptions: CompilerOptions = convertCompilerOptionsFromJson(optionDeclarations, json["compilerOptions"], basePath, configFileName, errors);
+        const compilerOptions: CompilerOptions = convertCompilerOptionsFromJson(optionDeclarations, json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
-        const typingOptions: TypingOptions = convertTypingOptionsFromJson(typingOptionDeclarations, json["typingOptions"], basePath, configFileName, errors);
+        const typingOptions: TypingOptions = convertTypingOptionsFromJson(typingOptionDeclarations, json["typingOptions"], basePath, errors, configFileName);
 
         const fileNames = getFileNames(errors);
 
@@ -667,27 +667,27 @@ namespace ts {
     }
 
     /* @internal */
-    export function convertCompilerOptionsFromJson(optionsDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
-        configFileName: string, errors: Diagnostic[]): CompilerOptions {
+    export function convertCompilerOptionsFromJson(optionsDeclarations: CommandLineOption[], jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): CompilerOptions {
 
         const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json" ? { allowJs: true } : {};
-        convertOptionsFromJson<CompilerOptions>(optionDeclarations, jsonOptions, basePath, configFileName, options, Diagnostics.Unknown_compiler_option_0, errors);
+        convertOptionsFromJson<CompilerOptions>(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
         return options;
     }
 
     /* @internal */
-    export function convertTypingOptionsFromJson(optionsDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
-        configFileName: string, errors: Diagnostic[]): TypingOptions {
+    export function convertTypingOptionsFromJson(optionsDeclarations: CommandLineOption[], jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): TypingOptions {
 
         const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
             ? { enableAutoDiscovery: true, include: [], exclude: [] }
             : { enableAutoDiscovery: false, include: [], exclude: [] };
-        convertOptionsFromJson<TypingOptions>(typingOptionDeclarations, jsonOptions, basePath, configFileName, options, Diagnostics.Unknown_typing_option_0, errors);
+        convertOptionsFromJson<TypingOptions>(typingOptionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_typing_option_0, errors);
         return options;
     }
 
     function convertOptionsFromJson<T extends CompilerOptions | TypingOptions>(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
-        configFileName: string, defaultOptions: T, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
+        defaultOptions: T, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
             return ;
@@ -706,7 +706,7 @@ namespace ts {
         }
     }
 
-    function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Diagnostic[]): number | string | number[] | string[] {
+    function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Diagnostic[]): CompilerOptionsValue {
         const optType = opt.type;
         const expectedType = typeof optType === "string" ? optType : "string";
         if (optType === "list" && isArray(value)) {

@@ -5,7 +5,7 @@ namespace ts {
     describe('convertCompilerOptionsFromJson', () => {
         function assertCompilerOptions(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             const actualErrors: Diagnostic[] = [];
-            const actualCompilerOptions: CompilerOptions = convertCompilerOptionsFromJson(optionDeclarations, json["compilerOptions"], "/apath/", configFileName, actualErrors);
+            const actualCompilerOptions: CompilerOptions = convertCompilerOptionsFromJson(optionDeclarations, json["compilerOptions"], "/apath/", actualErrors, configFileName);
             
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);

@@ -2381,6 +2381,8 @@ namespace ts {
     export type PathSubstitutions = Map<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2447,7 +2449,7 @@ namespace ts {
 
         list?: string[];
 
-        [option: string]: string | number | boolean | TsConfigOnlyOptions | (string | number)[];
+        [option: string]: CompilerOptionsValue;
     }
 
     export interface TypingOptions {

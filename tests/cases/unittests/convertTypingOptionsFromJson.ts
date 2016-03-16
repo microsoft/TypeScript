@@ -5,7 +5,7 @@ namespace ts {
     describe('convertTypingOptionsFromJson', () => {
         function assertTypingOptions(json: any, configFileName: string, expectedResult: { typingOptions: TypingOptions, errors: Diagnostic[] }) {
             const actualErrors: Diagnostic[] = [];
-            const actualTypingOptions = convertTypingOptionsFromJson(typingOptionDeclarations, json["typingOptions"], "/apath/", configFileName, actualErrors);
+            const actualTypingOptions = convertTypingOptionsFromJson(typingOptionDeclarations, json["typingOptions"], "/apath/", actualErrors, configFileName);
             const parsedTypingOptions = JSON.stringify(actualTypingOptions);
             const expectedTypingOptions = JSON.stringify(expectedResult.typingOptions);
             assert.equal(parsedTypingOptions, expectedTypingOptions);
