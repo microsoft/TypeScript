@@ -146,7 +146,7 @@ var harnessSources = harnessCoreSources.concat([
     "session.ts",
     "versionCache.ts",
     "convertToBase64.ts",
-    "transpile.ts", 
+    "transpile.ts",
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
