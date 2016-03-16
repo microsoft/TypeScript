@@ -665,7 +665,6 @@ namespace ts {
 
             // bind expressions (don't affect reachability)
             bind(n.expression, true);
-            bindFlowMarker(n.expression);
 
             const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? defaultUnreachable : currentReachabilityState;
 
@@ -684,7 +683,6 @@ namespace ts {
             const loopStartNode = n.condition || n.statement;
 
             bind(n.condition, loopStartNode === n.condition);
-            if (loopStartNode === n.condition) bindFlowMarker(loopStartNode);
 
             const preForState = currentReachabilityState;
             const postForLabel = pushImplicitLabel(n);
@@ -694,7 +692,6 @@ namespace ts {
 
             if (n.incrementor) {
                 bind(n.incrementor, true);
-                bindFlowMarker(n.incrementor);
             }
             bindIterationFlowMarkerEnd(loopStartNode);
 
