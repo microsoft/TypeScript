@@ -86,7 +86,7 @@ function c(x: string | number) {
 >x : string | number
 >"string" : string
 
-    x; // number | boolean
+    x; // string | number
 >x : string | number
 }
 

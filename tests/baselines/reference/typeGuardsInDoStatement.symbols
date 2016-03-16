@@ -68,7 +68,7 @@ function c(x: string | number) {
     } while (typeof x === "string")
 >x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
 
-    x; // number | boolean
+    x; // string | number
 >x : Symbol(x, Decl(typeGuardsInDoStatement.ts, 18, 11))
 }
 

@@ -30,15 +30,14 @@ function foo2(x: number | string) {
 >foo2 : (x: number | string) => string | number
 >x : number | string
 
-    // x is assigned in the if true branch, the type is not narrowed
     return typeof x === "string"
->typeof x === "string"        ? (x = 10 && x)// string | number        : x : string | number
+>typeof x === "string"        ? (x = 10 && x) // string        : x : string | number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
 >"string" : string
 
-        ? (x = 10 && x)// string | number
+        ? (x = 10 && x) // string
 >(x = 10 && x) : string
 >x = 10 && x : string
 >x : number | string
@@ -46,23 +45,21 @@ function foo2(x: number | string) {
 >10 : number
 >x : string
 
-        : x; // string | number
+        : x; // number
 >x : number
 }
 function foo3(x: number | string) {
 >foo3 : (x: number | string) => string | number
 >x : number | string
 
-    // x is assigned in the if false branch, the type is not narrowed
-    // even though assigned using same type as narrowed expression
     return typeof x === "string"
->typeof x === "string"        ? (x = "Hello" && x) // string | number        : x : string | number
+>typeof x === "string"        ? (x = "Hello" && x) // string        : x : string | number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
 >"string" : string
 
-        ? (x = "Hello" && x) // string | number
+        ? (x = "Hello" && x) // string
 >(x = "Hello" && x) : string
 >x = "Hello" && x : string
 >x : number | string
@@ -70,26 +67,24 @@ function foo3(x: number | string) {
 >"Hello" : string
 >x : string
 
-        : x; // string | number
+        : x; // number
 >x : number
 }
 function foo4(x: number | string) {
 >foo4 : (x: number | string) => string | number
 >x : number | string
 
-    // false branch updates the variable - so here it is not number
-    // even though assigned using same type as narrowed expression
     return typeof x === "string"
->typeof x === "string"        ? x // string | number        : (x = 10 && x) : string | number
+>typeof x === "string"        ? x // string        : (x = 10 && x) : string | number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
 >"string" : string
 
-        ? x // string | number
+        ? x // string
 >x : string
 
-        : (x = 10 && x); // string | number
+        : (x = 10 && x); // number
 >(x = 10 && x) : number
 >x = 10 && x : number
 >x : number | string
@@ -101,18 +96,17 @@ function foo5(x: number | string) {
 >foo5 : (x: number | string) => string | number
 >x : number | string
 
-    // false branch updates the variable - so here it is not number
     return typeof x === "string"
->typeof x === "string"        ? x // string | number        : (x = "hello" && x) : string | number
+>typeof x === "string"        ? x // string        : (x = "hello" && x) : string | number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
 >"string" : string
 
-        ? x // string | number
+        ? x // string
 >x : string
 
-        : (x = "hello" && x); // string | number
+        : (x = "hello" && x); // number
 >(x = "hello" && x) : number
 >x = "hello" && x : number
 >x : number | string
@@ -126,13 +120,13 @@ function foo6(x: number | string) {
 
     // Modify in both branches
     return typeof x === "string"
->typeof x === "string"        ? (x = 10 && x) // string | number        : (x = "hello" && x) : string | number
+>typeof x === "string"        ? (x = 10 && x) // string        : (x = "hello" && x) : string | number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
 >"string" : string
 
-        ? (x = 10 && x) // string | number
+        ? (x = 10 && x) // string
 >(x = 10 && x) : string
 >x = 10 && x : string
 >x : number | string
@@ -140,7 +134,7 @@ function foo6(x: number | string) {
 >10 : number
 >x : string
 
-        : (x = "hello" && x); // string | number
+        : (x = "hello" && x); // number
 >(x = "hello" && x) : number
 >x = "hello" && x : number
 >x : number | string
@@ -187,7 +181,7 @@ function foo8(x: number | string | boolean) {
 >b : number | boolean
 
     return typeof x === "string"
->typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
+>typeof x === "string"        ? x === "hello"        : ((b = x) && // number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string | boolean
@@ -198,9 +192,9 @@ function foo8(x: number | string | boolean) {
 >x : string
 >"hello" : string
 
-        : ((b = x) && //  number | boolean
->((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
->(b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
+        : ((b = x) && // number | boolean
+>((b = x) && // number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
+>(b = x) && // number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : number | boolean
@@ -305,13 +299,13 @@ function foo11(x: number | string | boolean) {
 >b : number | boolean | string
 
     return typeof x === "string"
->typeof x === "string"        ? x // number | boolean | string - changed in the false branch        : ((b = x) // x is number | boolean | string - because the assignment changed it        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number | boolean
+>typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean | string - because the assignment changed it        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number | boolean
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string | boolean
 >"string" : string
 
-        ? x // number | boolean | string - changed in the false branch
+        ? x // string
 >x : string
 
         : ((b = x) // x is number | boolean | string - because the assignment changed it
@@ -349,13 +343,13 @@ function foo12(x: number | string | boolean) {
 >b : number | boolean | string
 
     return typeof x === "string"
->typeof x === "string"        ? (x = 10 && x.toString().length) // number | boolean | string - changed here        : ((b = x) // x is number | boolean | string  - changed in true branch        && typeof x === "number"        && x) : number
+>typeof x === "string"        ? (x = 10 && x.toString().length) // x is string, result is number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string | boolean
 >"string" : string
 
-        ? (x = 10 && x.toString().length) // number | boolean | string - changed here
+        ? (x = 10 && x.toString().length) // x is string, result is number
 >(x = 10 && x.toString().length) : number
 >x = 10 && x.toString().length : number
 >x : number | string | boolean
@@ -368,10 +362,10 @@ function foo12(x: number | string | boolean) {
 >toString : () => string
 >length : number
 
-        : ((b = x) // x is number | boolean | string  - changed in true branch
->((b = x) // x is number | boolean | string  - changed in true branch        && typeof x === "number"        && x) : number
->(b = x) // x is number | boolean | string  - changed in true branch        && typeof x === "number"        && x : number
->(b = x) // x is number | boolean | string  - changed in true branch        && typeof x === "number" : boolean
+        : ((b = x) // x is number | boolean
+>((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
+>(b = x) // x is number | boolean        && typeof x === "number"        && x : number
+>(b = x) // x is number | boolean        && typeof x === "number" : boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
 >b : number | boolean | string
