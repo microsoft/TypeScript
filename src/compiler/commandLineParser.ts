@@ -386,9 +386,8 @@ namespace ts {
 
     /* @internal */
     export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
-
         const namesOfType: string[] = [];
-        ts.forEachKey(opt.type, key => {
+        forEachKey(opt.type, key => {
             namesOfType.push(` '${key}'`);
         });
 
@@ -487,7 +486,7 @@ namespace ts {
                         case "string":
                             return ts.map(values, v => v || "");
                         default:
-                            return ts.filter(ts.map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)), v => !!v);
+                            return filter(map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)), v => !!v);
                     }
                 }
             }
@@ -743,6 +742,6 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
-        return ts.filter(ts.map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 }
