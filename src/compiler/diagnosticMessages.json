@@ -2420,10 +2420,6 @@
         "category": "Message",
         "code": 6061
     },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
-        "category": "Error",
-        "code": 6063
-    },
     "Option '{0}' can only be specified in 'tsconfig.json' file.": {
         "category": "Error",
         "code": 6064
@@ -2483,10 +2479,6 @@
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
