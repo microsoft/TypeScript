@@ -69,7 +69,7 @@ export module C {
 >T : Symbol(T, Decl(declFileGenericType.ts, 13, 19))
 
         constructor(public val: T) { }
->val : Symbol(val, Decl(declFileGenericType.ts, 15, 20))
+>val : Symbol(D.val, Decl(declFileGenericType.ts, 15, 20))
 >T : Symbol(T, Decl(declFileGenericType.ts, 13, 19))
 
     }

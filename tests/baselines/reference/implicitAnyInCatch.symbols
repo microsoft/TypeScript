@@ -13,7 +13,7 @@ class C {
 >C : Symbol(C, Decl(implicitAnyInCatch.ts, 4, 25))
 
     public temp() {
->temp : Symbol(temp, Decl(implicitAnyInCatch.ts, 6, 9))
+>temp : Symbol(C.temp, Decl(implicitAnyInCatch.ts, 6, 9))
 
         for (var x in this) {
 >x : Symbol(x, Decl(implicitAnyInCatch.ts, 8, 16))

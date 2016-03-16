@@ -39,7 +39,7 @@ module X.Y.Z {
 >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 14))
 
         length: number;
->length : Symbol(length, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 15, 23))
+>length : Symbol(Line.length, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 15, 23))
     }
 }
 
@@ -56,7 +56,7 @@ module X {
 >Line : Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 22, 18))
 
                 name: string;
->name : Symbol(name, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 23, 31))
+>name : Symbol(Line.name, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 23, 31))
             }
         }
     }

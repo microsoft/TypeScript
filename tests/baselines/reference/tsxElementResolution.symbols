@@ -7,7 +7,7 @@ declare namespace JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution.tsx, 1, 23))
 
 		foundFirst: { x: string };
->foundFirst : Symbol(foundFirst, Decl(tsxElementResolution.tsx, 2, 30))
+>foundFirst : Symbol(IntrinsicElements.foundFirst, Decl(tsxElementResolution.tsx, 2, 30))
 >x : Symbol(x, Decl(tsxElementResolution.tsx, 3, 15))
 
 		'string_named';

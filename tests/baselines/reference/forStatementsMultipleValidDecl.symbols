@@ -21,8 +21,8 @@ function declSpace() {
 }
 interface Point { x: number; y: number; }
 >Point : Symbol(Point, Decl(forStatementsMultipleValidDecl.ts, 10, 1))
->x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 11, 17))
->y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 11, 28))
+>x : Symbol(Point.x, Decl(forStatementsMultipleValidDecl.ts, 11, 17))
+>y : Symbol(Point.y, Decl(forStatementsMultipleValidDecl.ts, 11, 28))
 
 for (var p: Point; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8), Decl(forStatementsMultipleValidDecl.ts, 19, 8))
