@@ -4228,7 +4228,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/true);
 
                         if (isTopLevelDeclarationInSystemModule) {
-                            // is system modules top level variables are hoisted
+                            // in System modules top level variables are hoisted 
+                            // so variable declarations with destructuring are turned into destructuring assignments
                             write("(");
                         }
 
