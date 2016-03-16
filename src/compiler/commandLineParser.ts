@@ -530,14 +530,14 @@ namespace ts {
                 }
 
                 function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (number | string)[] {
-                    const values = (value || "").split(",").filter(v => { return v != undefined; });
+                    const values = (value.trim() || "").split(",");
                     switch (opt.element.type) {
                         case "number":
                             return ts.map(values, parseInt);
                         case "string":
                             return ts.map(values, v => v || "");
                         default:
-                            return ts.map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)).filter(v => { return v != undefined; });
+                            return ts.filter(ts.map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)), v => !!v);
                     }
                 }
             }
@@ -793,6 +793,6 @@ namespace ts {
     }
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
-        return ts.map(values, v => convertJsonOption(option.element, v, basePath, errors)).filter(v => { return v != undefined; });
+        return ts.filter(ts.map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 }

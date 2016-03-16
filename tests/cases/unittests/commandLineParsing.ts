@@ -94,6 +94,26 @@ namespace ts {
                 });
         });
 
+        it("Parse incorrect form of library flags with trailing white-space ", () => {
+            // --lib es5, es7 0.ts
+            assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
+                {
+                    errors: [{
+                        messageText: "",
+                        category: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.category,
+                        code: ts.Diagnostics.Arguments_for_library_option_must_be_Colon_0.code,
+
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    fileNames: ["es7", "0.ts"],
+                    options: {
+                        lib: ["lib.es5.d.ts"]
+                    }
+                });
+        });
+
         it("Parse multiple compiler flags with input files at the end", () => {
             // --lib es5,es6.symbol.wellknown --target es5 0.ts
             assertParseResult(["--lib", "es5,es6.symbol.wellknown", "--target", "es5", "0.ts"],
