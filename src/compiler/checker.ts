@@ -3663,6 +3663,7 @@ namespace ts {
                     const sig = typeParamCount ? getSignatureInstantiation(baseSig, typeArguments) : cloneSignature(baseSig);
                     sig.typeParameters = classType.localTypeParameters;
                     sig.resolvedReturnType = classType;
+                    sig.target = undefined;
                     result.push(sig);
                 }
             }
