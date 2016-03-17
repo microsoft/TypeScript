@@ -489,11 +489,24 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+            function readDirectory(path: string, extension?: string | string[], exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
+
+                function checkExtension(name: string) {
+                    if (!extension) {
+                        return true;
+                    }
+                    if (typeof extension === "string") {
+                        return fileExtensionIs(name, extension);
+                    }
+                    if (typeof extension === "string[]") {
+                        return forEach(extension, ext => fileExtensionIs(name, ext));
+                    }
+                }
+
                 function visitDirectory(path: string) {
                     const files = _fs.readdirSync(path || ".").sort();
                     const directories: string[] = [];
@@ -505,7 +518,7 @@ namespace ts {
                             try {
                                 const stat = _fs.statSync(name);
                                 if (stat.isFile()) {
-                                    if (!extension || fileExtensionIs(name, extension)) {
+                                    if (checkExtension(name)) {
                                         result.push(name);
                                     }
                                 }
