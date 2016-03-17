@@ -53,7 +53,7 @@ var x5: T5;
 
 interface I6 { x : string }
 >I6 : Symbol(I6, Decl(typeAliases.ts, 20, 11))
->x : Symbol(x, Decl(typeAliases.ts, 22, 14))
+>x : Symbol(I6.x, Decl(typeAliases.ts, 22, 14))
 
 type T6 = I6;
 >T6 : Symbol(T6, Decl(typeAliases.ts, 22, 27))
@@ -69,7 +69,7 @@ var x6: T6;
 
 class C7 { x: boolean }
 >C7 : Symbol(C7, Decl(typeAliases.ts, 25, 11))
->x : Symbol(x, Decl(typeAliases.ts, 27, 10))
+>x : Symbol(C7.x, Decl(typeAliases.ts, 27, 10))
 
 type T7 = C7;
 >T7 : Symbol(T7, Decl(typeAliases.ts, 27, 23))
@@ -127,7 +127,7 @@ var x11: T11;
 
 interface I13 { x: string };
 >I13 : Symbol(I13, Decl(typeAliases.ts, 46, 13))
->x : Symbol(x, Decl(typeAliases.ts, 48, 15))
+>x : Symbol(I13.x, Decl(typeAliases.ts, 48, 15))
 
 type T13 = I13;
 >T13 : Symbol(T13, Decl(typeAliases.ts, 48, 28))

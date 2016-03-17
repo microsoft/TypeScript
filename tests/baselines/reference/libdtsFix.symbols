@@ -3,6 +3,6 @@ interface HTMLElement {
 >HTMLElement : Symbol(HTMLElement, Decl(libdtsFix.ts, 0, 0))
 
     type: string;
->type : Symbol(type, Decl(libdtsFix.ts, 0, 23))
+>type : Symbol(HTMLElement.type, Decl(libdtsFix.ts, 0, 23))
 }
 

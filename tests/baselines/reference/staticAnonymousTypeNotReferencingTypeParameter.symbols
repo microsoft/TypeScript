@@ -118,7 +118,7 @@ interface Scanner {
 >Scanner : Symbol(Scanner, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 35, 1))
 
   scanRange<T>(start: number, length: number, callback: () => T): T;
->scanRange : Symbol(scanRange, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 36, 19))
+>scanRange : Symbol(Scanner.scanRange, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 36, 19))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 37, 12))
 >start : Symbol(start, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 37, 15))
 >length : Symbol(length, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 37, 29))
@@ -660,7 +660,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 16))
 
 	fill(value: any, start: number, end: number): void;
->fill : Symbol(fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
+>fill : Symbol(Array.fill, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 138, 20))
 >value : Symbol(value, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 6))
 >start : Symbol(start, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 17))
 >end : Symbol(end, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 139, 32))

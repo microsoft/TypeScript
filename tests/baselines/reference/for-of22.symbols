@@ -15,7 +15,7 @@ class FooIterator {
 >FooIterator : Symbol(FooIterator, Decl(for-of22.ts, 5, 13))
 
     next() {
->next : Symbol(next, Decl(for-of22.ts, 6, 19))
+>next : Symbol(FooIterator.next, Decl(for-of22.ts, 6, 19))
 
         return {
             value: new Foo,

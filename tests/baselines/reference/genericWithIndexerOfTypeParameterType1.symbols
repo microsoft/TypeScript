@@ -4,17 +4,17 @@ class LazyArray<T> {
 >T : Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
 
     private objects = <{ [objectId: string]: T; }>{};
->objects : Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
+>objects : Symbol(LazyArray.objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
 >objectId : Symbol(objectId, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 26))
 >T : Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
 
     array() {
->array : Symbol(array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
+>array : Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
 
         return this.objects;
->this.objects : Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
+>this.objects : Symbol(LazyArray.objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
 >this : Symbol(LazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 0))
->objects : Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
+>objects : Symbol(LazyArray.objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
     }
 }
 var lazyArray = new LazyArray<string>();

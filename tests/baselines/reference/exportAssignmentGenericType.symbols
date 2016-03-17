@@ -18,7 +18,7 @@ class Foo<T>{
 >T : Symbol(T, Decl(foo_0.ts, 0, 10))
 
 	test: T;
->test : Symbol(test, Decl(foo_0.ts, 0, 13))
+>test : Symbol(Foo.test, Decl(foo_0.ts, 0, 13))
 >T : Symbol(T, Decl(foo_0.ts, 0, 10))
 }
 export = Foo;
