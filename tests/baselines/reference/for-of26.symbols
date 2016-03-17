@@ -17,7 +17,7 @@ class StringIterator {
     }
     [Symbol.iterator]() {
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
         return this;

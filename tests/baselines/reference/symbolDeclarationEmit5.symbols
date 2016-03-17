@@ -4,6 +4,6 @@ interface I {
 
     [Symbol.isConcatSpreadable](): string;
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
 }

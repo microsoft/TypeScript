@@ -4,14 +4,14 @@ class C {
 
     get [Symbol.hasInstance]() {
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.d.ts, --, --))
 
         return "";
     }
     get [Symbol.toPrimitive]() {
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 
         return "";

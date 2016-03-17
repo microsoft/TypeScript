@@ -4,7 +4,7 @@ class C {
 
     [Symbol.iterator]: { x; y };
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty14.ts, 1, 24))
 >y : Symbol(y, Decl(symbolProperty14.ts, 1, 27))
@@ -14,7 +14,7 @@ interface I {
 
     [Symbol.iterator]?: { x };
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty14.ts, 4, 25))
 }

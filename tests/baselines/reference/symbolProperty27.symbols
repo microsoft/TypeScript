@@ -4,7 +4,7 @@ class C1 {
 
     [Symbol.toStringTag]() {
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 
         return {};
@@ -17,7 +17,7 @@ class C2 extends C1 {
 
     [Symbol.toStringTag]() {
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, --, --))
 
         return "";

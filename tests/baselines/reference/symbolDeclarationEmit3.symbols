@@ -4,19 +4,19 @@ class C {
 
     [Symbol.toPrimitive](x: number);
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit3.ts, 1, 25))
 
     [Symbol.toPrimitive](x: string);
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit3.ts, 2, 25))
 
     [Symbol.toPrimitive](x: any) { }
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolDeclarationEmit3.ts, 3, 25))
 }
