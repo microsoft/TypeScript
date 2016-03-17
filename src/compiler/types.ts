@@ -1580,7 +1580,8 @@ namespace ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string | string[], exclude: string[]): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
+        readDirectoryWithMultipleExtensions?(rootDir: string, extensions: string[], exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
@@ -2440,7 +2441,7 @@ namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         disableSizeLimit?: boolean;
-	lib?: string[];
+        lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

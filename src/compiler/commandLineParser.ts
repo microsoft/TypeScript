@@ -637,7 +637,15 @@ namespace ts {
                 const supportedExtensions = getSupportedExtensions(options);
                 Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
-                const potentialFiles = host.readDirectory(basePath, supportedExtensions, exclude);
+                const potentialFiles: string[] = [];
+                if (host.readDirectoryWithMultipleExtensions) {
+                    addRange(potentialFiles, host.readDirectoryWithMultipleExtensions(basePath, supportedExtensions, exclude));
+                }
+                else {
+                    for (const extension of supportedExtensions) {
+                        addRange(potentialFiles, host.readDirectory(basePath, extension, exclude));
+                    }
+                }
                 // Get files of supported extensions in their order of resolution
                 for (const extension of supportedExtensions) {
                     for (const fileName of potentialFiles) {

@@ -10,6 +10,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
+        getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: Path, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -20,6 +21,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectoryWithMultipleExtensions?(path: string, extensions: string[], exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -489,10 +491,32 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
-            function readDirectory(path: string, extension?: string | string[], exclude?: string[]): string[] {
+            function visitDirectory(path: string, extension: string | string[], exclude: string[]) {
                 const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                const files = _fs.readdirSync(path || ".").sort();
+                const directories: string[] = [];
+                for (const current of files) {
+                    const name = combinePaths(path, current);
+                    if (!contains(exclude, getCanonicalPath(name))) {
+                        // fs.statSync would throw an exception if the file is a symlink
+                        // whose linked file doesn't exist.
+                        try {
+                            const stat = _fs.statSync(name);
+                            if (stat.isFile()) {
+                                if (checkExtension(name)) {
+                                    result.push(name);
+                                }
+                            }
+                            else if (stat.isDirectory()) {
+                                directories.push(name);
+                            }
+                        }
+                        catch (e) { }
+                    }
+                }
+                for (const current of directories) {
+                    visitDirectory(current, extension, exclude);
+                }
                 return result;
 
                 function checkExtension(name: string) {
@@ -502,37 +526,20 @@ namespace ts {
                     if (typeof extension === "string") {
                         return fileExtensionIs(name, extension);
                     }
-                    if (typeof extension === "string[]") {
+                    else {
                         return forEach(extension, ext => fileExtensionIs(name, ext));
                     }
                 }
+            }
 
-                function visitDirectory(path: string) {
-                    const files = _fs.readdirSync(path || ".").sort();
-                    const directories: string[] = [];
-                    for (const current of files) {
-                        const name = combinePaths(path, current);
-                        if (!contains(exclude, getCanonicalPath(name))) {
-                            // fs.statSync would throw an exception if the file is a symlink
-                            // whose linked file doesn't exist.
-                            try {
-                                const stat = _fs.statSync(name);
-                                if (stat.isFile()) {
-                                    if (checkExtension(name)) {
-                                        result.push(name);
-                                    }
-                                }
-                                else if (stat.isDirectory()) {
-                                    directories.push(name);
-                                }
-                            }
-                            catch (e) { }
-                        }
-                    }
-                    for (const current of directories) {
-                        visitDirectory(current);
-                    }
-                }
+            function readDirectoryWithMultipleExtensions(path: string, extensions: string[], exclude?: string[]): string[] {
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
+                return visitDirectory(path, extensions, exclude);
+            }
+
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
+                return visitDirectory(path, extension, exclude);
             }
 
             return {
@@ -597,11 +604,22 @@ namespace ts {
                     return process.cwd();
                 },
                 readDirectory,
+                readDirectoryWithMultipleExtensions,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
                     }
                     return process.memoryUsage().heapUsed;
+                },
+                getFileSize(path) {
+                    try {
+                        const stat = _fs.statSync(path);
+                        if (stat.isFile()) {
+                            return stat.size;
+                        }
+                    }
+                    catch (e) { }
+                    return 0;
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);

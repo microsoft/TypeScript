@@ -123,6 +123,7 @@ declare namespace ts.server.protocol {
           * The list of normalized file name in the project, including 'lib.d.ts'
           */
         fileNames?: string[];
+        languageServiceDisabled?: boolean;
     }
 
     /** 
