@@ -3506,9 +3506,16 @@ namespace ts {
                         // through type declaration or inference.
                         // Also proceed if rootDeclaration is parameter and if its containing function expression\arrow function is contextually typed -
                         // type of parameter will flow in from the contextual type of the function
-                        if (rootDeclaration.initializer ||
-                            rootDeclaration.type ||
-                            (rootDeclaration.kind === SyntaxKind.Parameter && isExpression(rootDeclaration.parent) && typeChecker.getContextualType(<Expression>rootDeclaration.parent))) {
+                        let canGetType = !!(rootDeclaration.initializer || rootDeclaration.type);
+                        if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+                            if (isExpression(rootDeclaration.parent)) {
+                                canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
+                            }
+                            else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
+                                canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
+                            }
+                        }
+                        if (canGetType) {
                             typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                             existingMembers = (<BindingPattern>objectLikeContainer).elements;
                         }
