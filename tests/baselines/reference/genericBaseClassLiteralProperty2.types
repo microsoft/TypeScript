@@ -16,7 +16,7 @@ class BaseCollection2<TItem extends CollectionItem2> {
         this._itemsByKey = {};
 >this._itemsByKey = {} : {}
 >this._itemsByKey : { [key: string]: TItem; }
->this : this
+>this : BaseCollection2<TItem>
 >_itemsByKey : { [key: string]: TItem; }
 >{} : {}
     }
@@ -36,7 +36,7 @@ class DataView2 extends BaseCollection2<CollectionItem2> {
 >this._itemsByKey['dummy'] = item : CollectionItem2
 >this._itemsByKey['dummy'] : CollectionItem2
 >this._itemsByKey : { [key: string]: CollectionItem2; }
->this : this
+>this : DataView2
 >_itemsByKey : { [key: string]: CollectionItem2; }
 >'dummy' : string
 >item : CollectionItem2

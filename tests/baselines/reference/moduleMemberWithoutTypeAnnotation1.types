@@ -71,7 +71,7 @@ module TypeScript {
 >positionedToken : any
 >this.findTokenInternal(null, position, 0) : any
 >this.findTokenInternal : (x: any, y: any, z: any) => any
->this : this
+>this : SyntaxNode
 >findTokenInternal : (x: any, y: any, z: any) => any
 >null : null
 >position : number

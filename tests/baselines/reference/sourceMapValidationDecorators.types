@@ -93,7 +93,7 @@ class Greeter {
 >"<h1>" + this.greeting : string
 >"<h1>" : string
 >this.greeting : string
->this : this
+>this : Greeter
 >greeting : string
 >"</h1>" : string
     }
@@ -137,7 +137,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : this
+>this : Greeter
 >greeting : string
     }
 
@@ -154,7 +154,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : this
+>this : Greeter
 >greeting : string
     }
 
@@ -175,7 +175,7 @@ class Greeter {
         this.greeting = greetings;
 >this.greeting = greetings : string
 >this.greeting : string
->this : this
+>this : Greeter
 >greeting : string
 >greetings : string
     }    

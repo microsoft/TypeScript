@@ -18,12 +18,12 @@ class C {
 		this.callback(()=>{this.p1+1});
 >this.callback(()=>{this.p1+1}) : void
 >this.callback : (cb: () => void) => void
->this : this
+>this : C
 >callback : (cb: () => void) => void
 >()=>{this.p1+1} : () => void
 >this.p1+1 : number
 >this.p1 : number
->this : this
+>this : C
 >p1 : number
 >1 : number
 	}

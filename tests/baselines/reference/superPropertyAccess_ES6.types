@@ -56,7 +56,7 @@ class A {
     get property() { return this._property; }
 >property : string
 >this._property : string
->this : this
+>this : A
 >_property : string
 
     set property(value: string) { this._property = value }
@@ -64,7 +64,7 @@ class A {
 >value : string
 >this._property = value : string
 >this._property : string
->this : this
+>this : A
 >_property : string
 >value : string
 }

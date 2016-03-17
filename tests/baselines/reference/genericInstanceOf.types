@@ -21,10 +21,10 @@ class C<T> {
         if (this.a instanceof this.b) {
 >this.a instanceof this.b : boolean
 >this.a : T
->this : this
+>this : C<T>
 >a : T
 >this.b : F
->this : this
+>this : C<T>
 >b : F
         }
     }

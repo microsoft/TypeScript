@@ -18,7 +18,7 @@ class A {
             this.bar(f());
 >this.bar(f()) : void
 >this.bar : (a: number) => void
->this : this
+>this : A
 >bar : (a: number) => void
 >f() : number
 >f : () => number
@@ -55,7 +55,7 @@ class A {
                 this.bar(b());
 >this.bar(b()) : void
 >this.bar : (a: number) => void
->this : this
+>this : A
 >bar : (a: number) => void
 >b() : number
 >b : () => number
@@ -63,7 +63,7 @@ class A {
             this.bar(a());
 >this.bar(a()) : void
 >this.bar : (a: number) => void
->this : this
+>this : A
 >bar : (a: number) => void
 >a() : number
 >a : () => number
@@ -85,7 +85,7 @@ class A {
             this.bar(a());
 >this.bar(a()) : void
 >this.bar : (a: number) => void
->this : this
+>this : A
 >bar : (a: number) => void
 >a() : number
 >a : () => number
@@ -103,7 +103,7 @@ class A {
                 this.bar(b());
 >this.bar(b()) : void
 >this.bar : (a: number) => void
->this : this
+>this : A
 >bar : (a: number) => void
 >b() : number
 >b : () => number
@@ -137,7 +137,7 @@ class B {
                     this.bar(f());
 >this.bar(f()) : void
 >this.bar : (a: number) => void
->this : this
+>this : B
 >bar : (a: number) => void
 >f() : number
 >f : () => number

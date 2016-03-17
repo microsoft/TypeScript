@@ -22,7 +22,7 @@ module M {
 >x : number
 >this.n * x : number
 >this.n : number
->this : this
+>this : C
 >n : number
 >x : number
  }

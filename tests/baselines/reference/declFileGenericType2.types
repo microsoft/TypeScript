@@ -142,7 +142,7 @@ module templa.dom.mvc.composite {
             this._controllers = [];
 >this._controllers = [] : undefined[]
 >this._controllers : templa.mvc.IController<templa.mvc.IModel>[]
->this : this
+>this : AbstractCompositeElementController<ModelType>
 >_controllers : templa.mvc.IController<templa.mvc.IModel>[]
 >[] : undefined[]
         }

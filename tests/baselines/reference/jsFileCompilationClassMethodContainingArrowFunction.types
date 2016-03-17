@@ -13,7 +13,7 @@ class c {
 >a : any
 >this.method(a) : void
 >this.method : (a: any) => void
->this : this
+>this : c
 >method : (a: any) => void
 >a : any
     }
