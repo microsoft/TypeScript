@@ -809,34 +809,25 @@ namespace Harness {
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
-        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
 
-        export const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
-            "lib.es5.d.ts": createSourceFileAndAssertInvariants("lib.es5.d.ts", IO.readFile(libFolder + "lib.es5.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.d.ts": createSourceFileAndAssertInvariants("lib.es6.d.ts", IO.readFile(libFolder + "lib.es6.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es7.d.ts": createSourceFileAndAssertInvariants("lib.es7.d.ts", IO.readFile(libFolder + "lib.es7.d.ts"), ts.ScriptTarget.Latest),
-            "lib.dom.d.ts": createSourceFileAndAssertInvariants("lib.dom.d.ts", IO.readFile(libFolder + "lib.dom.d.ts"), ts.ScriptTarget.Latest),
-            "lib.webworker.d.ts": createSourceFileAndAssertInvariants("lib.webworker.d.ts", IO.readFile(libFolder + "lib.webworker.d.ts"), ts.ScriptTarget.Latest),
-            "lib.scripthost.d.ts": createSourceFileAndAssertInvariants("lib.scripthost.d.ts", IO.readFile(libFolder + "lib.scripthost.d.ts"), ts.ScriptTarget.Latest),
-            // ES6 Or ESNext By-feature options
-            "lib.es6.array.d.ts": createSourceFileAndAssertInvariants("lib.es6.array.d.ts", IO.readFile(libFolder + "lib.es6.array.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.collection.d.ts": createSourceFileAndAssertInvariants("lib.es6.collection.d.ts", IO.readFile(libFolder + "lib.es6.collection.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.function.d.ts": createSourceFileAndAssertInvariants("lib.es6.function.d.ts", IO.readFile(libFolder + "lib.es6.function.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.generator.d.ts": createSourceFileAndAssertInvariants("lib.es6.generator.d.ts", IO.readFile(libFolder + "lib.es6.generator.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.iterable.d.ts": createSourceFileAndAssertInvariants("lib.es6.iterable.d.ts", IO.readFile(libFolder + "lib.es6.iterable.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.math.d.ts": createSourceFileAndAssertInvariants("lib.es6.math.d.ts", IO.readFile(libFolder + "lib.es6.math.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.number.d.ts": createSourceFileAndAssertInvariants("lib.es6.number.d.ts", IO.readFile(libFolder + "lib.es6.number.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.object.d.ts": createSourceFileAndAssertInvariants("lib.es6.object.d.ts", IO.readFile(libFolder + "lib.es6.object.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.promise.d.ts": createSourceFileAndAssertInvariants("lib.es6.promise.d.ts", IO.readFile(libFolder + "lib.es6.promise.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.proxy.d.ts": createSourceFileAndAssertInvariants("lib.es6.proxy.d.ts", IO.readFile(libFolder + "lib.es6.proxy.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.reflect.d.ts": createSourceFileAndAssertInvariants("lib.es6.reflect.d.ts", IO.readFile(libFolder + "lib.es6.reflect.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.regexp.d.ts": createSourceFileAndAssertInvariants("lib.es6.regexp.d.ts", IO.readFile(libFolder + "lib.es6.regexp.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.string.d.ts": createSourceFileAndAssertInvariants("lib.es6.string.d.ts", IO.readFile(libFolder + "lib.es6.string.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.symbol.d.ts": createSourceFileAndAssertInvariants("lib.es6.symbol.d.ts", IO.readFile(libFolder + "lib.es6.symbol.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es6.symbol.wellknown.d.ts": createSourceFileAndAssertInvariants("lib.es6.symbol.wellknown.d.ts", IO.readFile(libFolder + "lib.es6.symbol.wellknown.d.ts"), ts.ScriptTarget.Latest),
-            "lib.es7.array.include.d.ts": createSourceFileAndAssertInvariants("lib.es7.array.include.d.ts", IO.readFile(libFolder + "lib.es7.array.include.d.ts"), ts.ScriptTarget.Latest),
+        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         };
+
+        export function getDefaultLibrarySourceFile(fileName: string): ts.SourceFile {
+            if (!isLibraryFile(fileName)) {
+                return undefined;
+            }
+
+            if (!libFileNameSourceFileMap[fileName]) {
+                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName,  IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            }
+            return libFileNameSourceFileMap[fileName];
+        }
+
+        export function getDefaultLibSourceFile(languageVersion: ts.ScriptTarget) {
+            return languageVersion === ts.ScriptTarget.ES6 ? getDefaultLibrarySourceFile("lib.es6.d.ts") : getDefaultLibrarySourceFile(defaultLibFileName);
+        }
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
@@ -880,12 +871,9 @@ namespace Harness {
                     return fourslashSourceFile;
                 }
                 else {
-                    if (fileName === defaultLibFileName) {
-                        return languageVersion === ts.ScriptTarget.ES6 ?
-                            defaultES6LibSourceFile : defaultLibSourceFile;
-                    }
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                    return libFileNameSourceFileMap[fileName];
+                    // Return if it is other library file, otherwise return undefined
+                    return getDefaultLibrarySourceFile(fileName);
                 }
             }
 
@@ -897,7 +885,7 @@ namespace Harness {
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
-                getDefaultLibFileName: options => defaultLibFileName,
+                getDefaultLibFileName: options => options.target === ts.ScriptTarget.ES6 ? "lib.es6.d.ts" : defaultLibFileName,
                 getUserDefinedLibFileName: options => options.lib,
                 writeFile,
                 getCanonicalFileName,
@@ -1178,7 +1166,7 @@ namespace Harness {
             }
 
             // Report global errors
-            const globalErrors = diagnostics.filter(err => !err.file || ts.hasProperty(libFileNameSourceFileMap, err.file.fileName));
+            const globalErrors = diagnostics.filter(err => !err.file);
             globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
@@ -1638,8 +1626,10 @@ namespace Harness {
         }
     }
 
+    // Regex for check if the give filePath is a library file
+    const libRegex = /lib(\.\S+)*\.d\.ts/;
     export function isLibraryFile(filePath: string): boolean {
-        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.es5.d.ts");
+        return !!libRegex.exec(Path.getFileName(filePath));
     }
 
     export function isBuiltFile(filePath: string): boolean {
@@ -1647,7 +1637,7 @@ namespace Harness {
     }
 
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib.d.ts";
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

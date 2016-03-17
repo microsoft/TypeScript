@@ -156,7 +156,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
+                    sourceFile = Harness.Compiler.getDefaultLibSourceFile(languageVersion);
                 }
                 else {
                     const text = getSourceFileText(fileName);
@@ -413,7 +413,7 @@ class ProjectRunner extends RunnerBase {
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => sourceFile.fileName !== "lib.d.ts"),
+                sourceFile => !Harness.isLibraryFile(sourceFile.fileName)),
                 sourceFile => {
                     return {
                         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
