@@ -831,6 +831,18 @@
         "category": "Error",
         "code": 1313
     },
+    "Global module exports may only appear in module files.": {
+        "category": "Error",
+        "code": 1314
+    },
+    "Global module exports may only appear in declaration files.": {
+        "category": "Error",
+        "code": 1315
+    },
+    "Global module exports may only appear at top level.": {
+        "category": "Error",
+        "code": 1316
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2336,10 +2348,6 @@
         "category": "Message",
         "code": 6038
     },
-    "LIBRARY": {
-      "category": "Message",
-      "code":  6039
-    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2356,13 +2364,9 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
+    "Argument for '{0}' option must be: {1}": {
         "category": "Error",
         "code": 6046
-    },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-        "category": "Error",
-        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
@@ -2415,14 +2419,6 @@
     "NEWLINE": {
         "category": "Message",
         "code": 6061
-    },
-    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error",
-        "code": 6062
-    },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
-        "category": "Error",
-        "code": 6063
     },
     "Option '{0}' can only be specified in 'tsconfig.json' file.": {
         "category": "Error",
@@ -2480,13 +2476,13 @@
         "category": "Message",
         "code": 6078
     },
+    "Specify library files to be included in the compilation: ": {
+        "category": "Message",
+        "code": 6079
+    },
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
@@ -2612,15 +2608,6 @@
         "category": "Message",
         "code": 6112
     },
-    "Specify library to be included in the compilation:": {
-        "category": "Message",
-        "code": 6113
-    },
-    "Arguments for library option must be: {0}": {
-      "category": "Error",
-      "code": 6114
-    },
-
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

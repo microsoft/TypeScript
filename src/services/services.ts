@@ -2148,8 +2148,23 @@ namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const referencedFiles: FileReference[] = [];
         const importedFiles: FileReference[] = [];
-        let ambientExternalModules: string[];
+        let ambientExternalModules: { ref: FileReference, depth: number }[];
         let isNoDefaultLib = false;
+        let braceNesting = 0;
+        // assume that text represent an external module if it contains at least one top level import/export
+        // ambient modules that are found inside external modules are interpreted as module augmentations
+        let externalModule = false;
+
+        function nextToken() {
+            const token = scanner.scan();
+            if (token === SyntaxKind.OpenBraceToken) {
+                braceNesting++;
+            }
+            else if (token === SyntaxKind.CloseBraceToken) {
+                braceNesting--;
+            }
+            return token;
+        }
 
         function processTripleSlashDirectives(): void {
             const commentRanges = getLeadingCommentRanges(sourceText, 0);
@@ -2166,21 +2181,33 @@ namespace ts {
             });
         }
 
+        function getFileReference() {
+            const file = scanner.getTokenValue();
+            const pos = scanner.getTokenPos();
+            return {
+                fileName: file,
+                pos: pos,
+                end: pos + file.length
+            };
+        }
+
         function recordAmbientExternalModule(): void {
             if (!ambientExternalModules) {
                 ambientExternalModules = [];
             }
-            ambientExternalModules.push(scanner.getTokenValue());
+            ambientExternalModules.push({ ref: getFileReference(), depth: braceNesting });
         }
 
         function recordModuleName() {
-            const importPath = scanner.getTokenValue();
-            const pos = scanner.getTokenPos();
-            importedFiles.push({
-                fileName: importPath,
-                pos: pos,
-                end: pos + importPath.length
-            });
+            importedFiles.push(getFileReference());
+
+            markAsExternalModuleIfTopLevel();
+        }
+
+        function markAsExternalModuleIfTopLevel() {
+            if (braceNesting === 0) {
+                externalModule = true;
+            }
         }
 
         /**
@@ -2190,9 +2217,9 @@ namespace ts {
             let token = scanner.getToken();
             if (token === SyntaxKind.DeclareKeyword) {
                 // declare module "mod"
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.ModuleKeyword) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.StringLiteral) {
                         recordAmbientExternalModule();
                     }
@@ -2209,7 +2236,8 @@ namespace ts {
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
-                token = scanner.scan();
+
+                token = nextToken();
                 if (token === SyntaxKind.StringLiteral) {
                     // import "mod";
                     recordModuleName();
@@ -2217,9 +2245,9 @@ namespace ts {
                 }
                 else {
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.StringLiteral) {
                                 // import d from "mod";
                                 recordModuleName();
@@ -2233,7 +2261,7 @@ namespace ts {
                         }
                         else if (token === SyntaxKind.CommaToken) {
                             // consume comma and keep going
-                            token = scanner.scan();
+                            token = nextToken();
                         }
                         else {
                             // unknown syntax
@@ -2242,17 +2270,17 @@ namespace ts {
                     }
 
                     if (token === SyntaxKind.OpenBraceToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         // consume "{ a as B, c, d as D}" clauses
                         // make sure that it stops on EOF
                         while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
-                            token = scanner.scan();
+                            token = nextToken();
                         }
 
                         if (token === SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
+                                token = nextToken();
                                 if (token === SyntaxKind.StringLiteral) {
                                     // import {a as A} from "mod";
                                     // import d, {a, b as B} from "mod"
@@ -2262,13 +2290,13 @@ namespace ts {
                         }
                     }
                     else if (token === SyntaxKind.AsteriskToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.AsKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                                token = scanner.scan();
+                                token = nextToken();
                                 if (token === SyntaxKind.FromKeyword) {
-                                    token = scanner.scan();
+                                    token = nextToken();
                                     if (token === SyntaxKind.StringLiteral) {
                                         // import * as NS from "mod"
                                         // import d, * as NS from "mod"
@@ -2289,19 +2317,20 @@ namespace ts {
         function tryConsumeExport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ExportKeyword) {
-                token = scanner.scan();
+                markAsExternalModuleIfTopLevel();
+                token = nextToken();
                 if (token === SyntaxKind.OpenBraceToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     // consume "{ a as B, c, d as D}" clauses
                     // make sure it stops on EOF
                     while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                     }
 
                     if (token === SyntaxKind.CloseBraceToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.StringLiteral) {
                                 // export {a as A} from "mod";
                                 // export {a, b as B} from "mod"
@@ -2311,9 +2340,9 @@ namespace ts {
                     }
                 }
                 else if (token === SyntaxKind.AsteriskToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.FromKeyword) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.StringLiteral) {
                             // export * from "mod"
                             recordModuleName();
@@ -2321,9 +2350,9 @@ namespace ts {
                     }
                 }
                 else if (token === SyntaxKind.ImportKeyword) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.EqualsToken) {
                             if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
                                 return true;
@@ -2339,11 +2368,11 @@ namespace ts {
         }
 
         function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
-            let token = skipCurrentToken ? scanner.scan() : scanner.getToken();
+            let token = skipCurrentToken ? nextToken() : scanner.getToken();
             if (token === SyntaxKind.RequireKeyword) {
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.StringLiteral) {
                         //  require("mod");
                         recordModuleName();
@@ -2357,17 +2386,17 @@ namespace ts {
         function tryConsumeDefine(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
-                token = scanner.scan();
+                token = nextToken();
                 if (token !== SyntaxKind.OpenParenToken) {
                     return true;
                 }
 
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.StringLiteral) {
                     // looks like define ("modname", ... - skip string literal and comma
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.CommaToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                     }
                     else {
                         // unexpected token
@@ -2381,7 +2410,7 @@ namespace ts {
                 }
 
                 // skip open bracket
-                token = scanner.scan();
+                token = nextToken();
                 let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
@@ -2391,7 +2420,7 @@ namespace ts {
                         i++;
                     }
 
-                    token = scanner.scan();
+                    token = nextToken();
                 }
                 return true;
 
@@ -2401,7 +2430,7 @@ namespace ts {
 
         function processImports(): void {
             scanner.setText(sourceText);
-            scanner.scan();
+            nextToken();
             // Look for:
             //    import "mod";
             //    import d from "mod"
@@ -2428,7 +2457,7 @@ namespace ts {
                     continue;
                 }
                 else {
-                    scanner.scan();
+                    nextToken();
                 }
             }
 
@@ -2439,7 +2468,34 @@ namespace ts {
             processImports();
         }
         processTripleSlashDirectives();
-        return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules };
+        if (externalModule) {
+            // for external modules module all nested ambient modules are augmentations
+            if (ambientExternalModules) {
+                // move all detected ambient modules to imported files since they need to be resolved
+                for (const decl of ambientExternalModules) {
+                    importedFiles.push(decl.ref);
+                }
+            }
+            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: undefined };
+        }
+        else {
+            // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
+            let ambientModuleNames: string[];
+            if (ambientExternalModules) {
+                for (const decl of ambientExternalModules) {
+                    if (decl.depth === 0) {
+                        if (!ambientModuleNames) {
+                            ambientModuleNames = [];
+                        }
+                        ambientModuleNames.push(decl.ref.fileName);
+                    }
+                    else {
+                        importedFiles.push(decl.ref);
+                    }
+                }
+            }
+            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: ambientModuleNames };
+        }
     }
 
     /// Helpers

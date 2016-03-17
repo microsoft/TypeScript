@@ -892,7 +892,7 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { throw new Error("NotYetImplemented"); }
+                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
             };
         }
 
@@ -912,7 +912,8 @@ namespace Harness {
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" },
-            { name: "suppressOutputPathCheck", type: "boolean" }
+            { name: "suppressOutputPathCheck", type: "boolean" },
+            { name: "noImplicitReferences", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -936,6 +937,7 @@ namespace Harness {
                     }
                     const option = getCommandLineOption(name);
                     if (option) {
+                        const errors: ts.Diagnostic[] = [];
                         switch (option.type) {
                             case "boolean":
                                 options[option.name] = value.toLowerCase() === "true";
@@ -944,22 +946,16 @@ namespace Harness {
                                 options[option.name] = value;
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
+                            case "list":
+                                options[option.name] = ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                                break;
                             default:
-                                let map = <ts.Map<number>>option.type;
-                                let key = value.toLowerCase();
-                                let libOptions = ts.tryParseLibCommandLineFlag(key, option, []);
-                                if (libOptions) {
-                                    if (!options[option.name]) {
-                                        options[option.name] = [];
-                                    }
-                                    (<string[]>options[option.name]).push(...libOptions);
-                                }
-                                else if (!libOptions && ts.hasProperty(map, key)) {
-                                    options[option.name] = map[key];
-                                }
-                                else {
-                                    throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
-                                }
+                                options[option.name] = ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
+                                break;
+                        }
+
+                        if (errors.length > 0) {
+                            throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                         }
                     }
                     else {
@@ -1164,7 +1160,7 @@ namespace Harness {
                     totalErrorsReportedInNonLibraryFiles++;
                 }
             }
-
+            debugger;
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
             globalErrors.forEach(outputErrorText);

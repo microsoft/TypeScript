@@ -83,7 +83,7 @@ namespace ts {
              assertParseError("invalid");
         });
 
-        it("returns object when users correctly specify lib", () => {
+        it("returns object when users correctly specify library", () => {
             assertParseResult(
                 `{
                     "compilerOptions": {

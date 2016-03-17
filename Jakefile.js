@@ -151,7 +151,9 @@ var harnessSources = harnessCoreSources.concat([
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
-    "commandLineParsing.ts"
+    "commandLineParsing.ts",
+    "convertCompilerOptionsFromJson.ts",
+    "convertTypingOptionsFromJson.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

@@ -679,10 +679,9 @@ namespace ts {
             usageColumn.push(usageText);
             let description: string;
 
-            if (option.paramType === Diagnostics.LIBRARY) {
+            if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
-                const typeNames = convertLibFlagTypeToLibOptionNameArray();
-                descriptionKindMap[description] = typeNames;
+                descriptionKindMap[description] = [];
             }
             else {
                 description = getDiagnosticText(option.description);

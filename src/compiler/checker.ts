@@ -893,8 +893,12 @@ namespace ts {
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
+
             if (moduleSymbol) {
-                const exportDefaultSymbol = resolveSymbol(moduleSymbol.exports["default"]);
+                const exportDefaultSymbol = moduleSymbol.exports["export="] ?
+                    getPropertyOfType(getTypeOfSymbol(moduleSymbol.exports["export="]), "default") :
+                    resolveSymbol(moduleSymbol.exports["default"]);
+
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
                 }
@@ -965,8 +969,15 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
+                    let symbolFromVariable: Symbol;
+                    // First check if module was specified with "export=". If so, get the member from the resolved type
+                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports["export="]) {
+                        symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), name.text);
+                    }
+                    else {
+                        symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
+                    }
                     const symbolFromModule = getExportOfModule(targetSymbol, name.text);
-                    const symbolFromVariable = getPropertyOfVariable(targetSymbol, name.text);
                     const symbol = symbolFromModule && symbolFromVariable ?
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
@@ -980,6 +991,10 @@ namespace ts {
 
         function getTargetOfImportSpecifier(node: ImportSpecifier): Symbol {
             return getExternalModuleMember(<ImportDeclaration>node.parent.parent.parent, node);
+        }
+
+        function getTargetOfGlobalModuleExportDeclaration(node: GlobalModuleExportDeclaration): Symbol {
+            return resolveExternalModuleSymbol(node.parent.symbol);
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier): Symbol {
@@ -1006,6 +1021,8 @@ namespace ts {
                     return getTargetOfExportSpecifier(<ExportSpecifier>node);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.GlobalModuleExportDeclaration:
+                    return getTargetOfGlobalModuleExportDeclaration(<GlobalModuleExportDeclaration>node);
             }
         }
 
@@ -7471,11 +7488,10 @@ namespace ts {
 
             // check if node is used as LHS in some assignment expression
             let isAssigned = false;
-            if (current.parent.kind === SyntaxKind.BinaryExpression) {
-                isAssigned = (<BinaryExpression>current.parent).left === current && isAssignmentOperator((<BinaryExpression>current.parent).operatorToken.kind);
+            if (isAssignmentTarget(current)) {
+                isAssigned = true;
             }
-
-            if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
+            else if ((current.parent.kind === SyntaxKind.PrefixUnaryExpression || current.parent.kind === SyntaxKind.PostfixUnaryExpression)) {
                 const expr = <PrefixUnaryExpression | PostfixUnaryExpression>current.parent;
                 isAssigned = expr.operator === SyntaxKind.PlusPlusToken || expr.operator === SyntaxKind.MinusMinusToken;
             }
@@ -13946,7 +13962,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
+                else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
                     // The function has a return type, but the return statement doesn't have an expression.
                     error(node, Diagnostics.Not_all_code_paths_return_a_value);
                 }
@@ -15269,7 +15285,6 @@ namespace ts {
             }
         }
 
-
         function checkSourceElement(node: Node): void {
             if (!node) {
                 return;
@@ -16379,6 +16394,9 @@ namespace ts {
                 }
                 if (file.moduleAugmentations.length) {
                     (augmentations || (augmentations = [])).push(file.moduleAugmentations);
+                }
+                if (file.wasReferenced && file.symbol && file.symbol.globalExports) {
+                    mergeSymbolTable(globals, file.symbol.globalExports);
                 }
             });
 
