@@ -1,0 +1,46 @@
+=== tests/cases/compiler/inferInstanceOfSubclass.ts ===
+function create<T>(ctor: { new(): T }) {
+>create : Symbol(create, Decl(inferInstanceOfSubclass.ts, 0, 0))
+>T : Symbol(T, Decl(inferInstanceOfSubclass.ts, 0, 16))
+>ctor : Symbol(ctor, Decl(inferInstanceOfSubclass.ts, 0, 19))
+>T : Symbol(T, Decl(inferInstanceOfSubclass.ts, 0, 16))
+
+    return new ctor();
+>ctor : Symbol(ctor, Decl(inferInstanceOfSubclass.ts, 0, 19))
+}
+class C<U> { c: U }
+>C : Symbol(C, Decl(inferInstanceOfSubclass.ts, 2, 1))
+>U : Symbol(U, Decl(inferInstanceOfSubclass.ts, 3, 8))
+>c : Symbol(c, Decl(inferInstanceOfSubclass.ts, 3, 12))
+>U : Symbol(U, Decl(inferInstanceOfSubclass.ts, 3, 8))
+
+class D<V> extends C<V> { d: V }
+>D : Symbol(D, Decl(inferInstanceOfSubclass.ts, 3, 19))
+>V : Symbol(V, Decl(inferInstanceOfSubclass.ts, 4, 8))
+>C : Symbol(C, Decl(inferInstanceOfSubclass.ts, 2, 1))
+>V : Symbol(V, Decl(inferInstanceOfSubclass.ts, 4, 8))
+>d : Symbol(d, Decl(inferInstanceOfSubclass.ts, 4, 25))
+>V : Symbol(V, Decl(inferInstanceOfSubclass.ts, 4, 8))
+
+let d = create(D);
+>d : Symbol(d, Decl(inferInstanceOfSubclass.ts, 5, 3))
+>create : Symbol(create, Decl(inferInstanceOfSubclass.ts, 0, 0))
+>D : Symbol(D, Decl(inferInstanceOfSubclass.ts, 3, 19))
+
+class A { a: number }
+>A : Symbol(A, Decl(inferInstanceOfSubclass.ts, 5, 18))
+>a : Symbol(a, Decl(inferInstanceOfSubclass.ts, 7, 9))
+
+class B<T> extends A { b: T }
+>B : Symbol(B, Decl(inferInstanceOfSubclass.ts, 7, 21))
+>T : Symbol(T, Decl(inferInstanceOfSubclass.ts, 8, 8))
+>A : Symbol(A, Decl(inferInstanceOfSubclass.ts, 5, 18))
+>b : Symbol(b, Decl(inferInstanceOfSubclass.ts, 8, 22))
+>T : Symbol(T, Decl(inferInstanceOfSubclass.ts, 8, 8))
+
+let b = create(B);
+>b : Symbol(b, Decl(inferInstanceOfSubclass.ts, 9, 3))
+>create : Symbol(create, Decl(inferInstanceOfSubclass.ts, 0, 0))
+>B : Symbol(B, Decl(inferInstanceOfSubclass.ts, 7, 21))
+
+
