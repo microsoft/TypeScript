@@ -5,7 +5,6 @@
     "parameters": {
         "length": 0,
         "pos": 10,
-        "end": 10,
-        "arrayKind": 1
+        "end": 10
     }
 }
