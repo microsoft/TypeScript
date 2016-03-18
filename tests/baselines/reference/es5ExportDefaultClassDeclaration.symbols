@@ -4,6 +4,6 @@ export default class C {
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration.ts, 0, 0))
 
     method() { }
->method : Symbol(method, Decl(es5ExportDefaultClassDeclaration.ts, 1, 24))
+>method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration.ts, 1, 24))
 }
 

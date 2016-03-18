@@ -9,7 +9,7 @@ module TypeScript {
 >IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 1, 39))
 
             Alert(output: string): void;
->Alert : Symbol(Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 3, 44))
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 3, 44))
 >output : Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 4, 18))
         }
 

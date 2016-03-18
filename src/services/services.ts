@@ -3505,7 +3505,18 @@ namespace ts {
                         // We don't want to complete using the type acquired by the shape
                         // of the binding pattern; we are only interested in types acquired
                         // through type declaration or inference.
-                        if (rootDeclaration.initializer || rootDeclaration.type) {
+                        // Also proceed if rootDeclaration is parameter and if its containing function expression\arrow function is contextually typed -
+                        // type of parameter will flow in from the contextual type of the function
+                        let canGetType = !!(rootDeclaration.initializer || rootDeclaration.type);
+                        if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+                            if (isExpression(rootDeclaration.parent)) {
+                                canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
+                            }
+                            else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
+                                canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
+                            }
+                        }
+                        if (canGetType) {
                             typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                             existingMembers = (<BindingPattern>objectLikeContainer).elements;
                         }

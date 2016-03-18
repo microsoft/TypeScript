@@ -1444,12 +1444,6 @@ namespace ts {
                             return result;
                         }
                         break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (result = callback(getSymbolOfNode(location).members)) {
-                            return result;
-                        }
-                        break;
                 }
             }
 
@@ -1515,7 +1509,9 @@ namespace ts {
             }
 
             if (symbol) {
-                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+                if (!(isPropertyOrMethodDeclarationSymbol(symbol))) {
+                    return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+                }
             }
         }
 
@@ -1546,6 +1542,24 @@ namespace ts {
             });
 
             return qualify;
+        }
+
+        function isPropertyOrMethodDeclarationSymbol(symbol: Symbol) {
+            if (symbol.declarations && symbol.declarations.length) {
+                for (const declaration of symbol.declarations) {
+                    switch (declaration.kind) {
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            continue;
+                        default:
+                            return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult {

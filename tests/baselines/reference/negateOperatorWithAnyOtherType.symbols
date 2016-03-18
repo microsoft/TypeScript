@@ -31,7 +31,7 @@ class A {
 >A : Symbol(A, Decl(negateOperatorWithAnyOtherType.ts, 11, 1))
 
     public a: any;
->a : Symbol(a, Decl(negateOperatorWithAnyOtherType.ts, 12, 9))
+>a : Symbol(A.a, Decl(negateOperatorWithAnyOtherType.ts, 12, 9))
 
     static foo() {
 >foo : Symbol(A.foo, Decl(negateOperatorWithAnyOtherType.ts, 13, 18))

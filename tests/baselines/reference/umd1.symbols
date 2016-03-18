@@ -26,7 +26,7 @@ export function fn(): void;
 
 export interface Thing { n: typeof x }
 >Thing : Symbol(Thing, Decl(foo.d.ts, 2, 27))
->n : Symbol(n, Decl(foo.d.ts, 3, 24))
+>n : Symbol(Thing.n, Decl(foo.d.ts, 3, 24))
 >x : Symbol(x, Decl(foo.d.ts, 1, 10))
 
 export as namespace Foo;

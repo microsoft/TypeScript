@@ -7,7 +7,7 @@ function foo<A>() {
 >X : Symbol(X, Decl(localTypes5.ts, 0, 19))
 
         m<B, C>() {
->m : Symbol(m, Decl(localTypes5.ts, 1, 13))
+>m : Symbol(X.m, Decl(localTypes5.ts, 1, 13))
 >B : Symbol(B, Decl(localTypes5.ts, 2, 10))
 >C : Symbol(C, Decl(localTypes5.ts, 2, 12))
 

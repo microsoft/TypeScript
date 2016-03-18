@@ -7,28 +7,28 @@ class Ship {
 >Ship : Symbol(Ship, Decl(2dArrays.ts, 1, 1))
 
     isSunk: boolean;
->isSunk : Symbol(isSunk, Decl(2dArrays.ts, 3, 12))
+>isSunk : Symbol(Ship.isSunk, Decl(2dArrays.ts, 3, 12))
 }
 
 class Board {
 >Board : Symbol(Board, Decl(2dArrays.ts, 5, 1))
 
     ships: Ship[];
->ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
+>ships : Symbol(Board.ships, Decl(2dArrays.ts, 7, 13))
 >Ship : Symbol(Ship, Decl(2dArrays.ts, 1, 1))
 
     cells: Cell[];
->cells : Symbol(cells, Decl(2dArrays.ts, 8, 18))
+>cells : Symbol(Board.cells, Decl(2dArrays.ts, 8, 18))
 >Cell : Symbol(Cell, Decl(2dArrays.ts, 0, 0))
 
     private allShipsSunk() {
->allShipsSunk : Symbol(allShipsSunk, Decl(2dArrays.ts, 9, 18))
+>allShipsSunk : Symbol(Board.allShipsSunk, Decl(2dArrays.ts, 9, 18))
 
         return this.ships.every(function (val) { return val.isSunk; });
 >this.ships.every : Symbol(Array.every, Decl(lib.d.ts, --, --))
->this.ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
+>this.ships : Symbol(Board.ships, Decl(2dArrays.ts, 7, 13))
 >this : Symbol(Board, Decl(2dArrays.ts, 5, 1))
->ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
+>ships : Symbol(Board.ships, Decl(2dArrays.ts, 7, 13))
 >every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >val : Symbol(val, Decl(2dArrays.ts, 12, 42))
 >val.isSunk : Symbol(Ship.isSunk, Decl(2dArrays.ts, 3, 12))
