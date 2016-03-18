@@ -1362,20 +1362,36 @@ namespace ts.server {
                 }
                 else {
                     if (this.exceedTotalNonTsFileSizeLimit(projectOptions.files)) {
+                        project.setProjectOptions(projectOptions);
+                        if (project.languageServiceDiabled) {
+                            return;
+                        }
+
                         project.disableLanguageService();
                         project.directoryWatcher.close();
-                        project.directoryWatcher = undefined;
-                        project.setProjectOptions(projectOptions);
                         return;
                     }
 
-                    project.enableLanguageService();
-                    if (!project.directoryWatcher) {
+                    if (project.languageServiceDiabled) {
+                        project.setProjectOptions(projectOptions);
+                        project.enableLanguageService();
                         project.directoryWatcher = this.host.watchDirectory(
                             ts.getDirectoryPath(project.projectFilename),
                             path => this.directoryWatchedForSourceFilesChanged(project, path),
                             /*recursive*/ true
                         );
+
+                        for (const rootFilename of projectOptions.files) {
+                            if (this.host.fileExists(rootFilename)) {
+                                const info = this.openFile(rootFilename, /*openedByClient*/ false);
+                                project.addRoot(info);
+                            }
+                            else {
+                                return { errorMsg: "specified file " + rootFilename + " not found" };
+                            }
+                        }
+                        project.finishGraph();
+                        return;
                     }
 
                     // if the project is too large, the root files might not have been all loaded if the total
@@ -1396,6 +1412,9 @@ namespace ts.server {
                     for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
+                            if (!this.host.fileExists(info.fileName)) {
+                                return { errorMsg: "specified file " + info.fileName + " not found" };
+                            }
                             info = this.openFile(fileName, /*openedByClient*/ false);
                         }
                         else {
