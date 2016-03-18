@@ -1013,8 +1013,9 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.flags = NodeFlags.None;
-        this.transformFlags = undefined;
-        this.excludeTransformFlags = undefined;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
     }

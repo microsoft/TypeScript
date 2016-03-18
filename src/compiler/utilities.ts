@@ -190,7 +190,7 @@ namespace ts {
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
     export function nodeIsMissing(node: Node) {
-        if (!node) {
+        if (node === undefined) {
             return true;
         }
 
@@ -2561,19 +2561,26 @@ namespace ts {
     }
 
     export function hasModifier(node: Node, flags: ModifierFlags) {
-        return (getModifierFlags(node) & flags) != 0;
+        return (getModifierFlags(node) & flags) !== 0;
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
+        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
+            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
+        }
+
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {
                 flags |= modifierToFlag(modifier.kind);
             }
         }
+
         if (node.flags & NodeFlags.NestedNamespace) {
             flags |= ModifierFlags.Export;
         }
+
+        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
         return flags;
     }
 

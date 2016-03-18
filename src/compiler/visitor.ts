@@ -882,15 +882,15 @@ namespace ts {
      */
     function aggregateTransformFlagsForNode(node: Node): TransformFlags {
         if (node === undefined) {
-            return <TransformFlags>0;
+            return TransformFlags.None;
         }
-
-        if (node.transformFlags === undefined) {
+        else if (node.transformFlags & TransformFlags.HasComputedFlags) {
+            return node.transformFlags & ~node.excludeTransformFlags;
+        }
+        else {
             const subtreeFlags = aggregateTransformFlagsForSubtree(node);
             return computeTransformFlagsForNode(node, subtreeFlags);
         }
-
-        return node.transformFlags & ~node.excludeTransformFlags;
     }
 
     /**
