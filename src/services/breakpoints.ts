@@ -395,7 +395,7 @@ namespace ts.BreakpointResolver {
                 // Breakpoint is possible in variableDeclaration only if there is initialization
                 // or its declaration from 'for of'
                 if (variableDeclaration.initializer ||
-                    (variableDeclaration.flags & NodeFlags.Export) ||
+                    hasModifier(variableDeclaration, ModifierFlags.Export) ||
                     variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                     return textSpanFromVariableDeclaration(variableDeclaration);
                 }
@@ -413,7 +413,7 @@ namespace ts.BreakpointResolver {
             function canHaveSpanInParameterDeclaration(parameter: ParameterDeclaration): boolean {
                 // Breakpoint is possible on parameter only if it has initializer, is a rest parameter, or has public or private modifier
                 return !!parameter.initializer || parameter.dotDotDotToken !== undefined ||
-                    !!(parameter.flags & NodeFlags.Public) || !!(parameter.flags & NodeFlags.Private);
+                    hasModifier(parameter, ModifierFlags.Public | ModifierFlags.Private);
             }
 
             function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan {
@@ -439,7 +439,7 @@ namespace ts.BreakpointResolver {
             }
 
             function canFunctionHaveSpanInWholeDeclaration(functionDeclaration: FunctionLikeDeclaration) {
-                return !!(functionDeclaration.flags & NodeFlags.Export) ||
+                return hasModifier(functionDeclaration, ModifierFlags.Export) ||
                     (functionDeclaration.parent.kind === SyntaxKind.ClassDeclaration && functionDeclaration.kind !== SyntaxKind.Constructor);
             }
 
