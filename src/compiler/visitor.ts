@@ -1,8 +1,9 @@
 /// <reference path="checker.ts" />
+/// <reference path="factory.ts" />
 
 /* @internal */
 namespace ts {
-    export type OneOrMany<T extends Node> = T | NodeArrayNode<T>;
+    export type VisitResult<T extends Node> = T | T[];
 
     /**
      * Describes an edge of a Node, used when traversing a syntax tree.
@@ -19,6 +20,9 @@ namespace ts {
 
         /** A callback used to lift a NodeArrayNode into a valid node. */
         lift?: (nodes: NodeArray<Node>) => Node;
+
+        /** A callback used to parenthesize a node to preserve the intended order of operations. */
+        parenthesize?: (value: Node, parentNode: Node) => Node;
     };
 
     /**
@@ -52,7 +56,7 @@ namespace ts {
             { name: "modifiers", test: isModifier },
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.Decorator]: [
             { name: "expression", test: isLeftHandSideExpression },
@@ -108,34 +112,34 @@ namespace ts {
         [SyntaxKind.BindingElement]: [
             { name: "propertyName", test: isPropertyName, optional: true },
             { name: "name", test: isBindingName },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ArrayLiteralExpression]: [
-            { name: "elements", test: isExpression },
+            { name: "elements", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ObjectLiteralExpression]: [
             { name: "properties", test: isObjectLiteralElement },
         ],
         [SyntaxKind.PropertyAccessExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "name", test: isIdentifier },
         ],
         [SyntaxKind.ElementAccessExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "argumentExpression", test: isExpression },
         ],
         [SyntaxKind.CallExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.NewExpression]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForNew },
             { name: "typeArguments", test: isTypeNode },
             { name: "arguments", test: isExpression },
         ],
         [SyntaxKind.TaggedTemplateExpression]: [
-            { name: "tag", test: isLeftHandSideExpression },
+            { name: "tag", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "template", test: isTemplate },
         ],
         [SyntaxKind.TypeAssertionExpression]: [
@@ -160,29 +164,29 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isConciseBody, lift: liftToBlock },
+            { name: "body", test: isConciseBody, lift: liftToBlock, parenthesize: parenthesizeConciseBody },
         ],
         [SyntaxKind.DeleteExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.TypeOfExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.VoidExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.AwaitExpression]: [
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.PrefixUnaryExpression]: [
-            { name: "operand", test: isUnaryExpression },
+            { name: "operand", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
         ],
         [SyntaxKind.PostfixUnaryExpression]: [
-            { name: "operand", test: isLeftHandSideExpression },
+            { name: "operand", test: isLeftHandSideExpression, parenthesize: parenthesizePostfixOperand },
         ],
         [SyntaxKind.BinaryExpression]: [
-            { name: "left", test: isExpression },
-            { name: "right", test: isExpression },
+            { name: "left", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, true) },
+            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false) },
         ],
         [SyntaxKind.ConditionalExpression]: [
             { name: "condition", test: isExpression },
@@ -197,7 +201,7 @@ namespace ts {
             { name: "expression", test: isExpression, optional: true },
         ],
         [SyntaxKind.SpreadElementExpression]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ClassExpression]: [
             { name: "decorators", test: isDecorator },
@@ -208,7 +212,7 @@ namespace ts {
             { name: "members", test: isClassElement },
         ],
         [SyntaxKind.ExpressionWithTypeArguments]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
         ],
         [SyntaxKind.AsExpression]: [
@@ -228,7 +232,7 @@ namespace ts {
             { name: "declarationList", test: isVariableDeclarationList },
         ],
         [SyntaxKind.ExpressionStatement]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForExpressionStatement },
         ],
         [SyntaxKind.IfStatement]: [
             { name: "expression", test: isExpression },
@@ -291,7 +295,7 @@ namespace ts {
         [SyntaxKind.VariableDeclaration]: [
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.VariableDeclarationList]: [
             { name: "declarations", test: isVariableDeclaration },
@@ -405,7 +409,7 @@ namespace ts {
             { name: "expression", test: isExpression, optional: true },
         ],
         [SyntaxKind.CaseClause]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
             { name: "statements", test: isStatement },
         ],
         [SyntaxKind.DefaultClause]: [
@@ -420,7 +424,7 @@ namespace ts {
         ],
         [SyntaxKind.PropertyAssignment]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression },
+            { name: "initializer", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.ShorthandPropertyAssignment]: [
             { name: "name", test: isIdentifier },
@@ -428,7 +432,7 @@ namespace ts {
         ],
         [SyntaxKind.EnumMember]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.SourceFile]: [
             { name: "statements", test: isStatement },
@@ -444,7 +448,7 @@ namespace ts {
      * @param f The callback function
      * @param initial The initial value to supply to the reduction.
      */
-    export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T) {
+    export function reduceEachChild<T>(node: Node, f: (memo: T, node: Node) => T, initial: T): T {
         if (node === undefined) {
             return undefined;
         }
@@ -474,7 +478,22 @@ namespace ts {
      * @param optional An optional value indicating whether the Node is itself optional.
      * @param lift An optional callback to execute to lift a NodeArrayNode into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => Node, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+    export function visitNode<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional?: boolean, lift?: (node: NodeArray<Node>) => T): T {
+        return <T>visitNodeWorker(node, visitor, test, optional, lift, /*parenthesize*/ undefined, /*parentNode*/ undefined);
+    }
+
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param optional A value indicating whether the Node is itself optional.
+     * @param lift A callback to execute to lift a NodeArrayNode into a valid Node.
+     * @param parenthesize A callback used to parenthesize the node if needed.
+     * @param parentNode A parentNode for the node.
+     */
+    function visitNodeWorker(node: Node, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, optional: boolean, lift: (node: Node[]) => Node, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node): Node {
         if (node === undefined) {
             return undefined;
         }
@@ -484,14 +503,28 @@ namespace ts {
             return node;
         }
 
-        const lifted = liftNode(visited, lift);
-        if (lifted === undefined) {
-            Debug.assert(optional, "Node not optional.");
+        let visitedNode: Node;
+        if (visited === undefined) {
+            if (!optional) {
+                Debug.failNotOptional();
+            }
+
             return undefined;
         }
+        else if (isArray(visited)) {
+            visitedNode = (lift || extractSingleNode)(visited);
+        }
+        else {
+            visitedNode = visited;
+        }
 
-        Debug.assert(test === undefined || test(visited), "Wrong node type after visit.");
-        return <T>visited;
+        if (parenthesize !== undefined) {
+            visitedNode = parenthesize(visitedNode, parentNode);
+        }
+
+        Debug.assertNode(visitedNode, test);
+        aggregateTransformFlags(visitedNode);
+        return visitedNode;
     }
 
     /**
@@ -503,12 +536,25 @@ namespace ts {
      * @param start An optional value indicating the starting offset at which to start visiting.
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
-    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => Node, test: (node: Node) => boolean, start?: number, count?: number): TArray {
+    export function visitNodes<T extends Node, TArray extends NodeArray<T>>(nodes: TArray, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, start?: number, count?: number): TArray {
+        return <TArray>visitNodesWorker(nodes, visitor, test, /*parenthesize*/ undefined, /*parentNode*/ undefined, start, count);
+    }
+
+    /**
+     * Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+     *
+     * @param nodes The NodeArray to visit.
+     * @param visitor The callback used to visit a Node.
+     * @param test A node test to execute for each node.
+     * @param start An optional value indicating the starting offset at which to start visiting.
+     * @param count An optional value indicating the maximum number of nodes to visit.
+     */
+    function visitNodesWorker(nodes: NodeArray<Node>, visitor: (node: Node) => VisitResult<Node>, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, start: number, count: number): NodeArray<Node> {
         if (nodes === undefined) {
             return undefined;
         }
 
-        let updated: T[];
+        let updated: NodeArray<Node>;
 
         // Ensure start and count have valid values
         const length = nodes.length;
@@ -520,32 +566,29 @@ namespace ts {
             count = length - start;
         }
 
-        // If we are not visiting all of the original nodes, we must always create a new array.
         if (start > 0 || count < length) {
-            updated = [];
+            // If we are not visiting all of the original nodes, we must always create a new array.
+            // Since this is a fragment of a node array, we do not copy over the previous location
+            // and will only copy over `hasTrailingComma` if we are including the last element.
+            updated = createNodeArray<Node>([], /*location*/ undefined,
+                /*hasTrailingComma*/ nodes.hasTrailingComma && start + count === length);
         }
 
         // Visit each original node.
         for (let i = 0; i < count; i++) {
             const node = nodes[i + start];
-            const visited = node && <OneOrMany<T>>visitor(node);
+            const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
                 if (updated === undefined) {
                     // Ensure we have a copy of `nodes`, up to the current index.
-                    updated = nodes.slice(0, i);
+                    updated = createNodeArray(nodes.slice(0, i), /*location*/ nodes, nodes.hasTrailingComma);
                 }
 
-                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test);
+                addNodeWorker(updated, visited, /*addOnNewLine*/ undefined, test, parenthesize, parentNode, /*isVisiting*/ visited !== node);
             }
         }
 
-        if (updated !== undefined) {
-            return <TArray>(isModifiersArray(nodes)
-                ? createModifiersArray(updated, nodes)
-                : createNodeArray(updated, nodes, nodes.hasTrailingComma));
-        }
-
-        return nodes;
+        return updated || nodes;
     }
 
     /**
@@ -555,8 +598,8 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => Node, context: LexicalEnvironment): T;
-    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => Node, context: LexicalEnvironment): T {
+    export function visitEachChild<T extends Node>(node: T, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T;
+    export function visitEachChild<T extends Node>(node: T & Map<any>, visitor: (node: Node) => VisitResult<Node>, context: LexicalEnvironment): T {
         if (node === undefined) {
             return undefined;
         }
@@ -571,28 +614,25 @@ namespace ts {
 
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
-            let modifiers: NodeFlags;
             for (const edge of edgeTraversalPath) {
                 const value = <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
-                    const visited = visitEdge(edge, value, visitor);
-                    if (visited && isArray(visited) && isModifiersArray(visited)) {
-                        modifiers = visited.flags;
+                    let visited: Node | NodeArray<Node>;
+                    if (isArray(value)) {
+                        const visitedArray = visitNodesWorker(value, visitor, edge.test, edge.parenthesize, node, 0, value.length);
+                        visited = visitedArray;
+                    }
+                    else {
+                        visited = visitNodeWorker(<Node>value, visitor, edge.test, edge.optional, edge.lift, edge.parenthesize, node);
                     }
 
                     if (updated !== undefined || visited !== value) {
                         if (updated === undefined) {
-                            updated = getMutableNode(node);
-                            updated.flags &= ~NodeFlags.Modifier;
-                        }
-
-                        if (modifiers) {
-                            updated.flags |= modifiers;
-                            modifiers = undefined;
+                            updated = getMutableClone(node);
                         }
 
                         if (visited !== value) {
-                            setEdgeValue(updated, edge, visited);
+                            updated[edge.name] = visited;
                         }
                     }
                 }
@@ -611,6 +651,7 @@ namespace ts {
         }
 
         if (updated !== node) {
+            aggregateTransformFlags(updated);
             updated.original = node;
         }
 
@@ -618,34 +659,13 @@ namespace ts {
     }
 
     /**
-     * Sets the value of an edge, adjusting the value as necessary for cases such as expression precedence.
-     */
-    function setEdgeValue(parentNode: Node & Map<any>, edge: NodeEdge, value: Node | NodeArray<Node>) {
-        parentNode[edge.name] = value;
-    }
-
-    /**
-     * Visits a node edge.
-     *
-     * @param edge The edge of the Node.
-     * @param value The Node or NodeArray value for the edge.
-     * @param visitor A callback used to visit the node.
-     */
-    function visitEdge(edge: NodeEdge, value: Node | NodeArray<Node>, visitor: (node: Node) => Node) {
-        return isArray(value)
-            ? visitNodes(<NodeArray<Node>>value, visitor, edge.test, /*start*/ undefined, /*count*/ undefined)
-            : visitNode(<Node>value, visitor, edge.test, edge.optional, edge.lift);
-    }
-
-    /**
      * Appends a node to an array.
      *
      * @param to The destination array.
      * @param from The source Node or NodeArrayNode.
-     * @param test The node test used to validate each node.
      */
-    export function addNode<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine?: boolean) {
-        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined);
+    export function addNode<T extends Node>(to: T[], from: VisitResult<T>, startOnNewLine?: boolean): void {
+        addNodeWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
     /**
@@ -653,32 +673,40 @@ namespace ts {
      *
      * @param to The destination NodeArray.
      * @param from The source array of Node or NodeArrayNode.
-     * @param test The node test used to validate each node.
      */
-    export function addNodes<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine?: boolean) {
-        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined);
+    export function addNodes<T extends Node>(to: T[], from: VisitResult<T>[], startOnNewLine?: boolean): void {
+        addNodesWorker(to, from, startOnNewLine, /*test*/ undefined, /*parenthesize*/ undefined, /*parentNode*/ undefined, /*isVisiting*/ false);
     }
 
-    function addNodeWorker<T extends Node>(to: T[], from: OneOrMany<T>, startOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodeWorker(to: Node[], from: VisitResult<Node>, startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void {
         if (to && from) {
-            if (isNodeArrayNode(from)) {
-                addNodesWorker(to, from.nodes, startOnNewLine, test);
+            if (isArray(from)) {
+                addNodesWorker(to, from, startOnNewLine, test, parenthesize, parentNode, isVisiting);
             }
             else {
-                Debug.assert(test === undefined || test(from), "Wrong node type after visit.");
+                const node = parenthesize !== undefined
+                    ? parenthesize(from, parentNode)
+                    : from;
+
+                Debug.assertNode(node, test);
+
                 if (startOnNewLine) {
-                    from.startsOnNewLine = true;
+                    node.startsOnNewLine = true;
                 }
 
-                to.push(from);
+                if (isVisiting) {
+                    aggregateTransformFlags(node);
+                }
+
+                to.push(node);
             }
         }
     }
 
-    function addNodesWorker<T extends Node>(to: T[], from: OneOrMany<T>[], startOnNewLine: boolean, test: (node: Node) => boolean) {
+    function addNodesWorker(to: Node[], from: VisitResult<Node>[], startOnNewLine: boolean, test: (node: Node) => boolean, parenthesize: (node: Node, parentNode: Node) => Node, parentNode: Node, isVisiting: boolean): void {
         if (to && from) {
             for (const node of from) {
-                addNodeWorker(to, node, startOnNewLine, test);
+                addNodeWorker(to, node, startOnNewLine, test, parenthesize, parentNode, isVisiting);
             }
         }
     }
@@ -716,9 +744,9 @@ namespace ts {
      * @param node The SourceFile node.
      * @param declarations The generated lexical declarations.
      */
-    export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]) {
+    export function mergeSourceFileLexicalEnvironment(node: SourceFile, declarations: Statement[]): SourceFile {
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.statements = mergeStatements(mutableNode.statements, declarations);
             return mutableNode;
         }
@@ -732,10 +760,10 @@ namespace ts {
      * @param node The ModuleDeclaration node.
      * @param declarations The generated lexical declarations.
      */
-    export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]) {
+    export function mergeModuleDeclarationLexicalEnvironment(node: ModuleDeclaration, declarations: Statement[]): ModuleDeclaration {
         Debug.assert(node.body.kind === SyntaxKind.ModuleBlock);
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.body = mergeBlockLexicalEnvironment(<ModuleBlock>node.body, declarations);
             return mutableNode;
         }
@@ -749,10 +777,10 @@ namespace ts {
      * @param node The function-like node.
      * @param declarations The generated lexical declarations.
      */
-    function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]) {
+    function mergeFunctionLikeLexicalEnvironment(node: FunctionLikeDeclaration, declarations: Statement[]): FunctionLikeDeclaration {
         Debug.assert(node.body !== undefined);
         if (declarations !== undefined && declarations.length) {
-            const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+            const mutableNode = getMutableClone(node);
             mutableNode.body = mergeConciseBodyLexicalEnvironment(mutableNode.body, declarations);
             return mutableNode;
         }
@@ -766,7 +794,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]) {
+    export function mergeFunctionBodyLexicalEnvironment(body: FunctionBody, declarations: Statement[]): FunctionBody {
         if (declarations !== undefined && declarations.length > 0) {
             return mergeBlockLexicalEnvironment(body, declarations);
         }
@@ -780,7 +808,7 @@ namespace ts {
      * @param node The ConciseBody of an arrow function.
      * @param declarations The lexical declarations to merge.
      */
-    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]) {
+    export function mergeConciseBodyLexicalEnvironment(body: ConciseBody, declarations: Statement[]): ConciseBody {
         if (declarations !== undefined && declarations.length > 0) {
             if (isBlock(body)) {
                 return mergeBlockLexicalEnvironment(body, declarations);
@@ -802,8 +830,8 @@ namespace ts {
      * @param node The block into which to merge lexical declarations.
      * @param declarations The lexical declarations to merge.
      */
-    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]) {
-        const mutableNode = cloneNode(node, /*location*/ node, node.flags, /*parent*/ undefined, /*original*/ node);
+    function mergeBlockLexicalEnvironment<T extends Block>(node: T, declarations: Statement[]): T {
+        const mutableNode = getMutableClone(node);
         mutableNode.statements = mergeStatements(node.statements, declarations);
         return mutableNode;
     }
@@ -814,28 +842,8 @@ namespace ts {
      * @param statements The node array to concatentate with the supplied lexical declarations.
      * @param declarations The lexical declarations to merge.
      */
-    function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]) {
+    function mergeStatements(statements: NodeArray<Statement>, declarations: Statement[]): NodeArray<Statement> {
         return createNodeArray(concatenate(statements, declarations), /*location*/ statements);
-    }
-
-    /**
-     * Tries to lift a NodeArrayNode to a Node. This is primarily used to
-     * lift multiple statements into a single Block.
-     *
-     * @param node The visited Node.
-     * @param options Options used to control lift behavior.
-     */
-    function liftNode(node: Node, lifter: (nodes: NodeArray<Node>) => Node): Node {
-        if (node === undefined) {
-            return undefined;
-        }
-        else if (isNodeArrayNode(node)) {
-            const lift = lifter || extractSingleNode;
-            return lift(node.nodes);
-        }
-        else {
-            return node;
-        }
     }
 
     /**
@@ -843,7 +851,7 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function liftToBlock(nodes: NodeArray<Node>) {
+    export function liftToBlock(nodes: Node[]): Block {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
         return createBlock(<NodeArray<Statement>>nodes);
     }
@@ -853,8 +861,96 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    function extractSingleNode(nodes: NodeArray<Node>) {
+    function extractSingleNode(nodes: Node[]): Node {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
-        return nodes.length > 0 ? nodes[0] : undefined;
+        return singleOrUndefined(nodes);
+    }
+
+    /**
+     * Aggregates the TransformFlags for a Node and its subtree.
+     */
+    export function aggregateTransformFlags(node: Node): void {
+        aggregateTransformFlagsForNode(node);
+    }
+
+    /**
+     * Aggregates the TransformFlags for a Node and its subtree. The flags for the subtree are
+     * computed first, then the transform flags for the current node are computed from the subtree
+     * flags and the state of the current node. Finally, the transform flags of the node are
+     * returned, excluding any flags that should not be included in its parent node's subtree
+     * flags.
+     */
+    function aggregateTransformFlagsForNode(node: Node): TransformFlags {
+        if (node === undefined) {
+            return TransformFlags.None;
+        }
+        else if (node.transformFlags & TransformFlags.HasComputedFlags) {
+            return node.transformFlags & ~node.excludeTransformFlags;
+        }
+        else {
+            const subtreeFlags = aggregateTransformFlagsForSubtree(node);
+            return computeTransformFlagsForNode(node, subtreeFlags);
+        }
+    }
+
+    /**
+     * Aggregates the transform flags for the subtree of a node.
+     */
+    function aggregateTransformFlagsForSubtree(node: Node): TransformFlags {
+        // We do not transform ambient declarations or types, so there is no need to
+        // recursively aggregate transform flags.
+        if (hasModifier(node, ModifierFlags.Ambient) || isTypeNode(node)) {
+            return TransformFlags.None;
+        }
+
+        // Aggregate the transform flags of each child.
+        return reduceEachChild(node, aggregateTransformFlagsForChildNode, TransformFlags.None);
+    }
+
+    /**
+     * Aggregates the TransformFlags of a child node with the TransformFlags of its
+     * siblings.
+     */
+    function aggregateTransformFlagsForChildNode(transformFlags: TransformFlags, child: Node): TransformFlags {
+        return transformFlags | aggregateTransformFlagsForNode(child);
+    }
+
+    export namespace Debug {
+        export function failNotOptional(message?: string) {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(false, message || "Node not optional.");
+            }
+        }
+
+        export function failBadSyntaxKind(node: Node, message?: string) {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(false,
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`);
+            }
+        }
+
+        export function assertNode<T extends Node>(node: Node, test: (node: Node) => boolean, message?: string): void {
+            if (shouldAssert(AssertionLevel.Normal)) {
+                Debug.assert(
+                    test === undefined || test(node),
+                    message || "Unexpected node.",
+                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`);
+            };
+        }
+
+        function getFunctionName(func: Function) {
+            if (typeof func !== "function") {
+                return "";
+            }
+            else if (func.hasOwnProperty("name")) {
+                return (<any>func).name;
+            }
+            else {
+                const text = Function.prototype.toString.call(func);
+                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
+                return match ? match[1] : "";
+            }
+        }
     }
 }

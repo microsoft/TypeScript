@@ -91,7 +91,7 @@ namespace ts {
                     // Emit reference in dts, if the file reference was not already emitted
                     if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
                         // Add a reference to generated dts file,
-                        // global file reference is added only 
+                        // global file reference is added only
                         //  - if it is not bundled emit (because otherwise it would be self reference)
                         //  - and it is not already added
                         if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
@@ -144,7 +144,7 @@ namespace ts {
 
             if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
                 // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
-                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something
                 // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
                 write("export {};");
                 writeLine();
@@ -349,7 +349,7 @@ namespace ts {
                 const jsDocComments = getJsDocCommentsFromText(declaration, currentText);
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, declaration, jsDocComments);
                 // jsDoc comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, jsDocComments, /*trailingSeparator*/ true, newLine, writeCommentRange);
+                emitComments(currentText, currentLineMap, writer, jsDocComments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeCommentRange);
             }
         }
 
@@ -623,12 +623,13 @@ namespace ts {
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
             if (node.parent.kind === SyntaxKind.SourceFile) {
+                const modifiers = getModifierFlags(node);
                 // If the node is exported
-                if (node.flags & NodeFlags.Export) {
+                if (modifiers & ModifierFlags.Export) {
                     write("export ");
                 }
 
-                if (node.flags & NodeFlags.Default) {
+                if (modifiers & ModifierFlags.Default) {
                     write("default ");
                 }
                 else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
@@ -637,21 +638,21 @@ namespace ts {
             }
         }
 
-        function emitClassMemberDeclarationFlags(flags: NodeFlags) {
-            if (flags & NodeFlags.Private) {
+        function emitClassMemberDeclarationFlags(flags: ModifierFlags) {
+            if (flags & ModifierFlags.Private) {
                 write("private ");
             }
-            else if (flags & NodeFlags.Protected) {
+            else if (flags & ModifierFlags.Protected) {
                 write("protected ");
             }
 
-            if (flags & NodeFlags.Static) {
+            if (flags & ModifierFlags.Static) {
                 write("static ");
             }
-            if (flags & NodeFlags.Readonly) {
+            if (flags & ModifierFlags.Readonly) {
                 write("readonly ");
             }
-            if (flags & NodeFlags.Abstract) {
+            if (flags & ModifierFlags.Abstract) {
                 write("abstract ");
             }
         }
@@ -660,7 +661,7 @@ namespace ts {
             // note usage of writer. methods instead of aliases created, just to make sure we are using
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Export) {
+            if (hasModifier(node, ModifierFlags.Export)) {
                 write("export ");
             }
             write("import ");
@@ -698,12 +699,12 @@ namespace ts {
         }
 
         function writeImportDeclaration(node: ImportDeclaration) {
-            if (!node.importClause && !(node.flags & NodeFlags.Export)) {
+            if (!node.importClause && !hasModifier(node, ModifierFlags.Export)) {
                 // do not write non-exported import declarations that don't have import clauses
                 return;
             }
             emitJsDocComments(node);
-            if (node.flags & NodeFlags.Export) {
+            if (hasModifier(node, ModifierFlags.Export)) {
                 write("export ");
             }
             write("import ");
@@ -736,7 +737,7 @@ namespace ts {
 
         function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
             // emitExternalModuleSpecifier is usually called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
-            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
+            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered
             // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
             // so compiler will treat them as external modules.
             resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
@@ -893,7 +894,7 @@ namespace ts {
         }
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
-            return node.parent.kind === SyntaxKind.MethodDeclaration && (node.parent.flags & NodeFlags.Private);
+            return node.parent.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent, ModifierFlags.Private);
         }
 
         function emitTypeParameters(typeParameters: TypeParameterDeclaration[]) {
@@ -943,7 +944,7 @@ namespace ts {
 
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
-                            if (node.parent.flags & NodeFlags.Static) {
+                            if (hasModifier(node.parent, ModifierFlags.Static)) {
                                 diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                             }
                             else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
@@ -1018,7 +1019,7 @@ namespace ts {
             function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                 if (constructorDeclaration) {
                     forEach(constructorDeclaration.parameters, param => {
-                        if (param.flags & NodeFlags.AccessibilityModifier) {
+                        if (hasModifier(param, ModifierFlags.AccessibilityModifier)) {
                             emitPropertyDeclaration(param);
                         }
                     });
@@ -1027,7 +1028,7 @@ namespace ts {
 
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            if (node.flags & NodeFlags.Abstract) {
+            if (hasModifier(node, ModifierFlags.Abstract)) {
                 write("abstract ");
             }
 
@@ -1077,7 +1078,7 @@ namespace ts {
             }
 
             emitJsDocComments(node);
-            emitClassMemberDeclarationFlags(node.flags);
+            emitClassMemberDeclarationFlags(getModifierFlags(node));
             emitVariableDeclaration(<VariableDeclaration>node);
             write(";");
             writeLine();
@@ -1102,7 +1103,7 @@ namespace ts {
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
                         emitTypeOfVariableDeclarationFromTypeLiteral(node);
                     }
-                    else if (!(node.flags & NodeFlags.Private)) {
+                    else if (!hasModifier(node, ModifierFlags.Private)) {
                         writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                     }
                 }
@@ -1119,7 +1120,7 @@ namespace ts {
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
                 else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
-                    if (node.flags & NodeFlags.Static) {
+                    if (hasModifier(node, ModifierFlags.Static)) {
                         return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1230,9 +1231,9 @@ namespace ts {
             if (node === accessors.firstAccessor) {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
-                emitClassMemberDeclarationFlags(node.flags | (accessors.setAccessor ? 0 : NodeFlags.Readonly));
+                emitClassMemberDeclarationFlags(getModifierFlags(node) | (accessors.setAccessor ? 0 : ModifierFlags.Readonly));
                 writeTextOfNode(currentText, node.name);
-                if (!(node.flags & NodeFlags.Private)) {
+                if (!hasModifier(node, ModifierFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);
                     if (!type) {
@@ -1263,7 +1264,7 @@ namespace ts {
                 let diagnosticMessage: DiagnosticMessage;
                 if (accessorWithTypeAnnotation.kind === SyntaxKind.SetAccessor) {
                     // Setters have to have type named and cannot infer it so, the type should always be named
-                    if (accessorWithTypeAnnotation.parent.flags & NodeFlags.Static) {
+                    if (hasModifier(accessorWithTypeAnnotation.parent, ModifierFlags.Static)) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_public_static_property_setter_from_exported_class_has_or_is_using_private_name_1;
@@ -1281,7 +1282,7 @@ namespace ts {
                     };
                 }
                 else {
-                    if (accessorWithTypeAnnotation.flags & NodeFlags.Static) {
+                    if (hasModifier(accessorWithTypeAnnotation, ModifierFlags.Static)) {
                         diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Return_type_of_public_static_property_getter_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -1317,7 +1318,7 @@ namespace ts {
                     emitModuleElementDeclarationFlags(node);
                 }
                 else if (node.kind === SyntaxKind.MethodDeclaration) {
-                    emitClassMemberDeclarationFlags(node.flags);
+                    emitClassMemberDeclarationFlags(getModifierFlags(node));
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
@@ -1347,7 +1348,7 @@ namespace ts {
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 // Index signature can have readonly modifier
-                emitClassMemberDeclarationFlags(node.flags);
+                emitClassMemberDeclarationFlags(getModifierFlags(node));
                 write("[");
             }
             else {
@@ -1378,7 +1379,7 @@ namespace ts {
                     emitType(node.type);
                 }
             }
-            else if (node.kind !== SyntaxKind.Constructor && !(node.flags & NodeFlags.Private)) {
+            else if (node.kind !== SyntaxKind.Constructor && !hasModifier(node, ModifierFlags.Private)) {
                 writeReturnTypeAtSignature(node, getReturnTypeVisibilityError);
             }
 
@@ -1415,7 +1416,7 @@ namespace ts {
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (node.flags & NodeFlags.Static) {
+                        if (hasModifier(node, ModifierFlags.Static)) {
                             diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Return_type_of_public_static_method_from_exported_class_has_or_is_using_name_0_from_external_module_1_but_cannot_be_named :
@@ -1481,7 +1482,7 @@ namespace ts {
                 node.parent.parent.kind === SyntaxKind.TypeLiteral) {
                 emitTypeOfVariableDeclarationFromTypeLiteral(node);
             }
-            else if (!(node.parent.flags & NodeFlags.Private)) {
+            else if (!hasModifier(node.parent, ModifierFlags.Private)) {
                 writeTypeOfDeclaration(node, node.type, getParameterDeclarationTypeVisibilityError);
             }
 
@@ -1517,7 +1518,7 @@ namespace ts {
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (node.parent.flags & NodeFlags.Static) {
+                        if (hasModifier(node.parent, ModifierFlags.Static)) {
                             return symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
