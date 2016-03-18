@@ -433,9 +433,7 @@ namespace ts {
 
       /* @internal */
       export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
-          // Using ! with a greater than test is a fast way of testing the following conditions:
-          //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
-          if (!(pos >= 0)) {
+          if (positionIsSynthesized(pos)) {
               return pos;
           }
 
@@ -642,6 +640,7 @@ namespace ts {
                                 pos++;
                             }
                         }
+
                         if (collecting) {
                             if (!result) {
                                 result = [];

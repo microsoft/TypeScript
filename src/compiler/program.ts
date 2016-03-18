@@ -1,6 +1,7 @@
 /// <reference path="sys.ts" />
 /// <reference path="emitter.ts" />
 /// <reference path="core.ts" />
+/// <reference path="printer.ts" />
 
 namespace ts {
     /* @internal */ export let programTime = 0;
@@ -968,7 +969,8 @@ namespace ts {
 
             const start = new Date().getTime();
 
-            const emitResult = emitFiles(
+            const fileEmitter = options.experimentalTransforms ? printFiles : emitFiles;
+            const emitResult = fileEmitter(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile);
@@ -1194,7 +1196,7 @@ namespace ts {
                     return false;
                 }
 
-                function checkModifiers(modifiers: ModifiersArray): boolean {
+                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
                     if (modifiers) {
                         for (const modifier of modifiers) {
                             switch (modifier.kind) {
@@ -1309,7 +1311,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:

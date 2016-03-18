@@ -521,15 +521,15 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        let flags = getCombinedNodeFlags(node);
+        let flags = getCombinedModifierFlags(node);
         let result: string[] = [];
 
-        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
-        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & ModifierFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
+        if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
@@ -615,7 +615,7 @@ namespace ts {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
             if (node.parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).left === node &&
                 (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
@@ -629,7 +629,7 @@ namespace ts {
 
             // [a, b, c] of
             // [x, [a, b, c] ] = someExpression
-            // or 
+            // or
             // {x, a: {a, b, c} } = someExpression
             if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;
