@@ -649,6 +649,10 @@ namespace ts {
                 // Get files of supported extensions in their order of resolution
                 for (const extension of supportedExtensions) {
                     for (const fileName of potentialFiles) {
+                        if (!fileExtensionIs(fileName, extension)) {
+                            continue;
+                        }
+
                         // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
@@ -669,8 +673,10 @@ namespace ts {
                             }
                         }
 
-                        filesSeen[fileName] = true;
-                        fileNames.push(fileName);
+                        if (!filesSeen[fileName]) {
+                            filesSeen[fileName] = true;
+                            fileNames.push(fileName);
+                        }
                     }
                 }
             }

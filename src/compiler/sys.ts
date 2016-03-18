@@ -491,8 +491,7 @@ namespace ts {
                 return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
             }
 
-            function visitDirectory(path: string, extension: string | string[], exclude: string[]) {
-                const result: string[] = [];
+            function visitDirectory(path: string, result: string[], extension: string | string[], exclude: string[]) {
                 const files = _fs.readdirSync(path || ".").sort();
                 const directories: string[] = [];
                 for (const current of files) {
@@ -515,9 +514,8 @@ namespace ts {
                     }
                 }
                 for (const current of directories) {
-                    visitDirectory(current, extension, exclude);
+                    visitDirectory(current, result, extension, exclude);
                 }
-                return result;
 
                 function checkExtension(name: string) {
                     if (!extension) {
@@ -533,13 +531,17 @@ namespace ts {
             }
 
             function readDirectoryWithMultipleExtensions(path: string, extensions: string[], exclude?: string[]): string[] {
+                const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                return visitDirectory(path, extensions, exclude);
+                visitDirectory(path, result, extensions, exclude);
+                return result;
             }
 
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+                const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                return visitDirectory(path, extension, exclude);
+                visitDirectory(path, result, extension, exclude);
+                return result;
             }
 
             return {
