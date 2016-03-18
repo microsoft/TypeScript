@@ -1,0 +1,11 @@
+{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 10,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 10,
+        "text": "undefined"
+    }
+}

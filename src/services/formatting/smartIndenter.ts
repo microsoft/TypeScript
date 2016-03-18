@@ -204,7 +204,7 @@ namespace ts.formatting {
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
             let useActualIndentation =
-                (isDeclaration(current) || isStatement(current)) &&
+                (isDeclaration(current) || isStatementButNotDeclaration(current)) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
             if (!useActualIndentation) {
@@ -467,7 +467,7 @@ namespace ts.formatting {
             }
             return false;
         }
-        
+
         /* @internal */
         export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
             let childKind = child ? child.kind : SyntaxKind.Unknown;
@@ -497,7 +497,7 @@ namespace ts.formatting {
         Function returns true when the parent node should indent the given child by an explicit rule
         */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false); 
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false);
         }
     }
 }

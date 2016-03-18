@@ -1,0 +1,32 @@
+{
+    "kind": "JSDocRecordType",
+    "pos": 1,
+    "end": 11,
+    "members": {
+        "0": {
+            "kind": "JSDocRecordMember",
+            "pos": 2,
+            "end": 5,
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 5,
+                "text": "foo"
+            }
+        },
+        "1": {
+            "kind": "JSDocRecordMember",
+            "pos": 6,
+            "end": 10,
+            "name": {
+                "kind": "Identifier",
+                "pos": 6,
+                "end": 10,
+                "text": "bar"
+            }
+        },
+        "length": 2,
+        "pos": 2,
+        "end": 10
+    }
+}

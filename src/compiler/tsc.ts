@@ -777,4 +777,8 @@ namespace ts {
     }
 }
 
+if (ts.sys.developmentMode && ts.sys.tryEnableSourceMapsForHost) {
+    ts.sys.tryEnableSourceMapsForHost();
+}
+
 ts.executeCommandLine(ts.sys.args);

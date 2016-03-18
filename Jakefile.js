@@ -40,7 +40,20 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "visitor.ts",
+    "transformers/destructuring.ts",
+    "transformers/ts.ts",
+    "transformers/module/es6.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
+    "transformers/jsx.ts",
+    "transformers/es7.ts",
+    "transformers/es6.ts",
+    "transformer.ts",
     "sourcemap.ts",
+    "comments.ts",
+    "printer.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -60,7 +73,20 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "factory.ts",
+    "visitor.ts",
+    "transformers/destructuring.ts",
+    "transformers/ts.ts",
+    "transformers/module/es6.ts",
+    "transformers/module/system.ts",
+    "transformers/module/module.ts",
+    "transformers/jsx.ts",
+    "transformers/es7.ts",
+    "transformers/es6.ts",
+    "transformer.ts",
     "sourcemap.ts",
+    "comments.ts",
+    "printer.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -212,6 +238,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
+var useTransforms = process.env.USE_TRANSFORMS || false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
@@ -269,6 +296,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (stripInternal) {
             options += " --stripInternal"
+        }
+
+        if (useBuiltCompiler && useTransforms) {
+            options += " --experimentalTransforms"
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -392,6 +423,10 @@ compileFile(/*outfile*/configureNightlyJs,
 
 task("setDebugMode", function() {
     useDebugMode = true;
+});
+
+task("setTransforms", function() {
+    useTransforms = true;
 });
 
 task("configure-nightly", [configureNightlyJs], function() {

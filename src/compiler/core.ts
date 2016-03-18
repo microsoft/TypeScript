@@ -91,6 +91,23 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Iterates through `array` by index and performs the callback on each element of array until the callback
+     * returns a falsey value, then returns false.
+     * If no such value is found, the callback is applied to each element of array and `true` is returned.
+     */
+    export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
+        if (array) {
+            for (let i = 0, len = array.length; i < len; i++) {
+                if (!callback(array[i], i)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
             for (const v of array) {
@@ -113,11 +130,12 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
+    export function countWhere<T>(array: T[], predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
-            for (const v of array) {
-                if (predicate(v)) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (predicate(v, i)) {
                     count++;
                 }
             }
@@ -125,35 +143,151 @@ namespace ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
+    export function filter<T, U extends T>(array: T[], f: (x: T, i: number) => x is U): U[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[];
+    export function filter<T>(array: T[], f: (x: T, i: number) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
-            for (const item of array) {
-                if (f(item)) {
-                    result.push(item);
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (f(v, i)) {
+                    result.push(v);
                 }
             }
         }
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
+    export function map<T, U>(array: T[], f: (x: T, i: number) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
-            for (const v of array) {
-                result.push(f(v));
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                result.push(f(v, i));
             }
         }
+        return result;
+    }
+
+    /**
+     * Flattens an array containing a mix of array or non-array elements.
+     *
+     * @param array The array to flatten.
+     */
+    export function flatten<T>(array: (T | T[])[]): T[] {
+        let result: T[];
+        if (array) {
+            result = [];
+            for (const v of array) {
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        addRange(result, v);
+                    }
+                    else {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Computes the first matching span of elements and returns a tuple of the first span
+     * and the remaining elements.
+     */
+    export function span<T>(array: T[], f: (x: T, i: number) => boolean): [T[], T[]] {
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (!f(array[i], i)) {
+                    return [array.slice(0, i), array.slice(i)];
+                }
+            }
+            return [array.slice(0), []];
+        }
+
+        return undefined;
+    }
+
+    /**
+     * Maps contiguous spans of values with the same key.
+     *
+     * @param array The array to map.
+     * @param keyfn A callback used to select the key for an element.
+     * @param mapfn A callback used to map a contiguous chunk of values to a single value.
+     */
+    export function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K) => U): U[] {
+        let result: U[];
+        if (array) {
+            result = [];
+            const len = array.length;
+            let previousKey: K;
+            let key: K;
+            let start = 0;
+            let pos = 0;
+            while (start < len) {
+                while (pos < len) {
+                    const value = array[pos];
+                    key = keyfn(value, pos);
+                    if (pos === 0) {
+                        previousKey = key;
+                    }
+                    else if (key !== previousKey) {
+                        break;
+                    }
+
+                    pos++;
+                }
+
+                if (start < pos) {
+                    const v = mapfn(array.slice(start, pos), previousKey);
+                    if (v) {
+                        result.push(v);
+                    }
+
+                    start = pos;
+                }
+
+                previousKey = key;
+                pos++;
+            }
+        }
+
         return result;
     }
 
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
         if (!array2 || !array2.length) return array1;
         if (!array1 || !array1.length) return array2;
-
-        return array1.concat(array2);
+        return [...array1, ...array2];
     }
 
     export function deduplicate<T>(array: T[]): T[] {
@@ -167,6 +301,27 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    /**
+     * Compacts an array, removing any falsey elements.
+     */
+    export function compact<T>(array: T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const v = array[i];
+                if (result || !v) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (v) {
+                        result.push(v);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     export function sum(array: any[], prop: string): number {
@@ -195,15 +350,25 @@ namespace ts {
         return true;
     }
 
+    export function firstOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[0]
+            : undefined;
+    }
+
+    export function singleOrUndefined<T>(array: T[]): T {
+        return array && array.length === 1
+            ? array[0]
+            : undefined;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
     export function lastOrUndefined<T>(array: T[]): T {
-        if (array.length === 0) {
-            return undefined;
-        }
-
-        return array[array.length - 1];
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
     }
 
     /**
@@ -235,38 +400,50 @@ namespace ts {
         return ~low;
     }
 
-    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceLeft<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceLeft<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos++;
-                while (pos < count) {
-                    result = f(<U>result, array[pos]);
+                let result: T;
+                if (arguments.length <= 2) {
+                    result = array[pos];
                     pos++;
                 }
-                return <U>result;
+                else {
+                    result = initial;
+                }
+                while (pos < count) {
+                    result = f(result, array[pos], pos);
+                    pos++;
+                }
+                return result;
             }
         }
         return initial;
     }
 
-    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
-    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+    export function reduceRight<T, U>(array: T[], f: (memo: U, value: T, i: number) => U, initial: U): U;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T): T;
+    export function reduceRight<T>(array: T[], f: (memo: T, value: T, i: number) => T, initial?: T): T {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos--;
-                while (pos >= 0) {
-                    result = f(<U>result, array[pos]);
+                let result: T;
+                if (arguments.length <= 2) {
+                    result = array[pos];
                     pos--;
                 }
-                return <U>result;
+                else {
+                    result = initial;
+                }
+                while (pos >= 0) {
+                    result = f(result, array[pos], pos);
+                    pos--;
+                }
+                return result;
             }
         }
         return initial;
@@ -836,7 +1013,11 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.flags = NodeFlags.None;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
+        this.original = undefined;
     }
 
     export let objectAllocator: ObjectAllocator = {
@@ -855,7 +1036,12 @@ namespace ts {
     }
 
     export namespace Debug {
-        const currentAssertionLevel = AssertionLevel.None;
+        declare var process: any;
+        declare var require: any;
+
+        const currentAssertionLevel = getDevelopmentMode() === "development"
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -874,6 +1060,17 @@ namespace ts {
 
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
+        }
+
+        function getDevelopmentMode() {
+            return typeof require !== "undefined"
+                && typeof process !== "undefined"
+                && !process.browser
+                && process.nextTick
+                && process.env
+                && process.env.NODE_ENV
+                    ? String(process.env.NODE_ENV).toLowerCase()
+                    : undefined;
         }
     }
 

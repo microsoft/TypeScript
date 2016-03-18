@@ -313,7 +313,7 @@ namespace ts.formatting {
             this.SpaceAfterVoidOperator = new Rule(RuleDescriptor.create3(SyntaxKind.VoidKeyword, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsVoidOpContext), RuleAction.Space));
 
             this.NoSpaceBetweenReturnAndSemicolon = new Rule(RuleDescriptor.create1(SyntaxKind.ReturnKeyword, SyntaxKind.SemicolonToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            
+
             // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
             // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]
             this.SpaceBetweenStatements = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.DoKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CaseKeyword]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotForContext), RuleAction.Space));
@@ -554,17 +554,17 @@ namespace ts.formatting {
         static IsSameLineTokenOrBeforeMultilineBlockContext(context: FormattingContext): boolean {
             //// This check is mainly used inside SpaceBeforeOpenBraceInControl and SpaceBeforeOpenBraceInFunction.
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)     { ....
             ////      * ) and { are on the same line so apply the rule. Here we don't care whether it's same or multi block context
             ////
-            //// Ex: 
+            //// Ex:
             //// if (1)
             //// { ... }
             ////      * ) and { are on differnet lines. We only need to format if the block is multiline context. So in this case we don't format.
             ////
             //// Ex:
-            //// if (1) 
+            //// if (1)
             //// { ...
             //// }
             ////      * ) and { are on differnet lines. We only need to format if the block is multiline context. So in this case we format.
@@ -735,7 +735,7 @@ namespace ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            while (isExpression(node)) {
+            while (isPartOfExpression(node)) {
                 node = node.parent;
             }
             return node.kind === SyntaxKind.Decorator;

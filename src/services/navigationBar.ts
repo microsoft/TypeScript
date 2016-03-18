@@ -130,7 +130,7 @@ namespace ts.NavigationBar {
 
             return topLevelNodes;
         }
-         
+
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
@@ -147,7 +147,7 @@ namespace ts.NavigationBar {
                 }
             });
         }
-        
+
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
@@ -178,8 +178,8 @@ namespace ts.NavigationBar {
 
         function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
-                // A function declaration is 'top level' if it contains any function declarations 
-                // within it. 
+                // A function declaration is 'top level' if it contains any function declarations
+                // within it.
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
                     if (forEach((<Block>functionDeclaration.body).statements,
@@ -198,7 +198,7 @@ namespace ts.NavigationBar {
 
             return false;
         }
-        
+
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             let items: ts.NavigationBarItem[] = [];
 
@@ -258,7 +258,7 @@ namespace ts.NavigationBar {
                     if (isBindingPattern((<ParameterDeclaration>node).name)) {
                         break;
                     }
-                    if ((node.flags & NodeFlags.Modifier) === 0) {
+                    if (!hasModifiers(node)) {
                         return undefined;
                     }
                     return createItem(node, getTextOfNode((<ParameterDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
@@ -395,19 +395,19 @@ namespace ts.NavigationBar {
                 let result: string[] = [];
 
                 result.push(moduleDeclaration.name.text);
-                
+
                 while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
                     result.push(moduleDeclaration.name.text);
-                } 
+                }
 
                 return result.join(".");
             }
 
             function createModuleItem(node: ModuleDeclaration): NavigationBarItem {
                 let moduleName = getModuleName(node);
-                
+
                 let childItems = getItemsWorker(getChildNodes((<Block>getInnermostModule(node).body).statements), createChildItem);
 
                 return getNavigationBarItem(moduleName,
