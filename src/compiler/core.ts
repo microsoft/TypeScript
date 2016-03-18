@@ -221,6 +221,23 @@ namespace ts {
     }
 
     /**
+     * Computes the first matching span of elements and returns a tuple of the first span
+     * and the remaining elements.
+     */
+    export function span<T>(array: T[], f: (x: T, i: number) => boolean): [T[], T[]] {
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (!f(array[i], i)) {
+                    return [array.slice(0, i), array.slice(i)];
+                }
+            }
+            return [array.slice(0), []];
+        }
+
+        return undefined;
+    }
+
+    /**
      * Maps contiguous spans of values with the same key.
      *
      * @param array The array to map.
@@ -996,8 +1013,9 @@ namespace ts {
         this.pos = pos;
         this.end = end;
         this.flags = NodeFlags.None;
-        this.transformFlags = undefined;
-        this.excludeTransformFlags = undefined;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.excludeTransformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
     }
@@ -1018,7 +1036,12 @@ namespace ts {
     }
 
     export namespace Debug {
-        const currentAssertionLevel = AssertionLevel.None;
+        declare var process: any;
+        declare var require: any;
+
+        const currentAssertionLevel = getDevelopmentMode() === "development"
+            ? AssertionLevel.Normal
+            : AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -1037,6 +1060,17 @@ namespace ts {
 
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
+        }
+
+        function getDevelopmentMode() {
+            return typeof require !== "undefined"
+                && typeof process !== "undefined"
+                && !process.browser
+                && process.nextTick
+                && process.env
+                && process.env.NODE_ENV
+                    ? String(process.env.NODE_ENV).toLowerCase()
+                    : undefined;
         }
     }
 

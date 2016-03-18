@@ -7,10 +7,6 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            return visitEachChild(node, visitor, context);
-        }
-
-        function visitor(node: Node): Node {
             return node;
         }
     }

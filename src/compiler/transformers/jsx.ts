@@ -18,7 +18,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.Jsx) {
                 return visitorWorker(node);
             }
@@ -30,16 +30,18 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
                     return visitJsxElement(<JsxElement>node);
 
                 case SyntaxKind.JsxSelfClosingElement:
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-            }
 
-            Debug.fail("Unexpected node kind.");
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
+            }
         }
 
         function transformJsxChildToExpression(node: JsxChild): Expression {
@@ -55,9 +57,11 @@ namespace ts {
 
                 case SyntaxKind.JsxSelfClosingElement:
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-            }
 
-            Debug.fail("Unexpected node kind.");
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
+            }
         }
 
         function visitJsxElement(node: JsxElement) {
