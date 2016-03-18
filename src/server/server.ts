@@ -208,13 +208,13 @@ namespace ts.server {
                 const typingsFolderPath = combinePaths(getDirectoryPath(tsdJsonPath), "typings");
                 const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
                 const installedKeys = getKeys(config.installed);
-                const packageNameToTypingPath: Map<Path> = {};
+                const packagePathMap: Map<Path> = {};
                 for (const installedKey of installedKeys) {
                     const packageName = installedKey.substr(0, installedKey.indexOf("/"));
                     const typingFilePath = toPath(installedKey, typingsFolderPath, getCanonicalFileName);
-                    packageNameToTypingPath[packageName] = typingFilePath;
+                    packagePathMap[packageName] = typingFilePath;
                 }
-                serverHost.cachedTsdJsons[tsdJsonPath] = { packageNameToTypingPath };
+                serverHost.cachedTsdJsons[tsdJsonPath] = packagePathMap;
                 return serverHost.cachedTsdJsons[tsdJsonPath];
             }
         }

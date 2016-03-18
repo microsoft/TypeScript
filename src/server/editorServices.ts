@@ -782,7 +782,7 @@ namespace ts.server {
                 project.getFileNames(),
                 projectRootPath,
                 /* safeListPath */ undefined,
-                tsdJson ? tsdJson.packageNameToTypingPath : undefined,
+                tsdJson,
                 typingOptions,
                 compilerOptions
             );
@@ -836,7 +836,7 @@ namespace ts.server {
                             // If the tsd.json was just created (after calling the init api), then
                             // the it is not cached yet, the `tsdJson` variable will be undefined
                             if (tsdJson) {
-                                tsdJson.packageNameToTypingPath[key] = installedTypingPath;
+                                tsdJson[key] = installedTypingPath;
                             }
                             addTypingToProject(installedTypingPath, project);
                         }
