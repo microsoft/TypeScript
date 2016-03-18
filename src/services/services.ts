@@ -1112,7 +1112,7 @@ namespace ts {
 
         getProgram(): Program;
 
-        getSourceFile(fileName: string): SourceFile;
+        /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
     }
@@ -6528,7 +6528,7 @@ namespace ts {
         }
 
         /// Syntactic features
-        function getSourceFile(fileName: string): SourceFile {
+        function getNonBoundSourceFile(fileName: string): SourceFile {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
@@ -7616,7 +7616,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             getEmitOutput,
-            getSourceFile,
+            getNonBoundSourceFile,
             getProgram
         };
     }

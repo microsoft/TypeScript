@@ -1330,7 +1330,7 @@ namespace ts.server {
         }
 
         isExternalModule(filename: string): boolean {
-            const sourceFile = this.languageService.getSourceFile(filename);
+            const sourceFile = this.languageService.getNonBoundSourceFile(filename);
             return ts.isExternalModule(sourceFile);
         }
 
