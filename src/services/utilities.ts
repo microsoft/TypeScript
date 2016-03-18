@@ -436,6 +436,35 @@ namespace ts {
         return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
     }
 
+    export function isInJsxAttribute(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        if (token && (token.kind === SyntaxKind.JsxAttribute || token.kind === SyntaxKind.JsxSpreadAttribute)) {
+            return true;
+        }
+
+        if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
+            return true;
+        }
+
+        return false;
+    }
+
+    export function isInJsxElement(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (token && (token.kind === SyntaxKind.JsxText ||
+            (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    export function isInTemplateString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return token && (token.kind === SyntaxKind.NoSubstitutionTemplateLiteral || token.kind === SyntaxKind.TemplateHead || token.kind === SyntaxKind.TemplateMiddle || token.kind === SyntaxKind.TemplateTail) && position > token.getStart();
+    }
+
     /**
      * Returns true if the cursor at position in sourceFile is within a comment that additionally
      * satisfies predicate, and false otherwise.

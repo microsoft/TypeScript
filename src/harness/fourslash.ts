@@ -649,7 +649,7 @@ namespace FourSlash {
                 this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
             }
             else {
-                this.raiseError(`No completions at position '${ this.currentCaretPosition }' when looking for '${ symbol }'.`);
+                this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
             }
         }
 
@@ -1752,13 +1752,13 @@ namespace FourSlash {
                 const actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
                     this.activeFile.fileName,
                     /* needFileNameList */ true
-                    );
+                );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNames.map( file => {
+                    actual.fileNames.map(file => {
                         return file.replace(this.basePath + "/", "");
-                        }).join(",")
-                    );
+                    }).join(",")
+                );
             }
         }
 
@@ -1842,6 +1842,31 @@ namespace FourSlash {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });
+        }
+
+        public verifyBraceCompletionAtPostion(negative: boolean, openingBrace: string) {
+
+            let charCode = 0x28; // '('
+            switch (openingBrace) {
+                case "{": charCode = 0x7B; break;
+                case "[": charCode = 0x5B; break;
+                case "'": charCode = 0x27; break;
+                case '"': charCode = 0x22; break;
+                case "`": charCode = 0x60; break;
+                case "<": charCode = 0x3C; break;
+            }
+
+            const position = this.currentCaretPosition;
+
+            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPostion(this.activeFile.fileName, position, charCode);
+
+            if (!negative && !validBraceCompletion) {
+                this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
+            }
+
+            if (negative && validBraceCompletion) {
+                this.raiseError(`${position} is a valid brace completion position for ${openingBrace}`);
+            }
         }
 
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
@@ -2233,7 +2258,7 @@ namespace FourSlash {
         };
 
         const host = Harness.Compiler.createCompilerHost(
-            [ fourslashFile, testFile ],
+            [fourslashFile, testFile],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             Harness.IO.useCaseSensitiveFileNames(),
@@ -2258,7 +2283,7 @@ namespace FourSlash {
     function runCode(code: string, state: TestState): void {
         // Compile and execute the test
         const wrappedCode =
-`(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
+            `(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
 ${code}
 })`;
         try {
@@ -2372,7 +2397,7 @@ ${code}
                         }
                     }
                 }
-            // TODO: should be '==='?
+                // TODO: should be '==='?
             }
             else if (line == "" || lineLength === 0) {
                 // Previously blank lines between fourslash content caused it to be considered as 2 files,
@@ -2864,6 +2889,10 @@ namespace FourSlashInterface {
         public verifyDefinitionsName(name: string, containerName: string) {
             this.state.verifyDefinitionsName(this.negative, name, containerName);
         }
+
+        public isValidBraceCompletionAtPostion(openingBrace: string) {
+            this.state.verifyBraceCompletionAtPostion(this.negative, openingBrace);
+        }
     }
 
     export class Verify extends VerifyNegatable {
@@ -3082,7 +3111,7 @@ namespace FourSlashInterface {
             this.state.getSemanticDiagnostics(expected);
         }
 
-        public ProjectInfo(expected: string []) {
+        public ProjectInfo(expected: string[]) {
             this.state.verifyProjectInfo(expected);
         }
     }

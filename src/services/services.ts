@@ -1108,6 +1108,8 @@ namespace ts {
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
 
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: CharacterCodes): boolean;
+
         getEmitOutput(fileName: string): EmitOutput;
 
         getProgram(): Program;
@@ -7310,6 +7312,40 @@ namespace ts {
             return { newText: result, caretOffset: preamble.length };
         }
 
+        function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: CharacterCodes): boolean {
+
+            // '<' currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
+            // expensive to do during typing scenarios
+            // i.e. wether we're dealing with:
+            //      var x = new foo<| ( with class foo<T>{} )
+            // or 
+            //      var y = 3 <|
+            if (openingBrace === CharacterCodes.lessThan) {
+                return false;
+            }
+
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            // Check if in a context where we don't want to perform any insertion
+            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+                return false;
+            }
+
+            if (isInJsxAttribute(sourceFile, position)) {
+                return false;
+            }
+
+            if (isInJsxElement(sourceFile, position)) {
+                return openingBrace === CharacterCodes.openBrace;
+            }
+
+            if (isInTemplateString(sourceFile, position)) {
+                return false;
+            }
+
+            return true;
+        }
+
         function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
             if (isFunctionLike(commentOwner)) {
                 return commentOwner.parameters;
@@ -7604,6 +7640,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
+            isValidBraceCompletionAtPostion,
             getEmitOutput,
             getSourceFile,
             getProgram
