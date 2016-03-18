@@ -8,6 +8,7 @@ namespace ts {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
+        /*@internal*/ developmentMode?: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -22,6 +23,7 @@ namespace ts {
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        /*@internal*/ tryEnableSourceMapsForHost?(): void;
     }
 
     interface WatchedFile {
@@ -494,6 +496,7 @@ namespace ts {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
+                developmentMode: /^development$/i.test(String(process.env.NODE_ENV)),
                 write(s: string): void {
                     process.stdout.write(s);
                 },
@@ -564,6 +567,14 @@ namespace ts {
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
+                },
+                tryEnableSourceMapsForHost() {
+                    try {
+                        require("source-map-support").install();
+                    }
+                    catch (e) {
+                        // Could not enable source maps.
+                    }
                 }
             };
         }
