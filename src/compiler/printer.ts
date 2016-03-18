@@ -6,9 +6,6 @@
 
 /* @internal */
 namespace ts {
-    const delimiters = createDelimiterMap();
-    const brackets = createBracketsMap();
-
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
@@ -18,6 +15,9 @@ namespace ts {
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function printFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+        const delimiters = createDelimiterMap();
+        const brackets = createBracketsMap();
+
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -147,6 +147,7 @@ const _super = (function (geti, seti) {
             let startLexicalEnvironment: () => void;
             let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
+            let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
             let isExpressionSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let expressionSubstitution: (node: Expression) => Expression;
@@ -208,6 +209,7 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = undefined;
                 endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
+                setNodeEmitFlags = undefined;
                 isExpressionSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 expressionSubstitution = undefined;
@@ -228,6 +230,7 @@ const _super = (function (geti, seti) {
                 startLexicalEnvironment = context.startLexicalEnvironment;
                 endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
+                setNodeEmitFlags = context.setNodeEmitFlags;
                 isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 expressionSubstitution = context.expressionSubstitution;
@@ -672,7 +675,7 @@ const _super = (function (geti, seti) {
             //
 
             function emitIdentifier(node: Identifier) {
-                if (getNodeEmitFlags(node) && NodeEmitFlags.UMDDefine) {
+                if (getNodeEmitFlags(node) & NodeEmitFlags.UMDDefine) {
                     writeLines(umdHelper);
                 }
                 else {
@@ -1408,6 +1411,10 @@ const _super = (function (geti, seti) {
             }
 
             function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+                if (body.multiLine) {
+                    return false;
+                }
+
                 const originalNode = getOriginalNode(parentNode);
                 if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode)) {
                     const body = originalNode.body;
@@ -1951,7 +1958,7 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitModifiers(node: Node, modifiers: ModifiersArray) {
+            function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
                 if (modifiers && modifiers.length) {
                     emitList(node, modifiers, ListFormat.SingleLine);
                     write(" ");
@@ -1981,10 +1988,13 @@ const _super = (function (geti, seti) {
             }
 
             function tryEmitSubstitute(node: Node, substitution: (node: Node) => Node) {
-                const substitute = substitution ? substitution(node) : node;
-                if (substitute && substitute !== node) {
-                    emitWorker(substitute);
-                    return true;
+                if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
+                    const substitute = substitution(node);
+                    if (substitute !== node) {
+                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution | getNodeEmitFlags(substitute));
+                        emitWorker(substitute);
+                        return true;
+                    }
                 }
 
                 return false;
@@ -2392,7 +2402,7 @@ const _super = (function (geti, seti) {
             }
 
             function isUniqueLocalName(name: string, container: Node): boolean {
-                for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
+                for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                     if (node.locals && hasProperty(node.locals, name)) {
                         // We conservatively include alias symbols to cover cases where they're emitted as locals
                         if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
@@ -2510,36 +2520,36 @@ const _super = (function (geti, seti) {
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
             }
         }
-    }
 
-    function createDelimiterMap() {
-        const delimiters: string[] = [];
-        delimiters[ListFormat.None] = "";
-        delimiters[ListFormat.CommaDelimited] = ",";
-        delimiters[ListFormat.BarDelimited] = " |";
-        delimiters[ListFormat.AmpersandDelimited] = " &";
-        return delimiters;
-    }
+        function createDelimiterMap() {
+            const delimiters: string[] = [];
+            delimiters[ListFormat.None] = "";
+            delimiters[ListFormat.CommaDelimited] = ",";
+            delimiters[ListFormat.BarDelimited] = " |";
+            delimiters[ListFormat.AmpersandDelimited] = " &";
+            return delimiters;
+        }
 
-    function getDelimiter(format: ListFormat) {
-        return delimiters[format & ListFormat.DelimitersMask];
-    }
+        function getDelimiter(format: ListFormat) {
+            return delimiters[format & ListFormat.DelimitersMask];
+        }
 
-    function createBracketsMap() {
-        const brackets: string[][] = [];
-        brackets[ListFormat.Braces] = ["{", "}"];
-        brackets[ListFormat.Parenthesis] = ["(", ")"];
-        brackets[ListFormat.AngleBrackets] = ["<", ">"];
-        brackets[ListFormat.SquareBrackets] = ["[", "]"];
-        return brackets;
-    }
+        function createBracketsMap() {
+            const brackets: string[][] = [];
+            brackets[ListFormat.Braces] = ["{", "}"];
+            brackets[ListFormat.Parenthesis] = ["(", ")"];
+            brackets[ListFormat.AngleBrackets] = ["<", ">"];
+            brackets[ListFormat.SquareBrackets] = ["[", "]"];
+            return brackets;
+        }
 
-    function getOpeningBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][0];
-    }
+        function getOpeningBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][0];
+        }
 
-    function getClosingBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][1];
+        function getClosingBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][1];
+        }
     }
 
     const enum ListFormat {

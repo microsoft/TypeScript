@@ -342,7 +342,7 @@ namespace ts {
 
         // Synthesized list
         SyntaxList,
-        NodeArrayNode,
+
         // Enum value count
         Count,
         // Markers
@@ -373,18 +373,9 @@ namespace ts {
 
     export const enum NodeFlags {
         None =               0,
-        Export =             1 << 0,  // Declarations
-        Ambient =            1 << 1,  // Declarations
-        Public =             1 << 2,  // Property/Method
-        Private =            1 << 3,  // Property/Method
-        Protected =          1 << 4,  // Property/Method
-        Static =             1 << 5,  // Property/Method
-        Readonly =           1 << 6,  // Property/Method
-        Abstract =           1 << 7,  // Class/Method/ConstructSignature
-        Async =              1 << 8,  // Property/Method/Function
-        Default =            1 << 9,  // Function/Class (export default declaration)
-        Let =                1 << 10,  // Variable declaration
-        Const =              1 << 11,  // Variable declaration
+        Let =                1 << 0,   // Variable declaration
+        Const =              1 << 1,   // Variable declaration
+        NestedNamespace =    1 << 2,   // Namespace declaration
         Namespace =          1 << 12,  // Namespace declaration
         ExportContext =      1 << 13,  // Export context (initialized by binding)
         ContainsThis =       1 << 14,  // Interface contains references to "this"
@@ -404,8 +395,6 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
-        AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
@@ -416,6 +405,26 @@ namespace ts {
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
+    }
+
+    export const enum ModifierFlags {
+        None =               0,
+        Export =             1 << 0,  // Declarations
+        Ambient =            1 << 1,  // Declarations
+        Public =             1 << 2,  // Property/Method
+        Private =            1 << 3,  // Property/Method
+        Protected =          1 << 4,  // Property/Method
+        Static =             1 << 5,  // Property/Method
+        Readonly =           1 << 6,  // Property/Method
+        Abstract =           1 << 7,  // Class/Method/ConstructSignature
+        Async =              1 << 8,  // Property/Method/Function
+        Default =            1 << 9,  // Function/Class (export default declaration)
+        Const =              1 << 11, // Variable declaration
+
+        HasComputedFlags =   1 << 31, // Modifier flags have been computed
+
+        AccessibilityModifier = Public | Private | Protected,
+        NonPublicAccessibilityModifier = Private | Protected,
     }
 
     export const enum JsxFlags {
@@ -443,10 +452,11 @@ namespace ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
+        /* @internal */ modifierFlagsCache?: ModifierFlags;
         /* @internal */ transformFlags?: TransformFlags;
         /* @internal */ excludeTransformFlags?: TransformFlags;
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                     // Array of modifiers
+        modifiers?: NodeArray<Modifier>;                // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding)
         /* @internal */ original?: Node;                // The original node if this is an updated node.
@@ -458,31 +468,8 @@ namespace ts {
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
-    export const enum ArrayKind {
-        NodeArray = 1,
-        ModifiersArray = 2,
-    }
-
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
-        arrayKind: ArrayKind;
         hasTrailingComma?: boolean;
-    }
-
-    /**
-     * A NodeArrayNode is a transient node used during transformations to indicate that more than
-     * one node will substitute a single node in the source. When the source is a NodeArray (as
-     * part of a call to `visitNodes`), the nodes of a NodeArrayNode will be spread into the
-     * result array. When the source is a Node (as part of a call to `visitNode`), the NodeArrayNode
-     * must be converted into a compatible node via the `lift` callback.
-     */
-    /* @internal */
-    // @kind(SyntaxKind.NodeArrayNode)
-    export interface NodeArrayNode<T extends Node> extends Node {
-        nodes: NodeArray<T>;
-    }
-
-    export interface ModifiersArray extends NodeArray<Modifier> {
-        flags: number;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)
@@ -2091,8 +2078,8 @@ namespace ts {
         CapturedBlockScopedBinding          = 0x00020000, // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop            = 0x00040000, // Block-scoped binding with declaration nested inside iteration statement
         HasSeenSuperCall                    = 0x00080000, // Set during the binding when encounter 'super'
-        ClassWithBodyScopedClassBinding     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00200000, // Binding to a decorated class inside of the class's body.
+        DecoratedClassWithSelfReference     = 0x00100000, // Decorated class that contains a binding to itself inside of the class body.
+        SelfReferenceInDecoratedClass       = 0x00200000, // Binding to a decorated class inside of the class's body.
     }
 
     /* @internal */
@@ -2751,6 +2738,8 @@ namespace ts {
 
     /* @internal */
     export const enum TransformFlags {
+        None = 0,
+
         // Facts
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
         TypeScript = 1 << 0,
@@ -2761,18 +2750,21 @@ namespace ts {
         ContainsES7 = 1 << 5,
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
+        DestructuringAssignment = 1 << 8,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 8,
-        ContainsPropertyInitializer = 1 << 9,
-        ContainsLexicalThis = 1 << 10,
-        ContainsCapturedLexicalThis = 1 << 11,
-        ContainsDefaultValueAssignments = 1 << 12,
-        ContainsParameterPropertyAssignments = 1 << 13,
-        ContainsSpreadElementExpression = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
+        ContainsDecorators = 1 << 9,
+        ContainsPropertyInitializer = 1 << 10,
+        ContainsLexicalThis = 1 << 11,
+        ContainsCapturedLexicalThis = 1 << 12,
+        ContainsDefaultValueAssignments = 1 << 13,
+        ContainsParameterPropertyAssignments = 1 << 14,
+        ContainsSpreadElementExpression = 1 << 15,
+        ContainsComputedPropertyName = 1 << 16,
+        ContainsBlockScopedBinding = 1 << 17,
+
+        HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -2784,7 +2776,7 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        NodeExcludes = TypeScript | Jsx | ES7 | ES6,
+        NodeExcludes = TypeScript | Jsx | ES7 | ES6 | DestructuringAssignment | HasComputedFlags,
         ArrowFunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
@@ -2808,6 +2800,8 @@ namespace ts {
         AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
         IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
         EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
+        NoSubstitution = 1 << 10,                // Disables further substitution of an expression.
+        CapturesThis = 1 << 11,                  // The function captures a lexical `this`
     }
 
     /** Additional context provided to `visitEachChild` */
