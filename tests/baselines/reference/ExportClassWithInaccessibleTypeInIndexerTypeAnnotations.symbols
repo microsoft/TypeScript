@@ -6,10 +6,10 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 17))
+>x : Symbol(Point.x, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 2, 17))
 
         y: number;
->y : Symbol(y, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
+>y : Symbol(Point.y, Decl(ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.ts, 3, 18))
     }
 
     export class points {

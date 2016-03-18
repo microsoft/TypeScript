@@ -16,7 +16,7 @@ class MyClass {
 >decorator : Symbol(decorator, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 1, 11))
 
     doSomething() {
->doSomething : Symbol(doSomething, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 6, 5))
+>doSomething : Symbol(MyClass.doSomething, Decl(decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts, 6, 5))
 
     }
 }

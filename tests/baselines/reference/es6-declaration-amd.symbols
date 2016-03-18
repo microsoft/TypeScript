@@ -9,7 +9,7 @@ class A
     }
 
     public B()
->B : Symbol(B, Decl(es6-declaration-amd.ts, 6, 5))
+>B : Symbol(A.B, Decl(es6-declaration-amd.ts, 6, 5))
     {
         return 42;
     }

@@ -10,7 +10,7 @@ import {A} from "./f1";
 
 // change the shape of Array<T>
 declare global {
->global : typeof 
+>global : any
 
     interface Array<T> {
 >Array : T[]

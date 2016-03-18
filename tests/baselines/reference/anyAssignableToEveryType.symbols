@@ -6,7 +6,7 @@ class C {
 >C : Symbol(C, Decl(anyAssignableToEveryType.ts, 0, 11))
 
     foo: string;
->foo : Symbol(foo, Decl(anyAssignableToEveryType.ts, 2, 9))
+>foo : Symbol(C.foo, Decl(anyAssignableToEveryType.ts, 2, 9))
 }
 var ac: C;
 >ac : Symbol(ac, Decl(anyAssignableToEveryType.ts, 5, 3))
@@ -16,7 +16,7 @@ interface I {
 >I : Symbol(I, Decl(anyAssignableToEveryType.ts, 5, 10))
 
     foo: string;
->foo : Symbol(foo, Decl(anyAssignableToEveryType.ts, 6, 13))
+>foo : Symbol(I.foo, Decl(anyAssignableToEveryType.ts, 6, 13))
 }
 var ai: I;
 >ai : Symbol(ai, Decl(anyAssignableToEveryType.ts, 9, 3))

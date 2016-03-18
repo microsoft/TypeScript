@@ -19,7 +19,7 @@ module Underscore {
 >Static : Symbol(Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
 
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
->all : Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+>all : Symbol(Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
 >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
 >list : Symbol(list, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 15))
 >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
@@ -29,7 +29,7 @@ module Underscore {
 >context : Symbol(context, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 58))
 
         identity<T>(value: T): T;
->identity : Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+>identity : Symbol(Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
 >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
 >value : Symbol(value, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 20))
 >T : Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))

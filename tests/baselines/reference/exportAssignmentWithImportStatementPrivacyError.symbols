@@ -14,13 +14,13 @@ module m2 {
 >connectExport : Symbol(connectExport, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 3, 5))
 
         use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 4, 36))
+>use : Symbol(connectExport.use, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 4, 36))
 >mod : Symbol(mod, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 5, 14))
 >connectModule : Symbol(connectModule, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 11))
 >connectExport : Symbol(connectExport, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 3, 5))
 
         listen: (port: number) => void;
->listen : Symbol(listen, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 5, 51))
+>listen : Symbol(connectExport.listen, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 5, 51))
 >port : Symbol(port, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 6, 17))
     }
 

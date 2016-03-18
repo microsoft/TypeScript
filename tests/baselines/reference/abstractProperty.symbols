@@ -3,57 +3,57 @@ interface A {
 >A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
 
     prop: string;
->prop : Symbol(prop, Decl(abstractProperty.ts, 0, 13))
+>prop : Symbol(A.prop, Decl(abstractProperty.ts, 0, 13))
 
     raw: string;
->raw : Symbol(raw, Decl(abstractProperty.ts, 1, 17))
+>raw : Symbol(A.raw, Decl(abstractProperty.ts, 1, 17))
 
     m(): void;
->m : Symbol(m, Decl(abstractProperty.ts, 2, 16))
+>m : Symbol(A.m, Decl(abstractProperty.ts, 2, 16))
 }
 abstract class B implements A {
 >B : Symbol(B, Decl(abstractProperty.ts, 4, 1))
 >A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
 
     abstract prop: string;
->prop : Symbol(prop, Decl(abstractProperty.ts, 5, 31))
+>prop : Symbol(B.prop, Decl(abstractProperty.ts, 5, 31))
 
     abstract raw: string;
->raw : Symbol(raw, Decl(abstractProperty.ts, 6, 26))
+>raw : Symbol(B.raw, Decl(abstractProperty.ts, 6, 26))
 
     abstract readonly ro: string;
->ro : Symbol(ro, Decl(abstractProperty.ts, 7, 25))
+>ro : Symbol(B.ro, Decl(abstractProperty.ts, 7, 25))
 
     abstract get readonlyProp(): string;
->readonlyProp : Symbol(readonlyProp, Decl(abstractProperty.ts, 8, 33), Decl(abstractProperty.ts, 9, 40))
+>readonlyProp : Symbol(B.readonlyProp, Decl(abstractProperty.ts, 8, 33), Decl(abstractProperty.ts, 9, 40))
 
     abstract set readonlyProp(val: string);
->readonlyProp : Symbol(readonlyProp, Decl(abstractProperty.ts, 8, 33), Decl(abstractProperty.ts, 9, 40))
+>readonlyProp : Symbol(B.readonlyProp, Decl(abstractProperty.ts, 8, 33), Decl(abstractProperty.ts, 9, 40))
 >val : Symbol(val, Decl(abstractProperty.ts, 10, 30))
 
     abstract m(): void;
->m : Symbol(m, Decl(abstractProperty.ts, 10, 43))
+>m : Symbol(B.m, Decl(abstractProperty.ts, 10, 43))
 }
 class C extends B {
 >C : Symbol(C, Decl(abstractProperty.ts, 12, 1))
 >B : Symbol(B, Decl(abstractProperty.ts, 4, 1))
 
     get prop() { return "foo"; }
->prop : Symbol(prop, Decl(abstractProperty.ts, 13, 19), Decl(abstractProperty.ts, 14, 32))
+>prop : Symbol(C.prop, Decl(abstractProperty.ts, 13, 19), Decl(abstractProperty.ts, 14, 32))
 
     set prop(v) { }
->prop : Symbol(prop, Decl(abstractProperty.ts, 13, 19), Decl(abstractProperty.ts, 14, 32))
+>prop : Symbol(C.prop, Decl(abstractProperty.ts, 13, 19), Decl(abstractProperty.ts, 14, 32))
 >v : Symbol(v, Decl(abstractProperty.ts, 15, 13))
 
     raw = "edge";
->raw : Symbol(raw, Decl(abstractProperty.ts, 15, 19))
+>raw : Symbol(C.raw, Decl(abstractProperty.ts, 15, 19))
 
     readonly ro = "readonly please";
->ro : Symbol(ro, Decl(abstractProperty.ts, 16, 17))
+>ro : Symbol(C.ro, Decl(abstractProperty.ts, 16, 17))
 
     readonlyProp: string; // don't have to give a value, in fact
->readonlyProp : Symbol(readonlyProp, Decl(abstractProperty.ts, 17, 36))
+>readonlyProp : Symbol(C.readonlyProp, Decl(abstractProperty.ts, 17, 36))
 
     m() { }
->m : Symbol(m, Decl(abstractProperty.ts, 18, 25))
+>m : Symbol(C.m, Decl(abstractProperty.ts, 18, 25))
 }

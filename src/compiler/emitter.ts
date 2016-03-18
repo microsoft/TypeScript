@@ -296,11 +296,11 @@ namespace ts {
      * If loop contains block scoped binding captured in some function then loop body is converted to a function.
      * Lexical bindings declared in loop initializer will be passed into the loop body function as parameters,
      * however if this binding is modified inside the body - this new value should be propagated back to the original binding.
-     * This is done by declaring new variable (out parameter holder) outside of the loop for every binding that is reassigned inside the body. 
+     * This is done by declaring new variable (out parameter holder) outside of the loop for every binding that is reassigned inside the body.
      * On every iteration this variable is initialized with value of corresponding binding.
      * At every point where control flow leaves the loop either explicitly (break/continue) or implicitly (at the end of loop body)
      * we copy the value inside the loop to the out parameter holder.
-     * 
+     *
      * for (let x;;) {
      *     let a = 1;
      *     let b = () => a;
@@ -308,9 +308,9 @@ namespace ts {
      *     if (...) break;
      *     ...
      * }
-     * 
+     *
      * will be converted to
-     * 
+     *
      * var out_x;
      * var loop = function(x) {
      *     var a = 1;
@@ -326,7 +326,7 @@ namespace ts {
      *     x = out_x;
      *     if (state === "break") break;
      * }
-     * 
+     *
      * NOTE: values to out parameters are not copies if loop is abrupted with 'return' - in this case this will end the entire enclosing function
      * so nobody can observe this new value.
      */
@@ -604,7 +604,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(`//# sourceMappingURL=${sourceMappingURL}`);
                 }
 
-                writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
+                writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM, sourceFiles);
 
                 // reset the state
                 sourceMap.reset();
@@ -748,16 +748,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             /** Write emitted output to disk */
-            function writeEmittedFiles(emitOutput: string, jsFilePath: string, sourceMapFilePath: string, writeByteOrderMark: boolean) {
+            function writeEmittedFiles(emitOutput: string, jsFilePath: string, sourceMapFilePath: string, writeByteOrderMark: boolean, sourceFiles: SourceFile[]) {
                 if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false);
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false, sourceFiles);
                 }
 
                 if (sourceMapDataList) {
                     sourceMapDataList.push(sourceMap.getSourceMapData());
                 }
 
-                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark, sourceFiles);
             }
 
             // Create a temporary variable with a unique unused name.
@@ -2138,6 +2138,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return container && container.kind !== SyntaxKind.SourceFile;
             }
 
+            // Return true if identifier resolves to an imported identifier
+            function isImportedReference(node: Identifier) {
+                const declaration = resolver.getReferencedImportDeclaration(node);
+                return declaration && (declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.ImportSpecifier);
+            }
+
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 // The name property of a short-hand property assignment is considered an expression position, so here
                 // we manually emit the identifier to avoid rewriting.
@@ -2151,7 +2157,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 //       let obj = { y };
                 //   }
                 // Here we need to emit obj = { y : m.y } regardless of the output target.
-                if (modulekind !== ModuleKind.ES6 || isNamespaceExportReference(node.name)) {
+                // The same rules apply for imported identifiers when targeting module formats with indirect access to
+                // the imported identifiers. For example, when targeting CommonJS:
+                //
+                //   import {foo} from './foo';
+                //   export const baz = { foo };
+                //
+                // Must be transformed into:
+                //
+                //   const foo_1 = require('./foo');
+                //   exports.baz = { foo: foo_1.foo };
+                //
+                if (languageVersion < ScriptTarget.ES6 || (modulekind !== ModuleKind.ES6 && isImportedReference(node.name)) || isNamespaceExportReference(node.name) ) {
                     // Emit identifier as an identifier
                     write(": ");
                     emit(node.name);
@@ -3073,7 +3090,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 writeLine();
-                // end of loop body -> copy out parameter 
+                // end of loop body -> copy out parameter
                 copyLoopOutParameters(convertedLoopState, CopyDirection.ToOutParameter, /*emitAsStatements*/true);
 
                 decreaseIndent();
@@ -3572,7 +3589,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             }
                             else {
                                 convertedLoopState.nonLocalJumps |= Jump.Continue;
-                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.     
+                                // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.
                                 write(`"continue";`);
                             }
                         }
@@ -4201,12 +4218,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
             function emitVariableDeclaration(node: VariableDeclaration) {
                 if (isBindingPattern(node.name)) {
-                    if (languageVersion < ScriptTarget.ES6) {
-                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false);
-                    }
-                    else {
+                    const isExported = getCombinedNodeFlags(node) & NodeFlags.Export;
+                    if (languageVersion >= ScriptTarget.ES6 && (!isExported || modulekind === ModuleKind.ES6)) {
+                        // emit ES6 destructuring only if target module is ES6 or variable is not exported
+                        // exported variables in CJS/AMD are prefixed with 'exports.' so result javascript { exports.toString } = 1; is illegal
+
+                        const isTopLevelDeclarationInSystemModule =
+                            modulekind === ModuleKind.System &&
+                            shouldHoistVariable(node, /*checkIfSourceFileLevelDecl*/true);
+
+                        if (isTopLevelDeclarationInSystemModule) {
+                            // In System modules top level variables are hoisted
+                            // so variable declarations with destructuring are turned into destructuring assignments.
+                            // As a result, they will need parentheses to disambiguate object binding assignments from blocks.
+                            write("(");
+                        }
+
                         emit(node.name);
                         emitOptional(" = ", node.initializer);
+
+                        if (isTopLevelDeclarationInSystemModule) {
+                            write(")");
+                        }
+                    }
+                    else {
+                        emitDestructuring(node, /*isAssignmentExpressionStatement*/ false);
                     }
                 }
                 else {
@@ -5261,9 +5297,11 @@ const _super = (function (geti, seti) {
 
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let decoratedClassAlias: string;
-                const thisNodeIsDecorated = nodeIsDecorated(node);
+                const isHoistedDeclarationInSystemModule = shouldHoistDeclarationInSystemJsModule(node);
+                const isDecorated = nodeIsDecorated(node);
+                const rewriteAsClassExpression = isDecorated || isHoistedDeclarationInSystemModule;
                 if (node.kind === SyntaxKind.ClassDeclaration) {
-                    if (thisNodeIsDecorated) {
+                    if (rewriteAsClassExpression) {
                         // When we emit an ES6 class that has a class decorator, we must tailor the
                         // emit to certain specific cases.
                         //
@@ -5344,7 +5382,10 @@ const _super = (function (geti, seti) {
                         //  [Example 4]
                         //
 
-                        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
+                        // NOTE: we reuse the same rewriting logic for cases when targeting ES6 and module kind is System.
+                        // Because of hoisting top level class declaration need to be emitted as class expressions. 
+                        // Double bind case is only required if node is decorated.
+                        if (isDecorated && resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithBodyScopedClassBinding) {
                             decoratedClassAlias = unescapeIdentifier(makeUniqueName(node.name ? node.name.text : "default"));
                             decoratedClassAliases[getNodeId(node)] = decoratedClassAlias;
                             write(`let ${decoratedClassAlias};`);
@@ -5355,7 +5396,9 @@ const _super = (function (geti, seti) {
                             write("export ");
                         }
 
-                        write("let ");
+                        if (!isHoistedDeclarationInSystemModule) {
+                            write("let ");
+                        }
                         emitDeclarationName(node);
                         if (decoratedClassAlias !== undefined) {
                             write(` = ${decoratedClassAlias}`);
@@ -5399,7 +5442,7 @@ const _super = (function (geti, seti) {
                 // emit name if
                 // - node has a name
                 // - this is default export with static initializers
-                if (node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6) && !thisNodeIsDecorated)) {
+                if (node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6) && !rewriteAsClassExpression)) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -5419,7 +5462,7 @@ const _super = (function (geti, seti) {
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
 
-                if (thisNodeIsDecorated) {
+                if (rewriteAsClassExpression) {
                     decoratedClassAliases[getNodeId(node)] = undefined;
                     write(";");
                 }
@@ -5459,7 +5502,7 @@ const _super = (function (geti, seti) {
                     // module), export it
                     if (node.flags & NodeFlags.Default) {
                         // if this is a top level default export of decorated class, write the export after the declaration.
-                        if (thisNodeIsDecorated) {
+                        if (isDecorated) {
                             writeLine();
                             write("export default ");
                             emitDeclarationName(node);
@@ -7267,7 +7310,7 @@ const _super = (function (geti, seti) {
                     }
 
                     // text should be quoted string
-                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same                     
+                    // for deduplication purposes in key remove leading and trailing quotes so 'a' and "a" will be considered the same
                     const key = text.substr(1, text.length - 2);
 
                     if (hasProperty(groupIndices, key)) {

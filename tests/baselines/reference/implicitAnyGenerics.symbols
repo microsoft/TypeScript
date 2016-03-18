@@ -5,7 +5,7 @@ class C<T> {
 >T : Symbol(T, Decl(implicitAnyGenerics.ts, 1, 8))
 
     x: T;
->x : Symbol(x, Decl(implicitAnyGenerics.ts, 1, 12))
+>x : Symbol(C.x, Decl(implicitAnyGenerics.ts, 1, 12))
 >T : Symbol(T, Decl(implicitAnyGenerics.ts, 1, 8))
 }
 
