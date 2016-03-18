@@ -203,7 +203,7 @@ namespace ts {
         /**
          * Visits a ClassDeclaration and transforms it into a variable statement.
          *
-         * @parma node A ClassDeclaration node.
+         * @param node A ClassDeclaration node.
          */
         function visitClassDeclaration(node: ClassDeclaration): Statement {
             // [source]

@@ -1987,7 +1987,7 @@ const _super = (function (geti, seti) {
                 if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
                     const substitute = substitution(node);
                     if (substitute !== node) {
-                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution);
+                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution | getNodeEmitFlags(substitute));
                         emitWorker(substitute);
                         return true;
                     }
