@@ -757,11 +757,11 @@ namespace ts.server {
         }
 
         acquireTypingForJs(project: Project) {
-            if (!this.host.getTsd) {
+            if (!project || !this.host.getTsd) {
                 return;
             }
             const tsd = this.host.getTsd();
-            if (project === undefined || tsd === undefined) {
+            if (tsd === undefined) {
                 return;
             }
 
@@ -815,9 +815,9 @@ namespace ts.server {
                     query.addNamePattern(newTypingName);
                 }
 
-                let promise: any;
+                let promise: PromiseLike<any>;
                 if (!sys.fileExists(tsdJsonPath)) {
-                    promise = api.initConfig(/*overwrite*/ true).then((paths: string[]) => api.readConfig());
+                    promise = api.initConfig(/*overwrite*/ true).then(paths => api.readConfig());
                 }
                 else {
                     promise = api.readConfig();
@@ -825,8 +825,8 @@ namespace ts.server {
 
                 promise
                     .then(() => api.select(query, options))
-                    .then((selection: any) => api.install(selection, options))
-                    .then((installResult: any) => {
+                    .then(selection => api.install(selection, options))
+                    .then(installResult => {
                         if (!installResult || !installResult.written) {
                             return;
                         }
@@ -842,7 +842,7 @@ namespace ts.server {
                         }
                         project.projectService.updateProjectStructure();
                     })
-                    .catch((e: any) => this.log(e));
+                    .then(undefined, e => this.log(e));
             }
 
             function addTypingToProject(filePath: Path, project: Project) {
