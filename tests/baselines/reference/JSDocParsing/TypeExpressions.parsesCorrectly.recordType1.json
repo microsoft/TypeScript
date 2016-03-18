@@ -5,7 +5,6 @@
     "members": {
         "length": 0,
         "pos": 2,
-        "end": 2,
-        "arrayKind": 1
+        "end": 2
     }
 }

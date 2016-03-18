@@ -6,9 +6,6 @@
 
 /* @internal */
 namespace ts {
-    const delimiters = createDelimiterMap();
-    const brackets = createBracketsMap();
-
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
@@ -18,6 +15,9 @@ namespace ts {
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function printFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+        const delimiters = createDelimiterMap();
+        const brackets = createBracketsMap();
+
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -675,7 +675,7 @@ const _super = (function (geti, seti) {
             //
 
             function emitIdentifier(node: Identifier) {
-                if (getNodeEmitFlags(node) && NodeEmitFlags.UMDDefine) {
+                if (getNodeEmitFlags(node) & NodeEmitFlags.UMDDefine) {
                     writeLines(umdHelper);
                 }
                 else {
@@ -1411,6 +1411,10 @@ const _super = (function (geti, seti) {
             }
 
             function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+                if (body.multiLine) {
+                    return false;
+                }
+
                 const originalNode = getOriginalNode(parentNode);
                 if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode)) {
                     const body = originalNode.body;
@@ -1954,7 +1958,7 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function emitModifiers(node: Node, modifiers: ModifiersArray) {
+            function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
                 if (modifiers && modifiers.length) {
                     emitList(node, modifiers, ListFormat.SingleLine);
                     write(" ");
@@ -2516,36 +2520,36 @@ const _super = (function (geti, seti) {
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
             }
         }
-    }
 
-    function createDelimiterMap() {
-        const delimiters: string[] = [];
-        delimiters[ListFormat.None] = "";
-        delimiters[ListFormat.CommaDelimited] = ",";
-        delimiters[ListFormat.BarDelimited] = " |";
-        delimiters[ListFormat.AmpersandDelimited] = " &";
-        return delimiters;
-    }
+        function createDelimiterMap() {
+            const delimiters: string[] = [];
+            delimiters[ListFormat.None] = "";
+            delimiters[ListFormat.CommaDelimited] = ",";
+            delimiters[ListFormat.BarDelimited] = " |";
+            delimiters[ListFormat.AmpersandDelimited] = " &";
+            return delimiters;
+        }
 
-    function getDelimiter(format: ListFormat) {
-        return delimiters[format & ListFormat.DelimitersMask];
-    }
+        function getDelimiter(format: ListFormat) {
+            return delimiters[format & ListFormat.DelimitersMask];
+        }
 
-    function createBracketsMap() {
-        const brackets: string[][] = [];
-        brackets[ListFormat.Braces] = ["{", "}"];
-        brackets[ListFormat.Parenthesis] = ["(", ")"];
-        brackets[ListFormat.AngleBrackets] = ["<", ">"];
-        brackets[ListFormat.SquareBrackets] = ["[", "]"];
-        return brackets;
-    }
+        function createBracketsMap() {
+            const brackets: string[][] = [];
+            brackets[ListFormat.Braces] = ["{", "}"];
+            brackets[ListFormat.Parenthesis] = ["(", ")"];
+            brackets[ListFormat.AngleBrackets] = ["<", ">"];
+            brackets[ListFormat.SquareBrackets] = ["[", "]"];
+            return brackets;
+        }
 
-    function getOpeningBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][0];
-    }
+        function getOpeningBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][0];
+        }
 
-    function getClosingBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][1];
+        function getClosingBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][1];
+        }
     }
 
     const enum ListFormat {

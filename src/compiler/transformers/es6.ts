@@ -16,6 +16,7 @@ namespace ts {
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
+            getNodeEmitFlags,
             setNodeEmitFlags,
         } = context;
 
@@ -50,10 +51,11 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
+            enclosingBlockScopeContainer = node;
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
@@ -61,17 +63,18 @@ namespace ts {
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
 
             onBeforeVisitNode(node);
-            node = visitorWorker(node);
+
+            const visited = visitorWorker(node);
 
             containingNonArrowFunction = savedContainingNonArrowFunction;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
             enclosingBlockScopeContainer = savedEnclosingBlockScopeContainer;
             enclosingBlockScopeContainerParent = savedEnclosingBlockScopeContainerParent;
-            return node;
+            return visited;
         }
 
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.ES6) {
                 return visitJavaScript(node);
             }
@@ -83,7 +86,7 @@ namespace ts {
             }
         }
 
-        function visitJavaScript(node: Node): Node {
+        function visitJavaScript(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
@@ -171,9 +174,12 @@ namespace ts {
 
                 case SyntaxKind.SourceFile:
                     return visitSourceFileNode(<SourceFile>node);
+
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
             }
 
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
         function onBeforeVisitNode(node: Node) {
@@ -692,7 +698,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                        Debug.failBadSyntaxKind(node);
                         break;
                 }
             }
@@ -772,7 +778,9 @@ namespace ts {
                 enableSubstitutionsForCapturedThis();
             }
 
-            return transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
+            return func;
         }
 
         /**
@@ -931,7 +939,7 @@ namespace ts {
             enableSubstitutionsForBlockScopedBindings();
             return setOriginalNode(
                 createVariableDeclarationList(
-                    flattenNodes(map(node.declarations, visitVariableDeclarationInLetDeclarationList)),
+                    flatten(map(node.declarations, visitVariableDeclarationInLetDeclarationList)),
                     /*location*/ node
                 ),
                 node
@@ -1038,13 +1046,11 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclaration(node: VariableDeclaration): OneOrMany<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
             Debug.assert(isBindingPattern(node.name));
 
-            return createNodeArrayNode(
-                flattenVariableDestructuring(node, /*value*/ undefined, visitor)
-            );
+            return flattenVariableDestructuring(node, /*value*/ undefined, visitor);
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
@@ -1290,7 +1296,7 @@ namespace ts {
                         break;
 
                     default:
-                        Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                        Debug.failBadSyntaxKind(node);
                         break;
                 }
             }
@@ -1514,7 +1520,7 @@ namespace ts {
          * @param node A template literal.
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
-            return createLiteral(node.text);
+            return createLiteral(node.text, /*location*/ node);
         }
 
         /**
@@ -1579,7 +1585,7 @@ namespace ts {
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
             text = text.replace(/\r\n?/g, "\n");
             text = escapeString(text);
-            return createLiteral(text);
+            return createLiteral(text, /*location*/ node);
         }
 
         /**
@@ -1676,7 +1682,7 @@ namespace ts {
         function visitSuperKeyword(node: PrimaryExpression): LeftHandSideExpression {
             return containingNonArrowFunction
                 && isClassElement(containingNonArrowFunction)
-                && (containingNonArrowFunction.flags & NodeFlags.Static) === 0
+                && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
         }
@@ -1689,7 +1695,7 @@ namespace ts {
             addCaptureThisForNodeIfNeeded(statements, node);
             addRange(statements, visitNodes(createNodeArray(remaining), visitor, isStatement));
             addRange(statements, endLexicalEnvironment());
-            const clone = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
+            const clone = getMutableClone(node);
             clone.statements = createNodeArray(statements, /*location*/ node.statements);
             return clone;
         }
@@ -1705,7 +1711,7 @@ namespace ts {
             if (enabledSubstitutions & ES6SubstitutionFlags.CapturedThis && isFunctionLike(node)) {
                 // If we are tracking a captured `this`, push a bit that indicates whether the
                 // containing function is an arrow function.
-                useCapturedThis = node.kind === SyntaxKind.ArrowFunction;
+                useCapturedThis = (getNodeEmitFlags(node) & NodeEmitFlags.CapturesThis) !== 0;
             }
 
             previousOnEmitNode(node, emit);
@@ -1836,7 +1842,7 @@ namespace ts {
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const expression = getDeclarationName(node);
-            return member.flags & NodeFlags.Static ? expression : createPropertyAccess(expression, "prototype");
+            return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {

@@ -190,7 +190,7 @@ namespace ts {
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
     export function nodeIsMissing(node: Node) {
-        if (!node) {
+        if (node === undefined) {
             return true;
         }
 
@@ -491,6 +491,25 @@ namespace ts {
         return node;
     }
 
+    export function getCombinedModifierFlags(node: Node): ModifierFlags {
+        node = walkUpBindingElementsAndPatterns(node);
+        let flags = getModifierFlags(node);
+        if (node.kind === SyntaxKind.VariableDeclaration) {
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableDeclarationList) {
+            flags |= getModifierFlags(node);
+            node = node.parent;
+        }
+
+        if (node && node.kind === SyntaxKind.VariableStatement) {
+            flags |= getModifierFlags(node);
+        }
+
+        return flags;
+    }
+
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
@@ -519,7 +538,8 @@ namespace ts {
     }
 
     export function isConst(node: Node): boolean {
-        return !!(getCombinedNodeFlags(node) & NodeFlags.Const);
+        return !!(getCombinedNodeFlags(node) & NodeFlags.Const)
+            || !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
     export function isLet(node: Node): boolean {
@@ -1228,6 +1248,23 @@ namespace ts {
         }
     }
 
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            return <ImportEqualsDeclaration>node;
+        }
+
+        const importClause = (<ImportDeclaration>node).importClause;
+        if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+            return <NamespaceImport>importClause.namedBindings;
+        }
+    }
+
+    export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        return node.kind === SyntaxKind.ImportDeclaration
+            && (<ImportDeclaration>node).importClause
+            && !!(<ImportDeclaration>node).importClause.name;
+    }
+
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {
@@ -1373,7 +1410,7 @@ namespace ts {
 
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
-            if (node.flags & NodeFlags.Ambient || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
+            if (hasModifier(node, ModifierFlags.Ambient) || (node.kind === SyntaxKind.SourceFile && (node as SourceFile).isDeclarationFile)) {
                 return true;
             }
             node = node.parent;
@@ -1541,7 +1578,7 @@ namespace ts {
     }
 
     export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
+        return isFunctionLike(node) && hasModifier(node, ModifierFlags.Async) && !isAccessor(node);
     }
 
     export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
@@ -1649,11 +1686,13 @@ namespace ts {
      * @param parent The parent for the cloned node.
      */
     export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
-        const clone = cloneNode(node, node, node.flags, parent);
+        const clone = getMutableClone(node);
+        clone.parent = parent;
         if (isQualifiedName(clone)) {
             const { left, right } = clone;
             clone.left = cloneEntityName(left, clone);
-            clone.right = cloneNode(right, right, right.flags, parent);
+            clone.right = getMutableClone(right);
+            clone.right.parent = clone;
         }
 
         return clone;
@@ -2284,7 +2323,7 @@ namespace ts {
         else {
             forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
-                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -2517,21 +2556,49 @@ namespace ts {
         return currentLineIndent;
     }
 
-    export function modifierToFlag(token: SyntaxKind): NodeFlags {
-        switch (token) {
-            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
-            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
-            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
-            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
-            case SyntaxKind.AbstractKeyword: return NodeFlags.Abstract;
-            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
-            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
-            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
-            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
-            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
-            case SyntaxKind.ReadonlyKeyword: return NodeFlags.Readonly;
+    export function hasModifiers(node: Node) {
+        return getModifierFlags(node) !== ModifierFlags.None;
+    }
+
+    export function hasModifier(node: Node, flags: ModifierFlags) {
+        return (getModifierFlags(node) & flags) !== 0;
+    }
+
+    export function getModifierFlags(node: Node): ModifierFlags {
+        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
+            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
-        return 0;
+
+        let flags = ModifierFlags.None;
+        if (node.modifiers) {
+            for (const modifier of node.modifiers) {
+                flags |= modifierToFlag(modifier.kind);
+            }
+        }
+
+        if (node.flags & NodeFlags.NestedNamespace) {
+            flags |= ModifierFlags.Export;
+        }
+
+        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
+        return flags;
+    }
+
+    export function modifierToFlag(token: SyntaxKind): ModifierFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return ModifierFlags.Static;
+            case SyntaxKind.PublicKeyword: return ModifierFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return ModifierFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return ModifierFlags.Private;
+            case SyntaxKind.AbstractKeyword: return ModifierFlags.Abstract;
+            case SyntaxKind.ExportKeyword: return ModifierFlags.Export;
+            case SyntaxKind.DeclareKeyword: return ModifierFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return ModifierFlags.Const;
+            case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
+            case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
+            case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+        }
+        return ModifierFlags.None;
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {
@@ -2591,7 +2658,7 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2835,6 +2902,90 @@ namespace ts {
             : { pos: range.end, end: range.end };
     }
 
+    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {
+        const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
+        const exportSpecifiers: Map<ExportSpecifier[]> = {};
+        let exportEquals: ExportAssignment = undefined;
+        let hasExportStars = false;
+        for (const node of sourceFile.statements) {
+            switch (node.kind) {
+                case SyntaxKind.ImportDeclaration:
+                    if (!(<ImportDeclaration>node).importClause ||
+                        resolver.isReferencedAliasDeclaration((<ImportDeclaration>node).importClause, /*checkChildren*/ true)) {
+                        // import "mod"
+                        // import x from "mod" where x is referenced
+                        // import * as x from "mod" where x is referenced
+                        // import { x, y } from "mod" where at least one import is referenced
+                        externalImports.push(<ImportDeclaration>node);
+                    }
+                    break;
+
+                case SyntaxKind.ImportEqualsDeclaration:
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
+                        // import x = require("mod") where x is referenced
+                        externalImports.push(<ImportEqualsDeclaration>node);
+                    }
+                    break;
+
+                case SyntaxKind.ExportDeclaration:
+                    if ((<ExportDeclaration>node).moduleSpecifier) {
+                        if (!(<ExportDeclaration>node).exportClause) {
+                            // export * from "mod"
+                            externalImports.push(<ExportDeclaration>node);
+                            hasExportStars = true;
+                        }
+                        else if (resolver.isValueAliasDeclaration(node)) {
+                            // export { x, y } from "mod" where at least one export is a value symbol
+                            externalImports.push(<ExportDeclaration>node);
+                        }
+                    }
+                    else {
+                        // export { x, y }
+                        for (const specifier of (<ExportDeclaration>node).exportClause.elements) {
+                            const name = (specifier.propertyName || specifier.name).text;
+                            if (!exportSpecifiers[name]) {
+                                exportSpecifiers[name] = [specifier];
+                            }
+                            else {
+                                exportSpecifiers[name].push(specifier);
+                            }
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
+                        // export = x
+                        exportEquals = <ExportAssignment>node;
+                    }
+                    break;
+            }
+        }
+
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStars };
+    }
+
+    export function copyPrologueDirectives(from: Statement[], to: Statement[]): number {
+        for (let i = 0; i < from.length; i++) {
+            if (isPrologueDirective(from[i])) {
+                addNode(to, from[i]);
+            }
+            else {
+                return i;
+            }
+        }
+
+        return from.length;
+    }
+
+    export function getInitializedVariables(node: VariableDeclarationList) {
+        return filter(node.declarations, isInitializedVariable);
+    }
+
+    function isInitializedVariable(node: VariableDeclaration) {
+        return node.initializer !== undefined;
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that
@@ -2843,11 +2994,8 @@ namespace ts {
     // Node Arrays
 
     export function isNodeArray<T extends Node>(array: T[]): array is NodeArray<T> {
-        return (<NodeArray<T>>array).arrayKind === ArrayKind.NodeArray;
-    }
-
-    export function isModifiersArray(array: Modifier[]): array is ModifiersArray {
-        return (<ModifiersArray>array).arrayKind === ArrayKind.ModifiersArray;
+        return array.hasOwnProperty("pos")
+            && array.hasOwnProperty("end");
     }
 
     // Literals
@@ -2965,7 +3113,8 @@ namespace ts {
             || kind === SyntaxKind.MethodDeclaration
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.IndexSignature;
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.SemicolonClassElement;
     }
 
     export function isObjectLiteralElement(node: Node): node is ObjectLiteralElement {
@@ -3329,13 +3478,6 @@ namespace ts {
     export function isEnumMember(node: Node): node is EnumMember {
         return node.kind === SyntaxKind.EnumMember;
     }
-
-
-    // Synthesized
-
-    export function isNodeArrayNode<T extends Node>(node: Node): node is NodeArrayNode<T> {
-        return node.kind === SyntaxKind.NodeArrayNode;
-    }
 }
 
 namespace ts {
@@ -3571,6 +3713,6 @@ namespace ts {
     }
 
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
-        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+        return hasModifier(node, ModifierFlags.AccessibilityModifier) && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 }

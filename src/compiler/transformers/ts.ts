@@ -92,7 +92,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitWithStack(node: Node, visitor: (node: Node) => Node): Node {
+        function visitWithStack(node: Node, visitor: (node: Node) => VisitResult<Node>): VisitResult<Node> {
             // Save state
             const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
@@ -102,7 +102,7 @@ namespace ts {
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
 
-            node = visitor(node);
+            const visited = visitor(node);
 
             // Restore state
             currentNamespace = savedCurrentNamespace;
@@ -110,7 +110,7 @@ namespace ts {
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
 
-            return node;
+            return visited;
         }
 
         /**
@@ -118,7 +118,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, visitorWorker);
         }
 
@@ -127,14 +127,14 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -145,7 +145,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): Node {
+        function namespaceElementVisitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, namespaceElementVisitorWorker);
         }
 
@@ -154,15 +154,15 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): Node {
+        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -173,7 +173,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitor(node: Node) {
+        function classElementVisitor(node: Node): VisitResult<Node> {
             return visitWithStack(node, classElementVisitorWorker);
         }
 
@@ -182,7 +182,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node) {
+        function classElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are transformed in `transformClassDeclaration`.
@@ -198,9 +198,12 @@ namespace ts {
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 
+                case SyntaxKind.SemicolonClassElement:
+                    return node;
+
                 default:
-                    Debug.fail("Unexpected node.");
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
         }
 
@@ -209,8 +212,8 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): Node {
-            if (node.flags & NodeFlags.Ambient) {
+        function visitTypeScript(node: Node): VisitResult<Node> {
+            if (hasModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided.
                 return undefined;
             }
@@ -370,8 +373,8 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
         }
 
@@ -405,7 +408,7 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassDeclaration(node: ClassDeclaration): NodeArrayNode<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
 
@@ -468,7 +471,7 @@ namespace ts {
                 }
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -855,7 +858,7 @@ namespace ts {
          * @param parameter The parameter node.
          */
         function isParameterWithPropertyAssignment(parameter: ParameterDeclaration) {
-            return parameter.flags & NodeFlags.AccessibilityModifier
+            return hasModifier(parameter, ModifierFlags.AccessibilityModifier)
                 && isIdentifier(parameter.name);
         }
 
@@ -867,7 +870,7 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
 
-            const name = cloneNode(<Identifier>node.name);
+            const name = getSynthesizedClone(<Identifier>node.name);
             return startOnNewLine(
                 createStatement(
                     createAssignment(
@@ -914,7 +917,7 @@ namespace ts {
          */
         function isInitializedProperty(member: ClassElement, isStatic: boolean) {
             return member.kind === SyntaxKind.PropertyDeclaration
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0)
+                && isStatic === hasModifier(member, ModifierFlags.Static)
                 && (<PropertyDeclaration>member).initializer !== undefined;
         }
 
@@ -1012,7 +1015,7 @@ namespace ts {
          */
         function isDecoratedClassElement(member: ClassElement, isStatic: boolean) {
             return nodeOrChildIsDecorated(member)
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0);
+                && isStatic === hasModifier(member, ModifierFlags.Static);
         }
 
         /**
@@ -1550,7 +1553,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                    Debug.failBadSyntaxKind(node);
                     break;
             }
 
@@ -1730,10 +1733,7 @@ namespace ts {
                 );
             }
             else {
-                return setOriginalNode(
-                    cloneNode(name),
-                    name
-                );
+                return getSynthesizedClone(name);
             }
         }
 
@@ -1855,7 +1855,7 @@ namespace ts {
          *
          * @param node The function node.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             if (shouldElideFunctionLikeDeclaration(node)) {
                 return undefined;
             }
@@ -1870,10 +1870,10 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                return createNodeArrayNode([
+                return [
                     func,
                     createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
-                ]);
+                ];
             }
 
             return func;
@@ -1905,7 +1905,7 @@ namespace ts {
          */
         function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
             return node.body === undefined
-                || node.flags & (NodeFlags.Abstract | NodeFlags.Ambient);
+                || hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
         /**
@@ -2105,29 +2105,24 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is exported from a TypeScript namespace.
          */
-        function visitVariableStatement(node: VariableStatement) {
-            Debug.assert(isNamespaceExport(node));
+        function visitVariableStatement(node: VariableStatement): Statement {
+            if (isNamespaceExport(node)) {
+                const variables = getInitializedVariables(node.declarationList);
+                if (variables.length === 0) {
+                    // elide statement if there are no initialized variables.
+                    return undefined;
+                }
 
-            const variables = getInitializedVariables(node.declarationList);
-            if (variables.length === 0) {
-                // elide statement if there are no initialized variables.
-                return undefined;
+                return createStatement(
+                    inlineExpressions(
+                        map(variables, transformInitializedVariable)
+                    ),
+                    /*location*/ node
+                );
             }
-
-            return createStatement(
-                inlineExpressions(
-                    map(variables, transformInitializedVariable)
-                ),
-                /*location*/ node
-            );
-        }
-
-        function getInitializedVariables(node: VariableDeclarationList) {
-            return filter(node.declarations, isInitializedVariable);
-        }
-
-        function isInitializedVariable(node: VariableDeclaration) {
-            return node.initializer !== undefined;
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function transformInitializedVariable(node: VariableDeclaration): Expression {
@@ -2155,7 +2150,7 @@ namespace ts {
          *
          * @param node The enum declaration node.
          */
-        function visitEnumDeclaration(node: EnumDeclaration) {
+        function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
             if (shouldElideEnumDeclaration(node)) {
                 return undefined;
             }
@@ -2220,7 +2215,7 @@ namespace ts {
             }
 
             currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -2352,7 +2347,7 @@ namespace ts {
 
         function trackChildOfNotEmittedNode<T extends Node>(parent: Node, child: T, original: T) {
             if (!child.parent && !child.original) {
-                child = cloneNode(child, child, child.flags, child.parent, original);
+                child = getMutableClone(child);
             }
 
             setNodeEmitFlags(parent, NodeEmitFlags.IsNotEmittedNode);
@@ -2367,7 +2362,7 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function visitModuleDeclaration(node: ModuleDeclaration) {
+        function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
             if (shouldElideModuleDeclaration(node)) {
                 return undefined;
             }
@@ -2408,7 +2403,7 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                moduleParam = createAssignment(cloneNode(node.name), moduleParam);
+                moduleParam = createAssignment(getSynthesizedClone(node.name), moduleParam);
             }
 
             currentNamespaceLocalName = getGeneratedNameForNode(node);
@@ -2440,7 +2435,7 @@ namespace ts {
             );
 
             currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -2486,7 +2481,7 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMany<Statement> {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
             Debug.assert(!isExternalModuleImportEqualsDeclaration(node));
             if (shouldElideImportEqualsDeclaration(node)) {
                 return undefined;
@@ -2539,7 +2534,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExported(node: Node) {
-            return (node.flags & NodeFlags.Export) !== 0;
+            return hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2567,7 +2562,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) === 0;
+                && hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2577,7 +2572,7 @@ namespace ts {
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) !== 0;
+                && hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2629,7 +2624,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return member.flags & NodeFlags.Static
+            return hasModifier(member, ModifierFlags.Static)
                 ? getDeclarationName(node)
                 : getClassPrototype(node);
         }
@@ -2715,7 +2710,7 @@ namespace ts {
                         if (declaration) {
                             const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
                             if (classAlias) {
-                                return cloneNode(classAlias);
+                                return getRelocatedClone(classAlias, /*location*/ node);
                             }
                         }
                     }

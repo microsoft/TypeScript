@@ -12,7 +12,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.ES7) {
                 return visitorWorker(node);
             }
@@ -24,13 +24,15 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node) {
+        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);
-            }
 
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
+            }
         }
 
         function visitBinaryExpression(node: BinaryExpression): Expression {
@@ -90,7 +92,8 @@ namespace ts {
                 return createMathPow(left, right, /*location*/ node);
             }
             else {
-                Debug.fail(`Unexpected operator kind: ${formatSyntaxKind(node.operatorToken.kind)}.`);
+                Debug.failBadSyntaxKind(node);
+                return visitEachChild(node, visitor, context);
             }
         }
     }

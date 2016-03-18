@@ -1196,7 +1196,7 @@ namespace ts {
                     return false;
                 }
 
-                function checkModifiers(modifiers: ModifiersArray): boolean {
+                function checkModifiers(modifiers: NodeArray<Modifier>): boolean {
                     if (modifiers) {
                         for (const modifier of modifiers) {
                             switch (modifier.kind) {
@@ -1311,7 +1311,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
