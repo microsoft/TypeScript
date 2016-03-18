@@ -225,7 +225,7 @@ namespace ts {
          * at the current position.
          * E.g. we don't want Brace Completion inside string-literals, comments, etc.
          */
-        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: CharacterCodes): string;
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
 
         getEmitOutput(fileName: string): string;
     }
@@ -732,7 +732,7 @@ namespace ts {
             );
         }
 
-        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: CharacterCodes): string {
+        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
             return this.forwardJSONCall(
                 `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
                 () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
