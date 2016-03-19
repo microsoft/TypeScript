@@ -5,7 +5,7 @@ class A extends B {
 >B : Symbol(B, Decl(classOrder2.ts, 5, 1))
 
   foo() { this.bar(); }
->foo : Symbol(foo, Decl(classOrder2.ts, 1, 19))
+>foo : Symbol(A.foo, Decl(classOrder2.ts, 1, 19))
 >this.bar : Symbol(B.bar, Decl(classOrder2.ts, 7, 9))
 >this : Symbol(A, Decl(classOrder2.ts, 0, 0))
 >bar : Symbol(B.bar, Decl(classOrder2.ts, 7, 9))
@@ -16,7 +16,7 @@ class B {
 >B : Symbol(B, Decl(classOrder2.ts, 5, 1))
 
   bar() { }
->bar : Symbol(bar, Decl(classOrder2.ts, 7, 9))
+>bar : Symbol(B.bar, Decl(classOrder2.ts, 7, 9))
 
 }
 

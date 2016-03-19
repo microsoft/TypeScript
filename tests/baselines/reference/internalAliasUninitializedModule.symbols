@@ -9,7 +9,7 @@ module a {
 >I : Symbol(I, Decl(internalAliasUninitializedModule.ts, 1, 21))
 
             foo();
->foo : Symbol(foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
+>foo : Symbol(I.foo, Decl(internalAliasUninitializedModule.ts, 2, 28))
         }
     }
 }

@@ -1,4 +1,4 @@
- {
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -447,7 +447,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -722,6 +722,10 @@
     "Parameter '{0}' is not in the same position as parameter '{1}'.": {
         "category": "Error",
         "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
     },
     "A type predicate cannot reference a rest parameter.": {
         "category": "Error",
@@ -775,7 +779,7 @@
         "category": "Error",
         "code": 1241
     },
-    "'abstract' modifier can only appear on a class or method declaration.": {
+    "'abstract' modifier can only appear on a class, method, or property declaration.": {
         "category": "Error",
         "code": 1242
     },
@@ -826,6 +830,18 @@
     "The body of an 'if' statement cannot be the empty statement.": {
         "category": "Error",
         "code": 1313
+    },
+    "Global module exports may only appear in module files.": {
+        "category": "Error",
+        "code": 1314
+    },
+    "Global module exports may only appear in declaration files.": {
+        "category": "Error",
+        "code": 1315
+    },
+    "Global module exports may only appear at top level.": {
+        "category": "Error",
+        "code": 1316
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1147,7 +1163,7 @@
         "category": "Error",
         "code": 2382
     },
-    "Overload signatures must all be exported or not exported.": {
+    "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383
     },
@@ -1307,7 +1323,7 @@
         "category": "Error",
         "code": 2427
     },
-    "All declarations of an interface must have identical type parameters.": {
+    "All declarations of '{0}' must have identical type parameters.": {
         "category": "Error",
         "code": 2428
     },
@@ -1631,7 +1647,7 @@
         "category": "Error",
         "code": 2511
     },
-    "Overload signatures must all be abstract or not abstract.": {
+    "Overload signatures must all be abstract or non-abstract.": {
         "category": "Error",
         "code": 2512
     },
@@ -1698,6 +1714,10 @@
     "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module containing async functions.": {
         "category": "Error",
         "code": 2529
+    },
+    "Property '{0}' is incompatible with index signature.": {
+        "category": "Error",
+        "code": 2530
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -1818,6 +1838,30 @@
     "Cannot augment module '{0}' because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2671
+    },
+    "Cannot assign a '{0}' constructor type to a '{1}' constructor type.": {
+        "category": "Error",
+        "code": 2672
+    },
+    "Constructor of class '{0}' is private and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2673
+    },
+    "Constructor of class '{0}' is protected and only accessible within the class declaration.": {
+        "category": "Error",
+        "code": 2674
+    },
+    "Cannot extend a class '{0}'. Class constructor is marked as private.": {
+        "category": "Error",
+        "code": 2675
+    },
+    "Accessors must both be abstract or non-abstract.": {
+        "category": "Error",
+        "code": 2676
+    },
+    "A type predicate's type must be assignable to its parameter's type.": {
+        "category": "Error",
+        "code": 2677
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2187,6 +2231,7 @@
         "category": "Error",
         "code": 5062
     },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2195,11 +2240,11 @@
         "category": "Message",
         "code": 6002
     },
-    "Specifies the location where debugger should locate map files instead of generated locations.": {
+    "Specify the location where debugger should locate map files instead of generated locations.": {
         "category": "Message",
         "code": 6003
     },
-    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+    "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
     },
@@ -2231,10 +2276,10 @@
         "category": "Message",
         "code": 6011
     },
-  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
-    "category": "Message",
-    "code": 6015
-  },
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
+        "category": "Message",
+        "code": 6015
+    },
     "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
@@ -2319,13 +2364,9 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
+    "Argument for '{0}' option must be: {1}": {
         "category": "Error",
         "code": 6046
-    },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-        "category": "Error",
-        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
@@ -2363,7 +2404,7 @@
         "category": "Message",
         "code": 6056
     },
-    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+    "Specify the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
     },
@@ -2371,21 +2412,13 @@
         "category": "Error",
         "code": 6059
     },
-    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+    "Specify the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
         "code": 6060
     },
     "NEWLINE": {
         "category": "Message",
         "code": 6061
-    },
-    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error",
-        "code": 6062
-    },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
-        "category": "Error",
-        "code": 6063
     },
     "Option '{0}' can only be specified in 'tsconfig.json' file.": {
         "category": "Error",
@@ -2403,7 +2436,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
+    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },
@@ -2447,10 +2480,6 @@
         "category": "Message",
         "code": 6080
     },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082
@@ -2459,7 +2488,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
@@ -2570,6 +2599,10 @@
     "Module resolution using 'rootDirs' has failed": {
         "category": "Message",
         "code": 6111
+    },
+    "Do not emit 'use strict' directives in module output.": {
+        "category": "Message",
+        "code": 6112
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2723,11 +2756,6 @@
         "category": "Error",
         "code": 8016
     },
-    "'decorators' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8017
-    },
-
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2757,23 +2785,27 @@
         "code": 17004
     },
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
-      "category": "Error",
-      "code": 17005
+        "category": "Error",
+        "code": 17005
     },
     "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17006
+        "category": "Error",
+        "code": 17006
     },
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
-      "category": "Error",
-      "code": 17007
+        "category": "Error",
+        "code": 17007
     },
     "JSX element '{0}' has no corresponding closing tag.": {
-      "category": "Error",
-      "code": 17008
+        "category": "Error",
+        "code": 17008
     },
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
-      "category": "Error",
-      "code": 17009
+        "category": "Error",
+        "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }

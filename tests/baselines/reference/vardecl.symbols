@@ -150,7 +150,7 @@ module m2 {
 >C : Symbol(C, Decl(vardecl.ts, 65, 11))
 
         constructor (public b) {
->b : Symbol(b, Decl(vardecl.ts, 68, 21))
+>b : Symbol(C.b, Decl(vardecl.ts, 68, 21))
         }
     }
 
@@ -158,7 +158,7 @@ module m2 {
 >C2 : Symbol(C2, Decl(vardecl.ts, 70, 5))
 
         constructor (public b) {
->b : Symbol(b, Decl(vardecl.ts, 73, 21))
+>b : Symbol(C2.b, Decl(vardecl.ts, 73, 21))
         }
     }
     var m;

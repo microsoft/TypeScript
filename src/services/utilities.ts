@@ -147,7 +147,7 @@ namespace ts {
 
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicity always consider them non-completed
                 return false;
 
             case SyntaxKind.ForStatement:
@@ -265,7 +265,7 @@ namespace ts {
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
@@ -836,5 +836,20 @@ namespace ts {
             return name.substring(1, length - 1);
         };
         return name;
+    }
+
+    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
+        const scriptKind = getScriptKind(fileName, host);
+        return forEach(scriptKinds, k => k === scriptKind);
+    }
+
+    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+        // First check to see if the script kind can be determined from the file name
+        var scriptKind = getScriptKindFromFileName(fileName);
+        if (scriptKind === ScriptKind.Unknown && host && host.getScriptKind) {
+            // Next check to see if the host can resolve the script kind
+            scriptKind = host.getScriptKind(fileName);
+        }
+        return ensureScriptKind(fileName, scriptKind);
     }
 }

@@ -7,10 +7,16 @@ module ts {
     }
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost  {
-        const directories: Map<string> = {};
-        for (const f in fileMap) {
-            directories[getDirectoryPath(f)] = f;
-        }
+        let existingDirectories: Map<boolean> = {};
+        forEachValue(fileMap, v => {
+            let dir = getDirectoryPath(v.name);
+            let previous: string;
+            do {
+                existingDirectories[dir] = true;
+                previous = dir;
+                dir = getDirectoryPath(dir);
+            } while (dir !== previous);
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
@@ -30,7 +36,7 @@ module ts {
                 return hasProperty(fileMap, path);
             },
             directoryExists: (path: string): boolean => {
-                return hasProperty(directories, path);
+                return hasProperty(existingDirectories, path);
             },
             createDirectory: (path: string) => {
             },

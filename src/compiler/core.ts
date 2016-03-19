@@ -455,6 +455,14 @@ namespace ts {
         return hasOwnProperty.call(map, key);
     }
 
+    export function getKeys<T>(map: Map<T>): string[] {
+        const keys: string[] = [];
+        for (const key in map) {
+            keys.push(key);
+        }
+        return keys;
+    }
+
     export function getProperty<T>(map: Map<T>, key: string): T {
         return hasOwnProperty.call(map, key) ? map[key] : undefined;
     }
@@ -844,7 +852,7 @@ namespace ts {
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {
-        // Get root length of http://www.website.com/folder1/foler2/
+        // Get root length of http://www.website.com/folder1/folder2/
         // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
@@ -872,7 +880,7 @@ namespace ts {
         const indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
             // Found the "/" after the website.com so the root is length of http://www.website.com/
-            // and get components afetr the root normally like any other folder components
+            // and get components after the root normally like any other folder components
             rootLength = indexOfNextSlash + 1;
             return normalizedPathComponents(url, rootLength);
         }
@@ -953,6 +961,32 @@ namespace ts {
         const pathLen = path.length;
         const extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+    }
+
+    export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
+        // Using scriptKind as a condition handles both:
+        // - 'scriptKind' is unspecified and thus it is `undefined`
+        // - 'scriptKind' is set and it is `Unknown` (0)
+        // If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
+        // to get the ScriptKind from the file name. If it cannot be resolved
+        // from the file name then the default 'TS' script kind is returned.
+        return (scriptKind || getScriptKindFromFileName(fileName)) || ScriptKind.TS;
+    }
+
+    export function getScriptKindFromFileName(fileName: string): ScriptKind {
+        const ext = fileName.substr(fileName.lastIndexOf("."));
+        switch (ext.toLowerCase()) {
+            case ".js":
+                return ScriptKind.JS;
+            case ".jsx":
+                return ScriptKind.JSX;
+            case ".ts":
+                return ScriptKind.TS;
+            case ".tsx":
+                return ScriptKind.TSX;
+            default:
+                return ScriptKind.Unknown;
+        }
     }
 
     /**

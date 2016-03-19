@@ -26,7 +26,7 @@ System.register([], function(exports_1, context_1) {
     return {
         setters:[],
         execute: function() {
-            let Foo = class Foo {
+            Foo = class Foo {
             };
             Foo = __decorate([
                 decorator
@@ -49,7 +49,7 @@ System.register([], function(exports_1, context_1) {
     return {
         setters:[],
         execute: function() {
-            let default_1 = class {
+            default_1 = class {
             };
             default_1 = __decorate([
                 decorator

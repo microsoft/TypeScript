@@ -6,8 +6,8 @@ module M {
 
     export interface Point { x: number; y: number }
 >Point : Symbol(Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
->x : Symbol(x, Decl(instantiatedModule.ts, 3, 28))
->y : Symbol(y, Decl(instantiatedModule.ts, 3, 39))
+>x : Symbol(Point.x, Decl(instantiatedModule.ts, 3, 28))
+>y : Symbol(Point.y, Decl(instantiatedModule.ts, 3, 39))
 
     export var Point = 1;
 >Point : Symbol(Point, Decl(instantiatedModule.ts, 2, 10), Decl(instantiatedModule.ts, 4, 14))
@@ -56,10 +56,10 @@ module M2 {
 >Point : Symbol(Point, Decl(instantiatedModule.ts, 20, 11))
 
         x: number;
->x : Symbol(x, Decl(instantiatedModule.ts, 21, 24))
+>x : Symbol(Point.x, Decl(instantiatedModule.ts, 21, 24))
 
         y: number;
->y : Symbol(y, Decl(instantiatedModule.ts, 22, 18))
+>y : Symbol(Point.y, Decl(instantiatedModule.ts, 22, 18))
 
         static Origin(): Point {
 >Origin : Symbol(Point.Origin, Decl(instantiatedModule.ts, 23, 18))

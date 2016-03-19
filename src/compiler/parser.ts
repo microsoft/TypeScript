@@ -302,6 +302,9 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.GlobalModuleExportDeclaration:
+                return visitNode(cbNode, (<GlobalModuleExportDeclaration>node).name);
+
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
             case SyntaxKind.NamedImports:
@@ -400,12 +403,16 @@ namespace ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         const start = new Date().getTime();
-        const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+        const result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
 
         parseTime += new Date().getTime() - start;
         return result;
+    }
+
+    export function isExternalModule(file: SourceFile): boolean {
+        return file.externalModuleIndicator !== undefined;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
@@ -534,23 +541,24 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
-            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0;
-            initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile {
+            scriptKind = ensureScriptKind(fileName, scriptKind);
 
-            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor, scriptKind);
+
+            const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, scriptKind);
 
             clearState();
 
             return result;
         }
 
-        function getLanguageVariant(fileName: string) {
+        function getLanguageVariant(scriptKind: ScriptKind) {
             // .tsx and .jsx files are treated as jsx language variant.
-            return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx") || fileExtensionIs(fileName, ".js") ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
-        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
@@ -563,14 +571,14 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = isJavaScriptFile ? NodeFlags.JavaScriptFile : NodeFlags.None;
+            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX ? NodeFlags.JavaScriptFile : NodeFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(getLanguageVariant(fileName));
+            scanner.setLanguageVariant(getLanguageVariant(scriptKind));
         }
 
         function clearState() {
@@ -578,7 +586,7 @@ namespace ts {
             scanner.setText("");
             scanner.setOnError(undefined);
 
-            // Clear any data.  We don't want to accidently hold onto it for too long.
+            // Clear any data.  We don't want to accidentally hold onto it for too long.
             parseDiagnostics = undefined;
             sourceFile = undefined;
             identifiers = undefined;
@@ -586,8 +594,8 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
-            sourceFile = createSourceFile(fileName, languageVersion);
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion, scriptKind);
             sourceFile.flags = contextFlags;
 
             // Prime the scanner.
@@ -654,7 +662,7 @@ namespace ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
@@ -664,8 +672,9 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
-            sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
+            sourceFile.languageVariant = getLanguageVariant(scriptKind);
             sourceFile.isDeclarationFile = fileExtensionIs(sourceFile.fileName, ".d.ts");
+            sourceFile.scriptKind = scriptKind;
 
             return sourceFile;
         }
@@ -1130,7 +1139,7 @@ namespace ts {
                 if (token === SyntaxKind.DefaultKeyword) {
                     return lookAhead(nextTokenIsClassOrFunction);
                 }
-                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.AsKeyword && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
@@ -1452,8 +1461,8 @@ namespace ts {
             // We can only reuse a node if it was parsed under the same strict mode that we're
             // currently in.  i.e. if we originally parsed a node in non-strict mode, but then
             // the user added 'using strict' at the top of the file, then we can't use that node
-            // again as the presense of strict mode may cause us to parse the tokens in the file
-            // differetly.
+            // again as the presence of strict mode may cause us to parse the tokens in the file
+            // differently.
             //
             // Note: we *can* reuse tokens when the strict mode changes.  That's because tokens
             // are unaffected by strict mode.  It's just the parser will decide what to do with it
@@ -1466,7 +1475,7 @@ namespace ts {
             }
 
             // Ok, we have a node that looks like it could be reused.  Now verify that it is valid
-            // in the currest list parsing context that we're currently at.
+            // in the current list parsing context that we're currently at.
             if (!canReuseNode(node, parsingContext)) {
                 return undefined;
             }
@@ -1729,7 +1738,7 @@ namespace ts {
         };
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const result = createNodeArray<T>();
@@ -1757,7 +1766,7 @@ namespace ts {
                     // parse errors.  For example, this can happen when people do things like use
                     // a semicolon to delimit object literal members.   Note: we'll have already
                     // reported an error when we called parseExpected above.
-                    if (considerSemicolonAsDelimeter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
+                    if (considerSemicolonAsDelimiter && token === SyntaxKind.SemicolonToken && !scanner.hasPrecedingLineBreak()) {
                         nextToken();
                     }
                     continue;
@@ -1941,7 +1950,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+        function parseThisTypePredicate(lhs: ThisTypeNode): TypePredicateNode {
             nextToken();
             const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
             node.parameterName = lhs;
@@ -2218,7 +2227,7 @@ namespace ts {
                 method.name = name;
                 method.questionToken = questionToken;
 
-                // Method signatues don't exist in expression contexts.  So they have neither
+                // Method signatures don't exist in expression contexts.  So they have neither
                 // [Yield] nor [Await]
                 fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, method);
                 parseTypeMemberSemicolon();
@@ -2359,7 +2368,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword: {
                     const thisKeyword = parseThisTypeNode();
                     if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                        return parseTypePredicate(thisKeyword);
+                        return parseThisTypePredicate(thisKeyword);
                     }
                     else {
                         return thisKeyword;
@@ -2715,7 +2724,7 @@ namespace ts {
 
         function isYieldExpression(): boolean {
             if (token === SyntaxKind.YieldKeyword) {
-                // If we have a 'yield' keyword, and htis is a context where yield expressions are
+                // If we have a 'yield' keyword, and this is a context where yield expressions are
                 // allowed, then definitely parse out a yield expression.
                 if (inYieldContext()) {
                     return true;
@@ -2734,7 +2743,7 @@ namespace ts {
                 //
                 // for now we just check if the next token is an identifier.  More heuristics
                 // can be added here later as necessary.  We just need to make sure that we
-                // don't accidently consume something legal.
+                // don't accidentally consume something legal.
                 return lookAhead(nextTokenIsIdentifierOrKeywordOrNumberOnSameLine);
             }
 
@@ -2763,7 +2772,7 @@ namespace ts {
             }
             else {
                 // if the next token is not on the same line as yield.  or we don't have an '*' or
-                // the start of an expressin, then this is just a simple "yield" expression.
+                // the start of an expression, then this is just a simple "yield" expression.
                 return finishNode(node);
             }
         }
@@ -3055,7 +3064,7 @@ namespace ts {
                 // Check the precedence to see if we should "take" this operator
                 // - For left associative operator (all operator but **), consume the operator,
                 //   recursively call the function below, and parse binaryExpression as a rightOperand
-                //   of the caller if the new precendence of the operator is greater then or equal to the current precendence.
+                //   of the caller if the new precedence of the operator is greater then or equal to the current precedence.
                 //   For example:
                 //      a - b - c;
                 //            ^token; leftOperand = b. Return b to the caller as a rightOperand
@@ -3064,8 +3073,8 @@ namespace ts {
                 //      a - b * c;
                 //            ^token; leftOperand = b. Return b * c to the caller as a rightOperand
                 // - For right associative operator (**), consume the operator, recursively call the function
-                //   and parse binaryExpression as a rightOperand of the caller if the new precendence of
-                //   the operator is strictly grater than the current precendence
+                //   and parse binaryExpression as a rightOperand of the caller if the new precedence of
+                //   the operator is strictly grater than the current precedence
                 //   For example:
                 //      a ** b ** c;
                 //             ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
@@ -3306,7 +3315,7 @@ namespace ts {
          */
         function isIncrementExpression(): boolean {
             // This function is called inside parseUnaryExpression to decide
-            // whether to call parseSimpleUnaryExpression or call parseIncrmentExpression directly
+            // whether to call parseSimpleUnaryExpression or call parseIncrementExpression directly
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
@@ -3793,7 +3802,7 @@ namespace ts {
                 return undefined;
             }
 
-            // If we have a '<', then only parse this as a arugment list if the type arguments
+            // If we have a '<', then only parse this as a argument list if the type arguments
             // are complete and we have an open paren.  if we don't, rewind and return nothing.
             return typeArguments && canFollowTypeArgumentsInExpression()
                 ? typeArguments
@@ -3924,7 +3933,7 @@ namespace ts {
 
         function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
+                return addJSDocComment(parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers));
             }
             else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
                 return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, decorators, modifiers);
@@ -3970,7 +3979,7 @@ namespace ts {
                     shorthandDeclaration.equalsToken = equalsToken;
                     shorthandDeclaration.objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
                 }
-                return finishNode(shorthandDeclaration);
+                return addJSDocComment(finishNode(shorthandDeclaration));
             }
             else {
                 const propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
@@ -3979,7 +3988,7 @@ namespace ts {
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
                 propertyAssignment.initializer = allowInAnd(parseAssignmentExpressionOrHigher);
-                return finishNode(propertyAssignment);
+                return addJSDocComment(finishNode(propertyAssignment));
             }
         }
 
@@ -3990,7 +3999,7 @@ namespace ts {
                 node.multiLine = true;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter*/ true);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -4392,7 +4401,8 @@ namespace ts {
                         continue;
 
                     case SyntaxKind.GlobalKeyword:
-                        return nextToken() === SyntaxKind.OpenBraceToken;
+                        nextToken();
+                        return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.Identifier || token === SyntaxKind.ExportKeyword;
 
                     case SyntaxKind.ImportKeyword:
                         nextToken();
@@ -4401,7 +4411,8 @@ namespace ts {
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword) {
+                            token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword ||
+                            token === SyntaxKind.AsKeyword) {
                             return true;
                         }
                         continue;
@@ -4585,9 +4596,15 @@ namespace ts {
                     return parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.ExportKeyword:
                     nextToken();
-                    return token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken ?
-                        parseExportAssignment(fullStart, decorators, modifiers) :
-                        parseExportDeclaration(fullStart, decorators, modifiers);
+                    switch (token) {
+                        case SyntaxKind.DefaultKeyword:
+                        case SyntaxKind.EqualsToken:
+                            return parseExportAssignment(fullStart, decorators, modifiers);
+                        case SyntaxKind.AsKeyword:
+                            return parseGlobalModuleExportDeclaration(fullStart, decorators, modifiers);
+                        default:
+                            return parseExportDeclaration(fullStart, decorators, modifiers);
+                    }
                 default:
                     if (decorators || modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
@@ -4790,8 +4807,8 @@ namespace ts {
             // off. The grammar would look something like this:
             //
             //    MemberVariableDeclaration[Yield]:
-            //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initialiser_opt[In];
-            //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initialiser_opt[In, ?Yield];
+            //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initializer_opt[In];
+            //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initializer_opt[In, ?Yield];
             //
             // The checker may still error in the static case to explicitly disallow the yield expression.
             property.initializer = hasModifier(property, ModifierFlags.Static)
@@ -5251,6 +5268,20 @@ namespace ts {
             return nextToken() === SyntaxKind.SlashToken;
         }
 
+        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): GlobalModuleExportDeclaration {
+            const exportDeclaration = <GlobalModuleExportDeclaration>createNode(SyntaxKind.GlobalModuleExportDeclaration, fullStart);
+            exportDeclaration.decorators = decorators;
+            exportDeclaration.modifiers = modifiers;
+            parseExpected(SyntaxKind.AsKeyword);
+            parseExpected(SyntaxKind.NamespaceKeyword);
+
+            exportDeclaration.name = parseIdentifier();
+
+            parseExpected(SyntaxKind.SemicolonToken);
+
+            return finishNode(exportDeclaration);
+        }
+
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
             const afterImportPos = scanner.getStartPos();
@@ -5387,7 +5418,7 @@ namespace ts {
             // ImportSpecifier:
             //   BindingIdentifier
             //   IdentifierName as BindingIdentifier
-            // ExportSpecififer:
+            // ExportSpecifier:
             //   IdentifierName
             //   IdentifierName as IdentifierName
             let checkIdentifierIsKeyword = isKeyword(token) && !isIdentifier();
@@ -5582,7 +5613,7 @@ namespace ts {
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 scanner.setText(content, start, length);
                 token = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -5736,6 +5767,9 @@ namespace ts {
             function parseJSDocParameter(): ParameterDeclaration {
                 const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
                 parameter.type = parseJSDocType();
+                if (parseOptional(SyntaxKind.EqualsToken)) {
+                    parameter.questionToken = createNode(SyntaxKind.EqualsToken);
+                }
                 return finishNode(parameter);
             }
 
@@ -5743,15 +5777,21 @@ namespace ts {
                 const result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
                 result.name = parseSimplePropertyName();
 
-                while (parseOptional(SyntaxKind.DotToken)) {
-                    if (token === SyntaxKind.LessThanToken) {
-                        result.typeArguments = parseTypeArguments();
-                        break;
-                    }
-                    else {
-                        result.name = parseQualifiedName(result.name);
+                if (token === SyntaxKind.LessThanToken) {
+                    result.typeArguments = parseTypeArguments();
+                }
+                else {
+                    while (parseOptional(SyntaxKind.DotToken)) {
+                        if (token === SyntaxKind.LessThanToken) {
+                            result.typeArguments = parseTypeArguments();
+                            break;
+                        }
+                        else {
+                            result.name = parseQualifiedName(result.name);
+                        }
                     }
                 }
+
 
                 return finishNode(result);
             }
@@ -5890,7 +5930,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
                 const jsDocComment = parseJSDocCommentWorker(start, length);
                 const diagnostics = parseDiagnostics;
@@ -6215,11 +6255,11 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true);
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true, sourceFile.scriptKind);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
-            // we do an update the original source file is considered unusbale from that point onwards.
+            // we do an update the original source file is considered unusable from that point onwards.
             //
             // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
             // tree and give them new positions and parents.  From that point on, trusting the old
@@ -6279,7 +6319,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true);
+            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true, sourceFile.scriptKind);
 
             return result;
         }
@@ -6350,7 +6390,7 @@ namespace ts {
             // We have an element that intersects the change range in some way.  It may have its
             // start, or its end (or both) in the changed range.  We want to adjust any part
             // that intersects such that the final tree is in a consistent state.  i.e. all
-            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // children have spans within the span of their parent, and all siblings are ordered
             // properly.
 
             // We may need to update both the 'pos' and the 'end' of the element.
@@ -6372,7 +6412,7 @@ namespace ts {
             //  -------------------ZZZ-----------------
             //
             // In this case, any element that started in the 'X' range will keep its position.
-            // However any element htat started after that will have their pos adjusted to be
+            // However any element that started after that will have their pos adjusted to be
             // at the end of the new range.  i.e. any node that started in the 'Y' range will
             // be adjusted to have their start at the end of the 'Z' range.
             //
@@ -6397,7 +6437,7 @@ namespace ts {
             //  -------------------ZZZ-----------------
             //
             // In this case, any element that ended in the 'X' range will keep its position.
-            // However any element htat ended after that will have their pos adjusted to be
+            // However any element that ended after that will have their pos adjusted to be
             // at the end of the new range.  i.e. any node that ended in the 'Y' range will
             // be adjusted to have their end at the end of the 'Z' range.
             if (element.end >= changeRangeOldEnd) {
@@ -6727,7 +6767,7 @@ namespace ts {
                         // Position was within this node.  Keep searching deeper to find the node.
                         forEachChild(node, visitNode, visitArray);
 
-                        // don't procede any futher in the search.
+                        // don't proceed any further in the search.
                         return true;
                     }
 

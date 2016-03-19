@@ -1,0 +1,6 @@
+=== tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
+declare var ng: ng.IAngularStatic;declare module ng {   export interface IModule {      name: string;   }   export interface IAngularStatic {       module: (s: string) => IModule;   }}export = ng;
+>ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+>ng : Symbol(ng, Decl(module_augmentUninstantiatedModule2.ts, 0, 11), Decl(module_augmentUninstantiatedModule2.ts, 0, 34))
+>IAngularStatic : Symbol(ng.IAngularStatic, Decl(module_augmentUninstantiatedModule2.ts, 5, 4))
+

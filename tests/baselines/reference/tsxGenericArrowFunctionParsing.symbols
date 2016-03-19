@@ -4,7 +4,7 @@ declare module JSX {
 
 	interface Element { isElement; }
 >Element : Symbol(Element, Decl(file.tsx, 0, 20))
->isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
+>isElement : Symbol(Element.isElement, Decl(file.tsx, 1, 20))
 }
 
 var T, T1, T2;
@@ -15,8 +15,6 @@ var T, T1, T2;
 // This is an element
 var x1 = <T>() => {}</T>;
 >x1 : Symbol(x1, Decl(file.tsx, 7, 3))
->T : Symbol(T, Decl(file.tsx, 4, 3))
->T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x1.isElement;
 >x1.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
@@ -43,9 +41,7 @@ x3();
 // This is an element
 var x4 = <T extends={true}>() => {}</T>;
 >x4 : Symbol(x4, Decl(file.tsx, 19, 3))
->T : Symbol(T, Decl(file.tsx, 4, 3))
 >extends : Symbol(unknown)
->T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x4.isElement;
 >x4.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
@@ -55,9 +51,7 @@ x4.isElement;
 // This is an element
 var x5 = <T extends>() => {}</T>;
 >x5 : Symbol(x5, Decl(file.tsx, 23, 3))
->T : Symbol(T, Decl(file.tsx, 4, 3))
 >extends : Symbol(unknown)
->T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x5.isElement;
 >x5.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))

@@ -25,7 +25,7 @@ class TesterB {
 >TesterB : Symbol(TesterB, Decl(unusedImportDeclaration_testerB.ts, 0, 0))
 
     me: string;
->me : Symbol(me, Decl(unusedImportDeclaration_testerB.ts, 0, 15))
+>me : Symbol(TesterB.me, Decl(unusedImportDeclaration_testerB.ts, 0, 15))
 }
 export = TesterB;
 >TesterB : Symbol(TesterB, Decl(unusedImportDeclaration_testerB.ts, 0, 0))

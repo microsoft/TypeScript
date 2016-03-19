@@ -746,7 +746,7 @@ namespace Harness {
 
 namespace Harness {
     export const libFolder = "built/local/";
-    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
+    const tcServicesFileName = ts.combinePaths(libFolder, Utils.getExecutionEnvironment() === Utils.ExecutionEnvironment.Browser ? "typescriptServicesInBrowserTest.js" : "typescriptServices.js");
     export const tcServicesFile = IO.readFile(tcServicesFileName);
 
     export interface SourceMapEmitterCallback {
@@ -876,7 +876,7 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { throw new Error("NotYetImplemented"); }
+                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
             };
         }
 
@@ -895,7 +895,9 @@ namespace Harness {
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean" }
+            { name: "noErrorTruncation", type: "boolean" },
+            { name: "suppressOutputPathCheck", type: "boolean" },
+            { name: "noImplicitReferences", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -965,7 +967,6 @@ namespace Harness {
 
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.clone(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
-            options.module = options.module || ts.ModuleKind.None;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = true;
@@ -1330,7 +1331,7 @@ namespace Harness {
 
             public getSourceMapRecord() {
                 if (this.sourceMapData) {
-                    return Harness.SourceMapRecoder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
+                    return Harness.SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
             }
         }

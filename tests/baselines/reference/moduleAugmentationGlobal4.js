@@ -45,3 +45,5 @@ declare global  {
 export {  };
 export {};
 //// [f3.d.ts]
+import "./f1";
+import "./f2";

@@ -3,7 +3,7 @@ interface ICache {
 >ICache : Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
 
     get<T>(key: string): T;
->get : Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
+>get : Symbol(ICache.get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
 >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
 >key : Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 11))
 >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
@@ -13,7 +13,7 @@ class CacheService implements ICache { // Should not error that property type of
 >ICache : Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
 
     get<T>(key: string): T {
->get : Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
+>get : Symbol(CacheService.get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
 >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
 >key : Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 11))
 >T : Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))

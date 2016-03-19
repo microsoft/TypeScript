@@ -85,11 +85,6 @@ module ts {
 
         }
 
-        it("Generates correct compilerOptions diagnostics", () => {
-            // Expecting 5047: "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher."
-            test(`var x = 0;`, { expectedDiagnosticCodes: [5047] });
-        });
-
         it("Generates no diagnostics with valid inputs", () => {
             // No errors
             test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS } } });

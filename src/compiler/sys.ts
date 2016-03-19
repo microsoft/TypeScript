@@ -380,7 +380,8 @@ namespace ts {
                     const filePath = typeof relativeFileName !== "string"
                         ? undefined
                         : toPath(relativeFileName, baseDirPath, createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
-                    if (eventName === "change" && fileWatcherCallbacks.contains(filePath)) {
+                    // Some applications save a working file via rename operations
+                    if ((eventName === "change" || eventName === "rename") && fileWatcherCallbacks.contains(filePath)) {
                         for (const fileCallback of fileWatcherCallbacks.get(filePath)) {
                             fileCallback(filePath);
                         }
@@ -413,7 +414,7 @@ namespace ts {
             const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
             function readFile(fileName: string, encoding?: string): string {
-                if (!_fs.existsSync(fileName)) {
+                if (!fileExists(fileName)) {
                     return undefined;
                 }
                 const buffer = _fs.readFileSync(fileName);
@@ -464,6 +465,32 @@ namespace ts {
                 return useCaseSensitiveFileNames ? path : path.toLowerCase();
             }
 
+            const enum FileSystemEntryKind {
+                File,
+                Directory
+            }
+
+            function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
+                try {
+                    const stat = _fs.statSync(path);
+                    switch (entryKind) {
+                        case FileSystemEntryKind.File: return stat.isFile();
+                        case FileSystemEntryKind.Directory: return stat.isDirectory();
+                    }
+                }
+                catch (e) {
+                    return false;
+                }
+            }
+
+            function fileExists(path: string): boolean {
+                return fileSystemEntryExists(path, FileSystemEntryKind.File);
+            }
+
+            function directoryExists(path: string): boolean {
+                return fileSystemEntryExists(path, FileSystemEntryKind.Directory);
+            }
+
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
@@ -503,7 +530,7 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (filePath, callback) => {
-                    // Node 4.0 stablized the `fs.watch` function on Windows which avoids polling
+                    // Node 4.0 stabilized the `fs.watch` function on Windows which avoids polling
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
@@ -541,12 +568,8 @@ namespace ts {
                 resolvePath: function (path: string): string {
                     return _path.resolve(path);
                 },
-                fileExists(path: string): boolean {
-                    return _fs.existsSync(path);
-                },
-                directoryExists(path: string) {
-                    return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
-                },
+                fileExists,
+                directoryExists,
                 createDirectory(directoryName: string) {
                     if (!this.directoryExists(directoryName)) {
                         _fs.mkdirSync(directoryName);

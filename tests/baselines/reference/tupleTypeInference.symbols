@@ -7,7 +7,7 @@ interface IQService {
 >IQService : Symbol(IQService, Decl(tupleTypeInference.ts, 0, 26))
 
     all<T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>;
->all : Symbol(all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
+>all : Symbol(IQService.all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
 >T1 : Symbol(T1, Decl(tupleTypeInference.ts, 3, 8))
 >T2 : Symbol(T2, Decl(tupleTypeInference.ts, 3, 11))
 >T3 : Symbol(T3, Decl(tupleTypeInference.ts, 3, 15))
@@ -24,7 +24,7 @@ interface IQService {
 >T3 : Symbol(T3, Decl(tupleTypeInference.ts, 3, 15))
 
     all<T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>;
->all : Symbol(all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
+>all : Symbol(IQService.all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
 >T1 : Symbol(T1, Decl(tupleTypeInference.ts, 4, 8))
 >T2 : Symbol(T2, Decl(tupleTypeInference.ts, 4, 11))
 >x : Symbol(x, Decl(tupleTypeInference.ts, 4, 16))
@@ -37,7 +37,7 @@ interface IQService {
 >T2 : Symbol(T2, Decl(tupleTypeInference.ts, 4, 11))
 
     all<T1>(x: [IPromise<T1>]): IPromise<[T1]>;
->all : Symbol(all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
+>all : Symbol(IQService.all, Decl(tupleTypeInference.ts, 2, 21), Decl(tupleTypeInference.ts, 3, 91), Decl(tupleTypeInference.ts, 4, 69))
 >T1 : Symbol(T1, Decl(tupleTypeInference.ts, 5, 8))
 >x : Symbol(x, Decl(tupleTypeInference.ts, 5, 12))
 >IPromise : Symbol(IPromise, Decl(tupleTypeInference.ts, 7, 1))
@@ -46,7 +46,7 @@ interface IQService {
 >T1 : Symbol(T1, Decl(tupleTypeInference.ts, 5, 8))
 
     when<T>(t?: T): IPromise<T>;
->when : Symbol(when, Decl(tupleTypeInference.ts, 5, 47))
+>when : Symbol(IQService.when, Decl(tupleTypeInference.ts, 5, 47))
 >T : Symbol(T, Decl(tupleTypeInference.ts, 6, 9))
 >t : Symbol(t, Decl(tupleTypeInference.ts, 6, 12))
 >T : Symbol(T, Decl(tupleTypeInference.ts, 6, 9))
@@ -59,7 +59,7 @@ interface IPromise<T> {
 >T : Symbol(T, Decl(tupleTypeInference.ts, 9, 19))
 
     then<TResult>(callback: (t: T) => TResult): IPromise<TResult>;
->then : Symbol(then, Decl(tupleTypeInference.ts, 9, 23))
+>then : Symbol(IPromise.then, Decl(tupleTypeInference.ts, 9, 23))
 >TResult : Symbol(TResult, Decl(tupleTypeInference.ts, 10, 9))
 >callback : Symbol(callback, Decl(tupleTypeInference.ts, 10, 18))
 >t : Symbol(t, Decl(tupleTypeInference.ts, 10, 29))

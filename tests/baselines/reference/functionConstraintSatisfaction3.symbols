@@ -23,7 +23,7 @@ class C {
 >C : Symbol(C, Decl(functionConstraintSatisfaction3.ts, 7, 9))
 
     foo: string;
->foo : Symbol(foo, Decl(functionConstraintSatisfaction3.ts, 9, 9))
+>foo : Symbol(C.foo, Decl(functionConstraintSatisfaction3.ts, 9, 9))
 }
 
 var a: { (): string };
@@ -88,7 +88,7 @@ class C2<T> {
 >T : Symbol(T, Decl(functionConstraintSatisfaction3.ts, 29, 9))
 
     foo: T;
->foo : Symbol(foo, Decl(functionConstraintSatisfaction3.ts, 29, 13))
+>foo : Symbol(C2.foo, Decl(functionConstraintSatisfaction3.ts, 29, 13))
 >T : Symbol(T, Decl(functionConstraintSatisfaction3.ts, 29, 9))
 }
 

@@ -1,0 +1,38 @@
+=== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing1.ts ===
+declare var Factory: any
+>Factory : Symbol(Factory, Decl(superCallBeforeThisAccessing1.ts, 0, 11))
+
+class Base {
+>Base : Symbol(Base, Decl(superCallBeforeThisAccessing1.ts, 0, 24))
+
+    constructor(c) { }
+>c : Symbol(c, Decl(superCallBeforeThisAccessing1.ts, 3, 16))
+}
+class D extends Base {
+>D : Symbol(D, Decl(superCallBeforeThisAccessing1.ts, 4, 1))
+>Base : Symbol(Base, Decl(superCallBeforeThisAccessing1.ts, 0, 24))
+
+    private _t;
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+
+    constructor() {
+        super(i);
+>super : Symbol(Base, Decl(superCallBeforeThisAccessing1.ts, 0, 24))
+>i : Symbol(i, Decl(superCallBeforeThisAccessing1.ts, 12, 11))
+
+        var s = {
+>s : Symbol(s, Decl(superCallBeforeThisAccessing1.ts, 9, 11))
+
+            t: this._t
+>t : Symbol(t, Decl(superCallBeforeThisAccessing1.ts, 9, 17))
+>this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+>this : Symbol(D, Decl(superCallBeforeThisAccessing1.ts, 4, 1))
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+        }
+        var i = Factory.create(s);
+>i : Symbol(i, Decl(superCallBeforeThisAccessing1.ts, 12, 11))
+>Factory : Symbol(Factory, Decl(superCallBeforeThisAccessing1.ts, 0, 11))
+>s : Symbol(s, Decl(superCallBeforeThisAccessing1.ts, 9, 11))
+    }
+}
+

@@ -1,7 +1,7 @@
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(7,11): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(7,11): error TS2428: All declarations of 'B' must have identical type parameters.
 tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(8,8): error TS2304: Cannot find name 'V'.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(16,15): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(16,15): error TS2428: All declarations of 'B' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts(40,22): error TS2428: All declarations of 'B' must have identical type parameters.
 
 
 ==== tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDifferingByTypeParameterName2.ts (4 errors) ====
@@ -13,7 +13,7 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDiffer
     
     interface B<U, T> { // error
               ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'B' must have identical type parameters.
         y: V;
            ~
 !!! error TS2304: Cannot find name 'V'.
@@ -26,7 +26,7 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDiffer
     
         interface B<U, T> { // error
                   ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'B' must have identical type parameters.
             y: T;
         }
     }
@@ -52,7 +52,7 @@ tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesDiffer
     module M3 {
         export interface B<U, T> { // error
                          ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'B' must have identical type parameters.
             y: T;
         }
     }

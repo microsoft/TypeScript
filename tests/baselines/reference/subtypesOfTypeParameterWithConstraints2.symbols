@@ -118,16 +118,16 @@ function f3<T extends U, U extends Date>(x: T, y: U) {
 
 interface I1 { foo: number; }
 >I1 : Symbol(I1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 33, 1))
->foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 14))
+>foo : Symbol(I1.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 14))
 
 class C1 { foo: number; }
 >C1 : Symbol(C1, Decl(subtypesOfTypeParameterWithConstraints2.ts, 36, 29))
->foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 10))
+>foo : Symbol(C1.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 10))
 
 class C2<T> { foo: T; }
 >C2 : Symbol(C2, Decl(subtypesOfTypeParameterWithConstraints2.ts, 37, 25))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 9))
->foo : Symbol(foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 13))
+>foo : Symbol(C2.foo, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 13))
 >T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints2.ts, 38, 9))
 
 enum E { A }
@@ -145,7 +145,7 @@ module f {
 }
 class c { baz: string }
 >c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))
->baz : Symbol(baz, Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 9))
+>baz : Symbol(c.baz, Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 9))
 
 module c {
 >c : Symbol(c, Decl(subtypesOfTypeParameterWithConstraints2.ts, 43, 1), Decl(subtypesOfTypeParameterWithConstraints2.ts, 44, 23))

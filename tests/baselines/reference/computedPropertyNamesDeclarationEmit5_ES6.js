@@ -16,4 +16,6 @@ var v = {
 
 
 //// [computedPropertyNamesDeclarationEmit5_ES6.d.ts]
-declare var v: {};
+declare var v: {
+    [x: string]: any;
+};
