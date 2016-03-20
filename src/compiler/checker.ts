@@ -6673,7 +6673,7 @@ namespace ts {
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
-            const maxDepth = 5;
+            const maxDepth = 10;
             let depth = 0;
             let inferiority = 0;
             const visited: Map<boolean> = {};
