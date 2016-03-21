@@ -223,7 +223,7 @@ namespace ts {
         /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
          * at the current position.
-         * E.g. we don't want Brace Completion inside string-literals, comments, etc.
+         * E.g. we don't want brace completion inside string-literals, comments, etc.
          */
         isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
 

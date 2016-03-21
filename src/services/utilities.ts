@@ -438,9 +438,6 @@ namespace ts {
 
     export function isInJsxAttribute(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        if (token && (token.kind === SyntaxKind.JsxAttribute || token.kind === SyntaxKind.JsxSpreadAttribute)) {
-            return true;
-        }
 
         if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
@@ -449,9 +446,14 @@ namespace ts {
         return false;
     }
 
-    export function isInJsxElement(sourceFile: SourceFile, position: number) {
+    /**
+     * returns true if the position is in between the open and close elements of an JSX expression.
+     */
+    export function isInsideJsxElement(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
 
+        // make a distinction if we're dealing with an empty expression or a non-empty expression i.e
+        // <div>|</div vs <div>Hello | World</div> , where | is current cursor
         if (token && (token.kind === SyntaxKind.JsxText ||
             (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText))) {
             return true;
@@ -462,7 +464,7 @@ namespace ts {
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        return token && (token.kind === SyntaxKind.NoSubstitutionTemplateLiteral || token.kind === SyntaxKind.TemplateHead || token.kind === SyntaxKind.TemplateMiddle || token.kind === SyntaxKind.TemplateTail) && position > token.getStart();
+        return isTemplateLiteralKind(token.kind) && position > token.getStart();
     }
 
     /**

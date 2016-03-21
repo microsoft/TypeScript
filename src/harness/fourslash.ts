@@ -1848,12 +1848,12 @@ namespace FourSlash {
 
             let charCode = 0x28; // '('
             switch (openingBrace) {
-                case "{": charCode = 0x7B; break;
-                case "[": charCode = 0x5B; break;
-                case "'": charCode = 0x27; break;
-                case '"': charCode = 0x22; break;
-                case "`": charCode = 0x60; break;
-                case "<": charCode = 0x3C; break;
+                case "{": charCode = ts.CharacterCodes.openBrace; break;
+                case "[": charCode = ts.CharacterCodes.openBracket; break;
+                case "'": charCode = ts.CharacterCodes.singleQuote; break;
+                case '"': charCode = ts.CharacterCodes.doubleQuote; break;
+                case "`": charCode = ts.CharacterCodes.backtick; break;
+                case "<": charCode = ts.CharacterCodes.lessThan; break;
             }
 
             const position = this.currentCaretPosition;

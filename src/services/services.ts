@@ -7314,9 +7314,9 @@ namespace ts {
 
         function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
 
-            // '<' currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
+            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
             // expensive to do during typing scenarios
-            // i.e. wether we're dealing with:
+            // i.e. whether we're dealing with:
             //      var x = new foo<| ( with class foo<T>{} )
             // or 
             //      var y = 3 <|
@@ -7335,7 +7335,7 @@ namespace ts {
                 return false;
             }
 
-            if (isInJsxElement(sourceFile, position)) {
+            if (isInsideJsxElement(sourceFile, position)) {
                 return openingBrace === CharacterCodes.openBrace;
             }
 
