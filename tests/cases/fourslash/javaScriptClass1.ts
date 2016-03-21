@@ -8,7 +8,7 @@
 //// class Foo {
 ////    constructor() {
 ////        this.bar = 'world';
-////        this.thing = 42;
+////        this.thing = () => 0;
 ////        this.union = 'foo';
 ////        this.union = 100;
 ////    }
@@ -25,7 +25,6 @@ verify.completionListContains("union", /*displayText*/ undefined, /*documentatio
 
 edit.insert('bar.');
 verify.completionListContains("substr", /*displayText*/ undefined, /*documentation*/ undefined, "method");
-
 edit.backspace('bar.'.length);
 
 edit.insert('union.');
