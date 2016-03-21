@@ -17,6 +17,8 @@ interface AudioBuffer {
     length: number;
     numberOfChannels: number;
     sampleRate: number;
+    copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel?: number): void;
+    copyToChannel(source: Float32Array, channelNumber: number, startInChannel?: number): void;
     getChannelData(channel: number): Float32Array;
 }
 
@@ -58,6 +60,7 @@ interface Console {
     dir(value?: any, ...optionalParams: any[]): void;
     dirxml(value: any): void;
     error(message?: any, ...optionalParams: any[]): void;
+    exception(message?: string, ...optionalParams: any[]): void;
     group(groupTitle?: string): void;
     groupCollapsed(groupTitle?: string): void;
     groupEnd(): void;
@@ -67,6 +70,7 @@ interface Console {
     profile(reportName?: string): void;
     profileEnd(): void;
     select(element: any): void;
+    table(...data: any[]): void;
     time(timerName?: string): void;
     timeEnd(timerName?: string): void;
     trace(message?: any, ...optionalParams: any[]): void;
@@ -226,9 +230,9 @@ declare var Event: {
 }
 
 interface EventTarget {
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var EventTarget: {
@@ -239,6 +243,7 @@ declare var EventTarget: {
 interface File extends Blob {
     lastModifiedDate: any;
     name: string;
+    webkitRelativePath: string;
 }
 
 declare var File: {
@@ -273,11 +278,11 @@ declare var FileReader: {
 
 interface IDBCursor {
     direction: string;
-    key: any;
+    key: IDBKeyRange | IDBValidKey;
     primaryKey: any;
     source: IDBObjectStore | IDBIndex;
     advance(count: number): void;
-    continue(key?: any): void;
+    continue(key?: IDBKeyRange | IDBValidKey): void;
     delete(): IDBRequest;
     update(value: any): IDBRequest;
     NEXT: string;
@@ -310,10 +315,12 @@ interface IDBDatabase extends EventTarget {
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
     version: number;
+    onversionchange: (ev: IDBVersionChangeEvent) => any;
     close(): void;
     createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     deleteObjectStore(name: string): void;
     transaction(storeNames: string | string[], mode?: string): IDBTransaction;
+    addEventListener(type: "versionchange", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -341,11 +348,11 @@ interface IDBIndex {
     objectStore: IDBObjectStore;
     unique: boolean;
     multiEntry: boolean;
-    count(key?: any): IDBRequest;
-    get(key: any): IDBRequest;
-    getKey(key: any): IDBRequest;
-    openCursor(range?: IDBKeyRange, direction?: string): IDBRequest;
-    openKeyCursor(range?: IDBKeyRange, direction?: string): IDBRequest;
+    count(key?: IDBKeyRange | IDBValidKey): IDBRequest;
+    get(key: IDBKeyRange | IDBValidKey): IDBRequest;
+    getKey(key: IDBKeyRange | IDBValidKey): IDBRequest;
+    openCursor(range?: IDBKeyRange | IDBValidKey, direction?: string): IDBRequest;
+    openKeyCursor(range?: IDBKeyRange | IDBValidKey, direction?: string): IDBRequest;
 }
 
 declare var IDBIndex: {
@@ -364,9 +371,9 @@ declare var IDBKeyRange: {
     prototype: IDBKeyRange;
     new(): IDBKeyRange;
     bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
-    lowerBound(bound: any, open?: boolean): IDBKeyRange;
+    lowerBound(lower: any, open?: boolean): IDBKeyRange;
     only(value: any): IDBKeyRange;
-    upperBound(bound: any, open?: boolean): IDBKeyRange;
+    upperBound(upper: any, open?: boolean): IDBKeyRange;
 }
 
 interface IDBObjectStore {
@@ -375,16 +382,16 @@ interface IDBObjectStore {
     name: string;
     transaction: IDBTransaction;
     autoIncrement: boolean;
-    add(value: any, key?: any): IDBRequest;
+    add(value: any, key?: IDBKeyRange | IDBValidKey): IDBRequest;
     clear(): IDBRequest;
-    count(key?: any): IDBRequest;
+    count(key?: IDBKeyRange | IDBValidKey): IDBRequest;
     createIndex(name: string, keyPath: string | string[], optionalParameters?: IDBIndexParameters): IDBIndex;
-    delete(key: any): IDBRequest;
+    delete(key: IDBKeyRange | IDBValidKey): IDBRequest;
     deleteIndex(indexName: string): void;
     get(key: any): IDBRequest;
     index(name: string): IDBIndex;
-    openCursor(range?: any, direction?: string): IDBRequest;
-    put(value: any, key?: any): IDBRequest;
+    openCursor(range?: IDBKeyRange | IDBValidKey, direction?: string): IDBRequest;
+    put(value: any, key?: IDBKeyRange | IDBValidKey): IDBRequest;
 }
 
 declare var IDBObjectStore: {
@@ -483,7 +490,7 @@ interface MSApp {
     execAsyncAtPriority(asynchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): void;
     execAtPriority(synchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): any;
     getCurrentPriority(): string;
-    getHtmlPrintDocumentSourceAsync(htmlDoc: any): any;
+    getHtmlPrintDocumentSourceAsync(htmlDoc: any): PromiseLike<any>;
     getViewId(view: any): any;
     isTaskScheduledAtPriorityOrHigher(priority: string): boolean;
     pageHandlesAllApplicationActivations(enabled: boolean): void;
@@ -695,7 +702,6 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     onreadystatechange: (ev: ProgressEvent) => any;
     readyState: number;
     response: any;
-    responseBody: any;
     responseText: string;
     responseType: string;
     responseXML: any;
@@ -894,16 +900,6 @@ interface WorkerUtils extends Object, WindowBase64 {
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
-interface IDBObjectStoreParameters {
-    keyPath?: string | string[];
-    autoIncrement?: boolean;
-}
-
-interface IDBIndexParameters {
-    unique?: boolean;
-    multiEntry?: boolean;
-}
-
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
@@ -931,6 +927,9 @@ interface ProgressEventInit extends EventInit {
     lengthComputable?: boolean;
     loaded?: number;
     total?: number;
+}
+
+interface IDBArrayKey extends Array<IDBValidKey> {
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
@@ -971,9 +970,9 @@ declare var self: WorkerGlobalScope;
 declare function close(): void;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
 declare function toString(): string;
-declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function dispatchEvent(evt: Event): boolean;
-declare function removeEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare var indexedDB: IDBFactory;
 declare var msIndexedDB: IDBFactory;
 declare var navigator: WorkerNavigator;
@@ -992,3 +991,4 @@ declare var console: Console;
 declare function addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+type IDBValidKey = number | string | Date | IDBArrayKey;
