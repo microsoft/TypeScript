@@ -1411,30 +1411,41 @@ const _super = (function (geti, seti) {
             }
 
             function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+                // We must emit a function body as a single-line body in the following case:
+                // * The body has NodeEmitFlags.SingleLine specified.
+
+                // We must emit a function body as a multi-line body in the following cases:
+                // * The body is explicitly marked as multi-line.
+                // * A non-synthesized body's start and end position are on different lines.
+                // * Any statement in the body starts on a new line.
+
+                if (getNodeEmitFlags(body) & NodeEmitFlags.SingleLine) {
+                    return true;
+                }
+
                 if (body.multiLine) {
                     return false;
                 }
 
-                const originalNode = getOriginalNode(parentNode);
-                if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode)) {
-                    const body = originalNode.body;
-                    if (isBlock(body)) {
-                        if (rangeEndIsOnSameLineAsRangeStart(body, body)) {
-                            for (const statement of body.statements) {
-                                if (synthesizedNodeStartsOnNewLine(statement)) {
-                                    return false;
-                                }
-                            }
-
-                            return true;
-                        }
-                    }
-                    else {
-                        return rangeEndIsOnSameLineAsRangeStart((<ArrowFunction>originalNode).equalsGreaterThanToken, originalNode.body);
-                    }
+                if (!nodeIsSynthesized(body) && !rangeIsOnSingleLine(body, currentSourceFile)) {
+                    return false;
                 }
 
-                return false;
+                if (shouldWriteLeadingLineTerminator(body, body.statements, ListFormat.PreserveLines)
+                    || shouldWriteClosingLineTerminator(body, body.statements, ListFormat.PreserveLines)) {
+                    return false;
+                }
+
+                let previousStatement: Statement;
+                for (const statement of body.statements) {
+                    if (shouldWriteSeparatingLineTerminator(previousStatement, statement, ListFormat.PreserveLines)) {
+                        return false;
+                    }
+
+                    previousStatement = statement;
+                }
+
+                return true;
             }
 
             function emitBlockFunctionBody(parentNode: Node, body: Block) {
@@ -1457,7 +1468,7 @@ const _super = (function (geti, seti) {
 
                 const endingLine = writer.getLine();
                 emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
-                emitLeadingComments(collapseTextRange(body.statements, TextRangeCollapse.CollapseToEnd));
+                emitLeadingComments(collapseRangeToEnd(body.statements));
                 decreaseIndent();
             }
 
@@ -1738,7 +1749,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
-                if (statements.length === 1 && rangeStartPositionsAreOnSameLine(parentNode, statements[0])) {
+                if (statements.length === 1 && rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)) {
                     write(" ");
                     emit(statements[0]);
                 }
@@ -1778,7 +1789,7 @@ const _super = (function (geti, seti) {
                 //          }
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
-                emitLeadingComments(node.initializer, getTrailingComments(collapseTextRange(node.initializer, TextRangeCollapse.CollapseToStart)));
+                emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)));
                 emitExpression(node.initializer);
             }
 
@@ -2236,13 +2247,13 @@ const _super = (function (geti, seti) {
 
                     const firstChild = children[0];
                     if (firstChild === undefined) {
-                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                        return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                     }
                     else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
                         return synthesizedNodeStartsOnNewLine(firstChild, format);
                     }
                     else {
-                        return !rangeStartPositionsAreOnSameLine(parentNode, firstChild);
+                        return !rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile);
                     }
                 }
                 else {
@@ -2262,7 +2273,7 @@ const _super = (function (geti, seti) {
                         return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
                     }
                     else {
-                        return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode);
+                        return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile);
                     }
                 }
                 else {
@@ -2281,13 +2292,13 @@ const _super = (function (geti, seti) {
 
                     const lastChild = lastOrUndefined(children);
                     if (lastChild === undefined) {
-                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                        return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                     }
                     else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
                         return synthesizedNodeStartsOnNewLine(lastChild, format);
                     }
                     else {
-                        return !rangeEndPositionsAreOnSameLine(parentNode, lastChild);
+                        return !rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile);
                     }
                 }
                 else {
@@ -2304,28 +2315,8 @@ const _super = (function (geti, seti) {
 
                     return startsOnNewLine;
                 }
+
                 return (format & ListFormat.PreferNewLine) !== 0;
-            }
-
-            function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(getStartPos(range1), getStartPos(range2));
-            }
-
-            function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(range1.end, range2.end);
-            }
-
-            function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(range1.end, getStartPos(range2));
-            }
-
-            function positionsAreOnSameLine(pos1: number, pos2: number) {
-                return pos1 === pos2 ||
-                    getLineOfLocalPosition(currentSourceFile, pos1) === getLineOfLocalPosition(currentSourceFile, pos2);
-            }
-
-            function getStartPos(range: TextRange) {
-                return range.pos === -1 ? -1 : skipTrivia(currentText, range.pos);
             }
 
             function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
@@ -2341,7 +2332,7 @@ const _super = (function (geti, seti) {
                 return !nodeIsSynthesized(parent)
                     && !nodeIsSynthesized(node1)
                     && !nodeIsSynthesized(node2)
-                    && !rangeEndIsOnSameLineAsRangeStart(node1, node2);
+                    && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile);
             }
 
             function skipSynthesizedParentheses(node: Node) {
@@ -2381,7 +2372,7 @@ const _super = (function (geti, seti) {
             function isSingleLineEmptyBlock(block: Block) {
                 return !block.multiLine
                     && block.statements.length === 0
-                    && rangeEndIsOnSameLineAsRangeStart(block, block);
+                    && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
             }
 
             function getNotEmittedParent(node: Node): Node {

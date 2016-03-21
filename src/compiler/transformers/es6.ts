@@ -564,7 +564,10 @@ namespace ts {
                             )
                         ]),
                         NodeEmitFlags.SingleLine
-                    )
+                    ),
+                    /*elseStatement*/ undefined,
+                    /*location*/ undefined,
+                    { startOnNewLine: true }
                 )
             );
         }
@@ -841,25 +844,62 @@ namespace ts {
          * @param node A function-like node.
          */
         function transformFunctionBody(node: FunctionLikeDeclaration) {
+            let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
+            let singleLine = false; // indicates whether the block *may* be emitted as a single line
+
             const statements: Statement[] = [];
             startLexicalEnvironment();
             addCaptureThisForNodeIfNeeded(statements, node);
             addDefaultValueAssignmentsIfNeeded(statements, node);
             addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
 
+            // If we added any generated statements, this must be a multi-line block.
+            if (!multiLine && statements.length > 0) {
+                multiLine = true;
+            }
+
             const body = node.body;
             if (isBlock(body)) {
                 addRange(statements, visitNodes(body.statements, visitor, isStatement));
+
+                // If the original body was a multi-line block, this must be a multi-line block.
+                if (!multiLine && body.multiLine) {
+                    multiLine = true;
+                }
             }
             else {
+                Debug.assert(node.kind === SyntaxKind.ArrowFunction);
+
+                const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
+                if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
+                    if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
+                        singleLine = true;
+                    }
+                    else {
+                        multiLine = true;
+                    }
+                }
+
                 const expression = visitNode(body, visitor, isExpression);
                 if (expression) {
-                    statements.push(createReturn(expression, /*location*/ body));
+                    statements.push(createReturn(expression));
                 }
             }
 
-            addRange(statements, endLexicalEnvironment());
-            return createBlock(statements, node.body);
+            const lexicalEnvironment = endLexicalEnvironment();
+            addRange(statements, lexicalEnvironment);
+
+            // If we added any final generated statements, this must be a multi-line block
+            if (!multiLine && lexicalEnvironment && lexicalEnvironment.length) {
+                multiLine = true;
+            }
+
+            const block = createBlock(statements, node.body, multiLine);
+            if (!multiLine && singleLine) {
+                setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
+            }
+
+            return block;
         }
 
         /**

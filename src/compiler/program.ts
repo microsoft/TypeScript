@@ -994,8 +994,8 @@ namespace ts {
 
             const start = new Date().getTime();
 
-            // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permenantly.
-            if (Boolean(sys.getEnvironmentVariable("USE_TRANSFORMS"))) {
+            // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
+            if (/^(y(es)?|t(rue|ransforms?)?|1|\+)$/i.test(sys.getEnvironmentVariable("USE_TRANSFORMS"))) {
                 options.experimentalTransforms = true;
             }
 

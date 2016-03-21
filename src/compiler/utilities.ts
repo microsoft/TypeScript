@@ -2925,19 +2925,41 @@ namespace ts {
         }
     }
 
-    export const enum TextRangeCollapse {
-        CollapseToStart,
-        CollapseToEnd,
+    export function collapseRangeToStart(range: TextRange) {
+        return range.pos === range.end ? range : { pos: range.pos, end: range.pos };
     }
 
-    export function collapseTextRange(range: TextRange, collapse: TextRangeCollapse) {
-        if (range.pos === range.end) {
-            return range;
-        }
+    export function collapseRangeToEnd(range: TextRange) {
+        return range.pos === range.end ? range : { pos: range.end, end: range.end };
+    }
 
-        return collapse === TextRangeCollapse.CollapseToStart
-            ? { pos: range.pos, end: range.pos }
-            : { pos: range.end, end: range.end };
+    export function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile) {
+        return rangeStartIsOnSameLineAsRangeEnd(range, range, sourceFile);
+    }
+
+    export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), getStartPositionOfRange(range2, sourceFile), sourceFile);
+    }
+
+    export function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return positionsAreOnSameLine(range1.end, range2.end, sourceFile);
+    }
+
+    export function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile), range2.end, sourceFile);
+    }
+
+    export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+        return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
+    }
+
+    export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
+        return pos1 === pos2 ||
+            getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
+    }
+
+    export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile) {
+        return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
 
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver) {

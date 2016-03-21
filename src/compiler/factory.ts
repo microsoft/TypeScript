@@ -452,11 +452,15 @@ namespace ts {
         return node;
     }
 
-    export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement, location?: TextRange) {
+    export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement, location?: TextRange, options?: { startOnNewLine?: boolean; }) {
         const node = <IfStatement>createNode(SyntaxKind.IfStatement, location);
         node.expression = expression;
         node.thenStatement = thenStatement;
         node.elseStatement = elseStatement;
+        if (options && options.startOnNewLine) {
+            node.startsOnNewLine = true;
+        }
+
         return node;
     }
 

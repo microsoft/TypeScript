@@ -2228,7 +2228,7 @@ namespace ts {
             startLexicalEnvironment();
             addNodes(statements, map(node.members, transformEnumMember));
             addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements);
+            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
         }
 
         /**
@@ -2455,7 +2455,7 @@ namespace ts {
             }
 
             addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements);
+            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
         }
 
         /**
