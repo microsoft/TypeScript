@@ -8,16 +8,16 @@ class D {
 >D : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
 
     data: string | string[];
->data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 
     getData() {
->getData : Symbol(getData, Decl(typeGuardsOnClassProperty.ts, 6, 28))
+>getData : Symbol(D.getData, Decl(typeGuardsOnClassProperty.ts, 6, 28))
 
         var data = this.data;
 >data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
->this.data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
->data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 
         return typeof data === "string" ? data : data.join(" ");
 >data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 8, 11))
@@ -28,19 +28,19 @@ class D {
     }
 
     getData1() {
->getData1 : Symbol(getData1, Decl(typeGuardsOnClassProperty.ts, 10, 5))
+>getData1 : Symbol(D.getData1, Decl(typeGuardsOnClassProperty.ts, 10, 5))
 
         return typeof this.data === "string" ? this.data : this.data.join(" ");
->this.data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
->data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
->this.data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
->data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this.data.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
->this.data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>this.data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >this : Symbol(D, Decl(typeGuardsOnClassProperty.ts, 0, 0))
->data : Symbol(data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
+>data : Symbol(D.data, Decl(typeGuardsOnClassProperty.ts, 5, 9))
 >join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
 }
