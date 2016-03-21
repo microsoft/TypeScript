@@ -1533,6 +1533,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     case SyntaxKind.JsxSpreadAttribute:
                     case SyntaxKind.JsxExpression:
                     case SyntaxKind.NewExpression:
+                    case SyntaxKind.NonNullExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
                     case SyntaxKind.PrefixUnaryExpression:
@@ -2077,8 +2078,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
                 // When diagnosing whether the expression needs parentheses, the decision should be based
                 // on the innermost expression in a chain of nested type assertions.
-                while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
-                    expr = (<AssertionExpression>expr).expression;
+                while (expr.kind === SyntaxKind.TypeAssertionExpression ||
+                    expr.kind === SyntaxKind.AsExpression ||
+                    expr.kind === SyntaxKind.NonNullExpression) {
+                    expr = (<AssertionExpression | NonNullExpression>expr).expression;
                 }
 
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
@@ -2343,8 +2346,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function skipParentheses(node: Expression): Expression {
-                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
-                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
+                while (node.kind === SyntaxKind.ParenthesizedExpression ||
+                    node.kind === SyntaxKind.TypeAssertionExpression ||
+                    node.kind === SyntaxKind.AsExpression ||
+                    node.kind === SyntaxKind.NonNullExpression) {
+                    node = (<ParenthesizedExpression | AssertionExpression | NonNullExpression>node).expression;
                 }
                 return node;
             }
@@ -2518,13 +2524,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
-                        let operand = (<TypeAssertion>node.expression).expression;
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression ||
+                        node.expression.kind === SyntaxKind.AsExpression ||
+                        node.expression.kind === SyntaxKind.NonNullExpression) {
+                        let operand = (<TypeAssertion | NonNullExpression>node.expression).expression;
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
-                            operand = (<TypeAssertion>operand).expression;
+                        while (operand.kind === SyntaxKind.TypeAssertionExpression ||
+                            operand.kind === SyntaxKind.AsExpression ||
+                            operand.kind === SyntaxKind.NonNullExpression) {
+                            operand = (<TypeAssertion | NonNullExpression>operand).expression;
                         }
 
                         // We have an expression of the form: (<Type>SubExpr)
@@ -7928,9 +7938,9 @@ const _super = (function (geti, seti) {
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
-                        return emit((<TypeAssertion>node).expression);
                     case SyntaxKind.AsExpression:
-                        return emit((<AsExpression>node).expression);
+                    case SyntaxKind.NonNullExpression:
+                        return emit((<AssertionExpression | NonNullExpression>node).expression);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:

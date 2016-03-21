@@ -511,6 +511,7 @@ namespace ts {
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.UndefinedKeyword:
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -968,6 +969,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassExpression:
@@ -2406,6 +2408,7 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.NonNullExpression:
                 case SyntaxKind.JsxElement:
                 case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.TaggedTemplateExpression:
