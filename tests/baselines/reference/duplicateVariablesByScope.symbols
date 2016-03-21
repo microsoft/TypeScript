@@ -41,7 +41,7 @@ class C {
 >C : Symbol(C, Decl(duplicateVariablesByScope.ts, 20, 1))
 
     foo() {
->foo : Symbol(foo, Decl(duplicateVariablesByScope.ts, 22, 9))
+>foo : Symbol(C.foo, Decl(duplicateVariablesByScope.ts, 22, 9))
 
         try {
             var x = 1;

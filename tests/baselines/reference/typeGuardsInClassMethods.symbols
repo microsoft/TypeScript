@@ -44,7 +44,7 @@ class C1 {
     }
     // Inside function declaration
     private p1(param: string | number) {
->p1 : Symbol(p1, Decl(typeGuardsInClassMethods.ts, 17, 5))
+>p1 : Symbol(C1.p1, Decl(typeGuardsInClassMethods.ts, 17, 5))
 >param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 19, 15))
 
         // global vars in function declaration
@@ -76,7 +76,7 @@ class C1 {
     }
     // Inside function declaration
     p2(param: string | number) {
->p2 : Symbol(p2, Decl(typeGuardsInClassMethods.ts, 29, 5))
+>p2 : Symbol(C1.p2, Decl(typeGuardsInClassMethods.ts, 29, 5))
 >param : Symbol(param, Decl(typeGuardsInClassMethods.ts, 31, 7))
 
         // global vars in function declaration

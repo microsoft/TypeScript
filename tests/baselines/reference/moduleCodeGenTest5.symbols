@@ -15,19 +15,19 @@ export class C1 {
 >C1 : Symbol(C1, Decl(moduleCodeGenTest5.ts, 4, 16))
 
 	public p1 = 0;
->p1 : Symbol(p1, Decl(moduleCodeGenTest5.ts, 6, 17))
+>p1 : Symbol(C1.p1, Decl(moduleCodeGenTest5.ts, 6, 17))
 
 	public p2() {}
->p2 : Symbol(p2, Decl(moduleCodeGenTest5.ts, 7, 15))
+>p2 : Symbol(C1.p2, Decl(moduleCodeGenTest5.ts, 7, 15))
 }
 class C2{
 >C2 : Symbol(C2, Decl(moduleCodeGenTest5.ts, 9, 1))
 
 	public p1 = 0;
->p1 : Symbol(p1, Decl(moduleCodeGenTest5.ts, 10, 9))
+>p1 : Symbol(C2.p1, Decl(moduleCodeGenTest5.ts, 10, 9))
 
 	public p2() {}	
->p2 : Symbol(p2, Decl(moduleCodeGenTest5.ts, 11, 15))
+>p2 : Symbol(C2.p2, Decl(moduleCodeGenTest5.ts, 11, 15))
 }
 
 export enum E1 {A=0}

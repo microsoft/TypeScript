@@ -4,7 +4,7 @@ interface A<T> {
 >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 0, 12))
 
     x: A<T>
->x : Symbol(x, Decl(recursiveIdenticalAssignment.ts, 0, 16))
+>x : Symbol(A.x, Decl(recursiveIdenticalAssignment.ts, 0, 16))
 >A : Symbol(A, Decl(recursiveIdenticalAssignment.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 0, 12))
 }
@@ -17,7 +17,7 @@ interface B<T extends B<B<T>>> { // error, constraint referencing itself
 >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 4, 12))
 
     x: B<T>
->x : Symbol(x, Decl(recursiveIdenticalAssignment.ts, 4, 32))
+>x : Symbol(B.x, Decl(recursiveIdenticalAssignment.ts, 4, 32))
 >B : Symbol(B, Decl(recursiveIdenticalAssignment.ts, 2, 1))
 >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 4, 12))
 }

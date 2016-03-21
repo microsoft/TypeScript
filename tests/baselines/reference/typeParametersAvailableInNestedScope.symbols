@@ -4,11 +4,11 @@ class C<T> {
 >T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
     data: T;
->data : Symbol(data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>data : Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
 >T : Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
     x = <U>(a: U) => {
->x : Symbol(x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+>x : Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
 >U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
 >a : Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 3, 12))
 >U : Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
@@ -22,7 +22,7 @@ class C<T> {
     }
 
     foo() {
->foo : Symbol(foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
+>foo : Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
 
         function temp<U>(a: U) {
 >temp : Symbol(temp, Decl(typeParametersAvailableInNestedScope.ts, 8, 11))

@@ -2252,11 +2252,11 @@
         "category": "Message",
         "code": 6002
     },
-    "Specifies the location where debugger should locate map files instead of generated locations.": {
+    "Specify the location where debugger should locate map files instead of generated locations.": {
         "category": "Message",
         "code": 6003
     },
-    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+    "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
     },
@@ -2288,7 +2288,7 @@
         "category": "Message",
         "code": 6011
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
         "code": 6015
     },
@@ -2376,13 +2376,9 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
+    "Argument for '{0}' option must be: {1}": {
         "category": "Error",
         "code": 6046
-    },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-        "category": "Error",
-        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
@@ -2420,7 +2416,7 @@
         "category": "Message",
         "code": 6056
     },
-    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+    "Specify the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
     },
@@ -2428,21 +2424,13 @@
         "category": "Error",
         "code": 6059
     },
-    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+    "Specify the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
         "code": 6060
     },
     "NEWLINE": {
         "category": "Message",
         "code": 6061
-    },
-    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error",
-        "code": 6062
-    },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
-        "category": "Error",
-        "code": 6063
     },
     "Option '{0}' can only be specified in 'tsconfig.json' file.": {
         "category": "Error",
@@ -2460,7 +2448,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
+    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },
@@ -2504,10 +2492,6 @@
         "category": "Message",
         "code": 6080
     },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082
@@ -2516,7 +2500,7 @@
         "category": "Message",
         "code": 6083
     },
-    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },

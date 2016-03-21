@@ -18,7 +18,7 @@ interface IWithNoStringIndexSignature {
 >IWithNoStringIndexSignature : Symbol(IWithNoStringIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 7, 1))
 
     foo: string;
->foo : Symbol(foo, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 9, 39))
+>foo : Symbol(IWithNoStringIndexSignature.foo, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 9, 39))
 }
 interface IWithNoNumberIndexSignature {
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))

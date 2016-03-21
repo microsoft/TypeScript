@@ -3,10 +3,10 @@ interface Point {
 >Point : Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
 
     x: number;
->x : Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
+>x : Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
 
     y: number;
->y : Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
+>y : Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
 }
 function point(x: number, y: number): Point {
 >point : Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))

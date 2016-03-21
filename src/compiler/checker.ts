@@ -1445,12 +1445,6 @@ namespace ts {
                             return result;
                         }
                         break;
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                        if (result = callback(getSymbolOfNode(location).members)) {
-                            return result;
-                        }
-                        break;
                 }
             }
 
@@ -1516,7 +1510,9 @@ namespace ts {
             }
 
             if (symbol) {
-                return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+                if (!(isPropertyOrMethodDeclarationSymbol(symbol))) {
+                    return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+                }
             }
         }
 
@@ -1547,6 +1543,24 @@ namespace ts {
             });
 
             return qualify;
+        }
+
+        function isPropertyOrMethodDeclarationSymbol(symbol: Symbol) {
+            if (symbol.declarations && symbol.declarations.length) {
+                for (const declaration of symbol.declarations) {
+                    switch (declaration.kind) {
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            continue;
+                        default:
+                            return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         function isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessibilityResult {
@@ -5701,7 +5715,7 @@ namespace ts {
                         }
                     }
                     if (target.flags & TypeFlags.Union) {
-                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors)) {
+                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive))) {
                             return result;
                         }
                     }
@@ -6798,7 +6812,6 @@ namespace ts {
         function inferTypes(context: InferenceContext, source: Type, target: Type) {
             let sourceStack: Type[];
             let targetStack: Type[];
-            const maxDepth = 5;
             let depth = 0;
             let inferiority = 0;
             const visited: Map<boolean> = {};
@@ -6925,11 +6938,6 @@ namespace ts {
                         // If source is an object type, and target is a type reference with type arguments, a tuple type,
                         // the type of a method, or a type literal, infer from members
                         if (isInProcess(source, target)) {
-                            return;
-                        }
-                        // we delibirately limit the depth we examine to infer types: this speeds up the overall inference process
-                        // and user rarely expects inferences to be made from the deeply nested constituents.
-                        if (depth > maxDepth) {
                             return;
                         }
                         if (isDeeplyNestedGeneric(source, sourceStack, depth) && isDeeplyNestedGeneric(target, targetStack, depth)) {
@@ -15496,8 +15504,14 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
             if (target !== unknownSymbol) {
+                // For external modules symbol represent local symbol for an alias. 
+                // This local symbol will merge any other local declarations (excluding other aliases)
+                // and symbol.flags will contains combined representation for all merged declaration.
+                // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
+                // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export* 
+                // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names). 
                 const excludedMeanings =
-                    (symbol.flags & SymbolFlags.Value ? SymbolFlags.Value : 0) |
+                    (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
                     (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
                 if (target.flags & excludedMeanings) {

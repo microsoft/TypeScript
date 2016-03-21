@@ -130,11 +130,11 @@ interface Tuple<A, B> {
 >B : Symbol(B, Decl(genericTypeAliases.ts, 41, 18))
 
     a: A;
->a : Symbol(a, Decl(genericTypeAliases.ts, 41, 23))
+>a : Symbol(Tuple.a, Decl(genericTypeAliases.ts, 41, 23))
 >A : Symbol(A, Decl(genericTypeAliases.ts, 41, 16))
 
     b: B;
->b : Symbol(b, Decl(genericTypeAliases.ts, 42, 9))
+>b : Symbol(Tuple.b, Decl(genericTypeAliases.ts, 42, 9))
 >B : Symbol(B, Decl(genericTypeAliases.ts, 41, 18))
 }
 
@@ -152,7 +152,7 @@ interface TaggedPair<T> extends Pair<T> {
 >T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
 
     tag: string;
->tag : Symbol(tag, Decl(genericTypeAliases.ts, 48, 41))
+>tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))
 }
 
 var p: TaggedPair<number>;
