@@ -56,6 +56,9 @@ namespace ts.JsTyping {
 
         // Only infer typings for .js and .jsx files
         fileNames = filter(map(fileNames, normalizePath), f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JS, ScriptKind.JSX));
+        if (fileNames.length === 0) {
+            return { cachedTypingPaths: [], newTypingNames: [] };
+        }
 
         if (!safeList && safeListPath) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));

@@ -781,7 +781,7 @@ namespace ts.server {
                 sys,
                 project.getFileNames(),
                 projectRootPath,
-                /* safeListPath */ undefined,
+                /*safeListPath*/ undefined,
                 tsdJson,
                 typingOptions,
                 compilerOptions
@@ -800,7 +800,7 @@ namespace ts.server {
             }
 
             // Inject the cached ones first
-            cachedTypingPaths.forEach(p => addTypingToProject(p, project));
+            cachedTypingPaths.forEach(typingFilePath => addTypingToProject(typingFilePath, project));
 
             if (newTypingNames && newTypingNames.length > 0) {
                 const typingsFolderPath = toPath("typings", this.host.globalTypingCachePath, getCanonicalFileName);
