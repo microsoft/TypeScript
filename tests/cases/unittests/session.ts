@@ -17,6 +17,7 @@ namespace ts.server {
         createDirectory(): void {},
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
+        getEnvironmentVariable(name: string): string { return ""; },
         readDirectory(): string[] { return []; },
         exit(): void {}
     };
