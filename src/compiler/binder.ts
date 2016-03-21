@@ -1478,6 +1478,14 @@ namespace ts {
                 // It's acceptable for multiple 'this' assignments of the same identifier to occur
                 declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
             }
+            else if (container.kind === SyntaxKind.Constructor && isInJavaScriptFile(node)) {
+                // this.foo assignment in a JavaScript class
+                // Bind this property to the containing class
+                const saveContainer = container;
+                container = container.parent;
+                bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property, SymbolFlags.None);
+                container = saveContainer;
+            }
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
