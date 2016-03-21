@@ -241,7 +241,6 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var useTransforms = process.env.USE_TRANSFORMS || false;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
@@ -309,8 +308,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal"
         }
 
-        if (useBuiltCompiler && useTransforms) {
-            options += " --experimentalTransforms"
+        if (useBuiltCompiler && Boolean(process.env.USE_TRANSFORMS)) {
+            console.warn("\u001b[93mwarning: Found 'USE_TRANSFORMS' environment variable. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -430,10 +429,6 @@ task("setDebugMode", function() {
     useDebugMode = true;
 });
 
-task("setTransforms", function() {
-    useTransforms = true;
-});
-
 task("configure-nightly", [configureNightlyJs], function() {
     var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
     console.log(cmd);
@@ -519,7 +514,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
                 var i = content.lastIndexOf("\n");
                 fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
-    
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);

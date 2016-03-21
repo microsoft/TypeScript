@@ -994,6 +994,11 @@ namespace ts {
 
             const start = new Date().getTime();
 
+            // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permenantly.
+            if (Boolean(sys.getEnvironmentVariable("USE_TRANSFORMS"))) {
+                options.experimentalTransforms = true;
+            }
+
             const fileEmitter = options.experimentalTransforms ? printFiles : emitFiles;
             const emitResult = fileEmitter(
                 emitResolver,

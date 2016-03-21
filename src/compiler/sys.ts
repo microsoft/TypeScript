@@ -8,7 +8,6 @@ namespace ts {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
-        /*@internal*/ developmentMode?: boolean;
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -23,6 +22,7 @@ namespace ts {
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
     }
 
@@ -212,6 +212,9 @@ namespace ts {
                 },
                 getCurrentDirectory() {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
+                },
+                getEnvironmentVariable(name: string) {
+                    return new ActiveXObject("WScript.Shell").ExpandEnvironmentStrings(`%${name}%`);
                 },
                 readDirectory,
                 exit(exitCode?: number): void {
@@ -523,7 +526,6 @@ namespace ts {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-                developmentMode: /^development$/i.test(String(process.env.NODE_ENV)),
                 write(s: string): void {
                     process.stdout.write(s);
                 },
@@ -581,6 +583,9 @@ namespace ts {
                 getCurrentDirectory() {
                     return process.cwd();
                 },
+                getEnvironmentVariable(name: string) {
+                    return process.env[name] || "";
+                },
                 readDirectory,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -627,6 +632,9 @@ namespace ts {
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
+                getEnvironmentVariable(name: string) {
+                    return "";
+                },
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
             };

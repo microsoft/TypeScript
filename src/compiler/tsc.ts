@@ -781,7 +781,7 @@ namespace ts {
     }
 }
 
-if (ts.sys.developmentMode && ts.sys.tryEnableSourceMapsForHost) {
+if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
 
