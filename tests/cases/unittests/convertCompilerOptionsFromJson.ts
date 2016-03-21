@@ -31,6 +31,7 @@ namespace ts {
                         "target": "es5",
                         "noImplicitAny": false,
                         "sourceMap": false,
+                        "lib": ["es5", "es6.array", "es6.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -39,6 +40,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
@@ -54,6 +56,7 @@ namespace ts {
                         "noImplicitAny": false,
                         "sourceMap": false,
                         "allowJs": false,
+                        "lib": ["es5", "es6.array", "es6.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -63,13 +66,14 @@ namespace ts {
                         noImplicitAny: false,
                         sourceMap: false,
                         allowJs: false,
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
             );
         });
 
-        it("Convert incorrectly option of jsx to compiler-options ", () => {
+        it("Convert incorrect option of jsx to compiler-options ", () => {
             assertCompilerOptions(
                 {
                     "compilerOptions": {
@@ -99,7 +103,7 @@ namespace ts {
             );
         });
 
-        it("Convert incorrectly option of module to compiler-options ", () => {
+        it("Convert incorrect option of module to compiler-options ", () => {
             assertCompilerOptions(
                 {
                     "compilerOptions": {
@@ -127,7 +131,7 @@ namespace ts {
             );
         });
 
-        it("Convert incorrectly option of newLine to compiler-options ", () => {
+        it("Convert incorrect option of newLine to compiler-options ", () => {
             assertCompilerOptions(
                 {
                     "compilerOptions": {
@@ -155,7 +159,7 @@ namespace ts {
             );
         });
 
-        it("Convert incorrectly option of target to compiler-options ", () => {
+        it("Convert incorrect option of target to compiler-options ", () => {
             assertCompilerOptions(
                 {
                     "compilerOptions": {
@@ -181,7 +185,7 @@ namespace ts {
             );
         });
 
-        it("Convert incorrectly option of module-resolution to compiler-options ", () => {
+        it("Convert incorrect option of module-resolution to compiler-options ", () => {
             assertCompilerOptions(
                 {
                     "compilerOptions": {
@@ -203,6 +207,154 @@ namespace ts {
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
+                }
+            );
+        });
+
+        it("Convert incorrect option of libs to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "module": "commonjs",
+                        "target": "es5",
+                        "noImplicitAny": false,
+                        "sourceMap": false,
+                        "lib": ["es5", "es6.array", "incorrectLib"]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: <CompilerOptions>{
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts"]
+                    },
+                    errors: [{
+                        file: undefined,
+                        start: 0,
+                        length: 0,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    }]
+                }
+            );
+        });
+
+        it("Convert empty string option of libs to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "module": "commonjs",
+                        "target": "es5",
+                        "noImplicitAny": false,
+                        "sourceMap": false,
+                        "lib": ["es5", ""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: <CompilerOptions>{
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: ["lib.es5.d.ts"]
+                    },
+                    errors: [{
+                        file: undefined,
+                        start: 0,
+                        length: 0,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    }]
+                }
+            );
+        });
+
+        it("Convert empty string option of libs to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "module": "commonjs",
+                        "target": "es5",
+                        "noImplicitAny": false,
+                        "sourceMap": false,
+                        "lib": [""]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: <CompilerOptions>{
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: []
+                    },
+                    errors: [{
+                        file: undefined,
+                        start: 0,
+                        length: 0,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    }]
+                }
+            );
+        });
+
+        it("Convert trailing-whitespace string option of libs to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "module": "commonjs",
+                        "target": "es5",
+                        "noImplicitAny": false,
+                        "sourceMap": false,
+                        "lib": ["   "]
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: <CompilerOptions>{
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: []
+                    },
+                    errors: [{
+                        file: undefined,
+                        start: 0,
+                        length: 0,
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es7', 'dom', 'webworker', 'scripthost', 'es6.array', 'es6.collection', 'es6.function', 'es6.iterable', 'es6.math', 'es6.number', 'es6.object', 'es6.promise', 'es6.proxy', 'es6.reflect', 'es6.regexp', 'es6.symbol', 'es6.symbol.wellknown', 'es7.array.include'",
+                        code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                        category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    }]
+                }
+            );
+        });
+
+        it("Convert empty option of libs to compiler-options ", () => {
+            assertCompilerOptions(
+                {
+                    "compilerOptions": {
+                        "module": "commonjs",
+                        "target": "es5",
+                        "noImplicitAny": false,
+                        "sourceMap": false,
+                        "lib": []
+                    }
+                }, "tsconfig.json",
+                {
+                    compilerOptions: <CompilerOptions>{
+                        module: ModuleKind.CommonJS,
+                        target: ScriptTarget.ES5,
+                        noImplicitAny: false,
+                        sourceMap: false,
+                        lib: []
+                    },
+                    errors: []
                 }
             );
         });
@@ -246,6 +398,7 @@ namespace ts {
                         "target": "es5",
                         "noImplicitAny": false,
                         "sourceMap": false,
+                        "lib": ["es5", "es6.array", "es6.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -255,6 +408,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
@@ -270,6 +424,7 @@ namespace ts {
                         "noImplicitAny": false,
                         "sourceMap": false,
                         "allowJs": false,
+                        "lib": ["es5", "es6.array", "es6.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -279,6 +434,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
+                        lib: ["lib.es5.d.ts", "lib.es6.array.d.ts", "lib.es6.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
