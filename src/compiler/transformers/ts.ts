@@ -1810,16 +1810,26 @@ namespace ts {
          * @param node The get accessor node.
          */
         function visitGetAccessor(node: GetAccessorDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (shouldElideAccessorDeclaration(node)) {
                 return undefined;
             }
 
             return createGetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitEachChild(node.body, visitor, context),
+                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
                 node
             );
+        }
+
+        /**
+         * Determines whether a function-like declaration should be elided. A declaration should
+         * be elided if it is an overload, is abstract, or is an ambient declaration.
+         *
+         * @param node The declaration node.
+         */
+        function shouldElideAccessorDeclaration(node: AccessorDeclaration) {
+            return hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
         /**
@@ -1832,7 +1842,7 @@ namespace ts {
          * @param node The set accessor node.
          */
         function visitSetAccessor(node: SetAccessorDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (shouldElideAccessorDeclaration(node)) {
                 return undefined;
             }
 
@@ -1840,7 +1850,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
-                visitEachChild(node.body, visitor, context),
+                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
                 node
             );
         }

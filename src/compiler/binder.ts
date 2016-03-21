@@ -2108,7 +2108,8 @@ namespace ts {
 
                 // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
                 // or has both a computed property name and a decorator.
-                if (hasModifier(node, ModifierFlags.Abstract)
+                if ((<AccessorDeclaration>node).body === undefined
+                    || hasModifier(node, ModifierFlags.Abstract)
                     || (subtreeFlags & TransformFlags.ContainsDecorators
                         && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
                     transformFlags = TransformFlags.AssertTypeScript;
