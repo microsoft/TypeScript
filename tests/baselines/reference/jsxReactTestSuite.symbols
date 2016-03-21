@@ -56,9 +56,11 @@ declare var hasOwnProperty:any;
 >div : Symbol(unknown)
 
   <Component>{foo}<br />{bar}</Component>
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >foo : Symbol(foo, Decl(jsxReactTestSuite.tsx, 7, 11))
 >br : Symbol(unknown)
 >bar : Symbol(bar, Decl(jsxReactTestSuite.tsx, 8, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
   <br />
 >br : Symbol(unknown)
@@ -68,12 +70,20 @@ declare var hasOwnProperty:any;
 
 
 <Composite>
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
+
     {this.props.children}
 </Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
 
 <Composite>
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
+
     <Composite2 />
+>Composite2 : Symbol(Composite2, Decl(jsxReactTestSuite.tsx, 4, 11))
+
 </Composite>;
+>Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 3, 11))
 
 var x =
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
@@ -164,6 +174,7 @@ var x =
 >hasOwnProperty : Symbol(unknown)
 
 <Component constructor="foo" />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >constructor : Symbol(unknown)
 
 <Namespace.Component />;
@@ -171,6 +182,7 @@ var x =
 <Namespace.DeepNamespace.Component />;
 
 <Component { ... x } y
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 
@@ -178,6 +190,8 @@ var x =
 >z : Symbol(unknown)
 
 <Component
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+
     {...this.props} sound="moo" />;
 >sound : Symbol(unknown)
 
@@ -185,6 +199,7 @@ var x =
 >font-face : Symbol(unknown)
 
 <Component x={y} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 9, 11))
 
@@ -192,34 +207,43 @@ var x =
 >x-component : Symbol(unknown)
 
 <Component {...x} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 
 <Component { ...x } y={2} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 
 <Component { ... x } y={2} z />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 >z : Symbol(unknown)
 
 <Component x={1} {...y} />;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 9, 11))
 
 
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >y : Symbol(unknown)
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
+>Child : Symbol(Child, Decl(jsxReactTestSuite.tsx, 5, 11))
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >y : Symbol(y, Decl(jsxReactTestSuite.tsx, 113, 27))
 >z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >z : Symbol(unknown)
+>Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 
 
 

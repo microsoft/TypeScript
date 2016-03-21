@@ -8749,6 +8749,9 @@ namespace ts {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 return getIntrinsicTagSymbol(node);
             }
+            else if (node.tagName.kind === SyntaxKind.Identifier) {
+                return resolveEntityName(node.tagName, SymbolFlags.Value | SymbolFlags.Alias);
+            }
             else {
                 return checkExpression(node.tagName).symbol;
             }
