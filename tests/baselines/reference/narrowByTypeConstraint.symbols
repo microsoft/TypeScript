@@ -1,0 +1,58 @@
+=== tests/cases/compiler/narrowByTypeConstraint.ts ===
+interface Base { b }
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+>b : Symbol(b, Decl(narrowByTypeConstraint.ts, 0, 16))
+
+interface Derived extends Base { d }
+>Derived : Symbol(Derived, Decl(narrowByTypeConstraint.ts, 0, 20))
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+>d : Symbol(d, Decl(narrowByTypeConstraint.ts, 1, 32))
+
+declare function isDerived(b: Base): b is Derived;
+>isDerived : Symbol(isDerived, Decl(narrowByTypeConstraint.ts, 1, 36))
+>b : Symbol(b, Decl(narrowByTypeConstraint.ts, 2, 27))
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+>b : Symbol(b, Decl(narrowByTypeConstraint.ts, 2, 27))
+>Derived : Symbol(Derived, Decl(narrowByTypeConstraint.ts, 0, 20))
+
+function f<T extends Base>(x: T, y: T) {
+>f : Symbol(f, Decl(narrowByTypeConstraint.ts, 2, 50))
+>T : Symbol(T, Decl(narrowByTypeConstraint.ts, 3, 11))
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+>x : Symbol(x, Decl(narrowByTypeConstraint.ts, 3, 27))
+>T : Symbol(T, Decl(narrowByTypeConstraint.ts, 3, 11))
+>y : Symbol(y, Decl(narrowByTypeConstraint.ts, 3, 32))
+>T : Symbol(T, Decl(narrowByTypeConstraint.ts, 3, 11))
+
+	return isDerived(x) && isDerived(y) && x.d === y.d; 
+>isDerived : Symbol(isDerived, Decl(narrowByTypeConstraint.ts, 1, 36))
+>x : Symbol(x, Decl(narrowByTypeConstraint.ts, 3, 27))
+>isDerived : Symbol(isDerived, Decl(narrowByTypeConstraint.ts, 1, 36))
+>y : Symbol(y, Decl(narrowByTypeConstraint.ts, 3, 32))
+>x.d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>x : Symbol(x, Decl(narrowByTypeConstraint.ts, 3, 27))
+>d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>y.d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>y : Symbol(y, Decl(narrowByTypeConstraint.ts, 3, 32))
+>d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+}
+function g(z: Base, ka: Base) {
+>g : Symbol(g, Decl(narrowByTypeConstraint.ts, 5, 1))
+>z : Symbol(z, Decl(narrowByTypeConstraint.ts, 6, 11))
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+>ka : Symbol(ka, Decl(narrowByTypeConstraint.ts, 6, 19))
+>Base : Symbol(Base, Decl(narrowByTypeConstraint.ts, 0, 0))
+
+	return isDerived(z) && isDerived(ka) && z.d === ka.d;
+>isDerived : Symbol(isDerived, Decl(narrowByTypeConstraint.ts, 1, 36))
+>z : Symbol(z, Decl(narrowByTypeConstraint.ts, 6, 11))
+>isDerived : Symbol(isDerived, Decl(narrowByTypeConstraint.ts, 1, 36))
+>ka : Symbol(ka, Decl(narrowByTypeConstraint.ts, 6, 19))
+>z.d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>z : Symbol(z, Decl(narrowByTypeConstraint.ts, 6, 11))
+>d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>ka.d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+>ka : Symbol(ka, Decl(narrowByTypeConstraint.ts, 6, 19))
+>d : Symbol(Derived.d, Decl(narrowByTypeConstraint.ts, 1, 32))
+}
+

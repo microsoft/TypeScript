@@ -7289,7 +7289,14 @@ namespace ts {
                         return getUnionType(assignableConstituents);
                     }
                 }
-
+                if (originalType.flags & TypeFlags.TypeParameter) {
+                    const originalTypeParameter = <TypeParameter>originalType;
+                    if (originalTypeParameter.constraint && isTypeAssignableTo(narrowedTypeCandidate, originalTypeParameter.constraint)) {
+                        const narrowedTypeParameter = cloneTypeParameter(originalTypeParameter);
+                        narrowedTypeParameter.constraint = narrowedTypeCandidate;
+                        return narrowedTypeParameter;
+                    }
+                }
                 if (isTypeAssignableTo(narrowedTypeCandidate, originalType)) {
                     // Narrow to the target type if it's assignable to the current type
                     return narrowedTypeCandidate;
