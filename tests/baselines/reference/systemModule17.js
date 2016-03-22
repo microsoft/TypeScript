@@ -42,13 +42,13 @@ export {II};
 export {II as II1};
 
 //// [f1.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var A;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             A = (function () {
                 function A() {
                 }
@@ -56,20 +56,20 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("A", A);
         }
-    }
+    };
 });
 //// [f2.js]
-System.register(["f1"], function(exports_1, context_1) {
+System.register(["f1"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var f1_1;
-    var x, N, IX;
+    var x, N, IX, f1_1;
     return {
-        setters:[
-            function (f1_1_1) {
-                f1_1 = f1_1_1;
-            }],
-        execute: function() {
+        setters: [
+            function (_1) {
+                f1_1 = _1;
+            }
+        ],
+        execute: function () {
             x = 1;
             (function (N) {
                 N.x = 1;
@@ -84,5 +84,5 @@ System.register(["f1"], function(exports_1, context_1) {
             exports_1("IX", IX);
             exports_1("IX1", IX);
         }
-    }
+    };
 });
