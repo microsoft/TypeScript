@@ -6246,7 +6246,10 @@ namespace ts {
                         const contextualType = typeChecker.getContextualType(objectLiteral);
                     }
                     else {
-                        
+                        const rootDecl = getRootDeclaration(node.parent);
+                        if (rootDecl.kind === SyntaxKind.ObjectBindingPattern) {
+                            contextualType = typeChecker.getTypeAtLocation(rootDecl);
+                        }
                     }
                     if (contextualType) {
                         if (contextualType.flags & TypeFlags.Union) {
