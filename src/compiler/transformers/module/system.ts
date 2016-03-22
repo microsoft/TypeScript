@@ -88,7 +88,7 @@ namespace ts {
             const statements: Statement[] = [];
 
             // Add any prologue directives.
-            const statementOffset = copyPrologueDirectives(node.statements, statements);
+            const statementOffset = addPrologueDirectives(statements, node.statements);
 
             // var __moduleName = context_1 && context_1.id;
             addNode(statements,

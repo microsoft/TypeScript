@@ -1097,6 +1097,32 @@ namespace ts {
 
     // Utilities
 
+    function isUseStrictPrologue(node: ExpressionStatement): boolean {
+        return !!(node.expression as StringLiteral).text.match(/use strict/);
+    }
+
+    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+        let foundUseStrict = false;
+        for (let i = 0; i < source.length; i++) {
+            if (isPrologueDirective(source[i])) {
+                if (isUseStrictPrologue(source[i] as ExpressionStatement)) {
+                    foundUseStrict = true;
+                }
+
+                target.push(source[i]);
+            }
+            else {
+                if (ensureUseStrict && !foundUseStrict) {
+                    target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
+                }
+
+                return i;
+            }
+        }
+
+        return source.length;
+    }
+
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.

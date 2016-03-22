@@ -3025,19 +3025,6 @@ namespace ts {
         return { externalImports, exportSpecifiers, exportEquals, hasExportStars };
     }
 
-    export function copyPrologueDirectives(from: Statement[], to: Statement[]): number {
-        for (let i = 0; i < from.length; i++) {
-            if (isPrologueDirective(from[i])) {
-                addNode(to, from[i]);
-            }
-            else {
-                return i;
-            }
-        }
-
-        return from.length;
-    }
-
     export function getInitializedVariables(node: VariableDeclarationList) {
         return filter(node.declarations, isInitializedVariable);
     }
