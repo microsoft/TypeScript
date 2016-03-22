@@ -115,10 +115,28 @@ namespace ts {
          * @param includeNonAmdDependencies A value indicating whether to incldue any non-AMD dependencies.
          */
         function transformAsynchronousModule(node: SourceFile, define: Expression, moduleName: Expression, includeNonAmdDependencies: boolean) {
-            // Start the lexical environment for the module body.
-            startLexicalEnvironment();
+            // An AMD define function has the following shape:
+            //
+            //     define(id?, dependencies?, factory);
+            //
+            // This has the shape of the following:
+            //
+            //     define(name, ["module1", "module2"], function (module1Alias) { ... }
+            //
+            // The location of the alias in the parameter list in the factory function needs to
+            // match the position of the module name in the dependency list.
+            //
+            // To ensure this is true in cases of modules with no aliases, e.g.:
+            //
+            //     import "module"
+            //
+            // or
+            //
+            //     /// <amd-dependency path= "a.css" />
+            //
+            // we need to add modules without alias names to the end of the dependencies list
 
-            const { importModuleNames, importAliasNames } = collectAsynchronousDependencies(node, includeNonAmdDependencies);
+            const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, includeNonAmdDependencies);
 
             // Create an updated SourceFile:
             //
@@ -133,16 +151,25 @@ namespace ts {
 
                             // Add the dependency array argument:
                             //
-                            //     ["module1", "module2", ...]
-                            createArrayLiteral(importModuleNames),
+                            //     ["require", "exports", module1", "module2", ...]
+                            createArrayLiteral([
+                                createLiteral("require"),
+                                createLiteral("exports"),
+                                ...aliasedModuleNames,
+                                ...unaliasedModuleNames
+                            ]),
 
                             // Add the module body function argument:
                             //
-                            //     function (module1, module2) ...
+                            //     function (require, exports, module1, module2) ...
                             createFunctionExpression(
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
-                                importAliasNames,
+                                [
+                                    createParameter("require"),
+                                    createParameter("exports"),
+                                    ...importAliasNames
+                                ],
                                 transformAsynchronousModuleBody(node)
                             )
                         ]
@@ -152,6 +179,8 @@ namespace ts {
         }
 
         function transformAsynchronousModuleBody(node: SourceFile) {
+            startLexicalEnvironment();
+
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict);
 
@@ -726,36 +755,29 @@ namespace ts {
             );
         }
 
-        function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
-            // An AMD define function has the following shape:
-            //
-            //     define(id?, dependencies?, factory);
-            //
-            // This has the shape of the following:
-            //
-            //     define(name, ["module1", "module2"], function (module1Alias) { ... }
-            //
-            // The location of the alias in the parameter list in the factory function needs to
-            // match the position of the module name in the dependency list.
-            //
-            // To ensure this is true in cases of modules with no aliases, e.g.:
-            //
-            //     import "module"
-            //
-            // or
-            //
-            //     /// <amd-dependency path= "a.css" />
-            //
-            // we need to add modules without alias names to the end of the dependencies list
+        interface AsynchronousDependencies {
+            aliasedModuleNames: Expression[];
+            unaliasedModuleNames: Expression[];
+            importAliasNames: ParameterDeclaration[];
+        }
 
+        function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean): AsynchronousDependencies {
+            // names of modules with corresponding parameter in the factory function
+            const aliasedModuleNames: Expression[] = [];
+
+            // names of modules with no corresponding parameters in factory function
             const unaliasedModuleNames: Expression[] = [];
-            const aliasedModuleNames: Expression[] = [createLiteral("require"), createLiteral("exports") ];
-            const importAliasNames = [createParameter("require"), createParameter("exports")];
 
+            // names of the parameters in the factory function; these
+            // parameters need to match the indexes of the corresponding
+            // module names in aliasedModuleNames.
+            const importAliasNames: ParameterDeclaration[] = [];
+
+            // Fill in amd-dependency tags
             for (const amdDependency of node.amdDependencies) {
                 if (amdDependency.name) {
-                    aliasedModuleNames.push(createLiteral(amdDependency.name));
-                    importAliasNames.push(createParameter(createIdentifier(amdDependency.name)));
+                    aliasedModuleNames.push(createLiteral(amdDependency.path));
+                    importAliasNames.push(createParameter(amdDependency.name));
                 }
                 else {
                     unaliasedModuleNames.push(createLiteral(amdDependency.path));
@@ -765,6 +787,7 @@ namespace ts {
             for (const importNode of externalImports) {
                 // Find the name of the external module
                 const externalModuleName = getExternalModuleNameLiteral(importNode);
+
                 // Find the name of the module alias, if there is one
                 const importAliasName = getLocalNameForExternalImport(importNode);
                 if (includeNonAmdDependencies && importAliasName) {
@@ -776,13 +799,7 @@ namespace ts {
                 }
             }
 
-            return {
-                importModuleNames: [
-                    ...aliasedModuleNames,
-                    ...unaliasedModuleNames
-                ],
-                importAliasNames
-            };
+            return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
         }
 
         function updateSourceFile(node: SourceFile, statements: Statement[]) {
