@@ -18,6 +18,7 @@ namespace ts {
     export function transformTypeScript(context: TransformationContext) {
         const {
             setNodeEmitFlags,
+            getNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -82,9 +83,9 @@ namespace ts {
          */
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
-            node = visitEachChild(node, visitor, context);
-            setNodeEmitFlags(node, NodeEmitFlags.EmitEmitHelpers);
-            return node;
+            const visited = visitEachChild(node, visitor, context);
+            setNodeEmitFlags(visited, NodeEmitFlags.EmitEmitHelpers | getNodeEmitFlags(node));
+            return visited;
         }
 
         /**
@@ -94,7 +95,6 @@ namespace ts {
          */
         function visitWithStack(node: Node, visitor: (node: Node) => VisitResult<Node>): VisitResult<Node> {
             // Save state
-            const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
@@ -105,7 +105,6 @@ namespace ts {
             const visited = visitor(node);
 
             // Restore state
-            currentNamespace = savedCurrentNamespace;
             currentScope = savedCurrentScope;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
@@ -411,6 +410,7 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
+            let decoratedClassAlias: Identifier;
 
             // emit name if
             // - node has a name
@@ -421,7 +421,6 @@ namespace ts {
                 name = getGeneratedNameForNode(node);
             }
 
-            let decoratedClassAlias: Identifier;
             const statements: Statement[] = [];
             if (!node.decorators) {
                 //  ${modifiers} class ${name} ${heritageClauses} {
@@ -449,25 +448,25 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            addNodes(statements, generateInitializedPropertyStatements(node, staticProperties, name));
+            addInitializedPropertyStatements(statements, node, staticProperties, name);
 
             // Write any decorators of the node.
-            addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ false));
-            addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ true));
-            addNode(statements, generateConstructorDecorationStatement(node, decoratedClassAlias));
+            addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
+            addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
+            addConstructorDecorationStatement(statements, node, decoratedClassAlias);
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
             // declaration or export default for the class.
             if (isNamespaceExport(node)) {
-                addNode(statements, createNamespaceExport(name, name));
+                addNamespaceExport(statements, name, name);
             }
             else if (node.decorators) {
                 if (isDefaultExternalModuleExport(node)) {
-                    addNode(statements, createExportDefault(name));
+                    statements.push(createExportDefault(name));
                 }
                 else if (isNamedExternalModuleExport(node)) {
-                    addNode(statements, createExternalModuleExport(name));
+                    statements.push(createExternalModuleExport(name));
                 }
             }
 
@@ -806,7 +805,7 @@ namespace ts {
             //  }
             //
             const properties = getInitializedProperties(node, /*isStatic*/ false);
-            addNodes(statements, generateInitializedPropertyStatements(node, properties, createThis()));
+            addInitializedPropertyStatements(statements, node, properties, createThis());
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
@@ -928,8 +927,7 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyStatements(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
-            const statements: Statement[] = [];
+        function addInitializedPropertyStatements(statements: Statement[], node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
                 statements.push(
                     createStatement(
@@ -938,8 +936,6 @@ namespace ts {
                     )
                 );
             }
-
-            return statements;
         }
 
         /**
@@ -1178,8 +1174,8 @@ namespace ts {
          * @param isStatic A value indicating whether to generate statements for static or
          *                 instance members.
          */
-        function generateClassElementDecorationStatements(node: ClassDeclaration, isStatic: boolean) {
-            return map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement);
+        function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
+            addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement));
         }
 
         /**
@@ -1277,9 +1273,11 @@ namespace ts {
          *
          * @param node The class node.
          */
-        function generateConstructorDecorationStatement(node: ClassDeclaration, decoratedClassAlias: Identifier) {
+        function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration, decoratedClassAlias: Identifier) {
             const expression = generateConstructorDecorationExpression(node, decoratedClassAlias);
-            return expression ? createStatement(expression) : undefined;
+            if (expression) {
+                statements.push(createStatement(expression));
+            }
         }
 
         /**
@@ -2547,6 +2545,10 @@ namespace ts {
          */
         function expressionToStatement(expression: Expression) {
             return createStatement(expression, /*location*/ undefined);
+        }
+
+        function addNamespaceExport(statements: Statement[], exportName: Identifier, exportValue: Expression, location?: TextRange) {
+            statements.push(createNamespaceExport(exportName, exportValue, location));
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
