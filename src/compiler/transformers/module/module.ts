@@ -347,8 +347,7 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     getSynthesizedClone(node.name),
-                                    createRequireCall(node),
-                                    /*location*/ node
+                                    createRequireCall(node)
                                 )
                             ],
                             /*location*/ undefined,
