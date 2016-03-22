@@ -2575,6 +2575,11 @@ namespace ts {
             (node.parent.kind === SyntaxKind.PropertyAssignment || node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) && (<PropertyDeclaration>node.parent).name === node;
     }
 
+    function isContextSensitiveLocation(node: Node): boolean {
+        return isNameOfPropertyAssignment(node) ||
+            (node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.BindingElement);
+    }
+
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
         if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
             switch (node.parent.kind) {
@@ -6072,7 +6077,7 @@ namespace ts {
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
-                if (isNameOfPropertyAssignment(location)) {
+                if (isContextSensitiveLocation(location)) {
                     forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
                         addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                     });
@@ -6206,7 +6211,7 @@ namespace ts {
                 // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
-                if (isNameOfPropertyAssignment(referenceLocation)) {
+                if (isContextSensitiveLocation(referenceLocation)) {
                     return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
@@ -6233,10 +6238,16 @@ namespace ts {
             }
 
             function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
-                if (isNameOfPropertyAssignment(node)) {
-                    const objectLiteral = <ObjectLiteralExpression>node.parent.parent;
-                    const contextualType = typeChecker.getContextualType(objectLiteral);
+                if (isContextSensitiveLocation(node)) {
                     const name = (<Identifier>node).text;
+                    let contextualType: Type;
+                    if (isNameOfPropertyAssignment(node)) {
+                        const objectLiteral = <ObjectLiteralExpression>node.parent.parent;
+                        const contextualType = typeChecker.getContextualType(objectLiteral);
+                    }
+                    else {
+                        
+                    }
                     if (contextualType) {
                         if (contextualType.flags & TypeFlags.Union) {
                             // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
