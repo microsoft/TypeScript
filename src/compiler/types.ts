@@ -449,6 +449,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -1516,6 +1517,39 @@ namespace ts {
         typeExpression?: JSDocTypeExpression;
         postParameterName?: Identifier;
         isBracketed: boolean;
+    }
+
+    export const enum FlowKind {
+        Unreachable,
+        Start,
+        Label,
+        Assignment,
+        Condition
+    }
+
+    export interface FlowNode {
+        kind: FlowKind;  // Node kind
+        id?: number;     // Node id used by flow type cache in checker
+    }
+
+    // FlowLabel represents a junction with multiple possible preceding control flows.
+    export interface FlowLabel extends FlowNode {
+        antecedents: FlowNode[];
+    }
+
+    // FlowAssignment represents a node that possibly assigns a value to one or more
+    // references.
+    export interface FlowAssignment extends FlowNode {
+        node: BinaryExpression | VariableDeclaration | ForInStatement | ForOfStatement;
+        antecedent: FlowNode;
+    }
+
+    // FlowCondition represents a condition that is known to be true or false at the
+    // node's location in the control flow.
+    export interface FlowCondition extends FlowNode {
+        expression: Expression;
+        assumeTrue: boolean;
+        antecedent: FlowNode;
     }
 
     export interface AmdDependency {

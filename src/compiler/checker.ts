@@ -5,6 +5,7 @@ namespace ts {
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;
+    let nextFlowId = 1;
 
     export function getNodeId(node: Node): number {
         if (!node.id) {
@@ -118,6 +119,7 @@ namespace ts {
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        const resolvingFlowType = createIntrinsicType(TypeFlags.Void, "__resolving__");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyUnionType = emptyObjectType;
@@ -186,6 +188,7 @@ namespace ts {
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
+        const flowTypeCaches: Map<Type>[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
@@ -7136,11 +7139,11 @@ namespace ts {
             Debug.fail("should not get here");
         }
 
-        // Return the assignment key for a "dotted name" (i.e. a sequence of identifiers
+        // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
         // The result is undefined if the reference isn't a dotted name.
-        function getAssignmentKey(node: Node): string {
+        function getFlowCacheKey(node: Node): string {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
                 return symbol !== unknownSymbol ? "" + getSymbolId(symbol) : undefined;
@@ -7149,123 +7152,10 @@ namespace ts {
                 return "0";
             }
             if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                const key = getAssignmentKey((<PropertyAccessExpression>node).expression);
+                const key = getFlowCacheKey((<PropertyAccessExpression>node).expression);
                 return key && key + "." + (<PropertyAccessExpression>node).name.text;
             }
             return undefined;
-        }
-
-        function hasInitializer(node: VariableLikeDeclaration): boolean {
-            return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableLikeDeclaration>node.parent.parent));
-        }
-
-        // For a given node compute a map of which dotted names are assigned within
-        // the node.
-        function getAssignmentMap(node: Node): Map<boolean> {
-            const assignmentMap: Map<boolean> = {};
-            visit(node);
-            return assignmentMap;
-
-            function visitReference(node: Identifier | PropertyAccessExpression) {
-                if (isAssignmentTarget(node) || isCompoundAssignmentTarget(node)) {
-                    const key = getAssignmentKey(node);
-                    if (key) {
-                        assignmentMap[key] = true;
-                    }
-                }
-                forEachChild(node, visit);
-            }
-
-            function visitVariableDeclaration(node: VariableLikeDeclaration) {
-                if (!isBindingPattern(node.name) && hasInitializer(node)) {
-                    assignmentMap[getSymbolId(getSymbolOfNode(node))] = true;
-                }
-                forEachChild(node, visit);
-            }
-
-            function visit(node: Node) {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                    case SyntaxKind.PropertyAccessExpression:
-                        visitReference(<Identifier | PropertyAccessExpression>node);
-                        break;
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                        visitVariableDeclaration(<VariableLikeDeclaration>node);
-                        break;
-                    case SyntaxKind.BinaryExpression:
-                    case SyntaxKind.ObjectBindingPattern:
-                    case SyntaxKind.ArrayBindingPattern:
-                    case SyntaxKind.ArrayLiteralExpression:
-                    case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                    case SyntaxKind.NonNullExpression:
-                    case SyntaxKind.ParenthesizedExpression:
-                    case SyntaxKind.PrefixUnaryExpression:
-                    case SyntaxKind.DeleteExpression:
-                    case SyntaxKind.AwaitExpression:
-                    case SyntaxKind.TypeOfExpression:
-                    case SyntaxKind.VoidExpression:
-                    case SyntaxKind.PostfixUnaryExpression:
-                    case SyntaxKind.YieldExpression:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.SpreadElementExpression:
-                    case SyntaxKind.Block:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseBlock:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.DefaultClause:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.CatchClause:
-                    case SyntaxKind.JsxElement:
-                    case SyntaxKind.JsxSelfClosingElement:
-                    case SyntaxKind.JsxAttribute:
-                    case SyntaxKind.JsxSpreadAttribute:
-                    case SyntaxKind.JsxOpeningElement:
-                    case SyntaxKind.JsxExpression:
-                        forEachChild(node, visit);
-                        break;
-                }
-            }
-        }
-
-        function isReferenceAssignedWithin(reference: Node, node: Node): boolean {
-            if (reference.kind !== SyntaxKind.ThisKeyword) {
-                const key = getAssignmentKey(reference);
-                if (key) {
-                    const links = getNodeLinks(node);
-                    return (links.assignmentMap || (links.assignmentMap = getAssignmentMap(node)))[key];
-                }
-            }
-            return false;
-        }
-
-        function isAnyPartOfReferenceAssignedWithin(reference: Node, node: Node) {
-            while (true) {
-                if (isReferenceAssignedWithin(reference, node)) {
-                    return true;
-                }
-                if (reference.kind !== SyntaxKind.PropertyAccessExpression) {
-                    return false;
-                }
-                reference = (<PropertyAccessExpression>reference).expression;
-            }
         }
 
         function isNullOrUndefinedLiteral(node: Expression) {
@@ -7299,16 +7189,68 @@ namespace ts {
             return false;
         }
 
-        // Get the narrowed type of a given symbol at a given location
+        function containsMatchingReference(source: Node, target: Node) {
+            while (true) {
+                if (isMatchingReference(source, target)) {
+                    return true;
+                }
+                if (source.kind !== SyntaxKind.PropertyAccessExpression) {
+                    return false;
+                }
+                source = (<PropertyAccessExpression>source).expression;
+            }
+        }
+
+        function hasMatchingArgument(callExpression: CallExpression, target: Node) {
+            if (callExpression.arguments) {
+                for (const argument of callExpression.arguments) {
+                    if (isMatchingReference(argument, target)) {
+                        return true;
+                    }
+                }
+            }
+            if (callExpression.expression.kind === SyntaxKind.PropertyAccessExpression &&
+                isMatchingReference((<PropertyAccessExpression>callExpression.expression).expression, target)) {
+                return true;
+            }
+            return false;
+        }
+
+        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+            if (!flow.id) {
+                flow.id = nextFlowId;
+                nextFlowId++;
+            }
+            return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
+        }
+
+        function isNarrowableReference(expr: Node): boolean {
+            return expr.kind === SyntaxKind.Identifier ||
+                expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+        }
+
+        function getAssignmentReducedType(type: Type, assignedType: Type) {
+            if (type.flags & TypeFlags.Union) {
+                const reducedTypes = filter((<UnionType>type).types, t => isTypeAssignableTo(assignedType, t));
+                if (reducedTypes.length) {
+                    return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
+                }
+            }
+            return type;
+        }
+
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
             if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
+                return type;
+            }
+            if (!isNarrowableReference(reference)) {
                 return type;
             }
             const leftmostNode = getLeftmostIdentifierOrThis(reference);
             if (!leftmostNode) {
                 return type;
             }
-            let top: Node;
             if (leftmostNode.kind === SyntaxKind.Identifier) {
                 const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
                 if (!leftmostSymbol) {
@@ -7318,74 +7260,138 @@ namespace ts {
                 if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
                     return type;
                 }
-                top = getDeclarationContainer(declaration);
             }
-            const originalType = type;
-            const nodeStack: { node: Node, child: Node }[] = [];
-            let node: Node = reference;
-            loop: while (node.parent) {
-                const child = node;
-                node = node.parent;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.BinaryExpression:
-                        nodeStack.push({node, child});
-                        break;
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleDeclaration:
-                        break loop;
-                    default:
-                        if (node === top || isFunctionLikeKind(node.kind)) {
-                            break loop;
-                        }
-                        break;
-                }
-            }
+            return getFlowTypeOfReference(reference, type, type);
+        }
 
-            let nodes: { node: Node, child: Node };
-            while (nodes = nodeStack.pop()) {
-                const {node, child} = nodes;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                        // In a branch of an if statement, narrow based on controlling expression
-                        if (child !== (<IfStatement>node).expression) {
-                            type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
-                        }
-                        break;
-                    case SyntaxKind.ConditionalExpression:
-                        // In a branch of a conditional expression, narrow based on controlling condition
-                        if (child !== (<ConditionalExpression>node).condition) {
-                            type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
-                        }
-                        break;
-                    case SyntaxKind.BinaryExpression:
-                        // In the right operand of an && or ||, narrow based on left operand
-                        if (child === (<BinaryExpression>node).right) {
-                            if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
+            let key: string;
+            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : initialType;
+
+            function getTypeAtFlowNode(flow: FlowNode): Type {
+                while (true) {
+                    switch (flow.kind) {
+                        case FlowKind.Assignment:
+                            const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
+                            if (!type) {
+                                flow = (<FlowAssignment>flow).antecedent;
+                                continue;
                             }
-                            else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
+                            return type;
+                        case FlowKind.Condition:
+                            return getTypeAtFlowCondition(<FlowCondition>flow);
+                        case FlowKind.Label:
+                            if ((<FlowLabel>flow).antecedents.length === 1) {
+                                flow = (<FlowLabel>flow).antecedents[0];
+                                continue;
                             }
+                            return getTypeAtFlowLabel(<FlowLabel>flow);
+                    }
+                    // At the top of the flow we have the initial type
+                    return initialType;
+                }
+            }
+
+            function getTypeAtVariableDeclaration(node: VariableDeclaration) {
+                if (reference.kind === SyntaxKind.Identifier && !isBindingPattern(node.name) && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
+                    return getAssignmentReducedType(declaredType, checkExpressionCached((<VariableDeclaration>node).initializer));
+                }
+                return undefined;
+            }
+
+            function getTypeAtForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    if (reference.kind === SyntaxKind.Identifier) {
+                        const variable = (<VariableDeclarationList>node.initializer).declarations[0];
+                        if (variable && !isBindingPattern(variable.name) && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(variable)) {
+                            return declaredType;
+                        }
+                    }
+                }
+                else {
+                    if (isMatchingReference(reference, <Expression>node.initializer)) {
+                        const type = node.kind === SyntaxKind.ForOfStatement ? checkRightHandSideOfForOf(node.expression) : stringType;
+                        return getAssignmentReducedType(declaredType, type);
+                    }
+                    if (reference.kind === SyntaxKind.PropertyAccessExpression &&
+                        containsMatchingReference((<PropertyAccessExpression>reference).expression, <Expression>node.initializer)) {
+                        return declaredType;
+                    }
+                }
+                return undefined;
+            }
+
+            function getTypeAtFlowAssignment(flow: FlowAssignment) {
+                const node = flow.node;
+                switch (node.kind) {
+                    case SyntaxKind.BinaryExpression:
+                        // If reference matches left hand side and type on right is properly assignable,
+                        // return type on right. Otherwise default to the declared type.
+                        if (isMatchingReference(reference, (<BinaryExpression>node).left)) {
+                            return getAssignmentReducedType(declaredType, checkExpressionCached((<BinaryExpression>node).right));
+                        }
+                        // We didn't have a direct match. However, if the reference is a dotted name, this
+                        // may be an assignment to a left hand part of the reference. For example, for a
+                        // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
+                        // return the declared type.
+                        if (reference.kind === SyntaxKind.PropertyAccessExpression &&
+                            containsMatchingReference((<PropertyAccessExpression>reference).expression, (<BinaryExpression>node).left)) {
+                            return declaredType;
                         }
                         break;
-                    default:
-                        Debug.fail("Unreachable!");
+                    case SyntaxKind.VariableDeclaration:
+                        return getTypeAtVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                        return getTypeAtForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
                 }
-
-                // Use original type if construct contains assignments to variable
-                if (type !== originalType && isAnyPartOfReferenceAssignedWithin(reference, node)) {
-                    type = originalType;
-                }
+                // Assignment doesn't affect reference
+                return undefined;
             }
 
-            // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-            if (type === emptyUnionType) {
-                type = originalType;
+            function getTypeAtFlowCondition(flow: FlowCondition) {
+                const type = getTypeAtFlowNode(flow.antecedent);
+                if (type === resolvingFlowType) {
+                    return type;
+                }
+                return narrowType(type, (<FlowCondition>flow).expression, (<FlowCondition>flow).assumeTrue);
             }
 
-            return type;
+            function getTypeAtFlowNodeCached(flow: FlowNode) {
+                const cache = getFlowTypeCache(flow);
+                if (!key) {
+                    key = getFlowCacheKey(reference);
+                }
+                let type = cache[key];
+                if (type) {
+                    return type;
+                }
+                cache[key] = resolvingFlowType;
+                type = getTypeAtFlowNode(flow);
+                cache[key] = type !== resolvingFlowType ? type : undefined;
+                return type;
+            }
+
+            function getTypeAtFlowLabel(flow: FlowLabel) {
+                const antecedentTypes: Type[] = [];
+                for (const antecedent of flow.antecedents) {
+                    const t = getTypeAtFlowNodeCached(antecedent);
+                    if (t !== resolvingFlowType) {
+                        // If the type at a particular antecedent path is the declared type, there is no
+                        // reason to process more antecedents since the only possible outcome is subtypes
+                        // that are be removed in the final union type anyway.
+                        if (t === declaredType) {
+                            return t;
+                        }
+                        if (!contains(antecedentTypes, t)) {
+                            antecedentTypes.push(t);
+                        }
+                    }
+                }
+                return antecedentTypes.length === 0 ? declaredType :
+                    antecedentTypes.length === 1 ? antecedentTypes[0] :
+                    getUnionType(antecedentTypes);
+            }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
@@ -7574,7 +7580,7 @@ namespace ts {
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
-                if (type.flags & TypeFlags.Any) {
+                if (type.flags & TypeFlags.Any || !hasMatchingArgument(callExpression, reference)) {
                     return type;
                 }
                 const signature = getResolvedSignature(callExpression);
@@ -7656,98 +7662,6 @@ namespace ts {
             return expression;
         }
 
-        function findFirstAssignment(symbol: Symbol, container: Node): Node {
-            return visit(isFunctionLike(container) ? (<FunctionLikeDeclaration>container).body : container);
-
-            function visit(node: Node): Node {
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        const assignment = getAssignmentRoot(node);
-                        return assignment && getResolvedSymbol(<Identifier>node) === symbol ? assignment : undefined;
-                    case SyntaxKind.BinaryExpression:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                    case SyntaxKind.ObjectBindingPattern:
-                    case SyntaxKind.ArrayBindingPattern:
-                    case SyntaxKind.ArrayLiteralExpression:
-                    case SyntaxKind.ObjectLiteralExpression:
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.TypeAssertionExpression:
-                    case SyntaxKind.AsExpression:
-                    case SyntaxKind.NonNullExpression:
-                    case SyntaxKind.ParenthesizedExpression:
-                    case SyntaxKind.PrefixUnaryExpression:
-                    case SyntaxKind.DeleteExpression:
-                    case SyntaxKind.AwaitExpression:
-                    case SyntaxKind.TypeOfExpression:
-                    case SyntaxKind.VoidExpression:
-                    case SyntaxKind.PostfixUnaryExpression:
-                    case SyntaxKind.YieldExpression:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.SpreadElementExpression:
-                    case SyntaxKind.VariableStatement:
-                    case SyntaxKind.ExpressionStatement:
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                    case SyntaxKind.ReturnStatement:
-                    case SyntaxKind.WithStatement:
-                    case SyntaxKind.SwitchStatement:
-                    case SyntaxKind.CaseBlock:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.DefaultClause:
-                    case SyntaxKind.LabeledStatement:
-                    case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.TryStatement:
-                    case SyntaxKind.CatchClause:
-                    case SyntaxKind.JsxElement:
-                    case SyntaxKind.JsxSelfClosingElement:
-                    case SyntaxKind.JsxAttribute:
-                    case SyntaxKind.JsxSpreadAttribute:
-                    case SyntaxKind.JsxOpeningElement:
-                    case SyntaxKind.JsxExpression:
-                    case SyntaxKind.Block:
-                    case SyntaxKind.SourceFile:
-                        return forEachChild(node, visit);
-                }
-                return undefined;
-            }
-        }
-
-        function checkVariableAssignedBefore(symbol: Symbol, reference: Node) {
-            if (!(symbol.flags & SymbolFlags.Variable)) {
-                return;
-            }
-            const declaration = symbol.valueDeclaration;
-            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration || (<VariableDeclaration>declaration).initializer) {
-                return;
-            }
-            const parentParentKind = declaration.parent.parent.kind;
-            if (parentParentKind === SyntaxKind.ForOfStatement || parentParentKind === SyntaxKind.ForInStatement) {
-                return;
-            }
-            const declarationContainer = getContainingFunction(declaration) || getSourceFileOfNode(declaration);
-            const referenceContainer = getContainingFunction(reference) || getSourceFileOfNode(reference);
-            if (declarationContainer !== referenceContainer) {
-                return;
-            }
-            const links = getSymbolLinks(symbol);
-            if (!links.firstAssignmentChecked) {
-                links.firstAssignmentChecked = true;
-                links.firstAssignment = findFirstAssignment(symbol, declarationContainer);
-            }
-            if (links.firstAssignment && links.firstAssignment.end <= reference.pos) {
-                return;
-            }
-            error(reference, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
-        }
-
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
 
@@ -7800,10 +7714,18 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getTypeOfSymbol(localOrExportSymbol);
-            if (strictNullChecks && !isAssignmentTarget(node) && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined)) {
-                checkVariableAssignedBefore(symbol, node);
+            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || isAssignmentTarget(node)) {
+                return type;
             }
-            return getNarrowedTypeOfReference(type, node);
+            const declaration = localOrExportSymbol.valueDeclaration;
+            const defaultsToDeclaredType = !strictNullChecks || !declaration ||
+                declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
+                getContainingFunction(declaration) !== getContainingFunction(node);
+            const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
+            if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
+                error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+            }
+            return flowType;
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -8715,8 +8637,10 @@ namespace ts {
             return mapper && mapper.context;
         }
 
-        // Return the root assignment node of an assignment target
-        function getAssignmentRoot(node: Node): Node {
+        // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
+        // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
+        // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
+        function isAssignmentTarget(node: Node): boolean {
             while (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
                 node = node.parent;
             }
@@ -8734,23 +8658,7 @@ namespace ts {
             const parent = node.parent;
             return parent.kind === SyntaxKind.BinaryExpression &&
                 (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
-                (<BinaryExpression>parent).left === node ? parent : undefined;
-        }
-
-        // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
-        // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
-        // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
-        function isAssignmentTarget(node: Node): boolean {
-            return !!getAssignmentRoot(node);
-        }
-
-        function isCompoundAssignmentTarget(node: Node) {
-            const parent = node.parent;
-            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                const operator = (<BinaryExpression>parent).operatorToken.kind;
-                return operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment;
-            }
-            return false;
+                (<BinaryExpression>parent).left === node;
         }
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
@@ -9604,7 +9512,7 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
-            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & SymbolFlags.Property ?
+            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & SymbolFlags.Property && !isAssignmentTarget(node) ?
                 getNarrowedTypeOfReference(propType, <PropertyAccessExpression>node) : propType;
         }
 
@@ -16177,7 +16085,7 @@ namespace ts {
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
-                return resolveEntityName(<Identifier>entityName,
+                return resolveEntityName(<Identifier><EntityName>entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
