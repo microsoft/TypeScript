@@ -2,8 +2,8 @@
 
 type T = "" | "foo";
 
-let x: T = "";
-let y: T = "foo";
+let x: T = undefined;
+let y: T = undefined;
 
 if (x === "") {
     let a = x;
@@ -38,8 +38,8 @@ if (!!!x) {
 }
 
 //// [stringLiteralTypesInUnionTypes04.js]
-var x = "";
-var y = "foo";
+var x = undefined;
+var y = undefined;
 if (x === "") {
     var a = x;
 }

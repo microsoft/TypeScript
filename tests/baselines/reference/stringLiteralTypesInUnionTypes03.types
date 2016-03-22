@@ -6,10 +6,10 @@ type T = number | "foo" | "bar";
 var x: "foo" | "bar" | number;
 >x : "foo" | "bar" | number
 
-var y: T = "bar";
+var y: T = undefined;
 >y : number | "foo" | "bar"
 >T : number | "foo" | "bar"
->"bar" : "bar"
+>undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean
