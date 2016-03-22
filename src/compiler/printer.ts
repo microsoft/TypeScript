@@ -245,7 +245,7 @@ const _super = (function (geti, seti) {
                 currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
-                emitWorker(node);
+                emitNodeWithNotificationOption(node, emitWorker);
                 return node;
             }
 

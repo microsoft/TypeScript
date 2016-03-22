@@ -2129,25 +2129,27 @@ namespace ts {
             //      ...
             //  })(x || (x = {}));
             statements.push(
-                 createStatement(
-                     createCall(
-                        createParen(
-                            createFunctionExpression(
+                setOriginalNode(
+                    createStatement(
+                        createCall(
+                            createParen(
+                                createFunctionExpression(
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
-                                [createParameter(currentNamespaceLocalName)],
-                                transformEnumBody(node)
-                            )
-                        ),
-                        [createLogicalOr(
-                            name,
-                            createAssignment(
+                                    [createParameter(currentNamespaceLocalName)],
+                                    transformEnumBody(node)
+                                )
+                            ),
+                            [createLogicalOr(
                                 name,
-                                createObjectLiteral()
-                            )
-                        )]
-                    ),
-                    location
+                                createAssignment(
+                                    name,
+                                    createObjectLiteral()
+                                )
+                            )]
+                        ),
+                        location
+                    ), node
                 )
             );
 
