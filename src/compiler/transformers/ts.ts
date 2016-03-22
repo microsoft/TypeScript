@@ -1978,7 +1978,7 @@ namespace ts {
         }
 
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const promiseConstructor = getEntityNameFromTypeNode(node.type);
+            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getEntityNameFromTypeNode(node.type) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
 
@@ -1987,77 +1987,12 @@ namespace ts {
             // `this` and `arguments` objects to `__awaiter`. The generator function
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
-            //
-            // The emit for an async arrow without a lexical `arguments` binding might be:
-            //
-            //  // input
-            //  let a = async (b) => { await b; }
-            //
-            //  // output
-            //  let a = (b) => __awaiter(this, void 0, void 0, function* () {
-            //      yield b;
-            //  });
-            //
-            // The emit for an async arrow with a lexical `arguments` binding might be:
-            //
-            //  // input
-            //  let a = async (b) => { await arguments[0]; }
-            //
-            //  // output
-            //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
-            //      yield arguments[0];
-            //  });
-            //
-            // The emit for an async function expression without a lexical `arguments` binding
-            // might be:
-            //
-            //  // input
-            //  let a = async function (b) {
-            //      await b;
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, void 0, void 0, function* () {
-            //          yield b;
-            //      });
-            //  }
-            //
-            // The emit for an async function expression with a lexical `arguments` binding
-            // might be:
-            //
-            //  // input
-            //  let a = async function (b) {
-            //      await arguments[0];
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, arguments, void 0, function* (_arguments) {
-            //          yield _arguments[0];
-            //      });
-            //  }
-            //
-            // The emit for an async function expression with a lexical `arguments` binding
-            // and a return type annotation might be:
-            //
-            //  // input
-            //  let a = async function (b): MyPromise<any> {
-            //      await arguments[0];
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
-            //          yield _arguments[0];
-            //      });
-            //  }
-            //
+
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
 
-                addNode(statements,
+                statements.push(
                     createReturn(
                         createAwaiterHelper(
                             hasLexicalArguments,

@@ -2292,6 +2292,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.AssertES6;
         }
 
+        // If a FunctionDeclaration is async, then it is TypeScript syntax.
+        if (modifiers & ModifierFlags.Async) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
         // If a FunctionDeclaration has an asterisk token, is exported, or its
         // subtree has marked the container as needing to capture the lexical `this`,
         // then this node is ES6 syntax.
