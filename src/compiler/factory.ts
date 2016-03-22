@@ -102,6 +102,16 @@ namespace ts {
         return clone;
     }
 
+    /**
+     * Gets a clone of a node with a unique node ID.
+     */
+    export function getUniqueClone<T extends Node>(node: T): T {
+        const clone = getSynthesizedClone(node);
+        clone.id = undefined;
+        getNodeId(clone);
+        return clone;
+    }
+
     // Literals
 
     export function createLiteral(value: string, location?: TextRange): StringLiteral;

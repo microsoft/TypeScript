@@ -298,11 +298,19 @@ const _super = (function (geti, seti) {
                     const leadingComments = getLeadingComments(node, getNotEmittedParent);
                     const trailingComments = getTrailingComments(node, getNotEmittedParent);
                     emitLeadingComments(node, leadingComments);
-                    emitStart(node);
+                    emitStart(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
                     emitWorker(node);
-                    emitEnd(node);
+                    emitEnd(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
                     emitTrailingComments(node, trailingComments);
                 }
+            }
+
+            function shouldEmitSourceMap(node: Node) {
+                return (getNodeEmitFlags(node) & NodeEmitFlags.NoSourceMap) === 0;
+            }
+
+            function shouldEmitNestedSourceMap(node: Node) {
+                return (getNodeEmitFlags(node) & NodeEmitFlags.NoNestedSourceMaps) === 0;
             }
 
             function emitWorker(node: Node): void {
@@ -1151,10 +1159,8 @@ const _super = (function (geti, seti) {
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                emitStart(node);
                 emitExpression(node.expression);
                 emitTypeArguments(node, node.typeArguments);
-                emitEnd(node);
             }
 
             function emitAsExpression(node: AsExpression) {
@@ -1601,21 +1607,17 @@ const _super = (function (geti, seti) {
             }
 
             function emitImportClause(node: ImportClause) {
-                emitStart(node);
                 emit(node.name);
                 if (node.name && node.namedBindings) {
                     write(", ");
                 }
                 emit(node.namedBindings);
-                emitEnd(node);
                 write(" from ");
             }
 
             function emitNamespaceImport(node: NamespaceImport) {
-                emitStart(node);
                 write("* as ");
                 emit(node.name);
-                emitEnd(node);
             }
 
             function emitNamedImports(node: NamedImports) {
@@ -1759,12 +1761,10 @@ const _super = (function (geti, seti) {
             }
 
             function emitHeritageClause(node: HeritageClause) {
-                emitStart(node);
                 write(" ");
                 writeToken(node.token);
                 write(" ");
                 emitList(node, node.types, ListFormat.HeritageClauseTypes);
-                emitEnd(node);
             }
 
             function emitCatchClause(node: CatchClause) {
@@ -2207,9 +2207,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node);
+                    emitStart(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
                     writeTokenText(node.kind);
-                    emitEnd(node);
+                    emitEnd(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
                 }
             }
 

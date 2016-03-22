@@ -330,7 +330,7 @@ namespace ts {
             const statements: Statement[] = [];
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
-                    addNode(statements,
+                    statements.push(
                         createStatement(
                             createExportAssignment(
                                 node.name,
@@ -341,7 +341,7 @@ namespace ts {
                     );
                 }
                 else {
-                    addNode(statements,
+                    statements.push(
                         createVariableStatement(
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
@@ -350,14 +350,17 @@ namespace ts {
                                     createRequireCall(node),
                                     /*location*/ node
                                 )
-                            ])
+                            ],
+                            /*location*/ undefined,
+                            /*flags*/ languageVersion >= ScriptTarget.ES6 ? NodeFlags.Const : NodeFlags.None),
+                            /*location*/ node
                         )
                     );
                 }
             }
             else {
                 if (hasModifier(node, ModifierFlags.Export)) {
-                    addNode(statements,
+                    statements.push(
                         createStatement(
                             createExportAssignment(node.name, node.name),
                             /*location*/ node
@@ -544,6 +547,7 @@ namespace ts {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenVariableDestructuringToExpression(
+                    context,
                     node,
                     hoistVariableDeclaration,
                     getModuleMemberName,

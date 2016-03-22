@@ -21,7 +21,6 @@ namespace ts {
     export interface TextRange {
         pos: number;
         end: number;
-        /* @internal */ disableSourceMap?: boolean; // Whether a synthesized text range disables source maps for its contents (used by transforms).
     }
 
     // token > SyntaxKind.Identifer => token is a keyword
@@ -2114,7 +2113,7 @@ namespace ts {
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
     }
 
     export const enum TypeFlags {
@@ -2852,6 +2851,8 @@ namespace ts {
         EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
         NoSubstitution = 1 << 10,                // Disables further substitution of an expression.
         CapturesThis = 1 << 11,                  // The function captures a lexical `this`
+        NoSourceMap = 1 << 12,                   // Do not emit a source map location for this node.
+        NoNestedSourceMaps = 1 << 13,            // Do not emit source map locations for children of this node.
     }
 
     /** Additional context provided to `visitEachChild` */

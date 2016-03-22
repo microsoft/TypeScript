@@ -3904,7 +3904,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(" = ");
                     emit(value);
                 });
-                emitEnd(nodeForSourceMap, /*stopOverridingSpan*/true);
+                emitEnd(nodeForSourceMap);
+                sourceMap.stopOverridingSpan();
 
                 if (exportChanged) {
                     write(")");

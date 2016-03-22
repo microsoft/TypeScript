@@ -577,7 +577,7 @@ namespace ts {
             }
             else {
                 // If the variable has a BindingPattern, flatten the variable into multiple assignment expressions.
-                return flattenVariableDestructuringToExpression(node, hoistVariableDeclaration);
+                return flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration);
             }
         }
 
@@ -691,7 +691,7 @@ namespace ts {
             const name = firstDeclaration.name;
             return isIdentifier(name)
                 ? name
-                : flattenVariableDestructuringToExpression(firstDeclaration, hoistVariableDeclaration);
+                : flattenVariableDestructuringToExpression(context, firstDeclaration, hoistVariableDeclaration);
         }
 
         /**
@@ -1026,7 +1026,7 @@ namespace ts {
         }
 
         function substituteDestructuring(node: BinaryExpression) {
-            return flattenDestructuringAssignment(node, /*needsValue*/ true, hoistVariableDeclaration);
+            return flattenDestructuringAssignment(context, node, /*needsValue*/ true, hoistVariableDeclaration);
         }
 
         function substitutePostfixUnaryExpression(node: PostfixUnaryExpression): Expression {

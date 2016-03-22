@@ -6,10 +6,10 @@ namespace ts {
         getSourceMapData(): SourceMapData;
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number): void;
-        emitStart(range: TextRange): void;
-        emitEnd(range: TextRange): void;
-        /*@deprecated*/ emitEnd(range: TextRange, stopOverridingSpan: boolean): void;
+        emitStart(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean): void;
+        emitEnd(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean): void;
         /*@deprecated*/ changeEmitSourcePos(): void;
+        /*@deprecated*/ stopOverridingSpan(): void;
         getText(): string;
         getSourceMappingURL(): string;
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
@@ -34,9 +34,10 @@ namespace ts {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
                 emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
+                emitEnd(range: TextRange, shouldEmit?: Function, shouldEmitNested?: Function): void { },
                 emitPos(pos: number): void { },
                 changeEmitSourcePos(): void { },
+                stopOverridingSpan(): void { },
                 getText(): string { return undefined; },
                 getSourceMappingURL(): string { return undefined; },
                 initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
@@ -81,6 +82,7 @@ namespace ts {
             emitStart,
             emitEnd,
             changeEmitSourcePos,
+            stopOverridingSpan: () => stopOverridingSpan = true,
             getText,
             getSourceMappingURL,
             initialize,
@@ -318,21 +320,26 @@ namespace ts {
             return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
         }
 
-        function emitStart(range: TextRange) {
-            emitPos(getStartPos(range));
+        function emitStart(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean) {
+            if (!shouldEmit || shouldEmit(range)) {
+                emitPos(getStartPos(range));
+            }
 
-            if (range.disableSourceMap) {
+            if (shouldEmitNested && !shouldEmitNested(range)) {
                 disable();
             }
         }
 
-        function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
-            if (range.disableSourceMap) {
+        function emitEnd(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean) {
+            if (shouldEmitNested && !shouldEmitNested(range)) {
                 enable();
             }
 
-            emitPos(range.end);
-            stopOverridingSpan = stopOverridingEnd;
+            if (!shouldEmit || shouldEmit(range)) {
+                emitPos(range.end);
+            }
+
+            stopOverridingSpan = false;
         }
 
         function changeEmitSourcePos() {

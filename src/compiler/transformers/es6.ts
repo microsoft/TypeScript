@@ -522,7 +522,7 @@ namespace ts {
                     createVariableStatement(
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
-                            flattenParameterDestructuring(parameter, temp, visitor)
+                            flattenParameterDestructuring(context, parameter, temp, visitor)
                         )
                     )
                 );
@@ -964,7 +964,7 @@ namespace ts {
         function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(node, needsDestructuringValue, hoistVariableDeclaration, visitor);
+            return flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
         }
 
         /**
@@ -1090,7 +1090,7 @@ namespace ts {
             // If we are here it is because the name contains a binding pattern.
             Debug.assert(isBindingPattern(node.name));
 
-            return flattenVariableDestructuring(node, /*value*/ undefined, visitor);
+            return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
@@ -1173,6 +1173,7 @@ namespace ts {
                             /*modifiers*/ undefined,
                             createVariableDeclarationList(
                                 flattenVariableDestructuring(
+                                    context,
                                     firstDeclaration,
                                     createElementAccess(rhsReference, counter),
                                     visitor
@@ -1208,6 +1209,7 @@ namespace ts {
                     statements.push(
                         createStatement(
                             flattenDestructuringAssignment(
+                                context,
                                 assignment,
                                 /*needsValue*/ false,
                                 hoistVariableDeclaration,

@@ -2072,6 +2072,7 @@ namespace ts {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenVariableDestructuringToExpression(
+                    context,
                     node,
                     hoistVariableDeclaration,
                     getNamespaceMemberName,

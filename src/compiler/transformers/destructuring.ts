@@ -13,6 +13,7 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenDestructuringAssignment(
+        context: TransformationContext,
         node: BinaryExpression,
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
@@ -44,7 +45,7 @@ namespace ts {
             location = node.right;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -57,7 +58,7 @@ namespace ts {
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const expression = createAssignment(name, value, location);
             if (isSimpleExpression(value)) {
-                expression.disableSourceMap = true;
+                context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
             }
 
             aggregateTransformFlags(expression);
@@ -79,17 +80,21 @@ namespace ts {
      * @param value The rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => VisitResult<Node>) {
+    export function flattenParameterDestructuring(
+        context: TransformationContext,
+        node: ParameterDeclaration,
+        value: Expression,
+        visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const declaration = createVariableDeclaration(name, value, location);
             if (isSimpleExpression(value)) {
-                declaration.disableSourceMap = true;
+                context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
             }
 
             aggregateTransformFlags(declaration);
@@ -110,10 +115,14 @@ namespace ts {
      * @param value An optional rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => VisitResult<Node>) {
+    export function flattenVariableDestructuring(
+        context: TransformationContext,
+        node: VariableDeclaration,
+        value?: Expression,
+        visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
@@ -124,7 +133,7 @@ namespace ts {
             }
 
             if (isSimpleExpression(value)) {
-                declaration.disableSourceMap = true;
+                context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
             }
 
             declaration.original = original;
@@ -148,6 +157,7 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuringToExpression(
+        context: TransformationContext,
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
         nameSubstitution?: (name: Identifier) => Expression,
@@ -155,7 +165,7 @@ namespace ts {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment);
+        flattenDestructuring(context, node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
@@ -176,7 +186,7 @@ namespace ts {
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignment(name, value, location);
             if (isSimpleExpression(value)) {
-                expression.disableSourceMap = true;
+                context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
             }
 
             expression.original = original;
@@ -186,6 +196,7 @@ namespace ts {
     }
 
     function flattenDestructuring(
+        context: TransformationContext,
         root: BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,
