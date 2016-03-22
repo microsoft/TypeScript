@@ -778,8 +778,8 @@ namespace ts {
 
             return {
                 importModuleNames: [
-                    ...unaliasedModuleNames,
-                    ...aliasedModuleNames
+                    ...aliasedModuleNames,
+                    ...unaliasedModuleNames
                 ],
                 importAliasNames
             };
