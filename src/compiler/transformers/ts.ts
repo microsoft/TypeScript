@@ -2172,7 +2172,7 @@ namespace ts {
             if (!isExported(node) || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, SyntaxKind.EnumDeclaration))) {
                 // Emit a VariableStatement if the enum is not exported, or is the first enum
                 // with the same name exported from an external module.
-                addNode(statements,
+                statements.push(
                     createVariableStatement(
                         visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
@@ -2189,7 +2189,12 @@ namespace ts {
                 : getSynthesizedClone(node.name);
 
             currentNamespaceLocalName = getGeneratedNameForNode(node);
-            addNode(statements,
+
+            //  (function (x) {
+            //      x[x["y"] = 0] = "y";
+            //      ...
+            //  })(x || (x = {}));
+            statements.push(
                  createStatement(
                      createCall(
                         createParen(
@@ -2207,7 +2212,7 @@ namespace ts {
                                 createObjectLiteral()
                             )
                         )]
-                     ),
+                    ),
                     location
                 )
             );
@@ -2366,6 +2371,31 @@ namespace ts {
         }
 
         /**
+         * Determines whether to elide a module declaration.
+         *
+         * @param node The module declaration node.
+         */
+        function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+            return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+        }
+
+        /**
+         * Determines whether a module declaration has a name that merges with a class declaration.
+         *
+         * @param node The module declaration node.
+         */
+        function isModuleMergedWithClass(node: ModuleDeclaration) {
+            return languageVersion === ScriptTarget.ES6
+                && !!(resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LexicalModuleMergesWithClass);
+        }
+
+        function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
+            return !isModuleMergedWithClass(node)
+                && (!isExternalModuleExport(node)
+                    || isFirstDeclarationOfKind(node, SyntaxKind.ModuleDeclaration));
+        }
+
+        /**
          * Visits a module declaration node.
          *
          * This function will be called any time a TypeScript namespace (ModuleDeclaration) is encountered.
@@ -2373,7 +2403,7 @@ namespace ts {
          * @param node The module declaration node.
          */
         function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
-            if (shouldElideModuleDeclaration(node)) {
+            if (!shouldEmitModuleDeclaration(node)) {
                 return undefined;
             }
 
@@ -2382,42 +2412,36 @@ namespace ts {
             enableExpressionSubstitutionForNamespaceExports();
 
             const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const modifiers = visitNodes(node.modifiers, visitor, isModifier);
+            const savedCurrentNamespace = currentNamespace;
             const statements: Statement[] = [];
 
-            let location = node;
-            if (!isModuleMergedWithClass(node)) {
+            if (shouldEmitVarForModuleDeclaration(node)) {
                 // var x;
                 statements.push(
                     createVariableStatement(
-                        modifiers,
+                        visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
                             createVariableDeclaration(<Identifier>node.name)
                         ]),
-                        location
+                        /*location*/ node
                     )
                 );
-                location = undefined;
             }
 
             const name = isNamespaceExport(node)
                 ? getNamespaceMemberName(node.name)
                 : getSynthesizedClone(node.name);
 
-            let moduleParam: Expression = createLogicalOr(
+            currentNamespaceLocalName = getGeneratedNameForNode(node);
+            currentNamespace = node;
+
+            const moduleParam = createLogicalOr(
                 name,
                 createAssignment(
                     name,
-                    createObjectLiteral([])
+                    createObjectLiteral()
                 )
             );
-
-            if (isNamespaceExport(node)) {
-                moduleParam = createAssignment(getSynthesizedClone(node.name), moduleParam);
-            }
-
-            currentNamespaceLocalName = getGeneratedNameForNode(node);
-            currentNamespace = node;
 
             //  (function (x_1) {
             //      x_1.y = ...;
@@ -2435,8 +2459,13 @@ namespace ts {
                                         transformModuleBody(node)
                                     )
                                 ),
-                                [moduleParam]
-                            )
+                                [
+                                    isNamespaceExport(node)
+                                        ? createAssignment(getSynthesizedClone(<Identifier>node.name), moduleParam)
+                                        : moduleParam
+                                ]
+                            ),
+                            /*location*/ node
                         ),
                         node
                     ),
@@ -2445,6 +2474,7 @@ namespace ts {
             );
 
             currentNamespaceLocalName = savedCurrentNamespaceLocalName;
+            currentNamespace = savedCurrentNamespace;
             return statements;
         }
 
@@ -2466,24 +2496,6 @@ namespace ts {
 
             addNodes(statements, endLexicalEnvironment());
             return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-        }
-
-        /**
-         * Determines whether to elide a module declaration.
-         *
-         * @param node The module declaration node.
-         */
-        function shouldElideModuleDeclaration(node: ModuleDeclaration) {
-            return !isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
-        }
-
-        /**
-         * Determines whether a module declaration has a name that merges with a class declaration.
-         *
-         * @param node The module declaration node.
-         */
-        function isModuleMergedWithClass(node: ModuleDeclaration) {
-            return !!(resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LexicalModuleMergesWithClass);
         }
 
         /**
@@ -2584,7 +2596,6 @@ namespace ts {
             return isExternalModuleExport(node)
                 && hasModifier(node, ModifierFlags.Default);
         }
-
         /**
          * Gets a value indicating whether a node is the first declaration of its kind.
          *
