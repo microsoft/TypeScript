@@ -127,7 +127,7 @@ namespace ts {
 
     export function createIdentifier(text: string, location?: TextRange): Identifier {
         const node = <Identifier>createNode(SyntaxKind.Identifier, location);
-        node.text = text;
+        node.text = escapeIdentifier(text);
         return node;
     }
 

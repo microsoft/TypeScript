@@ -2349,7 +2349,7 @@ const _super = (function (geti, seti) {
                         return getGeneratedIdentifier(node);
                     }
                     else if (nodeIsSynthesized(node) || !node.parent) {
-                        return node.text;
+                        return unescapeIdentifier(node.text);
                     }
                 }
                 else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
