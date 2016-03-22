@@ -244,7 +244,7 @@ namespace ts {
      * @param keyfn A callback used to select the key for an element.
      * @param mapfn A callback used to map a contiguous chunk of values to a single value.
      */
-    export function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K) => U): U[] {
+    export function spanMap<T, K, U>(array: T[], keyfn: (x: T, i: number) => K, mapfn: (chunk: T[], key: K, start: number, end: number) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
@@ -268,7 +268,7 @@ namespace ts {
                 }
 
                 if (start < pos) {
-                    const v = mapfn(array.slice(start, pos), previousKey);
+                    const v = mapfn(array.slice(start, pos), previousKey, start, pos);
                     if (v) {
                         result.push(v);
                     }

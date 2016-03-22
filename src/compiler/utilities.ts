@@ -1825,6 +1825,7 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
+            case SyntaxKind.OmittedExpression:
                 return 19;
 
             case SyntaxKind.TaggedTemplateExpression:

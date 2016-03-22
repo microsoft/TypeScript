@@ -1436,7 +1436,7 @@ namespace ts {
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
             // We are here because we contain a SpreadElementExpression.
-            return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, node.multiLine);
+            return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, node.multiLine, /*hasTrailingComma*/ node.elements.hasTrailingComma);
         }
 
         /**
@@ -1523,7 +1523,7 @@ namespace ts {
          * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
          * @param multiLine A value indicating whether the result should be emitted on multiple lines.
          */
-        function transformAndSpreadElements(elements: NodeArray<Expression>, needsUniqueCopy: boolean, multiLine: boolean): Expression {
+        function transformAndSpreadElements(elements: NodeArray<Expression>, needsUniqueCopy: boolean, multiLine: boolean, hasTrailingComma?: boolean): Expression {
             // [source]
             //      [a, ...b, c]
             //
@@ -1532,10 +1532,12 @@ namespace ts {
 
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
+            const numElements = elements.length;
             const segments = flatten(
-                spanMap(elements, isSpreadElementExpression, (chunk: Expression[], isSpread: boolean) => isSpread
-                    ? map(chunk, visitExpressionOfSpreadElement)
-                    : createArrayLiteral(visitNodes(createNodeArray(chunk), visitor, isExpression), /*location*/ undefined, multiLine)));
+                spanMap(elements, partitionSpreadElement, (partition, visitPartition, start, end) =>
+                    visitPartition(partition, multiLine, hasTrailingComma && end === numElements)
+                )
+            );
 
             if (segments.length === 1) {
                 return needsUniqueCopy && isSpreadElementExpression(elements[0])
@@ -1545,6 +1547,24 @@ namespace ts {
 
             // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
             return createArrayConcat(segments.shift(), segments);
+        }
+
+        function partitionSpreadElement(node: Expression) {
+            return isSpreadElementExpression(node)
+                ? visitSpanOfSpreadElements
+                : visitSpanOfNonSpreadElements;
+        }
+
+        function visitSpanOfSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+            return map(chunk, visitExpressionOfSpreadElement);
+        }
+
+        function visitSpanOfNonSpreadElements(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
+            return createArrayLiteral(
+                visitNodes(createNodeArray(chunk, /*location*/ undefined, hasTrailingComma), visitor, isExpression),
+                /*location*/ undefined,
+                multiLine
+            );
         }
 
         /**
