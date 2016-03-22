@@ -7725,7 +7725,7 @@ namespace ts {
                 return;
             }
             const declaration = symbol.valueDeclaration;
-            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration || (<VariableDeclaration>declaration).initializer) {
+            if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration || (<VariableDeclaration>declaration).initializer || isInAmbientContext(declaration)) {
                 return;
             }
             const parentParentKind = declaration.parent.parent.kind;
