@@ -23,8 +23,15 @@ namespace ts {
         const previousExpressionSubstitution = context.expressionSubstitution;
         context.enableExpressionSubstitution(SyntaxKind.Identifier);
         context.enableExpressionSubstitution(SyntaxKind.BinaryExpression);
+        context.enableExpressionSubstitution(SyntaxKind.PrefixUnaryExpression);
         context.enableExpressionSubstitution(SyntaxKind.PostfixUnaryExpression);
         context.expressionSubstitution = substituteExpression;
+        
+        context.enableEmitNotification(SyntaxKind.SourceFile);
+
+        const exportFunctionForFileMap: Identifier[] = [];
+        const previousOnEmitNode = context.onEmitNode;
+        context.onEmitNode = onEmitNode;
 
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
@@ -38,12 +45,19 @@ namespace ts {
 
         return transformSourceFile;
 
+        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+            exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
+            previousOnEmitNode(node, emit);
+            exportFunctionForFile = undefined;
+        }
+
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
 
                 // Perform the transformation.
                 const updated = transformSystemModuleWorker(node);
+                aggregateTransformFlags(updated);
 
                 currentSourceFile = undefined;
                 externalImports = undefined;
@@ -83,56 +97,37 @@ namespace ts {
             exportFunctionForFile = createUniqueName("exports");
             contextObjectForFile = createUniqueName("context");
 
+            exportFunctionForFileMap[getNodeId(node)] = exportFunctionForFile;
+
             const dependencyGroups = collectDependencyGroups(externalImports);
 
             const statements: Statement[] = [];
 
-            // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements);
+            // Add the body of the module.
+            addSystemModuleBody(statements, node, dependencyGroups);
 
-            // var __moduleName = context_1 && context_1.id;
-            addNode(statements,
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            "__moduleName",
-                            createLogicalAnd(
-                                contextObjectForFile,
-                                createPropertyAccess(contextObjectForFile, "id")
-                            )
-                        )
-                    ])
+            const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
+            const body = createFunctionExpression(
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                [
+                    createParameter(exportFunctionForFile),
+                    createParameter(contextObjectForFile)
+                ],
+                setNodeEmitFlags(
+                    createBlock(statements, /*location*/ undefined, /*multiLine*/ true),
+                    NodeEmitFlags.EmitEmitHelpers
                 )
             );
-
-            // Add the body of the module.
-            addSystemModuleBody(statements, node, dependencyGroups, statementOffset);
 
             // Write the call to `System.register`
             return updateSourceFile(node, [
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        [
-                            node.moduleName ? createLiteral(node.moduleName) : undefined,
-                            createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup)),
-                            createFunctionExpression(
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                [
-                                    createParameter(exportFunctionForFile),
-                                    createParameter(contextObjectForFile)
-                                ],
-                                setNodeEmitFlags(
-                                    setMultiLine(
-                                        createBlock(statements),
-                                        /*multiLine*/ true
-                                    ),
-                                    NodeEmitFlags.EmitEmitHelpers
-                                )
-                            )
-                        ]
+                        node.moduleName 
+                            ? [createLiteral(node.moduleName), dependencies, body]
+                            : [dependencies, body]
                     )
                 )
             ]);
@@ -145,7 +140,7 @@ namespace ts {
          * @param node The source file for the module.
          * @param statementOffset The offset at which to begin visiting the statements of the SourceFile.
          */
-        function addSystemModuleBody(statements: Statement[], node: SourceFile, dependencyGroups: DependencyGroup[], statementOffset: number) {
+        function addSystemModuleBody(statements: Statement[], node: SourceFile, dependencyGroups: DependencyGroup[]) {
             // Shape of the body in system modules:
             //
             //  function (exports) {
@@ -193,6 +188,25 @@ namespace ts {
             // only in the outer module body and not in the inner one.
             startLexicalEnvironment();
 
+            // Add any prologue directives.
+            const statementOffset = addPrologueDirectives(statements, node.statements, !compilerOptions.noImplicitUseStrict);
+
+            // var __moduleName = context_1 && context_1.id;
+            addNode(statements,
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            "__moduleName",
+                            createLogicalAnd(
+                                contextObjectForFile,
+                                createPropertyAccess(contextObjectForFile, "id")
+                            )
+                        )
+                    ])
+                )
+            );
+
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
             // as we both emit transformations as well as aggregate some data used when creating
@@ -222,11 +236,13 @@ namespace ts {
                             ),
                             createPropertyAssignment("execute",
                                 createFunctionExpression(
-                                    /*asteriskToken*/ node,
+                                    /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     [],
                                     createBlock(
-                                        executeStatements
+                                        executeStatements,
+                                        /*location*/ undefined,
+                                        /*multiLine*/ true
                                     )
                                 )
                             )
@@ -238,6 +254,9 @@ namespace ts {
         }
 
         function addExportStarIfNeeded(statements: Statement[]) {
+            if (!hasExportStars) {
+                return;
+            }
             // when resolving exports local exported entries/indirect exported entries in the module
             // should always win over entries with similar names that were added via star exports
             // to support this we store names of local/indirect exported entries in a set.
@@ -303,7 +322,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             exportedNamesStorageRef,
-                            createObjectLiteral(exportedNames)
+                            createObjectLiteral(exportedNames, /*location*/ undefined, /*multiline*/ true)
                         )
                     ])
                 )
@@ -371,7 +390,7 @@ namespace ts {
                                     createStatement(
                                         createCall(
                                             exportFunctionForFile,
-                                            [createObjectLiteral(properties)]
+                                            [createObjectLiteral(properties, /*location*/ undefined, /*multiline*/ true)]
                                         )
                                     )
                                 );
@@ -400,12 +419,12 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         [createParameter(parameterName)],
-                        createBlock(statements)
+                        createBlock(statements, /*location*/ undefined, /*multiLine*/ true)
                     )
                 );
             }
 
-            return createArrayLiteral(setters);
+            return createArrayLiteral(setters, /*location*/ undefined, /*multiLine*/ true);
         }
 
         function visitSourceElement(node: Node): VisitResult<Node> {
@@ -479,6 +498,9 @@ namespace ts {
 
                 case SyntaxKind.Block:
                     return visitBlock(<Block>node);
+
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(<ExpressionStatement>node);
 
                 default:
                     return node;
@@ -590,7 +612,7 @@ namespace ts {
             if (hasModifier(node, ModifierFlags.Export)) {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
-                node = createFunctionDeclaration(
+                const newNode = createFunctionDeclaration(
                     /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
@@ -604,11 +626,25 @@ namespace ts {
                 if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
+                
+                node = newNode;
             }
 
             // Hoist the function declaration to the outer module body function.
             hoistFunctionDeclaration(node);
             return undefined;
+        }
+
+        function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
+            const originalNode = getOriginalNode(node);
+            if ((originalNode.kind === SyntaxKind.ModuleDeclaration || originalNode.kind === SyntaxKind.EnumDeclaration) && hasModifier(originalNode, ModifierFlags.Export)) {
+                const name = getDeclarationName(<ModuleDeclaration | EnumDeclaration>originalNode);
+                return [
+                    node,
+                    createExportStatement(name, name)
+                ]
+            }
+            return node;
         }
 
         /**
@@ -893,8 +929,9 @@ namespace ts {
                     return substituteExpressionIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     return substituteBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    return substitutePostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
             return node;
         }
@@ -905,7 +942,10 @@ namespace ts {
         function substituteExpressionIdentifier(node: Identifier): Expression {
             const importDeclaration = resolver.getReferencedImportDeclaration(node);
             if (importDeclaration) {
-                return createImportBinding(importDeclaration);
+                const importBinding = createImportBinding(importDeclaration);
+                if (importBinding) {
+                    return importBinding;
+                }
             }
 
             return node;
@@ -925,7 +965,8 @@ namespace ts {
             const left = node.left;
             switch (left.kind) {
                 case SyntaxKind.Identifier:
-                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>left);
+                    const originalNode = getOriginalNode(left);
+                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>originalNode);
                     if (exportDeclaration) {
                         return createExportExpression(<Identifier>left, node);
                     }
@@ -1029,19 +1070,30 @@ namespace ts {
             return flattenDestructuringAssignment(context, node, /*needsValue*/ true, hoistVariableDeclaration);
         }
 
-        function substitutePostfixUnaryExpression(node: PostfixUnaryExpression): Expression {
+        function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
             const operand = node.operand;
-            if (isIdentifier(operand)) {
-                const exportDeclaration = resolver.getReferencedExportContainer(operand);
-                if (exportDeclaration) {
-                    const exportCall = createExportExpression(
-                        operand,
-                        createPrefix(node.operator, operand, node)
-                    );
+            const operator = node.operator;
+            const substitute = 
+                isIdentifier(operand) &&
+                (
+                    node.kind === SyntaxKind.PostfixUnaryExpression ||
+                    (node.kind === SyntaxKind.PrefixUnaryExpression && (operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken))
+                );
 
-                    return node.operator === SyntaxKind.PlusPlusToken
-                        ? createSubtract(exportCall, createLiteral(1))
-                        : createAdd(exportCall, createLiteral(1));
+            if (substitute) {
+                const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>operand);
+                if (exportDeclaration) {
+                    const expr = createPostfix(operand, node.operator, node);
+                    setNodeEmitFlags(expr, NodeEmitFlags.NoSubstitution);
+                    const call = createExportExpression(<Identifier>operand, expr);
+                    if (node.kind === SyntaxKind.PrefixUnaryExpression) {
+                        return call;
+                    }
+                    else {
+                        return operator === SyntaxKind.PlusPlusToken 
+                            ? createSubtract(call, createLiteral(1))
+                            : createAdd(call, createLiteral(1))
+                    }
                 }
             }
             return node;
@@ -1147,7 +1199,9 @@ namespace ts {
                                 [exports]
                             )
                         )
-                    ])
+                    ],
+                    /*location*/ undefined, 
+                    /*multiline*/ true)
                 )
             );
 
@@ -1194,6 +1248,9 @@ namespace ts {
             else if (isImportSpecifier(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent.parent.parent);
                 name = importDeclaration.propertyName || importDeclaration.name;
+            }
+            else {
+                return undefined;
             }
 
             if (name.originalKeywordKind && languageVersion === ScriptTarget.ES3) {
