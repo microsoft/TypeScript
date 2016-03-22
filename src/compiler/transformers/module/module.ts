@@ -178,6 +178,11 @@ namespace ts {
             ]);
         }
 
+        /**
+         * Transforms a SourceFile into an AMD or UMD module body.
+         *
+         * @param node The SourceFile node.
+         */
         function transformAsynchronousModuleBody(node: SourceFile) {
             startLexicalEnvironment();
 
@@ -195,7 +200,6 @@ namespace ts {
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-
             if (hasExportStars) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
@@ -208,23 +212,17 @@ namespace ts {
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (exportEquals && resolver.isValueAliasDeclaration(exportEquals)) {
                 if (emitAsReturn) {
-                    statements.push(
-                        startOnNewLine(
-                            createReturn(exportEquals.expression)
-                        )
-                    );
+                    statements.push(createReturn(exportEquals.expression));
                 }
                 else {
                     statements.push(
-                        startOnNewLine(
-                            createStatement(
-                                createAssignment(
-                                    createPropertyAccess(
-                                        createIdentifier("module"),
-                                        "exports"
-                                    ),
-                                    exportEquals.expression
-                                )
+                        createStatement(
+                            createAssignment(
+                                createPropertyAccess(
+                                    createIdentifier("module"),
+                                    "exports"
+                                ),
+                                exportEquals.expression
                             )
                         )
                     );
@@ -497,7 +495,7 @@ namespace ts {
                     return createStatement(
                         createObjectDefineProperty(
                             createIdentifier("exports"),
-                            createLiteral("_esModule"),
+                            createLiteral("__esModule"),
                             { value: createLiteral(true) }
                         )
                     );
@@ -540,7 +538,7 @@ namespace ts {
 
         function addExportMemberAssignment(statements: Statement[], node: FunctionDeclaration | ClassDeclaration) {
             if (hasModifier(node, ModifierFlags.Default)) {
-                addExportDefault(statements, getSynthesizedClone(node.name), /*location*/ node);
+                addExportDefault(statements, node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node), /*location*/ node);
             }
             else {
                 statements.push(
@@ -592,79 +590,57 @@ namespace ts {
 
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
-            if (node.name) {
-                if (hasModifier(node, ModifierFlags.Export)) {
-                    statements.push(
-                        createFunctionDeclaration(
-                            /*modifiers*/ undefined,
-                            /*asteriskToken*/ undefined,
-                            node.name,
-                            node.parameters,
-                            node.body,
-                            /*location*/ node
-                        )
-                    );
-
-                    addExportMemberAssignment(statements, node);
-                }
-                else {
-                    statements.push(node);
-                }
-
-                addExportMemberAssignments(statements, node.name);
-            }
-            else {
-                Debug.assert(hasModifier(node, ModifierFlags.Default));
-                addExportDefault(statements,
-                    createFunctionExpression(
+            const name = node.name || getGeneratedNameForNode(node);
+            if (hasModifier(node, ModifierFlags.Export)) {
+                statements.push(
+                    createFunctionDeclaration(
+                        /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
-                        /*name*/ undefined,
+                        name,
                         node.parameters,
                         node.body,
                         /*location*/ node
-                    ),
-                    /*location*/ node
+                    )
                 );
+
+                addExportMemberAssignment(statements, node);
             }
-            return statements;
+            else {
+                statements.push(node);
+            }
+
+            if (node.name) {
+                addExportMemberAssignments(statements, node.name);
+            }
+
+            return singleOrMany(statements);
         }
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
-            if (node.name) {
-                if (hasModifier(node, ModifierFlags.Export)) {
-                    statements.push(
-                        createClassDeclaration(
-                            /*modifiers*/ undefined,
-                            node.name,
-                            node.heritageClauses,
-                            node.members,
-                            /*location*/ node
-                        )
-                    );
-
-                    addExportMemberAssignment(statements, node);
-                }
-                else {
-                    addNode(statements, node);
-                }
-
-                addExportMemberAssignments(statements, node.name);
-            }
-            else {
-                Debug.assert(hasModifier(node, ModifierFlags.Default));
-                addExportDefault(statements,
-                    createClassExpression(
-                        /*name*/ undefined,
+            const name = node.name || getGeneratedNameForNode(node);
+            if (hasModifier(node, ModifierFlags.Export)) {
+                statements.push(
+                    createClassDeclaration(
+                        /*modifiers*/ undefined,
+                        name,
                         node.heritageClauses,
                         node.members,
                         /*location*/ node
-                    ),
-                    /*location*/ node
+                    )
                 );
+
+                addExportMemberAssignment(statements, node);
+            }
+            else {
+                statements.push(node);
             }
 
-            return statements;
+            if (node.name) {
+                addExportMemberAssignments(statements, node.name);
+            }
+
+            return singleOrMany(statements);
         }
 
         function substituteExpression(node: Expression) {

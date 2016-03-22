@@ -362,6 +362,12 @@ namespace ts {
             : undefined;
     }
 
+    export function singleOrMany<T>(array: T[]): T | T[] {
+        return array && array.length === 1
+            ? array[0]
+            : array;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
