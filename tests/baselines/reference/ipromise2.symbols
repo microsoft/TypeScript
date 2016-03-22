@@ -8,7 +8,7 @@ declare module Windows.Foundation {
 >T : Symbol(T, Decl(ipromise2.ts, 1, 30))
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>then : Symbol(IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
 >U : Symbol(U, Decl(ipromise2.ts, 2, 13))
 >success : Symbol(success, Decl(ipromise2.ts, 2, 16))
 >value : Symbol(value, Decl(ipromise2.ts, 2, 27))
@@ -27,7 +27,7 @@ declare module Windows.Foundation {
 >U : Symbol(U, Decl(ipromise2.ts, 2, 13))
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>then : Symbol(IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
 >U : Symbol(U, Decl(ipromise2.ts, 3, 13))
 >success : Symbol(success, Decl(ipromise2.ts, 3, 16))
 >value : Symbol(value, Decl(ipromise2.ts, 3, 27))
@@ -45,7 +45,7 @@ declare module Windows.Foundation {
 >U : Symbol(U, Decl(ipromise2.ts, 3, 13))
 
         then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>then : Symbol(IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
 >U : Symbol(U, Decl(ipromise2.ts, 4, 13))
 >success : Symbol(success, Decl(ipromise2.ts, 4, 16))
 >value : Symbol(value, Decl(ipromise2.ts, 4, 27))
@@ -63,7 +63,7 @@ declare module Windows.Foundation {
 >U : Symbol(U, Decl(ipromise2.ts, 4, 13))
 
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>then : Symbol(IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
 >U : Symbol(U, Decl(ipromise2.ts, 5, 13))
 >success : Symbol(success, Decl(ipromise2.ts, 5, 16))
 >value : Symbol(value, Decl(ipromise2.ts, 5, 27))
@@ -80,7 +80,7 @@ declare module Windows.Foundation {
 >U : Symbol(U, Decl(ipromise2.ts, 5, 13))
 
         done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
->done : Symbol(done, Decl(ipromise2.ts, 5, 139))
+>done : Symbol(IPromise.done, Decl(ipromise2.ts, 5, 139))
 >U : Symbol(U, Decl(ipromise2.ts, 6, 13))
 >success : Symbol(success, Decl(ipromise2.ts, 6, 16))
 >value : Symbol(value, Decl(ipromise2.ts, 6, 27))
@@ -91,7 +91,7 @@ declare module Windows.Foundation {
 >progress : Symbol(progress, Decl(ipromise2.ts, 6, 86))
 
         value: T;
->value : Symbol(value, Decl(ipromise2.ts, 6, 117))
+>value : Symbol(IPromise.value, Decl(ipromise2.ts, 6, 117))
 >T : Symbol(T, Decl(ipromise2.ts, 1, 30))
     }
 }

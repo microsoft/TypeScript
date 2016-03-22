@@ -4,7 +4,7 @@ export class MyClass {
 >MyClass : Symbol(MyClass, Decl(visibilityOfTypeParameters.ts, 0, 0))
 
     protected myMethod<T>(val: T): T {
->myMethod : Symbol(myMethod, Decl(visibilityOfTypeParameters.ts, 1, 22))
+>myMethod : Symbol(MyClass.myMethod, Decl(visibilityOfTypeParameters.ts, 1, 22))
 >T : Symbol(T, Decl(visibilityOfTypeParameters.ts, 2, 23))
 >val : Symbol(val, Decl(visibilityOfTypeParameters.ts, 2, 26))
 >T : Symbol(T, Decl(visibilityOfTypeParameters.ts, 2, 23))

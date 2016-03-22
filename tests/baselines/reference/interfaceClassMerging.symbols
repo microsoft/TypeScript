@@ -3,34 +3,34 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
 
     method(a: number): string;
->method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+>method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
 >a : Symbol(a, Decl(interfaceClassMerging.ts, 1, 11))
 
     optionalMethod?(a: number): string;
->optionalMethod : Symbol(optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
+>optionalMethod : Symbol(Foo.optionalMethod, Decl(interfaceClassMerging.ts, 1, 30))
 >a : Symbol(a, Decl(interfaceClassMerging.ts, 2, 20))
 
     property: string;
->property : Symbol(property, Decl(interfaceClassMerging.ts, 2, 39))
+>property : Symbol(Foo.property, Decl(interfaceClassMerging.ts, 2, 39))
 
     optionalProperty?: string;
->optionalProperty : Symbol(optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
+>optionalProperty : Symbol(Foo.optionalProperty, Decl(interfaceClassMerging.ts, 3, 21))
 }
 
 class Foo {
 >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
 
     additionalProperty: string;
->additionalProperty : Symbol(additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
+>additionalProperty : Symbol(Foo.additionalProperty, Decl(interfaceClassMerging.ts, 7, 11))
 
     additionalMethod(a: number): string {
->additionalMethod : Symbol(additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
+>additionalMethod : Symbol(Foo.additionalMethod, Decl(interfaceClassMerging.ts, 8, 31))
 >a : Symbol(a, Decl(interfaceClassMerging.ts, 10, 21))
 
         return this.method(0);
->this.method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+>this.method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
 >this : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
->method : Symbol(method, Decl(interfaceClassMerging.ts, 0, 15))
+>method : Symbol(Foo.method, Decl(interfaceClassMerging.ts, 0, 15))
     }
 }
 
@@ -39,7 +39,7 @@ class Bar extends Foo {
 >Foo : Symbol(Foo, Decl(interfaceClassMerging.ts, 0, 0), Decl(interfaceClassMerging.ts, 5, 1))
 
     method(a: number) {
->method : Symbol(method, Decl(interfaceClassMerging.ts, 15, 23))
+>method : Symbol(Bar.method, Decl(interfaceClassMerging.ts, 15, 23))
 >a : Symbol(a, Decl(interfaceClassMerging.ts, 16, 11))
 
         return this.optionalProperty;

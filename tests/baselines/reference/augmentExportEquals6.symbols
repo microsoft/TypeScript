@@ -31,7 +31,7 @@ x.B.b = 1;
 declare module "./file1" {
     interface A { a: number }
 >A : Symbol(A, Decl(file1.ts, 2, 15), Decl(file2.ts, 4, 26))
->a : Symbol(a, Decl(file2.ts, 5, 17))
+>a : Symbol(A.a, Decl(file2.ts, 5, 17))
 
     namespace B {
 >B : Symbol(B, Decl(file1.ts, 3, 21), Decl(file2.ts, 5, 29))
