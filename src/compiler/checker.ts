@@ -7106,6 +7106,9 @@ namespace ts {
             result.previous = [location];
             return result;
         }
+        function cleanTransientIdentifier() {
+            nodeLinks[-1] = undefined;
+        }
 
         function getResolvedSymbol(node: Identifier): Symbol {
             if (node.id === -1) {
@@ -7380,7 +7383,7 @@ namespace ts {
                 if (left.kind === SyntaxKind.Identifier) {
                     const leftSymbol = resolveName(<Identifier>left, (<Identifier>left).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
                     const rightSymbol = resolveName(<Identifier>right, (<Identifier>right).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
-                    return leftSymbol.id === rightSymbol.id;
+                    return leftSymbol !== undefined && rightSymbol !== undefined && leftSymbol.id === rightSymbol.id;
                 }
                 if (left.kind === SyntaxKind.ThisKeyword) {
                     return getThisContainer(left, false) === getThisContainer(right, false);
@@ -7463,11 +7466,12 @@ namespace ts {
             const cache: { [nodeId: number]: Type } = {};
 
             let loop = false;
-            const narrowedType = getType(reference, false, true);
+            let narrowedType = getType(reference, false, true);
             if (nodeLinks.narrowingState === NarrowingState.Failed) {
                 // During recursion, the narrowing of this node failed.
                 return initialType;
             }
+            if (narrowedType === emptyUnionType) narrowedType = initialType;
             nodeLinks.narrowingState = NarrowingState.Done;
             return nodeLinks.localType = narrowedType;
 
@@ -7922,7 +7926,9 @@ namespace ts {
             // a hypothetical question of what type the symbol would have if there was a reference
             // to it at the given location. To answer that question we manufacture a transient
             // identifier at the location and narrow with respect to that identifier.
-            return getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+            const narrowedType = getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+            cleanTransientIdentifier();
+            return narrowedType;
         }
 
         function isLeftHandSideOfAssignment(node: Node): boolean {
