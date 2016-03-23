@@ -7103,6 +7103,7 @@ namespace ts {
             result.resolvedSymbol = symbol;
             result.parent = location;
             result.id = -1;
+            result.previous = [location];
             return result;
         }
 
@@ -7299,7 +7300,7 @@ namespace ts {
             return false;
         }
 
-        function getPreviousOccurences(symbol: Symbol, where: Node, callback: (node: Node, guards: BranchFlow[]) => boolean) {
+        function getPreviousOccurences(reference: Node, where: Node, callback: (node: Node, guards: BranchFlow[], isSameSymbol: boolean) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
             const guards: BranchFlow[] = [];
@@ -7323,14 +7324,22 @@ namespace ts {
                     nodeId = getNodeId(<Node>location);
                     if (visited[nodeId]) continue;
 
-                    let isSameIdentifier = false;
-                    if ((<Node>location).kind === SyntaxKind.Identifier) {
-                        const identifier = <Identifier>location;
-                        const otherSymbol = resolveName(identifier, identifier.text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
-                        isSameIdentifier = identifier !== where && (identifier).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id;
+                    const same = isSameSymbol(reference, <Node>location);
+                    let previousLocation = <Node>location;
+                    if (same && reference.kind === SyntaxKind.PropertyAccessExpression) {
+                        let node = (<PropertyAccessExpression>location).parent;
+                        while (node.kind === SyntaxKind.PropertyAccessExpression) {
+                            if (isLeftHandSideOfAssignment(node)) {
+                                // Reference node was part of an assignment
+                                // Example: a.b.c is reference, a or a.b was assigned
+                                previousLocation = undefined;
+                                break;
+                            }
+                            node = node.parent;
+                        }
                     }
-                    if (isSameIdentifier || isBranchStart(<Node>location)) {
-                        if (callback(<Identifier> location, guards)) {
+                    if (same || isBranchStart(<Node>location)) {
+                        if (callback(previousLocation, guards, same)) {
                             stop = true;
                             break;
                         }
@@ -7347,7 +7356,7 @@ namespace ts {
                 }
                 if (location.previous === undefined) {
                     // We cannot do analysis in a catch or finally block
-                    if (callback(undefined, guards)) {
+                    if (callback(undefined, guards, true)) {
                         stop = true;
                         break;
                     }
@@ -7365,6 +7374,25 @@ namespace ts {
 
             return stop;
 
+            function isSameSymbol(left: Node, right: Node): boolean {
+                if (left === right) return false;
+                if (left.kind !== right.kind) return false;
+                if (left.kind === SyntaxKind.Identifier) {
+                    const leftSymbol = resolveName(<Identifier>left, (<Identifier>left).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
+                    const rightSymbol = resolveName(<Identifier>right, (<Identifier>right).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
+                    return leftSymbol.id === rightSymbol.id;
+                }
+                if (left.kind === SyntaxKind.ThisKeyword) {
+                    return getThisContainer(left, false) === getThisContainer(right, false);
+                }
+                if (left.kind === SyntaxKind.PropertyAccessExpression) {
+                    if ((<PropertyAccessExpression>left).name.text !== (<PropertyAccessExpression>right).name.text) {
+                        return false;
+                    }
+                    return isSameSymbol((<PropertyAccessExpression>left).expression, (<PropertyAccessExpression>right).expression);
+                }
+                return false;
+            }
             function isBranchStart(node: Node) {
                 const guard = guards[guards.length - 1];
                 if (!guard) return false;
@@ -7373,51 +7401,77 @@ namespace ts {
         }
 
         // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Node) {
-            const initialType = getTypeOfSymbol(symbol);
+        function getNarrowedTypeOfReference(initialType: Type, reference: Node) { 
             const isUnion = (initialType.flags & TypeFlags.Union) !== 0;
+            
+            if (!(initialType.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
+                return initialType;
+            }
+            const leftmostNode = getLeftmostIdentifierOrThis(reference);
+            if (!leftmostNode) {
+                return initialType;
+            }
+            let top: Node;
+            const isDottedName = leftmostNode !== reference;
+            let thisKeyword: Node;
+            let leftmostSymbol: Symbol;
+            if (leftmostNode.kind === SyntaxKind.Identifier) {
+                leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
+                if (!leftmostSymbol) {
+                    return initialType;
+                }
+                const declaration = leftmostSymbol.valueDeclaration;
+                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
+                    return initialType;
+                }
+                top = getDeclarationContainer(declaration);
 
-            // Only narrow when symbol is variable of type any or an object, union, or type parameter type
-            if (!location || !(symbol.flags & SymbolFlags.Variable)) return initialType;
-            if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+                // Only narrow when symbol is variable of type any or an object, union, or type parameter type
+                if (!(leftmostSymbol.flags & SymbolFlags.Variable)) return initialType;
 
-            if (isLeftHandSideOfAssignment(location)) return initialType;
-
-            let saveLocalType = false;
-            let nodeLinks: NodeLinks;
-            if (location.kind === SyntaxKind.Identifier) {
-                const locationSymbol = resolveName(<Identifier>location, (<Identifier>location).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
-                if (locationSymbol && locationSymbol.id === symbol.id) {
-                    nodeLinks = getNodeLinks(location);
-                    if (nodeLinks.identifierNarrowingState === NarrowingState.Done) return nodeLinks.identifierLocalType;
-                    if (nodeLinks.identifierNarrowingState === NarrowingState.Narrowing) {
-                        nodeLinks.identifierNarrowingState = NarrowingState.Failed;
-                        return nodeLinks.identifierLocalType = initialType;
-                    }
-                    saveLocalType = true;
-                    nodeLinks.identifierNarrowingState = NarrowingState.Narrowing;
+                if (!leftmostSymbol.declarations) return initialType;
+                for (const declaration of leftmostSymbol.declarations) {
+                    if (getSourceFileOfNode(declaration) !== getSourceFileOfNode(reference)) return initialType;
                 }
             }
-            if (!symbol.declarations) return initialType;
-            for (const declaration of symbol.declarations) {
-                if (getSourceFileOfNode(declaration) !== getSourceFileOfNode(location)) return initialType;
+            else {
+                // leftmostNode is `this` keyword
+                if (!isDottedName) {
+                    thisKeyword = reference;
+                }
             }
+
+            const symbol = isDottedName ? undefined : leftmostSymbol;
+            const isThisExpression = thisKeyword !== undefined;
+            const isIdentifier = !isDottedName && !isThisExpression;
+
+            if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+
+            if (isLeftHandSideOfAssignment(reference)) {
+                return initialType;
+            }
+
+            let nodeLinks = getNodeLinks(reference);
+            if (nodeLinks.narrowingState === NarrowingState.Done) return nodeLinks.localType;
+            if (nodeLinks.narrowingState === NarrowingState.Narrowing) {
+                nodeLinks.narrowingState = NarrowingState.Failed;
+                return nodeLinks.localType = initialType;
+            }
+            nodeLinks.narrowingState = NarrowingState.Narrowing;
+
             const visited: FlowMarkerTarget[] = [];
             const cache: { [nodeId: number]: Type } = {};
 
             let loop = false;
-            const narrowedType = getType(location, false);
-            if (saveLocalType) {
-                if (nodeLinks.identifierNarrowingState === NarrowingState.Failed) {
-                    // During recursion, the narrowing of this node failed.
-                    return initialType;
-                }
-                nodeLinks.identifierNarrowingState = NarrowingState.Done;
-                nodeLinks.identifierLocalType = narrowedType;
+            const narrowedType = getType(reference, false, true);
+            if (nodeLinks.narrowingState === NarrowingState.Failed) {
+                // During recursion, the narrowing of this node failed.
+                return initialType;
             }
-            return narrowedType;
+            nodeLinks.narrowingState = NarrowingState.Done;
+            return nodeLinks.localType = narrowedType;
 
-            function getType(where: Node, after: boolean) {
+            function getType(where: Node, after: boolean, isSameSymbol: boolean) {
                 if (where === undefined) return initialType;
                 const whereId = getNodeId(where);
                 if (after && cache[whereId]) {
@@ -7427,45 +7481,44 @@ namespace ts {
                     loop = true;
                     return undefined;
                 }
-                const isIdentifier = where.kind === SyntaxKind.Identifier;
-                let identifierNodeLinks: NodeLinks;
-                if (isIdentifier) {
+                let nodeLinks: NodeLinks;
+                if (isSameSymbol) {
                     if (after) {
-                        const assignment = getAssignedTypeAtLocation(<Identifier>where);
+                        const assignment = getAssignedTypeAtLocation(where);
                         if (assignment) {
                             return cache[whereId] = narrowTypeByAssignment(assignment);
                         }
                     }
-                    identifierNodeLinks = getNodeLinks(where);
-                    if (identifierNodeLinks.identifierNarrowingState === NarrowingState.Done) {
-                        return identifierNodeLinks.identifierLocalType;
+                    nodeLinks = getNodeLinks(where);
+                    if (nodeLinks.narrowingState === NarrowingState.Done) {
+                        return nodeLinks.localType;
                     }
                 }
                 let types: Type[] = [];
                 visited.push(where);
-                const fallback = getPreviousOccurences(symbol, where, handleGuards);
+                const fallback = getPreviousOccurences(reference, where, handleGuards);
                 visited.pop();
                 const type = fallback || types.length === 0 ? initialType : getUnionType(types);
-                if (!loop && isIdentifier && identifierNodeLinks.identifierNarrowingState !== NarrowingState.Failed) {
-                    identifierNodeLinks.identifierLocalType = type;
+                if (!loop && isSameSymbol && nodeLinks.narrowingState !== NarrowingState.Failed) {
+                    nodeLinks.localType = type;
                 }
                 if (after) {
                     cache[whereId] = type;
                 }
                 return type;
 
-                function handleGuards(node: Identifier, guards: BranchFlow[]) {
+                function handleGuards(node: Node, guards: BranchFlow[], isSameSymbol: boolean) {
                     if (!node && guards.length === 0) {
                         return true;
                     }
-                    let type = getType(node, true);
+                    let type = getType(node, true, isSameSymbol);
                     if (type === undefined) {
                         return false;
                     }
                     for (let i = guards.length - 1; i >= 0; i--) {
                         const { expression, trueBranch } = guards[i];
                         const narrowed = narrowType(type, expression, trueBranch);
-                        if (narrowed !== type && isVariableAssignedWithin(symbol, expression)) {
+                        if (narrowed !== type && isAnyPartOfReferenceAssignedWithin(reference, expression)) {
                             // A variable could be reassigned in a type guard. Making this work would require some non-trivial
                             // work. Instead, we fall back to the initial type, since no one would probably write such code.
                             // Example:
@@ -7486,121 +7539,6 @@ namespace ts {
                     return false;
                 }
             }
-            
-            function isLeftHandSideOfAssignment(node: Node): boolean {
-                const parent = node.parent;
-                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                    return isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
-                }
-                else if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
-                    return hasInitializer(<VariableDeclaration>parent);
-                }
-                else if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ObjectLiteralElement>parent).name === node) {
-                    return isLeftHandSideOfAssignment(parent.parent);
-                }
-                else if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
-                    return isLeftHandSideOfAssignment(parent.parent);
-                }
-                else if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
-                    return isLeftHandSideOfAssignment(parent);
-                }
-                else if (parent.kind === SyntaxKind.SpreadElementExpression) {
-                    return isLeftHandSideOfAssignment(parent);
-                }
-                else if (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) {
-                    return (<ForInStatement | ForOfStatement>parent).initializer === node;
-                }
-                return false;
-            }
-        }
-
-        // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
-                return type;
-            }
-            const leftmostNode = getLeftmostIdentifierOrThis(reference);
-            if (!leftmostNode) {
-                return type;
-            }
-            let top: Node;
-            if (leftmostNode.kind === SyntaxKind.Identifier) {
-                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
-                if (!leftmostSymbol) {
-                    return type;
-                }
-                const declaration = leftmostSymbol.valueDeclaration;
-                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                    return type;
-                }
-                top = getDeclarationContainer(declaration);
-            }
-            const originalType = type;
-            const nodeStack: { node: Node, child: Node }[] = [];
-            let node: Node = reference;
-            loop: while (node.parent) {
-                const child = node;
-                node = node.parent;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.BinaryExpression:
-                        nodeStack.push({node, child});
-                        break;
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleDeclaration:
-                        break loop;
-                    default:
-                        if (node === top || isFunctionLikeKind(node.kind)) {
-                            break loop;
-                        }
-                        break;
-                }
-            }
-
-            let nodes: { node: Node, child: Node };
-            while (nodes = nodeStack.pop()) {
-                const {node, child} = nodes;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                        // In a branch of an if statement, narrow based on controlling expression
-                        if (child !== (<IfStatement>node).expression) {
-                            type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
-                        }
-                        break;
-                    case SyntaxKind.ConditionalExpression:
-                        // In a branch of a conditional expression, narrow based on controlling condition
-                        if (child !== (<ConditionalExpression>node).condition) {
-                            type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
-                        }
-                        break;
-                    case SyntaxKind.BinaryExpression:
-                        // In the right operand of an && or ||, narrow based on left operand
-                        if (child === (<BinaryExpression>node).right) {
-                            if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
-                            }
-                            else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
-                            }
-                        }
-                        break;
-                    default:
-                        Debug.fail("Unreachable!");
-                }
-
-                // Use original type if construct contains assignments to variable
-                if (type !== originalType && isAnyPartOfReferenceAssignedWithin(reference, node)) {
-                    type = originalType;
-                }
-            }
-
-            // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-            if (type === emptyUnionType) {
-                type = originalType;
-            }
-
-            return type;
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
@@ -7839,6 +7777,8 @@ namespace ts {
                 return type;
             }
             function getAssignedTypeAtLocation(node: Node): Type {
+                if (isThisExpression) return undefined;
+
                 // Only union types can be narrowed by assignments.
                 // Other types will always fall back to their initial type.
 
@@ -7849,7 +7789,8 @@ namespace ts {
                             // The type of the variable was infered by this initializer.
                             // Thus, we don't have to check the type of the initializer again.
                             return unknownType;
-                        } else {
+                        }
+                        else {
                             return checkExpressionCached((<VariableDeclaration>parent).initializer);
                         }
                     }
@@ -7930,6 +7871,7 @@ namespace ts {
                 return undefined;
             }
             function getPropertyAssignmentType(parentType: Type, propertyAssignment: PropertyAssignment | ShorthandPropertyAssignment) {
+                if (!isUnion) return unknownType;
                 const name = propertyAssignment.name;
                 if (name.kind === SyntaxKind.Identifier) {
                     const property = getPropertyOfType(parentType, (<Identifier>name).text);
@@ -7938,8 +7880,8 @@ namespace ts {
                 return unknownType;
             }
             function narrowTypeByAssignment(assignedType: Type) {
-                // Narrow union types only
-                if (!isUnion || assignedType === anyType || assignedType === unknownType) return initialType;
+                if (!isUnion) return initialType;
+                if (assignedType === anyType || assignedType === unknownType) return initialType;
 
                 const assignedTypes = (assignedType.flags & TypeFlags.Union) ? (<UnionType> assignedType).types : [assignedType];
 
@@ -7981,6 +7923,32 @@ namespace ts {
             // to it at the given location. To answer that question we manufacture a transient
             // identifier at the location and narrow with respect to that identifier.
             return getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+        }
+
+        function isLeftHandSideOfAssignment(node: Node): boolean {
+            const parent = node.parent;
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                return isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
+            }
+            else if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
+                return hasInitializer(<VariableDeclaration>parent);
+            }
+            else if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ObjectLiteralElement>parent).name === node) {
+                return isLeftHandSideOfAssignment(parent.parent);
+            }
+            else if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
+                return isLeftHandSideOfAssignment(parent.parent);
+            }
+            else if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                return isLeftHandSideOfAssignment(parent);
+            }
+            else if (parent.kind === SyntaxKind.SpreadElementExpression) {
+                return isLeftHandSideOfAssignment(parent);
+            }
+            else if (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) {
+                return (<ForInStatement | ForOfStatement>parent).initializer === node;
+            }
+            return false;
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {

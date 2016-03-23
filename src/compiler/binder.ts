@@ -1376,8 +1376,12 @@ namespace ts {
         function bindWorker(node: Node) {
             switch (node.kind) {
                 /* Strict mode checks */
+                case SyntaxKind.ThisKeyword:
+                    return bindThisExpression(node);
                 case SyntaxKind.Identifier:
                     return bindIdentifier(<Identifier>node);
+                case SyntaxKind.PropertyAccessExpression:
+                    return bindPropertyAccessExpression(<PropertyAccessExpression>node);
                 case SyntaxKind.BinaryExpression:
                     if (isInJavaScriptFile(node)) {
                         const specialKind = getSpecialPropertyAssignmentKind(node);
@@ -1799,6 +1803,9 @@ namespace ts {
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
 
+        function bindThisExpression(node: Node) {
+            bindFlowMarker(node);
+        }
         function bindIdentifier(node: Identifier) {
             checkStrictModeIdentifier(node);
             if (isExpression(node)
@@ -1810,6 +1817,9 @@ namespace ts {
                 }
                 bindFlowMarker(node);
             }
+        }
+        function bindPropertyAccessExpression(node: PropertyAccessExpression) {
+            bindFlowMarker(node);
         }
 
         function bindFlowMarker(node: Node) {
