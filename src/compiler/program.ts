@@ -15,7 +15,7 @@ namespace ts {
     const defaultLibrarySearchPaths = <Path[]>[
         "typings/",
         "node_modules/",
-        "node_modules/@types/",
+        "node_modules/@typings/",
     ];
 
     export const version = "1.9.0";
@@ -1597,7 +1597,7 @@ namespace ts {
                             const otherFileText = host.readFile(secondaryResult);
                             if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos,
-                                    Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_a_local_typings_folder_to_resolve_this_conflict,
+                                    Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_the_typings_folder_to_resolve_this_conflict,
                                     ref.fileName,
                                     secondaryResult,
                                     previousResolution.resolvedFileName));
