@@ -5,6 +5,6 @@ function Test() { }
 
 <Test></Test>
 ><Test></Test> : any
->Test : any
->Test : any
+>Test : () => void
+>Test : () => void
 

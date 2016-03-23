@@ -9033,7 +9033,12 @@ namespace ts {
             checkJsxOpeningLikeElement(node.openingElement);
 
             // Perform resolution on the closing tag so that rename/go to definition/etc work
-            getJsxTagSymbol(node.closingElement);
+            if (isJsxIntrinsicIdentifier(node.closingElement.tagName)) {
+                getIntrinsicTagSymbol(node.closingElement);
+            }
+            else {
+                checkExpression(node.closingElement.tagName);
+            }
 
             // Check children
             for (const child of node.children) {
@@ -9141,18 +9146,6 @@ namespace ts {
                 return jsxTypes[name] = getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType;
             }
             return jsxTypes[name];
-        }
-
-        function getJsxTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
-            if (isJsxIntrinsicIdentifier(node.tagName)) {
-                return getIntrinsicTagSymbol(node);
-            }
-            else if (node.tagName.kind === SyntaxKind.Identifier) {
-                return resolveEntityName(node.tagName, SymbolFlags.Value | SymbolFlags.Alias);
-            }
-            else {
-                return checkExpression(node.tagName).symbol;
-            }
         }
 
         /**
@@ -16211,12 +16204,6 @@ namespace ts {
                 meaning |= SymbolFlags.Alias;
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
-            else if ((entityName.parent.kind === SyntaxKind.JsxOpeningElement) ||
-                (entityName.parent.kind === SyntaxKind.JsxSelfClosingElement) ||
-                (entityName.parent.kind === SyntaxKind.JsxClosingElement)) {
-
-                return getJsxTagSymbol(<JsxOpeningLikeElement>entityName.parent);
-            }
             else if (isExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
@@ -16224,6 +16211,10 @@ namespace ts {
                 }
 
                 if (entityName.kind === SyntaxKind.Identifier) {
+                    if (isJSXTagName(entityName) && isJsxIntrinsicIdentifier(<Identifier>entityName)) {
+                        return getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
+                    }
+
                     // Include aliases in the meaning, this ensures that we do not follow aliases to where they point and instead
                     // return the alias symbol.
                     const meaning: SymbolFlags = SymbolFlags.Value | SymbolFlags.Alias;

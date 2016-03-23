@@ -953,6 +953,16 @@ namespace ts {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function isJSXTagName(node: Node) {
+        const parent = node.parent;
+        if (parent.kind === SyntaxKind.JsxOpeningElement ||
+            parent.kind === SyntaxKind.JsxSelfClosingElement ||
+            parent.kind === SyntaxKind.JsxClosingElement) {
+            return (<JsxOpeningLikeElement>parent).tagName === node;
+        }
+        return false;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
@@ -994,9 +1004,9 @@ namespace ts {
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-                return node.parent.kind === SyntaxKind.TypeQuery;
+                return node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node);
             case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery) {
+                if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
             // fall through
