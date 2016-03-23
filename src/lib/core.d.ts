@@ -836,7 +836,7 @@ interface RegExp {
     lastIndex: number;
 
     // Non-standard extensions
-    compile(): RegExp | undefined;
+    compile(): this;
 }
 
 interface RegExpConstructor {
