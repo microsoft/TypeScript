@@ -1846,14 +1846,20 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPostion(negative: boolean, openingBrace: string) {
 
-            let charCode = 0x28; // '('
-            switch (openingBrace) {
-                case "{": charCode = ts.CharacterCodes.openBrace; break;
-                case "[": charCode = ts.CharacterCodes.openBracket; break;
-                case "'": charCode = ts.CharacterCodes.singleQuote; break;
-                case '"': charCode = ts.CharacterCodes.doubleQuote; break;
-                case "`": charCode = ts.CharacterCodes.backtick; break;
-                case "<": charCode = ts.CharacterCodes.lessThan; break;
+            const openBraceMap: ts.Map<ts.CharacterCodes> = {
+                "(": ts.CharacterCodes.openParen,
+                "{": ts.CharacterCodes.openBrace,
+                "[": ts.CharacterCodes.openBracket,
+                "'": ts.CharacterCodes.singleQuote,
+                '"': ts.CharacterCodes.doubleQuote,
+                "`": ts.CharacterCodes.backtick,
+                "<": ts.CharacterCodes.lessThan
+            };
+
+            const charCode = openBraceMap[openingBrace];
+
+            if (!charCode) {
+                this.raiseError(`Invalid openingBrace '${openingBrace}' specified.`);
             }
 
             const position = this.currentCaretPosition;

@@ -7331,11 +7331,7 @@ namespace ts {
                 return false;
             }
 
-            if (isInJsxAttribute(sourceFile, position)) {
-                return false;
-            }
-
-            if (isInsideJsxElement(sourceFile, position)) {
+            if (isInsideJsxElementOrAttribute(sourceFile, position)) {
                 return openingBrace === CharacterCodes.openBrace;
             }
 
