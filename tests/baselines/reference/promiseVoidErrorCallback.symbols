@@ -3,21 +3,21 @@ interface T1 {
 >T1 : Symbol(T1, Decl(promiseVoidErrorCallback.ts, 0, 0))
 
     __t1: string;
->__t1 : Symbol(__t1, Decl(promiseVoidErrorCallback.ts, 0, 14))
+>__t1 : Symbol(T1.__t1, Decl(promiseVoidErrorCallback.ts, 0, 14))
 }
 
 interface T2 {
 >T2 : Symbol(T2, Decl(promiseVoidErrorCallback.ts, 2, 1))
 
     __t2: string;
->__t2 : Symbol(__t2, Decl(promiseVoidErrorCallback.ts, 4, 14))
+>__t2 : Symbol(T2.__t2, Decl(promiseVoidErrorCallback.ts, 4, 14))
 }
 
 interface T3 {
 >T3 : Symbol(T3, Decl(promiseVoidErrorCallback.ts, 6, 1))
 
     __t3: string;
->__t3 : Symbol(__t3, Decl(promiseVoidErrorCallback.ts, 8, 14))
+>__t3 : Symbol(T3.__t3, Decl(promiseVoidErrorCallback.ts, 8, 14))
 }
 
 function f1(): Promise<T1> {

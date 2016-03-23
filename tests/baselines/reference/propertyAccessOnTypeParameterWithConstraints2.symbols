@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
 
     foo(): string { return ''; }
->foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 2, 9))
 }
 
 class B extends A {
@@ -13,7 +13,7 @@ class B extends A {
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
 
     bar(): string {
->bar : Symbol(bar, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 6, 19))
+>bar : Symbol(B.bar, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 6, 19))
 
         return '';
     }
@@ -27,7 +27,7 @@ class C<U extends A, T extends A> {
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
 
     f() {
->f : Symbol(f, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 35))
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 35))
 
         var x: U;
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 14, 11))
@@ -46,7 +46,7 @@ class C<U extends A, T extends A> {
     }
 
     g(x: U) {
->g : Symbol(g, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 17, 5))
+>g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 17, 5))
 >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 19, 6))
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 12, 8))
 
@@ -100,7 +100,7 @@ interface I<U extends A, T extends A> {
 >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 0, 0))
 
     foo: U;
->foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 39))
 >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints2.ts, 40, 12))
 }
 //interface I<U extends T, T extends A> {

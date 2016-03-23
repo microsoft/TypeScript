@@ -13,10 +13,10 @@ class B extends A {
     constructor() { super({ test: () => this.someMethod()}); } 
 >super : Symbol(A, Decl(captureThisInSuperCall.ts, 0, 0))
 >test : Symbol(test, Decl(captureThisInSuperCall.ts, 5, 27))
->this.someMethod : Symbol(someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
+>this.someMethod : Symbol(B.someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
 >this : Symbol(B, Decl(captureThisInSuperCall.ts, 2, 1))
->someMethod : Symbol(someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
+>someMethod : Symbol(B.someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
 
     someMethod() {}
->someMethod : Symbol(someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
+>someMethod : Symbol(B.someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
 }

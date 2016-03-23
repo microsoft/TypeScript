@@ -16,7 +16,7 @@ declare class Thing {
 >Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))
 
 	foo(): number;
->foo : Symbol(foo, Decl(foo.d.ts, 1, 21))
+>foo : Symbol(Thing.foo, Decl(foo.d.ts, 1, 21))
 }
 export = Thing;
 >Thing : Symbol(Thing, Decl(foo.d.ts, 0, 0))

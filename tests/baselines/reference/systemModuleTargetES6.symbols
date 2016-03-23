@@ -1,0 +1,30 @@
+=== tests/cases/compiler/systemModuleTargetES6.ts ===
+export class MyClass { }
+>MyClass : Symbol(MyClass, Decl(systemModuleTargetES6.ts, 0, 0))
+
+export class MyClass2 {
+>MyClass2 : Symbol(MyClass2, Decl(systemModuleTargetES6.ts, 0, 24))
+
+    static value = 42;
+>value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
+
+    static getInstance() { return MyClass2.value; }
+>getInstance : Symbol(MyClass2.getInstance, Decl(systemModuleTargetES6.ts, 2, 22))
+>MyClass2.value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
+>MyClass2 : Symbol(MyClass2, Decl(systemModuleTargetES6.ts, 0, 24))
+>value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
+}
+
+export function myFunction() {
+>myFunction : Symbol(myFunction, Decl(systemModuleTargetES6.ts, 4, 1))
+
+    return new MyClass();
+>MyClass : Symbol(MyClass, Decl(systemModuleTargetES6.ts, 0, 0))
+}
+
+export function myFunction2() {
+>myFunction2 : Symbol(myFunction2, Decl(systemModuleTargetES6.ts, 8, 1))
+
+    return new MyClass2();
+>MyClass2 : Symbol(MyClass2, Decl(systemModuleTargetES6.ts, 0, 24))
+}

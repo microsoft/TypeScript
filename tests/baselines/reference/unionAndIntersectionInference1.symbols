@@ -157,21 +157,21 @@ interface Man {
 >Man : Symbol(Man, Decl(unionAndIntersectionInference1.ts, 51, 23))
 
     walks: boolean;
->walks : Symbol(walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
+>walks : Symbol(Man.walks, Decl(unionAndIntersectionInference1.ts, 55, 15))
 }
 
 interface Bear {
 >Bear : Symbol(Bear, Decl(unionAndIntersectionInference1.ts, 57, 1))
 
     roars: boolean;
->roars : Symbol(roars, Decl(unionAndIntersectionInference1.ts, 59, 16))
+>roars : Symbol(Bear.roars, Decl(unionAndIntersectionInference1.ts, 59, 16))
 }
 
 interface Pig {
 >Pig : Symbol(Pig, Decl(unionAndIntersectionInference1.ts, 61, 1))
 
     oinks: boolean;
->oinks : Symbol(oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
+>oinks : Symbol(Pig.oinks, Decl(unionAndIntersectionInference1.ts, 63, 15))
 }
 
 declare function pigify<T>(y: T & Bear): T & Pig;
