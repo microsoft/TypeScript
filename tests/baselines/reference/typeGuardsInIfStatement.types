@@ -183,7 +183,7 @@ function foo7(x: number | string | boolean) {
     else {
         return x == 10; // number
 >x == 10 : boolean
->x : number
+>x : number | string
 >10 : number
     }
 }
@@ -219,7 +219,7 @@ function foo8(x: number | string | boolean) {
         else {
             return x == 10; // number
 >x == 10 : boolean
->x : number
+>x : number | string
 >10 : number
         }
     }
@@ -259,7 +259,7 @@ function foo9(x: number | string) {
     }
 }
 function foo10(x: number | string | boolean) {
->foo10 : (x: number | string | boolean) => boolean
+>foo10 : (x: number | string | boolean) => boolean | string
 >x : number | string | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
@@ -283,10 +283,10 @@ function foo10(x: number | string | boolean) {
 >x : number | boolean
 
         return typeof x === "number"
->typeof x === "number"            ? x === 10 // number            : x : boolean
+>typeof x === "number"            ? x === 10 // number            : x : boolean | string
 >typeof x === "number" : boolean
 >typeof x : string
->x : number | boolean
+>x : number | string | boolean
 >"number" : string
 
             ? x === 10 // number
@@ -295,7 +295,7 @@ function foo10(x: number | string | boolean) {
 >10 : number
 
             : x; // x should be boolean
->x : boolean
+>x : string | boolean
     }
 }
 function foo11(x: number | string | boolean) {
@@ -325,7 +325,7 @@ function foo11(x: number | string | boolean) {
 >typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number            )            : (            // do not change value            y = x && x.toString() // boolean | string            ) : string
 >typeof x === "number" : boolean
 >typeof x : string
->x : number | boolean
+>x : number | string | boolean
 >"number" : string
 
             ? (
@@ -351,10 +351,10 @@ function foo11(x: number | string | boolean) {
 >y = x && x.toString() : string
 >y : number | boolean | string
 >x && x.toString() : string
->x : boolean
+>x : string | boolean
 >x.toString() : string
 >x.toString : () => string
->x : boolean
+>x : string | boolean
 >toString : () => string
 
             );
@@ -392,7 +392,7 @@ function foo12(x: number | string | boolean) {
 >typeof x === "number"            ? x.toString() // number            : x.toString() : string
 >typeof x === "number" : boolean
 >typeof x : string
->x : number
+>x : number | string | boolean
 >"number" : string
 
             ? x.toString() // number
@@ -403,8 +403,8 @@ function foo12(x: number | string | boolean) {
 
             : x.toString(); // boolean | string
 >x.toString() : string
->x.toString : (radix?: number) => string
->x : number | string | boolean
->toString : (radix?: number) => string
+>x.toString : () => string
+>x : string | boolean
+>toString : () => string
     }
 }

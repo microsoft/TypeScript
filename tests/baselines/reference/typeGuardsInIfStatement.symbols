@@ -264,9 +264,9 @@ function foo11(x: number | string | boolean) {
             y = x && x.toString() // boolean | string
 >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 120, 11))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 113, 15))
->x.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 113, 15))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
             );
     }
@@ -302,8 +302,8 @@ function foo12(x: number | string | boolean) {
 >toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
             : x.toString(); // boolean | string
->x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 133, 15))
->toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
