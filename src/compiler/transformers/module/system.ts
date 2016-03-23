@@ -26,7 +26,7 @@ namespace ts {
         context.enableExpressionSubstitution(SyntaxKind.PrefixUnaryExpression);
         context.enableExpressionSubstitution(SyntaxKind.PostfixUnaryExpression);
         context.expressionSubstitution = substituteExpression;
-        
+
         context.enableEmitNotification(SyntaxKind.SourceFile);
 
         const exportFunctionForFileMap: Identifier[] = [];
@@ -125,7 +125,7 @@ namespace ts {
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        node.moduleName 
+                        node.moduleName
                             ? [createLiteral(node.moduleName), dependencies, body]
                             : [dependencies, body]
                     )
@@ -626,7 +626,7 @@ namespace ts {
                 if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
-                
+
                 node = newNode;
             }
 
@@ -1073,7 +1073,7 @@ namespace ts {
         function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
             const operand = node.operand;
             const operator = node.operator;
-            const substitute = 
+            const substitute =
                 isIdentifier(operand) &&
                 (
                     node.kind === SyntaxKind.PostfixUnaryExpression ||
@@ -1090,7 +1090,7 @@ namespace ts {
                         return call;
                     }
                     else {
-                        return operator === SyntaxKind.PlusPlusToken 
+                        return operator === SyntaxKind.PlusPlusToken
                             ? createSubtract(call, createLiteral(1))
                             : createAdd(call, createLiteral(1))
                     }
@@ -1200,7 +1200,7 @@ namespace ts {
                             )
                         )
                     ],
-                    /*location*/ undefined, 
+                    /*location*/ undefined,
                     /*multiline*/ true)
                 )
             );
@@ -1243,7 +1243,6 @@ namespace ts {
             if (isImportClause(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent);
                 name = createIdentifier("default");
-                name.originalKeywordKind = SyntaxKind.DefaultKeyword;
             }
             else if (isImportSpecifier(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent.parent.parent);
