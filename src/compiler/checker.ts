@@ -7327,18 +7327,19 @@ namespace ts {
                     nodeId = getNodeId(<Node>location);
                     if (visited[nodeId]) continue;
 
-                    const same = isSameSymbol(reference, <Node>location);
+                    let same = isSameSymbol(reference, <Node>location);
                     let previousLocation = <Node>location;
-                    if (same && reference.kind === SyntaxKind.PropertyAccessExpression) {
-                        let node = (<PropertyAccessExpression>location).parent;
+                    if (isLeftHandSideOfAssignment(<Node>location)) {
+                        let node = reference;
                         while (node.kind === SyntaxKind.PropertyAccessExpression) {
-                            if (isLeftHandSideOfAssignment(node)) {
+                            node = (<PropertyAccessExpression>node).expression;
+                            if (isSameSymbol(node, <Node>location)) {
                                 // Reference node was part of an assignment
                                 // Example: a.b.c is reference, a or a.b was assigned
                                 previousLocation = undefined;
+                                same = true;
                                 break;
                             }
-                            node = node.parent;
                         }
                     }
                     if (same || isBranchStart(<Node>location)) {
