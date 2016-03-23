@@ -43,22 +43,22 @@ System.register(["file1", "file2", "file3", "file4", "file5", "file6", "file7"],
             function (ns_1) {
                 ns = ns_1;
             },
+            function (file2_1_1) {
+                file2_1 = file2_1_1;
+            },
+            function (file3_1_1) {
+                file3_1 = file3_1_1;
+            },
             function (_1) {
-                file2_1 = _1;
             },
-            function (_2) {
-                file3_1 = _2;
-            },
-            function (_3) {
-            },
-            function (_4) {
-                file5_1 = _4;
+            function (file5_1_1) {
+                file5_1 = file5_1_1;
             },
             function (ns3_1) {
                 ns3 = ns3_1;
             },
-            function (_5) {
-                exportStar_1(_5);
+            function (file7_1_1) {
+                exportStar_1(file7_1_1);
             }
         ],
         execute: function () {

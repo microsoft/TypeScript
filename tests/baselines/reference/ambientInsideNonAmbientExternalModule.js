@@ -7,5 +7,4 @@ export declare module M { }
 
 //// [ambientInsideNonAmbientExternalModule.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
 });

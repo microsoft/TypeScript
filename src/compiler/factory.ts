@@ -424,11 +424,11 @@ namespace ts {
         return block;
     }
 
-    export function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList, location?: TextRange): VariableStatement {
+    export function createVariableStatement(modifiers: Modifier[], declarationList: VariableDeclarationList | VariableDeclaration[], location?: TextRange): VariableStatement {
         const node = <VariableStatement>createNode(SyntaxKind.VariableStatement, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
-        node.declarationList = declarationList;
+        node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
         return node;
     }
 

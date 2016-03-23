@@ -2343,14 +2343,12 @@ const _super = (function (geti, seti) {
                 return node;
             }
 
-            function getTextOfNode(node: Node, includeTrivia?: boolean) {
-                if (isIdentifier(node)) {
-                    if (node.autoGenerateKind) {
-                        return getGeneratedIdentifier(node);
-                    }
-                    else if (nodeIsSynthesized(node) || !node.parent) {
-                        return unescapeIdentifier(node.text);
-                    }
+            function getTextOfNode(node: Node, includeTrivia?: boolean): string {
+                if (isGeneratedIdentifier(node)) {
+                    return getGeneratedIdentifier(node);
+                }
+                else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
+                    return unescapeIdentifier(node.text);
                 }
                 else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return node.text;
@@ -2452,7 +2450,7 @@ const _super = (function (geti, seti) {
             }
 
             function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                const name = node.name.text;
+                const name = getTextOfNode(node.name);
                 // Use module/enum name itself if it is unique, otherwise make a unique variation
                 return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
             }
@@ -2472,10 +2470,10 @@ const _super = (function (geti, seti) {
                 return makeUniqueName("class");
             }
 
-            function generateNameForNode(node: Node) {
+            function generateNameForNode(node: Node): string {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return makeUniqueName((<Identifier>node).text);
+                        return makeUniqueName(getTextOfNode(node));
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
                         return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -2502,13 +2500,36 @@ const _super = (function (geti, seti) {
                     case GeneratedIdentifierKind.Unique:
                         return makeUniqueName(node.text);
                     case GeneratedIdentifierKind.Node:
-                        return generateNameForNode(getOriginalNode(node));
+                        return generateNameForNode(getSourceNodeForGeneratedName(node));
                 }
             }
 
             function getGeneratedIdentifier(node: Identifier) {
-                const id = getOriginalNodeId(node);
+                const id = getNodeIdForGeneratedIdentifier(node);
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
+            }
+
+            function getSourceNodeForGeneratedName(name: Identifier) {
+                let node: Node = name;
+                while (node.original !== undefined) {
+                    node = node.original;
+                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node) {
+                        break;
+                    }
+                }
+
+                return node;
+            }
+
+            function getNodeIdForGeneratedIdentifier(node: Identifier) {
+                switch (node.autoGenerateKind) {
+                    case GeneratedIdentifierKind.Auto:
+                    case GeneratedIdentifierKind.Loop:
+                    case GeneratedIdentifierKind.Unique:
+                        return getNodeId(node);
+                    case GeneratedIdentifierKind.Node:
+                        return getNodeId(getSourceNodeForGeneratedName(node));
+                }
             }
         }
 

@@ -339,7 +339,8 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const parameterName = createUniqueName(forEach(group.externalImports, getLocalNameTextForExternalImport) || "");
+                const localName = forEach(group.externalImports, getLocalNameForExternalImport);
+                const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
                     const importVariableName = getLocalNameForExternalImport(entry);
@@ -1121,11 +1122,6 @@ namespace ts {
             return undefined;
         }
 
-        function getLocalNameTextForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
-            const name = getLocalNameForExternalImport(node);
-            return name ? name.text : undefined;
-        }
-
         function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
             const namespaceDeclaration = getNamespaceDeclarationNode(node);
             if (namespaceDeclaration && !isDefaultImport(node)) {
@@ -1182,14 +1178,17 @@ namespace ts {
                             ]),
                             m,
                             createBlock([
-                                createIf(
-                                    condition,
-                                    createStatement(
-                                        createAssignment(
-                                            createElementAccess(exports, n),
-                                            createElementAccess(m, n)
+                                setNodeEmitFlags(
+                                    createIf(
+                                        condition,
+                                        createStatement(
+                                            createAssignment(
+                                                createElementAccess(exports, n),
+                                                createElementAccess(m, n)
+                                            )
                                         )
-                                    )
+                                    ),
+                                    NodeEmitFlags.SingleLine
                                 )
                             ])
                         ),
