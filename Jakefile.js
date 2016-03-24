@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var readline = require("readline");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -673,9 +674,14 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
+function writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
+    var testConfig = { test: [tests], light: light };
+    if (/^(\d+|full)$/.test(stackTraceLimit)) {
+        testConfig.stackTraceLimit = stackTraceLimit;
+    }
+
+    var testConfigContents = JSON.stringify(testConfig);
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -683,6 +689,124 @@ function deleteTemporaryProjectOutput() {
     if (fs.existsSync(path.join(localBaseline, "projectOutput/"))) {
         jake.rmRf(path.join(localBaseline, "projectOutput/"));
     }
+}
+
+function runTestsAndWriteOutput(file) {
+    cleanTestDirs();
+    var tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
+    var testConfigFile = 'test.config';
+    if (fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+
+    if (tests || light) {
+        writeTestConfigFile(testConfigFile, tests, light, 10);
+    }
+
+    if (tests && tests.toLocaleLowerCase() === "rwc") {
+        testTimeout = 100000;
+    }
+
+    var args = [];
+    args.push("-R", "TAP");
+    args.push("--no-colors");
+    args.push("-t", testTimeout);
+    if (tests) {
+        args.push("-g", '"' + tests + '"');
+    }
+    args.push(run);
+
+    var cmd = "mocha " + args.join(" ");
+    console.log(cmd);
+    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
+    var out = fs.createWriteStream(file);
+    var tapRange = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
+    var tapOk = /^ok\s/;
+    var tapNotOk = /^not\sok/;
+    var tapComment = /^#/;
+    var typeError = /^\s+TypeError:/;
+    var progress = new ProgressBar("Running tests...");
+    var expectedTestCount = 0;
+    var testCount = 0;
+    var failureCount = 0;
+    var successCount = 0;
+    var comments = [];
+    var typeErrorCount = 0;
+
+    ex.addListener("stdout", function (output) {
+        var m = tapRange.exec(output);
+        if (m) {
+            expectedTestCount = parseInt(m[2]);
+            return;
+        }
+
+        out.write(output);
+
+        if (tapOk.test(output)) {
+            successCount++;
+        }
+        else if (tapNotOk.test(output)) {
+            failureCount++;
+        }
+        else {
+            if (tapComment.test(output)) {
+                comments.push(output.toString().trim());
+            }
+            else if (typeError.test(output)) {
+                typeErrorCount++;
+            }
+            return;
+        }
+
+        testCount++;
+
+        var percentComplete = testCount * 100 / expectedTestCount;
+        updateProgress(percentComplete);
+    });
+
+    function updateProgress(percentComplete) {
+        progress.update(percentComplete,
+            /*foregroundColor*/ failureCount > 0
+                ? "red"
+                : successCount === expectedTestCount
+                    ? "green"
+                    : "cyan",
+            /*backgroundColor*/ "gray"
+        );
+    }
+
+    ex.addListener("stderr", function (output) {
+        progress.hide();
+        process.stderr.write(output.toString().trim() + os.EOL);
+        progress.show();
+    });
+    ex.addListener("cmdEnd", function () {
+        if (progress.visible) {
+            updateProgress(100);
+            process.stdout.write("done." + os.EOL);
+        }
+
+        console.log(comments.join(os.EOL));
+        deleteTemporaryProjectOutput();
+        complete();
+    });
+    ex.addListener("error", function (e, status) {
+        if (progress.visible) {
+            updateProgress(100);
+            process.stdout.write("done." + os.EOL);
+        }
+
+        console.log(comments.join(os.EOL));
+
+        if (typeErrorCount) {
+            console.log("# type errors: %s", typeErrorCount);
+        }
+
+        deleteTemporaryProjectOutput();
+        fail("Process exited with code " + status);
+    });
+    ex.run();
 }
 
 function runConsoleTests(defaultReporter, defaultSubsets) {
@@ -696,7 +820,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     }
 
     if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(testConfigFile, tests, light);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -749,6 +873,10 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', []);
 }, {async: true});
 
+task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
+    runTestsAndWriteOutput("tests/baselines/local/testresults.tap");
+}, { async: true });
+
 desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
@@ -780,7 +908,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(testConfigFile, tests, light);
     }
 
     tests = tests ? tests : '';
@@ -1031,3 +1159,85 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
+
+function ProgressBar(title) {
+    this.title = title;
+}
+ProgressBar.prototype = {
+    progressChars: ["\u0020", "\u2591", "\u2592", "\u2593", "\u2588"],
+    colors: {
+        foreground: {
+            black: "\u001b[90m",
+            red: "\u001b[91m",
+            green: "\u001b[92m",
+            yellow: "\u001b[93m",
+            blue: "\u001b[94m",
+            magenta: "\u001b[95m",
+            cyan: "\u001b[96m",
+            white: "\u001b[97m",
+            gray: "\u001b[37m"
+        },
+        background: {
+            black: "\u001b[40m",
+            red: "\u001b[41m",
+            green: "\u001b[42m",
+            yellow: "\u001b[43m",
+            blue: "\u001b[44m",
+            magenta: "\u001b[45m",
+            cyan: "\u001b[46m",
+            white: "\u001b[47m",
+            gray: "\u001b[100m"
+        },
+        reset: "\u001b[0m"
+    },
+    update: function (percentComplete, foregroundColor, backgroundColor) {
+        var progress = "";
+        for (var i = 0; i < 100; i += 4) {
+            progress += this.progressChars[Math.floor(Math.max(0, Math.min(4, percentComplete - i)))];
+        }
+
+        foregroundColor = foregroundColor && this.colors.foreground[foregroundColor];
+        backgroundColor = backgroundColor && this.colors.background[backgroundColor];
+        if (foregroundColor || backgroundColor) {
+            if (foregroundColor) {
+                progress = foregroundColor + progress;
+            }
+            if (backgroundColor) {
+                progress = backgroundColor + progress;
+            }
+
+            progress += this.colors.reset;
+        }
+
+        if (this._lastProgress !== progress || !this.visible) {
+            this._print(progress);
+        }
+    },
+    hide: function () {
+        if (this.visible) {
+            this._savedProgress = this._lastProgress;
+            this.clear();
+        }
+    },
+    show: function () {
+        if (this._savedProgress && !this.visible) {
+            this._print(this._savedProgress);
+            this._savedProgress = undefined;
+        }
+    },
+    clear: function () {
+        if (this._lastProgress) {
+            readline.moveCursor(process.stdout, -process.stdout.columns, 0);
+            readline.clearLine(process.stdout, 1);
+            this._lastProgress = undefined;
+            this.visible = false;
+        }
+    },
+    _print: function (progress) {
+        readline.moveCursor(process.stdout, -process.stdout.columns, 0);
+        process.stdout.write(this.title ? progress + " " + this.title : progress);
+        readline.clearLine(process.stdout, 1);
+        this._lastProgress = progress;
+        this.visible = true;
+    }
+};

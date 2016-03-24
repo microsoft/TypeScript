@@ -13,6 +13,7 @@ tests/baselines/rwc/*
 tests/baselines/test262/*
 tests/baselines/reference/projectOutput/*
 tests/baselines/local/projectOutput/*
+tests/baselines/reference/testresults.tap
 tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
 scripts/configureNightly.js

@@ -365,18 +365,16 @@ namespace ts {
                     ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName, emitTempVariableAssignment)
                 );
             }
-            else if (isIdentifier(propertyName)) {
-                return createPropertyAccess(
-                    expression,
-                    propertyName.text
-                );
-            }
-            else {
-                // We create a synthetic copy of the identifier in order to avoid the rewriting that might
-                // otherwise occur when the identifier is emitted.
+            else if (isLiteralExpression(propertyName)) {
                 return createElementAccess(
                     expression,
                     getSynthesizedClone(propertyName)
+                );
+            }
+            else {
+                return createPropertyAccess(
+                    expression,
+                    isGeneratedIdentifier(propertyName) ? getSynthesizedClone(propertyName) : createIdentifier(propertyName.text)
                 );
             }
         }

@@ -1079,12 +1079,10 @@ namespace ts {
         declare var process: any;
         declare var require: any;
 
-        const currentAssertionLevel = getDevelopmentMode() === "development"
-            ? AssertionLevel.Normal
-            : AssertionLevel.None;
+        let currentAssertionLevel: AssertionLevel;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return currentAssertionLevel >= level;
+            return getCurrentAssertionLevel() >= level;
         }
 
         export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
@@ -1102,15 +1100,21 @@ namespace ts {
             Debug.assert(/*expression*/ false, message);
         }
 
-        function getDevelopmentMode() {
-            return typeof require !== "undefined"
-                && typeof process !== "undefined"
-                && !process.browser
-                && process.nextTick
-                && process.env
-                && process.env.NODE_ENV
-                    ? String(process.env.NODE_ENV).toLowerCase()
-                    : undefined;
+        function getCurrentAssertionLevel() {
+            if (currentAssertionLevel !== undefined) {
+                return currentAssertionLevel;
+            }
+
+            const developmentMode = sys && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"));
+            if (developmentMode === undefined) {
+                return AssertionLevel.None;
+            }
+
+            currentAssertionLevel = developmentMode
+                ? AssertionLevel.Normal
+                : AssertionLevel.None;
+
+            return currentAssertionLevel;
         }
     }
 

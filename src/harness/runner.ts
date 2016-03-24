@@ -46,6 +46,13 @@ if (testConfigFile !== "") {
         Harness.lightMode = true;
     }
 
+    if (testConfig.stackTraceLimit === "full") {
+        (<any>Error).stackTraceLimit = Infinity;
+    }
+    else if ((testConfig.stackTraceLimit | 0) > 0) {
+        (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+    }
+
     if (testConfig.test && testConfig.test.length > 0) {
         for (const option of testConfig.test) {
             if (!option) {

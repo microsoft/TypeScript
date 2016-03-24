@@ -668,7 +668,7 @@ const _super = (function (geti, seti) {
             // SyntaxKind.TemplateMiddle
             // SyntaxKind.TemplateTail
             function emitLiteral(node: LiteralLikeNode) {
-                const text = getLiteralText(node, currentSourceFile, languageVersion);
+                const text = getLiteralTextOfNode(node);
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap)
                     && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -980,7 +980,7 @@ const _super = (function (geti, seti) {
             function needsDotDotForPropertyAccess(expression: Expression) {
                 if (expression.kind === SyntaxKind.NumericLiteral) {
                     // check if numeric literal was originally written with a dot
-                    const text = getLiteralText(<LiteralExpression>expression, currentSourceFile, languageVersion);
+                    const text = getLiteralTextOfNode(<LiteralExpression>expression);
                     return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
                 }
                 else {
@@ -2343,20 +2343,35 @@ const _super = (function (geti, seti) {
                 return node;
             }
 
-            function getTextOfNode(node: Node, includeTrivia?: boolean) {
-                if (isIdentifier(node)) {
-                    if (node.autoGenerateKind) {
-                        return getGeneratedIdentifier(node);
-                    }
-                    else if (nodeIsSynthesized(node) || !node.parent) {
-                        return unescapeIdentifier(node.text);
-                    }
+            function getTextOfNode(node: Node, includeTrivia?: boolean): string {
+                if (isGeneratedIdentifier(node)) {
+                    return getGeneratedIdentifier(node);
+                }
+                else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
+                    return unescapeIdentifier(node.text);
+                }
+                else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
                 }
                 else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return node.text;
                 }
 
                 return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
+            }
+
+            function getLiteralTextOfNode(node: LiteralLikeNode): string {
+                if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    const textSourceNode = (<StringLiteral>node).textSourceNode;
+                    if (isIdentifier(textSourceNode)) {
+                        return "\"" + escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode))) + "\"";
+                    }
+                    else {
+                        return getLiteralTextOfNode(textSourceNode);
+                    }
+                }
+
+                return getLiteralText(node, currentSourceFile, languageVersion);
             }
 
             function tryGetConstEnumValue(node: Node): number {
@@ -2452,7 +2467,7 @@ const _super = (function (geti, seti) {
             }
 
             function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                const name = node.name.text;
+                const name = getTextOfNode(node.name);
                 // Use module/enum name itself if it is unique, otherwise make a unique variation
                 return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
             }
@@ -2472,10 +2487,10 @@ const _super = (function (geti, seti) {
                 return makeUniqueName("class");
             }
 
-            function generateNameForNode(node: Node) {
+            function generateNameForNode(node: Node): string {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return makeUniqueName((<Identifier>node).text);
+                        return makeUniqueName(getTextOfNode(node));
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
                         return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -2502,13 +2517,36 @@ const _super = (function (geti, seti) {
                     case GeneratedIdentifierKind.Unique:
                         return makeUniqueName(node.text);
                     case GeneratedIdentifierKind.Node:
-                        return generateNameForNode(getOriginalNode(node));
+                        return generateNameForNode(getSourceNodeForGeneratedName(node));
                 }
             }
 
             function getGeneratedIdentifier(node: Identifier) {
-                const id = getOriginalNodeId(node);
+                const id = getNodeIdForGeneratedIdentifier(node);
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
+            }
+
+            function getSourceNodeForGeneratedName(name: Identifier) {
+                let node: Node = name;
+                while (node.original !== undefined) {
+                    node = node.original;
+                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node) {
+                        break;
+                    }
+                }
+
+                return node;
+            }
+
+            function getNodeIdForGeneratedIdentifier(node: Identifier) {
+                switch (node.autoGenerateKind) {
+                    case GeneratedIdentifierKind.Auto:
+                    case GeneratedIdentifierKind.Loop:
+                    case GeneratedIdentifierKind.Unique:
+                        return getNodeId(node);
+                    case GeneratedIdentifierKind.Node:
+                        return getNodeId(getSourceNodeForGeneratedName(node));
+                }
             }
         }
 

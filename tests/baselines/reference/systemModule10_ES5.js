@@ -10,14 +10,14 @@ export {n2}
 export {n2 as n3}
 
 //// [systemModule10_ES5.js]
-System.register(["file1", "file2"], function (exports_1, context_1) {
+System.register(['file1', 'file2'], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var file1_1, n2;
     return {
         setters: [
-            function (_1) {
-                file1_1 = _1;
+            function (file1_1_1) {
+                file1_1 = file1_1_1;
             },
             function (n2_1) {
                 n2 = n2_1;

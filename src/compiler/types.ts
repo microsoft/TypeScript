@@ -480,6 +480,7 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
+    /*@internal*/
     export const enum GeneratedIdentifierKind {
         None,   // Not automatically generated.
         Auto,   // Automatically generated identifier.
@@ -490,9 +491,9 @@ namespace ts {
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
-        text: string;                                  // Text of identifier (with escapes converted to characters)
-        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
-        autoGenerateKind?: GeneratedIdentifierKind;    // Specifies whether to auto-generate the text for an identifier.
+        text: string;                                   // Text of identifier (with escapes converted to characters)
+        originalKeywordKind?: SyntaxKind;               // Original syntaxKind which get set so that we can report an error later
+        /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind;   // Specifies whether to auto-generate the text for an identifier.
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -803,6 +804,8 @@ namespace ts {
     // @kind(SyntaxKind.StringLiteral)
     export interface StringLiteral extends LiteralExpression {
         _stringLiteralBrand: any;
+        /* @internal */
+        textSourceNode?: Identifier | StringLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.

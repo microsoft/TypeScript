@@ -22,8 +22,8 @@ System.register(["foo"], function (exports_1, context_1) {
     var foo_1, cls, cls2, x, y, z, M;
     return {
         setters: [
-            function (_1) {
-                foo_1 = _1;
+            function (foo_1_1) {
+                foo_1 = foo_1_1;
             }
         ],
         execute: function () {

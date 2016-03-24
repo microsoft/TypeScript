@@ -5,7 +5,7 @@
 namespace ts {
     export function transformSystemModule(context: TransformationContext) {
         interface DependencyGroup {
-            name: Identifier;
+            name: StringLiteral;
             externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         }
 
@@ -26,7 +26,7 @@ namespace ts {
         context.enableExpressionSubstitution(SyntaxKind.PrefixUnaryExpression);
         context.enableExpressionSubstitution(SyntaxKind.PostfixUnaryExpression);
         context.expressionSubstitution = substituteExpression;
-        
+
         context.enableEmitNotification(SyntaxKind.SourceFile);
 
         const exportFunctionForFileMap: Identifier[] = [];
@@ -44,12 +44,6 @@ namespace ts {
         let exportedFunctionDeclarations: ExpressionStatement[];
 
         return transformSourceFile;
-
-        function onEmitNode(node: Node, emit: (node: Node) => void): void {
-            exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
-            previousOnEmitNode(node, emit);
-            exportFunctionForFile = undefined;
-        }
 
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
@@ -125,7 +119,7 @@ namespace ts {
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        node.moduleName 
+                        node.moduleName
                             ? [createLiteral(node.moduleName), dependencies, body]
                             : [dependencies, body]
                     )
@@ -339,7 +333,8 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const parameterName = createUniqueName(forEach(group.externalImports, getLocalNameTextForExternalImport) || "");
+                const localName = forEach(group.externalImports, getLocalNameForExternalImport);
+                const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
                     const importVariableName = getLocalNameForExternalImport(entry);
@@ -547,11 +542,14 @@ namespace ts {
         }
 
         function visitExportAssignment(node: ExportAssignment): Statement {
-            if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                return createExportStatement(
-                    createLiteral("default"),
-                    node.expression
-                );
+            if (!node.isExportEquals) {
+                const original = getOriginalNode(node);
+                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                    return createExportStatement(
+                        createLiteral("default"),
+                        node.expression
+                    );
+                }
             }
 
             return undefined;
@@ -626,7 +624,7 @@ namespace ts {
                 if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
-                
+
                 node = newNode;
             }
 
@@ -642,7 +640,7 @@ namespace ts {
                 return [
                     node,
                     createExportStatement(name, name)
-                ]
+                ];
             }
             return node;
         }
@@ -917,6 +915,17 @@ namespace ts {
         // Substitutions
         //
 
+        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+            if (node.kind === SyntaxKind.SourceFile) {
+                exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
+                previousOnEmitNode(node, emit);
+                exportFunctionForFile = undefined;
+            }
+            else {
+                previousOnEmitNode(node, emit);
+            }
+        }
+
         /**
          * Substitute the expression, if necessary.
          *
@@ -1073,7 +1082,7 @@ namespace ts {
         function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
             const operand = node.operand;
             const operator = node.operator;
-            const substitute = 
+            const substitute =
                 isIdentifier(operand) &&
                 (
                     node.kind === SyntaxKind.PostfixUnaryExpression ||
@@ -1090,9 +1099,9 @@ namespace ts {
                         return call;
                     }
                     else {
-                        return operator === SyntaxKind.PlusPlusToken 
+                        return operator === SyntaxKind.PlusPlusToken
                             ? createSubtract(call, createLiteral(1))
-                            : createAdd(call, createLiteral(1))
+                            : createAdd(call, createLiteral(1));
                     }
                 }
             }
@@ -1119,11 +1128,6 @@ namespace ts {
             }
 
             return undefined;
-        }
-
-        function getLocalNameTextForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
-            const name = getLocalNameForExternalImport(node);
-            return name ? name.text : undefined;
         }
 
         function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
@@ -1182,14 +1186,17 @@ namespace ts {
                             ]),
                             m,
                             createBlock([
-                                createIf(
-                                    condition,
-                                    createStatement(
-                                        createAssignment(
-                                            createElementAccess(exports, n),
-                                            createElementAccess(m, n)
+                                setNodeEmitFlags(
+                                    createIf(
+                                        condition,
+                                        createStatement(
+                                            createAssignment(
+                                                createElementAccess(exports, n),
+                                                createElementAccess(m, n)
+                                            )
                                         )
-                                    )
+                                    ),
+                                    NodeEmitFlags.SingleLine
                                 )
                             ])
                         ),
@@ -1200,7 +1207,7 @@ namespace ts {
                             )
                         )
                     ],
-                    /*location*/ undefined, 
+                    /*location*/ undefined,
                     /*multiline*/ true)
                 )
             );
@@ -1243,7 +1250,6 @@ namespace ts {
             if (isImportClause(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent);
                 name = createIdentifier("default");
-                name.originalKeywordKind = SyntaxKind.DefaultKeyword;
             }
             else if (isImportSpecifier(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent.parent.parent);

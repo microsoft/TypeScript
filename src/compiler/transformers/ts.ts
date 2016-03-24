@@ -463,7 +463,7 @@ namespace ts {
             }
             else if (node.decorators) {
                 if (isDefaultExternalModuleExport(node)) {
-                    statements.push(createExportDefault(name));
+                    statements.push(createExportDefault(name || getGeneratedNameForNode(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
                     statements.push(createExternalModuleExport(name));
@@ -580,6 +580,10 @@ namespace ts {
                 ),
                 node
             );
+
+            if (!name) {
+                name = getGeneratedNameForNode(node);
+            }
 
             // Record an alias to avoid class double-binding.
             let decoratedClassAlias: Identifier;
@@ -2440,7 +2444,10 @@ namespace ts {
          * @param node The import equals declaration node.
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
-            Debug.assert(!isExternalModuleImportEqualsDeclaration(node));
+            if (isExternalModuleImportEqualsDeclaration(node)) {
+                return visitEachChild(node, visitor, context);
+            }
+
             if (shouldElideImportEqualsDeclaration(node)) {
                 return undefined;
             }
