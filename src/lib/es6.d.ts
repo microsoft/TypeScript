@@ -341,7 +341,7 @@ interface Array<T> {
       * @param end index to stop filling the array at. If end is negative, it is treated as 
       * length+end.
       */
-    fill(value: T, start?: number, end?: number): T[];
+    fill(value: T, start?: number, end?: number): this;
 
     /** 
       * Returns the this object after copying a section of the array identified by start and end
@@ -352,7 +352,7 @@ interface Array<T> {
       * is treated as length+end.
       * @param end If not specified, length of the this object is used as its default value. 
       */
-    copyWithin(target: number, start: number, end?: number): T[];
+    copyWithin(target: number, start: number, end?: number): this;
 }
 
 interface IArguments {
