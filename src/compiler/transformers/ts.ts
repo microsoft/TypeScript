@@ -2004,7 +2004,7 @@ namespace ts {
                     )
                 );
 
-                const block = createBlock(statements, /*location*/ node.body);
+                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
