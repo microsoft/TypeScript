@@ -799,7 +799,7 @@ interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
     entries(): IterableIterator<[K, V]>;
-    forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: V, index: K, map: this) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
     keys(): IterableIterator<K>;
@@ -840,7 +840,7 @@ interface Set<T> {
     clear(): void;
     delete(value: T): boolean;
     entries(): IterableIterator<[T, T]>;
-    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, index: T, set: this) => void, thisArg?: any): void;
     has(value: T): boolean;
     keys(): IterableIterator<T>;
     readonly size: number;
