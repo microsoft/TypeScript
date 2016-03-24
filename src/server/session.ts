@@ -125,10 +125,10 @@ namespace ts.server {
     }
 
     export interface ServerHost extends ts.System {
-        globalTypingCachePath?: Path;
+        globalTypingCachePath?: string;
         getTsd?: () => protocol.Tsd;
-        cachedTsdJsons?: Map<Map<Path>>;
-        getTsdJson?: (tsdJsonPath: Path) => Map<Path>;
+        cachedTsdJsons?: Map<Map<string>>;
+        getTsdJson?: (tsdJsonPath: Path) => Map<string>;
     }
 
     export class Session {

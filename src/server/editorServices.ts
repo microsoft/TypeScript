@@ -771,7 +771,7 @@ namespace ts.server {
             const compilerOptions: CompilerOptions = project.projectOptions
                 ? project.projectOptions.compilerOptions
                 : undefined;
-            const projectRootPath: Path = project.isConfiguredProject() ? getDirectoryPath(<Path>project.projectFilename) : undefined;
+            const projectRootPath: string = project.isConfiguredProject() ? getDirectoryPath(project.projectFilename) : undefined;
 
             // Todo: add support for local cache path
             const cachePath = this.host.globalTypingCachePath;
@@ -845,8 +845,8 @@ namespace ts.server {
                     .then(undefined, e => this.log(e));
             }
 
-            function addTypingToProject(filePath: Path, project: Project) {
-                const script = project.projectService.openFile(filePath, /*openedByClient*/ false);
+            function addTypingToProject(fileName: string, project: Project) {
+                const script = project.projectService.openFile(fileName, /*openedByClient*/ false);
                 if (script.defaultProject !== project) {
                     project.addRoot(script);
                 }

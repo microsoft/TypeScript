@@ -178,10 +178,9 @@ namespace ts.server {
     ts.sys.write = (s: string) => writeMessage(s);
 
     const serverHost: ServerHost = <ServerHost>ts.sys;
-    serverHost.globalTypingCachePath = toPath(
+    serverHost.globalTypingCachePath = getNormalizedAbsolutePath(
         ".typingsCache",
-        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
-        createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"]);
 
     let tsd: any;
     serverHost.getTsd = () => {
@@ -198,24 +197,23 @@ namespace ts.server {
         return undefined;
     };
     serverHost.cachedTsdJsons = {};
-    serverHost.getTsdJson = (tsdJsonPath: Path) => {
-        if (hasProperty(serverHost.cachedTsdJsons, tsdJsonPath)) {
-            return serverHost.cachedTsdJsons[tsdJsonPath];
+    serverHost.getTsdJson = (tsdJsonFileName: string) => {
+        if (hasProperty(serverHost.cachedTsdJsons, tsdJsonFileName)) {
+            return serverHost.cachedTsdJsons[tsdJsonFileName];
         }
         else {
-            const { config } = readConfigFile(tsdJsonPath, (path: string) => serverHost.readFile(path));
+            const { config } = readConfigFile(tsdJsonFileName, (path: string) => serverHost.readFile(path));
             if (config && config.installed) {
-                const typingsFolderPath = combinePaths(getDirectoryPath(tsdJsonPath), "typings");
-                const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+                const typingsFolderPath = combinePaths(getDirectoryPath(tsdJsonFileName), "typings");
                 const installedKeys = getKeys(config.installed);
-                const packagePathMap: Map<Path> = {};
+                const packagePathMap: Map<string> = {};
                 for (const installedKey of installedKeys) {
                     const packageName = installedKey.substr(0, installedKey.indexOf("/"));
-                    const typingFilePath = toPath(installedKey, typingsFolderPath, getCanonicalFileName);
+                    const typingFilePath = getNormalizedAbsolutePath(installedKey, typingsFolderPath);
                     packagePathMap[packageName] = typingFilePath;
                 }
-                serverHost.cachedTsdJsons[tsdJsonPath] = packagePathMap;
-                return serverHost.cachedTsdJsons[tsdJsonPath];
+                serverHost.cachedTsdJsons[tsdJsonFileName] = packagePathMap;
+                return serverHost.cachedTsdJsons[tsdJsonFileName];
             }
         }
         return undefined;

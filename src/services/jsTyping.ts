@@ -40,15 +40,15 @@ namespace ts.JsTyping {
     export function discoverTypings(
         host: TypingResolutionHost,
         fileNames: string[],
-        projectRootPath: Path,
-        safeListPath: Path,
-        packageNameToTypingLocation: Map<Path>,
+        projectRootPath: string,
+        safeListPath: string,
+        packageNameToTypingLocation: Map<string>,
         typingOptions: TypingOptions,
         compilerOptions: CompilerOptions):
-        { cachedTypingPaths: Path[], newTypingNames: string[] } {
+        { cachedTypingPaths: string[], newTypingNames: string[] } {
 
         // A typing name to typing file path mapping
-        const inferredTypings: Map<Path> = {};
+        const inferredTypings: Map<string> = {};
 
         if (!typingOptions || !typingOptions.enableAutoDiscovery) {
             return { cachedTypingPaths: [], newTypingNames: [] };
@@ -106,7 +106,7 @@ namespace ts.JsTyping {
         }
 
         const newTypingNames: string[] = [];
-        const cachedTypingPaths: Path[] = [];
+        const cachedTypingPaths: string[] = [];
         for (const typing in inferredTypings) {
             if (inferredTypings[typing] !== undefined) {
                 cachedTypingPaths.push(inferredTypings[typing]);
@@ -214,7 +214,7 @@ namespace ts.JsTyping {
                     continue;
                 }
                 if (packageJson.typings) {
-                    const absolutePath = toPath(packageJson.typings, getDirectoryPath(normalizedFileName), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
+                    const absolutePath = getNormalizedAbsolutePath(packageJson.typings, getDirectoryPath(normalizedFileName));
                     inferredTypings[packageJson.name] = absolutePath;
                 }
                 else {
