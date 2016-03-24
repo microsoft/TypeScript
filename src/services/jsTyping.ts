@@ -67,7 +67,7 @@ namespace ts.JsTyping {
             }
             else {
                 safeList = { notFound: true };
-            };
+            }
         }
 
         // Directories to search for package.json, bower.json and other typing information
@@ -168,7 +168,13 @@ namespace ts.JsTyping {
                 mergeTypings(cleanedTypingNames);
             }
             else {
-                mergeTypings(filter(cleanedTypingNames, f => hasProperty(safeList.content, f)));
+                const confirmedTypingNames: string[] = [];
+                for (const key in cleanedTypingNames) {
+                    if (hasProperty(safeList.content, key)) {
+                        confirmedTypingNames.push(safeList.content[key]);
+                    }
+                }
+                mergeTypings(confirmedTypingNames);
             }
 
             const hasJsxFile = forEach(fileNames, f => scriptKindIs(f, /*LanguageServiceHost*/ undefined, ScriptKind.JSX));
