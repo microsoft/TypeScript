@@ -495,7 +495,9 @@ namespace ts {
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
-                    const files = _fs.readdirSync(path || ".").sort();
+                    // This filtering is necessary because on some file system node fails to exclude 
+                    // "." and "..". See https://github.com/nodejs/node/issues/4002
+                    const files = filter(<string[]>_fs.readdirSync(path || "."), f => f !== "." && f !== "..").sort();
                     const directories: string[] = [];
                     for (const current of files) {
                         const name = combinePaths(path, current);
