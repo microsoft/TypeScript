@@ -803,7 +803,7 @@ interface Map<K, V> {
     get(key: K): V | undefined;
     has(key: K): boolean;
     keys(): IterableIterator<K>;
-    set(key: K, value?: V): Map<K, V>;
+    set(key: K, value?: V): this;
     readonly size: number;
     values(): IterableIterator<V>;
     [Symbol.iterator]():IterableIterator<[K,V]>;
@@ -823,7 +823,7 @@ interface WeakMap<K, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): WeakMap<K, V>;
+    set(key: K, value?: V): this;
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 
@@ -836,7 +836,7 @@ interface WeakMapConstructor {
 declare var WeakMap: WeakMapConstructor;
 
 interface Set<T> {
-    add(value: T): Set<T>;
+    add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
     entries(): IterableIterator<[T, T]>;
@@ -858,7 +858,7 @@ interface SetConstructor {
 declare var Set: SetConstructor;
 
 interface WeakSet<T> {
-    add(value: T): WeakSet<T>;
+    add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
