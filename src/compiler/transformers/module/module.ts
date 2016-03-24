@@ -456,10 +456,13 @@ namespace ts {
         }
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
-            if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                const statements: Statement[] = [];
-                addExportDefault(statements, node.expression, /*location*/ node);
-                return statements;
+            if (!node.isExportEquals) {
+                const original = getOriginalNode(node);
+                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                    const statements: Statement[] = [];
+                    addExportDefault(statements, node.expression, /*location*/ node);
+                    return statements;
+                }
             }
 
             return undefined;

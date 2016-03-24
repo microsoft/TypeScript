@@ -45,12 +45,6 @@ namespace ts {
 
         return transformSourceFile;
 
-        function onEmitNode(node: Node, emit: (node: Node) => void): void {
-            exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
-            previousOnEmitNode(node, emit);
-            exportFunctionForFile = undefined;
-        }
-
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
@@ -548,11 +542,14 @@ namespace ts {
         }
 
         function visitExportAssignment(node: ExportAssignment): Statement {
-            if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                return createExportStatement(
-                    createLiteral("default"),
-                    node.expression
-                );
+            if (!node.isExportEquals) {
+                const original = getOriginalNode(node);
+                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                    return createExportStatement(
+                        createLiteral("default"),
+                        node.expression
+                    );
+                }
             }
 
             return undefined;
@@ -917,6 +914,17 @@ namespace ts {
         //
         // Substitutions
         //
+
+        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+            if (node.kind === SyntaxKind.SourceFile) {
+                exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
+                previousOnEmitNode(node, emit);
+                exportFunctionForFile = undefined;
+            }
+            else {
+                previousOnEmitNode(node, emit);
+            }
+        }
 
         /**
          * Substitute the expression, if necessary.
