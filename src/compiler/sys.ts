@@ -495,11 +495,14 @@ namespace ts {
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
-                    // This filtering is necessary because on some file system node fails to exclude 
-                    // "." and "..". See https://github.com/nodejs/node/issues/4002
-                    const files = filter(<string[]>_fs.readdirSync(path || "."), f => f !== "." && f !== "..").sort();
+                    const files = _fs.readdirSync(path || ".").sort();
                     const directories: string[] = [];
                     for (const current of files) {
+                        // This is necessary because on some file system node fails to exclude 
+                        // "." and "..". See https://github.com/nodejs/node/issues/4002
+                        if (current === "." || current === "..") {
+                            continue;
+                        }
                         const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
                             const stat = _fs.statSync(name);
