@@ -9511,14 +9511,11 @@ namespace ts {
             }
 
             // Property is known to be private or protected at this point
-            // Get the declaring and enclosing class instance types
-            const enclosingClassDeclaration = getContainingClass(node);
 
-            const enclosingClass = enclosingClassDeclaration ? <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClassDeclaration)) : undefined;
-
-            // Private property is accessible if declaring and enclosing class are the same
+            // Private property is accessible if the property is within the declaring class
             if (flags & NodeFlags.Private) {
-                if (declaringClass !== enclosingClass) {
+                const declaringClassDeclaration = <ClassLikeDeclaration>getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop));
+                if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClass));
                     return false;
                 }
@@ -9531,8 +9528,15 @@ namespace ts {
             if (left.kind === SyntaxKind.SuperKeyword) {
                 return true;
             }
-            // A protected property is accessible in the declaring class and classes derived from it
-            if (!enclosingClass || !hasBaseType(enclosingClass, declaringClass)) {
+
+            // Get the enclosing class that has the declaring class as its base type
+            const enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
+                const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration));
+                return hasBaseType(enclosingClass, declaringClass) ? enclosingClass : undefined;
+            });
+
+            // A protected property is accessible if the property is within the declaring class or classes derived from it
+            if (!enclosingClass) {
                 error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClass));
                 return false;
             }
@@ -16118,16 +16122,20 @@ namespace ts {
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
+        function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T): T {
+            let result: T;
+
             while (true) {
                 node = getContainingClass(node);
-                if (!node) {
-                    return false;
-                }
-                if (node === classDeclaration) {
-                    return true;
-                }
+                if (!node) break;
+                if (result = callback(node)) break;
             }
+
+            return result;
+        }
+
+        function isNodeWithinClass(node: Node, classDeclaration: ClassLikeDeclaration) {
+            return !!forEachEnclosingClass(node, n => n === classDeclaration);
         }
 
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment {
