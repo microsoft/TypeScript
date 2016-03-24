@@ -7231,7 +7231,7 @@ namespace ts {
         }
 
         function getAssignmentReducedType(type: Type, assignedType: Type) {
-            if (type.flags & TypeFlags.Union) {
+            if (type !== assignedType && type.flags & TypeFlags.Union) {
                 const reducedTypes = filter((<UnionType>type).types, t => isTypeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
                     return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
@@ -7241,10 +7241,7 @@ namespace ts {
         }
 
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
-                return type;
-            }
-            if (!isNarrowableReference(reference)) {
+            if (!(type.flags & TypeFlags.Narrowable) || !isNarrowableReference(reference)) {
                 return type;
             }
             const leftmostNode = getLeftmostIdentifierOrThis(reference);
@@ -7721,6 +7718,9 @@ namespace ts {
             const defaultsToDeclaredType = !strictNullChecks || !declaration ||
                 declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunction(declaration) !== getContainingFunction(node);
+            if (defaultsToDeclaredType && !(type.flags & TypeFlags.Narrowable)) {
+                return type;
+            }
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));

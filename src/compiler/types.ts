@@ -2176,6 +2176,7 @@ namespace ts {
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
+        Narrowable = Any | ObjectType | Union | TypeParameter,
         /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
