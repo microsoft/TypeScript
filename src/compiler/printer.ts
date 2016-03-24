@@ -668,7 +668,7 @@ const _super = (function (geti, seti) {
             // SyntaxKind.TemplateMiddle
             // SyntaxKind.TemplateTail
             function emitLiteral(node: LiteralLikeNode) {
-                const text = getLiteralText(node, currentSourceFile, languageVersion);
+                const text = getLiteralTextOfNode(node);
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap)
                     && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -980,7 +980,7 @@ const _super = (function (geti, seti) {
             function needsDotDotForPropertyAccess(expression: Expression) {
                 if (expression.kind === SyntaxKind.NumericLiteral) {
                     // check if numeric literal was originally written with a dot
-                    const text = getLiteralText(<LiteralExpression>expression, currentSourceFile, languageVersion);
+                    const text = getLiteralTextOfNode(<LiteralExpression>expression);
                     return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
                 }
                 else {
@@ -2350,11 +2350,28 @@ const _super = (function (geti, seti) {
                 else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return unescapeIdentifier(node.text);
                 }
+                else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
+                }
                 else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return node.text;
                 }
 
                 return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
+            }
+
+            function getLiteralTextOfNode(node: LiteralLikeNode): string {
+                if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    const textSourceNode = (<StringLiteral>node).textSourceNode;
+                    if (isIdentifier(textSourceNode)) {
+                        return "\"" + escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode))) + "\"";
+                    }
+                    else {
+                        return getLiteralTextOfNode(textSourceNode);
+                    }
+                }
+
+                return getLiteralText(node, currentSourceFile, languageVersion);
             }
 
             function tryGetConstEnumValue(node: Node): number {

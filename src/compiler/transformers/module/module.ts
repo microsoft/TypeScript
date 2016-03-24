@@ -720,7 +720,7 @@ namespace ts {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
                 return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedClone(<StringLiteral>moduleName);
+                    || createLiteral(<StringLiteral>moduleName);
             }
 
             return undefined;

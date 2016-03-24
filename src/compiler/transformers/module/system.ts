@@ -5,7 +5,7 @@
 namespace ts {
     export function transformSystemModule(context: TransformationContext) {
         interface DependencyGroup {
-            name: Identifier;
+            name: StringLiteral;
             externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         }
 
@@ -640,7 +640,7 @@ namespace ts {
                 return [
                     node,
                     createExportStatement(name, name)
-                ]
+                ];
             }
             return node;
         }
@@ -1101,7 +1101,7 @@ namespace ts {
                     else {
                         return operator === SyntaxKind.PlusPlusToken
                             ? createSubtract(call, createLiteral(1))
-                            : createAdd(call, createLiteral(1))
+                            : createAdd(call, createLiteral(1));
                     }
                 }
             }

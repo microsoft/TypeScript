@@ -804,6 +804,8 @@ namespace ts {
     // @kind(SyntaxKind.StringLiteral)
     export interface StringLiteral extends LiteralExpression {
         _stringLiteralBrand: any;
+        /* @internal */
+        textSourceNode?: Identifier | StringLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.

@@ -2982,7 +2982,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(getOriginalNode(node))) {
                         // import x = require("mod") where x is referenced
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
@@ -2995,7 +2995,7 @@ namespace ts {
                             externalImports.push(<ExportDeclaration>node);
                             hasExportStars = true;
                         }
-                        else if (resolver.isValueAliasDeclaration(node)) {
+                        else if (resolver.isValueAliasDeclaration(getOriginalNode(node))) {
                             // export { x, y } from "mod" where at least one export is a value symbol
                             externalImports.push(<ExportDeclaration>node);
                         }

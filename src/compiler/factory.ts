@@ -114,10 +114,11 @@ namespace ts {
 
     // Literals
 
+    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
     export function createLiteral(value: string, location?: TextRange): StringLiteral;
     export function createLiteral(value: number, location?: TextRange): LiteralExpression;
     export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression {
+    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
             const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location);
             node.text = value.toString();
@@ -126,9 +127,15 @@ namespace ts {
         else if (typeof value === "boolean") {
             return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location);
         }
+        else if (typeof value === "string") {
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
+            node.text = value;
+            return node;
+        }
         else {
             const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
-            node.text = String(value);
+            node.textSourceNode = value;
+            node.text = value.text;
             return node;
         }
     }
