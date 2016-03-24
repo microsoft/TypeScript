@@ -174,9 +174,9 @@ if (holder2.a.isLeader()) {
 >isLeader : () => this is LeadGuard
 
     holder2.a;
->holder2.a : RoyalGuard
+>holder2.a : LeadGuard
 >holder2 : { a: RoyalGuard; }
->a : RoyalGuard
+>a : LeadGuard
 }
 else {
     holder2.a;

@@ -34,7 +34,7 @@ interface SymbolConstructor {
       * Otherwise, returns a undefined.
       * @param sym Symbol to find the key for.
       */
-    keyFor(sym: symbol): string;
+    keyFor(sym: symbol): string | undefined;
 
     // Well-known Symbols
 
@@ -320,7 +320,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T;
+    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -331,7 +331,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
@@ -407,7 +407,7 @@ interface String {
       * If there is no element at that position, the result is undefined. 
       * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
       */
-    codePointAt(pos: number): number;
+    codePointAt(pos: number): number | undefined;
 
     /**
       * Returns true if searchString appears as a substring of the result of converting this 
@@ -453,7 +453,7 @@ interface String {
       * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
       * @param matcher An object that supports being matched against.
       */
-    match(matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
+    match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using an object that supports replacement within a string.
@@ -723,7 +723,7 @@ interface RegExp {
       * that search.
       * @param string A string to search within.
       */
-    [Symbol.match](string: string): RegExpMatchArray;
+    [Symbol.match](string: string): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using this regular expression.
@@ -800,7 +800,7 @@ interface Map<K, V> {
     delete(key: K): boolean;
     entries(): IterableIterator<[K, V]>;
     forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
-    get(key: K): V;
+    get(key: K): V | undefined;
     has(key: K): boolean;
     keys(): IterableIterator<K>;
     set(key: K, value?: V): Map<K, V>;
@@ -821,7 +821,7 @@ declare var Map: MapConstructor;
 interface WeakMap<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    get(key: K): V;
+    get(key: K): V | undefined;
     has(key: K): boolean;
     set(key: K, value?: V): WeakMap<K, V>;
     readonly [Symbol.toStringTag]: "WeakMap";

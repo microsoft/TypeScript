@@ -242,8 +242,14 @@ namespace ts {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos++;
+                let result: T | U;
+                if (arguments.length <= 2) {
+                    result = array[pos];
+                    pos++;
+                }
+                else {
+                    result = initial;
+                }
                 while (pos < count) {
                     result = f(<U>result, array[pos]);
                     pos++;
@@ -260,8 +266,14 @@ namespace ts {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos--;
+                let result: T | U;
+                if (arguments.length <= 2) {
+                    result = array[pos];
+                    pos--;
+                }
+                else {
+                    result = initial;
+                }
                 while (pos >= 0) {
                     result = f(<U>result, array[pos]);
                     pos--;
