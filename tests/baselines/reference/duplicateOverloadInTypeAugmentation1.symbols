@@ -3,7 +3,7 @@ interface Array<T> {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 0))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: this) => T,
 >reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 11))
 >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 24))
@@ -13,14 +13,13 @@ interface Array<T> {
 >currentIndex : Symbol(currentIndex, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 58))
 >array : Symbol(array, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 80))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
         initialValue?: T): T;
->initialValue : Symbol(initialValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 98))
+>initialValue : Symbol(initialValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 99))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
-    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
+    reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: this) => U,
 >reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 14))
@@ -30,11 +29,10 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 >currentIndex : Symbol(currentIndex, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 61))
 >array : Symbol(array, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 83))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 
         initialValue: U): U;
->initialValue : Symbol(initialValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 101))
+>initialValue : Symbol(initialValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 102))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 }
