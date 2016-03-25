@@ -1793,11 +1793,14 @@ namespace ts {
                 return undefined;
             }
 
-            return createMethod(
-                visitNodes(node.modifiers, visitor, isModifier),
-                visitPropertyNameOfClassElement(node),
-                visitNodes(node.parameters, visitor, isParameter),
-                transformFunctionBody(node),
+            return setOriginalNode(
+                createMethod(
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    visitPropertyNameOfClassElement(node),
+                    visitNodes(node.parameters, visitor, isParameter),
+                    transformFunctionBody(node),
+                    node
+                ),
                 node
             );
         }
@@ -1900,6 +1903,10 @@ namespace ts {
          * @param node The function expression node.
          */
         function visitFunctionExpression(node: FunctionExpression) {
+            if (nodeIsMissing(node.body)) {
+                return createNode(SyntaxKind.OmittedExpression);
+            }
+
             return createFunctionExpression(
                 node.asteriskToken,
                 node.name,
@@ -1916,7 +1923,7 @@ namespace ts {
          * @param node The declaration node.
          */
         function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return node.body === undefined
+            return nodeIsMissing(node.body)
                 || hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
@@ -2004,7 +2011,7 @@ namespace ts {
                     )
                 );
 
-                const block = createBlock(statements, /*location*/ node.body);
+                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.

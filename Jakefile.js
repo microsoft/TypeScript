@@ -695,6 +695,7 @@ function runTestsAndWriteOutput(file) {
     cleanTestDirs();
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var beep = process.env.beep;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -726,6 +727,7 @@ function runTestsAndWriteOutput(file) {
     var tapNotOk = /^not\sok/;
     var tapComment = /^#/;
     var typeError = /^\s+TypeError:/;
+    var debugError = /^\s+Error:\sDebug\sFailure\./;
     var progress = new ProgressBar("Running tests...");
     var expectedTestCount = 0;
     var testCount = 0;
@@ -733,6 +735,7 @@ function runTestsAndWriteOutput(file) {
     var successCount = 0;
     var comments = [];
     var typeErrorCount = 0;
+    var debugErrorCount = 0;
 
     ex.addListener("stdout", function (output) {
         var m = tapRange.exec(output);
@@ -755,6 +758,9 @@ function runTestsAndWriteOutput(file) {
             }
             else if (typeError.test(output)) {
                 typeErrorCount++;
+            }
+            else if (debugError.test(output)) {
+                debugErrorCount++;
             }
             return;
         }
@@ -790,6 +796,8 @@ function runTestsAndWriteOutput(file) {
         console.log(comments.join(os.EOL));
         deleteTemporaryProjectOutput();
         complete();
+
+        if (beep) process.stdout.write("\u0007");
     });
     ex.addListener("error", function (e, status) {
         if (progress.visible) {
@@ -803,7 +811,12 @@ function runTestsAndWriteOutput(file) {
             console.log("# type errors: %s", typeErrorCount);
         }
 
+        if (debugErrorCount) {
+            console.log("# debug errors: %s", debugErrorCount);
+        }
+
         deleteTemporaryProjectOutput();
+        if (beep) process.stdout.write("\u0007");
         fail("Process exited with code " + status);
     });
     ex.run();
