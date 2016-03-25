@@ -674,7 +674,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const declaration = resolver.getReferencedImportDeclaration(original);
+                    const declaration = resolver.getReferencedImportDeclaration(node.parent ? node : original);
                     if (declaration) {
                         if (declaration.kind === SyntaxKind.ImportClause) {
                             if (languageVersion >= ScriptTarget.ES5) {

@@ -695,7 +695,6 @@ function runTestsAndWriteOutput(file) {
     cleanTestDirs();
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
-    var beep = process.env.beep;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -796,8 +795,6 @@ function runTestsAndWriteOutput(file) {
         console.log(comments.join(os.EOL));
         deleteTemporaryProjectOutput();
         complete();
-
-        if (beep) process.stdout.write("\u0007");
     });
     ex.addListener("error", function (e, status) {
         if (progress.visible) {
@@ -816,7 +813,6 @@ function runTestsAndWriteOutput(file) {
         }
 
         deleteTemporaryProjectOutput();
-        if (beep) process.stdout.write("\u0007");
         fail("Process exited with code " + status);
     });
     ex.run();
@@ -827,13 +823,14 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var stackTraceLimit = process.env.stackTraceLimit || 1;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
     if (tests || light) {
-        writeTestConfigFile(testConfigFile, tests, light);
+        writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
