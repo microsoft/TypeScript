@@ -1,4 +1,3 @@
-
 interface NumberConstructor {
     /**
       * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1

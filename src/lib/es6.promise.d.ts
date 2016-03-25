@@ -1,4 +1,3 @@
-
 /**
  * Represents the completion of an asynchronous operation
  */

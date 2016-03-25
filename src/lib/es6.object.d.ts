@@ -1,4 +1,3 @@
-
 interface Object {
     /**
       * Determines whether an object has a property with the specified name. 

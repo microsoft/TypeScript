@@ -1,4 +1,3 @@
-
 interface ProxyHandler<T> {
     getPrototypeOf? (target: T): any;
     setPrototypeOf? (target: T, v: any): boolean;

@@ -1,4 +1,3 @@
-
 interface Math {
     /**
       * Returns the number of leading zero bits in the 32-bit binary representation of a number.

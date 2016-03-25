@@ -1,4 +1,3 @@
-
 interface String {
     /**
       * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point 
