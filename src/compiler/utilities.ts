@@ -3405,6 +3405,7 @@ namespace ts {
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ExportDeclaration
             || kind === SyntaxKind.ExportAssignment;

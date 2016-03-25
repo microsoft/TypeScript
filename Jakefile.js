@@ -727,6 +727,7 @@ function runTestsAndWriteOutput(file) {
     var tapNotOk = /^not\sok/;
     var tapComment = /^#/;
     var typeError = /^\s+TypeError:/;
+    var debugError = /^\s+Error:\sDebug\sFailure\./;
     var progress = new ProgressBar("Running tests...");
     var expectedTestCount = 0;
     var testCount = 0;
@@ -734,6 +735,7 @@ function runTestsAndWriteOutput(file) {
     var successCount = 0;
     var comments = [];
     var typeErrorCount = 0;
+    var debugErrorCount = 0;
 
     ex.addListener("stdout", function (output) {
         var m = tapRange.exec(output);
@@ -756,6 +758,9 @@ function runTestsAndWriteOutput(file) {
             }
             else if (typeError.test(output)) {
                 typeErrorCount++;
+            }
+            else if (debugError.test(output)) {
+                debugErrorCount++;
             }
             return;
         }
@@ -804,6 +809,10 @@ function runTestsAndWriteOutput(file) {
 
         if (typeErrorCount) {
             console.log("# type errors: %s", typeErrorCount);
+        }
+
+        if (debugErrorCount) {
+            console.log("# debug errors: %s", debugErrorCount);
         }
 
         deleteTemporaryProjectOutput();
