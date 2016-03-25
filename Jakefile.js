@@ -695,6 +695,7 @@ function runTestsAndWriteOutput(file) {
     cleanTestDirs();
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var beep = process.env.beep;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
@@ -790,6 +791,8 @@ function runTestsAndWriteOutput(file) {
         console.log(comments.join(os.EOL));
         deleteTemporaryProjectOutput();
         complete();
+
+        if (beep) process.stdout.write("\u0007");
     });
     ex.addListener("error", function (e, status) {
         if (progress.visible) {
@@ -804,6 +807,7 @@ function runTestsAndWriteOutput(file) {
         }
 
         deleteTemporaryProjectOutput();
+        if (beep) process.stdout.write("\u0007");
         fail("Process exited with code " + status);
     });
     ex.run();

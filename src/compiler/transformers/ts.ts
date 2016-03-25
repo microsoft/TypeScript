@@ -1793,11 +1793,14 @@ namespace ts {
                 return undefined;
             }
 
-            return createMethod(
-                visitNodes(node.modifiers, visitor, isModifier),
-                visitPropertyNameOfClassElement(node),
-                visitNodes(node.parameters, visitor, isParameter),
-                transformFunctionBody(node),
+            return setOriginalNode(
+                createMethod(
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    visitPropertyNameOfClassElement(node),
+                    visitNodes(node.parameters, visitor, isParameter),
+                    transformFunctionBody(node),
+                    node
+                ),
                 node
             );
         }
