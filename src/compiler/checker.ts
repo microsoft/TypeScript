@@ -5643,7 +5643,7 @@ namespace ts {
                 }
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
-                    if (result = enumRelatedTo(source, target)) {
+                    if (result = enumRelatedTo(source, target, reportErrors)) {
                         return result;
                     }
                 }
@@ -6266,7 +6266,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function enumRelatedTo(source: Type, target: Type) {
+            function enumRelatedTo(source: Type, target: Type, reportErrors?: boolean) {
                 if (source.symbol.name !== target.symbol.name ||
                     source.symbol.flags & SymbolFlags.ConstEnum ||
                     target.symbol.flags & SymbolFlags.ConstEnum) {
@@ -6277,9 +6277,11 @@ namespace ts {
                     if (property.flags & SymbolFlags.EnumMember) {
                         const targetProperty = getPropertyOfType(targetEnumType, property.name);
                         if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
-                            reportError(Diagnostics.Property_0_is_missing_in_type_1,
-                                property.name,
-                                typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                            if (reportErrors) {
+                                reportError(Diagnostics.Property_0_is_missing_in_type_1,
+                                    property.name,
+                                    typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                            }
                             return Ternary.False;
                         }
                     }
