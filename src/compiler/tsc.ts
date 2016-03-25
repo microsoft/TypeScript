@@ -655,7 +655,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const descriptionKindMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap: Map<string[]> = {};  // Map between option.description and list of option.type if it is a kind
 
         for (let i = 0; i < optsList.length; i++) {
             const option = optsList[i];
@@ -681,7 +681,12 @@ namespace ts {
 
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
-                descriptionKindMap[description] = [];
+                const options: string[] = [];
+                const element = (<CommandLineOptionOfListType>option).element;
+                forEachKey(<Map<number | string>>element.type, key => {
+                    options.push(`'${key}'`);
+                });
+                optionsDescriptionMap[description] = options;
             }
             else {
                 description = getDiagnosticText(option.description);
@@ -703,7 +708,7 @@ namespace ts {
         for (let i = 0; i < usageColumn.length; i++) {
             const usage = usageColumn[i];
             const description = descriptionColumn[i];
-            const kindsList = descriptionKindMap[description];
+            const kindsList = optionsDescriptionMap[description];
             output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
 
             if (kindsList) {
