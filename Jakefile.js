@@ -184,23 +184,23 @@ var es6LibrarySources = [
 ];
 
 var es6LibrarySourceMap = es6LibrarySources.map(function(source) {
-   return  { target: "lib." + source, sources: [source ] };
+   return  { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
 var es7LibrarySource = [ "es7.array.include.d.ts" ];
 
 var es7LibrarySourceMap = es7LibrarySource.map(function(source) {
-    return { target: "lib." + source, sources: [source] };
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
 })
 
 var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
 
 var librarySourceMap = [
         // Host library
-        { target: "lib.dom.d.ts", sources: ["dom.generated.d.ts"], },
-        { target: "lib.dom.iterable.d.ts", sources: ["dom.iterable.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["webworker.generated.d.ts"], },
-        { target: "lib.scripthost.d.ts", sources: ["scripthost.d.ts"], },
+        { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"], },
         
         // JavaScript library
         { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
