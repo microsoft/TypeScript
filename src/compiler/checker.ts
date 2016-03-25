@@ -7242,17 +7242,17 @@ namespace ts {
             return false;
         }
 
-        // Remove those constituent types of currentType to which no constituent type of assignedType is assignable.
+        // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
-        function getAssignmentReducedType(currentType: Type, assignedType: Type) {
-            if (currentType !== assignedType && currentType.flags & TypeFlags.Union) {
-                const reducedTypes = filter((<UnionType>currentType).types, t => typeMaybeAssignableTo(assignedType, t));
+        function getAssignmentReducedType(declaredType: Type, assignedType: Type) {
+            if (declaredType !== assignedType && declaredType.flags & TypeFlags.Union) {
+                const reducedTypes = filter((<UnionType>declaredType).types, t => typeMaybeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
                     return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
                 }
             }
-            return currentType;
+            return declaredType;
         }
 
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
@@ -7389,10 +7389,11 @@ namespace ts {
                 for (const antecedent of flow.antecedents) {
                     const t = getTypeAtFlowNodeCached(antecedent);
                     if (t !== resolvingFlowType) {
-                        // If the type at a particular antecedent path is the declared type, there is no
-                        // reason to process more antecedents since the only possible outcome is subtypes
-                        // that are be removed in the final union type anyway.
-                        if (t === declaredType) {
+                        // If the type at a particular antecedent path is the declared type and the
+                        // reference is known to always be assigned (i.e. when declared and initial types
+                        // are the same), there is no reason to process more antecedents since the only
+                        // possible outcome is subtypes that will be removed in the final union type anyway.
+                        if (t === declaredType && declaredType === initialType) {
                             return t;
                         }
                         if (!contains(antecedentTypes, t)) {
