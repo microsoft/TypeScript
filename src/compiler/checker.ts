@@ -7707,6 +7707,10 @@ namespace ts {
                 }
             }
 
+            if (compilerOptions.noImplicitThis && isFunctionLike(container)) {
+                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+            }
             return anyType;
         }
 

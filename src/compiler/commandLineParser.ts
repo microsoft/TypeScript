@@ -126,6 +126,10 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
+            name: "noImplicitThis",
+            type: "boolean",
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
