@@ -7230,14 +7230,29 @@ namespace ts {
                 expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
-        function getAssignmentReducedType(type: Type, assignedType: Type) {
-            if (type !== assignedType && type.flags & TypeFlags.Union) {
-                const reducedTypes = filter((<UnionType>type).types, t => isTypeAssignableTo(assignedType, t));
+        function typeMaybeAssignableTo(source: Type, target: Type) {
+            if (!(source.flags & TypeFlags.Union)) {
+                return isTypeAssignableTo(source, target);
+            }
+            for (const t of (<UnionType>source).types) {
+                if (isTypeAssignableTo(t, target)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Remove those constituent types of currentType to which no constituent type of assignedType is assignable.
+        // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
+        // we remove type string.
+        function getAssignmentReducedType(currentType: Type, assignedType: Type) {
+            if (currentType !== assignedType && currentType.flags & TypeFlags.Union) {
+                const reducedTypes = filter((<UnionType>currentType).types, t => typeMaybeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
                     return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
                 }
             }
-            return type;
+            return currentType;
         }
 
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
