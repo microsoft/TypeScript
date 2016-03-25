@@ -4,7 +4,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(readonlyInDeclarationFile.ts, 0, 0))
 
     readonly x: number;
->x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 1, 15))
+>x : Symbol(Foo.x, Decl(readonlyInDeclarationFile.ts, 1, 15))
 
     readonly [x: string]: Object;
 >x : Symbol(x, Decl(readonlyInDeclarationFile.ts, 3, 14))
@@ -19,42 +19,42 @@ class C {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     private readonly a1: number;
->a1 : Symbol(a1, Decl(readonlyInDeclarationFile.ts, 7, 33))
+>a1 : Symbol(C.a1, Decl(readonlyInDeclarationFile.ts, 7, 33))
 
     protected readonly a2: number;
->a2 : Symbol(a2, Decl(readonlyInDeclarationFile.ts, 8, 32))
+>a2 : Symbol(C.a2, Decl(readonlyInDeclarationFile.ts, 8, 32))
 
     public readonly a3: number;
->a3 : Symbol(a3, Decl(readonlyInDeclarationFile.ts, 9, 34))
+>a3 : Symbol(C.a3, Decl(readonlyInDeclarationFile.ts, 9, 34))
 
     private get b1() { return 1 }
->b1 : Symbol(b1, Decl(readonlyInDeclarationFile.ts, 10, 31))
+>b1 : Symbol(C.b1, Decl(readonlyInDeclarationFile.ts, 10, 31))
 
     protected get b2() { return 1 }
->b2 : Symbol(b2, Decl(readonlyInDeclarationFile.ts, 11, 33))
+>b2 : Symbol(C.b2, Decl(readonlyInDeclarationFile.ts, 11, 33))
 
     public get b3() { return 1 }
->b3 : Symbol(b3, Decl(readonlyInDeclarationFile.ts, 12, 35))
+>b3 : Symbol(C.b3, Decl(readonlyInDeclarationFile.ts, 12, 35))
 
     private get c1() { return 1 }
->c1 : Symbol(c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
+>c1 : Symbol(C.c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
 
     private set c1(value) { }
->c1 : Symbol(c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
+>c1 : Symbol(C.c1, Decl(readonlyInDeclarationFile.ts, 13, 32), Decl(readonlyInDeclarationFile.ts, 14, 33))
 >value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 15, 19))
 
     protected get c2() { return 1 }
->c2 : Symbol(c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
+>c2 : Symbol(C.c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
 
     protected set c2(value) { }
->c2 : Symbol(c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
+>c2 : Symbol(C.c2, Decl(readonlyInDeclarationFile.ts, 15, 29), Decl(readonlyInDeclarationFile.ts, 16, 35))
 >value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 17, 21))
 
     public get c3() { return 1 }
->c3 : Symbol(c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
+>c3 : Symbol(C.c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
 
     public set c3(value) { }
->c3 : Symbol(c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
+>c3 : Symbol(C.c3, Decl(readonlyInDeclarationFile.ts, 17, 31), Decl(readonlyInDeclarationFile.ts, 18, 32))
 >value : Symbol(value, Decl(readonlyInDeclarationFile.ts, 19, 18))
 
     private static readonly s1: number;

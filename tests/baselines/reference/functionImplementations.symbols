@@ -150,12 +150,12 @@ var n = function () {
 // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
 class Base { private m; }
 >Base : Symbol(Base, Decl(functionImplementations.ts, 70, 4))
->m : Symbol(m, Decl(functionImplementations.ts, 77, 12))
+>m : Symbol(Base.m, Decl(functionImplementations.ts, 77, 12))
 
 class Derived extends Base { private q; }
 >Derived : Symbol(Derived, Decl(functionImplementations.ts, 77, 25))
 >Base : Symbol(Base, Decl(functionImplementations.ts, 70, 4))
->q : Symbol(q, Decl(functionImplementations.ts, 78, 28))
+>q : Symbol(Derived.q, Decl(functionImplementations.ts, 78, 28))
 
 var b: Base;
 >b : Symbol(b, Decl(functionImplementations.ts, 79, 3), Decl(functionImplementations.ts, 80, 3))
@@ -261,11 +261,11 @@ function f6(): number {
 class Derived2 extends Base { private r: string; }
 >Derived2 : Symbol(Derived2, Decl(functionImplementations.ts, 124, 1))
 >Base : Symbol(Base, Decl(functionImplementations.ts, 70, 4))
->r : Symbol(r, Decl(functionImplementations.ts, 126, 29))
+>r : Symbol(Derived2.r, Decl(functionImplementations.ts, 126, 29))
 
 class AnotherClass { private x }
 >AnotherClass : Symbol(AnotherClass, Decl(functionImplementations.ts, 126, 50))
->x : Symbol(x, Decl(functionImplementations.ts, 127, 20))
+>x : Symbol(AnotherClass.x, Decl(functionImplementations.ts, 127, 20))
 
 // if f is a contextually typed function expression, the inferred return type is the union type
 // of the types of the return statement expressions in the function body, 

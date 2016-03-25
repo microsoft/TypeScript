@@ -94,18 +94,18 @@ class MyClass {
 >MyClass : Symbol(MyClass, Decl(arrowFunctionExpressions.ts, 24, 37))
 
     m = (n) => n + 1;
->m : Symbol(m, Decl(arrowFunctionExpressions.ts, 28, 15))
+>m : Symbol(MyClass.m, Decl(arrowFunctionExpressions.ts, 28, 15))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 29, 9))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 29, 9))
 
     p = (n) => n && this;
->p : Symbol(p, Decl(arrowFunctionExpressions.ts, 29, 21))
+>p : Symbol(MyClass.p, Decl(arrowFunctionExpressions.ts, 29, 21))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 30, 9))
 >n : Symbol(n, Decl(arrowFunctionExpressions.ts, 30, 9))
 >this : Symbol(MyClass, Decl(arrowFunctionExpressions.ts, 24, 37))
 
     fn() {
->fn : Symbol(fn, Decl(arrowFunctionExpressions.ts, 30, 25))
+>fn : Symbol(MyClass.fn, Decl(arrowFunctionExpressions.ts, 30, 25))
 
         var m = (n) => n + 1;
 >m : Symbol(m, Decl(arrowFunctionExpressions.ts, 33, 11))

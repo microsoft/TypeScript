@@ -24,7 +24,7 @@ interface I2<T> extends I1<T[]> {
 >T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 12, 13))
 
     b: T;
->b : Symbol(b, Decl(inheritedGenericCallSignature.ts, 12, 33))
+>b : Symbol(I2.b, Decl(inheritedGenericCallSignature.ts, 12, 33))
 >T : Symbol(T, Decl(inheritedGenericCallSignature.ts, 12, 13))
 
 }

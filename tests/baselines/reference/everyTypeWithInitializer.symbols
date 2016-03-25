@@ -3,7 +3,7 @@ interface I {
 >I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(everyTypeWithInitializer.ts, 0, 13))
+>id : Symbol(I.id, Decl(everyTypeWithInitializer.ts, 0, 13))
 }
 
 class C implements I {
@@ -11,7 +11,7 @@ class C implements I {
 >I : Symbol(I, Decl(everyTypeWithInitializer.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(everyTypeWithInitializer.ts, 4, 22))
+>id : Symbol(C.id, Decl(everyTypeWithInitializer.ts, 4, 22))
 }
 
 class D<T>{
@@ -19,16 +19,16 @@ class D<T>{
 >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
 
     source: T;
->source : Symbol(source, Decl(everyTypeWithInitializer.ts, 8, 11))
+>source : Symbol(D.source, Decl(everyTypeWithInitializer.ts, 8, 11))
 >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
 
     recurse: D<T>;
->recurse : Symbol(recurse, Decl(everyTypeWithInitializer.ts, 9, 14))
+>recurse : Symbol(D.recurse, Decl(everyTypeWithInitializer.ts, 9, 14))
 >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
 >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
 
     wrapped: D<D<T>>
->wrapped : Symbol(wrapped, Decl(everyTypeWithInitializer.ts, 10, 18))
+>wrapped : Symbol(D.wrapped, Decl(everyTypeWithInitializer.ts, 10, 18))
 >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
 >D : Symbol(D, Decl(everyTypeWithInitializer.ts, 6, 1))
 >T : Symbol(T, Decl(everyTypeWithInitializer.ts, 8, 8))
@@ -45,7 +45,7 @@ module M {
 >A : Symbol(A, Decl(everyTypeWithInitializer.ts, 16, 10))
 
         name: string;
->name : Symbol(name, Decl(everyTypeWithInitializer.ts, 17, 20))
+>name : Symbol(A.name, Decl(everyTypeWithInitializer.ts, 17, 20))
     }
 
     export function F2(x: number): string { return x.toString(); }

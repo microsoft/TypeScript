@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 0, 0))
 
     foo<T>(x: T): T { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 2, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 3, 8))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 3, 11))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 3, 8))
@@ -18,7 +18,7 @@ class B<U, V> {
 >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 6, 10))
 
     foo(x: U): U { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 6, 15))
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 6, 15))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 7, 8))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 6, 8))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 6, 8))
@@ -31,7 +31,7 @@ class C<V, W, X> {
 >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 10, 13))
 
     foo(x: V): V { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 10, 18))
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 10, 18))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 11, 8))
 >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 10, 8))
 >V : Symbol(V, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 10, 8))
@@ -45,7 +45,7 @@ interface I<X, Y, Z, A> {
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 14, 20))
 
     foo(x: X): X;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 14, 25))
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 14, 25))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 15, 8))
 >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 14, 12))
 >X : Symbol(X, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 14, 12))
@@ -55,7 +55,7 @@ interface I2 {
 >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 16, 1))
 
     foo<Y, Z, A, B>(x: Y): Y;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 18, 14))
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 18, 14))
 >Y : Symbol(Y, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 19, 8))
 >Z : Symbol(Z, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 19, 10))
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts.ts, 19, 13))

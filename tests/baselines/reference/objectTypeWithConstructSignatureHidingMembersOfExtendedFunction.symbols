@@ -3,7 +3,7 @@ interface Function {
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 0, 0))
 
     data: number;
->data : Symbol(data, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 0, 20))
+>data : Symbol(Function.data, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 0, 20))
 
     [x: string]: Object;
 >x : Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 2, 5))
@@ -15,12 +15,12 @@ interface I {
 
     new(): number;
     apply(a: any, b?: any): void;
->apply : Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 6, 18))
+>apply : Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 6, 18))
 >a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 7, 10))
 >b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 7, 17))
 
     call(thisArg: number, ...argArray: number[]): any;
->call : Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 7, 33))
+>call : Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 7, 33))
 >thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 8, 9))
 >argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 8, 25))
 }

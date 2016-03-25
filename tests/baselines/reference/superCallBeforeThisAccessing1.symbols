@@ -13,7 +13,7 @@ class D extends Base {
 >Base : Symbol(Base, Decl(superCallBeforeThisAccessing1.ts, 0, 24))
 
     private _t;
->_t : Symbol(_t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
 
     constructor() {
         super(i);
@@ -25,9 +25,9 @@ class D extends Base {
 
             t: this._t
 >t : Symbol(t, Decl(superCallBeforeThisAccessing1.ts, 9, 17))
->this._t : Symbol(_t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+>this._t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
 >this : Symbol(D, Decl(superCallBeforeThisAccessing1.ts, 4, 1))
->_t : Symbol(_t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
+>_t : Symbol(D._t, Decl(superCallBeforeThisAccessing1.ts, 5, 22))
         }
         var i = Factory.create(s);
 >i : Symbol(i, Decl(superCallBeforeThisAccessing1.ts, 12, 11))

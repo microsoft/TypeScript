@@ -16,7 +16,7 @@ interface x {
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: string;
->foo : Symbol(foo, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 2, 13))
+>foo : Symbol(x.foo, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 2, 13))
 }
 export = x;
 >x : Symbol(x, Decl(exportAssignedTypeAsTypeAnnotation_0.ts, 0, 0))

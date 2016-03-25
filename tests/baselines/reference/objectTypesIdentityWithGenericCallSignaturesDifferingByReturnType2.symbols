@@ -7,7 +7,7 @@ class A {
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 0, 0))
 
     foo<T extends Date>(x: T): string { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 4, 9))
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 4, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 5, 8))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 5, 24))
@@ -20,7 +20,7 @@ class B<T extends Date> {
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): number { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 8, 25))
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 8, 25))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 9, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 8, 8))
 }
@@ -31,7 +31,7 @@ class C<T extends Date> {
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): boolean { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 12, 25))
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 12, 25))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 13, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 12, 8))
 }
@@ -42,7 +42,7 @@ interface I<T extends Date> {
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo(x: T): Date;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 29))
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 29))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 17, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 16, 12))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
@@ -52,7 +52,7 @@ interface I2 {
 >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 18, 1))
 
     foo<T extends Date>(x: T): RegExp;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 20, 14))
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 20, 14))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 21, 8))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType2.ts, 21, 24))

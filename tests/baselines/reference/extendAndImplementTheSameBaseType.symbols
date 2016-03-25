@@ -3,10 +3,10 @@ class C {
 >C : Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
 
     foo: number
->foo : Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
 
     bar() {}
->bar : Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+>bar : Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
 }
 class D extends C implements C {
 >D : Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
@@ -14,7 +14,7 @@ class D extends C implements C {
 >C : Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
 
     baz() { }
->baz : Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+>baz : Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
 }
 
 var c: C;

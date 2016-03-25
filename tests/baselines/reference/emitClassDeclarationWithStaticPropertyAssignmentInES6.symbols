@@ -10,7 +10,7 @@ class D {
 >D : Symbol(D, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 2, 1))
 
     x = 20000;
->x : Symbol(x, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 4, 9))
+>x : Symbol(D.x, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 4, 9))
 
     static b = true;
 >b : Symbol(D.b, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 5, 14))

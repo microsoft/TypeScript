@@ -1103,6 +1103,10 @@
         "category": "Error",
         "code": 2365
     },
+    "Function lacks ending return statement and return type does not include 'undefined'.": {
+        "category": "Error",
+        "code": 2366
+    },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
         "code": 2368
@@ -1423,6 +1427,10 @@
         "category": "Error",
         "code": 2453
     },
+    "Variable '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2454
+    },
     "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
         "category": "Error",
         "code": 2455
@@ -1718,6 +1726,10 @@
     "Property '{0}' is incompatible with index signature.": {
         "category": "Error",
         "code": 2530
+    },
+    "Object is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2531
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2608,6 +2620,11 @@
         "category": "Message",
         "code": 6112
     },
+    "Enable strict null checks.": {
+        "category": "Message",
+        "code": 6113
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

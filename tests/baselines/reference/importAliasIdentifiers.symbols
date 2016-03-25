@@ -6,8 +6,8 @@ module moduleA {
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 0, 16))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(importAliasIdentifiers.ts, 2, 20))
->y : Symbol(y, Decl(importAliasIdentifiers.ts, 2, 37))
+>x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 2, 20))
+>y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 2, 37))
     }
 }
 
@@ -34,7 +34,7 @@ class clodule {
 >clodule : Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
 
     name: string;
->name : Symbol(name, Decl(importAliasIdentifiers.ts, 12, 15))
+>name : Symbol(clodule.name, Decl(importAliasIdentifiers.ts, 12, 15))
 }
 
 module clodule {
@@ -44,8 +44,8 @@ module clodule {
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
 
         x: number; y: number;
->x : Symbol(x, Decl(importAliasIdentifiers.ts, 17, 28))
->y : Symbol(y, Decl(importAliasIdentifiers.ts, 18, 18))
+>x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 17, 28))
+>y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 18, 18))
     }
     var Point: Point = { x: 0, y: 0 };
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16), Decl(importAliasIdentifiers.ts, 20, 7))
@@ -89,8 +89,8 @@ module fundule {
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
 
         x: number; y: number;
->x : Symbol(x, Decl(importAliasIdentifiers.ts, 35, 28))
->y : Symbol(y, Decl(importAliasIdentifiers.ts, 36, 18))
+>x : Symbol(Point.x, Decl(importAliasIdentifiers.ts, 35, 28))
+>y : Symbol(Point.y, Decl(importAliasIdentifiers.ts, 36, 18))
     }
     var Point: Point = { x: 0, y: 0 };
 >Point : Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16), Decl(importAliasIdentifiers.ts, 38, 7))

@@ -6,7 +6,7 @@ class C<T> {
 >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
 
     x: T;
->x : Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
+>x : Symbol(C.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
 >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
 }
 
@@ -20,11 +20,11 @@ class D<T, U> {
 >U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
 
     x: T
->x : Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
+>x : Symbol(D.x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
 >T : Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
 
     y: U
->y : Symbol(y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
+>y : Symbol(D.y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
 >U : Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
 }
 

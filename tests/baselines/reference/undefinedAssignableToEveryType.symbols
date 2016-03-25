@@ -3,7 +3,7 @@ class C {
 >C : Symbol(C, Decl(undefinedAssignableToEveryType.ts, 0, 0))
 
     foo: string;
->foo : Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(undefinedAssignableToEveryType.ts, 0, 9))
 }
 var ac: C;
 >ac : Symbol(ac, Decl(undefinedAssignableToEveryType.ts, 3, 3))
@@ -13,7 +13,7 @@ interface I {
 >I : Symbol(I, Decl(undefinedAssignableToEveryType.ts, 3, 10))
 
     foo: string;
->foo : Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 4, 13))
+>foo : Symbol(I.foo, Decl(undefinedAssignableToEveryType.ts, 4, 13))
 }
 var ai: I;
 >ai : Symbol(ai, Decl(undefinedAssignableToEveryType.ts, 7, 3))

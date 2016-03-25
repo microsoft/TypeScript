@@ -16,7 +16,7 @@ class C {
     'a': {}
 
     fn() {
->fn : Symbol(fn, Decl(indexersInClassType.ts, 4, 11))
+>fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
 
         return this;
 >this : Symbol(C, Decl(indexersInClassType.ts, 0, 0))

@@ -7,7 +7,7 @@ class StringIterator {
 >StringIterator : Symbol(StringIterator, Decl(for-of28.ts, 0, 37))
 
     next: any;
->next : Symbol(next, Decl(for-of28.ts, 2, 22))
+>next : Symbol(StringIterator.next, Decl(for-of28.ts, 2, 22))
 
     [Symbol.iterator]() {
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es6.symbol.wellknown.d.ts, --, --))

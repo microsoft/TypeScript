@@ -4,7 +4,7 @@ declare module http {
 
 	export interface Server { openPort: number; }
 >Server : Symbol(Server, Decl(exportAssignValueAndType.ts, 0, 21))
->openPort : Symbol(openPort, Decl(exportAssignValueAndType.ts, 1, 26))
+>openPort : Symbol(Server.openPort, Decl(exportAssignValueAndType.ts, 1, 26))
 }
 
 interface server {
@@ -15,7 +15,7 @@ interface server {
 >Server : Symbol(http.Server, Decl(exportAssignValueAndType.ts, 0, 21))
 
     startTime: Date;
->startTime : Symbol(startTime, Decl(exportAssignValueAndType.ts, 5, 20))
+>startTime : Symbol(server.startTime, Decl(exportAssignValueAndType.ts, 5, 20))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
  

@@ -15,7 +15,7 @@ interface server {
 >Server : Symbol(server.Server, Decl(exportEqualNamespaces.ts, 0, 23))
 
     startTime: Date;
->startTime : Symbol(startTime, Decl(exportEqualNamespaces.ts, 5, 22))
+>startTime : Symbol(server.startTime, Decl(exportEqualNamespaces.ts, 5, 22))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
  

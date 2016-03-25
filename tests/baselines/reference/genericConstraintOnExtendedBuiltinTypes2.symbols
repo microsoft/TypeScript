@@ -6,7 +6,7 @@ module EndGate {
 >ICloneable : Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 
         Clone(): any;
->Clone : Symbol(Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
+>Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
     }
 }
 
@@ -26,7 +26,7 @@ module EndGate.Tweening {
 >ICloneable : Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 
         private _from: T;
->_from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
+>_from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
 >T : Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 23))
 
         constructor(from: T) {
@@ -34,9 +34,9 @@ module EndGate.Tweening {
 >T : Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 23))
 
             this._from = from.Clone();
->this._from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
+>this._from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
 >this : Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
->_from : Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
+>_from : Symbol(Tween._from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
 >from.Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
 >from : Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 12, 20))
 >Clone : Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))

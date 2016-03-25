@@ -4,7 +4,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(typeLiteralCallback.ts, 0, 14))
 
     reject(arg: T): void ;
->reject : Symbol(reject, Decl(typeLiteralCallback.ts, 0, 18))
+>reject : Symbol(Foo.reject, Decl(typeLiteralCallback.ts, 0, 18))
 >arg : Symbol(arg, Decl(typeLiteralCallback.ts, 1, 11))
 >T : Symbol(T, Decl(typeLiteralCallback.ts, 0, 14))
 }
@@ -17,13 +17,13 @@ interface bar<T> {
 >T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))
 
     fail(func: (arg: T) => void ): void ;
->fail : Symbol(fail, Decl(typeLiteralCallback.ts, 5, 18))
+>fail : Symbol(bar.fail, Decl(typeLiteralCallback.ts, 5, 18))
 >func : Symbol(func, Decl(typeLiteralCallback.ts, 6, 9))
 >arg : Symbol(arg, Decl(typeLiteralCallback.ts, 6, 16))
 >T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))
 
     fail2(func: { (arg: T): void ; }): void ;
->fail2 : Symbol(fail2, Decl(typeLiteralCallback.ts, 6, 41))
+>fail2 : Symbol(bar.fail2, Decl(typeLiteralCallback.ts, 6, 41))
 >func : Symbol(func, Decl(typeLiteralCallback.ts, 7, 10))
 >arg : Symbol(arg, Decl(typeLiteralCallback.ts, 7, 19))
 >T : Symbol(T, Decl(typeLiteralCallback.ts, 5, 14))

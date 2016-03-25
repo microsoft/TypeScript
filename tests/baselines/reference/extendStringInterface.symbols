@@ -3,10 +3,10 @@ interface String {
 >String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(extendStringInterface.ts, 0, 0))
 
     doStuff(): string;
->doStuff : Symbol(doStuff, Decl(extendStringInterface.ts, 0, 18))
+>doStuff : Symbol(String.doStuff, Decl(extendStringInterface.ts, 0, 18))
 
     doOtherStuff<T>(x:T): T;
->doOtherStuff : Symbol(doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
+>doOtherStuff : Symbol(String.doOtherStuff, Decl(extendStringInterface.ts, 1, 22))
 >T : Symbol(T, Decl(extendStringInterface.ts, 2, 17))
 >x : Symbol(x, Decl(extendStringInterface.ts, 2, 20))
 >T : Symbol(T, Decl(extendStringInterface.ts, 2, 17))

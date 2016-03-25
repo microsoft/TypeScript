@@ -3,7 +3,7 @@ declare class Point {
 >Point : Symbol(Point, Decl(assignToPrototype1.ts, 0, 0))
 
   add(dx: number, dy: number): void;
->add : Symbol(add, Decl(assignToPrototype1.ts, 0, 21))
+>add : Symbol(Point.add, Decl(assignToPrototype1.ts, 0, 21))
 >dx : Symbol(dx, Decl(assignToPrototype1.ts, 1, 6))
 >dy : Symbol(dy, Decl(assignToPrototype1.ts, 1, 17))
 }

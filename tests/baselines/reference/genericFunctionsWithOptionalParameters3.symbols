@@ -4,7 +4,7 @@ class Collection<T> {
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
 
     public add(x: T) { }
->add : Symbol(add, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 21))
+>add : Symbol(Collection.add, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 21))
 >x : Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 1, 15))
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
 }
@@ -12,7 +12,7 @@ interface Utils {
 >Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters3.ts, 2, 1))
 
     fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
->fold : Symbol(fold, Decl(genericFunctionsWithOptionalParameters3.ts, 3, 17))
+>fold : Symbol(Utils.fold, Decl(genericFunctionsWithOptionalParameters3.ts, 3, 17))
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
 >S : Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
 >c : Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 15))
@@ -29,7 +29,7 @@ interface Utils {
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
 
     mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
->mapReduce : Symbol(mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
+>mapReduce : Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
 >T : Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
 >U : Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
 >V : Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))

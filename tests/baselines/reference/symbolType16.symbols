@@ -3,7 +3,7 @@ interface Symbol {
 >Symbol : Symbol(Symbol, Decl(lib.es6.symbol.wellknown.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --), Decl(symbolType16.ts, 0, 0))
 
     newSymbolProp: number;
->newSymbolProp : Symbol(newSymbolProp, Decl(symbolType16.ts, 0, 18))
+>newSymbolProp : Symbol(Symbol.newSymbolProp, Decl(symbolType16.ts, 0, 18))
 }
 
 var sym: symbol;
