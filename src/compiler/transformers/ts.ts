@@ -1903,6 +1903,10 @@ namespace ts {
          * @param node The function expression node.
          */
         function visitFunctionExpression(node: FunctionExpression) {
+            if (nodeIsMissing(node.body)) {
+                return createNode(SyntaxKind.OmittedExpression);
+            }
+
             return createFunctionExpression(
                 node.asteriskToken,
                 node.name,
@@ -1919,7 +1923,7 @@ namespace ts {
          * @param node The declaration node.
          */
         function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return node.body === undefined
+            return nodeIsMissing(node.body)
                 || hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
