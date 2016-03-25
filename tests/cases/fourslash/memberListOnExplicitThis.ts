@@ -1,4 +1,3 @@
-// @strictThisChecks: true
 /// <reference path='fourslash.ts'/>
 
 ////interface Restricted {
@@ -7,10 +6,10 @@
 ////class C1 implements Restricted {
 ////   n: number;
 ////   m: number;
-////   f() {this./*1*/} // test on 'this.'
+////   f(this: this) {this./*1*/} // test on 'this.'
 ////   g(this: Restricted) {this./*2*/}
 ////}
-////function f() {this./*3*/}
+////function f(this: void) {this./*3*/}
 ////function g(this: Restricted) {this./*4*/}
 
 goTo.marker('1');

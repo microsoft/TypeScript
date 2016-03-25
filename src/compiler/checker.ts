@@ -3520,7 +3520,6 @@ namespace ts {
                             return isIndependentVariableLikeDeclaration(<VariableLikeDeclaration>declaration);
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
-                            return compilerOptions.strictThisChecks ? false : isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                         case SyntaxKind.Constructor:
                             return isIndependentFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
                     }
@@ -4233,21 +4232,6 @@ namespace ts {
 
                 if (minArgumentCount < 0) {
                     minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
-                }
-                if (!hasThisParameter && compilerOptions.strictThisChecks) {
-                    if (declaration.kind === SyntaxKind.FunctionDeclaration ||
-                        declaration.kind === SyntaxKind.CallSignature ||
-                        declaration.kind == SyntaxKind.FunctionExpression ||
-                        declaration.kind === SyntaxKind.FunctionType) {
-                        thisType = voidType;
-                    }
-                    else if ((declaration.kind === SyntaxKind.MethodDeclaration || declaration.kind === SyntaxKind.MethodSignature)
-                        && (isClassLike(declaration.parent) || declaration.parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                        thisType = declaration.flags & NodeFlags.Static ?
-                            getTypeOfSymbol(getSymbolOfNode(declaration.parent)) :
-                            getThisType(declaration.name);
-                        Debug.assert(!!thisType, "couldn't find implicit this type");
-                    }
                 }
 
                 if (isJSConstructSignature) {

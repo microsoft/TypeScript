@@ -2,22 +2,24 @@
 interface Real {
 >Real : Symbol(Real, Decl(unionThisTypeInFunctions.ts, 0, 0))
 
-    method(n: number): void;
+    method(this: this, n: number): void;
 >method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 0, 16))
->n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 1, 11))
+>this : Symbol(this, Decl(unionThisTypeInFunctions.ts, 1, 11))
+>n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 1, 22))
 
     data: string;
->data : Symbol(data, Decl(unionThisTypeInFunctions.ts, 1, 28))
+>data : Symbol(data, Decl(unionThisTypeInFunctions.ts, 1, 40))
 }
 interface Fake {
 >Fake : Symbol(Fake, Decl(unionThisTypeInFunctions.ts, 3, 1))
 
-    method(n: number): void;
+    method(this: this, n: number): void;
 >method : Symbol(method, Decl(unionThisTypeInFunctions.ts, 4, 16))
->n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 5, 11))
+>this : Symbol(this, Decl(unionThisTypeInFunctions.ts, 5, 11))
+>n : Symbol(n, Decl(unionThisTypeInFunctions.ts, 5, 22))
 
     data: number;
->data : Symbol(data, Decl(unionThisTypeInFunctions.ts, 5, 28))
+>data : Symbol(data, Decl(unionThisTypeInFunctions.ts, 5, 40))
 }
 function test(r: Real | Fake) {
 >test : Symbol(test, Decl(unionThisTypeInFunctions.ts, 7, 1))

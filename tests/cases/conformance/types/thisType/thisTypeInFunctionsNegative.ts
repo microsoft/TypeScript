@@ -1,4 +1,3 @@
-// @strictThisChecks: true
 class C {
     n: number;
     explicitThis(this: this, m: number): number {
@@ -25,9 +24,6 @@ class D {
 	explicitD(this: D, m: number): number {
 		return this.x + m;
 	}
-	implicitD(m: number): number {
-		return this.x + m;
-	}
 }
 interface I {
     a: number;
@@ -36,8 +32,6 @@ interface I {
     explicitStructural(this: {a: number}): number;
     explicitInterface(this: I): number;
     explicitThis(this: this): number; // TODO: Allow `this` types for interfaces
-    implicitMethod(): number;
-    implicitFunction: () => number;
 }
 let impl: I = {
     a: 12,
@@ -50,17 +44,11 @@ let impl: I = {
     explicitThis() {
         return this.a;
     },
-    implicitMethod() {
-        return this.a; // ok, I.a: number
-    },
-    implicitFunction: function () { return this.a; } // TODO: error 'a' not found in 'void'
 }
 let implExplicitStructural = impl.explicitStructural;
 implExplicitStructural(); // error, no 'a' in 'void'
 let implExplicitInterface = impl.explicitInterface;
 implExplicitInterface(); // error, no 'a' in 'void' 
-let implImplicitMethod = impl.implicitMethod;
-implImplicitMethod(); // error, no 'a' in 'void'
 function explicitStructural(this: { y: number }, x: number): number {
     return x + this.y;
 }
@@ -68,10 +56,6 @@ function propertyName(this: { y: number }, x: number): number {
     return x + this.notFound;
 }
 function voidThisSpecified(this: void, x: number): number {
-    return x + this.notSpecified;
-}
-function noThisSpecified(x: number): number {
-    // this:void unless loose-this is on
     return x + this.notSpecified;
 }
 let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
@@ -99,19 +83,17 @@ c.explicitProperty('wrong type 3');
 c.explicitProperty(15, 'too many arguments 3');
 
 // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
-let specifiedToImplicitVoid: (x: number) => number = explicitStructural;
+let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
 
 let reconstructed: { 
     n: number,
     explicitThis(this: C, m: number): number, // note: this: this is not allowed in an object literal type.
-    implicitThis(m: number): number,
     explicitC(this: C, m: number): number,
     explicitProperty: (this: {n : number}, m: number) => number,
     explicitVoid(this: void, m: number): number,
 } = { 
     n: 12,
     explicitThis: c.explicitThis,
-    implicitThis: c.implicitThis, // error not assignable -- c.this:c<this> not assignable to this:void.
     explicitC: c.explicitC,
     explicitProperty: c.explicitProperty,
     explicitVoid: c.explicitVoid
@@ -125,26 +107,21 @@ let explicitXProperty: (this: { x: number }, m: number) => number;
 c.explicitC = function(this: D, m: number) { return this.x + m };
 c.explicitProperty = explicitXProperty;
 
-c.explicitC = d.implicitD;
 c.explicitC = d.explicitD;
 c.explicitC = d.explicitThis;
-c.explicitThis = d.implicitD;
 c.explicitThis = d.explicitD;
 c.explicitThis = d.explicitThis;
 c.explicitProperty = d.explicitD;
-c.explicitProperty = d.implicitD;
 c.explicitThis = d.explicitThis;
-c.explicitVoid = d.implicitD;
 c.explicitVoid = d.explicitD;
 c.explicitVoid = d.explicitThis;
 
-/// class-based implicit assignability (with inheritance!) ///
+/// class-based polymorphic assignability (with inheritance!) ///
 
 class Base1 {
     x: number
-    public implicit(): number { return this.x; }
+    public polymorphic(this: this): number { return this.x; }
     explicit(this: Base1): number { return this.x; }
-    static implicitStatic(): number { return this.x; }
     static explicitStatic(this: typeof Base1): number { return this.x; }
 }
 class Derived1 extends Base1 {
@@ -152,7 +129,7 @@ class Derived1 extends Base1 {
 }
 class Base2 {
     y: number
-    implicit(): number { return this.y; }
+    polymorphic(this: this): number { return this.y; }
     explicit(this: Base1): number { return this.x; }
 }
 class Derived2 extends Base2 {
@@ -165,20 +142,16 @@ let d1 = new Derived1();
 let b2 = new Base2();
 let d2 = new Derived2();
 
-b1.implicit = b2.implicit // error, 'this.y' not in C: { x } (c assignable to e)
-b1.explicit = b2.implicit // error, 'y' not in C: { x } (c assignable to e)
+b1.polymorphic = b2.polymorphic // error, 'this.y' not in Base1: { x }
+b1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
 
-d1.explicit = b2.implicit // error, 'y' not in C: { x } (c assignable to e)
+d1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
 
 ////// use this-type for construction with new ////
 function VoidThis(this: void) {
 
 }
-function ImplicitVoidThis() {
-
-}
 let voidThis = new VoidThis();
-let implicitVoidThis = new ImplicitVoidThis();
 
 ///// syntax-ish errors /////
 class ThisConstructor {

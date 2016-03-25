@@ -2407,7 +2407,6 @@ namespace ts {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
-        strictThisChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;

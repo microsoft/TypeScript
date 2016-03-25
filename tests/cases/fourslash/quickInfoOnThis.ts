@@ -1,4 +1,3 @@
-// @strictThisChecks: true
 /// <reference path='fourslash.ts' />
 ////interface Restricted {
 ////    n: number;
@@ -6,9 +5,9 @@
 ////function wrapper(wrapped: { (): void; }) { }
 ////class Foo {
 ////    n: number;
-////    public implicitThis() {
+////    public explicitThis(this: this) {
 ////        wrapper(
-////            function implicitVoid() {
+////            function explicitVoid(this: void) {
 ////                console.log(th/*1*/is);
 ////            }
 ////        )
@@ -22,15 +21,15 @@
 ////    }
 ////}
 ////class Bar<T> {
-////    public implicitThis() {
+////    public explicitThis(this: this) {
 ////        console.log(th/*7*/is);
 ////    }
-////    public explicitThis(this: Bar<T>) {
+////    public explicitClass(this: Bar<T>) {
 ////        console.log(thi/*8*/s);
 ////    }
 ////}
 ////
-////function implicitVoid(x: number): void {
+////function implicitAny(x: number): void {
 ////    return th/*9*/is;
 ////}
 ////function explicitVoid(th/*10*/is: void, x: number): void {
@@ -75,7 +74,7 @@ verify.quickInfoIs('this: this');
 goTo.marker('8');
 verify.quickInfoIs('this: Bar<T>');
 goTo.marker('9');
-verify.quickInfoIs('void');
+verify.quickInfoIs('any');
 goTo.marker('10');
 verify.quickInfoIs('(parameter) this: void');
 goTo.marker('11');

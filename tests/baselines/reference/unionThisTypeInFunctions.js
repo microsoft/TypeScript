@@ -1,10 +1,10 @@
 //// [unionThisTypeInFunctions.ts]
 interface Real {
-    method(n: number): void;
+    method(this: this, n: number): void;
     data: string;
 }
 interface Fake {
-    method(n: number): void;
+    method(this: this, n: number): void;
     data: number;
 }
 function test(r: Real | Fake) {
