@@ -13,7 +13,7 @@ for (; false;) {
 
 //// [nestedBlockScopedBindings14.js]
 var x;
-var _loop_1 = function() {
+var _loop_1 = function () {
     var x_1;
     (function () { return x_1; });
 };

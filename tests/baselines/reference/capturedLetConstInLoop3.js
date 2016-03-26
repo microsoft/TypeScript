@@ -219,7 +219,7 @@ function foo8_c(x) {
 
 //// [capturedLetConstInLoop3.js]
 function foo0(x) {
-    var _loop_1 = function(x_1) {
+    var _loop_1 = function (x_1) {
         v = x_1;
         (function () { return x_1 + v; });
         (function () { return x_1 + v; });
@@ -232,7 +232,7 @@ function foo0(x) {
     use(v);
 }
 function foo0_1(x) {
-    var _loop_2 = function(x_2) {
+    var _loop_2 = function (x_2) {
         v = x_2;
         (function () { return x_2 + v; });
         (function () { return x_2 + v; });
@@ -244,7 +244,7 @@ function foo0_1(x) {
     use(v);
 }
 function foo1(x) {
-    var _loop_3 = function(x_3) {
+    var _loop_3 = function (x_3) {
         v = x_3;
         (function () { return x_3 + v; });
         (function () { return x_3 + v; });
@@ -256,7 +256,7 @@ function foo1(x) {
     use(v);
 }
 function foo2(x) {
-    var _loop_4 = function() {
+    var _loop_4 = function () {
         var x_4 = 1;
         v = x_4;
         (function () { return x_4 + v; });
@@ -269,7 +269,7 @@ function foo2(x) {
     use(v);
 }
 function foo3(x) {
-    var _loop_5 = function() {
+    var _loop_5 = function () {
         var x_5;
         (function () { return x_5 + v; });
         (function () { return x_5 + v; });
@@ -281,7 +281,7 @@ function foo3(x) {
     use(v);
 }
 function foo4(x) {
-    var _loop_6 = function(y) {
+    var _loop_6 = function (y) {
         v = y;
         var x_6 = 1;
         (function () { return x_6 + v; });
@@ -294,7 +294,7 @@ function foo4(x) {
     use(v);
 }
 function foo5(x) {
-    var _loop_7 = function(x_7, y) {
+    var _loop_7 = function (x_7, y) {
         v = x_7;
         (function () { return x_7 + y + v; });
         (function () { return x_7 + y + v; });
@@ -306,7 +306,7 @@ function foo5(x) {
     use(v);
 }
 function foo6(x) {
-    var _loop_8 = function() {
+    var _loop_8 = function () {
         var x_8, y;
         v = x_8;
         (function () { return x_8 + y + v; });
@@ -319,7 +319,7 @@ function foo6(x) {
     use(v);
 }
 function foo7(x) {
-    var _loop_9 = function() {
+    var _loop_9 = function () {
         var x_9, y;
         v = x_9;
         (function () { return x_9 + y + v; });
@@ -332,7 +332,7 @@ function foo7(x) {
     use(v);
 }
 function foo8(x) {
-    var _loop_10 = function(y) {
+    var _loop_10 = function (y) {
         var x_10 = 1;
         v = x_10;
         (function () { return x_10 + y + v; });
@@ -346,7 +346,7 @@ function foo8(x) {
 }
 //===const
 function foo0_c(x) {
-    var _loop_11 = function(x_11) {
+    var _loop_11 = function (x_11) {
         v = x_11;
         (function () { return x_11 + v; });
         (function () { return x_11 + v; });
@@ -359,7 +359,7 @@ function foo0_c(x) {
     use(v);
 }
 function foo0_1_c(x) {
-    var _loop_12 = function(x_12) {
+    var _loop_12 = function (x_12) {
         v = x_12;
         (function () { return x_12 + v; });
         (function () { return x_12 + v; });
@@ -371,7 +371,7 @@ function foo0_1_c(x) {
     use(v);
 }
 function foo1_c(x) {
-    var _loop_13 = function(x_13) {
+    var _loop_13 = function (x_13) {
         v = x_13;
         (function () { return x_13 + v; });
         (function () { return x_13 + v; });
@@ -383,7 +383,7 @@ function foo1_c(x) {
     use(v);
 }
 function foo2_c(x) {
-    var _loop_14 = function() {
+    var _loop_14 = function () {
         var x_14 = 1;
         v = x_14;
         (function () { return x_14 + v; });
@@ -396,7 +396,7 @@ function foo2_c(x) {
     use(v);
 }
 function foo3_c(x) {
-    var _loop_15 = function() {
+    var _loop_15 = function () {
         var x_15 = 1;
         (function () { return x_15 + v; });
         (function () { return x_15 + v; });
@@ -408,7 +408,7 @@ function foo3_c(x) {
     use(v);
 }
 function foo4_c(x) {
-    var _loop_16 = function(y) {
+    var _loop_16 = function (y) {
         v = y;
         var x_16 = 1;
         (function () { return x_16 + v; });
@@ -421,7 +421,7 @@ function foo4_c(x) {
     use(v);
 }
 function foo5_c(x) {
-    var _loop_17 = function(x_17, y) {
+    var _loop_17 = function (x_17, y) {
         v = x_17;
         (function () { return x_17 + y + v; });
         (function () { return x_17 + y + v; });
@@ -433,7 +433,7 @@ function foo5_c(x) {
     use(v);
 }
 function foo6_c(x) {
-    var _loop_18 = function() {
+    var _loop_18 = function () {
         var x_18 = 1, y = 1;
         v = x_18;
         (function () { return x_18 + y + v; });
@@ -446,7 +446,7 @@ function foo6_c(x) {
     use(v);
 }
 function foo7_c(x) {
-    var _loop_19 = function() {
+    var _loop_19 = function () {
         var x_19 = 1, y = 1;
         v = x_19;
         (function () { return x_19 + y + v; });
@@ -459,7 +459,7 @@ function foo7_c(x) {
     use(v);
 }
 function foo8_c(x) {
-    var _loop_20 = function(y) {
+    var _loop_20 = function (y) {
         var x_20 = 1;
         v = x_20;
         (function () { return x_20 + y + v; });
