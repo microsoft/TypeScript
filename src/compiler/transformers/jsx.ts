@@ -38,6 +38,9 @@ namespace ts {
                 case SyntaxKind.JsxSelfClosingElement:
                     return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
 
+                case SyntaxKind.JsxExpression:
+                    return visitJsxExpression(<JsxExpression>node);
+
                 default:
                     Debug.failBadSyntaxKind(node);
                     return undefined;
@@ -116,10 +119,23 @@ namespace ts {
 
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
-            const expression = node.initializer
-                ? visitNode(node.initializer, visitor, isExpression)
-                : createLiteral(true);
+            const expression = transformJsxAttributeInitializer(node.initializer);
             return createPropertyAssignment(name, expression);
+        }
+
+        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
+            if (node === undefined) {
+                return createLiteral(true);
+            }
+            else if (node.kind === SyntaxKind.StringLiteral) {
+                return node;
+            }
+            else if (node.kind === SyntaxKind.JsxExpression) {
+                return visitJsxExpression(<JsxExpression>node);
+            }
+            else {
+                Debug.failBadSyntaxKind(node);
+            }
         }
 
         function visitJsxText(node: JsxText) {

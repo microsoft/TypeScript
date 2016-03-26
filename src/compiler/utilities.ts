@@ -3408,7 +3408,8 @@ namespace ts {
             || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ImportEqualsDeclaration
             || kind === SyntaxKind.ExportDeclaration
-            || kind === SyntaxKind.ExportAssignment;
+            || kind === SyntaxKind.ExportAssignment
+            || kind === SyntaxKind.GlobalModuleExportDeclaration;
     }
 
     function isStatementKindButNotDeclarationKind(kind: SyntaxKind) {
@@ -3493,6 +3494,12 @@ namespace ts {
 
     export function isJsxAttribute(node: Node): node is JsxAttribute {
         return node.kind === SyntaxKind.JsxAttribute;
+    }
+
+    export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.JsxExpression;
     }
 
     // Clauses

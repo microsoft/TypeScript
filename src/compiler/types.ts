@@ -1070,7 +1070,7 @@ namespace ts {
     export interface JsxAttribute extends Node {
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        initializer?: Expression;
+        initializer?: StringLiteral | JsxExpression;
     }
 
     // @kind(SyntaxKind.JsxSpreadAttribute)

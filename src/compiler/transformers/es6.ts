@@ -88,6 +88,9 @@ namespace ts {
 
         function visitJavaScript(node: Node): VisitResult<Node> {
             switch (node.kind) {
+                case SyntaxKind.ExportKeyword:
+                    return node;
+
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
 
@@ -169,11 +172,18 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                     return visitSuperKeyword(<PrimaryExpression>node);
 
+                case SyntaxKind.YieldExpression:
+                    // `yield` will be handled by a generators transform.
+                    return visitEachChild(node, visitor, context);
+
                 case SyntaxKind.MethodDeclaration:
                     return visitMethodDeclaration(<MethodDeclaration>node);
 
                 case SyntaxKind.SourceFile:
                     return visitSourceFileNode(<SourceFile>node);
+
+                case SyntaxKind.VariableStatement:
+                    return visitEachChild(node, visitor, context);
 
                 default:
                     Debug.failBadSyntaxKind(node);
@@ -437,7 +447,11 @@ namespace ts {
          * @param node A ParameterDeclaration node.
          */
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
-            if (isBindingPattern(node.name)) {
+            if (node.dotDotDotToken) {
+                // rest parameters are elided
+                return undefined;
+            }
+            else if (isBindingPattern(node.name)) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
                 return createParameter(
@@ -453,10 +467,6 @@ namespace ts {
                     /*initializer*/ undefined,
                     /*location*/ node
                 );
-            }
-            else if (node.dotDotDotToken) {
-                // rest parameters are elided
-                return undefined;
             }
             else {
                 return node;
@@ -826,7 +836,7 @@ namespace ts {
             }
 
             const expression = createFunctionExpression(
-                /*asteriskToken*/ undefined,
+                node.asteriskToken,
                 name,
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),

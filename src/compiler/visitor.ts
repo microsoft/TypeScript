@@ -400,7 +400,7 @@ namespace ts {
         ],
         [SyntaxKind.JsxAttribute]: [
             { name: "name", test: isIdentifier },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isStringLiteralOrJsxExpression, optional: true },
         ],
         [SyntaxKind.JsxSpreadAttribute]: [
             { name: "expression", test: isExpression },

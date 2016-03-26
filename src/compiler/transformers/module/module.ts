@@ -752,11 +752,12 @@ namespace ts {
 
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(importNode);
-            Debug.assert(isDefined(moduleName));
-            return createCall(
-                createIdentifier("require"),
-                [moduleName]
-            );
+            const args: Expression[] = [];
+            if (isDefined(moduleName)) {
+                args.push(moduleName);
+            }
+
+            return createCall(createIdentifier("require"), args);
         }
 
         function createExportAssignment(name: Identifier, value: Expression) {

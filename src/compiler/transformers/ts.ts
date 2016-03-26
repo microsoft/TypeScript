@@ -243,14 +243,16 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.StringLiteralType:
                     // TypeScript type nodes are elided.
 
                 case SyntaxKind.IndexSignature:
@@ -2048,15 +2050,18 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node has an accessibility modifier.
+         * - The node has a questionToken.
          *
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            Debug.assert(!node.dotDotDotToken);
-            return createParameter(
-                visitNode(node.name, visitor, isBindingName),
-                visitNode(node.initializer, visitor, isExpression)
-            );
+            const clone = getMutableClone(node);
+            clone.decorators = undefined;
+            clone.modifiers = undefined;
+            clone.questionToken = undefined;
+            clone.type = undefined;
+            aggregateTransformFlags(clone);
+            return visitEachChild(clone, visitor, context);
         }
 
         /**
