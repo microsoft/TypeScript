@@ -83,6 +83,7 @@ namespace ts {
          */
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
+            currentScope = node;
             const visited = visitEachChild(node, visitor, context);
             setNodeEmitFlags(visited, NodeEmitFlags.EmitEmitHelpers | getNodeEmitFlags(node));
             return visited;
@@ -242,14 +243,16 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.StringLiteralType:
                     // TypeScript type nodes are elided.
 
                 case SyntaxKind.IndexSignature:
@@ -1355,14 +1358,18 @@ namespace ts {
          */
         function addTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
+                let properties: ObjectLiteralElement[];
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node), /*defer*/ true));
+                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction([], serializeTypeOfNode(node))));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node), /*defer*/ true));
+                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction([], serializeParameterTypesOfNode(node))));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node), /*defer*/ true));
+                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction([], serializeReturnTypeOfNode(node))));
+                }
+                if (properties) {
+                    decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true), /*defer*/ false));
                 }
             }
         }
@@ -1483,11 +1490,11 @@ namespace ts {
          * @param node The node that should have its return type serialized.
          */
         function serializeReturnTypeOfNode(node: Node): Expression {
-            if (isFunctionLike(node)) {
+            if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
 
-            return undefined;
+            return createVoidZero();
         }
 
         /**
@@ -1533,7 +1540,7 @@ namespace ts {
                     return createIdentifier("Boolean");
 
                 case SyntaxKind.StringKeyword:
-                case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                     return createIdentifier("String");
 
                 case SyntaxKind.NumberKeyword:
@@ -1552,6 +1559,7 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.ThisType:
                     break;
 
                 default:
@@ -2042,15 +2050,18 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node has an accessibility modifier.
+         * - The node has a questionToken.
          *
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            Debug.assert(!node.dotDotDotToken);
-            return createParameter(
-                visitNode(node.name, visitor, isBindingName),
-                visitNode(node.initializer, visitor, isExpression)
-            );
+            const clone = getMutableClone(node);
+            clone.decorators = undefined;
+            clone.modifiers = undefined;
+            clone.questionToken = undefined;
+            clone.type = undefined;
+            aggregateTransformFlags(clone);
+            return visitEachChild(clone, visitor, context);
         }
 
         /**

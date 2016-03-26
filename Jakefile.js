@@ -675,14 +675,24 @@ function cleanTestDirs() {
 
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit) {
-    console.log('Running test(s): ' + tests);
-    var testConfig = { test: [tests], light: light };
-    if (/^(\d+|full)$/.test(stackTraceLimit)) {
-        testConfig.stackTraceLimit = stackTraceLimit;
+    var testConfig;
+    if (tests) {
+        console.log('Running test(s): ' + tests);
+        (testConfig || (testConfig = {})).tests = [tests];
     }
 
-    var testConfigContents = JSON.stringify(testConfig);
-    fs.writeFileSync('test.config', testConfigContents);
+    if (light) {
+        (testConfig || (testConfig = {})).light = light;
+    }
+
+    if (/^(\d+|full)$/.test(stackTraceLimit)) {
+        (testConfig || (testConfig = {})).stackTraceLimit = stackTraceLimit;
+    }
+
+    if (testConfig) {
+        var testConfigContents = JSON.stringify(testConfig);
+        fs.writeFileSync(testConfigFile, testConfigContents);
+    }
 }
 
 function deleteTemporaryProjectOutput() {
@@ -695,15 +705,12 @@ function runTestsAndWriteOutput(file) {
     cleanTestDirs();
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
-    var beep = process.env.beep;
     var testConfigFile = 'test.config';
     if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
-    if (tests || light) {
-        writeTestConfigFile(testConfigFile, tests, light, 10);
-    }
+    writeTestConfigFile(testConfigFile, tests, light, 10);
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 100000;
@@ -720,11 +727,16 @@ function runTestsAndWriteOutput(file) {
 
     var cmd = "mocha " + args.join(" ");
     console.log(cmd);
-    var ex = jake.createExec([cmd], { windowsVerbatimArguments: true });
+    var p = child_process.spawn(
+        process.platform === "win32" ? "cmd" : "/bin/sh",
+        process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
+            windowsVerbatimArguments: true
+        });
+
     var out = fs.createWriteStream(file);
     var tapRange = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
     var tapOk = /^ok\s/;
-    var tapNotOk = /^not\sok/;
+    var tapNotOk = /^not\sok\s/;
     var tapComment = /^#/;
     var typeError = /^\s+TypeError:/;
     var debugError = /^\s+Error:\sDebug\sFailure\./;
@@ -737,38 +749,9 @@ function runTestsAndWriteOutput(file) {
     var typeErrorCount = 0;
     var debugErrorCount = 0;
 
-    ex.addListener("stdout", function (output) {
-        var m = tapRange.exec(output);
-        if (m) {
-            expectedTestCount = parseInt(m[2]);
-            return;
-        }
-
-        out.write(output);
-
-        if (tapOk.test(output)) {
-            successCount++;
-        }
-        else if (tapNotOk.test(output)) {
-            failureCount++;
-        }
-        else {
-            if (tapComment.test(output)) {
-                comments.push(output.toString().trim());
-            }
-            else if (typeError.test(output)) {
-                typeErrorCount++;
-            }
-            else if (debugError.test(output)) {
-                debugErrorCount++;
-            }
-            return;
-        }
-
-        testCount++;
-
-        var percentComplete = testCount * 100 / expectedTestCount;
-        updateProgress(percentComplete);
+    var rl = readline.createInterface({
+        input: p.stdout,
+        terminal: false
     });
 
     function updateProgress(percentComplete) {
@@ -782,24 +765,42 @@ function runTestsAndWriteOutput(file) {
         );
     }
 
-    ex.addListener("stderr", function (output) {
-        progress.hide();
-        process.stderr.write(output.toString().trim() + os.EOL);
-        progress.show();
-    });
-    ex.addListener("cmdEnd", function () {
-        if (progress.visible) {
-            updateProgress(100);
-            process.stdout.write("done." + os.EOL);
+    rl.on("line", function (line) {
+        var m = tapRange.exec(line);
+        if (m) {
+            expectedTestCount = parseInt(m[2]);
+            return;
         }
 
-        console.log(comments.join(os.EOL));
-        deleteTemporaryProjectOutput();
-        complete();
+        if (tapOk.test(line)) {
+            out.write(line.replace(/^ok\s+\d+\s+/, "ok ") + os.EOL);
+            successCount++;
+        }
+        else if (tapNotOk.test(line)) {
+            out.write(line.replace(/^not\s+ok\s+\d+\s+/, "not ok ") + os.EOL);
+            failureCount++;
+        }
+        else {
+            out.write(line + os.EOL);
+            if (tapComment.test(line)) {
+                comments.push(line);
+            }
+            else if (typeError.test(line)) {
+                typeErrorCount++;
+            }
+            else if (debugError.test(line)) {
+                debugErrorCount++;
+            }
+            return;
+        }
 
-        if (beep) process.stdout.write("\u0007");
+        testCount++;
+
+        var percentComplete = testCount * 100 / expectedTestCount;
+        updateProgress(percentComplete);
     });
-    ex.addListener("error", function (e, status) {
+
+    p.on("exit", function (status) {
         if (progress.visible) {
             updateProgress(100);
             process.stdout.write("done." + os.EOL);
@@ -816,10 +817,13 @@ function runTestsAndWriteOutput(file) {
         }
 
         deleteTemporaryProjectOutput();
-        if (beep) process.stdout.write("\u0007");
-        fail("Process exited with code " + status);
+        if (status) {
+            fail("Process exited with code " + status);
+        }
+        else {
+            complete();
+        }
     });
-    ex.run();
 }
 
 function runConsoleTests(defaultReporter, defaultSubsets) {
@@ -827,13 +831,14 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var stackTraceLimit = process.env.stackTraceLimit || 1;
     var testConfigFile = 'test.config';
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
     if (tests || light) {
-        writeTestConfigFile(testConfigFile, tests, light);
+        writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
