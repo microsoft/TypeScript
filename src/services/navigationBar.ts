@@ -130,7 +130,7 @@ namespace ts.NavigationBar {
 
             return topLevelNodes;
         }
-         
+
         function sortNodes(nodes: Node[]): Node[] {
             return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
@@ -147,7 +147,7 @@ namespace ts.NavigationBar {
                 }
             });
         }
-        
+
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
@@ -190,28 +190,33 @@ namespace ts.NavigationBar {
             }
         }
 
-        function hasNamedFunctionDeclarations(nodes: NodeArray<Statement>) {
-            if (forEach(nodes, s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
-                return true;
+        function hasNamedFunctionDeclarations(nodes: NodeArray<Statement>): boolean {
+            for (let s of nodes) {
+                if (s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text)) {
+                    return true;
+                }
             }
+            return false;
         }
 
-        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
+        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): boolean {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
-                // A function declaration is 'top level' if it contains any function declarations 
-                // within it. 
+                // A function declaration is 'top level' if it contains any function declarations
+                // within it.
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
                     if (hasNamedFunctionDeclarations((<Block>functionDeclaration.body).statements)) {
                         return true;
                     }
 
-                    // Or if it is not parented by another function (except for parent functions that
-                    // are methods and constructors). I.e all functions at module scope are 'top level'.
+                    // Or if it is not parented by another function. I.e all functions at module scope are 'top level'.
                     if (!isFunctionBlock(functionDeclaration.parent)) {
                         return true;
                     }
+
+                    // Or if it is nested inside class methods and constructors.
                     else {
+                        // We have made sure that a grand parent node exists with 'isFunctionBlock()' above.
                         const grandParentKind = functionDeclaration.parent.parent.kind;
                         if (grandParentKind === SyntaxKind.MethodDeclaration ||
                             grandParentKind === SyntaxKind.Constructor) {
@@ -224,7 +229,7 @@ namespace ts.NavigationBar {
 
             return false;
         }
-        
+
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
             let items: ts.NavigationBarItem[] = [];
 
@@ -425,12 +430,12 @@ namespace ts.NavigationBar {
                 let result: string[] = [];
 
                 result.push(moduleDeclaration.name.text);
-                
+
                 while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
                     moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
                     result.push(moduleDeclaration.name.text);
-                } 
+                }
 
                 return result.join(".");
             }
@@ -448,7 +453,7 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createFunctionItem(node: FunctionDeclaration) {
+            function createFunctionItem(node: FunctionDeclaration): ts.NavigationBarItem  {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
                     let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
@@ -463,7 +468,7 @@ namespace ts.NavigationBar {
                 return undefined;
             }
 
-            function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration) {
+            function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration): ts.NavigationBarItem  {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
                     let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
                     let scriptElementKind: string;
