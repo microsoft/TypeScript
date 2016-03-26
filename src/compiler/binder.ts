@@ -636,6 +636,9 @@ namespace ts {
         }
 
         function createFlowCondition(antecedent: FlowNode, expression: Expression, assumeTrue: boolean): FlowNode {
+            if (antecedent.kind === FlowKind.Unreachable) {
+                return antecedent;
+            }
             if (!expression) {
                 return assumeTrue ? antecedent : unreachableFlow;
             }
@@ -696,16 +699,19 @@ namespace ts {
 
         function bindDoStatement(node: DoStatement): void {
             const preDoLabel = createFlowLabel();
+            const preConditionLabel = createFlowLabel();
             const postDoLabel = createFlowLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
             const saveBreakTarget = breakTarget;
             const saveContinueTarget = continueTarget;
             breakTarget = postDoLabel;
-            continueTarget = preDoLabel;
+            continueTarget = preConditionLabel;
             bind(node.statement);
             breakTarget = saveBreakTarget;
             continueTarget = saveContinueTarget;
+            addAntecedent(preConditionLabel, currentFlow);
+            currentFlow = finishFlow(preConditionLabel);
             bind(node.expression);
             addAntecedent(preDoLabel, createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ true));
             addAntecedent(postDoLabel, createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ false));
@@ -737,10 +743,10 @@ namespace ts {
             const preLoopLabel = createFlowLabel();
             const postLoopLabel = createFlowLabel();
             bind(node.initializer);
-            bind(node.expression);
             addAntecedent(preLoopLabel, currentFlow);
-            addAntecedent(postLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
+            bind(node.expression);
+            addAntecedent(postLoopLabel, currentFlow);
             const saveBreakTarget = breakTarget;
             const saveContinueTarget = continueTarget;
             breakTarget = postLoopLabel;
@@ -750,7 +756,6 @@ namespace ts {
             breakTarget = saveBreakTarget;
             continueTarget = saveContinueTarget;
             addAntecedent(preLoopLabel, currentFlow);
-            addAntecedent(postLoopLabel, currentFlow);
             currentFlow = finishFlow(postLoopLabel);
         }
 

@@ -8674,7 +8674,9 @@ namespace ts {
             const parent = node.parent;
             return parent.kind === SyntaxKind.BinaryExpression &&
                 (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
-                (<BinaryExpression>parent).left === node;
+                (<BinaryExpression>parent).left === node ||
+                (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
+                (<ForInStatement | ForOfStatement>parent).initializer === node;
         }
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
