@@ -1,0 +1,37 @@
+=== tests/cases/conformance/controlFlow/controlFlowBinaryOrExpression.ts ===
+let x: string | number | boolean;
+>x : string | number | boolean
+
+let cond: boolean;
+>cond : boolean
+
+(x = "") || (x = 0);
+>(x = "") || (x = 0) : string | number
+>(x = "") : string
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+>(x = 0) : number
+>x = 0 : number
+>x : string | number | boolean
+>0 : number
+
+x; // string | number
+>x : string | number
+
+x = "";
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+
+cond || (x = 0);
+>cond || (x = 0) : boolean | number
+>cond : boolean
+>(x = 0) : number
+>x = 0 : number
+>x : string | number | boolean
+>0 : number
+
+x; // string | number
+>x : string | number
+
