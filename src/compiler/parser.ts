@@ -177,6 +177,8 @@ namespace ts {
             case SyntaxKind.AsExpression:
                 return visitNode(cbNode, (<AsExpression>node).expression) ||
                     visitNode(cbNode, (<AsExpression>node).type);
+            case SyntaxKind.NonNullExpression:
+                return visitNode(cbNode, (<NonNullExpression>node).expression);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -301,6 +303,9 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.GlobalModuleExportDeclaration:
+                return visitNode(cbNode, (<GlobalModuleExportDeclaration>node).name);
+
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (<NamespaceImport>node).name);
             case SyntaxKind.NamedImports:
@@ -405,6 +410,10 @@ namespace ts {
 
         parseTime += new Date().getTime() - start;
         return result;
+    }
+
+    export function isExternalModule(file: SourceFile): boolean {
+        return file.externalModuleIndicator !== undefined;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
@@ -1121,7 +1130,7 @@ namespace ts {
                 if (token === SyntaxKind.DefaultKeyword) {
                     return lookAhead(nextTokenIsClassOrFunction);
                 }
-                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
+                return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.AsKeyword && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
@@ -2354,12 +2363,14 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.UndefinedKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.ThisKeyword: {
                     const thisKeyword = parseThisTypeNode();
@@ -2391,6 +2402,8 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -3717,6 +3730,14 @@ namespace ts {
                     continue;
                 }
 
+                if (token === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                    nextToken();
+                    const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
+                    nonNullExpression.expression = expression;
+                    expression = finishNode(nonNullExpression);
+                    continue;
+                }
+
                 // when in the [Decorator] context, we do not parse ElementAccess as it could be part of a ComputedPropertyName
                 if (!inDecoratorContext() && parseOptional(SyntaxKind.OpenBracketToken)) {
                     const indexedAccess = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, expression.pos);
@@ -3932,7 +3953,7 @@ namespace ts {
 
         function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): AccessorDeclaration {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
+                return addJSDocComment(parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers));
             }
             else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
                 return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, decorators, modifiers);
@@ -4396,7 +4417,8 @@ namespace ts {
                         continue;
 
                     case SyntaxKind.GlobalKeyword:
-                        return nextToken() === SyntaxKind.OpenBraceToken;
+                        nextToken();
+                        return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.Identifier || token === SyntaxKind.ExportKeyword;
 
                     case SyntaxKind.ImportKeyword:
                         nextToken();
@@ -4405,7 +4427,8 @@ namespace ts {
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword) {
+                            token === SyntaxKind.OpenBraceToken || token === SyntaxKind.DefaultKeyword ||
+                            token === SyntaxKind.AsKeyword) {
                             return true;
                         }
                         continue;
@@ -4589,9 +4612,15 @@ namespace ts {
                     return parseImportDeclarationOrImportEqualsDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.ExportKeyword:
                     nextToken();
-                    return token === SyntaxKind.DefaultKeyword || token === SyntaxKind.EqualsToken ?
-                        parseExportAssignment(fullStart, decorators, modifiers) :
-                        parseExportDeclaration(fullStart, decorators, modifiers);
+                    switch (token) {
+                        case SyntaxKind.DefaultKeyword:
+                        case SyntaxKind.EqualsToken:
+                            return parseExportAssignment(fullStart, decorators, modifiers);
+                        case SyntaxKind.AsKeyword:
+                            return parseGlobalModuleExportDeclaration(fullStart, decorators, modifiers);
+                        default:
+                            return parseExportDeclaration(fullStart, decorators, modifiers);
+                    }
                 default:
                     if (decorators || modifiers) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
@@ -5258,6 +5287,20 @@ namespace ts {
 
         function nextTokenIsSlash() {
             return nextToken() === SyntaxKind.SlashToken;
+        }
+
+        function parseGlobalModuleExportDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): GlobalModuleExportDeclaration {
+            const exportDeclaration = <GlobalModuleExportDeclaration>createNode(SyntaxKind.GlobalModuleExportDeclaration, fullStart);
+            exportDeclaration.decorators = decorators;
+            exportDeclaration.modifiers = modifiers;
+            parseExpected(SyntaxKind.AsKeyword);
+            parseExpected(SyntaxKind.NamespaceKeyword);
+
+            exportDeclaration.name = parseIdentifier();
+
+            parseExpected(SyntaxKind.SemicolonToken);
+
+            return finishNode(exportDeclaration);
         }
 
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {

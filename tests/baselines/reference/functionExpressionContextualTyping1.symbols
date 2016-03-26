@@ -30,7 +30,7 @@ class Class<T> {
 >T : Symbol(T, Decl(functionExpressionContextualTyping1.ts, 13, 12))
 
     foo() { }
->foo : Symbol(foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
+>foo : Symbol(Class.foo, Decl(functionExpressionContextualTyping1.ts, 13, 16))
 }
 
 var a1: (c: Class<Number>) => number = (a1) => {

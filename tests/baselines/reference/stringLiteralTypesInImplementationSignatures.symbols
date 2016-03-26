@@ -19,7 +19,7 @@ class C {
 >C : Symbol(C, Decl(stringLiteralTypesInImplementationSignatures.ts, 4, 34))
 
     foo(x: 'hi') { }
->foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures.ts, 6, 9))
+>foo : Symbol(C.foo, Decl(stringLiteralTypesInImplementationSignatures.ts, 6, 9))
 >x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures.ts, 7, 8))
 }
 
@@ -30,7 +30,7 @@ interface I {
 >x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures.ts, 11, 5))
 
     foo(x: 'hi', y: 'hi');
->foo : Symbol(foo, Decl(stringLiteralTypesInImplementationSignatures.ts, 11, 14))
+>foo : Symbol(I.foo, Decl(stringLiteralTypesInImplementationSignatures.ts, 11, 14))
 >x : Symbol(x, Decl(stringLiteralTypesInImplementationSignatures.ts, 12, 8))
 >y : Symbol(y, Decl(stringLiteralTypesInImplementationSignatures.ts, 12, 16))
 }

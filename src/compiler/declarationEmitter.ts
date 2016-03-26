@@ -367,6 +367,8 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.StringLiteralType:
                     return writeTextOfNode(currentText, type);
@@ -986,6 +988,10 @@ namespace ts {
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
                     write("null");
+                }
+                else {
+                    writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
+                    resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
                 }
 
                 function getHeritageClauseVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {

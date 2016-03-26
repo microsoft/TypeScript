@@ -4,15 +4,15 @@
 
 interface A { a: string }
 >A : Symbol(A, Decl(intersectionTypeMembers.ts, 0, 0))
->a : Symbol(a, Decl(intersectionTypeMembers.ts, 3, 13))
+>a : Symbol(A.a, Decl(intersectionTypeMembers.ts, 3, 13))
 
 interface B { b: string }
 >B : Symbol(B, Decl(intersectionTypeMembers.ts, 3, 25))
->b : Symbol(b, Decl(intersectionTypeMembers.ts, 4, 13))
+>b : Symbol(B.b, Decl(intersectionTypeMembers.ts, 4, 13))
 
 interface C { c: string }
 >C : Symbol(C, Decl(intersectionTypeMembers.ts, 4, 25))
->c : Symbol(c, Decl(intersectionTypeMembers.ts, 5, 13))
+>c : Symbol(C.c, Decl(intersectionTypeMembers.ts, 5, 13))
 
 var abc: A & B & C;
 >abc : Symbol(abc, Decl(intersectionTypeMembers.ts, 7, 3))
@@ -37,17 +37,17 @@ abc.c = "hello";
 
 interface X { x: A }
 >X : Symbol(X, Decl(intersectionTypeMembers.ts, 10, 16))
->x : Symbol(x, Decl(intersectionTypeMembers.ts, 12, 13))
+>x : Symbol(X.x, Decl(intersectionTypeMembers.ts, 12, 13))
 >A : Symbol(A, Decl(intersectionTypeMembers.ts, 0, 0))
 
 interface Y { x: B }
 >Y : Symbol(Y, Decl(intersectionTypeMembers.ts, 12, 20))
->x : Symbol(x, Decl(intersectionTypeMembers.ts, 13, 13))
+>x : Symbol(Y.x, Decl(intersectionTypeMembers.ts, 13, 13))
 >B : Symbol(B, Decl(intersectionTypeMembers.ts, 3, 25))
 
 interface Z { x: C }
 >Z : Symbol(Z, Decl(intersectionTypeMembers.ts, 13, 20))
->x : Symbol(x, Decl(intersectionTypeMembers.ts, 14, 13))
+>x : Symbol(Z.x, Decl(intersectionTypeMembers.ts, 14, 13))
 >C : Symbol(C, Decl(intersectionTypeMembers.ts, 4, 25))
 
 var xyz: X & Y & Z;

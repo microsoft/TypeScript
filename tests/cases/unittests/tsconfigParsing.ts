@@ -82,5 +82,25 @@ namespace ts {
         it("returns object with error when json is invalid", () => {
              assertParseError("invalid");
         });
+
+        it("returns object when users correctly specify library", () => {
+            assertParseResult(
+                `{
+                    "compilerOptions": {
+                        "lib": "es5"
+                    }
+                }`, {
+                    config: { compilerOptions: { lib: "es5" } }
+                });
+
+            assertParseResult(
+                `{
+                    "compilerOptions": {
+                        "lib": "es5,es6"
+                    }
+                }`, {
+                    config: { compilerOptions: { lib: "es5,es6" } }
+                });
+        });
     });
 }

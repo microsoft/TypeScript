@@ -6,7 +6,7 @@ class C {
 >f : Symbol(C.f, Decl(staticPropertyAndFunctionWithSameName.ts, 0, 9))
 
     f: number;
->f : Symbol(f, Decl(staticPropertyAndFunctionWithSameName.ts, 1, 21))
+>f : Symbol(C.f, Decl(staticPropertyAndFunctionWithSameName.ts, 1, 21))
 }
 
 class D {
@@ -16,5 +16,5 @@ class D {
 >f : Symbol(D.f, Decl(staticPropertyAndFunctionWithSameName.ts, 5, 9))
 
     f() { }
->f : Symbol(f, Decl(staticPropertyAndFunctionWithSameName.ts, 6, 21))
+>f : Symbol(D.f, Decl(staticPropertyAndFunctionWithSameName.ts, 6, 21))
 }

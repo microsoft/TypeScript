@@ -30,7 +30,6 @@ namespace ts.JsTyping {
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project
-     * @param cachePath is the path to the typings cache
      * @param projectRootPath is the path to the project root directory
      * @param safeListPath is the path used to retrieve the safe list
      * @param packageNameToTypingLocation is the map of package names to their cached typing locations
@@ -40,7 +39,6 @@ namespace ts.JsTyping {
     export function discoverTypings(
         host: TypingResolutionHost,
         fileNames: string[],
-        cachePath: Path,
         projectRootPath: Path,
         safeListPath: Path,
         packageNameToTypingLocation: Map<string>,

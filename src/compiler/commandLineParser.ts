@@ -58,12 +58,11 @@ namespace ts {
             },
             paramType: Diagnostics.KIND,
             description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
-            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
             name: "reactNamespace",
             type: "string",
-            description: Diagnostics.Specifies_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
+            description: Diagnostics.Specify_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
         },
         {
             name: "listFiles",
@@ -77,7 +76,7 @@ namespace ts {
             name: "mapRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
             paramType: Diagnostics.LOCATION,
         },
         {
@@ -94,7 +93,6 @@ namespace ts {
             },
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_es2015_or_none
         },
         {
             name: "newLine",
@@ -102,9 +100,8 @@ namespace ts {
                 "crlf": NewLineKind.CarriageReturnLineFeed,
                 "lf": NewLineKind.LineFeed
             },
-            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
-            error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",
@@ -186,8 +183,8 @@ namespace ts {
             name: "rootDir",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
             paramType: Diagnostics.LOCATION,
+            description: Diagnostics.Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
         },
         {
             name: "isolatedModules",
@@ -202,7 +199,7 @@ namespace ts {
             name: "sourceRoot",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Specifies_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
+            description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
             paramType: Diagnostics.LOCATION,
         },
         {
@@ -231,9 +228,8 @@ namespace ts {
                 "es6": ScriptTarget.ES6,
                 "es2015": ScriptTarget.ES2015,
             },
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015_experimental,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES2015
         },
         {
             name: "version",
@@ -264,8 +260,7 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic,
             },
-            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
-            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+            description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
         },
         {
             name: "allowUnusedLabels",
@@ -309,9 +304,13 @@ namespace ts {
             // this option can only be specified in tsconfig.json
             // use type = object to copy the value as-is
             name: "rootDirs",
-            type: "object",
+            type: "list",
             isTSConfigOnly: true,
-            isFilePath: true
+            element: {
+                name: "rootDirs",
+                type: "string",
+                isFilePath: true
+            }
         },
         {
             name: "traceModuleResolution",
@@ -332,6 +331,35 @@ namespace ts {
             name: "noImplicitUseStrict",
             type: "boolean",
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
+        },
+        {
+            name: "strictNullChecks",
+            type: "boolean",
+            description: Diagnostics.Enable_strict_null_checks
+        }
+    ];
+
+    /* @internal */
+    export let typingOptionDeclarations: CommandLineOption[] = [
+        {
+            name: "enableAutoDiscovery",
+            type: "boolean",
+        },
+        {
+            name: "include",
+            type: "list",
+            element: {
+                name: "include",
+                type: "string"
+            }
+        },
+        {
+            name: "exclude",
+            type: "list",
+            element: {
+                name: "exclude",
+                type: "string"
+            }
         }
     ];
 
@@ -359,6 +387,16 @@ namespace ts {
 
         optionNameMapCache = { optionNameMap, shortOptionNames };
         return optionNameMapCache;
+    }
+
+    /* @internal */
+    export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
+        const namesOfType: string[] = [];
+        forEachKey(opt.type, key => {
+            namesOfType.push(` '${key}'`);
+        });
+
+        return createCompilerDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
     }
 
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
@@ -414,17 +452,15 @@ namespace ts {
                                     options[opt.name] = args[i] || "";
                                     i++;
                                     break;
+                                case "list":
+                                    options[opt.name] = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i]);
+                                    i++;
+                                    break;
                                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                                 default:
-                                    let map = <Map<number>>opt.type;
-                                    let key = (args[i] || "").toLowerCase();
+                                    options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i]);
                                     i++;
-                                    if (hasProperty(map, key)) {
-                                        options[opt.name] = map[key];
-                                    }
-                                    else {
-                                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                    }
+                                    break;
                             }
                         }
                     }
@@ -434,6 +470,29 @@ namespace ts {
                 }
                 else {
                     fileNames.push(s);
+                }
+
+                function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string) {
+                    const key = (value || "").trim().toLowerCase();
+                    const map = opt.type;
+                    if (hasProperty(map, key)) {
+                        return map[key];
+                    }
+                    else {
+                        errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
+                    }
+                }
+
+                function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (string | number)[] {
+                    const values = (value || "").trim().split(",");
+                    switch (opt.element.type) {
+                        case "number":
+                            return ts.map(values, parseInt);
+                        case "string":
+                            return ts.map(values, v => v || "");
+                        default:
+                            return filter(map(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v)), v => !!v);
+                    }
                 }
             }
         }
@@ -502,7 +561,6 @@ namespace ts {
         }
     }
 
-
     /**
      * Remove the comments from a json like text.
      * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
@@ -536,21 +594,24 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string): ParsedCommandLine {
-        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath, configFileName);
+        const errors: Diagnostic[] = [];
+        const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
+        const options = extend(existingOptions, compilerOptions);
+        const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
 
-        const options = extend(existingOptions, optionsFromJsonConfigFile);
+        const fileNames = getFileNames(errors);
 
         return {
             options,
-            fileNames: getFileNames(),
-            typingOptions: getTypingOptions(),
+            fileNames,
+            typingOptions,
             errors
         };
 
-        function getFileNames(): string[] {
+        function getFileNames(errors: Diagnostic[]): string[] {
             let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
-                if (json["files"] instanceof Array) {
+                if (isArray(json["files"])) {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
@@ -561,7 +622,7 @@ namespace ts {
                 const filesSeen: Map<boolean> = {};
 
                 let exclude: string[] = [];
-                if (json["exclude"] instanceof Array) {
+                if (isArray(json["exclude"])) {
                     exclude = json["exclude"];
                 }
                 else {
@@ -608,47 +669,43 @@ namespace ts {
             }
             return fileNames;
         }
-
-        function getTypingOptions(): TypingOptions {
-            const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
-                ? { enableAutoDiscovery: true, include: [], exclude: [] }
-                : { enableAutoDiscovery: false, include: [], exclude: [] };
-            const jsonTypingOptions = json["typingOptions"];
-            if (jsonTypingOptions) {
-                for (const id in jsonTypingOptions) {
-                    if (id === "enableAutoDiscovery") {
-                        if (typeof jsonTypingOptions[id] === "boolean") {
-                            options.enableAutoDiscovery = jsonTypingOptions[id];
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
-                        }
-                    }
-                    else if (id === "include") {
-                        options.include = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
-                    }
-                    else if (id === "exclude") {
-                        options.exclude = convertJsonOptionToStringArray(id, jsonTypingOptions[id], errors);
-                    }
-                    else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_typing_option_0, id));
-                    }
-                }
-            }
-            return options;
-        }
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
-        const options: CompilerOptions = {};
         const errors: Diagnostic[] = [];
+        const options = convertCompilerOptionsFromJsonWorker(jsonOptions, basePath, errors, configFileName);
+        return { options, errors };
+    }
 
-        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
-            options.allowJs = true;
-        }
+    export function convertTypingOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): { options: CompilerOptions, errors: Diagnostic[] } {
+        const errors: Diagnostic[] = [];
+        const options = convertTypingOptionsFromJsonWorker(jsonOptions, basePath, errors, configFileName);
+        return { options, errors };
+    }
+
+    function convertCompilerOptionsFromJsonWorker(jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): CompilerOptions {
+
+        const options: CompilerOptions = getBaseFileName(configFileName) === "jsconfig.json" ? { allowJs: true } : {};
+        convertOptionsFromJson(optionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_compiler_option_0, errors);
+        return options;
+    }
+
+    function convertTypingOptionsFromJsonWorker(jsonOptions: any,
+        basePath: string, errors: Diagnostic[], configFileName?: string): TypingOptions {
+
+        const options: TypingOptions = getBaseFileName(configFileName) === "jsconfig.json"
+            ? { enableAutoDiscovery: true, include: [], exclude: [] }
+            : { enableAutoDiscovery: false, include: [], exclude: [] };
+        convertOptionsFromJson(typingOptionDeclarations, jsonOptions, basePath, options, Diagnostics.Unknown_typing_option_0, errors);
+        return options;
+    }
+
+    function convertOptionsFromJson(optionDeclarations: CommandLineOption[], jsonOptions: any, basePath: string,
+        defaultOptions: CompilerOptions | TypingOptions, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
-            return { options, errors };
+            return ;
         }
 
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
@@ -656,69 +713,50 @@ namespace ts {
         for (const id in jsonOptions) {
             if (hasProperty(optionNameMap, id)) {
                 const opt = optionNameMap[id];
-                const optType = opt.type;
-                let value = jsonOptions[id];
-                const expectedType = typeof optType === "string" ? optType : "string";
-                if (typeof value === expectedType) {
-                    if (typeof optType !== "string") {
-                        const key = value.toLowerCase();
-                        if (hasProperty(optType, key)) {
-                            value = optType[key];
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                            value = 0;
-                        }
-                    }
-                    if (opt.isFilePath) {
-                        switch (typeof value) {
-                            case "string":
-                                value = normalizePath(combinePaths(basePath, value));
-                                break;
-                            case "object":
-                                // "object" options with 'isFilePath' = true expected to be string arrays
-                                value = convertJsonOptionToStringArray(opt.name, value, errors, (element) => normalizePath(combinePaths(basePath, element)));
-                                break;
-                        }
-                        if (value === "") {
-                            value = ".";
-                        }
-                    }
-                    options[opt.name] = value;
-                }
-                else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
-                }
+                defaultOptions[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
-                errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+                errors.push(createCompilerDiagnostic(diagnosticMessage, id));
             }
         }
-
-        return { options, errors };
     }
 
-    function convertJsonOptionToStringArray(optionName: string, optionJson: any, errors: Diagnostic[], func?: (element: string) => string): string[] {
-        const items: string[] = [];
-        let invalidOptionType = false;
-        if (!isArray(optionJson)) {
-            invalidOptionType = true;
+    function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Diagnostic[]): CompilerOptionsValue {
+        const optType = opt.type;
+        const expectedType = typeof optType === "string" ? optType : "string";
+        if (optType === "list" && isArray(value)) {
+            return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
         }
-        else {
-            for (const element of <any[]>optionJson) {
-                if (typeof element === "string") {
-                    const item = func ? func(element) : element;
-                    items.push(item);
-                }
-                else {
-                    invalidOptionType = true;
-                    break;
+        else if (typeof value === expectedType) {
+            if (typeof optType !== "string") {
+                return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, value, errors);
+            }
+            else {
+                if (opt.isFilePath) {
+                    value = normalizePath(combinePaths(basePath, value));
+                    if (value === "") {
+                        value = ".";
+                    }
                 }
             }
+            return value;
         }
-        if (invalidOptionType) {
-            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_should_have_array_of_strings_as_a_value, optionName));
+        else {
+            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, expectedType));
         }
-        return items;
+    }
+
+    function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
+        const key = value.toLowerCase();
+        if (hasProperty(opt.type, key)) {
+            return opt.type[key];
+        }
+        else {
+            errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
+        }
+    }
+
+    function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
+        return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 }

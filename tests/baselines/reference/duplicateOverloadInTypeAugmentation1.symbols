@@ -4,7 +4,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
->reduce : Symbol(reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 11))
 >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 24))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
@@ -21,7 +21,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
->reduce : Symbol(reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 14))
 >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 27))

@@ -4,7 +4,7 @@ class GenericClass<T> {
 >T : Symbol(T, Decl(destructuringWithGenericParameter.ts, 0, 19))
 
     payload: T;
->payload : Symbol(payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
+>payload : Symbol(GenericClass.payload, Decl(destructuringWithGenericParameter.ts, 0, 23))
 >T : Symbol(T, Decl(destructuringWithGenericParameter.ts, 0, 19))
 }
 

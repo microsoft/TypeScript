@@ -10,18 +10,18 @@ fun(new FooIterator);
 
 class Bar { x }
 >Bar : Symbol(Bar, Decl(iterableArrayPattern13.ts, 1, 21))
->x : Symbol(x, Decl(iterableArrayPattern13.ts, 2, 11))
+>x : Symbol(Bar.x, Decl(iterableArrayPattern13.ts, 2, 11))
 
 class Foo extends Bar { y }
 >Foo : Symbol(Foo, Decl(iterableArrayPattern13.ts, 2, 15))
 >Bar : Symbol(Bar, Decl(iterableArrayPattern13.ts, 1, 21))
->y : Symbol(y, Decl(iterableArrayPattern13.ts, 3, 23))
+>y : Symbol(Foo.y, Decl(iterableArrayPattern13.ts, 3, 23))
 
 class FooIterator {
 >FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern13.ts, 3, 27))
 
     next() {
->next : Symbol(next, Decl(iterableArrayPattern13.ts, 4, 19))
+>next : Symbol(FooIterator.next, Decl(iterableArrayPattern13.ts, 4, 19))
 
         return {
             value: new Foo,
