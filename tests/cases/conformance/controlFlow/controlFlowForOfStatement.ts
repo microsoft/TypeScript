@@ -6,5 +6,5 @@ function a() {
     for (x of obj) {
         x = x.toExponential();
     }
-    x; // number | boolean
+    x; // string | boolean
 }
