@@ -1751,7 +1751,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
-                if (statements.length === 1 && rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)) {
+                const emitAsSingleStatement = 
+                    statements.length === 1 &&
+                    (
+                        // treat synthesized nodes as located on the same line for emit purposes
+                        nodeIsSynthesized(parentNode) ||
+                        nodeIsSynthesized(statements[0]) ||
+                        rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
+                    );
+                if (emitAsSingleStatement) {
                     write(" ");
                     emit(statements[0]);
                 }
