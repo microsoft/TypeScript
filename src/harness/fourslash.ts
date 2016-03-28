@@ -231,13 +231,13 @@ namespace FourSlash {
         private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
             switch (testType) {
                 case FourSlashTestType.Native:
-                    return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
                 case FourSlashTestType.ShimsWithPreprocess:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
-                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
@@ -1279,7 +1279,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1370,7 +1370,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1414,7 +1414,7 @@ namespace FourSlash {
                 return;
             }
 
-            const incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            const incrementalSourceFile = this.languageService.getNonBoundSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
             const incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
@@ -2771,12 +2771,12 @@ namespace FourSlashInterface {
 
         // Verifies the member list contains the specified symbol. The
         // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
+        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
                 this.state.verifyMemberListDoesNotContain(symbol);
             }
             else {
-                this.state.verifyMemberListContains(symbol, text, documenation, kind);
+                this.state.verifyMemberListContains(symbol, text, documentation, kind);
             }
         }
 

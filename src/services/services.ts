@@ -7,6 +7,7 @@
 /// <reference path='patternMatcher.ts' />
 /// <reference path='signatureHelp.ts' />
 /// <reference path='utilities.ts' />
+/// <reference path='jsTyping.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
 
@@ -806,6 +807,7 @@ namespace ts {
         public identifierCount: number;
         public symbolCount: number;
         public version: string;
+        public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
@@ -1019,6 +1021,7 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
         getLocalizedDiagnosticMessages?(): any;
@@ -1109,7 +1112,7 @@ namespace ts {
 
         getProgram(): Program;
 
-        getSourceFile(fileName: string): SourceFile;
+        /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
     }
@@ -1468,7 +1471,8 @@ namespace ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
@@ -1486,7 +1490,8 @@ namespace ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
 
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
@@ -1657,6 +1662,7 @@ namespace ts {
         hostFileName: string;
         version: string;
         scriptSnapshot: IScriptSnapshot;
+        scriptKind: ScriptKind;
     }
 
     interface DocumentRegistryEntry {
@@ -1751,7 +1757,8 @@ namespace ts {
                 entry = {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
-                    scriptSnapshot: scriptSnapshot
+                    scriptSnapshot: scriptSnapshot,
+                    scriptKind: getScriptKind(fileName, this.host)
                 };
             }
 
@@ -1817,12 +1824,13 @@ namespace ts {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
 
+            const scriptKind = getScriptKind(fileName, this.host);
             const version = this.host.getScriptVersion(fileName);
             let sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
                 // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true);
+                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true, scriptKind);
             }
             else if (this.currentFileVersion !== version) {
                 // This is the same file, just a newer version. Incrementally parse the file.
@@ -1953,9 +1961,9 @@ namespace ts {
         return output.outputText;
     }
 
-    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
+    export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
         const text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
-        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
+        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }
@@ -2017,7 +2025,7 @@ namespace ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
@@ -2059,12 +2067,12 @@ namespace ts {
             return JSON.stringify(bucketInfoArray, undefined, 2);
         }
 
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true);
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
         }
 
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false);
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
         }
 
         function acquireOrUpdateDocument(
@@ -2072,7 +2080,8 @@ namespace ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            acquiring: boolean): SourceFile {
+            acquiring: boolean,
+            scriptKind?: ScriptKind): SourceFile {
 
             const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -2081,7 +2090,7 @@ namespace ts {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false);
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
 
                 entry = {
                     sourceFile: sourceFile,
@@ -2138,8 +2147,23 @@ namespace ts {
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const referencedFiles: FileReference[] = [];
         const importedFiles: FileReference[] = [];
-        let ambientExternalModules: string[];
+        let ambientExternalModules: { ref: FileReference, depth: number }[];
         let isNoDefaultLib = false;
+        let braceNesting = 0;
+        // assume that text represent an external module if it contains at least one top level import/export
+        // ambient modules that are found inside external modules are interpreted as module augmentations
+        let externalModule = false;
+
+        function nextToken() {
+            const token = scanner.scan();
+            if (token === SyntaxKind.OpenBraceToken) {
+                braceNesting++;
+            }
+            else if (token === SyntaxKind.CloseBraceToken) {
+                braceNesting--;
+            }
+            return token;
+        }
 
         function processTripleSlashDirectives(): void {
             const commentRanges = getLeadingCommentRanges(sourceText, 0);
@@ -2156,21 +2180,33 @@ namespace ts {
             });
         }
 
+        function getFileReference() {
+            const file = scanner.getTokenValue();
+            const pos = scanner.getTokenPos();
+            return {
+                fileName: file,
+                pos: pos,
+                end: pos + file.length
+            };
+        }
+
         function recordAmbientExternalModule(): void {
             if (!ambientExternalModules) {
                 ambientExternalModules = [];
             }
-            ambientExternalModules.push(scanner.getTokenValue());
+            ambientExternalModules.push({ ref: getFileReference(), depth: braceNesting });
         }
 
         function recordModuleName() {
-            const importPath = scanner.getTokenValue();
-            const pos = scanner.getTokenPos();
-            importedFiles.push({
-                fileName: importPath,
-                pos: pos,
-                end: pos + importPath.length
-            });
+            importedFiles.push(getFileReference());
+
+            markAsExternalModuleIfTopLevel();
+        }
+
+        function markAsExternalModuleIfTopLevel() {
+            if (braceNesting === 0) {
+                externalModule = true;
+            }
         }
 
         /**
@@ -2180,9 +2216,9 @@ namespace ts {
             let token = scanner.getToken();
             if (token === SyntaxKind.DeclareKeyword) {
                 // declare module "mod"
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.ModuleKeyword) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.StringLiteral) {
                         recordAmbientExternalModule();
                     }
@@ -2199,7 +2235,8 @@ namespace ts {
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
-                token = scanner.scan();
+
+                token = nextToken();
                 if (token === SyntaxKind.StringLiteral) {
                     // import "mod";
                     recordModuleName();
@@ -2207,9 +2244,9 @@ namespace ts {
                 }
                 else {
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.StringLiteral) {
                                 // import d from "mod";
                                 recordModuleName();
@@ -2223,7 +2260,7 @@ namespace ts {
                         }
                         else if (token === SyntaxKind.CommaToken) {
                             // consume comma and keep going
-                            token = scanner.scan();
+                            token = nextToken();
                         }
                         else {
                             // unknown syntax
@@ -2232,17 +2269,17 @@ namespace ts {
                     }
 
                     if (token === SyntaxKind.OpenBraceToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         // consume "{ a as B, c, d as D}" clauses
                         // make sure that it stops on EOF
                         while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
-                            token = scanner.scan();
+                            token = nextToken();
                         }
 
                         if (token === SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
+                                token = nextToken();
                                 if (token === SyntaxKind.StringLiteral) {
                                     // import {a as A} from "mod";
                                     // import d, {a, b as B} from "mod"
@@ -2252,13 +2289,13 @@ namespace ts {
                         }
                     }
                     else if (token === SyntaxKind.AsteriskToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.AsKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                                token = scanner.scan();
+                                token = nextToken();
                                 if (token === SyntaxKind.FromKeyword) {
-                                    token = scanner.scan();
+                                    token = nextToken();
                                     if (token === SyntaxKind.StringLiteral) {
                                         // import * as NS from "mod"
                                         // import d, * as NS from "mod"
@@ -2279,19 +2316,20 @@ namespace ts {
         function tryConsumeExport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ExportKeyword) {
-                token = scanner.scan();
+                markAsExternalModuleIfTopLevel();
+                token = nextToken();
                 if (token === SyntaxKind.OpenBraceToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     // consume "{ a as B, c, d as D}" clauses
                     // make sure it stops on EOF
                     while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                     }
 
                     if (token === SyntaxKind.CloseBraceToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
+                            token = nextToken();
                             if (token === SyntaxKind.StringLiteral) {
                                 // export {a as A} from "mod";
                                 // export {a, b as B} from "mod"
@@ -2301,9 +2339,9 @@ namespace ts {
                     }
                 }
                 else if (token === SyntaxKind.AsteriskToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.FromKeyword) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.StringLiteral) {
                             // export * from "mod"
                             recordModuleName();
@@ -2311,9 +2349,9 @@ namespace ts {
                     }
                 }
                 else if (token === SyntaxKind.ImportKeyword) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                        token = scanner.scan();
+                        token = nextToken();
                         if (token === SyntaxKind.EqualsToken) {
                             if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
                                 return true;
@@ -2329,11 +2367,11 @@ namespace ts {
         }
 
         function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
-            let token = skipCurrentToken ? scanner.scan() : scanner.getToken();
+            let token = skipCurrentToken ? nextToken() : scanner.getToken();
             if (token === SyntaxKind.RequireKeyword) {
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.OpenParenToken) {
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.StringLiteral) {
                         //  require("mod");
                         recordModuleName();
@@ -2347,17 +2385,17 @@ namespace ts {
         function tryConsumeDefine(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
-                token = scanner.scan();
+                token = nextToken();
                 if (token !== SyntaxKind.OpenParenToken) {
                     return true;
                 }
 
-                token = scanner.scan();
+                token = nextToken();
                 if (token === SyntaxKind.StringLiteral) {
                     // looks like define ("modname", ... - skip string literal and comma
-                    token = scanner.scan();
+                    token = nextToken();
                     if (token === SyntaxKind.CommaToken) {
-                        token = scanner.scan();
+                        token = nextToken();
                     }
                     else {
                         // unexpected token
@@ -2371,7 +2409,7 @@ namespace ts {
                 }
 
                 // skip open bracket
-                token = scanner.scan();
+                token = nextToken();
                 let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
@@ -2381,7 +2419,7 @@ namespace ts {
                         i++;
                     }
 
-                    token = scanner.scan();
+                    token = nextToken();
                 }
                 return true;
 
@@ -2391,7 +2429,7 @@ namespace ts {
 
         function processImports(): void {
             scanner.setText(sourceText);
-            scanner.scan();
+            nextToken();
             // Look for:
             //    import "mod";
             //    import d from "mod"
@@ -2418,7 +2456,7 @@ namespace ts {
                     continue;
                 }
                 else {
-                    scanner.scan();
+                    nextToken();
                 }
             }
 
@@ -2429,7 +2467,34 @@ namespace ts {
             processImports();
         }
         processTripleSlashDirectives();
-        return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules };
+        if (externalModule) {
+            // for external modules module all nested ambient modules are augmentations
+            if (ambientExternalModules) {
+                // move all detected ambient modules to imported files since they need to be resolved
+                for (const decl of ambientExternalModules) {
+                    importedFiles.push(decl.ref);
+                }
+            }
+            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: undefined };
+        }
+        else {
+            // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
+            let ambientModuleNames: string[];
+            if (ambientExternalModules) {
+                for (const decl of ambientExternalModules) {
+                    if (decl.depth === 0) {
+                        if (!ambientModuleNames) {
+                            ambientModuleNames = [];
+                        }
+                        ambientModuleNames.push(decl.ref.fileName);
+                    }
+                    else {
+                        importedFiles.push(decl.ref);
+                    }
+                }
+            }
+            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: ambientModuleNames };
+        }
     }
 
     /// Helpers
@@ -2829,7 +2894,7 @@ namespace ts {
                     if (oldSourceFile) {
                         // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
-                        // address the following 'race'.  Specifically, say we have the following:
+                        // address the following race-condition.  Specifically, say we have the following:
                         //
                         //      LS1
                         //          \
@@ -2848,14 +2913,20 @@ namespace ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the
                         // host says should be used.
-                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+
+                        // We do not support the scenario where a host can modify a registered
+                        // file's script kind, i.e. in one project some file is treated as ".ts"
+                        // and in another as ".js"
+                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + fileName);
+
+                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
@@ -3119,7 +3190,7 @@ namespace ts {
             else if (isRightOfOpenTag) {
                 const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
-                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & (SymbolFlags.Value | SymbolFlags.Alias))));
                 }
                 else {
                     symbols = tagSymbols;
@@ -3433,7 +3504,18 @@ namespace ts {
                         // We don't want to complete using the type acquired by the shape
                         // of the binding pattern; we are only interested in types acquired
                         // through type declaration or inference.
-                        if (rootDeclaration.initializer || rootDeclaration.type) {
+                        // Also proceed if rootDeclaration is parameter and if its containing function expression\arrow function is contextually typed -
+                        // type of parameter will flow in from the contextual type of the function
+                        let canGetType = !!(rootDeclaration.initializer || rootDeclaration.type);
+                        if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+                            if (isExpression(rootDeclaration.parent)) {
+                                canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
+                            }
+                            else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
+                                canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
+                            }
+                        }
+                        if (canGetType) {
                             typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                             existingMembers = (<BindingPattern>objectLikeContainer).elements;
                         }
@@ -6446,7 +6528,7 @@ namespace ts {
         }
 
         /// Syntactic features
-        function getSourceFile(fileName: string): SourceFile {
+        function getNonBoundSourceFile(fileName: string): SourceFile {
             return syntaxTreeCache.getCurrentSourceFile(fileName);
         }
 
@@ -7534,7 +7616,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             getEmitOutput,
-            getSourceFile,
+            getNonBoundSourceFile,
             getProgram
         };
     }

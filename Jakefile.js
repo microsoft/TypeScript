@@ -150,7 +150,10 @@ var harnessSources = harnessCoreSources.concat([
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
-    "tsconfigParsing.ts"
+    "tsconfigParsing.ts",
+    "commandLineParsing.ts",
+    "convertCompilerOptionsFromJson.ts",
+    "convertTypingOptionsFromJson.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -657,7 +660,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
+function runConsoleTests(defaultReporter, defaultSubsets) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -690,13 +693,13 @@ function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
         subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
         subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
     }
-    subsetRegexes.forEach(function (subsetRegex) {
+    subsetRegexes.forEach(function (subsetRegex, i) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (postLint) {
+            if (i === 0) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -718,7 +721,7 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
+    runConsoleTests('mocha-fivemat-progress-reporter', []);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -932,6 +935,7 @@ var servicesLintTargets = [
     "patternMatcher.ts",
     "services.ts",
     "shims.ts",
+    "jsTyping.ts"
 ].map(function (s) {
     return path.join(servicesDirectory, s);
 });

@@ -4,7 +4,7 @@ interface IA<T> {
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 0, 13))
 
 foo(x: T): T;
->foo : Symbol(foo, Decl(genericTypeWithMultipleBases3.ts, 0, 17))
+>foo : Symbol(IA.foo, Decl(genericTypeWithMultipleBases3.ts, 0, 17))
 >x : Symbol(x, Decl(genericTypeWithMultipleBases3.ts, 2, 4))
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 0, 13))
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 0, 13))
@@ -16,7 +16,7 @@ interface IB<T> {
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 6, 13))
 
 bar(x: T): T;
->bar : Symbol(bar, Decl(genericTypeWithMultipleBases3.ts, 6, 17))
+>bar : Symbol(IB.bar, Decl(genericTypeWithMultipleBases3.ts, 6, 17))
 >x : Symbol(x, Decl(genericTypeWithMultipleBases3.ts, 8, 4))
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 6, 13))
 >T : Symbol(T, Decl(genericTypeWithMultipleBases3.ts, 6, 13))

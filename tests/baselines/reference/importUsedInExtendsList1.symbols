@@ -22,5 +22,5 @@ var r: string = s.foo;
 === tests/cases/compiler/importUsedInExtendsList1_require.ts ===
 export class Super { foo: string; }
 >Super : Symbol(Super, Decl(importUsedInExtendsList1_require.ts, 0, 0))
->foo : Symbol(foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
+>foo : Symbol(Super.foo, Decl(importUsedInExtendsList1_require.ts, 0, 20))
 

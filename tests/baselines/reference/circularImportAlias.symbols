@@ -15,7 +15,7 @@ module B {
 >C : Symbol(a.C, Decl(circularImportAlias.ts, 9, 10))
 
         id: number;
->id : Symbol(id, Decl(circularImportAlias.ts, 4, 32))
+>id : Symbol(D.id, Decl(circularImportAlias.ts, 4, 32))
     }
 }
 
@@ -24,7 +24,7 @@ module A {
 
     export class C { name: string }
 >C : Symbol(C, Decl(circularImportAlias.ts, 9, 10))
->name : Symbol(name, Decl(circularImportAlias.ts, 10, 20))
+>name : Symbol(C.name, Decl(circularImportAlias.ts, 10, 20))
 
     export import b = B;
 >b : Symbol(b, Decl(circularImportAlias.ts, 10, 35))

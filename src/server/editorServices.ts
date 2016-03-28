@@ -192,6 +192,10 @@ namespace ts.server {
             return this.roots.map(root => root.fileName);
         }
 
+        getScriptKind() {
+            return ScriptKind.Unknown;
+        }
+
         getScriptVersion(filename: string) {
             return this.getScriptInfo(filename).svc.latestVersion().toString();
         }
@@ -1002,9 +1006,7 @@ namespace ts.server {
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
-                        info.fileWatcher = this.host.watchFile(
-                            toPath(fileName, fileName, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-                            _ => { this.watchedFileChanged(fileName); });
+                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
                     }
                 }
             }
@@ -1223,9 +1225,7 @@ namespace ts.server {
                     }
                 }
                 project.finishGraph();
-                project.projectFileWatcher = this.host.watchFile(
-                    toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-                    _ => this.watchedProjectConfigFileChanged(project));
+                project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
                 this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
                 project.directoryWatcher = this.host.watchDirectory(
                     ts.getDirectoryPath(configFilename),
@@ -1313,6 +1313,7 @@ namespace ts.server {
             else {
                 const defaultOpts = ts.getDefaultCompilerOptions();
                 defaultOpts.allowNonTsExtensions = true;
+                defaultOpts.allowJs = true;
                 this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
@@ -1325,7 +1326,7 @@ namespace ts.server {
         }
 
         isExternalModule(filename: string): boolean {
-            const sourceFile = this.languageService.getSourceFile(filename);
+            const sourceFile = this.languageService.getNonBoundSourceFile(filename);
             return ts.isExternalModule(sourceFile);
         }
 

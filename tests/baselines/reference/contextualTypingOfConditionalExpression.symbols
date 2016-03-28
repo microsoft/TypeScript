@@ -15,21 +15,21 @@ class A {
 >A : Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
 
     foo: number;
->foo : Symbol(foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
 }
 class B extends A {
 >B : Symbol(B, Decl(contextualTypingOfConditionalExpression.ts, 4, 1))
 >A : Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
 
     bar: number;
->bar : Symbol(bar, Decl(contextualTypingOfConditionalExpression.ts, 5, 19))
+>bar : Symbol(B.bar, Decl(contextualTypingOfConditionalExpression.ts, 5, 19))
 }
 class C extends A {
 >C : Symbol(C, Decl(contextualTypingOfConditionalExpression.ts, 7, 1))
 >A : Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
 
     baz: number;
->baz : Symbol(baz, Decl(contextualTypingOfConditionalExpression.ts, 8, 19))
+>baz : Symbol(C.baz, Decl(contextualTypingOfConditionalExpression.ts, 8, 19))
 }
 
 var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;

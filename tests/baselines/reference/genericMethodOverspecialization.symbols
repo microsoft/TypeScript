@@ -6,10 +6,10 @@ interface HTMLElement {
 >HTMLElement : Symbol(HTMLElement, Decl(genericMethodOverspecialization.ts, 0, 62))
 
     clientWidth: number;
->clientWidth : Symbol(clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
+>clientWidth : Symbol(HTMLElement.clientWidth, Decl(genericMethodOverspecialization.ts, 2, 23))
 
     isDisabled: boolean;
->isDisabled : Symbol(isDisabled, Decl(genericMethodOverspecialization.ts, 3, 24))
+>isDisabled : Symbol(HTMLElement.isDisabled, Decl(genericMethodOverspecialization.ts, 3, 24))
 }
 
 declare var document: Document;
@@ -20,7 +20,7 @@ interface Document {
 >Document : Symbol(Document, Decl(genericMethodOverspecialization.ts, 7, 31))
 
     getElementById(elementId: string): HTMLElement;
->getElementById : Symbol(getElementById, Decl(genericMethodOverspecialization.ts, 8, 20))
+>getElementById : Symbol(Document.getElementById, Decl(genericMethodOverspecialization.ts, 8, 20))
 >elementId : Symbol(elementId, Decl(genericMethodOverspecialization.ts, 9, 19))
 >HTMLElement : Symbol(HTMLElement, Decl(genericMethodOverspecialization.ts, 0, 62))
 }

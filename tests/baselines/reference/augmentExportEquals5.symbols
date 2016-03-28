@@ -27,7 +27,7 @@ declare module "express" {
 >IRoute : Symbol(IRoute, Decl(express.d.ts, 10, 17))
 
             all(...handler: RequestHandler[]): IRoute;
->all : Symbol(all, Decl(express.d.ts, 11, 26))
+>all : Symbol(IRoute.all, Decl(express.d.ts, 11, 26))
 >handler : Symbol(handler, Decl(express.d.ts, 12, 16))
 >RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 40, 9))
 >IRoute : Symbol(IRoute, Decl(express.d.ts, 10, 17))
@@ -51,7 +51,7 @@ declare module "express" {
 >RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 40, 9))
 
             route(path: string): IRoute;
->route : Symbol(route, Decl(express.d.ts, 19, 53))
+>route : Symbol(IRouter.route, Decl(express.d.ts, 19, 53))
 >path : Symbol(path, Decl(express.d.ts, 20, 18))
 >IRoute : Symbol(IRoute, Decl(express.d.ts, 10, 17))
         }
@@ -78,7 +78,7 @@ declare module "express" {
 >Request : Symbol(Express.Request, Decl(express.d.ts, 2, 24))
 
             get (name: string): string;
->get : Symbol(get, Decl(express.d.ts, 29, 51))
+>get : Symbol(Request.get, Decl(express.d.ts, 29, 51))
 >name : Symbol(name, Decl(express.d.ts, 31, 17))
         }
 
@@ -89,7 +89,7 @@ declare module "express" {
 >Response : Symbol(Express.Response, Decl(express.d.ts, 3, 32))
 
             charset: string;
->charset : Symbol(charset, Decl(express.d.ts, 34, 53))
+>charset : Symbol(Response.charset, Decl(express.d.ts, 34, 53))
         }
 
         interface ErrorRequestHandler {
@@ -143,7 +143,7 @@ declare module "express" {
 >Application : Symbol(Express.Application, Decl(express.d.ts, 4, 33))
 
             routes: any;
->routes : Symbol(routes, Decl(express.d.ts, 52, 81))
+>routes : Symbol(Application.routes, Decl(express.d.ts, 52, 81))
         }
 
         interface Express extends Application {
@@ -151,7 +151,7 @@ declare module "express" {
 >Application : Symbol(Application, Decl(express.d.ts, 50, 9))
 
             createApplication(): Application;
->createApplication : Symbol(createApplication, Decl(express.d.ts, 56, 47))
+>createApplication : Symbol(Express.createApplication, Decl(express.d.ts, 56, 47))
 >Application : Symbol(Application, Decl(express.d.ts, 50, 9))
         }
 
@@ -173,7 +173,7 @@ declare module "express" {
 >Request : Symbol(Request, Decl(express.d.ts, 27, 49), Decl(augmentation.ts, 2, 26))
 
         id: number;
->id : Symbol(id, Decl(augmentation.ts, 3, 23))
+>id : Symbol(Request.id, Decl(augmentation.ts, 3, 23))
     }
 }
 

@@ -154,7 +154,7 @@ export class d {
 >d : Symbol(d, Decl(importDecl_require.ts, 0, 0))
 
     foo: string;
->foo : Symbol(foo, Decl(importDecl_require.ts, 0, 16))
+>foo : Symbol(d.foo, Decl(importDecl_require.ts, 0, 16))
 }
 export var x: d;
 >x : Symbol(x, Decl(importDecl_require.ts, 3, 10))
@@ -169,7 +169,7 @@ export class d {
 >d : Symbol(d, Decl(importDecl_require1.ts, 0, 0))
 
     bar: string;
->bar : Symbol(bar, Decl(importDecl_require1.ts, 0, 16))
+>bar : Symbol(d.bar, Decl(importDecl_require1.ts, 0, 16))
 }
 var x: d;
 >x : Symbol(x, Decl(importDecl_require1.ts, 3, 3))
@@ -184,7 +184,7 @@ export class d {
 >d : Symbol(d, Decl(importDecl_require2.ts, 0, 0))
 
     baz: string;
->baz : Symbol(baz, Decl(importDecl_require2.ts, 0, 16))
+>baz : Symbol(d.baz, Decl(importDecl_require2.ts, 0, 16))
 }
 export var x: d;
 >x : Symbol(x, Decl(importDecl_require2.ts, 3, 10))
@@ -199,7 +199,7 @@ export class d {
 >d : Symbol(d, Decl(importDecl_require3.ts, 0, 0))
 
     bing: string;
->bing : Symbol(bing, Decl(importDecl_require3.ts, 0, 16))
+>bing : Symbol(d.bing, Decl(importDecl_require3.ts, 0, 16))
 }
 export var x: d;
 >x : Symbol(x, Decl(importDecl_require3.ts, 3, 10))

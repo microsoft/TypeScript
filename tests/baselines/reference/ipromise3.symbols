@@ -4,7 +4,7 @@ interface IPromise3<T> {
 >T : Symbol(T, Decl(ipromise3.ts, 0, 20))
 
     then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
->then : Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
 >U : Symbol(U, Decl(ipromise3.ts, 1, 9))
 >success : Symbol(success, Decl(ipromise3.ts, 1, 12))
 >value : Symbol(value, Decl(ipromise3.ts, 1, 23))
@@ -21,7 +21,7 @@ interface IPromise3<T> {
 >U : Symbol(U, Decl(ipromise3.ts, 1, 9))
 
     then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
->then : Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
 >U : Symbol(U, Decl(ipromise3.ts, 2, 9))
 >success : Symbol(success, Decl(ipromise3.ts, 2, 12))
 >value : Symbol(value, Decl(ipromise3.ts, 2, 23))
@@ -37,7 +37,7 @@ interface IPromise3<T> {
 >U : Symbol(U, Decl(ipromise3.ts, 2, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
->then : Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
 >U : Symbol(U, Decl(ipromise3.ts, 3, 9))
 >success : Symbol(success, Decl(ipromise3.ts, 3, 12))
 >value : Symbol(value, Decl(ipromise3.ts, 3, 23))
@@ -53,7 +53,7 @@ interface IPromise3<T> {
 >U : Symbol(U, Decl(ipromise3.ts, 3, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
->then : Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>then : Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
 >U : Symbol(U, Decl(ipromise3.ts, 4, 9))
 >success : Symbol(success, Decl(ipromise3.ts, 4, 12))
 >value : Symbol(value, Decl(ipromise3.ts, 4, 23))
@@ -68,7 +68,7 @@ interface IPromise3<T> {
 >U : Symbol(U, Decl(ipromise3.ts, 4, 9))
 
     done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
->done : Symbol(done, Decl(ipromise3.ts, 4, 117))
+>done : Symbol(IPromise3.done, Decl(ipromise3.ts, 4, 117))
 >U : Symbol(U, Decl(ipromise3.ts, 5, 11))
 >success : Symbol(success, Decl(ipromise3.ts, 5, 14))
 >value : Symbol(value, Decl(ipromise3.ts, 5, 25))

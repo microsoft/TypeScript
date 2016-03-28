@@ -18,7 +18,7 @@ class ClassWithAccessors {
 
     // Inside public accessor getter
     get p1() {
->p1 : Symbol(p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
+>p1 : Symbol(ClassWithAccessors.p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
@@ -44,7 +44,7 @@ class ClassWithAccessors {
     }
     // Inside public accessor setter
     set p1(param: string | number) {
->p1 : Symbol(p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
+>p1 : Symbol(ClassWithAccessors.p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
 
         // global vars in function declaration
@@ -76,7 +76,7 @@ class ClassWithAccessors {
     }
     // Inside private accessor getter
     private get pp1() {
->pp1 : Symbol(pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
+>pp1 : Symbol(ClassWithAccessors.pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
@@ -102,7 +102,7 @@ class ClassWithAccessors {
     }
     // Inside private accessor setter
     private set pp1(param: string | number) {
->pp1 : Symbol(pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
+>pp1 : Symbol(ClassWithAccessors.pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
 
         // global vars in function declaration

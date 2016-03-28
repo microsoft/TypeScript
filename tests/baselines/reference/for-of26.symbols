@@ -10,7 +10,7 @@ class StringIterator {
 >StringIterator : Symbol(StringIterator, Decl(for-of26.ts, 1, 37))
 
     next() {
->next : Symbol(next, Decl(for-of26.ts, 3, 22))
+>next : Symbol(StringIterator.next, Decl(for-of26.ts, 3, 22))
 
         return x;
 >x : Symbol(x, Decl(for-of26.ts, 0, 3))

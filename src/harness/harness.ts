@@ -876,7 +876,7 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { throw new Error("NotYetImplemented"); }
+                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
             };
         }
 
@@ -896,7 +896,8 @@ namespace Harness {
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" },
-            { name: "suppressOutputPathCheck", type: "boolean" }
+            { name: "suppressOutputPathCheck", type: "boolean" },
+            { name: "noImplicitReferences", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -1330,7 +1331,7 @@ namespace Harness {
 
             public getSourceMapRecord() {
                 if (this.sourceMapData) {
-                    return Harness.SourceMapRecoder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
+                    return Harness.SourceMapRecorder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
             }
         }
