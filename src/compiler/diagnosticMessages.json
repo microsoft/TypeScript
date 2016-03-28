@@ -2243,10 +2243,6 @@
         "category": "Error",
         "code": 5062
     },
-    "Option 'excludes' is invalid. You should use 'exclude'": {
-        "category": "Error",
-        "code": 5063
-    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2623,6 +2619,10 @@
     "Enable strict null checks.": {
         "category": "Message",
         "code": 6113
+    },
+    "Unknown option 'excludes'. Did you mean 'exclude'?": {
+        "category": "Error",
+        "code": 6114
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
