@@ -292,7 +292,7 @@ namespace FourSlash {
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                        Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.defaultLibFileName).text);
+                        Harness.Compiler.getDefaultLibrarySourceFile().text);
                 }
             }
             else {
@@ -303,7 +303,7 @@ namespace FourSlash {
                     }
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                    Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.defaultLibFileName).text);
+                    Harness.Compiler.getDefaultLibrarySourceFile().text);
             }
 
             this.formatCodeOptions = {
