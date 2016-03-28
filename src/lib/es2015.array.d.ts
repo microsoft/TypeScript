@@ -1,37 +1,4 @@
-
 interface Array<T> {
-    /** Iterator */
-    [Symbol.iterator](): IterableIterator<T>;
-
-    /**
-     * Returns an object whose properties have the value 'true'
-     * when they will be absent when used in a 'with' statement.
-     */
-    [Symbol.unscopables](): {
-        copyWithin: boolean;
-        entries: boolean;
-        fill: boolean;
-        find: boolean;
-        findIndex: boolean;
-        keys: boolean;
-        values: boolean;
-    };
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, T]>;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
-
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<T>;
-
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
       * otherwise.
@@ -85,25 +52,12 @@ interface ArrayConstructor {
       */
     from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
 
-    /**
-      * Creates an array from an iterable object.
-      * @param iterable An iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
 
     /**
       * Creates an array from an array-like object.
       * @param arrayLike An array-like object to convert to an array.
       */
     from<T>(arrayLike: ArrayLike<T>): Array<T>;
-
-    /**
-      * Creates an array from an iterable object.
-      * @param iterable An iterable object to convert to an array.
-      */
-    from<T>(iterable: Iterable<T>): Array<T>;
 
     /**
       * Returns a new array from a set of elements.
