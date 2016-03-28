@@ -667,6 +667,9 @@ namespace ts {
                     }
                 }
             }
+            if (hasProperty(json, "excludes") && !hasProperty(json, "exclude")) {
+                errors.push(createCompilerDiagnostic(Diagnostics.Option_excludes_is_invalid_You_should_use_exclude));
+            }
             return fileNames;
         }
     }

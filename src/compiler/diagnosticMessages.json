@@ -2243,6 +2243,10 @@
         "category": "Error",
         "code": 5062
     },
+    "Option 'excludes' is invalid. You should use 'exclude'": {
+        "category": "Error",
+        "code": 5063
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
