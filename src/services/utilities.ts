@@ -451,7 +451,7 @@ namespace ts {
             return true;
         }
 
-        // <div> { |  or <div a={|
+        // <div> { | </div> or <div a={| </div>
         if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
         }
