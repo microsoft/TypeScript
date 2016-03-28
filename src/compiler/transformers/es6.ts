@@ -207,7 +207,7 @@ namespace ts {
 
             const savedConvertedLoopState = convertedLoopState;
             if (nodeStartsNewLexicalEnvironment(node)) {
-                // don't treat content of nodes that start new lexical environment or class-like nodes as part of converted loop copy 
+                // don't treat content of nodes that start new lexical environment as part of converted loop copy 
                 convertedLoopState = undefined;
             }
 
