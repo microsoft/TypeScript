@@ -809,6 +809,7 @@ namespace Harness {
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
+        export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
             [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
@@ -826,7 +827,7 @@ namespace Harness {
         }
 
         export function getDefaultLibSourceFile(languageVersion: ts.ScriptTarget) {
-            return languageVersion === ts.ScriptTarget.ES6 ? getDefaultLibrarySourceFile("lib.es6.d.ts") : getDefaultLibrarySourceFile(defaultLibFileName);
+            return languageVersion === ts.ScriptTarget.ES6 ? getDefaultLibrarySourceFile("lib.es2015.d.ts") : getDefaultLibrarySourceFile(defaultLibFileName);
         }
 
         // Cache these between executions so we don't have to re-parse them for every test
@@ -885,7 +886,7 @@ namespace Harness {
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
-                getDefaultLibFileName: options => options.target === ts.ScriptTarget.ES6 ? "lib.es6.d.ts" : defaultLibFileName,
+                getDefaultLibFileName: options => options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName,
                 getUserDefinedLibFileName: options => options.lib,
                 writeFile,
                 getCanonicalFileName,

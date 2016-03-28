@@ -1,4 +1,4 @@
-﻿// @lib: es5,es6.array
+﻿// @lib: es5,es2015.array
 
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

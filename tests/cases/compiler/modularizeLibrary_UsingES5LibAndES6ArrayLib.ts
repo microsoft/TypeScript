@@ -1,4 +1,4 @@
-﻿// @lib: es5,es6.array
+﻿// @lib: es5,es2015.array
 // @target: es5
 
 // No error

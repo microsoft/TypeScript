@@ -1,4 +1,4 @@
-﻿// @lib: es5,es6.symbol,es6.proxy,es6.generator,es6.iterable,es6.reflect
+﻿// @lib: es5,es2015.symbol,es2015.proxy,es2015.generator,es2015.iterable,es2015.reflect
 // @target: es6
 
 var s = Symbol();

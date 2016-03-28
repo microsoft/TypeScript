@@ -1,4 +1,4 @@
-// @lib: es5,es6.array,es6.symbol.wellknown
+// @lib: es5,es2015.array,es2015.symbol.wellknown
 
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);
