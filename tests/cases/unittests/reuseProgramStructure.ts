@@ -111,6 +111,7 @@ module ts {
             getDefaultLibFileName(): string {
                 return "lib.d.ts"
             },
+            getUserDefinedLibFileName: options => [],
             writeFile(file, text) {
                 throw new Error("NYI");
             },
