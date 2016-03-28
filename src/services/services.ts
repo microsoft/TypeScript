@@ -1926,6 +1926,7 @@ namespace ts {
                 }
             },
             getDefaultLibFileName: () => "lib.d.ts",
+            getUserDefinedLibFileName: () => [],
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
@@ -2825,6 +2826,7 @@ namespace ts {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
+                getUserDefinedLibFileName: (options) => [],
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,

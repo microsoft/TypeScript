@@ -1,0 +1,30 @@
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+lib.es6.array.d.ts(68,27): error TS2304: Cannot find name 'ArrayLike'.
+lib.es6.array.d.ts(75,24): error TS2304: Cannot find name 'ArrayLike'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts(4,12): error TS2304: Cannot find name 'Array'.
+
+
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+==== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts (1 errors) ====
+    
+    // Error missing basic JavaScript objects
+    function f(x: number, y: number, z: number) {
+        return Array.from(arguments);
+               ~~~~~
+!!! error TS2304: Cannot find name 'Array'.
+    }
+    
+    f(1, 2, 3);
+    

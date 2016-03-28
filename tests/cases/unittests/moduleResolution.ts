@@ -281,6 +281,7 @@ module ts {
                     return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
+                getUserDefinedLibFileName: options => [],
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
                 getCanonicalFileName: fileName => fileName.toLowerCase(),
@@ -364,6 +365,7 @@ export = C;
                     return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
                 },
                 getDefaultLibFileName: () => "lib.d.ts",
+                getUserDefinedLibFileName: options => [],
                 writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
                 getCurrentDirectory: () => currentDirectory,
                 getCanonicalFileName,
