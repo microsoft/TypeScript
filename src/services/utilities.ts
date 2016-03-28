@@ -451,14 +451,14 @@ namespace ts {
             return true;
         }
 
-        // <div> { 
-        // |
-        // } < /div>
+        // <div> { |  or <div a={|
         if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
         }
 
-        // <div> { |  or <div a={|
+        // <div> { 
+        // |
+        // } < /div>
         if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
             return true;
         }
