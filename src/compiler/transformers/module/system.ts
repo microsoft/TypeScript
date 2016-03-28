@@ -1092,13 +1092,16 @@ namespace ts {
             if (substitute) {
                 const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>operand);
                 if (exportDeclaration) {
-                    const expr = createPostfix(operand, node.operator, node);
+                    const expr = createPrefix(node.operator, operand, node);
                     setNodeEmitFlags(expr, NodeEmitFlags.NoSubstitution);
                     const call = createExportExpression(<Identifier>operand, expr);
                     if (node.kind === SyntaxKind.PrefixUnaryExpression) {
                         return call;
                     }
                     else {
+                        // export function returns the value that was passes as the second argument
+                        // however for postfix unary expressions result value should be the value before modification.
+                        // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
                         return operator === SyntaxKind.PlusPlusToken
                             ? createSubtract(call, createLiteral(1))
                             : createAdd(call, createLiteral(1));
