@@ -364,6 +364,23 @@ namespace ts {
         return createTextSpanFromBounds(start, scanner.getTextPos());
     }
 
+    function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
+        const pos = skipTrivia(sourceFile.text, node.pos);
+
+        if (node.body && node.body.kind === SyntaxKind.Block) {
+            const {line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
+            const {line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
+            if (startLine < endLine) {
+                // The arrow function body spans multiple lines, 
+                // make the error span be the first line.
+                const endOfFirstLine = getLineStarts(sourceFile)[startLine + 1] - 1;
+                return createTextSpan(pos, endOfFirstLine - pos);
+            }
+        }
+
+        return createTextSpanFromBounds(pos, node.end);
+    }
+
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode = node;
         switch (node.kind) {
@@ -392,6 +409,8 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
+            case SyntaxKind.ArrowFunction:
+                return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
         }
 
         if (errorNode === undefined) {
