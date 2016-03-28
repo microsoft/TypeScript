@@ -629,18 +629,15 @@ namespace ts {
             }
         }
 
-        function getUserDefinedLibFileName(options: CompilerOptions): string[] {
-            const directoryPath = getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
-            return options.lib.map(fileName => {
-                return combinePaths(directoryPath, fileName);
-            });
+        function getDefaultLibLocation(): string {
+            return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
 
         const newLine = getNewLineCharacter(options);
 
         return {
             getSourceFile,
-            getUserDefinedLibFileName,
+            getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
@@ -767,9 +764,9 @@ namespace ts {
                     processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
                 }
                 else {
-                    const libFileNames = host.getUserDefinedLibFileName(options);
-                    libFileNames.forEach(libFileName => {
-                        processRootFile(libFileName, /*isDefaultLib*/ true);
+                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
+                    forEach(options.lib, libFileName => {
+                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
                     });
                 }
             }

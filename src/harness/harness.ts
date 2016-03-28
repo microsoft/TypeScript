@@ -887,7 +887,6 @@ namespace Harness {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName: options => options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName,
-                getUserDefinedLibFileName: options => options.lib,
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,

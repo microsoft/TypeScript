@@ -172,7 +172,6 @@ class ProjectRunner extends RunnerBase {
                 return {
                     getSourceFile,
                     getDefaultLibFileName: options => Harness.Compiler.defaultLibFileName,
-                    getUserDefinedLibFileName: options => [],
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
