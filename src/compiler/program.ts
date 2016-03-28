@@ -15,8 +15,8 @@ namespace ts {
     export const version = "1.9.0";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
-        let fileName = "tsconfig.json";
         while (true) {
+            const fileName = combinePaths(searchPath, "tsconfig.json");
             if (fileExists(fileName)) {
                 return fileName;
             }
@@ -25,7 +25,6 @@ namespace ts {
                 break;
             }
             searchPath = parentPath;
-            fileName = "../" + fileName;
         }
         return undefined;
     }
