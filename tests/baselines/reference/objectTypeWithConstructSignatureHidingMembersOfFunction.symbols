@@ -4,12 +4,12 @@ interface I {
 
     new(): number;
     apply(a: any, b?: any): void;
->apply : Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
+>apply : Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
 >a : Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 10))
 >b : Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 17))
 
     call(thisArg: number, ...argArray: number[]): any;
->call : Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
+>call : Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
 >thisArg : Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 9))
 >argArray : Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 25))
 }

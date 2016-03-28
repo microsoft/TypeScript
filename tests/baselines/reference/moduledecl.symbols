@@ -65,10 +65,10 @@ module m0 {
 >c1 : Symbol(c1, Decl(moduledecl.ts, 25, 5))
 
         public a : ()=>string;
->a : Symbol(a, Decl(moduledecl.ts, 27, 14))
+>a : Symbol(c1.a, Decl(moduledecl.ts, 27, 14))
 
         private b: ()=>number;
->b : Symbol(b, Decl(moduledecl.ts, 28, 30))
+>b : Symbol(c1.b, Decl(moduledecl.ts, 28, 30))
 
         private static s1;
 >s1 : Symbol(c1.s1, Decl(moduledecl.ts, 29, 30))
@@ -141,10 +141,10 @@ module m1 {
 >c1 : Symbol(c1, Decl(moduledecl.ts, 54, 5))
 
         public a: () =>string;
->a : Symbol(a, Decl(moduledecl.ts, 56, 21))
+>a : Symbol(c1.a, Decl(moduledecl.ts, 56, 21))
 
         private b: () =>number;
->b : Symbol(b, Decl(moduledecl.ts, 57, 30))
+>b : Symbol(c1.b, Decl(moduledecl.ts, 57, 30))
 
         private static s1;
 >s1 : Symbol(c1.s1, Decl(moduledecl.ts, 58, 31))
@@ -153,21 +153,21 @@ module m1 {
 >s2 : Symbol(c1.s2, Decl(moduledecl.ts, 59, 26))
 
         public d() {
->d : Symbol(d, Decl(moduledecl.ts, 60, 25))
+>d : Symbol(c1.d, Decl(moduledecl.ts, 60, 25))
 
             return "Hello";
         }
 
         public e: { x: number; y: string; };
->e : Symbol(e, Decl(moduledecl.ts, 64, 9))
+>e : Symbol(c1.e, Decl(moduledecl.ts, 64, 9))
 >x : Symbol(x, Decl(moduledecl.ts, 66, 19))
 >y : Symbol(y, Decl(moduledecl.ts, 66, 30))
 
         constructor (public n, public n2: number, private n3, private n4: string) {
->n : Symbol(n, Decl(moduledecl.ts, 67, 21))
->n2 : Symbol(n2, Decl(moduledecl.ts, 67, 30))
->n3 : Symbol(n3, Decl(moduledecl.ts, 67, 49))
->n4 : Symbol(n4, Decl(moduledecl.ts, 67, 61))
+>n : Symbol(c1.n, Decl(moduledecl.ts, 67, 21))
+>n2 : Symbol(c1.n2, Decl(moduledecl.ts, 67, 30))
+>n3 : Symbol(c1.n3, Decl(moduledecl.ts, 67, 49))
+>n4 : Symbol(c1.n4, Decl(moduledecl.ts, 67, 61))
         }
     }
 
@@ -312,13 +312,13 @@ module exportTests {
 >C1_public : Symbol(C1_public, Decl(moduledecl.ts, 138, 20))
 
         private f2() {
->f2 : Symbol(f2, Decl(moduledecl.ts, 139, 28))
+>f2 : Symbol(C1_public.f2, Decl(moduledecl.ts, 139, 28))
 
             return 30;
         }
 
         public f3() {
->f3 : Symbol(f3, Decl(moduledecl.ts, 142, 9))
+>f3 : Symbol(C1_public.f3, Decl(moduledecl.ts, 142, 9))
 
             return "string";
         }
@@ -327,13 +327,13 @@ module exportTests {
 >C2_private : Symbol(C2_private, Decl(moduledecl.ts, 147, 5))
 
         private f2() {
->f2 : Symbol(f2, Decl(moduledecl.ts, 148, 22))
+>f2 : Symbol(C2_private.f2, Decl(moduledecl.ts, 148, 22))
 
             return 30;
         }
 
         public f3() {
->f3 : Symbol(f3, Decl(moduledecl.ts, 151, 9))
+>f3 : Symbol(C2_private.f3, Decl(moduledecl.ts, 151, 9))
 
             return "string";
         }
@@ -343,35 +343,35 @@ module exportTests {
 >C3_public : Symbol(C3_public, Decl(moduledecl.ts, 156, 5))
 
         private getC2_private() {
->getC2_private : Symbol(getC2_private, Decl(moduledecl.ts, 158, 28))
+>getC2_private : Symbol(C3_public.getC2_private, Decl(moduledecl.ts, 158, 28))
 
             return new C2_private();
 >C2_private : Symbol(C2_private, Decl(moduledecl.ts, 147, 5))
         }
         private setC2_private(arg: C2_private) {
->setC2_private : Symbol(setC2_private, Decl(moduledecl.ts, 161, 9))
+>setC2_private : Symbol(C3_public.setC2_private, Decl(moduledecl.ts, 161, 9))
 >arg : Symbol(arg, Decl(moduledecl.ts, 162, 30))
 >C2_private : Symbol(C2_private, Decl(moduledecl.ts, 147, 5))
         }
         private get c2() {
->c2 : Symbol(c2, Decl(moduledecl.ts, 163, 9))
+>c2 : Symbol(C3_public.c2, Decl(moduledecl.ts, 163, 9))
 
             return new C2_private();
 >C2_private : Symbol(C2_private, Decl(moduledecl.ts, 147, 5))
         }
         public getC1_public() {
->getC1_public : Symbol(getC1_public, Decl(moduledecl.ts, 166, 9))
+>getC1_public : Symbol(C3_public.getC1_public, Decl(moduledecl.ts, 166, 9))
 
             return new C1_public();
 >C1_public : Symbol(C1_public, Decl(moduledecl.ts, 138, 20))
         }
         public setC1_public(arg: C1_public) {
->setC1_public : Symbol(setC1_public, Decl(moduledecl.ts, 169, 9))
+>setC1_public : Symbol(C3_public.setC1_public, Decl(moduledecl.ts, 169, 9))
 >arg : Symbol(arg, Decl(moduledecl.ts, 170, 28))
 >C1_public : Symbol(C1_public, Decl(moduledecl.ts, 138, 20))
         }
         public get c1() {
->c1 : Symbol(c1, Decl(moduledecl.ts, 171, 9))
+>c1 : Symbol(C3_public.c1, Decl(moduledecl.ts, 171, 9))
 
             return new C1_public();
 >C1_public : Symbol(C1_public, Decl(moduledecl.ts, 138, 20))
@@ -386,7 +386,7 @@ declare module mAmbient {
 >C : Symbol(C, Decl(moduledecl.ts, 178, 25))
 
         public myProp: number;
->myProp : Symbol(myProp, Decl(moduledecl.ts, 179, 13))
+>myProp : Symbol(C.myProp, Decl(moduledecl.ts, 179, 13))
     }
 
     function foo() : C;
@@ -401,10 +401,10 @@ declare module mAmbient {
 >B : Symbol(B, Decl(moduledecl.ts, 184, 16))
 
         x: number;
->x : Symbol(x, Decl(moduledecl.ts, 185, 17))
+>x : Symbol(B.x, Decl(moduledecl.ts, 185, 17))
 
         y: C;
->y : Symbol(y, Decl(moduledecl.ts, 186, 18))
+>y : Symbol(B.y, Decl(moduledecl.ts, 186, 18))
 >C : Symbol(C, Decl(moduledecl.ts, 178, 25))
     }
     enum e {
@@ -427,7 +427,7 @@ declare module mAmbient {
 >C : Symbol(C, Decl(moduledecl.ts, 195, 15))
 
             public myProp: number;
->myProp : Symbol(myProp, Decl(moduledecl.ts, 196, 17))
+>myProp : Symbol(C.myProp, Decl(moduledecl.ts, 196, 17))
         }
 
         function foo(): C;
@@ -442,10 +442,10 @@ declare module mAmbient {
 >B : Symbol(B, Decl(moduledecl.ts, 201, 20))
 
             x: number;
->x : Symbol(x, Decl(moduledecl.ts, 202, 21))
+>x : Symbol(B.x, Decl(moduledecl.ts, 202, 21))
 
             y: C;
->y : Symbol(y, Decl(moduledecl.ts, 203, 22))
+>y : Symbol(B.y, Decl(moduledecl.ts, 203, 22))
 >C : Symbol(C, Decl(moduledecl.ts, 195, 15))
         }
         enum e {

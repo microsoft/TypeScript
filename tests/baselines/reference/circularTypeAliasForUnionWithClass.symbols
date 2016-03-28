@@ -11,7 +11,7 @@ class I0 {
 >I0 : Symbol(I0, Decl(circularTypeAliasForUnionWithClass.ts, 1, 22))
 
     x: T0;
->x : Symbol(x, Decl(circularTypeAliasForUnionWithClass.ts, 2, 10))
+>x : Symbol(I0.x, Decl(circularTypeAliasForUnionWithClass.ts, 2, 10))
 >T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithClass.ts, 0, 11))
 }
 

@@ -307,13 +307,13 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): RegExpMatchArray;
+    match(regexp: string): RegExpMatchArray | null;
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
       */
-    match(regexp: RegExp): RegExpMatchArray;
+    match(regexp: RegExp): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -816,7 +816,7 @@ interface RegExp {
       * Executes a search on a string using a regular expression pattern, and returns an array containing the results of that search.
       * @param string The String object or string literal on which to perform the search.
       */
-    exec(string: string): RegExpExecArray;
+    exec(string: string): RegExpExecArray | null;
 
     /** 
       * Returns a Boolean value that indicates whether or not a pattern exists in a searched string.
@@ -839,7 +839,7 @@ interface RegExp {
     lastIndex: number;
 
     // Non-standard extensions
-    compile(): RegExp;
+    compile(): this;
 }
 
 interface RegExpConstructor {
@@ -1111,7 +1111,7 @@ interface Array<T> {
     /**
       * Removes the last element from an array and returns it.
       */
-    pop(): T;
+    pop(): T | undefined;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1129,7 +1129,7 @@ interface Array<T> {
     /**
       * Removes the first element from an array and returns it.
       */
-    shift(): T;
+    shift(): T | undefined;
     /** 
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.
@@ -1522,7 +1522,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -1533,7 +1533,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1795,7 +1795,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -1806,7 +1806,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2069,7 +2069,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -2080,7 +2080,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2342,7 +2342,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -2353,7 +2353,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2616,7 +2616,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -2627,7 +2627,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2889,7 +2889,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -2900,7 +2900,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3162,7 +3162,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -3173,7 +3173,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3435,7 +3435,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -3446,7 +3446,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3709,7 +3709,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -3720,7 +3720,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Performs the specified action for each element in an array.

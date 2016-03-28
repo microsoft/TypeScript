@@ -8,7 +8,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 1, 14))
 
     z: Foo<X<T>>; // error
->z : Symbol(z, Decl(recursiveTypeParameterReferenceError1.ts, 1, 18))
+>z : Symbol(Foo.z, Decl(recursiveTypeParameterReferenceError1.ts, 1, 18))
 >Foo : Symbol(Foo, Decl(recursiveTypeParameterReferenceError1.ts, 0, 14))
 >X : Symbol(X, Decl(recursiveTypeParameterReferenceError1.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 1, 14))
@@ -29,7 +29,7 @@ class C2<T> {
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 8, 9))
 
     x: T;
->x : Symbol(x, Decl(recursiveTypeParameterReferenceError1.ts, 8, 13))
+>x : Symbol(C2.x, Decl(recursiveTypeParameterReferenceError1.ts, 8, 13))
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 8, 9))
 }
 interface Foo2<T> {
@@ -37,7 +37,7 @@ interface Foo2<T> {
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 11, 15))
 
     ofC4: C2<{ x: T }> // ok
->ofC4 : Symbol(ofC4, Decl(recursiveTypeParameterReferenceError1.ts, 11, 19))
+>ofC4 : Symbol(Foo2.ofC4, Decl(recursiveTypeParameterReferenceError1.ts, 11, 19))
 >C2 : Symbol(C2, Decl(recursiveTypeParameterReferenceError1.ts, 5, 12))
 >x : Symbol(x, Decl(recursiveTypeParameterReferenceError1.ts, 12, 14))
 >T : Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 11, 15))

@@ -3,7 +3,7 @@ class A {
 >A : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
 
     self() {
->self : Symbol(self, Decl(thisTypeAndConstraints.ts, 0, 9))
+>self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
 
         return this;
 >this : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
@@ -43,7 +43,7 @@ class B<T extends A> {
 >A : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
 
     foo(x: T) {
->foo : Symbol(foo, Decl(thisTypeAndConstraints.ts, 13, 22))
+>foo : Symbol(B.foo, Decl(thisTypeAndConstraints.ts, 13, 22))
 >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 14, 8))
 >T : Symbol(T, Decl(thisTypeAndConstraints.ts, 13, 8))
 
@@ -54,7 +54,7 @@ class B<T extends A> {
 >self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
     }
     bar<U extends T>(x: U) {
->bar : Symbol(bar, Decl(thisTypeAndConstraints.ts, 16, 5))
+>bar : Symbol(B.bar, Decl(thisTypeAndConstraints.ts, 16, 5))
 >U : Symbol(U, Decl(thisTypeAndConstraints.ts, 17, 8))
 >T : Symbol(T, Decl(thisTypeAndConstraints.ts, 13, 8))
 >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 17, 21))

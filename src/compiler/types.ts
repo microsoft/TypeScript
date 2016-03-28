@@ -171,6 +171,7 @@ namespace ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
+        UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
@@ -240,6 +241,7 @@ namespace ts {
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
+        NonNullExpression,
 
         // Misc
         TemplateSpan,
@@ -274,6 +276,7 @@ namespace ts {
         ModuleDeclaration,
         ModuleBlock,
         CaseBlock,
+        GlobalModuleExportDeclaration,
         ImportEqualsDeclaration,
         ImportDeclaration,
         ImportClause,
@@ -472,6 +475,11 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+    }
+
+    // Transient identifier node (marked by id === -1)
+    export interface TransientIdentifier extends Identifier {
+        resolvedSymbol: Symbol;
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -967,6 +975,8 @@ namespace ts {
         name: Identifier;
     }
 
+    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
@@ -1010,6 +1020,11 @@ namespace ts {
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
+
+    // @kind(SyntaxKind.NonNullExpression)
+    export interface NonNullExpression extends LeftHandSideExpression {
+        expression: Expression;
+    }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
     // @kind(SyntaxKind.JsxElement)
@@ -1326,6 +1341,12 @@ namespace ts {
         name: Identifier;
     }
 
+    // @kind(SyntaxKind.GlobalModuleImport)
+    export interface GlobalModuleExportDeclaration extends DeclarationStatement {
+        name: Identifier;
+        moduleReference: LiteralLikeNode;
+    }
+
     // @kind(SyntaxKind.ExportDeclaration)
     export interface ExportDeclaration extends DeclarationStatement {
         exportClause?: NamedExports;
@@ -1539,6 +1560,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
+        // True if the file was a root file in a compilation or a /// reference targets
+        /* @internal */ wasReferenced?: boolean;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -1575,7 +1598,7 @@ namespace ts {
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
     }
 
     export class OperationCanceledException { }
@@ -1997,6 +2020,7 @@ namespace ts {
 
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        globalExports?: SymbolTable;            // Conditional global UMD exports
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
@@ -2019,7 +2043,9 @@ namespace ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // true if module exports some value (not just types)
+        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        firstAssignmentChecked?: boolean;   // True if first assignment node has been computed
+        firstAssignment?: Node;             // First assignment node (undefined if no assignments)
     }
 
     /* @internal */
@@ -2062,7 +2088,7 @@ namespace ts {
         isVisible?: boolean;              // Is this node visible
         generatedName?: string;           // Generated name for module, enum, or import declaration
         generatedNames?: Map<string>;     // Generated names table for source file
-        assignmentChecks?: Map<boolean>;  // Cache of assignment checks
+        assignmentMap?: Map<boolean>;     // Cached map of references assigned within this node
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
@@ -2096,7 +2122,7 @@ namespace ts {
         /* @internal */
         FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains undefined or null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
@@ -2105,6 +2131,8 @@ namespace ts {
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
+        /* @internal */
+        Nullable = Undefined | Null,
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
         /* @internal */
@@ -2372,6 +2400,8 @@ namespace ts {
     export type PathSubstitutions = Map<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2429,6 +2459,8 @@ namespace ts {
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        strictNullChecks?: boolean;
+        lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2436,7 +2468,9 @@ namespace ts {
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
 
-        [option: string]: string | number | boolean | TsConfigOnlyOptions;
+        list?: string[];
+
+        [option: string]: CompilerOptionsValue;
     }
 
     export interface TypingOptions {
@@ -2521,7 +2555,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | Map<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2537,8 +2571,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number>;             // an object literal mapping named values to actual values
-        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+        type: Map<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -2547,7 +2580,13 @@ namespace ts {
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+    export interface CommandLineOptionOfListType extends CommandLineOptionBase {
+        type: "list";
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {

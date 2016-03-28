@@ -5,23 +5,23 @@ class C1 {
 >C1 : Symbol(C1, Decl(declarationEmit_protectedMembers.ts, 0, 0))
 
     protected x: number;
->x : Symbol(x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
+>x : Symbol(C1.x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
 
     protected f() {
->f : Symbol(f, Decl(declarationEmit_protectedMembers.ts, 3, 24))
+>f : Symbol(C1.f, Decl(declarationEmit_protectedMembers.ts, 3, 24))
 
         return this.x;
->this.x : Symbol(x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
+>this.x : Symbol(C1.x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
 >this : Symbol(C1, Decl(declarationEmit_protectedMembers.ts, 0, 0))
->x : Symbol(x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
+>x : Symbol(C1.x, Decl(declarationEmit_protectedMembers.ts, 2, 10))
     }
 
     protected set accessor(a: number) { }
->accessor : Symbol(accessor, Decl(declarationEmit_protectedMembers.ts, 7, 5), Decl(declarationEmit_protectedMembers.ts, 9, 41))
+>accessor : Symbol(C1.accessor, Decl(declarationEmit_protectedMembers.ts, 7, 5), Decl(declarationEmit_protectedMembers.ts, 9, 41))
 >a : Symbol(a, Decl(declarationEmit_protectedMembers.ts, 9, 27))
 
     protected get accessor() { return 0; }
->accessor : Symbol(accessor, Decl(declarationEmit_protectedMembers.ts, 7, 5), Decl(declarationEmit_protectedMembers.ts, 9, 41))
+>accessor : Symbol(C1.accessor, Decl(declarationEmit_protectedMembers.ts, 7, 5), Decl(declarationEmit_protectedMembers.ts, 9, 41))
 
     protected static sx: number;
 >sx : Symbol(C1.sx, Decl(declarationEmit_protectedMembers.ts, 10, 42))
@@ -49,7 +49,7 @@ class C2 extends C1 {
 >C1 : Symbol(C1, Decl(declarationEmit_protectedMembers.ts, 0, 0))
 
     protected f() {
->f : Symbol(f, Decl(declarationEmit_protectedMembers.ts, 23, 21))
+>f : Symbol(C2.f, Decl(declarationEmit_protectedMembers.ts, 23, 21))
 
         return super.f() + this.x;
 >super.f : Symbol(C1.f, Decl(declarationEmit_protectedMembers.ts, 3, 24))
@@ -78,13 +78,13 @@ class C3 extends C2 {
 >C2 : Symbol(C2, Decl(declarationEmit_protectedMembers.ts, 20, 1))
 
     x: number;
->x : Symbol(x, Decl(declarationEmit_protectedMembers.ts, 33, 21))
+>x : Symbol(C3.x, Decl(declarationEmit_protectedMembers.ts, 33, 21))
 
     static sx: number;
 >sx : Symbol(C3.sx, Decl(declarationEmit_protectedMembers.ts, 34, 14))
 
     f() {
->f : Symbol(f, Decl(declarationEmit_protectedMembers.ts, 35, 22))
+>f : Symbol(C3.f, Decl(declarationEmit_protectedMembers.ts, 35, 22))
 
         return super.f();
 >super.f : Symbol(C2.f, Decl(declarationEmit_protectedMembers.ts, 23, 21))
@@ -109,6 +109,6 @@ class C4 {
 >C4 : Symbol(C4, Decl(declarationEmit_protectedMembers.ts, 44, 1))
 
     constructor(protected a: number, protected b) { }
->a : Symbol(a, Decl(declarationEmit_protectedMembers.ts, 48, 16))
->b : Symbol(b, Decl(declarationEmit_protectedMembers.ts, 48, 36))
+>a : Symbol(C4.a, Decl(declarationEmit_protectedMembers.ts, 48, 16))
+>b : Symbol(C4.b, Decl(declarationEmit_protectedMembers.ts, 48, 36))
 }
