@@ -7,9 +7,9 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 1, 32))
 
     return Array.from(arguments);
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es6.array.d.ts, --, --), Decl(lib.es6.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es6.symbol.wellknown.d.ts, --, --), Decl(lib.es6.array.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es6.array.d.ts, --, --), Decl(lib.es6.array.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -21,7 +21,7 @@ let a = ['c', 'd'];
 
 a[Symbol.isConcatSpreadable] = false;
 >a : Symbol(a, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 6, 3))
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es6.symbol.wellknown.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --), Decl(lib.es6.symbol.d.ts, --, --))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es6.symbol.wellknown.d.ts, --, --))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
