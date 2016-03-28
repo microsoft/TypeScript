@@ -2620,6 +2620,10 @@
         "category": "Message",
         "code": 6113
     },
+    "Unknown option 'excludes'. Did you mean 'exclude'?": {
+        "category": "Error",
+        "code": 6114
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
