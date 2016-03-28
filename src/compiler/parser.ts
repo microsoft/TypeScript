@@ -401,6 +401,8 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
+            case SyntaxKind.JSDocTypedefTag:
+                return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
         }
     }
 
@@ -886,7 +888,7 @@ namespace ts {
 
         /** Invokes the provided callback then unconditionally restores the parser to the state it
          * was in immediately prior to invoking the callback.  The result of invoking the callback
-         * is returned from this function. 
+         * is returned from this function.
          */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
@@ -2068,11 +2070,11 @@ namespace ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldContext: boolean,
-                awaitContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldContext: boolean,
+            awaitContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
@@ -3341,8 +3343,8 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
-                    // We are in JSX context and the token is part of JSXElement.
-                    // Fall through
+                // We are in JSX context and the token is part of JSXElement.
+                // Fall through
                 default:
                     return true;
             }
@@ -4044,9 +4046,9 @@ namespace ts {
             const isAsync = !!(node.flags & NodeFlags.Async);
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                parseOptionalIdentifier();
+                    isGenerator ? doInYieldContext(parseOptionalIdentifier) :
+                        isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                            parseOptionalIdentifier();
 
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ isGenerator, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
@@ -4984,7 +4986,7 @@ namespace ts {
 
                 if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
                     // We need to ensure that any subsequent modifiers appear on the same line
-                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    // so that when 'const' is a standalone declaration, we don't issue an error.
                     if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                         break;
                     }
@@ -5247,7 +5249,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (token === SyntaxKind.GlobalKeyword) {
-                // parse 'global' as name of global scope augmentation 
+                // parse 'global' as name of global scope augmentation
                 node.name = parseIdentifier();
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
@@ -5829,7 +5831,7 @@ namespace ts {
             }
 
             function checkForEmptyTypeArgumentList(typeArguments: NodeArray<Node>) {
-                if (parseDiagnostics.length === 0 &&  typeArguments && typeArguments.length === 0) {
+                if (parseDiagnostics.length === 0 && typeArguments && typeArguments.length === 0) {
                     const start = typeArguments.pos - "<".length;
                     const end = skipTrivia(sourceText, typeArguments.end) + ">".length;
                     return parseErrorAtPosition(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
@@ -5990,6 +5992,7 @@ namespace ts {
                 Debug.assert(end <= content.length);
 
                 let tags: NodeArray<JSDocTag>;
+                let currentParentJSDocDeclaration: Declaration;
 
                 let result: JSDocComment;
 
@@ -6097,6 +6100,11 @@ namespace ts {
                                 return handleTemplateTag(atToken, tagName);
                             case "type":
                                 return handleTypeTag(atToken, tagName);
+                            case "typedef":
+                                return handleTypedefTag(atToken, tagName);
+                            case "property":
+                            case "prop":
+                                return handlePropertyTag(atToken, tagName);
                         }
                     }
 
@@ -6202,6 +6210,56 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
                     return finishNode(result);
+                }
+
+                function handlePropertyTag(atToken: Node, tagName: Identifier): JSDocPropertyTag {
+                    if (!currentParentJSDocDeclaration) {
+                        parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag, tagName.text);
+                        return undefined;
+                    }
+
+                    const typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
+                    const name = parseJSDocIdentifier();
+                    if (!name) {
+                        parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
+                        return undefined;
+                    }
+
+                    const result = <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.name = name;
+                    result.typeExpression = typeExpression;
+                    return finishNode(result);
+                }
+
+                function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
+                    const typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
+                    const name = parseJSDocIdentifier();
+                    if (!name) {
+                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                        return undefined;
+                    }
+
+                    const result = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.name = name;
+                    result.typeExpression = typeExpression;
+
+                    // if (typeExpression && typeExpression.type.kind === SyntaxKind.JSDocTypeReference) {
+                    //     const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
+                    //     if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
+                    //         const name = <Identifier>jsDocTypeReference.name;
+                    //         if (name.text === "Object") {
+                    //             currentParentJSDocDeclaration = declaration;
+                    //         }
+                    //     }
+                    // }
+
+                    return result;
                 }
 
                 function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {

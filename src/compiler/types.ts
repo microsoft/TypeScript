@@ -342,6 +342,10 @@ namespace ts {
         JSDocReturnTag,
         JSDocTypeTag,
         JSDocTemplateTag,
+        JSDocTypedefTag,
+        JSDocPropertyTag,
+        JSDocTypedefDeclaration,
+        JSDocTypeLiteral,
 
         // Synthesized list
         SyntaxList,
@@ -1510,6 +1514,29 @@ namespace ts {
         typeExpression: JSDocTypeExpression;
     }
 
+    // @kind(SyntaxKind.JSDocTypedefTag)
+    export interface JSDocTypedefTag extends JSDocTag, Declaration {
+        name: Identifier;
+        typeExpression: JSDocTypeExpression;
+    }
+
+    // @kind(SyntaxKind.JSDocPropertyTag)
+    export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        name: Identifier;
+        typeExpression: JSDocTypeExpression;
+    }
+
+    // @kind(SyntaxKind.JSDocTypedefDeclaration)
+    export interface JSDocTypedefDeclaration extends Declaration {
+        name: Identifier;
+        type: TypeNode;
+    }
+
+    // @kind(SyntaxKind.JSDocTypeLiteral)
+    export interface JSDocTypeLiteral extends TypeNode {
+        members: NodeArray<TypeElement>;
+    }
+
     // @kind(SyntaxKind.JSDocParameterTag)
     export interface JSDocParameterTag extends JSDocTag {
         preParameterName?: Identifier;
@@ -2094,7 +2121,7 @@ namespace ts {
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
     }
 
     export const enum TypeFlags {

@@ -811,6 +811,10 @@
         "category": "Error",
         "code": 1249
     },
+    "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
+        "category": "Error",
+        "code": 1250
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

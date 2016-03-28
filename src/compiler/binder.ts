@@ -404,6 +404,13 @@ namespace ts {
             // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
 
+            // Binding of JsDocComment should be done before the current block scope container changes.
+            // because the scope of JsDocComment should not be affected by whether the current node is a
+            // container or not.
+            if (isInJavaScriptFile(node) && node.jsDocComment) {
+                bind(node.jsDocComment);
+            }
+
             // Depending on what kind of node this is, we may have to adjust the current container
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
@@ -466,10 +473,6 @@ namespace ts {
                 currentReachabilityState = Reachability.Reachable;
                 hasExplicitReturn = false;
                 labelStack = labelIndexMap = implicitLabels = undefined;
-            }
-
-            if (isInJavaScriptFile(node) && node.jsDocComment) {
-                bind(node.jsDocComment);
             }
 
             bindReachableStatement(node);
@@ -857,7 +860,7 @@ namespace ts {
                     // their container in the tree.  To accomplish this, we simply add their declared
                     // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
 
@@ -1343,6 +1346,7 @@ namespace ts {
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:

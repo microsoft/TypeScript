@@ -3403,7 +3403,7 @@ namespace ts {
             return <InterfaceType>links.declaredType;
         }
 
-        function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
+        function getDeclaredTypeOfTypeAlias(symbol: Symbol, node?: Node): Type {
             const links = getSymbolLinks(symbol);
             if (!links.declaredType) {
                 // Note that we use the links object as the target here because the symbol object is used as the unique
@@ -3411,8 +3411,18 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.DeclaredType)) {
                     return unknownType;
                 }
-                const declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                let type = getTypeFromTypeNode(declaration.type);
+
+                let typeNode: TypeNode;
+                let name: Identifier;
+                if (node && (node.flags & NodeFlags.JavaScriptFile)) {
+                    const declaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
+                    typeNode = declaration.typeExpression.type;
+                }
+                if (!typeNode) {
+                    const declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                    typeNode = declaration.type;
+                }
+                let type = getTypeFromTypeNode(typeNode);
                 if (popTypeResolution()) {
                     links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     if (links.typeParameters) {
@@ -3424,7 +3434,7 @@ namespace ts {
                 }
                 else {
                     type = unknownType;
-                    error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    error(name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
                 links.declaredType = type;
             }
@@ -3462,13 +3472,13 @@ namespace ts {
             return links.declaredType;
         }
 
-        function getDeclaredTypeOfSymbol(symbol: Symbol): Type {
+        function getDeclaredTypeOfSymbol(symbol: Symbol, node?: Node): Type {
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0);
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getDeclaredTypeOfClassOrInterface(symbol);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getDeclaredTypeOfTypeAlias(symbol);
+                return getDeclaredTypeOfTypeAlias(symbol, node);
             }
             if (symbol.flags & SymbolFlags.Enum) {
                 return getDeclaredTypeOfEnum(symbol);
@@ -4564,7 +4574,7 @@ namespace ts {
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
         function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
-            const type = getDeclaredTypeOfSymbol(symbol);
+            const type = getDeclaredTypeOfSymbol(symbol, node);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
             if (typeParameters) {
