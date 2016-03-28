@@ -189,6 +189,16 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, dispatcher);
+        }
+
+        function dispatcher(node: Node): VisitResult<Node> {
+            return convertedLoopState
+                ? visitorForConvertedLoopWorker(node)
+                : visitorWorker(node);
+        }
+
+        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
@@ -196,16 +206,13 @@ namespace ts {
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
 
             const savedConvertedLoopState = convertedLoopState;
-            if (nodeStartsNewLexicalEnvironment(node) || isClassLike(node)) {
+            if (nodeStartsNewLexicalEnvironment(node)) {
                 // don't treat content of nodes that start new lexical environment or class-like nodes as part of converted loop copy 
                 convertedLoopState = undefined;
             }
 
             onBeforeVisitNode(node);
-
-            const visited = convertedLoopState
-                ? visitorForConvertedLoopWorker(node)
-                : visitorWorker(node);
+            const visited = f(node);
 
             convertedLoopState = savedConvertedLoopState;
             containingNonArrowFunction = savedContainingNonArrowFunction;
@@ -237,7 +244,7 @@ namespace ts {
         function visitorForConvertedLoopWorker(node: Node): VisitResult<Node> {
             const savedUseCapturedThis = useCapturedThis;
 
-            if (nodeStartsNewLexicalEnvironment(node) || isClassLike(node)) {
+            if (nodeStartsNewLexicalEnvironment(node)) {
                 useCapturedThis = false
             }
 
@@ -703,11 +710,20 @@ namespace ts {
             addDefaultSuperCallIfNeeded(statements, constructor, hasExtendsClause, hasSynthesizedSuper);
 
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, hasSynthesizedSuper ? 1 : 0));
+                const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
+                addRange(statements, body);
             }
 
             addRange(statements, endLexicalEnvironment());
             return createBlock(statements, /*location*/ constructor && constructor.body, /*multiLine*/ true);
+        }
+
+        function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
+            return visitNodes(node.body.statements, visitor, isStatement, 1);
+        }
+
+        function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
+            return visitNodes(node.body.statements, visitor, isStatement, 0);
         }
 
         /**
@@ -1141,7 +1157,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 name,
                 visitNodes(node.parameters, visitor, isParameter),
-                transformFunctionBody(node),
+                saveStateAndInvoke(node, transformFunctionBody),
                 location,
                 /*original*/ node
             );
@@ -2483,6 +2499,7 @@ namespace ts {
             return containingNonArrowFunction
                 && isClassElement(containingNonArrowFunction)
                 && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
+                && currentParent.kind !== SyntaxKind.CallExpression
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
         }
