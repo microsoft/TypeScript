@@ -4609,7 +4609,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 emitEnd(node);
-                if (kind !== SyntaxKind.MethodDeclaration && kind !== SyntaxKind.MethodSignature) {
+                if (kind !== SyntaxKind.MethodDeclaration &&
+                    kind !== SyntaxKind.MethodSignature &&
+                    kind !== SyntaxKind.ArrowFunction) {
                     emitTrailingComments(node);
                 }
             }
