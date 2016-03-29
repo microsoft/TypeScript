@@ -181,16 +181,16 @@ namespace ts {
 
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         Debug.assert(line >= 0);
-        let lineStarts = getLineStarts(sourceFile);
+        const lineStarts = getLineStarts(sourceFile);
 
-        let lineIndex = line;
+        const lineIndex = line;
         if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
             return sourceFile.text.length - 1;
         }
         else {
             // current line start
-            let start = lineStarts[lineIndex];
+            const start = lineStarts[lineIndex];
             // take the start position of the next line -1 = it should be some line break
             let pos = lineStarts[lineIndex + 1] - 1;
             Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
