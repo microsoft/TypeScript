@@ -1759,6 +1759,7 @@ const _super = (function (geti, seti) {
                         nodeIsSynthesized(statements[0]) ||
                         rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                     );
+
                 if (emitAsSingleStatement) {
                     write(" ");
                     emit(statements[0]);

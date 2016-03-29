@@ -111,7 +111,7 @@ namespace ts {
         thisName?: Identifier;
 
         /*
-         * set to true if node contains lexical 'this' so we can mark function that wraps convered loop body as 'CapturedThis' for subsequence substitution.
+         * set to true if node contains lexical 'this' so we can mark function that wraps convered loop body as 'CapturedThis' for subsequent substitution.
          */
         containsLexicalThis?: boolean;
 
@@ -445,7 +445,7 @@ namespace ts {
             Debug.assert(convertedLoopState !== undefined);
 
             if (useCapturedThis) {
-                // if useCapturedThis is true then 'this' keyword is contained inside the arrow function. 
+                // if useCapturedThis is true then 'this' keyword is contained inside an arrow function. 
                 convertedLoopState.containsLexicalThis = true;
                 return node;
             }
@@ -467,10 +467,10 @@ namespace ts {
 
         function visitBreakOrContinueStatement(node: BreakOrContinueStatement): Statement {
             if (convertedLoopState) {
-                // check if we can emit break\continue as is
+                // check if we can emit break/continue as is
                 // it is possible if either
-                //   - break\continue is labeled and label is located inside the converted loop
-                //   - break\continue is non-labeled and located in non-converted loop\switch statement
+                //   - break/continue is labeled and label is located inside the converted loop
+                //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
                     (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
