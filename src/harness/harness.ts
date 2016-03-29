@@ -1161,7 +1161,7 @@ namespace Harness {
                     totalErrorsReportedInNonLibraryFiles++;
                 }
             }
-            debugger;
+
             // Report global errors
             const globalErrors = diagnostics.filter(err => !err.file);
             globalErrors.forEach(outputErrorText);
