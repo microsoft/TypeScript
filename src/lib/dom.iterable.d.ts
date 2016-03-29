@@ -1,3 +1,5 @@
+/// <reference path="lib.dom.generated.d.ts" />
+
 interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;
 }
