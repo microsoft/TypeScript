@@ -482,6 +482,19 @@ namespace ts {
         return node;
     }
 
+    export function createSwitch(expression: Expression, caseBlock: CaseBlock, location?: TextRange): SwitchStatement {
+        const node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement, location);
+        node.expression = parenthesizeExpressionForList(expression);
+        node.caseBlock = caseBlock;
+        return node;
+    }
+
+    export function createCaseBlock(clauses: CaseClause[], location?: TextRange): CaseBlock {
+        const node = <CaseBlock>createNode(SyntaxKind.CaseBlock, location);
+        node.clauses = createNodeArray(clauses);
+        return node;
+    }
+
     export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
         const node = <ForStatement>createNode(SyntaxKind.ForStatement, location);
         node.initializer = initializer;
@@ -685,6 +698,22 @@ namespace ts {
             ],
             location
         );
+    }
+
+    export function createBreak(label?: Identifier, location?: TextRange): BreakStatement {
+        const node = <BreakStatement>createNode(SyntaxKind.BreakStatement, location);
+        if (label) {
+            node.label = label;
+        }
+        return node;
+    }
+
+    export function createContinue(label?: Identifier, location?: TextRange): BreakStatement {
+        const node = <ContinueStatement>createNode(SyntaxKind.ContinueStatement, location);
+        if (label) {
+            node.label = label;
+        }
+        return node;
     }
 
     export function createFunctionApply(func: Expression, thisArg: Expression, argumentsExpression: Expression, location?: TextRange) {
@@ -1349,8 +1378,11 @@ namespace ts {
                 return clone;
             }
         }
-        else if (getLeftmostExpression(expression).kind === SyntaxKind.ObjectLiteralExpression) {
-            return createParen(expression, /*location*/ expression);
+        else {
+            const leftmostExpressionKind = getLeftmostExpression(expression).kind;
+            if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
+                return createParen(expression, /*location*/ expression);
+            }
         }
 
         return expression;

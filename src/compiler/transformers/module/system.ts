@@ -43,11 +43,16 @@ namespace ts {
         let exportedLocalNames: Identifier[];
         let exportedFunctionDeclarations: ExpressionStatement[];
 
+        let enclosingBlockScopedContainer: Node;
+        let currentParent: Node;
+        let currentNode: Node;
+
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
+                currentNode = node;
 
                 // Perform the transformation.
                 const updated = transformSystemModuleWorker(node);
@@ -442,6 +447,28 @@ namespace ts {
         }
 
         function visitNestedNode(node: Node): VisitResult<Node> {
+            const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
+            const savedCurrentParent = currentParent;
+            const savedCurrentNode = currentNode;
+
+            const currentGrandparent = currentParent;
+            currentParent = currentNode;
+            currentNode = node;
+
+            if (currentParent && isBlockScope(currentParent, currentGrandparent)) {
+                enclosingBlockScopedContainer = currentParent;
+            }
+
+            const result = visitNestedNodeWorker(node);
+
+            enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
+            currentParent = savedCurrentParent;
+            currentNode = savedCurrentNode;
+
+            return result;
+        }
+
+        function visitNestedNodeWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
@@ -562,10 +589,17 @@ namespace ts {
          * @param node The variable statement to visit.
          */
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
+            // hoist only non-block scoped declarations or block scoped declarations parented by source file
+            const shouldHoist =
+                ((getCombinedNodeFlags(getOriginalNode(node.declarationList)) & NodeFlags.BlockScoped) == 0) ||
+                enclosingBlockScopedContainer.kind === SyntaxKind.SourceFile;
+            if (!shouldHoist) {
+                return node;
+            }
             const isExported = hasModifier(node, ModifierFlags.Export);
             const expressions: Expression[] = [];
             for (const variable of node.declarationList.declarations) {
-                addNode(expressions, transformVariable(variable, isExported));
+                addNode(expressions, <Expression>transformVariable(variable, isExported));
             }
 
             if (expressions.length) {
@@ -581,7 +615,7 @@ namespace ts {
          * @param node The VariableDeclaration to transform.
          * @param isExported A value used to indicate whether the containing statement was exported.
          */
-        function transformVariable(node: VariableDeclaration, isExported: boolean): Expression {
+        function transformVariable(node: VariableDeclaration, isExported: boolean): VariableDeclaration | Expression {
             // Hoist any bound names within the declaration.
             hoistBindingElement(node, isExported);
 
@@ -685,6 +719,10 @@ namespace ts {
             return statements;
         }
 
+        function shouldHoistLoopInitializer(node: VariableDeclarationList | Expression) {
+            return isVariableDeclarationList(node) && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0;
+        }
+
         /**
          * Visits the body of a ForStatement to hoist declarations.
          *
@@ -692,10 +730,10 @@ namespace ts {
          */
         function visitForStatement(node: ForStatement): ForStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const expressions: Expression[] = [];
-                for (const variable of initializer.declarations) {
-                    addNode(expressions, transformVariable(variable, /*isExported*/ false));
+                for (const variable of (<VariableDeclarationList>initializer).declarations) {
+                    addNode(expressions, <Expression>transformVariable(variable, /*isExported*/ false));
                 };
 
                 return createFor(
@@ -735,9 +773,9 @@ namespace ts {
          */
         function visitForInStatement(node: ForInStatement): ForInStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(initializer);
+                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
             }
@@ -753,9 +791,9 @@ namespace ts {
          */
         function visitForOfStatement(node: ForOfStatement): ForOfStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(initializer);
+                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
             }
@@ -1315,7 +1353,7 @@ namespace ts {
             exportedFunctionDeclarations.push(createDeclarationExport(node));
         }
 
-        function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean) {
+        function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean): void {
             const name = node.name;
             if (isIdentifier(name)) {
                 hoistVariableDeclaration(getSynthesizedClone(name));

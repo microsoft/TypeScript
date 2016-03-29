@@ -799,7 +799,7 @@ namespace ts {
         return false;
     }
 
-    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement {
         switch (node.kind) {
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:

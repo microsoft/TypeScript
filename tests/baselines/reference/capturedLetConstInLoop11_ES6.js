@@ -16,7 +16,7 @@ function foo() {
 //// [capturedLetConstInLoop11_ES6.js]
 for (;;) {
     let x = 1;
-    (() => x);
+    () => x;
 }
 function foo() {
     for (;;) {

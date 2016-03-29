@@ -851,9 +851,9 @@ namespace ts {
      *
      * @param nodes The NodeArray.
      */
-    export function liftToBlock(nodes: Node[]): Block {
+    export function liftToBlock(nodes: Node[]): Statement {
         Debug.assert(every(nodes, isStatement), "Cannot lift nodes to a Block.");
-        return createBlock(<NodeArray<Statement>>nodes);
+        return <Statement>singleOrUndefined(nodes) || createBlock(<NodeArray<Statement>>nodes);
     }
 
     /**

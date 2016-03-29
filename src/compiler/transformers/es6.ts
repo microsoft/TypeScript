@@ -10,6 +10,133 @@ namespace ts {
         /** Enables substitutions for block-scoped bindings. */
         BlockScopedBindings = 1 << 1,
     }
+    /**
+     * If loop contains block scoped binding captured in some function then loop body is converted to a function.
+     * Lexical bindings declared in loop initializer will be passed into the loop body function as parameters,
+     * however if this binding is modified inside the body - this new value should be propagated back to the original binding.
+     * This is done by declaring new variable (out parameter holder) outside of the loop for every binding that is reassigned inside the body.
+     * On every iteration this variable is initialized with value of corresponding binding.
+     * At every point where control flow leaves the loop either explicitly (break/continue) or implicitly (at the end of loop body)
+     * we copy the value inside the loop to the out parameter holder.
+     *
+     * for (let x;;) {
+     *     let a = 1;
+     *     let b = () => a;
+     *     x++
+     *     if (...) break;
+     *     ...
+     * }
+     *
+     * will be converted to
+     *
+     * var out_x;
+     * var loop = function(x) {
+     *     var a = 1;
+     *     var b = function() { return a; }
+     *     x++;
+     *     if (...) return out_x = x, "break";
+     *     ...
+     *     out_x = x;
+     * }
+     * for (var x;;) {
+     *     out_x = x;
+     *     var state = loop(x);
+     *     x = out_x;
+     *     if (state === "break") break;
+     * }
+     *
+     * NOTE: values to out parameters are not copies if loop is abrupted with 'return' - in this case this will end the entire enclosing function
+     * so nobody can observe this new value.
+     */
+    interface LoopOutParameter {
+        originalName: Identifier;
+        outParamName: Identifier;
+    }
+
+    const enum CopyDirection {
+        ToOriginal,
+        ToOutParameter
+    }
+
+    const enum Jump {
+        Break       = 1 << 1,
+        Continue    = 1 << 2,
+        Return      = 1 << 3
+    }
+
+    interface ConvertedLoopState {
+        /*
+         * set of labels that occurred inside the converted loop
+         * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
+         */
+        labels?: Map<string>;
+        /*
+         * collection of labeled jumps that transfer control outside the converted loop.
+         * maps store association 'label -> labelMarker' where
+         * - label - value of label as it appear in code
+         * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
+         */
+        labeledNonLocalBreaks?: Map<string>;
+        labeledNonLocalContinues?: Map<string>;
+
+        /*
+         * set of non-labeled jumps that transfer control outside the converted loop
+         * used to emit dispatching logic in the caller of converted loop
+         */
+        nonLocalJumps?: Jump;
+
+        /*
+         * set of non-labeled jumps that should be interpreted as local
+         * i.e. if converted loop contains normal loop or switch statement then inside this loop break should be treated as local jump
+         */
+        allowedNonLabeledJumps?: Jump;
+
+        /*
+         * alias for 'arguments' object from the calling code stack frame
+         * i.e.
+         * for (let x;;) <statement that captures x in closure and uses 'arguments'>
+         * should be converted to
+         * var loop = function(x) { <code where 'arguments' is replaced with 'arguments_1'> }
+         * var arguments_1 = arguments
+         * for (var x;;) loop(x);
+         * otherwise semantics of the code will be different since 'arguments' inside converted loop body
+         * will refer to function that holds converted loop.
+         * This value is set on demand.
+         */
+        argumentsName?: Identifier;
+
+        /*
+         * alias for 'this' from the calling code stack frame in case if this was used inside the converted loop
+         */
+        thisName?: Identifier;
+
+        /*
+         * set to true if node contains lexical 'this' so we can mark function that wraps convered loop body as 'CapturedThis' for subsequent substitution.
+         */
+        containsLexicalThis?: boolean;
+
+        /*
+         * list of non-block scoped variable declarations that appear inside converted loop
+         * such variable declarations should be moved outside the loop body
+         * for (let x;;) {
+         *     var y = 1;
+         *     ...
+         * }
+         * should be converted to
+         * var loop = function(x) {
+         *    y = 1;
+         *    ...
+         * }
+         * var y;
+         * for (var x;;) loop(x);
+         */
+        hoistedLocalVariables?: Identifier[];
+
+        /**
+         * List of loop out parameters - detailed descripion can be found in the comment to LoopOutParameter
+         */
+        loopOutParameters?: LoopOutParameter[];
+    }
 
     export function transformES6(context: TransformationContext) {
         const {
@@ -36,6 +163,11 @@ namespace ts {
         let containingNonArrowFunction: FunctionLikeDeclaration;
 
         /**
+         * Used to track if we are emitting body of the converted loop
+         */
+        let convertedLoopState: ConvertedLoopState;
+
+        /**
          * Keeps track of whether substitutions have been enabled for specific cases.
          * They are persisted between each SourceFile transformation and should not
          * be reset.
@@ -52,20 +184,37 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
             enclosingBlockScopeContainer = node;
+            currentNode = node;
             return visitEachChild(node, visitor, context);
         }
 
         function visitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, dispatcher);
+        }
+
+        function dispatcher(node: Node): VisitResult<Node> {
+            return convertedLoopState
+                ? visitorForConvertedLoopWorker(node)
+                : visitorWorker(node);
+        }
+
+        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             const savedContainingNonArrowFunction = containingNonArrowFunction;
             const savedCurrentParent = currentParent;
             const savedCurrentNode = currentNode;
             const savedEnclosingBlockScopeContainer = enclosingBlockScopeContainer;
             const savedEnclosingBlockScopeContainerParent = enclosingBlockScopeContainerParent;
 
+            const savedConvertedLoopState = convertedLoopState;
+            if (nodeStartsNewLexicalEnvironment(node)) {
+                // don't treat content of nodes that start new lexical environment as part of converted loop copy 
+                convertedLoopState = undefined;
+            }
+
             onBeforeVisitNode(node);
+            const visited = f(node);
 
-            const visited = visitorWorker(node);
-
+            convertedLoopState = savedConvertedLoopState;
             containingNonArrowFunction = savedContainingNonArrowFunction;
             currentParent = savedCurrentParent;
             currentNode = savedCurrentNode;
@@ -74,8 +223,14 @@ namespace ts {
             return visited;
         }
 
+        function shouldCheckNode(node: Node): boolean {
+            return (node.transformFlags & TransformFlags.ES6) !== 0 ||
+                node.kind === SyntaxKind.LabeledStatement ||
+                (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
+        }
+
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.ES6) {
+            if (shouldCheckNode(node)) {
                 return visitJavaScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsES6) {
@@ -83,6 +238,52 @@ namespace ts {
             }
             else {
                 return node;
+            }
+        }
+
+        function visitorForConvertedLoopWorker(node: Node): VisitResult<Node> {
+            const savedUseCapturedThis = useCapturedThis;
+
+            if (nodeStartsNewLexicalEnvironment(node)) {
+                useCapturedThis = false
+            }
+
+            let result: VisitResult<Node>;
+            
+            if (shouldCheckNode(node)) {
+                result = visitJavaScript(node);
+            }
+            else {
+                result = visitNodesInConvertedLoop(node);
+            }
+
+            useCapturedThis = savedUseCapturedThis;
+            return result;
+        }
+
+        function visitNodesInConvertedLoop(node: Node): VisitResult<Node> {
+            switch (node.kind) {
+                case SyntaxKind.ReturnStatement:
+                    return visitReturnStatement(<ReturnStatement>node);
+
+                case SyntaxKind.VariableStatement:
+                    return visitVariableStatement(<VariableStatement>node);
+
+                case SyntaxKind.SwitchStatement:
+                    return visitSwitchStatement(<SwitchStatement>node);
+
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                    return visitBreakOrContinueStatement(<BreakOrContinueStatement>node);
+
+                case SyntaxKind.ThisKeyword:
+                    return visitThisKeyword(node);
+
+                case SyntaxKind.Identifier:
+                    return visitIdentifier(<Identifier>node);
+
+                default:
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -111,6 +312,9 @@ namespace ts {
 
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(<VariableDeclaration>node);
+
+                case SyntaxKind.Identifier:
+                    return visitIdentifier(<Identifier>node);
 
                 case SyntaxKind.VariableDeclarationList:
                     return visitVariableDeclarationList(<VariableDeclarationList>node);
@@ -214,6 +418,116 @@ namespace ts {
                         break;
                 }
             }
+        }
+
+        function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
+            Debug.assert(convertedLoopState !== undefined);
+            
+            const savedAllowedNonLabeledJumps = convertedLoopState.allowedNonLabeledJumps;
+            // for switch statement allow only non-labeled break
+            convertedLoopState.allowedNonLabeledJumps |= Jump.Break;
+
+            const result = visitEachChild(node, visitor, context);
+
+            convertedLoopState.allowedNonLabeledJumps = savedAllowedNonLabeledJumps;
+            return result;
+        }
+        
+        function visitReturnStatement(node: ReturnStatement): Statement {
+            Debug.assert(convertedLoopState !== undefined);
+
+            convertedLoopState.nonLocalJumps |= Jump.Return;
+            return createReturn(
+                createObjectLiteral(
+                    [
+                        createPropertyAssignment(
+                            createIdentifier("value"),
+                            node.expression
+                                ? visitNode(node.expression, visitor, isExpression)
+                                : createVoidZero()
+                        )
+                    ]
+                )
+            );
+        }
+
+        function visitThisKeyword(node: Node): Node {
+            Debug.assert(convertedLoopState !== undefined);
+
+            if (useCapturedThis) {
+                // if useCapturedThis is true then 'this' keyword is contained inside an arrow function. 
+                convertedLoopState.containsLexicalThis = true;
+                return node;
+            }
+            return convertedLoopState.thisName || (convertedLoopState.thisName = createUniqueName("this"));
+        }
+
+        function visitIdentifier(node: Identifier): Identifier {
+            if (!convertedLoopState) {
+                return node;
+            }
+            if (isGeneratedIdentifier(node)) {
+                return node;
+            }
+            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(<Identifier>getOriginalNode(node))) {
+                return node;
+            }
+            return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
+        }
+
+        function visitBreakOrContinueStatement(node: BreakOrContinueStatement): Statement {
+            if (convertedLoopState) {
+                // check if we can emit break/continue as is
+                // it is possible if either
+                //   - break/continue is labeled and label is located inside the converted loop
+                //   - break/continue is non-labeled and located in non-converted loop/switch statement
+                const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
+                const canUseBreakOrContinue =
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels[node.label.text]) ||
+                    (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
+
+                if (!canUseBreakOrContinue) {
+                    let labelMarker: string;
+                    if (!node.label) {
+                        if (node.kind === SyntaxKind.BreakStatement) {
+                            convertedLoopState.nonLocalJumps |= Jump.Break;
+                            labelMarker = "break";
+                        }
+                        else {
+                            convertedLoopState.nonLocalJumps |= Jump.Continue;
+                            // note: return value is emitted only to simplify debugging, call to converted loop body does not do any dispatching on it.
+                            labelMarker = "continue";
+                        }
+                    }
+                    else {
+                        if (node.kind === SyntaxKind.BreakStatement) {
+                            labelMarker = `break-${node.label.text}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, node.label.text, labelMarker);
+                        }
+                        else {
+                            labelMarker = `continue-${node.label.text}`;
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, node.label.text, labelMarker);
+                        }
+                    }
+                    let returnExpression: Expression = createLiteral(labelMarker);
+                    if (convertedLoopState.loopOutParameters.length) {
+                        const outParams = convertedLoopState.loopOutParameters;
+                        let expr: Expression;
+                        for (let i = 0; i < outParams.length; ++i) {
+                            const copyExpr = copyOutParameter(outParams[i], CopyDirection.ToOutParameter);
+                            if (i === 0) {
+                                expr = copyExpr
+                            }
+                            else {
+                                expr = createBinary(expr, SyntaxKind.CommaToken, copyExpr);
+                            }
+                        }
+                        returnExpression = createBinary(expr, SyntaxKind.CommaToken, returnExpression);
+                    }
+                    return createReturn(returnExpression);
+                }
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -406,11 +720,20 @@ namespace ts {
             addDefaultSuperCallIfNeeded(statements, constructor, hasExtendsClause, hasSynthesizedSuper);
 
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, hasSynthesizedSuper ? 1 : 0));
+                const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
+                addRange(statements, body);
             }
 
             addRange(statements, endLexicalEnvironment());
             return createBlock(statements, /*location*/ constructor && constructor.body, /*multiLine*/ true);
+        }
+
+        function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
+            return visitNodes(node.body.statements, visitor, isStatement, 1);
+        }
+
+        function transformConstructorBodyWithoutSynthesizedSuper(node: ConstructorDeclaration) {
+            return visitNodes(node.body.statements, visitor, isStatement, 0);
         }
 
         /**
@@ -791,7 +1114,12 @@ namespace ts {
                 enableSubstitutionsForCapturedThis();
             }
 
+            const savedUseCapturedThis = useCapturedThis;
+            useCapturedThis = true;
+            
             const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            
+            useCapturedThis = savedUseCapturedThis;
             setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
             return func;
         }
@@ -839,7 +1167,7 @@ namespace ts {
                 node.asteriskToken,
                 name,
                 visitNodes(node.parameters, visitor, isParameter),
-                transformFunctionBody(node),
+                saveStateAndInvoke(node, transformFunctionBody),
                 location,
                 /*original*/ node
             );
@@ -977,6 +1305,34 @@ namespace ts {
             return flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
         }
 
+        function visitVariableStatement(node: VariableStatement): Statement {
+            if (convertedLoopState && (getCombinedNodeFlags(node.declarationList) & NodeFlags.BlockScoped) == 0) {
+                // we are inside a converted loop - hoist variable declarations
+                let assignments: Expression[];
+                for (const decl of node.declarationList.declarations) {
+                    hoistVariableDeclarationDeclaredInConvertedLoop(convertedLoopState, decl);
+                    if (decl.initializer) {
+                        let assignment: Expression;
+                        if (isBindingPattern(decl.name)) {
+                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration,/*nameSubstitution*/ undefined, visitor);
+                        }
+                        else {
+                            assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, decl.initializer);
+                        }
+                        (assignments || (assignments = [])).push(assignment);
+                    }
+                }
+                if (assignments) {
+                    return createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc)));
+                }
+                else {
+                    // none of declarations has initializer - the entire variable statement can be deleted
+                    return undefined;
+                }
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
         /**
          * Visits a VariableDeclarationList that is block scoped (e.g. `let` or `const`).
          *
@@ -1103,29 +1459,43 @@ namespace ts {
             return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
         }
 
-        function visitLabeledStatement(node: LabeledStatement) {
-            // TODO: Convert loop body for block scoped bindings.
-            return visitEachChild(node, visitor, context);
+        function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
+            if (convertedLoopState) {
+                if (!convertedLoopState.labels) {
+                    convertedLoopState.labels = {};
+                }
+                convertedLoopState.labels[node.label.text] = node.label.text;
+            }
+
+            let result: VisitResult<Statement>;
+            if (isIterationStatement(node.statement, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(<IterationStatement>node.statement)) {
+                result = visitNodes(createNodeArray([node.statement]), visitor, isStatement);
+            }
+            else {
+                result = visitEachChild(node, visitor, context);
+            }
+
+            if (convertedLoopState) {
+                convertedLoopState.labels[node.label.text] = undefined;
+            }
+
+            return result;
         }
 
         function visitDoStatement(node: DoStatement) {
-            // TODO: Convert loop body for block scoped bindings.
-            return visitEachChild(node, visitor, context);
+            return convertIterationStatementBodyIfNecessary(node);
         }
 
         function visitWhileStatement(node: WhileStatement) {
-            // TODO: Convert loop body for block scoped bindings.
-            return visitEachChild(node, visitor, context);
+            return convertIterationStatementBodyIfNecessary(node);
         }
 
         function visitForStatement(node: ForStatement) {
-            // TODO: Convert loop body for block scoped bindings.
-            return visitEachChild(node, visitor, context);
+            return convertIterationStatementBodyIfNecessary(node);
         }
 
         function visitForInStatement(node: ForInStatement) {
-            // TODO: Convert loop body for block scoped bindings.
-            return visitEachChild(node, visitor, context);
+            return convertIterationStatementBodyIfNecessary(node);
         }
 
         /**
@@ -1133,9 +1503,30 @@ namespace ts {
          *
          * @param node A ForOfStatement.
          */
-        function visitForOfStatement(node: ForOfStatement): Statement {
-            // TODO: Convert loop body for block scoped bindings.
+        function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
+            const statementOrStatements = convertIterationStatementBodyIfNecessary(node);
+            const lastStatement = isArray(statementOrStatements) ? lastOrUndefined(statementOrStatements) : statementOrStatements;
+            const loop = lastStatement.kind === SyntaxKind.LabeledStatement
+                ? (<LabeledStatement>lastStatement).statement
+                : lastStatement;
 
+            Debug.assert(loop.kind === SyntaxKind.ForOfStatement);
+
+            const statement =
+                lastStatement.kind === SyntaxKind.LabeledStatement
+                ? createLabel((<LabeledStatement>lastStatement).label, convertForOfToFor(<ForOfStatement>loop))
+                : convertForOfToFor(<ForOfStatement>loop);
+
+            if (isArray(statementOrStatements)) {
+                statementOrStatements[statementOrStatements.length - 1] = statement;
+                return statementOrStatements;
+            }
+            else {
+                return statement;
+            }
+        }
+
+        function convertForOfToFor(node: ForOfStatement): ForStatement {
             // The following ES6 code:
             //
             //    for (let v of expr) { }
@@ -1157,7 +1548,7 @@ namespace ts {
             // Note also that because an extra statement is needed to assign to the LHS,
             // for-of bodies are always emitted as blocks.
 
-            const expression = visitNode(node.expression, visitor, isExpression);
+            const expression = node.expression;
             const initializer = node.initializer;
             const statements: Statement[] = [];
 
@@ -1233,12 +1624,11 @@ namespace ts {
                 }
             }
 
-            const statement = visitNode(node.statement, visitor, isStatement);
-            if (isBlock(statement)) {
-                addRange(statements, statement.statements);
+            if (isBlock(node.statement)) {
+                addRange(statements, (<Block>node.statement).statements);
             }
             else {
-                statements.push(statement);
+                statements.push(node.statement);
             }
 
             return createFor(
@@ -1309,6 +1699,369 @@ namespace ts {
             // new line
             addNode(expressions, getMutableClone(temp), node.multiLine);
             return createParen(inlineExpressions(expressions));
+        }
+
+        function shouldConvertIterationStatementBody(node: IterationStatement): boolean {
+            return (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
+        }
+
+        /**
+         * Records constituents of name for the given variable to be hoisted in the outer scope.
+         */
+        function hoistVariableDeclarationDeclaredInConvertedLoop(state: ConvertedLoopState, node: VariableDeclaration): void {
+            if (!state.hoistedLocalVariables) {
+                state.hoistedLocalVariables = [];
+            }
+
+            visit(node.name);
+
+            function visit(node: Identifier | BindingPattern) {
+                if (node.kind === SyntaxKind.Identifier) {
+                    state.hoistedLocalVariables.push((<Identifier>node));
+                }
+                else {
+                    for (const element of (<BindingPattern>node).elements) {
+                        visit(element.name);
+                    }
+                }
+            }
+        }
+
+        function convertIterationStatementBodyIfNecessary(node: IterationStatement): VisitResult<Statement> {
+            if (!shouldConvertIterationStatementBody(node)) {
+                let saveAllowedNonLabeledJumps: Jump;
+                if (convertedLoopState) {
+                    // we get here if we are trying to emit normal loop loop inside converted loop
+                    // set allowedNonLabeledJumps to Break | Continue to mark that break\continue inside the loop should be emitted as is
+                    saveAllowedNonLabeledJumps = convertedLoopState.allowedNonLabeledJumps;
+                    convertedLoopState.allowedNonLabeledJumps = Jump.Break | Jump.Continue;
+                }
+
+                const result = visitEachChild(node, visitor, context);
+
+                if (convertedLoopState) {
+                    convertedLoopState.allowedNonLabeledJumps = saveAllowedNonLabeledJumps;
+                }
+                return result;
+            }
+
+            const functionName = createUniqueName("_loop");
+            let loopInitializer: VariableDeclarationList;
+            switch (node.kind) {
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    const initializer = (<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                    if (initializer && initializer.kind === SyntaxKind.VariableDeclarationList) {
+                        loopInitializer = <VariableDeclarationList>(<ForStatement | ForInStatement | ForOfStatement>node).initializer;
+                    }
+                    break;
+            }
+            // variables that will be passed to the loop as parameters
+            const loopParameters: ParameterDeclaration[] = [];
+            // variables declared in the loop initializer that will be changed inside the loop
+            const loopOutParameters: LoopOutParameter[] = [];
+            if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
+                for (const decl of loopInitializer.declarations) {
+                    processLoopVariableDeclaration(decl, loopParameters, loopOutParameters);
+                }
+            }
+
+            const outerConvertedLoopState = convertedLoopState;
+            convertedLoopState = { loopOutParameters };
+            if (outerConvertedLoopState) {
+                // convertedOuterLoopState !== undefined means that this converted loop is nested in another converted loop.
+                // if outer converted loop has already accumulated some state - pass it through
+                if (outerConvertedLoopState.argumentsName) {
+                    // outer loop has already used 'arguments' so we've already have some name to alias it
+                    // use the same name in all nested loops
+                    convertedLoopState.argumentsName = outerConvertedLoopState.argumentsName;
+                }
+                if (outerConvertedLoopState.thisName) {
+                    // outer loop has already used 'this' so we've already have some name to alias it
+                    // use the same name in all nested loops
+                    convertedLoopState.thisName = outerConvertedLoopState.thisName;
+                }
+                if (outerConvertedLoopState.hoistedLocalVariables) {
+                    // we've already collected some non-block scoped variable declarations in enclosing loop
+                    // use the same storage in nested loop
+                    convertedLoopState.hoistedLocalVariables = outerConvertedLoopState.hoistedLocalVariables;
+                }
+            }
+
+            let loopBody = visitEachChild(node.statement, visitor, context);
+
+            const currentState = convertedLoopState;
+            convertedLoopState = outerConvertedLoopState;
+
+            if (loopOutParameters.length) {
+                const statements = isBlock(loopBody) ? (<Block>loopBody).statements.slice() : [loopBody];
+                copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
+                loopBody = createBlock(statements, /*location*/ undefined, /*multiline*/ true);
+            }
+
+            if (!isBlock(loopBody)) {
+                loopBody = createBlock([loopBody], /*location*/ undefined, /*multiline*/ true);
+            }
+            const convertedLoopVariable =
+                createVariableStatement(
+                /*modifiers*/ undefined,
+                    createVariableDeclarationList(
+                        [
+                            createVariableDeclaration(
+                                functionName,
+                                setNodeEmitFlags(
+                                    createFunctionExpression(
+                                        /*asteriskToken*/ undefined,
+                                        /*name*/ undefined,
+                                        loopParameters,
+                                        <Block>loopBody
+                                    ),
+                                    currentState.containsLexicalThis 
+                                        ? NodeEmitFlags.CapturesThis
+                                        : 0
+                                )
+                            )
+                        ]
+                    )
+                );
+
+            const statements: Statement[] = [convertedLoopVariable];
+
+            let extraVariableDeclarations: VariableDeclaration[];
+            // propagate state from the inner loop to the outer loop if necessary
+            if (currentState.argumentsName) {
+                // if alias for arguments is set
+                if (outerConvertedLoopState) {
+                    // pass it to outer converted loop
+                    outerConvertedLoopState.argumentsName = currentState.argumentsName;
+                }
+                else {
+                    // this is top level converted loop and we need to create an alias for 'arguments' object
+                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                        createVariableDeclaration(
+                            currentState.argumentsName,
+                            createIdentifier("arguments")
+                        )
+                    );
+                }
+            }
+
+            if (currentState.thisName) {
+                // if alias for this is set
+                if (outerConvertedLoopState) {
+                    // pass it to outer converted loop
+                    outerConvertedLoopState.thisName = currentState.thisName;
+                }
+                else {
+                    // this is top level converted loop so we need to create an alias for 'this' here
+                    // NOTE:
+                    // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
+                    // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
+                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                        createVariableDeclaration(
+                            currentState.thisName,
+                            createIdentifier("this")
+                            )
+                    );
+                }
+            }
+
+            if (currentState.hoistedLocalVariables) {
+                // if hoistedLocalVariables !== undefined this means that we've possibly collected some variable declarations to be hoisted later
+                if (outerConvertedLoopState) {
+                    // pass them to outer converted loop
+                    outerConvertedLoopState.hoistedLocalVariables = currentState.hoistedLocalVariables;
+                }
+                else {
+                    if (!extraVariableDeclarations) {
+                        extraVariableDeclarations = [];
+                    }
+                    // hoist collected variable declarations
+                    for (const name in currentState.hoistedLocalVariables) {
+                        const identifier = currentState.hoistedLocalVariables[name];
+                        extraVariableDeclarations.push(createVariableDeclaration(identifier));
+                    }
+                }
+            }
+
+            // add extra variables to hold out parameters if necessary
+            if (loopOutParameters.length) {
+                if (!extraVariableDeclarations) {
+                    extraVariableDeclarations = [];
+                }
+                for (const outParam of loopOutParameters) {
+                    extraVariableDeclarations.push(createVariableDeclaration(outParam.outParamName));
+                }
+            }
+
+            // create variable statement to hold all introduced variable declarations 
+            if (extraVariableDeclarations) {
+                statements.push(createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList(extraVariableDeclarations)
+                ));
+            }
+
+            let loop = <IterationStatement>getMutableClone(node);
+            // clean statement part 
+            loop.statement = undefined;
+            // visit childnodes to transform initializer/condition/incrementor parts
+            loop = visitEachChild(loop, visitor, context);
+            // set loop statement
+            loop.statement = createBlock(
+                generateCallToConvertedLoop(functionName, loopParameters, currentState),
+                /*location*/ undefined,
+                /*multiline*/ true
+            );
+            statements.push(
+                currentParent.kind === SyntaxKind.LabeledStatement
+                    ? createLabel((<LabeledStatement>currentParent).label, loop)
+                    : loop
+                );
+            return statements;
+        }
+
+        function copyOutParameter(outParam: LoopOutParameter, copyDirection: CopyDirection): BinaryExpression {
+            const source = copyDirection === CopyDirection.ToOriginal ? outParam.outParamName : outParam.originalName;
+            const target = copyDirection === CopyDirection.ToOriginal ? outParam.originalName : outParam.outParamName;
+            return createBinary(target, SyntaxKind.EqualsToken, source);
+        }
+
+        function copyOutParameters(outParams: LoopOutParameter[], copyDirection: CopyDirection, statements: Statement[]): void {
+            for (const outParam of outParams) {
+                statements.push(createStatement(copyOutParameter(outParam, copyDirection)));
+            }
+        }
+
+        function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, parameters: ParameterDeclaration[], state: ConvertedLoopState): Statement[] {
+            const outerConvertedLoopState = convertedLoopState;
+
+            const statements: Statement[] = [];
+            // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
+            // simple loops are emitted as just 'loop()';
+            // NOTE: if loop uses only 'continue' it still will be emitted as simple loop
+            const isSimpleLoop =
+                !(state.nonLocalJumps & ~Jump.Continue) &&
+                !state.labeledNonLocalBreaks &&
+                !state.labeledNonLocalContinues;
+
+            const call = createCall(loopFunctionExpressionName, map(parameters, p => <Identifier>p.name));
+            if (isSimpleLoop) {
+                statements.push(createStatement(call));
+                copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
+            }
+            else {
+                const loopResultName = createUniqueName("state");
+                const stateVariable = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList(
+                        [createVariableDeclaration(loopResultName, call)]
+                    )
+                );
+                statements.push(stateVariable);
+                copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
+
+                if (state.nonLocalJumps & Jump.Return) {
+                    let returnStatement: ReturnStatement;
+                    if (outerConvertedLoopState) {
+                        outerConvertedLoopState.nonLocalJumps |= Jump.Return;
+                        returnStatement = createReturn(loopResultName);
+                    }
+                    else {
+                        returnStatement = createReturn(createPropertyAccess(loopResultName, "value"));
+                    }
+                    statements.push(
+                        createIf(
+                            createBinary(
+                                createTypeOf(loopResultName),
+                                SyntaxKind.EqualsEqualsEqualsToken,
+                                createLiteral("object")
+                            ),
+                            returnStatement
+                        )
+                    );
+                }
+
+                if (state.nonLocalJumps & Jump.Break) {
+                    statements.push(
+                        createIf(
+                            createBinary(
+                                loopResultName,
+                                SyntaxKind.EqualsEqualsEqualsToken,
+                                createLiteral("break")
+                            ),
+                            createBreak()
+                        )
+                    );
+                }
+
+                if (state.labeledNonLocalBreaks || state.labeledNonLocalContinues) {
+                    const caseClauses: CaseClause[] = [];
+                    processLabeledJumps(state.labeledNonLocalBreaks, /*isBreak*/ true, loopResultName, outerConvertedLoopState, caseClauses);
+                    processLabeledJumps(state.labeledNonLocalContinues, /*isBreak*/ false, loopResultName, outerConvertedLoopState, caseClauses);
+                    statements.push(
+                        createSwitch(
+                            loopResultName,
+                            createCaseBlock(caseClauses)
+                        )
+                    );
+                }
+            }
+            return statements;
+        }
+
+        function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
+            if (isBreak) {
+                if (!state.labeledNonLocalBreaks) {
+                    state.labeledNonLocalBreaks = {};
+                }
+                state.labeledNonLocalBreaks[labelText] = labelMarker;
+            }
+            else {
+                if (!state.labeledNonLocalContinues) {
+                    state.labeledNonLocalContinues = {};
+                }
+                state.labeledNonLocalContinues[labelText] = labelMarker;
+            }
+        }
+
+        function processLabeledJumps(table: Map<string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState, caseClauses: CaseClause[]): void {
+            if (!table) {
+                return;
+            }
+            for (const labelText in table) {
+                const labelMarker = table[labelText];
+                const statements: Statement[] = [];
+                // if there are no outer converted loop or outer label in question is located inside outer converted loop
+                // then emit labeled break\continue
+                // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
+                if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
+                    const label = createIdentifier(labelText);
+                    statements.push(isBreak ? createBreak(label) : createContinue(label));
+                }
+                else {
+                    setLabeledJump(outerLoop, isBreak, labelText, labelMarker);
+                    statements.push(createReturn(loopResultName));
+                }
+                caseClauses.push(createCaseClause(createLiteral(labelMarker), statements));
+            }
+        }
+
+        function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {
+            const name = decl.name;
+            if (isBindingPattern(name)) {
+                for (const element of name.elements) {
+                    processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                }
+            }
+            else {
+                loopParameters.push(createParameter(name));
+                if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
+                    const outParamName = createUniqueName("out_" + name.text);
+                    loopOutParameters.push({ originalName: name, outParamName });
+                }
+            }
         }
 
         /**
@@ -1756,6 +2509,7 @@ namespace ts {
             return containingNonArrowFunction
                 && isClassElement(containingNonArrowFunction)
                 && !hasModifier(containingNonArrowFunction, ModifierFlags.Static)
+                && currentParent.kind !== SyntaxKind.CallExpression
                     ? createPropertyAccess(createIdentifier("_super"), "prototype")
                     : createIdentifier("_super");
         }
