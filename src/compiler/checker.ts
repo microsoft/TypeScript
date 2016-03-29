@@ -150,6 +150,12 @@ namespace ts {
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
+        let anyArrayType: Type;
+        let anyReadonlyArrayType: Type;
+
+        // The library files are only loaded when the feature is used.
+        // This allows users to just specify library files they want to used through --lib
+        // and they will not get an error from not having unrelated library files
         let getGlobalTemplateStringsArrayType: () => ObjectType;
 
         let getGlobalESSymbolType: () => ObjectType;
@@ -157,8 +163,6 @@ namespace ts {
         let getGlobalIteratorType: () => GenericType;
         let getGlobalIterableIteratorType: () => GenericType;
 
-        let anyArrayType: Type;
-        let anyReadonlyArrayType: Type;
         let getGlobalClassDecoratorType: () => ObjectType;
         let getGlobalParameterDecoratorType: () => ObjectType;
         let getGlobalPropertyDecoratorType: () => ObjectType;
