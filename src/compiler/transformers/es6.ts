@@ -207,7 +207,7 @@ namespace ts {
 
             const savedConvertedLoopState = convertedLoopState;
             if (nodeStartsNewLexicalEnvironment(node)) {
-                // don't treat content of nodes that start new lexical environment as part of converted loop copy 
+                // don't treat content of nodes that start new lexical environment as part of converted loop copy
                 convertedLoopState = undefined;
             }
 
@@ -249,7 +249,7 @@ namespace ts {
             }
 
             let result: VisitResult<Node>;
-            
+
             if (shouldCheckNode(node)) {
                 result = visitJavaScript(node);
             }
@@ -422,7 +422,7 @@ namespace ts {
 
         function visitSwitchStatement(node: SwitchStatement): SwitchStatement {
             Debug.assert(convertedLoopState !== undefined);
-            
+
             const savedAllowedNonLabeledJumps = convertedLoopState.allowedNonLabeledJumps;
             // for switch statement allow only non-labeled break
             convertedLoopState.allowedNonLabeledJumps |= Jump.Break;
@@ -432,7 +432,7 @@ namespace ts {
             convertedLoopState.allowedNonLabeledJumps = savedAllowedNonLabeledJumps;
             return result;
         }
-        
+
         function visitReturnStatement(node: ReturnStatement): Statement {
             Debug.assert(convertedLoopState !== undefined);
 
@@ -455,7 +455,7 @@ namespace ts {
             Debug.assert(convertedLoopState !== undefined);
 
             if (useCapturedThis) {
-                // if useCapturedThis is true then 'this' keyword is contained inside an arrow function. 
+                // if useCapturedThis is true then 'this' keyword is contained inside an arrow function.
                 convertedLoopState.containsLexicalThis = true;
                 return node;
             }
@@ -1116,9 +1116,9 @@ namespace ts {
 
             const savedUseCapturedThis = useCapturedThis;
             useCapturedThis = true;
-            
+
             const func = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
-            
+
             useCapturedThis = savedUseCapturedThis;
             setNodeEmitFlags(func, NodeEmitFlags.CapturesThis);
             return func;
@@ -1504,29 +1504,31 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
-            const statementOrStatements = convertIterationStatementBodyIfNecessary(node);
-            const lastStatement = isArray(statementOrStatements) ? lastOrUndefined(statementOrStatements) : statementOrStatements;
-            const loop = lastStatement.kind === SyntaxKind.LabeledStatement
-                ? (<LabeledStatement>lastStatement).statement
-                : lastStatement;
+            return convertIterationStatementBodyIfNecessary(node, convertForOfToFor);
+            // debugger;
+            // const statementOrStatements = convertIterationStatementBodyIfNecessary(node);
+            // const lastStatement = isArray(statementOrStatements) ? lastOrUndefined(statementOrStatements) : statementOrStatements;
+            // const loop = lastStatement.kind === SyntaxKind.LabeledStatement
+            //     ? (<LabeledStatement>lastStatement).statement
+            //     : lastStatement;
 
-            Debug.assert(loop.kind === SyntaxKind.ForOfStatement);
+            // Debug.assert(loop.kind === SyntaxKind.ForOfStatement);
 
-            const statement =
-                lastStatement.kind === SyntaxKind.LabeledStatement
-                ? createLabel((<LabeledStatement>lastStatement).label, convertForOfToFor(<ForOfStatement>loop))
-                : convertForOfToFor(<ForOfStatement>loop);
+            // const statement =
+            //     lastStatement.kind === SyntaxKind.LabeledStatement
+            //     ? createLabel((<LabeledStatement>lastStatement).label, convertForOfToFor(<ForOfStatement>loop))
+            //     : convertForOfToFor(<ForOfStatement>loop);
 
-            if (isArray(statementOrStatements)) {
-                statementOrStatements[statementOrStatements.length - 1] = statement;
-                return statementOrStatements;
-            }
-            else {
-                return statement;
-            }
+            // if (isArray(statementOrStatements)) {
+            //     statementOrStatements[statementOrStatements.length - 1] = statement;
+            //     return statementOrStatements;
+            // }
+            // else {
+            //     return statement;
+            // }
         }
 
-        function convertForOfToFor(node: ForOfStatement): ForStatement {
+        function convertForOfToFor(node: ForOfStatement, convertedLoopBodyStatements: Statement[]): ForStatement {
             // The following ES6 code:
             //
             //    for (let v of expr) { }
@@ -1624,11 +1626,17 @@ namespace ts {
                 }
             }
 
-            if (isBlock(node.statement)) {
-                addRange(statements, (<Block>node.statement).statements);
+            if (convertedLoopBodyStatements) {
+                addRange(statements, convertedLoopBodyStatements);
             }
             else {
-                statements.push(node.statement);
+                const statement = visitNode(node.statement, visitor, isStatement);
+                if (isBlock(statement)) {
+                    addRange(statements, (<Block>statement).statements);
+                }
+                else {
+                    statements.push(statement);
+                }
             }
 
             return createFor(
@@ -1727,7 +1735,7 @@ namespace ts {
             }
         }
 
-        function convertIterationStatementBodyIfNecessary(node: IterationStatement): VisitResult<Statement> {
+        function convertIterationStatementBodyIfNecessary(node: IterationStatement, convert?: (node: IterationStatement, convertedLoopBodyStatements: Statement[]) => IterationStatement): VisitResult<Statement> {
             if (!shouldConvertIterationStatementBody(node)) {
                 let saveAllowedNonLabeledJumps: Jump;
                 if (convertedLoopState) {
@@ -1737,7 +1745,7 @@ namespace ts {
                     convertedLoopState.allowedNonLabeledJumps = Jump.Break | Jump.Continue;
                 }
 
-                const result = visitEachChild(node, visitor, context);
+                const result = convert ? convert(node, /*convertedLoopBodyStatements*/ undefined) : visitEachChild(node, visitor, context);
 
                 if (convertedLoopState) {
                     convertedLoopState.allowedNonLabeledJumps = saveAllowedNonLabeledJumps;
@@ -1817,7 +1825,7 @@ namespace ts {
                                         loopParameters,
                                         <Block>loopBody
                                     ),
-                                    currentState.containsLexicalThis 
+                                    currentState.containsLexicalThis
                                         ? NodeEmitFlags.CapturesThis
                                         : 0
                                 )
@@ -1895,7 +1903,7 @@ namespace ts {
                 }
             }
 
-            // create variable statement to hold all introduced variable declarations 
+            // create variable statement to hold all introduced variable declarations
             if (extraVariableDeclarations) {
                 statements.push(createVariableStatement(
                     /*modifiers*/ undefined,
@@ -1903,17 +1911,25 @@ namespace ts {
                 ));
             }
 
-            let loop = <IterationStatement>getMutableClone(node);
-            // clean statement part 
-            loop.statement = undefined;
-            // visit childnodes to transform initializer/condition/incrementor parts
-            loop = visitEachChild(loop, visitor, context);
-            // set loop statement
-            loop.statement = createBlock(
-                generateCallToConvertedLoop(functionName, loopParameters, currentState),
-                /*location*/ undefined,
-                /*multiline*/ true
-            );
+            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState);
+            let loop: IterationStatement;
+            if (convert) {
+                loop = convert(node, convertedLoopBodyStatements);
+            }
+            else {
+                loop = <IterationStatement>getMutableClone(node);
+                // clean statement part
+                loop.statement = undefined;
+                // visit childnodes to transform initializer/condition/incrementor parts
+                loop = visitEachChild(loop, visitor, context);
+                // set loop statement
+                loop.statement = createBlock(
+                    generateCallToConvertedLoop(functionName, loopParameters, currentState),
+                    /*location*/ undefined,
+                    /*multiline*/ true
+                );
+            }
+
             statements.push(
                 currentParent.kind === SyntaxKind.LabeledStatement
                     ? createLabel((<LabeledStatement>currentParent).label, loop)
