@@ -320,7 +320,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: this) => boolean, thisArg?: any): T | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -331,7 +331,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number | undefined;
+    findIndex(predicate: (value: T, index: number, obj: this) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
@@ -341,7 +341,7 @@ interface Array<T> {
       * @param end index to stop filling the array at. If end is negative, it is treated as 
       * length+end.
       */
-    fill(value: T, start?: number, end?: number): T[];
+    fill(value: T, start?: number, end?: number): this;
 
     /** 
       * Returns the this object after copying a section of the array identified by start and end
@@ -352,7 +352,7 @@ interface Array<T> {
       * is treated as length+end.
       * @param end If not specified, length of the this object is used as its default value. 
       */
-    copyWithin(target: number, start: number, end?: number): T[];
+    copyWithin(target: number, start: number, end?: number): this;
 }
 
 interface IArguments {
@@ -424,6 +424,14 @@ interface String {
       * endPosition – length(this). Otherwise returns false.
       */
     endsWith(searchString: string, endPosition?: number): boolean;
+
+    /**
+      * Returns the String value result of normalizing the string into the normalization form 
+      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+      * is "NFC"
+      */
+    normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
       * Returns the String value result of normalizing the string into the normalization form 
@@ -799,11 +807,11 @@ interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
     entries(): IterableIterator<[K, V]>;
-    forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: V, index: K, map: this) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
     keys(): IterableIterator<K>;
-    set(key: K, value?: V): Map<K, V>;
+    set(key: K, value?: V): this;
     readonly size: number;
     values(): IterableIterator<V>;
     [Symbol.iterator]():IterableIterator<[K,V]>;
@@ -823,7 +831,7 @@ interface WeakMap<K, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): WeakMap<K, V>;
+    set(key: K, value?: V): this;
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 
@@ -836,11 +844,11 @@ interface WeakMapConstructor {
 declare var WeakMap: WeakMapConstructor;
 
 interface Set<T> {
-    add(value: T): Set<T>;
+    add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
     entries(): IterableIterator<[T, T]>;
-    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, index: T, set: this) => void, thisArg?: any): void;
     has(value: T): boolean;
     keys(): IterableIterator<T>;
     readonly size: number;
@@ -858,7 +866,7 @@ interface SetConstructor {
 declare var Set: SetConstructor;
 
 interface WeakSet<T> {
-    add(value: T): WeakSet<T>;
+    add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
