@@ -16,6 +16,7 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
+    const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -331,7 +332,8 @@ namespace ts.server {
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
-        compilerOptions?: ts.CompilerOptions;
+        compilerOptions?: CompilerOptions;
+        typingOptions?: TypingOptions;
     }
 
     export class Project {
@@ -754,6 +756,106 @@ namespace ts.server {
             return false;
         }
 
+        acquireTypingForJs(project: Project) {
+            if (!project || !this.host.getTsd) {
+                return;
+            }
+            const tsd = this.host.getTsd();
+            if (tsd === undefined) {
+                return;
+            }
+
+            const typingOptions: TypingOptions = project.projectOptions
+                ? project.projectOptions.typingOptions
+                : { enableAutoDiscovery: true };
+            const compilerOptions: CompilerOptions = project.projectOptions
+                ? project.projectOptions.compilerOptions
+                : undefined;
+            const projectRootPath: string = project.isConfiguredProject() ? getDirectoryPath(project.projectFilename) : undefined;
+
+            // Todo: add support for local cache path
+            const cachePath = this.host.globalTypingCachePath;
+            const tsdJsonPath = toPath("tsd.json", cachePath, getCanonicalFileName);
+            const tsdJson = this.host.getTsdJson(tsdJsonPath);
+            const { cachedTypingPaths, newTypingNames } = JsTyping.discoverTypings(
+                sys,
+                project.getFileNames(),
+                projectRootPath,
+                /*safeListPath*/ undefined,
+                tsdJson,
+                typingOptions,
+                compilerOptions
+            );
+
+            this.log("Cached typings include: " + cachedTypingPaths);
+            this.log("New typings to download: " + newTypingNames);
+
+            // Bail out when no actions are needed
+            if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            if (!sys.directoryExists(cachePath)) {
+                sys.createDirectory(cachePath);
+            }
+
+            // Inject the cached ones first
+            cachedTypingPaths.forEach(typingFilePath => addTypingToProject(typingFilePath, project));
+
+            if (newTypingNames && newTypingNames.length > 0) {
+                const typingsFolderPath = toPath("typings", this.host.globalTypingCachePath, getCanonicalFileName);
+                const query = new tsd.Query();
+                const api = tsd.getAPI(tsdJsonPath);
+                const options = new tsd.Options();
+                options.resolveDependencies = true;
+                options.overwriteFiles = true;
+                options.saveToConfig = true;
+
+                for (const newTypingName of newTypingNames) {
+                    query.addNamePattern(newTypingName);
+                }
+
+                let promise: PromiseLike<any>;
+                if (!sys.fileExists(tsdJsonPath)) {
+                    promise = api.initConfig(/*overwrite*/ true).then(paths => api.readConfig());
+                }
+                else {
+                    promise = api.readConfig();
+                }
+
+                promise
+                    .then(() => api.select(query, options))
+                    .then(selection => api.install(selection, options))
+                    .then(installResult => {
+                        if (!installResult || !installResult.written) {
+                            return;
+                        }
+                        const keys = getKeys(installResult.written.dict);
+                        for (const key of keys) {
+                            const installedTypingPath = toPath(key, typingsFolderPath, getCanonicalFileName);
+                            // If the tsd.json was just created (after calling the init api), then
+                            // the it is not cached yet, the `tsdJson` variable will be undefined
+                            if (tsdJson) {
+                                tsdJson[key] = installedTypingPath;
+                            }
+                            addTypingToProject(installedTypingPath, project);
+                        }
+                        project.projectService.updateProjectStructure();
+                    })
+                    .then(undefined, e => this.log(e));
+            }
+
+            function addTypingToProject(fileName: string, project: Project) {
+                const script = project.projectService.openFile(fileName, /*openedByClient*/ false);
+                if (script.defaultProject !== project) {
+                    project.addRoot(script);
+                }
+                if (project.isConfiguredProject() && project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
+                    project.projectService.openFileRootsConfigured.push(script);
+                }
+            }
+        }
+
         addOpenFile(info: ScriptInfo) {
             if (this.setConfiguredProjectRoot(info)) {
                 this.openFileRootsConfigured.push(info);
@@ -786,6 +888,10 @@ namespace ts.server {
                     }
                     this.openFileRoots = openFileRoots;
                     this.openFileRoots.push(info);
+                }
+
+                if (hasJavaScriptFileExtension(info.fileName)) {
+                    this.acquireTypingForJs(info.defaultProject);
                 }
             }
             this.updateConfiguredProjectList();
@@ -1200,12 +1306,12 @@ namespace ts.server {
                 else {
                     const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        compilerOptions: parsedCommandLine.options,
+                        typingOptions: parsedCommandLine.typingOptions
                     };
                     return { succeeded: true, projectOptions };
                 }
             }
-
         }
 
         openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
@@ -1232,6 +1338,10 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                // Acquire typings for JS files
+                this.acquireTypingForJs(project);
+
                 return { success: true, project: project };
             }
         }
@@ -1286,6 +1396,9 @@ namespace ts.server {
 
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
+
+                    // Acquire typings for JS files
+                    this.acquireTypingForJs(project);
                 }
             }
         }

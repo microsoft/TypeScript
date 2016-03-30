@@ -416,6 +416,7 @@ namespace ts {
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
+        public useCaseSensitiveFileNames = true;
 
         constructor(private shimHost: CoreServicesShimHost) {
             if ("directoryExists" in this.shimHost) {

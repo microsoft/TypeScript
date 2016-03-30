@@ -2482,7 +2482,7 @@ namespace ts {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<string>;       // The map of package names to their cached typing locations
+        packageNameToTypingLocation: Map<Path>;         // The map of package names to their cached typing locations
         typingOptions: TypingOptions;                   // Used to customize the typing inference process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
     }

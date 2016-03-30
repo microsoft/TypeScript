@@ -177,7 +177,49 @@ namespace ts.server {
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
 
-    const ioSession = new IOSession(ts.sys, logger);
+    const serverHost: ServerHost = <ServerHost>ts.sys;
+    serverHost.globalTypingCachePath = getNormalizedAbsolutePath(
+        ".typingsCache",
+        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"]);
+
+    let tsd: any;
+    serverHost.getTsd = () => {
+        if (tsd !== undefined) {
+            return tsd;
+        }
+        try {
+            tsd = require("tsd");
+            return tsd;
+        }
+        catch (e) {
+            logger.msg("Failed to require tsd.");
+        }
+        return undefined;
+    };
+    serverHost.cachedTsdJsons = {};
+    serverHost.getTsdJson = (tsdJsonFileName: string) => {
+        if (hasProperty(serverHost.cachedTsdJsons, tsdJsonFileName)) {
+            return serverHost.cachedTsdJsons[tsdJsonFileName];
+        }
+        else {
+            const { config } = readConfigFile(tsdJsonFileName, (path: string) => serverHost.readFile(path));
+            if (config && config.installed) {
+                const typingsFolderPath = combinePaths(getDirectoryPath(tsdJsonFileName), "typings");
+                const installedKeys = getKeys(config.installed);
+                const packagePathMap: Map<string> = {};
+                for (const installedKey of installedKeys) {
+                    const packageName = installedKey.substr(0, installedKey.indexOf("/"));
+                    const typingFilePath = getNormalizedAbsolutePath(installedKey, typingsFolderPath);
+                    packagePathMap[packageName] = typingFilePath;
+                }
+                serverHost.cachedTsdJsons[tsdJsonFileName] = packagePathMap;
+                return serverHost.cachedTsdJsons[tsdJsonFileName];
+            }
+        }
+        return undefined;
+    };
+
+    const ioSession = new IOSession(serverHost, logger);
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });
