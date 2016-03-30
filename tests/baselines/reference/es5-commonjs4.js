@@ -16,6 +16,7 @@ export var __esModule = 1;
 
 
 //// [es5-commonjs4.js]
+"use strict";
 var A = (function () {
     function A() {
     }
@@ -23,6 +24,6 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 exports.default = A;
 exports.__esModule = 1;

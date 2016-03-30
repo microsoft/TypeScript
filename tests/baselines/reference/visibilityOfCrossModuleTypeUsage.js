@@ -26,9 +26,12 @@ function run(configuration: commands.IConfiguration) {
 }
 
 //// [visibilityOfCrossModuleTypeUsage_server.js]
+"use strict";
 //// [visibilityOfCrossModuleTypeUsage_commands.js]
 //visibilityOfCrossModuleTypeUsage
+"use strict";
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
+"use strict";
 function run(configuration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 }

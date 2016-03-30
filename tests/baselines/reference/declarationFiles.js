@@ -54,17 +54,17 @@ var C1 = (function () {
     }
     C1.prototype.f = function (x) { return undefined; };
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C4 = (function () {
     function C4() {
         var _this = this;
@@ -87,49 +87,4 @@ var C4 = (function () {
         return function () { return _this; };
     };
     return C4;
-})();
-
-
-//// [declarationFiles.d.ts]
-declare class C1 {
-    x: this;
-    f(x: this): this;
-    constructor(x: this);
-}
-declare class C2 {
-    [x: string]: this;
-}
-interface Foo<T> {
-    x: T;
-    y: this;
-}
-declare class C3 {
-    a: this[];
-    b: [this, this];
-    c: this | Date;
-    d: this & Date;
-    e: (((this)));
-    f: (x: this) => this;
-    g: new (x: this) => this;
-    h: Foo<this>;
-    i: Foo<this | (() => this)>;
-    j: (x: any) => x is this;
-}
-declare class C4 {
-    x1: {
-        a: this;
-    };
-    x2: this[];
-    x3: {
-        a: this;
-    }[];
-    x4: () => this;
-    f1(): {
-        a: this;
-    };
-    f2(): this[];
-    f3(): {
-        a: this;
-    }[];
-    f4(): () => this;
-}
+}());

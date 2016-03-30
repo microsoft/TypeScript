@@ -131,31 +131,31 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var PA = (function (_super) {
     __extends(PA, _super);
     function PA() {
         _super.apply(this, arguments);
     }
     return PA;
-})(A);
+}(A));
 var PB = (function (_super) {
     __extends(PB, _super);
     function PB() {
         _super.apply(this, arguments);
     }
     return PB;
-})(B);
+}(B));
 var a;
 var b = { foo: '' };
 function foo1(x) { }

@@ -286,7 +286,7 @@ interface Console {
     select(element: any): void;
     time(timerName?: string): void;
     timeEnd(timerName?: string): void;
-    trace(): void;
+    trace(message?: any, ...optionalParams: any[]): void;
     warn(message?: any, ...optionalParams: any[]): void;
 }
 
@@ -492,7 +492,7 @@ interface IDBCursor {
     direction: string;
     key: any;
     primaryKey: any;
-    source: any;
+    source: IDBObjectStore | IDBIndex;
     advance(count: number): void;
     continue(key?: any): void;
     delete(): IDBRequest;
@@ -526,11 +526,11 @@ interface IDBDatabase extends EventTarget {
     objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
-    version: string;
+    version: number;
     close(): void;
-    createObjectStore(name: string, optionalParameters?: any): IDBObjectStore;
+    createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     deleteObjectStore(name: string): void;
-    transaction(storeNames: any, mode?: string): IDBTransaction;
+    transaction(storeNames: string | string[], mode?: string): IDBTransaction;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -553,10 +553,11 @@ declare var IDBFactory: {
 }
 
 interface IDBIndex {
-    keyPath: string;
+    keyPath: string | string[];
     name: string;
     objectStore: IDBObjectStore;
     unique: boolean;
+    multiEntry: boolean;
     count(key?: any): IDBRequest;
     get(key: any): IDBRequest;
     getKey(key: any): IDBRequest;
@@ -587,13 +588,14 @@ declare var IDBKeyRange: {
 
 interface IDBObjectStore {
     indexNames: DOMStringList;
-    keyPath: string;
+    keyPath: string | string[];
     name: string;
     transaction: IDBTransaction;
+    autoIncrement: boolean;
     add(value: any, key?: any): IDBRequest;
     clear(): IDBRequest;
     count(key?: any): IDBRequest;
-    createIndex(name: string, keyPath: string, optionalParameters?: any): IDBIndex;
+    createIndex(name: string, keyPath: string | string[], optionalParameters?: IDBIndexParameters): IDBIndex;
     delete(key: any): IDBRequest;
     deleteIndex(indexName: string): void;
     get(key: any): IDBRequest;
@@ -628,7 +630,7 @@ interface IDBRequest extends EventTarget {
     onsuccess: (ev: Event) => any;
     readyState: string;
     result: any;
-    source: any;
+    source: IDBObjectStore | IDBIndex | IDBCursor;
     transaction: IDBTransaction;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -677,7 +679,7 @@ declare var IDBVersionChangeEvent: {
 }
 
 interface ImageData {
-    data: number[];
+    data: Uint8ClampedArray;
     height: number;
     width: number;
 }
@@ -1109,6 +1111,16 @@ interface WorkerUtils extends Object, WindowBase64 {
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
+interface IDBObjectStoreParameters {
+    keyPath?: string | string[];
+    autoIncrement?: boolean;
+}
+
+interface IDBIndexParameters {
+    unique?: boolean;
+    multiEntry?: boolean;
+}
+
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
@@ -1165,7 +1177,7 @@ interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
 }
 interface DecodeErrorCallback {
-    (): void;
+    (error: DOMException): void;
 }
 interface FunctionStringCallback {
     (data: string): void;

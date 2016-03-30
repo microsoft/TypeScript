@@ -18,4 +18,4 @@ var CDoc = (function () {
         doSomething(function () { });
     }
     return CDoc;
-})();
+}());

@@ -18,12 +18,13 @@ if(foo.answer === 42){
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Foo = (function () {
         function Foo() {
             this.test = "test";
         }
         return Foo;
-    })();
+    }());
     var Foo;
     (function (Foo) {
         Foo.answer = 42;
@@ -32,6 +33,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
+    "use strict";
     if (foo.answer === 42) {
         var x = new foo();
     }

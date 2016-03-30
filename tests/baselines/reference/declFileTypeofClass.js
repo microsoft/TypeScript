@@ -21,7 +21,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var x;
 var y = c;
 var z;
@@ -29,7 +29,7 @@ var genericC = (function () {
     function genericC() {
     }
     return genericC;
-})();
+}());
 var genericX = genericC;
 
 

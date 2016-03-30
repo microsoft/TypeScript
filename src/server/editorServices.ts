@@ -100,7 +100,8 @@ namespace ts.server {
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
-                readFile: fileName => this.host.readFile(fileName)
+                readFile: fileName => this.host.readFile(fileName),
+                directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
         }
 
@@ -119,7 +120,7 @@ namespace ts.server {
                 if (!resolution) {
                     const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
                     if (moduleResolutionIsValid(existingResolution)) {
-                        // ok, it is safe to use existing module resolution results  
+                        // ok, it is safe to use existing module resolution results
                         resolution = existingResolution;
                     }
                     else {
@@ -144,8 +145,8 @@ namespace ts.server {
                 }
 
                 if (resolution.resolvedModule) {
-                    // TODO: consider checking failedLookupLocations  
-                    // TODO: use lastCheckTime to track expiration for module name resolution 
+                    // TODO: consider checking failedLookupLocations
+                    // TODO: use lastCheckTime to track expiration for module name resolution
                     return true;
                 }
 
@@ -189,6 +190,10 @@ namespace ts.server {
 
         getScriptFileNames() {
             return this.roots.map(root => root.fileName);
+        }
+
+        getScriptKind() {
+            return ScriptKind.Unknown;
         }
 
         getScriptVersion(filename: string) {
@@ -263,13 +268,11 @@ namespace ts.server {
         }
 
         resolvePath(path: string): string {
-            const start = new Date().getTime();
             const result = this.host.resolvePath(path);
             return result;
         }
 
         fileExists(path: string): boolean {
-            const start = new Date().getTime();
             const result = this.host.fileExists(path);
             return result;
         }
@@ -325,32 +328,6 @@ namespace ts.server {
         }
     }
 
-    // assumes normalized paths
-    function getAbsolutePath(filename: string, directory: string) {
-        const rootLength = ts.getRootLength(filename);
-        if (rootLength > 0) {
-            return filename;
-        }
-        else {
-            const splitFilename = filename.split("/");
-            const splitDir = directory.split("/");
-            let i = 0;
-            let dirTail = 0;
-            const sflen = splitFilename.length;
-            while ((i < sflen) && (splitFilename[i].charAt(0) == ".")) {
-                const dots = splitFilename[i];
-                if (dots == "..") {
-                    dirTail++;
-                }
-                else if (dots != ".") {
-                    return undefined;
-                }
-                i++;
-            }
-            return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join("/");
-        }
-    }
-
     export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
@@ -371,6 +348,10 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            if (projectOptions && projectOptions.files) {
+                // If files are listed explicitly, allow all extensions
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
+            }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
@@ -384,7 +365,7 @@ namespace ts.server {
         }
 
         openReferencedFile(filename: string) {
-            return this.projectService.openFile(filename, false);
+            return this.projectService.openFile(filename, /*openedByClient*/ false);
         }
 
         getRootFiles() {
@@ -461,6 +442,7 @@ namespace ts.server {
         setProjectOptions(projectOptions: ProjectOptions) {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
         }
@@ -505,11 +487,11 @@ namespace ts.server {
         openFileRootsConfigured: ScriptInfo[] = [];
         // a path to directory watcher map that detects added tsconfig files
         directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
-        // count of how many projects are using the directory watcher. If the 
+        // count of how many projects are using the directory watcher. If the
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFilelistChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -559,37 +541,38 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, project.projectOptions ? project.projectOptions.compilerOptions : undefined)) {
                 return;
             }
 
             this.log("Detected source file changes: " + fileName);
-            this.startTimerForDetectingProjectFilelistChanges(project);
+            this.startTimerForDetectingProjectFileListChanges(project);
         }
 
-        startTimerForDetectingProjectFilelistChanges(project: Project) {
-            if (this.timerForDetectingProjectFilelistChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFilelistChanges[project.projectFilename]);
+        startTimerForDetectingProjectFileListChanges(project: Project) {
+            if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
+                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFilelistChanges[project.projectFilename] = setTimeout(
-                () => this.handleProjectFilelistChanges(project),
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+                () => this.handleProjectFileListChanges(project),
                 250
             );
         }
 
-        handleProjectFilelistChanges(project: Project) {
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+        handleProjectFileListChanges(project: Project) {
+            const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
+
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
             // We check if the project file list has changed. If so, we update the project.
             if (!arrayIsEqualTo(currentRootFiles && currentRootFiles.sort(), newRootFiles && newRootFiles.sort())) {
                 // For configured projects, the change is made outside the tsconfig file, and
-                // it is not likely to affect the project for other files opened by the client. We can 
+                // it is not likely to affect the project for other files opened by the client. We can
                 // just update the current project.
                 this.updateConfiguredProject(project);
 
-                // Call updateProjectStructure to clean up inferred projects we may have 
+                // Call updateProjectStructure to clean up inferred projects we may have
                 // created for the new files
                 this.updateProjectStructure();
             }
@@ -606,7 +589,8 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
+            const { projectOptions } = this.configFileToProjectOptions(fileName);
+
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
             const openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
 
@@ -739,7 +723,8 @@ namespace ts.server {
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
-                    if (!(--project.projectService.directoryWatchersRefCount[directory])) {
+                    project.projectService.directoryWatchersRefCount[directory]--;
+                    if (!project.projectService.directoryWatchersRefCount[directory]) {
                         this.log("Close directory watcher for: " + directory);
                         project.projectService.directoryWatchersForTsconfig[directory].close();
                         delete project.projectService.directoryWatchersForTsconfig[directory];
@@ -811,8 +796,8 @@ namespace ts.server {
           * @param info The file that has been closed or newly configured
           */
         closeOpenFile(info: ScriptInfo) {
-            // Closing file should trigger re-reading the file content from disk. This is 
-            // because the user may chose to discard the buffer content before saving 
+            // Closing file should trigger re-reading the file content from disk. This is
+            // because the user may chose to discard the buffer content before saving
             // to the disk, and the server's version of the file can be out of sync.
             info.svc.reloadFromFile(info.fileName);
 
@@ -910,8 +895,8 @@ namespace ts.server {
         }
 
         /**
-         * This function is to update the project structure for every projects. 
-         * It is called on the premise that all the configured projects are 
+         * This function is to update the project structure for every projects.
+         * It is called on the premise that all the configured projects are
          * up to date.
          */
         updateProjectStructure() {
@@ -965,7 +950,7 @@ namespace ts.server {
 
                 if (rootFile.defaultProject && rootFile.defaultProject.isConfiguredProject()) {
                     // If the root file has already been added into a configured project,
-                    // meaning the original inferred project is gone already. 
+                    // meaning the original inferred project is gone already.
                     if (!rootedProject.isConfiguredProject()) {
                         this.removeProject(rootedProject);
                     }
@@ -1001,14 +986,15 @@ namespace ts.server {
 
         /**
          * @param filename is absolute pathname
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openFile(fileName: string, openedByClient: boolean) {
+        openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
-                    content = this.host.readFile(fileName);
+                    content = fileContent || this.host.readFile(fileName);
                 }
                 if (!content) {
                     if (openedByClient) {
@@ -1025,6 +1011,9 @@ namespace ts.server {
                 }
             }
             if (info) {
+                if (fileContent) {
+                    info.svc.reload(fileContent);
+                }
                 if (openedByClient) {
                     info.isOpen = true;
                 }
@@ -1039,10 +1028,16 @@ namespace ts.server {
         // the newly opened file.
         findConfigFile(searchPath: string): string {
             while (true) {
-                const fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (this.host.fileExists(fileName)) {
-                    return fileName;
+                const tsconfigFileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (this.host.fileExists(tsconfigFileName)) {
+                    return tsconfigFileName;
                 }
+
+                const jsconfigFileName = ts.combinePaths(searchPath, "jsconfig.json");
+                if (this.host.fileExists(jsconfigFileName)) {
+                    return jsconfigFileName;
+                }
+
                 const parentPath = ts.getDirectoryPath(searchPath);
                 if (parentPath === searchPath) {
                     break;
@@ -1055,19 +1050,20 @@ namespace ts.server {
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string) {
+        openClientFile(fileName: string, fileContent?: string) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, true);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
             this.addOpenFile(info);
             this.printProjects();
             return info;
         }
 
         /**
-         * This function tries to search for a tsconfig.json for the given file. If we found it, 
+         * This function tries to search for a tsconfig.json for the given file. If we found it,
          * we first detect if there is already a configured project created for it: if so, we re-read
-         * the tsconfig file content and update the project; otherwise we create a new one. 
+         * the tsconfig file content and update the project; otherwise we create a new one.
          */
         openOrUpdateConfiguredProjectForFile(fileName: string) {
             const searchPath = ts.normalizePath(getDirectoryPath(fileName));
@@ -1099,7 +1095,6 @@ namespace ts.server {
          * Close file whose contents is managed by the client
          * @param filename is absolute pathname
          */
-
         closeClientFile(filename: string) {
             const info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
@@ -1193,7 +1188,7 @@ namespace ts.server {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath);
+                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath, /*existingOptions*/ {}, configFilename);
                 Debug.assert(!!parsedCommandLine.fileNames);
 
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
@@ -1267,10 +1262,10 @@ namespace ts.server {
                     for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
-                            info = this.openFile(fileName, false);
+                            info = this.openFile(fileName, /*openedByClient*/ false);
                         }
                         else {
-                            // if the root file was opened by client, it would belong to either 
+                            // if the root file was opened by client, it would belong to either
                             // openFileRoots or openFileReferenced.
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
@@ -1316,7 +1311,10 @@ namespace ts.server {
                 this.setCompilerOptions(opt);
             }
             else {
-                this.setCompilerOptions(ts.getDefaultCompilerOptions());
+                const defaultOpts = ts.getDefaultCompilerOptions();
+                defaultOpts.allowNonTsExtensions = true;
+                defaultOpts.allowJs = true;
+                this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
             this.classifier = ts.createClassifier();
@@ -1328,7 +1326,7 @@ namespace ts.server {
         }
 
         isExternalModule(filename: string): boolean {
-            const sourceFile = this.languageService.getSourceFile(filename);
+            const sourceFile = this.languageService.getNonBoundSourceFile(filename);
             return ts.isExternalModule(sourceFile);
         }
 
@@ -1345,6 +1343,7 @@ namespace ts.server {
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         };
@@ -1745,7 +1744,8 @@ namespace ts.server {
             let count = 1;
             let pos = 0;
             this.index.every((ll, s, len) => {
-                starts[count++] = pos;
+                starts[count] = pos;
+                count++;
                 pos += ll.text.length;
                 return true;
             }, 0);
@@ -1753,9 +1753,9 @@ namespace ts.server {
         }
 
         getLineMapper() {
-            return ((line: number) => {
+            return (line: number) => {
                 return this.index.lineNumberToInfo(line).offset;
-            });
+            };
         }
 
         getTextChangeRangeSinceVersion(scriptVersion: number) {
@@ -2011,7 +2011,8 @@ namespace ts.server {
             while (adjustedStart >= childCharCount) {
                 this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, CharRangeSection.PreStart);
                 adjustedStart -= childCharCount;
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
             }
             // Case I: both start and end of range in same subtree
@@ -2026,14 +2027,16 @@ namespace ts.server {
                     return;
                 }
                 let adjustedLength = rangeLength - (childCharCount - adjustedStart);
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
                     if (this.execWalk(0, childCharCount, walkFns, childIndex, CharRangeSection.Mid)) {
                         return;
                     }
                     adjustedLength -= childCharCount;
-                    child = this.children[++childIndex];
+                    childIndex++;
+                    child = this.children[childIndex];
                     childCharCount = child.charCount();
                 }
                 if (adjustedLength > 0) {
@@ -2157,7 +2160,8 @@ namespace ts.server {
             if (childIndex < clen) {
                 splitNode = new LineNode();
                 while (childIndex < clen) {
-                    splitNode.add(this.children[childIndex++]);
+                    splitNode.add(this.children[childIndex]);
+                    childIndex++;
                 }
                 splitNode.updateCounts();
             }
@@ -2198,7 +2202,9 @@ namespace ts.server {
                 let nodeIndex = 0;
                 childIndex++;
                 while ((childIndex < lineCollectionCapacity) && (nodeIndex < nodeCount)) {
-                    this.children[childIndex++] = nodes[nodeIndex++];
+                    this.children[childIndex] = nodes[nodeIndex];
+                    childIndex++;
+                    nodeIndex++;
                 }
                 let splitNodes: LineNode[] = [];
                 let splitNodeCount = 0;
@@ -2211,7 +2217,8 @@ namespace ts.server {
                     }
                     let splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
-                        splitNode.add(nodes[nodeIndex++]);
+                        splitNode.add(nodes[nodeIndex]);
+                        nodeIndex++;
                         if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
                             splitNode = <LineNode>splitNodes[splitNodeIndex];

@@ -29,7 +29,7 @@ var CCC = (function () {
     }
     CCC.staticY = aaa; // This shouldnt be error
     return CCC;
-})();
+}());
 // above is equivalent to this:
 var aaaa = 1;
 var CCCC = (function () {
@@ -38,4 +38,4 @@ var CCCC = (function () {
         this.y = '';
     }
     return CCCC;
-})();
+}());

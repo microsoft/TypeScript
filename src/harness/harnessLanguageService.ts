@@ -7,7 +7,7 @@ namespace Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
-        public lineMap: number[] = undefined;
+        private lineMap: number[] = undefined;
 
         constructor(public fileName: string, public content: string) {
             this.setContent(content);
@@ -15,7 +15,11 @@ namespace Harness.LanguageService {
 
         private setContent(content: string): void {
             this.content = content;
-            this.lineMap = ts.computeLineStarts(content);
+            this.lineMap = undefined;
+        }
+
+        public getLineMap(): number[] {
+            return this.lineMap || (this.lineMap = ts.computeLineStarts(this.content));
         }
 
         public updateContent(content: string): void {
@@ -153,7 +157,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string): void {
+        public openFile(fileName: string, content?: string): void {
         }
 
         /**
@@ -164,7 +168,7 @@ namespace Harness.LanguageService {
             const script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            return ts.computeLineAndCharacterOfPosition(script.lineMap, position);
+            return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
 
@@ -179,6 +183,7 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return ts.ScriptKind.Unknown; }
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
@@ -189,7 +194,7 @@ namespace Harness.LanguageService {
         error(s: string): void { }
     }
 
-    export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
@@ -197,7 +202,7 @@ namespace Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
         getClassifier(): ts.Classifier { return ts.createClassifier(); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
     }
 
     /// Shim adapter
@@ -249,6 +254,7 @@ namespace Harness.LanguageService {
             const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return this.nativeHost.getScriptKind(fileName); }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
@@ -263,6 +269,10 @@ namespace Harness.LanguageService {
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
+        directoryExists(directoryName: string): boolean {
+            // for tests pessimistically assume that directory always exists
+            return true;
+        }
     }
 
     class ClassifierShimProxy implements ts.Classifier {
@@ -310,13 +320,6 @@ namespace Harness.LanguageService {
 
     class LanguageServiceShimProxy implements ts.LanguageService {
         constructor(private shim: ts.LanguageServiceShim) {
-        }
-        private unwrappJSONCallResult(result: string): any {
-            const parsedResult = JSON.parse(result);
-            if (parsedResult.error) {
-                throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
-            }
-            return parsedResult.result;
         }
         cleanupSemanticCache(): void {
             this.shim.cleanupSemanticCache();
@@ -420,13 +423,13 @@ namespace Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
-        getSourceFile(fileName: string): ts.SourceFile {
+        getNonBoundSourceFile(fileName: string): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         dispose(): void { this.shim.dispose({}); }
     }
 
-    export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
@@ -493,9 +496,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string): void {
-            super.openFile(fileName);
-            this.client.openFile(fileName);
+        openFile(fileName: string, content?: string): void {
+            super.openFile(fileName, content);
+            this.client.openFile(fileName, content);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
@@ -546,7 +549,8 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(path: string): boolean {
-            return false;
+            // for tests assume that directory exists
+            return true;
         }
 
         getExecutingFilePath(): string {
@@ -607,7 +611,7 @@ namespace Harness.LanguageService {
         }
     }
 
-    export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {

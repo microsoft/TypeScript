@@ -6,7 +6,7 @@ export module m {
 }
 
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.ts]
-import r = require('importAliasAnExternalModuleInsideAnInternalModule_file0');
+import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 module m_private {
     //import r2 = require('m'); // would be error
     export import C = r; // no error
@@ -15,13 +15,15 @@ module m_private {
 
 
 //// [importAliasAnExternalModuleInsideAnInternalModule_file0.js]
+"use strict";
 var m;
 (function (m) {
     function foo() { }
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
-var r = require('importAliasAnExternalModuleInsideAnInternalModule_file0');
+"use strict";
+var r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 var m_private;
 (function (m_private) {
     //import r2 = require('m'); // would be error

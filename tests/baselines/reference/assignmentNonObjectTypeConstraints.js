@@ -29,12 +29,12 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 function bar(x) {
     var y = x; // Ok
 }

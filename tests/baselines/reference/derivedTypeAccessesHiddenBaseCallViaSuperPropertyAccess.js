@@ -30,7 +30,7 @@ var Base = (function () {
         return null;
     };
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -45,4 +45,4 @@ var Derived = (function (_super) {
         var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
     };
     return Derived;
-})(Base);
+}(Base));

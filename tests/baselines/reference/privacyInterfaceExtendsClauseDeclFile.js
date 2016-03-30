@@ -95,4 +95,5 @@ interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInter
 
 
 //// [privacyInterfaceExtendsClauseDeclFile_externalModule.js]
+"use strict";
 //// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.js]

@@ -1,11 +1,8 @@
-tests/cases/compiler/assertInWrapSomeTypeParameter.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/assertInWrapSomeTypeParameter.ts(2,26): error TS1005: '>' expected.
 
 
-==== tests/cases/compiler/assertInWrapSomeTypeParameter.ts (2 errors) ====
+==== tests/cases/compiler/assertInWrapSomeTypeParameter.ts (1 errors) ====
     class C<T extends C<T>> {
-            ~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo<U extends C<C<T>>(x: U) {
                              ~
 !!! error TS1005: '>' expected.

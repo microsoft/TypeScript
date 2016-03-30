@@ -9,6 +9,7 @@ export module outerModule.InnerModule {
 
 //// [commentsDottedModuleName.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     /** this is multi declare module*/
     var outerModule;
     (function (outerModule) {
@@ -19,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
                 function b() {
                 }
                 return b;
-            })();
+            }());
             InnerModule.b = b;
         })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
     })(outerModule = exports.outerModule || (exports.outerModule = {}));

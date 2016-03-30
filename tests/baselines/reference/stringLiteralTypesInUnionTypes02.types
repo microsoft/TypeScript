@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts ===
+
+type T = string | "foo" | "bar" | "baz";
+>T : string | "foo" | "bar" | "baz"
+
+var x: "foo" | "bar" | "baz" | string = "foo";
+>x : "foo" | "bar" | "baz" | string
+>"foo" : "foo"
+
+var y: T = "bar";
+>y : string | "foo" | "bar" | "baz"
+>T : string | "foo" | "bar" | "baz"
+>"bar" : "bar"
+
+if (x === "foo") {
+>x === "foo" : boolean
+>x : "foo" | "bar" | "baz" | string
+>"foo" : string
+
+    let a = x;
+>a : "foo" | "bar" | "baz" | string
+>x : "foo" | "bar" | "baz" | string
+}
+else if (x !== "bar") {
+>x !== "bar" : boolean
+>x : "foo" | "bar" | "baz" | string
+>"bar" : string
+
+    let b = x || y;
+>b : string
+>x || y : string
+>x : "foo" | "bar" | "baz" | string
+>y : string | "foo" | "bar" | "baz"
+}
+else {
+    let c = x;
+>c : "foo" | "bar" | "baz" | string
+>x : "foo" | "bar" | "baz" | string
+
+    let d = y;
+>d : string | "foo" | "bar" | "baz"
+>y : string | "foo" | "bar" | "baz"
+
+    let e: (typeof x) | (typeof y) = c || d;
+>e : "foo" | "bar" | "baz" | string
+>x : "foo" | "bar" | "baz" | string
+>y : string | "foo" | "bar" | "baz"
+>c || d : string
+>c : "foo" | "bar" | "baz" | string
+>d : string | "foo" | "bar" | "baz"
+}
+
+x = y;
+>x = y : string | "foo" | "bar" | "baz"
+>x : "foo" | "bar" | "baz" | string
+>y : string | "foo" | "bar" | "baz"
+
+y = x;
+>y = x : "foo" | "bar" | "baz" | string
+>y : string | "foo" | "bar" | "baz"
+>x : "foo" | "bar" | "baz" | string
+

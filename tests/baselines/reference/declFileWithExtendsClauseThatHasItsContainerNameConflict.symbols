@@ -18,7 +18,7 @@ module A.B {
 >EventManager : Symbol(EventManager, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 6, 12))
 
         id: number;
->id : Symbol(id, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 7, 31))
+>id : Symbol(EventManager.id, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 7, 31))
 
     }
 }
@@ -33,6 +33,6 @@ module A.B.C {
 >EventManager : Symbol(EventManager, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 6, 12))
 
         name: string;
->name : Symbol(name, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 14, 51))
+>name : Symbol(ContextMenu.name, Decl(declFileWithExtendsClauseThatHasItsContainerNameConflict.ts, 14, 51))
     }
 }

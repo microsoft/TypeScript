@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyIndexing.ts(13,26): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyIndexing.ts(13,26): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
 tests/cases/compiler/noImplicitAnyIndexing.ts(20,9): error TS7017: Index signature of object type implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyIndexing.ts(23,9): error TS7017: Index signature of object type implicitly has an 'any' type.
 tests/cases/compiler/noImplicitAnyIndexing.ts(31,10): error TS7017: Index signature of object type implicitly has an 'any' type.
@@ -19,7 +19,7 @@ tests/cases/compiler/noImplicitAnyIndexing.ts(31,10): error TS7017: Index signat
     // Should be implicit 'any' ; property access fails, no string indexer.
     var strRepresentation3 = MyEmusEnum["monehh"];
                              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS7017: Index signature of object type implicitly has an 'any' type.
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
     
     // Should be okay; should be a MyEmusEnum
     var strRepresentation4 = MyEmusEnum["emu"];

@@ -129,9 +129,6 @@ namespace ts.server {
 
     export class Session {
         protected projectService: ProjectService;
-        private pendingOperation = false;
-        private fileHash: ts.Map<number> = {};
-        private nextFileId = 1;
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
         private changeSeq = 0;
@@ -239,11 +236,6 @@ namespace ts.server {
             }
         }
 
-        private errorCheck(file: string, project: Project) {
-            this.syntacticCheck(file, project);
-            this.semanticCheck(file, project);
-        }
-
         private reloadProjects() {
             this.projectService.reloadProjects();
         }
@@ -271,7 +263,8 @@ namespace ts.server {
             let index = 0;
             const checkOne = () => {
                 if (matchSeq(seq)) {
-                    const checkSpec = checkList[index++];
+                    const checkSpec = checkList[index];
+                    index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
@@ -532,9 +525,13 @@ namespace ts.server {
             };
         }
 
-        private openClientFile(fileName: string) {
+        /**
+         * @param fileName is the name of the file to be opened
+         * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
+         */
+        private openClientFile(fileName: string, fileContent?: string) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file);
+            this.projectService.openClientFile(file, fileContent);
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -606,7 +603,7 @@ namespace ts.server {
             // Check whether we should auto-indent. This will be when
             // the position is on a line containing only whitespace.
             // This should leave the edits returned from
-            // getFormattingEditsAfterKeytroke either empty or pertaining
+            // getFormattingEditsAfterKeystroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
             if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
@@ -795,7 +792,9 @@ namespace ts.server {
         }
 
         private closeClientFile(fileName: string) {
-            if (!fileName) { return; }
+            if (!fileName) {
+                return;
+            }
             const file = ts.normalizePath(fileName);
             this.projectService.closeClientFile(file);
         }
@@ -897,7 +896,7 @@ namespace ts.server {
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
-            const { configFileName, fileNames } = this.getProjectInfo(fileName, true);
+            const { fileNames } = this.getProjectInfo(fileName, /*needFileNameList*/ true);
             // No need to analyze lib.d.ts
             let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 
@@ -968,7 +967,7 @@ namespace ts.server {
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                this.openClientFile(openArgs.file);
+                this.openClientFile(openArgs.file, openArgs.fileContent);
                 return {responseRequired: false};
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {

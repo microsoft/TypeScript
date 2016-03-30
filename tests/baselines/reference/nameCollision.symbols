@@ -27,7 +27,7 @@ module B {
 >B : Symbol(B, Decl(nameCollision.ts, 11, 10))
 
         name: string;
->name : Symbol(name, Decl(nameCollision.ts, 14, 13))
+>name : Symbol(B.name, Decl(nameCollision.ts, 14, 13))
     }
 }
 
@@ -80,7 +80,7 @@ module D {
 >D : Symbol(D, Decl(nameCollision.ts, 39, 10))
 
         id: number;
->id : Symbol(id, Decl(nameCollision.ts, 40, 24))
+>id : Symbol(D.id, Decl(nameCollision.ts, 40, 24))
     }
 
     export var E = 'hello';

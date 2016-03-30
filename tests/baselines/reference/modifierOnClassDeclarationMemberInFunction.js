@@ -17,7 +17,7 @@ function f() {
         C.foo = function () { };
         C.prototype.bar = function () { };
         return C;
-    })();
+    }());
 }
 
 

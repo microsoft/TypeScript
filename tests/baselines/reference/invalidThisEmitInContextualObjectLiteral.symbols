@@ -1,0 +1,39 @@
+=== tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts ===
+interface IDef {
+>IDef : Symbol(IDef, Decl(invalidThisEmitInContextualObjectLiteral.ts, 0, 0))
+
+	p1: (e:string) => void;
+>p1 : Symbol(IDef.p1, Decl(invalidThisEmitInContextualObjectLiteral.ts, 0, 16))
+>e : Symbol(e, Decl(invalidThisEmitInContextualObjectLiteral.ts, 1, 6))
+
+	p2: () => (n: number) => any;
+>p2 : Symbol(IDef.p2, Decl(invalidThisEmitInContextualObjectLiteral.ts, 1, 24))
+>n : Symbol(n, Decl(invalidThisEmitInContextualObjectLiteral.ts, 2, 12))
+}
+
+class TestController {
+>TestController : Symbol(TestController, Decl(invalidThisEmitInContextualObjectLiteral.ts, 3, 1))
+
+	public m(def: IDef) { }
+>m : Symbol(TestController.m, Decl(invalidThisEmitInContextualObjectLiteral.ts, 5, 22))
+>def : Symbol(def, Decl(invalidThisEmitInContextualObjectLiteral.ts, 6, 10))
+>IDef : Symbol(IDef, Decl(invalidThisEmitInContextualObjectLiteral.ts, 0, 0))
+
+	public p = this.m({
+>p : Symbol(TestController.p, Decl(invalidThisEmitInContextualObjectLiteral.ts, 6, 24))
+>this.m : Symbol(TestController.m, Decl(invalidThisEmitInContextualObjectLiteral.ts, 5, 22))
+>this : Symbol(TestController, Decl(invalidThisEmitInContextualObjectLiteral.ts, 3, 1))
+>m : Symbol(TestController.m, Decl(invalidThisEmitInContextualObjectLiteral.ts, 5, 22))
+
+		p1: e => { },
+>p1 : Symbol(p1, Decl(invalidThisEmitInContextualObjectLiteral.ts, 7, 20))
+>e : Symbol(e, Decl(invalidThisEmitInContextualObjectLiteral.ts, 8, 5))
+
+		p2: () => { return vvvvvvvvv => this; },
+>p2 : Symbol(p2, Decl(invalidThisEmitInContextualObjectLiteral.ts, 8, 15))
+>vvvvvvvvv : Symbol(vvvvvvvvv, Decl(invalidThisEmitInContextualObjectLiteral.ts, 9, 20))
+>this : Symbol(TestController, Decl(invalidThisEmitInContextualObjectLiteral.ts, 3, 1))
+
+	});
+}
+

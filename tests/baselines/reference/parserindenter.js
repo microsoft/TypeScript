@@ -1340,6 +1340,6 @@ var Formatting;
                 this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
         };
         return Indenter;
-    })();
+    }());
     Formatting.Indenter = Indenter;
 })(Formatting || (Formatting = {}));

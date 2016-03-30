@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxEmit3.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 
 declare module JSX {
 >JSX : any
@@ -67,8 +67,9 @@ module M {
 >S : typeof S
 >Bar : typeof S.Bar
 ><S.Bar /> : JSX.Element
->S : any
->Bar : any
+>S.Bar : typeof S.Bar
+>S : typeof S
+>Bar : typeof S.Bar
 }
 
 module M {

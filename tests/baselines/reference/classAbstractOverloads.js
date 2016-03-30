@@ -30,9 +30,9 @@ var A = (function () {
     }
     A.prototype.baz = function () { };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());

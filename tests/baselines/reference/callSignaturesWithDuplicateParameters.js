@@ -57,7 +57,7 @@ var C = (function () {
     C.prototype.foo2 = function (x, x) { };
     C.prototype.foo3 = function (x, x) { };
     return C;
-})();
+}());
 var a;
 var b = {
     foo: function (x, x) { },

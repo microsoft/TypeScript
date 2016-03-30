@@ -13,7 +13,8 @@
         ],
         "no-var-keyword": true,
         "quotemark": [true,
-            "double"
+            "double",
+            "avoid-escape"
         ],
         "semicolon": true,
         "whitespace": [true,
@@ -38,8 +39,11 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null": true,
+        "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
-        "prefer-const": true
+        "prefer-const": true,
+        "no-in-operator": true,
+        "no-increment-decrement": true
   }
 }

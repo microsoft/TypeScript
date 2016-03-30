@@ -15,6 +15,7 @@ module Foo {
 
 //// [privacyCheckExportAssignmentOnExportedGenericInterface2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function Foo(array) {
         return undefined;
     }

@@ -17,6 +17,6 @@ export class Foo {}
         function Foo() {
         }
         return Foo;
-    })();
+    }());
     exports.Foo = Foo;
 });

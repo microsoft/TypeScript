@@ -34,7 +34,9 @@ export default value;
 export var value2 = "v";
 
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var value;
     return {
         setters:[],
@@ -45,7 +47,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var value2;
     return {
         setters:[],
@@ -55,7 +59,9 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register(["./file3"], function(exports_1) {
+System.register(["./file3"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var moduleCStar, file3_1, file3_2;
     return {
         setters:[
@@ -72,7 +78,9 @@ System.register(["./file3"], function(exports_1) {
     }
 });
 //// [file1.js]
-System.register(["./file2"], function(exports_1) {
+System.register(["./file2"], function(exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var moduleB;
     return {
         setters:[

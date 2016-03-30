@@ -3,21 +3,21 @@ class Base {
 >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     x: string;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 0, 12))
+>x : Symbol(Base.x, Decl(genericCallWithObjectTypeArgs2.ts, 0, 12))
 }
 class Derived extends Base {
 >Derived : Symbol(Derived, Decl(genericCallWithObjectTypeArgs2.ts, 2, 1))
 >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     y: string;
->y : Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 3, 28))
+>y : Symbol(Derived.y, Decl(genericCallWithObjectTypeArgs2.ts, 3, 28))
 }
 class Derived2 extends Base {
 >Derived2 : Symbol(Derived2, Decl(genericCallWithObjectTypeArgs2.ts, 5, 1))
 >Base : Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     z: string;
->z : Symbol(z, Decl(genericCallWithObjectTypeArgs2.ts, 6, 29))
+>z : Symbol(Derived2.z, Decl(genericCallWithObjectTypeArgs2.ts, 6, 29))
 }
 
 // returns {}[]
@@ -93,11 +93,11 @@ interface I<T, U> {
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 25, 14))
 
     x: T;
->x : Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 25, 19))
+>x : Symbol(I.x, Decl(genericCallWithObjectTypeArgs2.ts, 25, 19))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 25, 12))
 
     y: U;
->y : Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 26, 9))
+>y : Symbol(I.y, Decl(genericCallWithObjectTypeArgs2.ts, 26, 9))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 25, 14))
 }
 

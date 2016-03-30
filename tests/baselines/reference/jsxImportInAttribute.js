@@ -15,6 +15,7 @@ let x = Test; // emit test_1.default
 
 
 //// [consumer.jsx]
+"use strict";
 /// <reference path="component.d.ts" />
 var Test_1 = require('Test');
 var x = Test_1["default"]; // emit test_1.default

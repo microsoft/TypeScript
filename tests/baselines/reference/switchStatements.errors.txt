@@ -1,4 +1,4 @@
-tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): error TS2323: Type '{ id: number; name: string; }' is not comparable to type 'C'.
+tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): error TS2678: Type '{ id: number; name: string; }' is not comparable to type 'C'.
   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
 
 
@@ -39,8 +39,8 @@ tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): 
         case new D():
         case { id: 12, name: '' }:
                        ~~~~~~~~
-!!! error TS2323: Type '{ id: number; name: string; }' is not comparable to type 'C'.
-!!! error TS2323:   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
+!!! error TS2678: Type '{ id: number; name: string; }' is not comparable to type 'C'.
+!!! error TS2678:   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
         case new C():
     }
     

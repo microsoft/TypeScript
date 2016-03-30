@@ -67,17 +67,17 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var X = (function () {
     function X() {
     }
     return X;
-})();
+}());
 var Class;
 (function (Class) {
     var G = (function () {
@@ -88,7 +88,7 @@ var Class;
             return x;
         };
         return G;
-    })();
+    }());
     var c1 = new X();
     var d1 = new X();
     var g;
@@ -102,7 +102,7 @@ var Class;
             return x;
         };
         return G2;
-    })();
+    }());
     var g2;
     var r = g2.foo2(c1, d1);
     var r2 = g2.foo2(c1, c1);

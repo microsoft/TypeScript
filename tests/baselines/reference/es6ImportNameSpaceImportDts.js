@@ -10,14 +10,16 @@ export var x = new nameSpaceBinding.c();
 import * as nameSpaceBinding2 from "./server"; // unreferenced
 
 //// [server.js]
+"use strict";
 var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 exports.c = c;
 ;
 //// [client.js]
+"use strict";
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
 

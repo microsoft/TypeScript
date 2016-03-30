@@ -1,0 +1,43 @@
+=== tests/cases/compiler/overloadOnConstConstraintChecks4.ts ===
+class Z { }
+>Z : Symbol(Z, Decl(overloadOnConstConstraintChecks4.ts, 0, 0))
+
+class A extends Z { private x = 1 }
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks4.ts, 0, 11))
+>Z : Symbol(Z, Decl(overloadOnConstConstraintChecks4.ts, 0, 0))
+>x : Symbol(A.x, Decl(overloadOnConstConstraintChecks4.ts, 1, 19))
+
+class B extends A {}
+>B : Symbol(B, Decl(overloadOnConstConstraintChecks4.ts, 1, 35))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks4.ts, 0, 11))
+
+class C extends A {
+>C : Symbol(C, Decl(overloadOnConstConstraintChecks4.ts, 2, 20))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks4.ts, 0, 11))
+
+    public foo() { }
+>foo : Symbol(C.foo, Decl(overloadOnConstConstraintChecks4.ts, 3, 19))
+}
+function foo(name: 'hi'): B;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks4.ts, 5, 1), Decl(overloadOnConstConstraintChecks4.ts, 6, 28), Decl(overloadOnConstConstraintChecks4.ts, 7, 29), Decl(overloadOnConstConstraintChecks4.ts, 8, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks4.ts, 6, 13))
+>B : Symbol(B, Decl(overloadOnConstConstraintChecks4.ts, 1, 35))
+
+function foo(name: 'bye'): C;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks4.ts, 5, 1), Decl(overloadOnConstConstraintChecks4.ts, 6, 28), Decl(overloadOnConstConstraintChecks4.ts, 7, 29), Decl(overloadOnConstConstraintChecks4.ts, 8, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks4.ts, 7, 13))
+>C : Symbol(C, Decl(overloadOnConstConstraintChecks4.ts, 2, 20))
+
+function foo(name: string): A;
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks4.ts, 5, 1), Decl(overloadOnConstConstraintChecks4.ts, 6, 28), Decl(overloadOnConstConstraintChecks4.ts, 7, 29), Decl(overloadOnConstConstraintChecks4.ts, 8, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks4.ts, 8, 13))
+>A : Symbol(A, Decl(overloadOnConstConstraintChecks4.ts, 0, 11))
+
+function foo(name: any): Z {
+>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks4.ts, 5, 1), Decl(overloadOnConstConstraintChecks4.ts, 6, 28), Decl(overloadOnConstConstraintChecks4.ts, 7, 29), Decl(overloadOnConstConstraintChecks4.ts, 8, 30))
+>name : Symbol(name, Decl(overloadOnConstConstraintChecks4.ts, 9, 13))
+>Z : Symbol(Z, Decl(overloadOnConstConstraintChecks4.ts, 0, 0))
+
+    return null;
+}
+

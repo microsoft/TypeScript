@@ -112,6 +112,7 @@ module TopLevelModule2 {
 
 //// [typeResolution.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var TopLevelModule1;
     (function (TopLevelModule1) {
         var SubModule1;
@@ -146,7 +147,7 @@ define(["require", "exports"], function (require, exports) {
                         d2.XisIn1_1_1();
                     };
                     return ClassA;
-                })();
+                }());
                 SubSubModule1.ClassA = ClassA;
                 var ClassB = (function () {
                     function ClassB() {
@@ -179,7 +180,7 @@ define(["require", "exports"], function (require, exports) {
                         d2.XisIn1_1_1();
                     };
                     return ClassB;
-                })();
+                }());
                 SubSubModule1.ClassB = ClassB;
                 var NonExportedClassQ = (function () {
                     function NonExportedClassQ() {
@@ -196,7 +197,7 @@ define(["require", "exports"], function (require, exports) {
                         }
                     }
                     return NonExportedClassQ;
-                })();
+                }());
             })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
             // Should have no effect on S1.SS1.ClassA above because it is not exported
             var ClassA = (function () {
@@ -214,7 +215,7 @@ define(["require", "exports"], function (require, exports) {
                     }
                 }
                 return ClassA;
-            })();
+            }());
         })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
         var SubModule2;
         (function (SubModule2) {
@@ -226,21 +227,21 @@ define(["require", "exports"], function (require, exports) {
                     }
                     ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
-                })();
+                }());
                 SubSubModule2.ClassA = ClassA;
                 var ClassB = (function () {
                     function ClassB() {
                     }
                     ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
-                })();
+                }());
                 SubSubModule2.ClassB = ClassB;
                 var ClassC = (function () {
                     function ClassC() {
                     }
                     ClassC.prototype.CisIn1_2_2 = function () { };
                     return ClassC;
-                })();
+                }());
                 SubSubModule2.ClassC = ClassC;
             })(SubSubModule2 = SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {}));
         })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
@@ -249,14 +250,14 @@ define(["require", "exports"], function (require, exports) {
             }
             ClassA.prototype.AisIn1 = function () { };
             return ClassA;
-        })();
+        }());
         var NotExportedModule;
         (function (NotExportedModule) {
             var ClassA = (function () {
                 function ClassA() {
                 }
                 return ClassA;
-            })();
+            }());
             NotExportedModule.ClassA = ClassA;
         })(NotExportedModule || (NotExportedModule = {}));
     })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
@@ -269,7 +270,7 @@ define(["require", "exports"], function (require, exports) {
                 }
                 ClassA.prototype.AisIn2_3 = function () { };
                 return ClassA;
-            })();
+            }());
             SubModule3.ClassA = ClassA;
         })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
     })(TopLevelModule2 || (TopLevelModule2 = {}));

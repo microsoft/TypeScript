@@ -27,26 +27,24 @@ namespace RWC {
 
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
-            let inputFiles: { unitName: string; content: string; }[] = [];
-            let otherFiles: { unitName: string; content: string; }[] = [];
+            let inputFiles: Harness.Compiler.TestFile[] = [];
+            let otherFiles: Harness.Compiler.TestFile[] = [];
             let compilerResult: Harness.Compiler.CompilerResult;
             let compilerOptions: ts.CompilerOptions;
-            let baselineOpts: Harness.Baseline.BaselineOptions = {
+            const baselineOpts: Harness.Baseline.BaselineOptions = {
                 Subfolder: "rwc",
                 Baselinefolder: "internal/baselines"
             };
-            let baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
+            const baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
-                inputFiles = undefined;
-                otherFiles = undefined;
+                inputFiles = [];
+                otherFiles = [];
                 compilerResult = undefined;
                 compilerOptions = undefined;
-                baselineOpts = undefined;
-                baseName = undefined;
                 currentDirectory = undefined;
                 // useCustomLibraryFile is a flag specified in the json object to indicate whether to use built/local/lib.d.ts
                 // or to use lib.d.ts inside the json object. If the flag is true, use the lib.d.ts inside json file
@@ -55,7 +53,6 @@ namespace RWC {
             });
 
             it("can compile", () => {
-                const harnessCompiler = Harness.Compiler.getCompiler();
                 let opts: ts.ParsedCommandLine;
 
                 const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
@@ -71,8 +68,6 @@ namespace RWC {
                 });
 
                 runWithIOLog(ioLog, oldIO => {
-                    harnessCompiler.reset();
-
                     let fileNames = opts.fileNames;
 
                     const tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
@@ -128,17 +123,21 @@ namespace RWC {
                     opts.options.noLib = true;
 
                     // Emit the results
-                    compilerOptions = harnessCompiler.compileFiles(
+                    compilerOptions = null;
+                    const output = Harness.Compiler.compileFiles(
                         inputFiles,
                         otherFiles,
-                        newCompilerResults => { compilerResult = newCompilerResults; },
-                        /*settingsCallback*/ undefined, opts.options,
+                        /* harnessOptions */ undefined,
+                        opts.options,
                         // Since each RWC json file specifies its current directory in its json file, we need
                         // to pass this information in explicitly instead of acquiring it from the process.
                         currentDirectory);
+
+                    compilerOptions = output.options;
+                    compilerResult = output.result;
                 });
 
-                function getHarnessCompilerInputUnit(fileName: string) {
+                function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
                     const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
                     let content: string = null;
                     try {
@@ -201,8 +200,9 @@ namespace RWC {
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline("has the expected errors in generated declaration files", baseName + ".dts.errors.txt", () => {
-                        const declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult,
-                            /*settingscallback*/ undefined, compilerOptions, currentDirectory);
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
+                            inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
+
                         if (declFileCompilationResult.declResult.errors.length === 0) {
                             return null;
                         }

@@ -6,7 +6,7 @@ class Base {
 class Foo extends Base {
     public x: number;
     constructor() {
-        super(this); // no error
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 
@@ -29,14 +29,14 @@ var Base = (function () {
     function Base(a) {
     }
     return Base;
-})();
+}());
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
-        _super.call(this, this); // no error
+        _super.call(this, this); // error: "super" has to be called before "this" accessing
     }
     return Foo;
-})(Base);
+}(Base));
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
@@ -44,4 +44,4 @@ var Foo2 = (function (_super) {
         this.x = 0;
     }
     return Foo2;
-})(Base);
+}(Base));

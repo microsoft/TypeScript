@@ -16,4 +16,4 @@ var Camera = (function () {
     }
     Camera.prototype.foo = function () { return "s"; };
     return Camera;
-})();
+}());

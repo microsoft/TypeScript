@@ -83,7 +83,7 @@ var C1 = (function () {
         configurable: true
     });
     return C1;
-})();
+}());
 // Derived class overriding protected members
 var C2 = (function (_super) {
     __extends(C2, _super);
@@ -97,7 +97,7 @@ var C2 = (function (_super) {
         return _super.sf.call(this) + this.sx;
     };
     return C2;
-})(C1);
+}(C1));
 // Derived class making protected members public
 var C3 = (function (_super) {
     __extends(C3, _super);
@@ -116,7 +116,7 @@ var C3 = (function (_super) {
         configurable: true
     });
     return C3;
-})(C2);
+}(C2));
 // Protected properties in constructors
 var C4 = (function () {
     function C4(a, b) {
@@ -124,7 +124,7 @@ var C4 = (function () {
         this.b = b;
     }
     return C4;
-})();
+}());
 
 
 //// [declarationEmit_protectedMembers.d.ts]
@@ -135,7 +135,7 @@ declare class C1 {
     protected static sx: number;
     protected static sf(): number;
     protected static staticSetter: number;
-    protected static staticGetter: number;
+    protected static readonly staticGetter: number;
 }
 declare class C2 extends C1 {
     protected f(): number;
@@ -146,7 +146,7 @@ declare class C3 extends C2 {
     static sx: number;
     f(): number;
     static sf(): number;
-    static staticGetter: number;
+    static readonly staticGetter: number;
 }
 declare class C4 {
     protected a: number;

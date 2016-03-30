@@ -19,7 +19,7 @@ class CLASS {
 >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
 
     num: number;
->num : Symbol(num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
+>num : Symbol(CLASS.num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
 }
 
 //The second operand type is Object

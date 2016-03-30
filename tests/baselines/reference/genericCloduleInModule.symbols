@@ -7,7 +7,7 @@ module A {
 >T : Symbol(T, Decl(genericCloduleInModule.ts, 1, 19))
 
         foo() { }
->foo : Symbol(foo, Decl(genericCloduleInModule.ts, 1, 23))
+>foo : Symbol(B.foo, Decl(genericCloduleInModule.ts, 1, 23))
 
         static bar() { }
 >bar : Symbol(B.bar, Decl(genericCloduleInModule.ts, 2, 17))

@@ -18,7 +18,7 @@ var Z = (function () {
     }
     Z.prototype.func = function () { };
     return Z;
-})();
+}());
 var Y = (function (_super) {
     __extends(Y, _super);
     function Y() {
@@ -26,4 +26,4 @@ var Y = (function (_super) {
     }
     Y.prototype.func = function (value) { };
     return Y;
-})(Z);
+}(Z));

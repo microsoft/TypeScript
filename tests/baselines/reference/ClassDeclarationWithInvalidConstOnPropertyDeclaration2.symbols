@@ -1,0 +1,10 @@
+=== tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts ===
+class C {
+>C : Symbol(C, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 0, 0))
+
+    const
+>const : Symbol(C.const, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 0, 9))
+
+    x = 10;
+>x : Symbol(C.x, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 1, 9))
+}

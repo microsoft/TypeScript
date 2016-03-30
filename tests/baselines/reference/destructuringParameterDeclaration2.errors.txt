@@ -7,7 +7,6 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     Type '() => number | string[][] | string' is not assignable to type '() => number | string[][]'.
       Type 'number | string[][] | string' is not assignable to type 'number | string[][]'.
         Type 'string' is not assignable to type 'number | string[][]'.
-          Type 'string' is not assignable to type 'string[][]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(23,14): error TS2345: Argument of type '{ x: string; y: boolean; }' is not assignable to parameter of type '{ x: number; y: any; }'.
@@ -29,11 +28,9 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(38,4): error TS2345: Argument of type '{ b: boolean; }' is not assignable to parameter of type '{ b: number | string; }'.
   Types of property 'b' are incompatible.
     Type 'boolean' is not assignable to type 'number | string'.
-      Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(39,4): error TS2345: Argument of type '[number, number, boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Types of property '2' are incompatible.
     Type 'boolean' is not assignable to type '[[any]]'.
-      Property '0' is missing in type 'Boolean'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(40,4): error TS2345: Argument of type '[number, number, [[string]]]' is not assignable to parameter of type '[any, any, [[number]]]'.
   Types of property '2' are incompatible.
     Type '[[string]]' is not assignable to type '[[number]]'.
@@ -47,8 +44,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
   Types of property 'd4' are incompatible.
     Type '({x, y, c}: { x: any; y: any; c: any; }) => void' is not assignable to type '({x, y, z}?: { x: any; y: any; z: any; }) => any'.
       Types of parameters '__0' and '__0' are incompatible.
-        Type '{ x: any; y: any; c: any; }' is not assignable to type '{ x: any; y: any; z: any; }'.
-          Property 'z' is missing in type '{ x: any; y: any; c: any; }'.
+        Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
+          Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
@@ -76,7 +73,6 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2345:     Type '() => number | string[][] | string' is not assignable to type '() => number | string[][]'.
 !!! error TS2345:       Type 'number | string[][] | string' is not assignable to type 'number | string[][]'.
 !!! error TS2345:         Type 'string' is not assignable to type 'number | string[][]'.
-!!! error TS2345:           Type 'string' is not assignable to type 'string[][]'.
     
     
     // If the declaration includes an initializer expression (which is permitted only
@@ -138,13 +134,11 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2345: Argument of type '{ b: boolean; }' is not assignable to parameter of type '{ b: number | string; }'.
 !!! error TS2345:   Types of property 'b' are incompatible.
 !!! error TS2345:     Type 'boolean' is not assignable to type 'number | string'.
-!!! error TS2345:       Type 'boolean' is not assignable to type 'string'.
     c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
        ~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
 !!! error TS2345:   Types of property '2' are incompatible.
 !!! error TS2345:     Type 'boolean' is not assignable to type '[[any]]'.
-!!! error TS2345:       Property '0' is missing in type 'Boolean'.
     c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
        ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, [[string]]]' is not assignable to parameter of type '[any, any, [[number]]]'.
@@ -178,8 +172,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2420:   Types of property 'd4' are incompatible.
 !!! error TS2420:     Type '({x, y, c}: { x: any; y: any; c: any; }) => void' is not assignable to type '({x, y, z}?: { x: any; y: any; z: any; }) => any'.
 !!! error TS2420:       Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2420:         Type '{ x: any; y: any; c: any; }' is not assignable to type '{ x: any; y: any; z: any; }'.
-!!! error TS2420:           Property 'z' is missing in type '{ x: any; y: any; c: any; }'.
+!!! error TS2420:         Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
+!!! error TS2420:           Property 'c' is missing in type '{ x: any; y: any; z: any; }'.
         d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
            ~~~~~~~~~~
 !!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.

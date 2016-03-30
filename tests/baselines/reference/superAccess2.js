@@ -36,7 +36,7 @@ var P = (function () {
     P.prototype.x = function () { };
     P.y = function () { };
     return P;
-})();
+}());
 var Q = (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
@@ -61,4 +61,4 @@ var Q = (function (_super) {
     };
     Q.yy = _super.; // error for static initializer accessing super
     return Q;
-})(P);
+}(P));
