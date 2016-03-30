@@ -827,8 +827,8 @@ namespace Harness {
             return libFileNameSourceFileMap[fileName];
         }
 
-        export function getDefaultLibSourceFile(languageVersion: ts.ScriptTarget) {
-            return languageVersion === ts.ScriptTarget.ES6 ? getDefaultLibrarySourceFile(es2015DefaultLibFileName) : getDefaultLibrarySourceFile(defaultLibFileName);
+        export function getDefaultLibFileName(options: ts.CompilerOptions): string {
+            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName
         }
 
         // Cache these between executions so we don't have to re-parse them for every test
@@ -887,7 +887,7 @@ namespace Harness {
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
-                getDefaultLibFileName: options => options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName,
+                getDefaultLibFileName,
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,

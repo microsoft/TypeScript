@@ -156,7 +156,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = Harness.Compiler.getDefaultLibSourceFile(languageVersion);
+                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
                 else {
                     const text = getSourceFileText(fileName);
