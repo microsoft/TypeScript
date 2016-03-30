@@ -55,6 +55,7 @@ namespace ts {
 
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -344,6 +345,15 @@ namespace ts {
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
             const scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
+        }
+
+        public getScriptKind(fileName: string): ScriptKind {
+            if ("getScriptKind" in this.shimHost) {
+                return this.shimHost.getScriptKind(fileName);
+            }
+            else {
+                return ScriptKind.Unknown;
+            }
         }
 
         public getScriptVersion(fileName: string): string {
@@ -744,7 +754,7 @@ namespace ts {
                 `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
-                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    // workaround for VS document highlighting issue - keep only items from the initial file
                     const normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });

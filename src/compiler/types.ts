@@ -1,3 +1,4 @@
+
 namespace ts {
     export interface Map<T> {
         [index: string]: T;
@@ -1530,6 +1531,7 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+        /* @internal */ scriptKind: ScriptKind;
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
@@ -2369,6 +2371,7 @@ namespace ts {
         allowNonTsExtensions?: boolean;
         charset?: string;
         declaration?: boolean;
+        declarationDir?: string;
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
@@ -2457,6 +2460,14 @@ namespace ts {
          * This value denotes the character position in line and is different from the 'column' because of tab characters.
          */
         character: number;
+    }
+
+    export const enum ScriptKind {
+        Unknown = 0,
+        JS = 1,
+        JSX = 2,
+        TS = 3,
+        TSX = 4
     }
 
     export const enum ScriptTarget {

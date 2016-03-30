@@ -136,7 +136,7 @@ namespace Playback {
         };
         wrapper.startReplayFromData = log => {
             replayLog = log;
-            // Remove non-found files from the log (shouldn't really need them, but we still record them for diganostic purposes)
+            // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
         };
 
