@@ -1047,7 +1047,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
+    "Type '{0}' cannot be converted to type '{1}'.": {
         "category": "Error",
         "code": 2352
     },
@@ -1874,6 +1874,10 @@
     "A type predicate's type must be assignable to its parameter's type.": {
         "category": "Error",
         "code": 2677
+    },
+    "Type '{0}' is not comparable to type '{1}'.": {
+        "category": "Error",
+        "code": 2678
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
