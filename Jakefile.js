@@ -193,7 +193,7 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 })
 
-var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]
+var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
 
 var librarySourceMap = [
         // Host library
