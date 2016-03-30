@@ -307,9 +307,10 @@ class ProjectRunner extends RunnerBase {
                     // If the generated output file resides in the parent folder or is rooted path,
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the fileName the compiler asked to write
-                    diskRelativeName = "diskFile" + nonSubfolderDiskFiles++ +
+                    diskRelativeName = "diskFile" + nonSubfolderDiskFiles +
                     (Harness.Compiler.isDTS(fileName) ? ".d.ts" :
                     Harness.Compiler.isJS(fileName) ? ".js" : ".js.map");
+                    nonSubfolderDiskFiles++;
                 }
 
                 if (Harness.Compiler.isJS(fileName)) {
@@ -369,14 +370,14 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     const outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    const file = findOutpuDtsFile(outputDtsFileName);
+                    const file = findOutputDtsFile(outputDtsFileName);
                     if (file) {
                         allInputFiles.unshift(file);
                     }
                 }
                 else {
                     const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
-                    const outputDtsFile = findOutpuDtsFile(outputDtsFileName);
+                    const outputDtsFile = findOutputDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                     }
@@ -386,7 +387,7 @@ class ProjectRunner extends RunnerBase {
             // Dont allow config files since we are compiling existing source options
             return compileProjectFiles(compilerResult.moduleKind, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
 
-            function findOutpuDtsFile(fileName: string) {
+            function findOutputDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
             }
             function getInputFiles() {
@@ -483,7 +484,7 @@ class ProjectRunner extends RunnerBase {
                     it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.sourceMapData) {
                             Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
                                     ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                             });
                         }

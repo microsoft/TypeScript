@@ -198,7 +198,7 @@ function foo() {
         };
         l1: for (var x = 0; x < 1; ++x) {
             var state_2 = _loop_1(x);
-            if (typeof state_2 === "object") return state_2.value
+            if (typeof state_2 === "object") return state_2.value;
             if (state_2 === "break") break;
             if (state_2 === "continue") continue;
             switch(state_2) {
@@ -280,7 +280,7 @@ function foo_c() {
         };
         l1: for (var x = 0; x < 1;) {
             var state_4 = _loop_3(x);
-            if (typeof state_4 === "object") return state_4.value
+            if (typeof state_4 === "object") return state_4.value;
             if (state_4 === "break") break;
             if (state_4 === "continue") continue;
             switch(state_4) {

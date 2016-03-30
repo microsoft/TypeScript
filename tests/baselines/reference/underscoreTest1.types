@@ -31,7 +31,7 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >_.each : { <T>(list: T[], iterator: Iterator<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator<T, void>, context?: any): void; }
 >_ : Underscore.Static
 >each : { <T>(list: T[], iterator: Iterator<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator<T, void>, context?: any): void; }
->{ one: 1, two: 2, three: 3 } : { [x: string]: number; one: number; two: number; three: number; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : number
 >two : number
@@ -68,7 +68,7 @@ _.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3);
 >_.map : { <T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator<T, U>, context?: any): U[]; }
 >_ : Underscore.Static
 >map : { <T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator<T, U>, context?: any): U[]; }
->{ one: 1, two: 2, three: 3 } : { [x: string]: number; one: number; two: number; three: number; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : number
 >two : number
@@ -124,9 +124,9 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a : number[]
 >b : number[]
 >a.concat(b) : number[]
->a.concat : { <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }
+>a.concat : (...items: (number | number[])[]) => number[]
 >a : number[]
->concat : { <U extends number[]>(...items: U[]): number[]; (...items: number[]): number[]; }
+>concat : (...items: (number | number[])[]) => number[]
 >b : number[]
 >[] : undefined[]
 
@@ -449,7 +449,7 @@ _.size({ one: 1, two: 2, three: 3 });
 >_.size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
 >_ : Underscore.Static
 >size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
->{ one: 1, two: 2, three: 3 } : { [x: string]: number; one: number; two: number; three: number; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
 >one : number
 >1 : number
 >two : number

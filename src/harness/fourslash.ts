@@ -231,13 +231,13 @@ namespace FourSlash {
         private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
             switch (testType) {
                 case FourSlashTestType.Native:
-                    return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
                 case FourSlashTestType.ShimsWithPreprocess:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
-                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
@@ -317,6 +317,7 @@ namespace FourSlash {
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -571,6 +572,31 @@ namespace FourSlash {
             }
         }
 
+        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
+            if (items.length === 0) {
+                return;
+            }
+
+            const entries = this.getCompletionListAtCaret().entries;
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            for (let i = 0; i < items.length; i++) {
+                assert.equal(entries[i].name, items[i], `Unexpected item in completion list`);
+            }
+        }
+
+        public noItemsWithSameNameButDifferentKind(): void {
+            const completions = this.getCompletionListAtCaret();
+            const uniqueItems: ts.Map<string> = {};
+            for (const item of completions.entries) {
+                if (!ts.hasProperty(uniqueItems, item.name)) {
+                    uniqueItems[item.name] = item.kind;
+                }
+                else {
+                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                }
+            }
+        }
+
         public verifyMemberListIsEmpty(negative: boolean) {
             const members = this.getMemberListAtCaret();
             if ((!members || members.entries.length === 0) && negative) {
@@ -727,7 +753,7 @@ namespace FourSlash {
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
                     if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        ++referencesCount;
+                        referencesCount++;
                     }
                 });
             }
@@ -1079,9 +1105,15 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
+                baselineFile = baselineFile.replace(".ts", ".baseline");
+
+            }
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
@@ -1093,7 +1125,7 @@ namespace FourSlash {
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
             const allFourSlashFiles = this.testData.files;
-            for (let idx = 0; idx < allFourSlashFiles.length; ++idx) {
+            for (let idx = 0; idx < allFourSlashFiles.length; idx++) {
                 const file = allFourSlashFiles[idx];
                 if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
@@ -1247,7 +1279,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1338,7 +1370,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1853,7 +1885,7 @@ namespace FourSlash {
             let item: ts.NavigateToItem = null;
 
             // Count only the match that match the same MatchKind
-            for (let i = 0; i < items.length; ++i) {
+            for (let i = 0; i < items.length; i++) {
                 item = items[i];
                 if (!matchKind || item.matchKind === matchKind) {
                     actual++;
@@ -2739,12 +2771,12 @@ namespace FourSlashInterface {
 
         // Verifies the member list contains the specified symbol. The
         // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
+        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
                 this.state.verifyMemberListDoesNotContain(symbol);
             }
             else {
-                this.state.verifyMemberListContains(symbol, text, documenation, kind);
+                this.state.verifyMemberListContains(symbol, text, documentation, kind);
             }
         }
 
@@ -3282,6 +3314,30 @@ namespace FourSlashInterface {
 
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
+        }
+
+        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxOpenTagName", text, position);
+        }
+
+        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxCloseTagName", text, position);
+        }
+
+        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxSelfClosingTagName", text, position);
+        }
+
+        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttribute", text, position);
+        }
+
+        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxText", text, position);
+        }
+
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttributeStringLiteralValue", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {

@@ -95,7 +95,7 @@ declare namespace Test {
         path: string;
         isFSO: this is FileSystemObject;
         isFile: this is File;
-        isDirectory: this is Directory;
+        readonly isDirectory: this is Directory;
         isNetworked: this is (Networked & this);
         constructor(path: string);
     }

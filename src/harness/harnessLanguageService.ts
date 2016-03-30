@@ -183,6 +183,7 @@ namespace Harness.LanguageService {
             const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return ts.ScriptKind.Unknown; }
         getScriptVersion(fileName: string): string {
             const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
@@ -193,7 +194,7 @@ namespace Harness.LanguageService {
         error(s: string): void { }
     }
 
-    export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
@@ -253,6 +254,7 @@ namespace Harness.LanguageService {
             const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
+        getScriptKind(fileName: string): ts.ScriptKind { return this.nativeHost.getScriptKind(fileName); }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
 
@@ -267,6 +269,10 @@ namespace Harness.LanguageService {
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
+        directoryExists(directoryName: string): boolean {
+            // for tests pessimistically assume that directory always exists
+            return true;
+        }
     }
 
     class ClassifierShimProxy implements ts.Classifier {
@@ -423,7 +429,7 @@ namespace Harness.LanguageService {
         dispose(): void { this.shim.dispose({}); }
     }
 
-    export class ShimLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: ShimLanguageServiceHost;
         private factory: ts.TypeScriptServicesFactory;
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
@@ -543,7 +549,8 @@ namespace Harness.LanguageService {
         }
 
         directoryExists(path: string): boolean {
-            return false;
+            // for tests assume that directory exists
+            return true;
         }
 
         getExecutingFilePath(): string {
@@ -604,7 +611,7 @@ namespace Harness.LanguageService {
         }
     }
 
-    export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
+    export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {

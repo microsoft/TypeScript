@@ -31,41 +31,36 @@ declare function use(s: string): void;
 let x1 = () => { use("Test"); }
 
 //// [reachabilityChecks7.js]
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
-    return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
-        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
-        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
-        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
-        function step(verb, value) {
-            var result = generator[verb](value);
-            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
-        }
-        step("next", void 0);
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
 // async function without return type annotation - error
 function f1() {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
     });
 }
 let x = function () {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
     });
 };
 // async function with which promised type is void - return can be omitted
 function f2() {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
     });
 }
 function f3(x) {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         if (x)
             return 10;
     });
 }
 function f4() {
-    return __awaiter(this, void 0, Promise, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
     });
 }
 function voidFunc() {

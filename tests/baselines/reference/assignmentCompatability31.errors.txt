@@ -1,7 +1,6 @@
 tests/cases/compiler/assignmentCompatability31.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: string[]; }'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'string[]'.
-      Property 'length' is missing in type 'Number'.
 
 
 ==== tests/cases/compiler/assignmentCompatability31.ts (1 errors) ====
@@ -18,4 +17,3 @@ tests/cases/compiler/assignmentCompatability31.ts(9,1): error TS2322: Type 'inte
 !!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ one: string[]; }'.
 !!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string[]'.
-!!! error TS2322:       Property 'length' is missing in type 'Number'.

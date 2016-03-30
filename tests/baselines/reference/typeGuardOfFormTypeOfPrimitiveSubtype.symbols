@@ -1,0 +1,52 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfPrimitiveSubtype.ts ===
+let a: {};
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+
+let b: {toString(): string};
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+>toString : Symbol(toString, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 8))
+
+if (typeof a === "number") {
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+
+    let c: number = a;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 3, 7))
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+}
+if (typeof a === "string") {
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+
+    let c: string = a;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 6, 7))
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+}
+if (typeof a === "boolean") {
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+
+    let c: boolean = a;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 9, 7))
+>a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
+}
+
+if (typeof b === "number") {
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+
+    let c: number = b;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 13, 7))
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+}
+if (typeof b === "string") {
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+
+    let c: string = b;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 16, 7))
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+}
+if (typeof b === "boolean") {
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+
+    let c: boolean = b;
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 19, 7))
+>b : Symbol(b, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 1, 3))
+}
+

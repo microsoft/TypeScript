@@ -1,0 +1,34 @@
+tests/cases/conformance/externalModules/b.ts(6,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/externalModules/b.ts(7,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/externalModules/b.ts(8,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/conformance/externalModules/b.ts(9,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+
+
+==== tests/cases/conformance/externalModules/b.ts (4 errors) ====
+    import { x, y } from "./a";
+    import * as a1 from "./a";
+    import a2 = require("./a");
+    const a3 = a1;
+    
+    x = 1;     // Error
+    ~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    y = 1;     // Error
+    ~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    a1.x = 1;  // Error
+    ~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    a1.y = 1;  // Error
+    ~~~~
+!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+    a2.x = 1;
+    a2.y = 1;
+    a3.x = 1;
+    a3.y = 1;
+==== tests/cases/conformance/externalModules/a.ts (0 errors) ====
+    
+    export var x = 1;
+    var y = 1;
+    export { y };
+    

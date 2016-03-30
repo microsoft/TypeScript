@@ -15,7 +15,7 @@
 ////export = A;
 
 // @Filename: cloduleAsBaseClass2_1.ts
-////import B = require('cloduleAsBaseClass2_0');
+////import B = require('./cloduleAsBaseClass2_0');
 ////class D extends B {
 ////    constructor() {
 ////        super(1);

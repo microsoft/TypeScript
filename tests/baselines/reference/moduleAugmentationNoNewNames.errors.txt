@@ -1,0 +1,47 @@
+tests/cases/compiler/map.ts(10,11): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map.ts(11,9): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map.ts(11,20): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map.ts(12,13): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map.ts(12,19): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map.ts(13,12): error TS2665: Module augmentation cannot introduce new names in the top level scope.
+
+
+==== tests/cases/compiler/map.ts (6 errors) ====
+    
+    import { Observable } from "./observable"
+    
+    (<any>Observable.prototype).map = function() { }
+    
+    declare module "./observable" {
+        interface Observable<T> {
+            map<U>(proj: (e:T) => U): Observable<U>
+        }
+        class Bar {}
+              ~~~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+        let y: number, z: string;
+            ~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+                       ~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+        let {a: x, b: x1}: {a: number, b: number};
+                ~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+                      ~~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+        module Z {}
+               ~
+!!! error TS2665: Module augmentation cannot introduce new names in the top level scope.
+    }
+    
+==== tests/cases/compiler/observable.ts (0 errors) ====
+    export declare class Observable<T> {
+        filter(pred: (e:T) => boolean): Observable<T>;
+    }
+    
+==== tests/cases/compiler/main.ts (0 errors) ====
+    import { Observable } from "./observable"
+    import "./map";
+    
+    let x: Observable<number>;
+    let y = x.map(x => x + 1);

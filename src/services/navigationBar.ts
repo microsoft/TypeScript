@@ -374,7 +374,7 @@ namespace ts.NavigationBar {
                     return createEnumItem(<EnumDeclaration>node);
 
                 case SyntaxKind.InterfaceDeclaration:
-                    return createIterfaceItem(<InterfaceDeclaration>node);
+                    return createInterfaceItem(<InterfaceDeclaration>node);
 
                 case SyntaxKind.ModuleDeclaration:
                     return createModuleItem(<ModuleDeclaration>node);
@@ -387,7 +387,7 @@ namespace ts.NavigationBar {
 
             function getModuleName(moduleDeclaration: ModuleDeclaration): string {
                 // We want to maintain quotation marks.
-                if (moduleDeclaration.name.kind === SyntaxKind.StringLiteral) {
+                if (isAmbientModule(moduleDeclaration)) {
                     return getTextOfNode(moduleDeclaration.name);
                 }
 
@@ -493,7 +493,7 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createIterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
+            function createInterfaceItem(node: InterfaceDeclaration): ts.NavigationBarItem {
                 let childItems = getItemsWorker(sortNodes(removeDynamicallyNamedProperties(node)), createChildItem);
                 return getNavigationBarItem(
                     node.name.text,
