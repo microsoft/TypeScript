@@ -15,5 +15,5 @@ function f3(z: number): number {
     return this.a + z;
 }
 
-// ok, arrow functions don't even bind `this`, so `this` is just `window`
+// error: `this` is `window`, but is still of type `any`
 let f4: (b: number) => number = b => this.c + b;
