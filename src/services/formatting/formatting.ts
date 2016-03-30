@@ -152,7 +152,7 @@ namespace ts.formatting {
 
         return current;
     }
-    
+
     // Returns true if node is an element in some list in parent
     // i.e. parent is class declaration with the list of members and node is one of members.
     function isListElement(parent: Node, node: Node): boolean {
