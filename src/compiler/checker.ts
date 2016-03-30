@@ -16076,7 +16076,7 @@ namespace ts {
 
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
-        function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
+        function getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration {
             let symbol = getReferencedValueSymbol(node);
             if (symbol) {
                 if (symbol.flags & SymbolFlags.ExportValue) {
@@ -16084,7 +16084,7 @@ namespace ts {
                     // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
                     // kinds that we do NOT prefix.
                     const exportSymbol = getMergedSymbol(symbol.exportSymbol);
-                    if (exportSymbol.flags & SymbolFlags.ExportHasLocal) {
+                    if (exportSymbol.flags & SymbolFlags.ExportHasLocal && !prefixLocals) {
                         return undefined;
                     }
                     symbol = exportSymbol;

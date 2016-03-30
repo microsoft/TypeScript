@@ -258,6 +258,9 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     return visitClassDeclaration(<ClassDeclaration>node);
 
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(<ExpressionStatement>node);
+
                 default:
                     // This visitor does not descend into the tree, as export/import statements
                     // are only transformed at the top level of a file.
@@ -544,24 +547,33 @@ namespace ts {
             }
         }
 
-        function addExportMemberAssignment(statements: Statement[], node: FunctionDeclaration | ClassDeclaration) {
+        function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
             if (hasModifier(node, ModifierFlags.Default)) {
-                addExportDefault(statements, node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node), /*location*/ node);
+                addExportDefault(statements, getDeclarationName(node), /*location*/ node);
             }
             else {
                 statements.push(
-                    startOnNewLine(
-                        createStatement(
-                            createExportAssignment(node.name, node.name),
-                            /*location*/ node
-                        )
-                    )
+                    createExportStatement(node.name, node.name, /*location*/ node)
                 );
             }
         }
 
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             if (hasModifier(node, ModifierFlags.Export)) {
+                // If the variable is for a declaration that has a local name,
+                // do not elide the declaration.
+                const original = getOriginalNode(node);
+                if (original.kind === SyntaxKind.EnumDeclaration
+                    || original.kind === SyntaxKind.ModuleDeclaration) {
+                    return setOriginalNode(
+                        createVariableStatement(
+                            /*modifiers*/ undefined,
+                            node.declarationList
+                        ),
+                        node
+                    );
+                }
+
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length === 0) {
                     // elide statement if there are no initialized variables
@@ -651,6 +663,87 @@ namespace ts {
             return singleOrMany(statements);
         }
 
+        function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
+            const original = getOriginalNode(node);
+            if (hasModifier(original, ModifierFlags.Export)) {
+                switch (original.kind) {
+                    case SyntaxKind.EnumDeclaration:
+                        return visitExpressionStatementForEnumDeclaration(node, <EnumDeclaration>original);
+
+                    case SyntaxKind.ModuleDeclaration:
+                        return visitExpressionStatementForModuleDeclaration(node, <ModuleDeclaration>original);
+                }
+            }
+
+            return node;
+        }
+
+        function visitExpressionStatementForEnumDeclaration(node: ExpressionStatement, original: EnumDeclaration): VisitResult<Statement> {
+            if (isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
+                const statements: Statement[] = [node];
+                addVarForExportedEnumOrModule(statements, original);
+                return statements;
+            }
+
+            return node;
+        }
+
+        function isModuleMergedWithES6Class(node: ModuleDeclaration) {
+            return languageVersion === ScriptTarget.ES6
+                && isMergedWithClass(node);
+        }
+
+        function visitExpressionStatementForModuleDeclaration(node: ExpressionStatement, original: ModuleDeclaration): VisitResult<Statement> {
+            if (isFirstDeclarationOfKind(original, SyntaxKind.ModuleDeclaration)) {
+                const statements: Statement[] = [node];
+                if (isModuleMergedWithES6Class(original)) {
+                    addAssignmentForExportedModule(statements, original);
+                }
+                else {
+                    addVarForExportedEnumOrModule(statements, original);
+                }
+
+                return statements;
+            }
+
+            return node;
+        }
+
+        /**
+         * Adds a trailing VariableStatement for an enum or module declaration.
+         */
+        function addVarForExportedEnumOrModule(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+            statements.push(
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    [createVariableDeclaration(
+                        getDeclarationName(node),
+                        createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
+                    )],
+                    /*location*/ node
+                )
+            );
+        }
+
+        /**
+         * Adds a trailing assignment for a module declaration.
+         */
+        function addAssignmentForExportedModule(statements: Statement[], node: ModuleDeclaration) {
+            statements.push(
+                createStatement(
+                    createAssignment(
+                        getDeclarationName(node),
+                        createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
+                    ),
+                    /*location*/ node
+                )
+            );
+        }
+
+        function getDeclarationName(node: DeclarationStatement) {
+            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        }
+
         function substituteExpression(node: Expression) {
             node = previousExpressionSubstitution(node);
             if (isIdentifier(node)) {
@@ -663,7 +756,7 @@ namespace ts {
         function substituteExpressionIdentifier(node: Identifier): Expression {
             const original = getOriginalNode(node);
             if (isIdentifier(original)) {
-                const container = resolver.getReferencedExportContainer(original);
+                const container = resolver.getReferencedExportContainer(original, (getNodeEmitFlags(node) & NodeEmitFlags.PrefixExportedLocal) !== 0);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
                         return createPropertyAccess(
@@ -758,6 +851,10 @@ namespace ts {
             }
 
             return createCall(createIdentifier("require"), args);
+        }
+
+        function createExportStatement(name: Identifier, value: Expression, location?: TextRange) {
+            return startOnNewLine(createStatement(createExportAssignment(name, value), location));
         }
 
         function createExportAssignment(name: Identifier, value: Expression) {

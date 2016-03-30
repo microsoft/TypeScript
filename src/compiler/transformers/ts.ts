@@ -94,7 +94,7 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitWithStack(node: Node, visitor: (node: Node) => VisitResult<Node>): VisitResult<Node> {
+        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
             const savedCurrentScope = currentScope;
             const savedCurrentParent = currentParent;
@@ -103,7 +103,7 @@ namespace ts {
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
 
-            const visited = visitor(node);
+            const visited = f(node);
 
             // Restore state
             currentScope = savedCurrentScope;
@@ -119,7 +119,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitor(node: Node): VisitResult<Node> {
-            return visitWithStack(node, visitorWorker);
+            return saveStateAndInvoke(node, visitorWorker);
         }
 
         /**
@@ -146,7 +146,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function namespaceElementVisitor(node: Node): VisitResult<Node> {
-            return visitWithStack(node, namespaceElementVisitorWorker);
+            return saveStateAndInvoke(node, namespaceElementVisitorWorker);
         }
 
         /**
@@ -155,7 +155,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
+            if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
                 return visitTypeScript(node);
@@ -174,7 +174,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function classElementVisitor(node: Node): VisitResult<Node> {
-            return visitWithStack(node, classElementVisitorWorker);
+            return saveStateAndInvoke(node, classElementVisitorWorker);
         }
 
         /**
@@ -462,7 +462,7 @@ namespace ts {
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
             // declaration or export default for the class.
             if (isNamespaceExport(node)) {
-                addNamespaceExport(statements, name, name);
+                addExportMemberAssignment(statements, node);
             }
             else if (node.decorators) {
                 if (isDefaultExternalModuleExport(node)) {
@@ -619,16 +619,19 @@ namespace ts {
 
             //  let ${name} = ${classExpression};
             addNode(statements,
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            name,
-                            classExpression
-                        )
-                    ],
-                    /*location*/ undefined,
-                    NodeFlags.Let)
+                setOriginalNode(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createVariableDeclarationList([
+                            createVariableDeclaration(
+                                name,
+                                classExpression
+                            )
+                        ],
+                        /*location*/ undefined,
+                        NodeFlags.Let)
+                    ),
+                    /*original*/ node
                 )
             );
 
@@ -1786,6 +1789,17 @@ namespace ts {
         }
 
         /**
+         * Determines whether to emit a function-like declaration. We should not emit the
+         * declaration if it is an overload, is abstract, or is an ambient declaration.
+         *
+         * @param node The declaration node.
+         */
+        function shouldEmitFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+            return !nodeIsMissing(node.body)
+                && !hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
+        }
+
+        /**
          * Visits a method declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
@@ -1797,7 +1811,7 @@ namespace ts {
          * @param node The method node.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
             }
 
@@ -1814,6 +1828,16 @@ namespace ts {
         }
 
         /**
+         * Determines whether to emit an accessor declaration. We should not emit the
+         * declaration if it is abstract or is an ambient declaration.
+         *
+         * @param node The declaration node.
+         */
+        function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
+            return !hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
+        }
+
+        /**
          * Visits a get accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
@@ -1823,7 +1847,7 @@ namespace ts {
          * @param node The get accessor node.
          */
         function visitGetAccessor(node: GetAccessorDeclaration) {
-            if (shouldElideAccessorDeclaration(node)) {
+            if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
 
@@ -1836,16 +1860,6 @@ namespace ts {
         }
 
         /**
-         * Determines whether a function-like declaration should be elided. A declaration should
-         * be elided if it is an overload, is abstract, or is an ambient declaration.
-         *
-         * @param node The declaration node.
-         */
-        function shouldElideAccessorDeclaration(node: AccessorDeclaration) {
-            return hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
-        }
-
-        /**
          * Visits a set accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
@@ -1855,7 +1869,7 @@ namespace ts {
          * @param node The set accessor node.
          */
         function visitSetAccessor(node: SetAccessorDeclaration) {
-            if (shouldElideAccessorDeclaration(node)) {
+            if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
 
@@ -1879,7 +1893,7 @@ namespace ts {
          * @param node The function node.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
             }
 
@@ -1893,10 +1907,9 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                return [
-                    func,
-                    createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
-                ];
+                const statements: Statement[] = [func];
+                addExportMemberAssignment(statements, node);
+                return statements;
             }
 
             return func;
@@ -1922,17 +1935,6 @@ namespace ts {
                 transformFunctionBody(node),
                 node
             );
-        }
-
-        /**
-         * Determines whether a function-like declaration should be elided. A declaration should
-         * be elided if it is an overload, is abstract, or is an ambient declaration.
-         *
-         * @param node The declaration node.
-         */
-        function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return nodeIsMissing(node.body)
-                || hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
         }
 
         /**
@@ -2110,155 +2112,6 @@ namespace ts {
         }
 
         /**
-         * Visits an enum declaration.
-         *
-         * This function will be called any time a TypeScript enum is encountered.
-         *
-         * @param node The enum declaration node.
-         */
-        function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
-            if (shouldElideEnumDeclaration(node)) {
-                return undefined;
-            }
-
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const statements: Statement[] = [];
-
-            let location: TextRange = node;
-            if (!isExported(node) || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, SyntaxKind.EnumDeclaration))) {
-                // Emit a VariableStatement if the enum is not exported, or is the first enum
-                // with the same name exported from an external module.
-                statements.push(
-                    createVariableStatement(
-                        visitNodes(node.modifiers, visitor, isModifier),
-                        createVariableDeclarationList([
-                            createVariableDeclaration(node.name)
-                        ]),
-                        location
-                    )
-                );
-                location = undefined;
-            }
-
-            const name = isNamespaceExport(node)
-                ? getNamespaceMemberName(node.name)
-                : getSynthesizedClone(node.name);
-
-            currentNamespaceLocalName = getGeneratedNameForNode(node);
-
-            //  (function (x) {
-            //      x[x["y"] = 0] = "y";
-            //      ...
-            //  })(x || (x = {}));
-            statements.push(
-                setOriginalNode(
-                    createStatement(
-                        createCall(
-                            createParen(
-                                createFunctionExpression(
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                    [createParameter(currentNamespaceLocalName)],
-                                    transformEnumBody(node)
-                                )
-                            ),
-                            [createLogicalOr(
-                                name,
-                                createAssignment(
-                                    name,
-                                    createObjectLiteral()
-                                )
-                            )]
-                        ),
-                        location
-                    ), node
-                )
-            );
-
-            if (isNamespaceExport(node)) {
-                addNode(statements,
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(node.name, name)
-                        ]),
-                        location
-                    )
-                );
-            }
-
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return statements;
-        }
-
-        /**
-         * Transforms the body of an enum declaration.
-         *
-         * @param node The enum declaration node.
-         */
-        function transformEnumBody(node: EnumDeclaration): Block {
-            const statements: Statement[] = [];
-            startLexicalEnvironment();
-            addNodes(statements, map(node.members, transformEnumMember));
-            addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-        }
-
-        /**
-         * Transforms an enum member into a statement.
-         *
-         * @param member The enum member node.
-         */
-        function transformEnumMember(member: EnumMember): Statement {
-            const name = getExpressionForPropertyName(member);
-            return createStatement(
-                createAssignment(
-                    createElementAccess(
-                        currentNamespaceLocalName,
-                        createAssignment(
-                            createElementAccess(
-                                currentNamespaceLocalName,
-                                name
-                            ),
-                            transformEnumMemberDeclarationValue(member)
-                        )
-                    ),
-                    name
-                ),
-                member
-            );
-        }
-
-        /**
-         * Transforms the value of an enum member.
-         *
-         * @param member The enum member node.
-         */
-        function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-            const value = resolver.getConstantValue(member);
-            if (value !== undefined) {
-                return createLiteral(value);
-            }
-            else if (member.initializer) {
-                return visitNode(member.initializer, visitor, isExpression);
-            }
-            else {
-                return createVoidZero();
-            }
-        }
-
-        /**
-         * Determines whether to elide an enum declaration.
-         *
-         * @param node The enum declaration node.
-         */
-        function shouldElideEnumDeclaration(node: EnumDeclaration) {
-            return isConst(node)
-                && !compilerOptions.preserveConstEnums
-                && !compilerOptions.isolatedModules;
-        }
-
-        /**
          * Visits an await expression.
          *
          * This function will be called any time a TypeScript await expression is encountered.
@@ -2329,6 +2182,182 @@ namespace ts {
         }
 
         /**
+         * Adds a leading VariableStatement for an enum or module declaration.
+         */
+        function addVarForEnumOrModuleDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+            // Emit a variable statement for the enum.
+            statements.push(
+                createVariableStatement(
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    [createVariableDeclaration(
+                        getDeclarationName(node)
+                    )],
+                    /*location*/ node
+                )
+            );
+        }
+
+        /**
+         * Adds a trailing VariableStatement for an enum or module declaration.
+         */
+        function addVarForEnumOrModuleExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+            statements.push(
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    [createVariableDeclaration(
+                        getDeclarationName(node),
+                        getDeclarationNameExpression(node)
+                    )],
+                    /*location*/ node
+                )
+            )
+        }
+
+        function addAssignmentForModuleExportedFromNamespace(statements: Statement[], node: ModuleDeclaration) {
+            statements.push(
+                createStatement(
+                    createAssignment(
+                        getDeclarationName(node),
+                        setNodeEmitFlags(getDeclarationName(node), NodeEmitFlags.PrefixExportedLocal)
+                    ),
+                    /*location*/ node
+                )
+            );
+        }
+
+        /**
+         * Determines whether to emit an enum declaration.
+         *
+         * @param node The enum declaration node.
+         */
+        function shouldEmitEnumDeclaration(node: EnumDeclaration) {
+            return !isConst(node)
+                || compilerOptions.preserveConstEnums
+                || compilerOptions.isolatedModules;
+        }
+
+        function shouldEmitVarForEnumOrModuleDeclaration(node: EnumDeclaration | ModuleDeclaration) {
+            return !hasModifier(node, ModifierFlags.Export)
+                || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, node.kind));
+        }
+
+        /**
+         * Visits an enum declaration.
+         *
+         * This function will be called any time a TypeScript enum is encountered.
+         *
+         * @param node The enum declaration node.
+         */
+        function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
+            if (!shouldEmitEnumDeclaration(node)) {
+                return undefined;
+            }
+
+            const statements: Statement[] = [];
+            if (shouldEmitVarForEnumOrModuleDeclaration(node)) {
+                addVarForEnumOrModuleDeclaration(statements, node);
+            }
+
+            const localName = getGeneratedNameForNode(node);
+            const name = getDeclarationNameExpression(node);
+
+            //  (function (x) {
+            //      x[x["y"] = 0] = "y";
+            //      ...
+            //  })(x || (x = {}));
+            statements.push(
+                setOriginalNode(
+                    createStatement(
+                        createCall(
+                            createFunctionExpression(
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                [createParameter(localName)],
+                                transformEnumBody(node, localName)
+                            ),
+                            [createLogicalOr(
+                                name,
+                                createAssignment(
+                                    name,
+                                    createObjectLiteral()
+                                )
+                            )]
+                        ),
+                        /*location*/ node
+                    ),
+                    /*original*/ node
+                )
+            );
+
+            if (isNamespaceExport(node)) {
+                addVarForEnumOrModuleExportedFromNamespace(statements, node);
+            }
+
+            return statements;
+        }
+
+        /**
+         * Transforms the body of an enum declaration.
+         *
+         * @param node The enum declaration node.
+         */
+        function transformEnumBody(node: EnumDeclaration, localName: Identifier): Block {
+            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
+            currentNamespaceLocalName = localName;
+
+            const statements: Statement[] = [];
+            startLexicalEnvironment();
+            addNodes(statements, map(node.members, transformEnumMember));
+            addNodes(statements, endLexicalEnvironment());
+
+            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
+            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+        }
+
+        /**
+         * Transforms an enum member into a statement.
+         *
+         * @param member The enum member node.
+         */
+        function transformEnumMember(member: EnumMember): Statement {
+            const name = getExpressionForPropertyName(member);
+            return createStatement(
+                createAssignment(
+                    createElementAccess(
+                        currentNamespaceLocalName,
+                        createAssignment(
+                            createElementAccess(
+                                currentNamespaceLocalName,
+                                name
+                            ),
+                            transformEnumMemberDeclarationValue(member)
+                        )
+                    ),
+                    name
+                ),
+                member
+            );
+        }
+
+        /**
+         * Transforms the value of an enum member.
+         *
+         * @param member The enum member node.
+         */
+        function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
+            const value = resolver.getConstantValue(member);
+            if (value !== undefined) {
+                return createLiteral(value);
+            }
+            else if (member.initializer) {
+                return visitNode(member.initializer, visitor, isExpression);
+            }
+            else {
+                return createVoidZero();
+            }
+        }
+
+        /**
          * Determines whether to elide a module declaration.
          *
          * @param node The module declaration node.
@@ -2337,20 +2366,9 @@ namespace ts {
             return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
         }
 
-        /**
-         * Determines whether a module declaration has a name that merges with a class declaration.
-         *
-         * @param node The module declaration node.
-         */
-        function isModuleMergedWithClass(node: ModuleDeclaration) {
+        function isModuleMergedWithES6Class(node: ModuleDeclaration) {
             return languageVersion === ScriptTarget.ES6
-                && !!(resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LexicalModuleMergesWithClass);
-        }
-
-        function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
-            return !isModuleMergedWithClass(node)
-                && (!isExternalModuleExport(node)
-                    || isFirstDeclarationOfKind(node, SyntaxKind.ModuleDeclaration));
+                && isMergedWithClass(node);
         }
 
         /**
@@ -2365,41 +2383,29 @@ namespace ts {
                 return undefined;
             }
 
-            Debug.assert(isIdentifier(node.name));
-
+            Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");
             enableExpressionSubstitutionForNamespaceExports();
 
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const savedCurrentNamespace = currentNamespace;
             const statements: Statement[] = [];
-
-            if (shouldEmitVarForModuleDeclaration(node)) {
-                // var x;
-                statements.push(
-                    createVariableStatement(
-                        visitNodes(node.modifiers, visitor, isModifier),
-                        createVariableDeclarationList([
-                            createVariableDeclaration(<Identifier>node.name)
-                        ]),
-                        /*location*/ node
-                    )
-                );
+            if (!isModuleMergedWithES6Class(node) && (isNamespaceExport(node) || shouldEmitVarForEnumOrModuleDeclaration(node))) {
+                addVarForEnumOrModuleDeclaration(statements, node);
             }
 
-            const name = isNamespaceExport(node)
-                ? getNamespaceMemberName(node.name)
-                : getSynthesizedClone(node.name);
+            const localName = getGeneratedNameForNode(node);
+            const name = getDeclarationNameExpression(node);
 
-            currentNamespaceLocalName = getGeneratedNameForNode(node);
-            currentNamespace = node;
-
-            const moduleParam = createLogicalOr(
-                name,
-                createAssignment(
+            let moduleArg =
+                createLogicalOr(
                     name,
-                    createObjectLiteral()
-                )
-            );
+                    createAssignment(
+                        name,
+                        createObjectLiteral()
+                    )
+                );
+
+            if (isNamespaceExport(node)) {
+                moduleArg = createAssignment(getDeclarationName(node), moduleArg);
+            }
 
             //  (function (x_1) {
             //      x_1.y = ...;
@@ -2409,30 +2415,22 @@ namespace ts {
                     setOriginalNode(
                         createStatement(
                             createCall(
-                                createParen(
-                                    createFunctionExpression(
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        [createParameter(currentNamespaceLocalName)],
-                                        transformModuleBody(node)
-                                    )
+                                createFunctionExpression(
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    [createParameter(localName)],
+                                    transformModuleBody(node, localName)
                                 ),
-                                [
-                                    isNamespaceExport(node)
-                                        ? createAssignment(getSynthesizedClone(<Identifier>node.name), moduleParam)
-                                        : moduleParam
-                                ]
+                                [moduleArg]
                             ),
                             /*location*/ node
                         ),
-                        node
+                        /*original*/ node
                     ),
                     NodeEmitFlags.AdviseOnEmitNode
                 )
             );
 
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            currentNamespace = savedCurrentNamespace;
             return statements;
         }
 
@@ -2441,7 +2439,12 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function transformModuleBody(node: ModuleDeclaration): Block {
+        function transformModuleBody(node: ModuleDeclaration, namespaceLocalName: Identifier): Block {
+            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
+            const savedCurrentNamespace = currentNamespace;
+            currentNamespaceLocalName = namespaceLocalName;
+            currentNamespace = node;
+
             const statements: Statement[] = [];
             startLexicalEnvironment();
             const body = node.body;
@@ -2453,7 +2456,24 @@ namespace ts {
             }
 
             addNodes(statements, endLexicalEnvironment());
+
+            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
+            currentNamespace = savedCurrentNamespace;
             return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+        }
+
+        /**
+         * Determines whether to emit an import equals declaration.
+         *
+         * @param node The import equals declaration node.
+         */
+        function shouldEmitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
+            // - current file is not external module
+            // - import declaration is top level and target is value imported by entity name
+            return resolver.isReferencedAliasDeclaration(node)
+                || (!isExternalModule(currentSourceFile)
+                    && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
 
         /**
@@ -2466,7 +2486,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            if (shouldElideImportEqualsDeclaration(node)) {
+            if (!shouldEmitImportEqualsDeclaration(node)) {
                 return undefined;
             }
 
@@ -2499,34 +2519,12 @@ namespace ts {
         }
 
         /**
-         * Determines whether to elide an import equals declaration.
-         *
-         * @param node The import equals declaration node.
-         */
-        function shouldElideImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
-            // - current file is not external module
-            // - import declaration is top level and target is value imported by entity name
-            return !resolver.isReferencedAliasDeclaration(node)
-                && (isExternalModule(currentSourceFile) || !resolver.isTopLevelValueImportEqualsWithEntityName(node));
-        }
-
-        /**
-         * Gets a value indicating whether the node is exported.
-         *
-         * @param node The node to test.
-         */
-        function isExported(node: Node) {
-            return hasModifier(node, ModifierFlags.Export);
-        }
-
-        /**
          * Gets a value indicating whether the node is exported from a namespace.
          *
          * @param node The node to test.
          */
         function isNamespaceExport(node: Node) {
-            return currentNamespace !== undefined && isExported(node);
+            return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2535,7 +2533,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined && isExported(node);
+            return currentNamespace === undefined && hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2557,16 +2555,6 @@ namespace ts {
             return isExternalModuleExport(node)
                 && hasModifier(node, ModifierFlags.Default);
         }
-        /**
-         * Gets a value indicating whether a node is the first declaration of its kind.
-         *
-         * @param node A Declaration node.
-         * @param kind The SyntaxKind to find among related declarations.
-         */
-        function isFirstDeclarationOfKind(node: Declaration, kind: SyntaxKind) {
-            const original = getOriginalNode(node);
-            return original.symbol && getDeclarationOfKind(original.symbol, kind) === original;
-        }
 
         /**
          * Creates a statement for the provided expression. This is used in calls to `map`.
@@ -2575,8 +2563,8 @@ namespace ts {
             return createStatement(expression, /*location*/ undefined);
         }
 
-        function addNamespaceExport(statements: Statement[], exportName: Identifier, exportValue: Expression, location?: TextRange) {
-            statements.push(createNamespaceExport(exportName, exportValue, location));
+        function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
+            statements.push(createNamespaceExport(getDeclarationName(node), getDeclarationName(node)));
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
@@ -2601,8 +2589,21 @@ namespace ts {
             return createPropertyAccess(currentNamespaceLocalName, getSynthesizedClone(name));
         }
 
-        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration | EnumDeclaration) {
+        function getDeclarationName(node: DeclarationStatement | ClassExpression) {
             return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        }
+
+        function getDeclarationNameExpression(node: DeclarationStatement) {
+            const name = getDeclarationName(node);
+            if (isNamespaceExport(node)) {
+                return getNamespaceMemberName(name);
+            }
+            else {
+                // We set the "PrefixExportedLocal" flag to indicate to any module transformer
+                // downstream that any `exports.` prefix should be added.
+                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.PrefixExportedLocal);
+                return name;
+            }
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {

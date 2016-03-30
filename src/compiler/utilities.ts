@@ -3034,6 +3034,31 @@ namespace ts {
         return node.initializer !== undefined;
     }
 
+    /**
+     * Gets a value indicating whether a node is merged with a class declaration in the same scope.
+     */
+    export function isMergedWithClass(node: Node) {
+        if (node.symbol) {
+            for (const declaration of node.symbol.declarations) {
+                if (declaration.kind === SyntaxKind.ClassDeclaration && declaration !== node) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets a value indicating whether a node is the first declaration of its kind.
+     *
+     * @param node A Declaration node.
+     * @param kind The SyntaxKind to find among related declarations.
+     */
+    export function isFirstDeclarationOfKind(node: Node, kind: SyntaxKind) {
+        return node.symbol && getDeclarationOfKind(node.symbol, kind) === node;
+    }
+
     // Node tests
     //
     // All node tests in the following list should *not* reference parent pointers so that

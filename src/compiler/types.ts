@@ -1924,7 +1924,7 @@ namespace ts {
     /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
-        getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
+        getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedDeclarationWithCollidingName(node: Identifier): Declaration;
         isDeclarationWithCollidingName(node: Declaration): boolean;
@@ -2856,6 +2856,7 @@ namespace ts {
         CapturesThis = 1 << 11,                  // The function captures a lexical `this`
         NoSourceMap = 1 << 12,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 13,            // Do not emit source map locations for children of this node.
+        PrefixExportedLocal = 1 << 14,
     }
 
     /** Additional context provided to `visitEachChild` */
