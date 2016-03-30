@@ -2492,6 +2492,10 @@
         "category": "Message",
         "code": 6078
     },
+    "Specify library files to be included in the compilation: ": {
+        "category": "Message",
+        "code": 6079
+    },
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
