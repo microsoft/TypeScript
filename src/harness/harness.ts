@@ -828,7 +828,7 @@ namespace Harness {
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName
+            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName;
         }
 
         // Cache these between executions so we don't have to re-parse them for every test
