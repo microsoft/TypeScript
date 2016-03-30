@@ -122,7 +122,7 @@ namespace ts {
         const resolvingFlowType = createIntrinsicType(TypeFlags.Void, "__resolving__");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const emptyUnionType = emptyObjectType;
+        const emptyUnionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -194,27 +194,74 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
 
-        const primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
-            "string": {
-                type: stringType,
-                flags: TypeFlags.StringLike
-            },
-            "number": {
-                type: numberType,
-                flags: TypeFlags.NumberLike
-            },
-            "boolean": {
-                type: booleanType,
-                flags: TypeFlags.Boolean
-            },
-            "symbol": {
-                type: esSymbolType,
-                flags: TypeFlags.ESSymbol
-            },
-            "undefined": {
-                type: undefinedType,
-                flags: TypeFlags.ContainsUndefinedOrNull
-            }
+        const enum TypeFacts {
+            None = 0,
+            TypeofEQString = 1 << 0,     // typeof x === "string"
+            TypeofEQNumber = 1 << 1,     // typeof x === "number"
+            TypeofEQBoolean = 1 << 2,    // typeof x === "boolean"
+            TypeofEQSymbol = 1 << 3,     // typeof x === "symbol"
+            TypeofEQObject = 1 << 4,     // typeof x === "object"
+            TypeofEQFunction = 1 << 5,   // typeof x === "function"
+            TypeofNEString = 1 << 6,     // typeof x !== "string"
+            TypeofNENumber = 1 << 7,     // typeof x !== "number"
+            TypeofNEBoolean = 1 << 8,    // typeof x !== "boolean"
+            TypeofNESymbol = 1 << 9,     // typeof x !== "symbol"
+            TypeofNEObject = 1 << 10,    // typeof x !== "object"
+            TypeofNEFunction = 1 << 11,  // typeof x !== "function"
+            EQUndefined = 1 << 12,       // x === undefined
+            EQNull = 1 << 13,            // x === null
+            EQUndefinedOrNull = 1 << 14, // x == undefined / x == null
+            NEUndefined = 1 << 15,       // x !== undefined
+            NENull = 1 << 16,            // x !== null
+            NEUndefinedOrNull = 1 << 17, // x != undefined / x != null
+            Truthy = 1 << 18,            // x
+            Falsy = 1 << 19,             // !x
+            All = (1 << 20) - 1,
+            // The following members encode facts about particular kinds of types for use in the getTypeFacts function.
+            // The presence of a particular fact means that the given test is true for some (and possibly all) values
+            // of that kind of type.
+            StringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
+            StringFacts = StringStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            NumberStrictFacts = TypeofEQNumber | TypeofNEString | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
+            NumberFacts = NumberStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            BooleanStrictFacts = TypeofEQBoolean | TypeofNEString | TypeofNENumber | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy | Falsy,
+            BooleanFacts = BooleanStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull,
+            SymbolStrictFacts = TypeofEQSymbol | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNEObject | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+            SymbolFacts = SymbolStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            ObjectStrictFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+            ObjectFacts = ObjectStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            FunctionStrictFacts = TypeofEQFunction | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | NEUndefined | NENull | NEUndefinedOrNull | Truthy,
+            FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
+            NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
+        }
+
+        const typeofEQFacts: Map<TypeFacts> = {
+            "string": TypeFacts.TypeofEQString,
+            "number": TypeFacts.TypeofEQNumber,
+            "boolean": TypeFacts.TypeofEQBoolean,
+            "symbol": TypeFacts.TypeofEQSymbol,
+            "undefined": TypeFacts.EQUndefined,
+            "object": TypeFacts.TypeofEQObject,
+            "function": TypeFacts.TypeofEQFunction
+        };
+
+        const typeofNEFacts: Map<TypeFacts> = {
+            "string": TypeFacts.TypeofNEString,
+            "number": TypeFacts.TypeofNENumber,
+            "boolean": TypeFacts.TypeofNEBoolean,
+            "symbol": TypeFacts.TypeofNESymbol,
+            "undefined": TypeFacts.NEUndefined,
+            "object": TypeFacts.TypeofNEObject,
+            "function": TypeFacts.TypeofNEFunction
+        };
+
+        const typeofTypesByName: Map<Type> = {
+            "string": stringType,
+            "number": numberType,
+            "boolean": booleanType,
+            "symbol": esSymbolType,
+            "undefined": undefinedType
         };
 
         let jsxElementType: ObjectType;
@@ -4823,7 +4870,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
-            else if (!contains(typeSet, type)) {
+            else if (type !== emptyUnionType && !contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
@@ -4879,7 +4926,9 @@ namespace ts {
                 removeSubtypes(typeSet);
             }
             if (typeSet.length === 0) {
-                return typeSet.containsNull ? nullType : undefinedType;
+                return typeSet.containsNull ? nullType :
+                    typeSet.containsUndefined ? undefinedType :
+                    emptyUnionType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -5637,7 +5686,7 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (isTypeAny(target)) return Ternary.True;
+                if (target.flags & TypeFlags.Any) return Ternary.True;
                 if (source.flags & TypeFlags.Undefined) {
                     if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
                 }
@@ -6556,11 +6605,6 @@ namespace ts {
             return flags & TypeFlags.Nullable;
         }
 
-        function getNullableTypeOfKind(kind: TypeFlags) {
-            return kind & TypeFlags.Null ? kind & TypeFlags.Undefined ?
-                getUnionType([nullType, undefinedType]) : nullType : undefinedType;
-        }
-
         function addNullableKind(type: Type, kind: TypeFlags): Type {
             if ((getNullableKind(type) & kind) !== kind) {
                 const types = [type];
@@ -6576,7 +6620,10 @@ namespace ts {
         }
 
         function removeNullableKind(type: Type, kind: TypeFlags) {
-            if (type.flags & TypeFlags.Union && getNullableKind(type) & kind) {
+            if (!(getNullableKind(type) & kind)) {
+                return type;
+            }
+            if (type.flags & TypeFlags.Union) {
                 let firstType: Type;
                 let types: Type[];
                 for (const t of (type as UnionType).types) {
@@ -6593,10 +6640,10 @@ namespace ts {
                     }
                 }
                 if (firstType) {
-                    type = types ? getUnionType(types) : firstType;
+                    return types ? getUnionType(types) : firstType;
                 }
             }
-            return type;
+            return emptyUnionType;
         }
 
         function getNonNullableType(type: Type): Type {
@@ -7255,6 +7302,64 @@ namespace ts {
             return declaredType;
         }
 
+        function getTypeFacts(type: Type): TypeFacts {
+            const flags = type.flags;
+            if (flags & TypeFlags.StringLike) {
+                return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
+            }
+            if (flags & TypeFlags.NumberLike) {
+                return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
+            }
+            if (flags & TypeFlags.Boolean) {
+                return strictNullChecks ? TypeFacts.BooleanStrictFacts : TypeFacts.BooleanFacts;
+            }
+            if (flags & TypeFlags.ObjectType) {
+                const resolved = resolveStructuredTypeMembers(type);
+                return resolved.callSignatures.length || resolved.constructSignatures.length ?
+                    strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
+                    strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+            }
+            if (flags & (TypeFlags.Void | TypeFlags.Undefined)) {
+                return TypeFacts.UndefinedFacts;
+            }
+            if (flags & TypeFlags.Null) {
+                return TypeFacts.NullFacts;
+            }
+            if (flags & TypeFlags.ESSymbol) {
+                return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
+            }
+            if (flags & TypeFlags.TypeParameter) {
+                const constraint = getConstraintOfTypeParameter(<TypeParameter>type);
+                return constraint ? getTypeFacts(constraint) : TypeFacts.All;
+            }
+            if (flags & TypeFlags.Intersection) {
+                return reduceLeft((<IntersectionType>type).types, (flags, type) => flags |= getTypeFacts(type), TypeFacts.None);
+            }
+            return TypeFacts.All;
+        }
+
+        function getTypeWithFacts(type: Type, include: TypeFacts) {
+            if (!(type.flags & TypeFlags.Union)) {
+                return getTypeFacts(type) & include ? type : emptyUnionType;
+            }
+            let firstType: Type;
+            let types: Type[];
+            for (const t of (type as UnionType).types) {
+                if (getTypeFacts(t) & include) {
+                    if (!firstType) {
+                        firstType = t;
+                    }
+                    else {
+                        if (!types) {
+                            types = [firstType];
+                        }
+                        types.push(t);
+                    }
+                }
+            }
+            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : emptyUnionType;
+        }
+
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
             if (!(type.flags & TypeFlags.Narrowable) || !isNarrowableReference(reference)) {
                 return type;
@@ -7407,7 +7512,7 @@ namespace ts {
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
-                return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
+                return isMatchingReference(expr, reference) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -7443,13 +7548,12 @@ namespace ts {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
-                const exprNullableKind = doubleEquals ? TypeFlags.Nullable :
-                    expr.right.kind === SyntaxKind.NullKeyword ? TypeFlags.Null : TypeFlags.Undefined;
-                if (assumeTrue) {
-                    const nullableKind = getNullableKind(type) & exprNullableKind;
-                    return nullableKind ? getNullableTypeOfKind(nullableKind) : type;
-                }
-                return removeNullableKind(type, exprNullableKind);
+                const facts = doubleEquals ?
+                    assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
+                    expr.right.kind === SyntaxKind.NullKeyword ?
+                        assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
+                        assumeTrue ? TypeFacts.EQUndefined: TypeFacts.NEUndefined;
+                return getTypeWithFacts(type, facts);
             }
 
             function narrowTypeByTypeof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -7464,33 +7568,19 @@ namespace ts {
                     expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                const typeInfo = primitiveTypeInfo[right.text];
-                // Don't narrow `undefined`
-                if (typeInfo && typeInfo.type === undefinedType) {
-                    return type;
-                }
-                let flags: TypeFlags;
-                if (typeInfo) {
-                    flags = typeInfo.flags;
-                }
-                else {
-                    assumeTrue = !assumeTrue;
-                    flags = TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean;
-                }
-                // At this point we can bail if it's not a union
-                if (!(type.flags & TypeFlags.Union)) {
-                    // If we're on the true branch and the type is a subtype, we should return the primitive type
-                    if (assumeTrue && typeInfo && isTypeSubtypeOf(typeInfo.type, type)) {
-                        return typeInfo.type;
+                if (assumeTrue && !(type.flags & TypeFlags.Union)) {
+                    // We narrow a non-union type to an exact primitive type if the non-union type
+                    // is a supertype of that primtive type. For example, type 'any' can be narrowed
+                    // to one of the primitive types.
+                    const targetType = getProperty(typeofTypesByName, right.text);
+                    if (targetType && isTypeSubtypeOf(targetType, type)) {
+                        return targetType;
                     }
-                    // If the active non-union type would be removed from a union by this type guard, return an empty union
-                    return filterUnion(type) ? type : emptyUnionType;
                 }
-                return getUnionType(filter((type as UnionType).types, filterUnion), /*noSubtypeReduction*/ true);
-
-                function filterUnion(type: Type) {
-                    return assumeTrue === !!(type.flags & flags);
-                }
+                const facts = assumeTrue ?
+                    getProperty(typeofEQFacts, right.text) || TypeFacts.TypeofEQObject :
+                    getProperty(typeofNEFacts, right.text) || TypeFacts.TypeofNEObject;
+                return getTypeWithFacts(type, facts);
             }
 
             function narrowTypeByAnd(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -14243,7 +14333,7 @@ namespace ts {
 
                 // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                 // arrayOrStringType was a string.
-                if (arrayType === emptyObjectType) {
+                if (arrayType === emptyUnionType) {
                     return stringType;
                 }
             }
