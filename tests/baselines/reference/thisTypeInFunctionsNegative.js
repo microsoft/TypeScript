@@ -158,6 +158,11 @@ let voidThis = new VoidThis();
 class ThisConstructor {
     constructor(this: ThisConstructor, private n: number) {
     }
+    set p(this: void) {
+    }
+}
+interface ThisConstructorInterface {
+    new(this: ThisConstructor, n: number);
 }
 function notFirst(a: number, this: C): number { return this.n; }
 
@@ -326,6 +331,12 @@ var ThisConstructor = (function () {
     function ThisConstructor(n) {
         this.n = n;
     }
+    Object.defineProperty(ThisConstructor.prototype, "p", {
+        set: function () {
+        },
+        enumerable: true,
+        configurable: true
+    });
     return ThisConstructor;
 }());
 function notFirst(a, this) { return this.n; }

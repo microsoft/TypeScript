@@ -75,29 +75,31 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(146,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(148,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(154,16): error TS2678: A function that is called with the 'new' keyword cannot have a 'this' type that is void.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(158,17): error TS2680: A constructor cannot have a 'this' parameter.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(161,30): error TS2679: 'this' parameter must be the first parameter.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(164,26): error TS1003: Identifier expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(164,30): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(165,20): error TS2370: A rest parameter must be of an array type.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(165,23): error TS1003: Identifier expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(165,27): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(166,23): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(166,24): error TS1138: Parameter declaration expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(167,28): error TS1003: Identifier expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(167,32): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,30): error TS1005: ',' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,32): error TS1138: Parameter declaration expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,39): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,40): error TS1128: Declaration or statement expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,42): error TS2304: Cannot find name 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(168,49): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,1): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,29): error TS2304: Cannot find name 'm'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,32): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,35): error TS2304: Cannot find name 'm'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(160,11): error TS2681: A setter cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(164,9): error TS2680: A constructor cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(166,30): error TS2679: 'this' parameter must be the first parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,26): error TS1003: Identifier expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,30): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,20): error TS2370: A rest parameter must be of an array type.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,23): error TS1003: Identifier expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,27): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,23): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,24): error TS1138: Parameter declaration expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,28): error TS1003: Identifier expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,32): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,30): error TS1005: ',' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,32): error TS1138: Parameter declaration expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,39): error TS1005: ';' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,40): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,42): error TS2304: Cannot find name 'number'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(173,49): error TS1005: ';' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,1): error TS7027: Unreachable code detected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,29): error TS2304: Cannot find name 'm'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,32): error TS1005: ';' expected.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,35): error TS2304: Cannot find name 'm'.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (63 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (65 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -377,6 +379,15 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(171,35): e
                     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2680: A constructor cannot have a 'this' parameter.
         }
+        set p(this: void) {
+              ~~~~~~~~~~
+!!! error TS2681: A setter cannot have a 'this' parameter.
+        }
+    }
+    interface ThisConstructorInterface {
+        new(this: ThisConstructor, n: number);
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2680: A constructor cannot have a 'this' parameter.
     }
     function notFirst(a: number, this: C): number { return this.n; }
                                  ~~~~~~~

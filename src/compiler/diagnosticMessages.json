@@ -1887,9 +1887,13 @@
         "category": "Error",
         "code": 2680
     },
-    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+    "A setter cannot have a 'this' parameter.": {
         "category": "Error",
         "code": 2681
+    },
+    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+        "category": "Error",
+        "code": 2682
     },
    "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2635,6 +2639,10 @@
     "Enable strict null checks.": {
         "category": "Message",
         "code": 6113
+    },
+    "Raise error on 'this' expressions with an implied 'any' type.": {
+        "category": "Message",
+        "code": 6114
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

@@ -5379,11 +5379,8 @@ namespace ts {
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
             const areAllParametersUntyped = !forEach(node.parameters, p => p.type);
-            if (node.kind === SyntaxKind.ArrowFunction) {
-                return !node.typeParameters && node.parameters.length && areAllParametersUntyped;
-            }
-            const hasThisType = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" && node.parameters[0].type;
-            return !node.typeParameters && areAllParametersUntyped && !hasThisType;
+            const isNullaryArrow = node.kind === SyntaxKind.ArrowFunction && !node.parameters.length;
+            return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -8072,19 +8069,19 @@ namespace ts {
                 if (signature.thisType) {
                     return signature.thisType;
                 }
+                if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // Note: this works because object literal methods are deferred,
+                    // which means that the type of the containing object literal is already known.
+                    const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
+                    if (type) {
+                        return type;
+                    }
+                }
             }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
                 return getNarrowedTypeOfReference(type, node);
-            }
-            if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                // Note: this works because object literal methods are deferred,
-                // which means that the type of the containing object literal is already known.
-                const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
-                if (type) {
-                    return type;
-                }
             }
 
             if (isInJavaScriptFile(node)) {
@@ -12401,8 +12398,11 @@ namespace ts {
                 if (indexOf(func.parameters, node) !== 0) {
                     error(node, Diagnostics.this_parameter_must_be_the_first_parameter);
                 }
-                if (func.kind === SyntaxKind.Constructor) {
+                if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
+                }
+                if (func.kind === SyntaxKind.SetAccessor) {
+                    error(node, Diagnostics.A_setter_cannot_have_a_this_parameter);
                 }
             }
 

@@ -125,6 +125,7 @@ namespace ts {
         {
             name: "noImplicitThis",
             type: "boolean",
+            description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
             name: "noLib",
