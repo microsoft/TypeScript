@@ -712,21 +712,9 @@ namespace ts {
             output += usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine;
 
             if (kindsList) {
-                const maxElementsInLine = 6;
-                for (let idx = 0; idx < kindsList.length; idx++) {
-                    // We have to manually cut the line because the list is too long and it will be very hard to read with auto-wrapping
-                    // It will print in the following format:
-                    //      'es5' 'es6' 'es2015'
-                    //      'es7' 'es2016' 'dom'
-                    //      ....
-                    const positionInLine = idx % maxElementsInLine;
-                    if (positionInLine === 0) {
-                        output += makePadding(marginLength + 4);
-                    }
-                    output += kindsList[idx] + " ";
-                    if (positionInLine === maxElementsInLine - 1) {
-                        output += sys.newLine;
-                    }
+                output += makePadding(marginLength + 4);
+                for (const kind of kindsList) {
+                    output += kind + " ";
                 }
                 output += sys.newLine;
             }
