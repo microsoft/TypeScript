@@ -638,7 +638,7 @@ namespace ts {
         return {
             getSourceFile,
             getDefaultLibLocation,
-            getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
+            getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
