@@ -2155,6 +2155,11 @@
         "category": "Error",
         "code": 4082
     },
+    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+        "category": "Message",
+        "code": 4090
+    },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

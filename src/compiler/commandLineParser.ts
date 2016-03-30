@@ -313,6 +313,16 @@ namespace ts {
             }
         },
         {
+            name: "librarySearchPaths",
+            type: "list",
+            isTSConfigOnly: true,
+            element: {
+                name: "librarySearchPaths",
+                type: "string",
+                isFilePath: true
+            }
+        },
+        {
             name: "traceModuleResolution",
             type: "boolean",
             description: Diagnostics.Enable_tracing_of_the_module_resolution_process
@@ -598,6 +608,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+        options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
 

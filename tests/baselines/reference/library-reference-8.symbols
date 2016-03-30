@@ -1,0 +1,28 @@
+=== tests/cases/conformance/references/foo.ts ===
+/// <reference library="alpha" />
+/// <reference library="beta" />
+var x: string = alpha.a + beta.b;
+>x : Symbol(x, Decl(foo.ts, 2, 3))
+>alpha.a : Symbol(a, Decl(index.d.ts, 4, 20))
+>alpha : Symbol(alpha, Decl(index.d.ts, 4, 11))
+>a : Symbol(a, Decl(index.d.ts, 4, 20))
+>beta.b : Symbol(b, Decl(index.d.ts, 1, 19))
+>beta : Symbol(beta, Decl(index.d.ts, 1, 11))
+>b : Symbol(b, Decl(index.d.ts, 1, 19))
+
+
+=== tests/cases/conformance/references/typings/alpha/index.d.ts ===
+
+// Don't crash in circular library reference situations
+
+/// <reference library="beta" />
+declare var alpha: { a: string };
+>alpha : Symbol(alpha, Decl(index.d.ts, 4, 11))
+>a : Symbol(a, Decl(index.d.ts, 4, 20))
+
+=== tests/cases/conformance/references/typings/beta/index.d.ts ===
+/// <reference library="alpha" />
+declare var beta: { b: string };
+>beta : Symbol(beta, Decl(index.d.ts, 1, 11))
+>b : Symbol(b, Decl(index.d.ts, 1, 19))
+
