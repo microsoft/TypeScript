@@ -2757,7 +2757,7 @@ namespace ts {
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
             // undefined from the final type.
             if (strictNullChecks && declaration.initializer && !(getNullableKind(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
-                type = removeNullableKind(type, TypeFlags.Undefined);
+                type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
             return type;
         }
@@ -6619,35 +6619,8 @@ namespace ts {
             return type;
         }
 
-        function removeNullableKind(type: Type, kind: TypeFlags) {
-            if (!(getNullableKind(type) & kind)) {
-                return type;
-            }
-            if (type.flags & TypeFlags.Union) {
-                let firstType: Type;
-                let types: Type[];
-                for (const t of (type as UnionType).types) {
-                    if (!(t.flags & kind)) {
-                        if (!firstType) {
-                            firstType = t;
-                        }
-                        else {
-                            if (!types) {
-                                types = [firstType];
-                            }
-                            types.push(t);
-                        }
-                    }
-                }
-                if (firstType) {
-                    return types ? getUnionType(types) : firstType;
-                }
-            }
-            return emptyUnionType;
-        }
-
         function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? removeNullableKind(type, TypeFlags.Nullable) : type;
+            return strictNullChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
         }
 
         /**
