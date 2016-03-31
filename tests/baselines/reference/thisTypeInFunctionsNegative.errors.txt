@@ -1,7 +1,7 @@
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(16,15): error TS2339: Property 'n' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(39,21): error TS2339: Property 'a' does not exist on type 'void'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(49,1): error TS2345: Argument of type 'void' is not assignable to parameter of type '{ a: number; }'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(51,1): error TS2345: Argument of type 'void' is not assignable to parameter of type 'I'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(49,1): error TS2683: 'this' context of type 'void' is not assignable to method 'this' of type '{ a: number; }'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(51,1): error TS2683: 'this' context of type 'void' is not assignable to method 'this' of type 'I'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(56,21): error TS2339: Property 'notFound' does not exist on type '{ y: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(59,21): error TS2339: Property 'notSpecified' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(61,79): error TS2322: Type '{ y: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
@@ -13,10 +13,10 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(63,110): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(66,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): error TS2345: Argument of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to parameter of type '{ y: number; }'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): error TS2683: 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method 'this' of type '{ y: number; }'.
   Types of property 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): error TS2345: Argument of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to parameter of type '{ y: number; }'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): error TS2683: 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method 'this' of type '{ y: number; }'.
   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -77,7 +77,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(154,16): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(158,17): error TS2680: A constructor cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(160,11): error TS2681: A setter cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(164,9): error TS2680: A constructor cannot have a 'this' parameter.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(166,30): error TS2679: 'this' parameter must be the first parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(166,30): error TS2679: A 'this' parameter must be the first parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,26): error TS1003: Identifier expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(169,30): error TS1005: ',' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(170,20): error TS2370: A rest parameter must be of an array type.
@@ -154,11 +154,11 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,35): e
     let implExplicitStructural = impl.explicitStructural;
     implExplicitStructural(); // error, no 'a' in 'void'
     ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'void' is not assignable to parameter of type '{ a: number; }'.
+!!! error TS2683: 'this' context of type 'void' is not assignable to method 'this' of type '{ a: number; }'.
     let implExplicitInterface = impl.explicitInterface;
     implExplicitInterface(); // error, no 'a' in 'void' 
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'void' is not assignable to parameter of type 'I'.
+!!! error TS2683: 'this' context of type 'void' is not assignable to method 'this' of type 'I'.
     function explicitStructural(this: { y: number }, x: number): number {
         return x + this.y;
     }
@@ -196,13 +196,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,35): e
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     wrongPropertyType.f(13);
     ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to parameter of type '{ y: number; }'.
-!!! error TS2345:   Types of property 'y' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! error TS2683: 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method 'this' of type '{ y: number; }'.
+!!! error TS2683:   Types of property 'y' are incompatible.
+!!! error TS2683:     Type 'string' is not assignable to type 'number'.
     wrongPropertyName.f(13);
     ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to parameter of type '{ y: number; }'.
-!!! error TS2345:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2683: 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method 'this' of type '{ y: number; }'.
+!!! error TS2683:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
     
     let c = new C();
     c.explicitC(); // not enough arguments
@@ -391,7 +391,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,35): e
     }
     function notFirst(a: number, this: C): number { return this.n; }
                                  ~~~~~~~
-!!! error TS2679: 'this' parameter must be the first parameter.
+!!! error TS2679: A 'this' parameter must be the first parameter.
     
     ///// parse errors /////
     function modifiers(async this: C): number { return this.n; }

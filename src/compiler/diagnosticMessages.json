@@ -1879,7 +1879,7 @@
         "category": "Error",
         "code": 2678
     },
-    "'this' parameter must be the first parameter.": {
+    "A 'this' parameter must be the first parameter.": {
         "category": "Error",
         "code": 2679
     },
@@ -1894,6 +1894,10 @@
     "'this' implicitly has type 'any' because it does not have a type annotation.": {
         "category": "Error",
         "code": 2682
+    },
+    "'this' context of type '{0}' is not assignable to method 'this' of type '{1}'.": {
+        "category": "Error",
+        "code": 2683
     },
    "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

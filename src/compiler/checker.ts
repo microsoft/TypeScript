@@ -5465,21 +5465,17 @@ namespace ts {
             target = getErasedSignature(target);
 
             let result = Ternary.True;
-            if (source.thisType && target.thisType) {
-                if (source.thisType !== voidType) {
-                    // void sources are assignable to anything.
-                    let related = compareTypes(target.thisType, source.thisType, reportErrors);
-                    if (!related) {
-                        related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false);
-                        if (!related) {
-                            if (reportErrors) {
-                                errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
-                            }
-                            return Ternary.False;
-                        }
+            if (source.thisType && target.thisType && source.thisType !== voidType) {
+                // void sources are assignable to anything.
+                const related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false)
+                    || compareTypes(target.thisType, source.thisType, reportErrors);
+                if (!related) {
+                    if (reportErrors) {
+                        errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
                     }
-                    result &= related;
+                    return Ternary.False;
                 }
+                result &= related;
             }
 
             const sourceMax = getNumNonRestParameters(source);
@@ -10199,18 +10195,20 @@ namespace ts {
         }
 
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
-            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
+
             if (signature.thisType && signature.thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
-                // If the source's this is not of the form `x.f` or `x[f]`, then sourceType = voidType
-                // If the target's this is voidType, then the check is skipped -- anything is compatible.
+                // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
+                // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
                 // If the expression is a new expression, then the check is skipped.
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
+                const headMessage = Diagnostics.this_context_of_type_0_is_not_assignable_to_method_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
             }
+            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             const argCount = getEffectiveArgumentCount(node, args, signature);
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
@@ -12396,7 +12394,7 @@ namespace ts {
             }
             if ((<Identifier>node.name).text === "this") {
                 if (indexOf(func.parameters, node) !== 0) {
-                    error(node, Diagnostics.this_parameter_must_be_the_first_parameter);
+                    error(node, Diagnostics.A_this_parameter_must_be_the_first_parameter);
                 }
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
