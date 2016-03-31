@@ -2431,7 +2431,6 @@ namespace ts {
             // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
             text = text.replace(/\r\n?/g, "\n");
-            //text = escapeString(text);
             return createLiteral(text, /*location*/ node);
         }
 

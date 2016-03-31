@@ -1248,7 +1248,7 @@ namespace ts {
                         //  x|(a|b)     => x|a|b
                         //  x&(a&b)     => x&a&b
                         //  x^(a^b)     => x^a^b
-                        if (isMathAssociativeOperator(binaryOperator)) {
+                        if (operatorHasAssociativeProperty(binaryOperator)) {
                             return false;
                         }
 
@@ -1286,7 +1286,7 @@ namespace ts {
      *
      * @param binaryOperator The binary operator.
      */
-    function isMathAssociativeOperator(binaryOperator: SyntaxKind) {
+    function operatorHasAssociativeProperty(binaryOperator: SyntaxKind) {
         // The following operators are associative in JavaScript:
         //  (a*b)*c     -> a*(b*c)  -> a*b*c
         //  (a|b)|c     -> a|(b|c)  -> a|b|c
