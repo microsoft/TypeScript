@@ -17244,7 +17244,8 @@ namespace ts {
         }
 
         function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {
-            if (list && list.hasTrailingComma) {
+            if (list && list.hasTrailingComma &&
+                !(list[0].parent.kind === SyntaxKind.FunctionDeclaration || list[0].parent.kind === SyntaxKind.ArrowFunction)) {
                 const start = list.end - ",".length;
                 const end = list.end;
                 const sourceFile = getSourceFileOfNode(list[0]);

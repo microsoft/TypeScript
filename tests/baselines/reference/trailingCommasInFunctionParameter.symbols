@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es7/trailingCommasInFunctionParamLists/trailingCommasInFunctionParameter.ts ===
+function f1(x, y,) {
+>f1 : Symbol(f1, Decl(trailingCommasInFunctionParameter.ts, 0, 0))
+>x : Symbol(x, Decl(trailingCommasInFunctionParameter.ts, 0, 12))
+>y : Symbol(y, Decl(trailingCommasInFunctionParameter.ts, 0, 14))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(trailingCommasInFunctionParameter.ts, 1, 1))
+
+    return (x,) => {}
+>x : Symbol(x, Decl(trailingCommasInFunctionParameter.ts, 4, 12))
+}
