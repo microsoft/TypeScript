@@ -1017,6 +1017,7 @@ const _super = (function (geti, seti) {
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
                 emitExpression(node.tag);
+                write(" ");
                 emitExpression(node.template);
             }
 
@@ -1751,7 +1752,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
-                const emitAsSingleStatement = 
+                const emitAsSingleStatement =
                     statements.length === 1 &&
                     (
                         // treat synthesized nodes as located on the same line for emit purposes
@@ -2145,7 +2146,7 @@ const _super = (function (geti, seti) {
                                 writeLine();
                                 shouldEmitInterveningComments = false;
                             }
-                            else if (previousSibling) {
+                            else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
                                 write(" ");
                             }
                         }
@@ -2609,53 +2610,54 @@ const _super = (function (geti, seti) {
         // Whitespace
         Indented = 1 << 7,              // The list should be indented.
         SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
+        SpaceBetweenSiblings = 1 << 9,  // Inserts a space between each sibling node.
 
         // Brackets/Braces
-        Braces = 1 << 9,                // The list is surrounded by "{" and "}".
-        Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
-        AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
-        SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
+        Braces = 1 << 10,                // The list is surrounded by "{" and "}".
+        Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
+        AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
+        SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
         BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
-        OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
+        OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
+        OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
         Optional = OptionalIfUndefined | OptionalIfEmpty,
 
         // Other
-        PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
+        PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
+        NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
 
         // Precomputed Formats
         TypeLiteralMembers = MultiLine | Indented,
-        TupleTypeElements = CommaDelimited | SingleLine | Indented,
-        UnionTypeConstituents = BarDelimited | SingleLine,
-        IntersectionTypeConstituents = AmpersandDelimited | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited,
-        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited,
-        ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenBraces | Indented | Braces,
-        ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | AllowTrailingComma | Indented | SquareBrackets,
-        CallExpressionArguments = CommaDelimited | SingleLine | Parenthesis,
-        NewExpressionArguments = CommaDelimited | SingleLine | Parenthesis | OptionalIfUndefined,
+        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
+        UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
+        IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
+        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
+        ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
+        CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
+        NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,
         TemplateExpressionSpans = SingleLine,
-        SingleLineBlockStatements = SpaceBetweenBraces | SingleLine,
+        SingleLineBlockStatements = SpaceBetweenBraces | SpaceBetweenSiblings | SingleLine,
         MultiLineBlockStatements = Indented | MultiLine,
-        VariableDeclarationList = CommaDelimited | SingleLine,
-        SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenBraces,
+        VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenSiblings | SpaceBetweenBraces,
         MultiLineFunctionBodyStatements = MultiLine,
-        ClassHeritageClauses = SingleLine,
+        ClassHeritageClauses = SingleLine | SpaceBetweenSiblings,
         ClassMembers = Indented | MultiLine,
         InterfaceMembers = Indented | MultiLine,
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
-        NamedImportsOrExportsElements = CommaDelimited | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
+        NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
         JsxElementChildren = SingleLine,
-        JsxElementAttributes = SingleLine,
+        JsxElementAttributes = SingleLine | SpaceBetweenSiblings,
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
-        HeritageClauseTypes = CommaDelimited | SingleLine,
+        HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
         Decorators = MultiLine | Optional,
-        TypeArguments = CommaDelimited | SingleLine | Indented | AngleBrackets | Optional,
-        TypeParameters = CommaDelimited | SingleLine | Indented | AngleBrackets | Optional,
-        Parameters = CommaDelimited | SingleLine | Indented | Parenthesis,
-        IndexSignatureParameters = CommaDelimited | SingleLine | Indented | SquareBrackets,
+        TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
+        TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
+        Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | Parenthesis,
+        IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     }
 }
