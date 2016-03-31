@@ -1047,7 +1047,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
+    "Type '{0}' cannot be converted to type '{1}'.": {
         "category": "Error",
         "code": 2352
     },
@@ -1875,31 +1875,35 @@
         "category": "Error",
         "code": 2677
     },
-    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
+    "Type '{0}' is not comparable to type '{1}'.": {
         "category": "Error",
         "code": 2678
     },
-    "A 'this' parameter must be the first parameter.": {
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
         "category": "Error",
         "code": 2679
     },
-    "A constructor cannot have a 'this' parameter.": {
+    "A 'this' parameter must be the first parameter.": {
         "category": "Error",
         "code": 2680
     },
-    "A setter cannot have a 'this' parameter.": {
+    "A constructor cannot have a 'this' parameter.": {
         "category": "Error",
         "code": 2681
     },
-    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+    "A setter cannot have a 'this' parameter.": {
         "category": "Error",
         "code": 2682
     },
-    "'this' context of type '{0}' is not assignable to method 'this' of type '{1}'.": {
+    "'this' implicitly has type 'any' because it does not have a type annotation.": {
         "category": "Error",
         "code": 2683
     },
-   "Import declaration '{0}' is using private name '{1}'.": {
+    "'this' context of type '{0}' is not assignable to method 'this' of type '{1}'.": {
+        "category": "Error",
+        "code": 2684
+    },
+    "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
     },
@@ -2512,6 +2516,10 @@
         "category": "Message",
         "code": 6078
     },
+    "Specify library files to be included in the compilation: ": {
+        "category": "Message",
+        "code": 6079
+    },
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
@@ -2644,11 +2652,14 @@
         "category": "Message",
         "code": 6113
     },
-    "Raise error on 'this' expressions with an implied 'any' type.": {
-        "category": "Message",
+    "Unknown option 'excludes'. Did you mean 'exclude'?": {
+        "category": "Error",
         "code": 6114
     },
-
+    "Raise error on 'this' expressions with an implied 'any' type.": {
+        "category": "Message",
+        "code": 6115
+    }
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
