@@ -1,4 +1,4 @@
-﻿// @lib: es2015.array
+﻿// @lib: es2015.core
 // @target: es5
 
 // Error missing basic JavaScript objects

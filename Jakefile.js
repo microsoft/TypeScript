@@ -166,19 +166,13 @@ var harnessSources = harnessCoreSources.concat([
 }));
 
 var es2015LibrarySources = [
-    "es2015.array.d.ts",
+    "es2015.core.d.ts",
     "es2015.collection.d.ts",
-    "es2015.function.d.ts",
     "es2015.generator.d.ts",
     "es2015.iterable.d.ts",
-    "es2015.math.d.ts",
-    "es2015.number.d.ts",
-    "es2015.object.d.ts",
     "es2015.promise.d.ts",
     "es2015.proxy.d.ts",
     "es2015.reflect.d.ts",
-    "es2015.regexp.d.ts",
-    "es2015.string.d.ts",
     "es2015.symbol.d.ts",
     "es2015.symbol.wellknown.d.ts",
 ];
