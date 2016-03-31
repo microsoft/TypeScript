@@ -1879,7 +1879,7 @@
         "category": "Error",
         "code": 2678
     },
-    "A function that is called with the 'new' keyword cannot have a 'this' type that is void.": {
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.": {
         "category": "Error",
         "code": 2679
     },
@@ -1899,9 +1899,13 @@
         "category": "Error",
         "code": 2683
     },
-    "'this' context of type '{0}' is not assignable to method 'this' of type '{1}'.": {
+    "'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
         "category": "Error",
         "code": 2684
+    },
+    "'this' types of each signature are incompatible.": {
+        "category": "Error",
+        "code": 2685
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

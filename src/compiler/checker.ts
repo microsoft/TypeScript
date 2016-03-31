@@ -5480,7 +5480,7 @@ namespace ts {
                     || compareTypes(target.thisType, source.thisType, reportErrors);
                 if (!related) {
                     if (reportErrors) {
-                        errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible, "this", "this");
+                        errorReporter(Diagnostics.this_types_of_each_signature_are_incompatible);
                     }
                     return Ternary.False;
                 }
@@ -10223,7 +10223,7 @@ namespace ts {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
-                const headMessage = Diagnostics.this_context_of_type_0_is_not_assignable_to_method_this_of_type_1;
+                const headMessage = Diagnostics.this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }
@@ -10929,7 +10929,7 @@ namespace ts {
             // If expressionType's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
-            // operation is the function's this type. It is an error to have a Void this type.
+            // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray);
@@ -11117,10 +11117,10 @@ namespace ts {
                     if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function)) {
                         return getInferredClassType(funcSymbol);
                     }
-                    else if (compilerOptions.noImplicitAny && !signature.thisType) {
+                    else if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
-                    return signature.thisType || anyType;
+                    return anyType;
                 }
             }
 

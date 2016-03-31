@@ -895,13 +895,13 @@ function AnyThis(this: any) {
 >"ok" : string
 }
 let interfaceThis = new InterfaceThis();
->interfaceThis : I
->new InterfaceThis() : I
+>interfaceThis : any
+>new InterfaceThis() : any
 >InterfaceThis : (this: I) => void
 
 let literalTypeThis = new LiteralTypeThis();
->literalTypeThis : { x: string; }
->new LiteralTypeThis() : { x: string; }
+>literalTypeThis : any
+>new LiteralTypeThis() : any
 >LiteralTypeThis : (this: { x: string; }) => void
 
 let anyThis = new AnyThis();
