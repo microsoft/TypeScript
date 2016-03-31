@@ -185,8 +185,8 @@ namespace ts {
             { name: "operand", test: isLeftHandSideExpression, parenthesize: parenthesizePostfixOperand },
         ],
         [SyntaxKind.BinaryExpression]: [
-            { name: "left", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, true) },
-            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false) },
+            { name: "left", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, true, /*leftOperand*/ undefined) },
+            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false, parent.left) },
         ],
         [SyntaxKind.ConditionalExpression]: [
             { name: "condition", test: isExpression },

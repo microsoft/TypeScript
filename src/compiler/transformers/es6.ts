@@ -2397,11 +2397,16 @@ namespace ts {
                 }
             }
 
-            return inlineExpressions([
-                createAssignment(temp, createArrayLiteral(cookedStrings)),
-                createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
-                createCall(tag, templateArguments)
-            ]);
+            // NOTE: The parentheses here is entirely optional as we are now able to auto-
+            //       parenthesize when rebuilding the tree. This should be removed in a
+            //       future version. It is here for now to match our existing emit.
+            return createParen(
+                inlineExpressions([
+                    createAssignment(temp, createArrayLiteral(cookedStrings)),
+                    createAssignment(createPropertyAccess(temp, "raw"), createArrayLiteral(rawStrings)),
+                    createCall(tag, templateArguments)
+                ])
+            );
         }
 
         /**
@@ -2426,7 +2431,7 @@ namespace ts {
             // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
             text = text.replace(/\r\n?/g, "\n");
-            text = escapeString(text);
+            //text = escapeString(text);
             return createLiteral(text, /*location*/ node);
         }
 

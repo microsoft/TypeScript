@@ -374,9 +374,9 @@ namespace ts {
 
     export function createBinary(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
         const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, location);
-        node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true);
+        node.left = parenthesizeBinaryOperand(operator, left, /*isLeftSideOfBinary*/ true, /*leftOperand*/ undefined);
         node.operatorToken = createSynthesizedNode(operator);
-        node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false);
+        node.right = parenthesizeBinaryOperand(operator, right, /*isLeftSideOfBinary*/ false, node.left);
         return node;
     }
 
@@ -1179,13 +1179,13 @@ namespace ts {
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
+    export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
         if (operand.kind === SyntaxKind.ParenthesizedExpression) {
             return operand;
         }
 
-        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary)
+        return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary, leftOperand)
             ? createParen(operand)
             : operand;
     }
@@ -1198,7 +1198,7 @@ namespace ts {
      * @param isLeftSideOfBinary A value indicating whether the operand is the left side of the
      *                           BinaryExpression.
      */
-    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean) {
+    function binaryOperandNeedsParentheses(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand: Expression) {
         // If the operand has lower precedence, then it needs to be parenthesized to preserve the
         // intent of the expression. For example, if the operand is `a + b` and the operator is
         // `*`, then we need to parenthesize the operand to preserve the intended order of
@@ -1240,16 +1240,30 @@ namespace ts {
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
-                    // No need to parenthesize the right operand when the binary operator and
-                    // operand are the same and one of the following:
-                    //  x*(a*b)     => x*a*b
-                    //  x|(a|b)     => x|a|b
-                    //  x&(a&b)     => x&a&b
-                    //  x^(a^b)     => x^a^b
                     if (isBinaryExpression(operand)
-                        && operand.operatorToken.kind === binaryOperator
-                        && isMathAssociativeOperator(binaryOperator)) {
-                        return false;
+                        && operand.operatorToken.kind === binaryOperator) {
+                        // No need to parenthesize the right operand when the binary operator and
+                        // operand are the same and one of the following:
+                        //  x*(a*b)     => x*a*b
+                        //  x|(a|b)     => x|a|b
+                        //  x&(a&b)     => x&a&b
+                        //  x^(a^b)     => x^a^b
+                        if (isMathAssociativeOperator(binaryOperator)) {
+                            return false;
+                        }
+
+                        // No need to parenthesize the right operand when the binary operator
+                        // is plus (+) if both the left and right operands consist solely of either
+                        // literals of the same kind or binary plus (+) expressions for literals of
+                        // the same kind (recursively).
+                        //  "a"+(1+2)       => "a"+(1+2)
+                        //  "a"+("b"+"c")   => "a"+"b"+"c"
+                        if (binaryOperator === SyntaxKind.PlusToken) {
+                            const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
+                            if (leftKind === getLiteralKindOfBinaryPlusOperand(operand)) {
+                                return false;
+                            }
+                        }
                     }
 
                     // No need to parenthesize the right operand when the operand is right
@@ -1294,14 +1308,17 @@ namespace ts {
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        const lhs = parenthesizeForAccess(expression);
-        switch (lhs.kind) {
+        switch (expression.kind) {
             case SyntaxKind.CallExpression:
+                return createParen(expression);
+
             case SyntaxKind.NewExpression:
-                return createParen(lhs);
+                return (<NewExpression>expression).arguments
+                    ? <NewExpression>expression
+                    : createParen(expression);
         }
 
-        return lhs;
+        return parenthesizeForAccess(expression);
     }
 
     /**
@@ -1394,6 +1411,21 @@ namespace ts {
         }
 
         return body;
+    }
+
+    function getLiteralKindOfBinaryPlusOperand(node: Expression): SyntaxKind {
+        if (isLiteralKind(node.kind)) {
+            return node.kind;
+        }
+
+        if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
+            const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+            if (leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)) {
+                return leftKind;
+            }
+        }
+
+        return SyntaxKind.Unknown;
     }
 
     function getLeftmostExpression(node: Expression): Expression {
