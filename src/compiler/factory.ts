@@ -1336,9 +1336,9 @@ namespace ts {
         //    NumericLiteral
         //       1.x            -> not the same as (1).x
         //
-        if (isLeftHandSideExpression(expression) &&
-            expression.kind !== SyntaxKind.NewExpression &&
-            expression.kind !== SyntaxKind.NumericLiteral) {
+        if (isLeftHandSideExpression(expression)
+            && (expression.kind !== SyntaxKind.NewExpression || (<NewExpression>expression).arguments)
+            && expression.kind !== SyntaxKind.NumericLiteral) {
             return <LeftHandSideExpression>expression;
         }
 
