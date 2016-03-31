@@ -2659,7 +2659,7 @@
     "Raise error on 'this' expressions with an implied 'any' type.": {
         "category": "Message",
         "code": 6115
-    }
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

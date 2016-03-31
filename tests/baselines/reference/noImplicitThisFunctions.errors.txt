@@ -1,5 +1,5 @@
-tests/cases/compiler/noImplicitThisFunctions.ts(14,12): error TS2682: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/noImplicitThisFunctions.ts(18,38): error TS2682: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/compiler/noImplicitThisFunctions.ts(14,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/compiler/noImplicitThisFunctions.ts(18,38): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
 ==== tests/cases/compiler/noImplicitThisFunctions.ts (2 errors) ====
@@ -18,11 +18,11 @@ tests/cases/compiler/noImplicitThisFunctions.ts(18,38): error TS2682: 'this' imp
         // error: this is implicitly any
         return this.a + z;
                ~~~~
-!!! error TS2682: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     // error: `this` is `window`, but is still of type `any`
     let f4: (b: number) => number = b => this.c + b;
                                          ~~~~
-!!! error TS2682: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     
