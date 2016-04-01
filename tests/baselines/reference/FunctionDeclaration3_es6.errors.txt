@@ -1,8 +1,0 @@
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration3_es6.ts(1,20): error TS2372: Parameter 'yield' cannot be referenced in its initializer.
-
-
-==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration3_es6.ts (1 errors) ====
-    function f(yield = yield) {
-                       ~~~~~
-!!! error TS2372: Parameter 'yield' cannot be referenced in its initializer.
-    }

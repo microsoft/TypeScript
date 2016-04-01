@@ -1,6 +1,0 @@
-error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
-
-
-!!! error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
-==== SameNameTsSpecifiedWithAllowJs/a.ts (0 errors) ====
-    var test = 10;

@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Protected/Protected5.ts ===
-class C {
->C : C
-
-  protected static m() { }
->m : () => void
-}

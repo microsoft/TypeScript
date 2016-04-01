@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,9): error TS2304: Cannot find name '$'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts (1 errors) ====
-    var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {});
-            ~
-!!! error TS2304: Cannot find name '$'.
-    

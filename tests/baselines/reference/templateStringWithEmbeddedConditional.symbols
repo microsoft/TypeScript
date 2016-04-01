@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedConditional.ts ===
-var x = `abc${ true ? false : " " }def`;
->x : Symbol(x, Decl(templateStringWithEmbeddedConditional.ts, 0, 3))
-

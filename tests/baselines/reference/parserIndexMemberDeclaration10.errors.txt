@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts(2,4): error TS1071: 'static' modifier cannot appear on an index signature.
-
-
-==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts (1 errors) ====
-    class C {
-       static static [x: string]: string;
-       ~~~~~~
-!!! error TS1071: 'static' modifier cannot appear on an index signature.
-    }

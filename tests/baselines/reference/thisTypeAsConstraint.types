@@ -1,9 +1,0 @@
-=== tests/cases/compiler/thisTypeAsConstraint.ts ===
-class C {
->C : C
-
-  public m<T extends this>() {
->m : <T extends this>() => void
->T : T
-  }
-}

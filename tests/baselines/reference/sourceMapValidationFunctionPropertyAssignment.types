@@ -1,6 +1,0 @@
-=== tests/cases/compiler/sourceMapValidationFunctionPropertyAssignment.ts ===
-var x = { n() { } };
->x : { n(): void; }
->{ n() { } } : { n(): void; }
->n : () => void
-

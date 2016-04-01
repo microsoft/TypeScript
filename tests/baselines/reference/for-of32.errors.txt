@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/for-ofStatements/for-of32.ts(1,10): error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-
-
-==== tests/cases/conformance/es6/for-ofStatements/for-of32.ts (1 errors) ====
-    for (var v of v) { }
-             ~
-!!! error TS7022: 'v' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

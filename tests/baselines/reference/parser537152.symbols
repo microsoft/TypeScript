@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser537152.ts ===
-var t;
->t : Symbol(t, Decl(parser537152.ts, 0, 3))
-
-var y = t.e1;
->y : Symbol(y, Decl(parser537152.ts, 1, 3))
->t : Symbol(t, Decl(parser537152.ts, 0, 3))
-

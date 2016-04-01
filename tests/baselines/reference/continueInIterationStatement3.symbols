@@ -1,5 +1,0 @@
-=== tests/cases/compiler/continueInIterationStatement3.ts ===
-for (;;) {
-No type information for this code.  continue;
-No type information for this code.}
-No type information for this code.

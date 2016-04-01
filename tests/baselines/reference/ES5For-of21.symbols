@@ -1,7 +1,0 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of21.ts ===
-for (let v of []) {
->v : Symbol(v, Decl(ES5For-of21.ts, 0, 8))
-
-    for (let _i of []) { }
->_i : Symbol(_i, Decl(ES5For-of21.ts, 1, 12))
-}

@@ -1,6 +1,0 @@
-=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
-export default class {}
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
-export default function() {}
-No type information for this code.

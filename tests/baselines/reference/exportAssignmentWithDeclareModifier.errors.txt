@@ -1,8 +1,0 @@
-tests/cases/compiler/exportAssignmentWithDeclareModifier.ts(2,1): error TS1120: An export assignment cannot have modifiers.
-
-
-==== tests/cases/compiler/exportAssignmentWithDeclareModifier.ts (1 errors) ====
-    var x;
-    declare export = x;
-    ~~~~~~~
-!!! error TS1120: An export assignment cannot have modifiers.

@@ -1,6 +1,0 @@
-=== tests/cases/compiler/continueInIterationStatement2.ts ===
-do {
-No type information for this code.  continue;
-No type information for this code.}
-No type information for this code.while (true);
-No type information for this code.

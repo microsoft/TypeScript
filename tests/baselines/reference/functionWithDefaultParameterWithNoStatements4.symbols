@@ -1,9 +1,0 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements4.ts ===
-function foo(a = ``) { }
->foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements4.ts, 0, 0))
->a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements4.ts, 0, 13))
-
-function bar(a = ``) {
->bar : Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements4.ts, 0, 24))
->a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements4.ts, 2, 13))
-}

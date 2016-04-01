@@ -1,9 +1,0 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of5.ts ===
-for (var _a of []) {
->_a : any
->[] : undefined[]
-
-    var x = _a;
->x : any
->_a : any
-}

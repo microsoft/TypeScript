@@ -1,2 +1,0 @@
-//// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js.map]
-{"version":3,"file":"sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js","sourceRoot":"","sources":["sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts"],"names":[],"mappings":"AAAA;IAAA;QAAA,iBAGC;QAFU,MAAC,GAAG,EAAE,CAAC;QACP,YAAO,GAAG,cAAM,OAAA,KAAI,CAAC,CAAC,EAAN,CAAM,CAAC;IAClC,CAAC;IAAD,cAAC;AAAD,CAAC,AAHD,IAGC"}

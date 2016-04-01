@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment3.ts(1,9): error TS1109: Expression expected.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment3.ts (1 errors) ====
-    export =
-            
-!!! error TS1109: Expression expected.

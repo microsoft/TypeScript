@@ -1,9 +1,0 @@
-tests/cases/compiler/catchClauseWithTypeAnnotation.ts(2,13): error TS1196: Catch clause variable cannot have a type annotation.
-
-
-==== tests/cases/compiler/catchClauseWithTypeAnnotation.ts (1 errors) ====
-    try {
-    } catch (e: any) {
-                ~~~
-!!! error TS1196: Catch clause variable cannot have a type annotation.
-    }

@@ -1,7 +1,0 @@
-===================================================================
-JsFile: test.js
-mapUrl: ../../mapFiles/test.js.map
-sourceRoot: 
-sources: ../outputdir_module_subfolder/ref/m1.ts,../outputdir_module_subfolder/test.ts
-===================================================================
->>>//# sourceMappingURL=../../mapFiles/test.js.map

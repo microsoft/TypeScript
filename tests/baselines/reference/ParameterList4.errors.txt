@@ -1,8 +1,0 @@
-tests/cases/compiler/ParameterList4.ts(1,12): error TS2369: A parameter property is only allowed in a constructor implementation.
-
-
-==== tests/cases/compiler/ParameterList4.ts (1 errors) ====
-    function F(public A) {
-               ~~~~~~~~
-!!! error TS2369: A parameter property is only allowed in a constructor implementation.
-    }

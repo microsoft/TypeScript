@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList1.ts ===
-var v: { workItem: any, width: string };
->v : Symbol(v, Decl(parserCommaInTypeMemberList1.ts, 0, 3))
->workItem : Symbol(workItem, Decl(parserCommaInTypeMemberList1.ts, 0, 8))
->width : Symbol(width, Decl(parserCommaInTypeMemberList1.ts, 0, 23))
-

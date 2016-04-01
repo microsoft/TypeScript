@@ -1,6 +1,0 @@
-=== tests/cases/compiler/exportEqualsAmd.ts ===
-export = { ["hi"]: "there" };
->{ ["hi"]: "there" } : { ["hi"]: string; }
->"hi" : string
->"there" : string
-

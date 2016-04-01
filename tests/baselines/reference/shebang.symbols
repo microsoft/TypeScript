@@ -1,5 +1,0 @@
-=== tests/cases/compiler/shebang.ts ===
-#!/usr/bin/env node
-var foo = 'I wish the generated JS to be executed in node';
->foo : Symbol(foo, Decl(shebang.ts, 1, 3))
-

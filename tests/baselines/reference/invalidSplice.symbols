@@ -1,6 +1,0 @@
-=== tests/cases/compiler/invalidSplice.ts ===
-var arr = [].splice(0,3,4,5);
->arr : Symbol(arr, Decl(invalidSplice.ts, 0, 3))
->[].splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->splice : Symbol(Array.splice, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
-

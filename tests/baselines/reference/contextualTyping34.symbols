@@ -1,6 +1,0 @@
-=== tests/cases/compiler/contextualTyping34.ts ===
-var foo = <{ id: number;}> ({id:4});
->foo : Symbol(foo, Decl(contextualTyping34.ts, 0, 3))
->id : Symbol(id, Decl(contextualTyping34.ts, 0, 12))
->id : Symbol(id, Decl(contextualTyping34.ts, 0, 29))
-

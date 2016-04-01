@@ -1,6 +1,0 @@
-=== tests/cases/conformance/classes/classDeclarations/classWithSemicolonClassElement1.ts ===
-class C {
->C : C
-
-    ;
-}

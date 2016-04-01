@@ -1,9 +1,0 @@
-=== tests/cases/compiler/requiredInitializedParameter4.ts ===
-class C1 {
->C1 : Symbol(C1, Decl(requiredInitializedParameter4.ts, 0, 0))
-
-    method(a = 0, b) { }
->method : Symbol(C1.method, Decl(requiredInitializedParameter4.ts, 0, 10))
->a : Symbol(a, Decl(requiredInitializedParameter4.ts, 1, 11))
->b : Symbol(b, Decl(requiredInitializedParameter4.ts, 1, 17))
-}

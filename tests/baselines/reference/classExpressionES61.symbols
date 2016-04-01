@@ -1,5 +1,0 @@
-=== tests/cases/conformance/es6/classExpressions/classExpressionES61.ts ===
-var v = class C {};
->v : Symbol(v, Decl(classExpressionES61.ts, 0, 3))
->C : Symbol(C, Decl(classExpressionES61.ts, 0, 7))
-

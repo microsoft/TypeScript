@@ -1,7 +1,0 @@
-=== tests/cases/compiler/typeAliasDeclareKeyword01.d.ts ===
-type Foo = number;
->Foo : Symbol(Foo, Decl(typeAliasDeclareKeyword01.d.ts, 0, 0))
-
-declare type Bar = string;
->Bar : Symbol(Bar, Decl(typeAliasDeclareKeyword01.d.ts, 0, 18))
-

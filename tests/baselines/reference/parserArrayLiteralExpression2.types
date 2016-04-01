@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression2.ts ===
-var v = [,];
->v : any[]
->[,] : undefined[]
-> : undefined
-

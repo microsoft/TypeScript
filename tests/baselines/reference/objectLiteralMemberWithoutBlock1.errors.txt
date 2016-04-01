@@ -1,7 +1,0 @@
-tests/cases/compiler/objectLiteralMemberWithoutBlock1.ts(1,16): error TS1005: '{' expected.
-
-
-==== tests/cases/compiler/objectLiteralMemberWithoutBlock1.ts (1 errors) ====
-    var v = { foo(); }
-                   ~
-!!! error TS1005: '{' expected.

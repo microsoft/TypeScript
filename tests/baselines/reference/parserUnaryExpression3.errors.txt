@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression3.ts(1,3): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression3.ts (1 errors) ====
-    ++[0];
-      ~~~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
