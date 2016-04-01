@@ -138,12 +138,39 @@ declare var Buffer: {
     compare(buf1: NodeJS.Buffer, buf2: NodeJS.Buffer): number;
 };
 
+declare namespace console {
+    export function assert(value: boolean, message?: string, ...optionalParams: any[]): void;
+    export function dir(obj: any, ...optionalParams: any[]): void;
+    export function error(data?: any, ...optionalParams: any[]): void;
+    export function info(data?: any, ...optionalParams: any[]): void;
+    export function log(data?: any, ...optionalParams: any[]): void;
+    export function time(label: string): void;
+    export function timeEnd(label: string): void;
+    export function trace(message: any, ...optionalParams: any[]): void;
+    export function warn(data?: any, ...optionalParams: any[]): void;
+    export var Console: {
+        new(stdout: NodeJS.WritableStream, stderr? :NodeJS.WritableStream): NodeJS.Console;
+    }
+}
+
 /************************************************
 *                                               *
 *               GLOBAL INTERFACES               *
 *                                               *
 ************************************************/
 declare namespace NodeJS {
+    export interface Console {
+        assert(value: boolean, message?: string, ...optionalParams: any[]): void;
+        dir(obj: any, ...optionalParams: any[]): void;
+        error(data?: any, ...optionalParams: any[]): void;
+        info(data?: any, ...optionalParams: any[]): void;
+        log(data?: any, ...optionalParams: any[]): void;
+        time(label: string): void;
+        timeEnd(label: string): void;
+        trace(message: any, ...optionalParams: any[]): void;
+        warn(data?: any, ...optionalParams: any[]): void;
+    }
+
     export interface ErrnoException extends Error {
         errno?: number;
         code?: string;
@@ -439,6 +466,10 @@ declare module "buffer" {
     var BuffType: typeof Buffer;
     var SlowBuffType: typeof SlowBuffer;
     export { BuffType as Buffer, SlowBuffType as SlowBuffer };
+}
+
+declare module "console" {
+    export = console;
 }
 
 declare module "querystring" {
