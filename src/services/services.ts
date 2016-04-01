@@ -175,7 +175,9 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        const node = new NodeObject(kind, pos, end);
+        const node = kind === SyntaxKind.SyntaxList ?
+            new SyntaxList(pos, end) :
+            new NodeObject(kind, pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -326,6 +328,21 @@ namespace ts {
             }
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+        }
+    }
+
+    class SyntaxList extends NodeObject {
+        constructor(pos: number, end: number) {
+            super(SyntaxKind.SyntaxList, pos, end);
+        }
+
+        getStart(sourceFile?: SourceFile) {
+            const children = this.getChildren(sourceFile);
+            if (children.length === 0) {
+                return this.pos;
+            }
+
+            return children[0].getStart(sourceFile);
         }
     }
 

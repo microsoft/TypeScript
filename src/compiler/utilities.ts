@@ -206,7 +206,10 @@ namespace ts {
     export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
-        if (nodeIsMissing(node)) {
+        //
+        // Nodes like JsxText can *seem* to have leading trivia, but actually encompass
+        // their entire span from pos to end.
+        if (nodeIsMissing(node) || node.kind === SyntaxKind.JsxText) {
             return node.pos;
         }
 
