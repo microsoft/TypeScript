@@ -46,6 +46,8 @@ namespace ts {
         TemplateHead,
         TemplateMiddle,
         TemplateTail,
+        // JSX Text
+        JsxText,
         // Punctuation
         OpenBraceToken,
         CloseBraceToken,
@@ -292,11 +294,10 @@ namespace ts {
         // Module references
         ExternalModuleReference,
 
-        // JSX
+        // JSX (excluding JsxText which is a token).
         JsxElement,
         JsxSelfClosingElement,
         JsxOpeningElement,
-        JsxText,
         JsxClosingElement,
         JsxAttribute,
         JsxSpreadAttribute,
