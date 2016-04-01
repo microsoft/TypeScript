@@ -1,5 +1,0 @@
-=== tests/cases/compiler/a.js ===
-@internal class C { }
->internal : any
->C : C
-

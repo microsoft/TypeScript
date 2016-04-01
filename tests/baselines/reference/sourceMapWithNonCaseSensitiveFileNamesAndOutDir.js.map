@@ -1,3 +1,0 @@
-//// [app.js.map]
-{"version":3,"file":"app.js","sourceRoot":"","sources":["app.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,0GAA0G;AAC1G;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}//// [app2.js.map]
-{"version":3,"file":"app2.js","sourceRoot":"","sources":["app2.ts"],"names":[],"mappings":"AAAA;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}

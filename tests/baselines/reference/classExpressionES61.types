@@ -1,6 +1,0 @@
-=== tests/cases/conformance/es6/classExpressions/classExpressionES61.ts ===
-var v = class C {};
->v : typeof C
->class C {} : typeof C
->C : typeof C
-

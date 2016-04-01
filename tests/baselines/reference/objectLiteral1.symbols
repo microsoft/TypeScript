@@ -1,6 +1,0 @@
-=== tests/cases/compiler/objectLiteral1.ts ===
-var v30 = {a:1, b:2};
->v30 : Symbol(v30, Decl(objectLiteral1.ts, 0, 3))
->a : Symbol(a, Decl(objectLiteral1.ts, 0, 11))
->b : Symbol(b, Decl(objectLiteral1.ts, 0, 15))
-

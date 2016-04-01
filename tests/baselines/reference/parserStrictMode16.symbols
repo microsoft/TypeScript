@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode16.ts ===
-"use strict";
-No type information for this code.delete this;
-No type information for this code.delete 1;
-No type information for this code.delete null;
-No type information for this code.delete "a";
-No type information for this code.

@@ -1,9 +1,0 @@
-=== tests/cases/compiler/debugger.ts ===
-debugger;
-
-function foo() {
->foo : Symbol(foo, Decl(debugger.ts, 0, 9))
-
-    debugger;
-
-}

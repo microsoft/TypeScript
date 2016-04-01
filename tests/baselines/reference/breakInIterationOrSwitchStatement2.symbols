@@ -1,6 +1,0 @@
-=== tests/cases/compiler/breakInIterationOrSwitchStatement2.ts ===
-do {
-No type information for this code.  break;
-No type information for this code.}
-No type information for this code.while (true);
-No type information for this code.

@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/templates/templateStringInNewExpression.ts(1,1): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-
-
-==== tests/cases/conformance/es6/templates/templateStringInNewExpression.ts (1 errors) ====
-    new `abc${0}abc`(`hello ${0} world`, `   `, `1${2}3`);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.

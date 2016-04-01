@@ -1,9 +1,0 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of57.ts ===
-var iter: Iterable<number>;
->iter : Iterable<number>
->Iterable : Iterable<T>
-
-for (let num of iter) { }
->num : number
->iter : Iterable<number>
-

@@ -1,3 +1,0 @@
-=== tests/cases/compiler/asiContinue.ts ===
-while (true) continue
-No type information for this code.

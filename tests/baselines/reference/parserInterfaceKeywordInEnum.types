@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum.ts ===
-enum Bar {
->Bar : Bar
-
-    interface,
->interface : Bar
-}
-

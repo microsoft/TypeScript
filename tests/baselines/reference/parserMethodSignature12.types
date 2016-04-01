@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature12.ts ===
-interface I {
->I : I
-
-  3?<T>();
->T : T
-}

@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration5.ts(2,24): error TS1005: ';' expected.
-
-
-==== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration5.ts (1 errors) ====
-    class C {
-       [a: string]: number public v: number
-                           ~~~~~~
-!!! error TS1005: ';' expected.
-    }

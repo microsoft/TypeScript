@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGreaterThanTokenAmbiguity5.ts ===
-1 
-No type information for this code.// before
-No type information for this code.>> // after
-No type information for this code.2;
-No type information for this code.

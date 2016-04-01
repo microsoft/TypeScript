@@ -1,9 +1,0 @@
-=== tests/cases/compiler/preserveConstEnums.ts ===
-const enum E {
->E : Symbol(E, Decl(preserveConstEnums.ts, 0, 0))
-
-    Value = 1, Value2 = Value
->Value : Symbol(E.Value, Decl(preserveConstEnums.ts, 0, 14))
->Value2 : Symbol(E.Value2, Decl(preserveConstEnums.ts, 1, 14))
->Value : Symbol(E.Value, Decl(preserveConstEnums.ts, 0, 14))
-}

@@ -1,7 +1,0 @@
-=== tests/cases/compiler/switchCases.ts ===
-switch(0) {
-No type information for this code. case 1:
-No type information for this code. break;
-No type information for this code.}
-No type information for this code.
-No type information for this code.

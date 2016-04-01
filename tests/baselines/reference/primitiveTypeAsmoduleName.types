@@ -1,4 +1,0 @@
-=== tests/cases/compiler/primitiveTypeAsmoduleName.ts ===
-module string {}
->string : any
-

@@ -1,9 +1,0 @@
-tests/cases/compiler/ParameterList13.ts(2,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-
-
-==== tests/cases/compiler/ParameterList13.ts (1 errors) ====
-    interface I {
-        new (public x);
-             ~~~~~~~~
-!!! error TS2369: A parameter property is only allowed in a constructor implementation.
-    }

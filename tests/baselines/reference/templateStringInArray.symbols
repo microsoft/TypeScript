@@ -1,4 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInArray.ts ===
-var x = [1, 2, `abc${ 123 }def`];
->x : Symbol(x, Decl(templateStringInArray.ts, 0, 3))
-

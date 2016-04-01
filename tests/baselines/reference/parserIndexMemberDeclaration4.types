@@ -1,8 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration4.ts ===
-class C {
->C : C
-
-   [a: string]: number; public v: number
->a : string
->v : number
-}

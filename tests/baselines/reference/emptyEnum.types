@@ -1,4 +1,0 @@
-=== tests/cases/compiler/emptyEnum.ts ===
-enum E {
->E : E
-}

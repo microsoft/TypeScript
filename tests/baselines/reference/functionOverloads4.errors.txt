@@ -1,8 +1,0 @@
-tests/cases/compiler/functionOverloads4.ts(1,10): error TS2394: Overload signature is not compatible with function implementation.
-
-
-==== tests/cases/compiler/functionOverloads4.ts (1 errors) ====
-    function foo():number;
-             ~~~
-!!! error TS2394: Overload signature is not compatible with function implementation.
-    function foo():string { return "a" }

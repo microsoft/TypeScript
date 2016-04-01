@@ -1,5 +1,0 @@
-=== tests/cases/compiler/declarationEmit_array-types-from-generic-array-usage.ts ===
-interface A extends Array<string> { }
->A : A
->Array : T[]
-

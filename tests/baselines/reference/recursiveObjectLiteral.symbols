@@ -1,6 +1,0 @@
-=== tests/cases/compiler/recursiveObjectLiteral.ts ===
-var a = { f: a };
->a : Symbol(a, Decl(recursiveObjectLiteral.ts, 0, 3))
->f : Symbol(f, Decl(recursiveObjectLiteral.ts, 0, 9))
->a : Symbol(a, Decl(recursiveObjectLiteral.ts, 0, 3))
-

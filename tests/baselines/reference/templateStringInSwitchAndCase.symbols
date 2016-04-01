@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringInSwitchAndCase.ts ===
-switch (`abc${0}abc`) {
-No type information for this code.    case `abc`:
-No type information for this code.    case `123`:
-No type information for this code.    case `abc${0}abc`:
-No type information for this code.        `def${1}def`;
-No type information for this code.}
-No type information for this code.

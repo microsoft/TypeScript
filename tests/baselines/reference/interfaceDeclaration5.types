@@ -1,8 +1,0 @@
-=== tests/cases/compiler/interfaceDeclaration5.ts ===
-export interface I1 { item:string; }
->I1 : I1
->item : string
-
-export class C1 { }
->C1 : C1
-

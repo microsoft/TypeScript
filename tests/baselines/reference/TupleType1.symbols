@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/TupleTypes/TupleType1.ts ===
-var v: [number]
->v : Symbol(v, Decl(TupleType1.ts, 0, 3))
-

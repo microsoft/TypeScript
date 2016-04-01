@@ -1,6 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/PropertySignatures/parserPropertySignature10.ts ===
-interface I {
->I : I
-
-  1?;
-}

@@ -1,6 +1,0 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
-declare var ng: ng.IAngularStatic;declare module ng {   export interface IModule {      name: string;   }   export interface IAngularStatic {       module: (s: string) => IModule;   }}export = ng;
->ng : ng.IAngularStatic
->ng : any
->IAngularStatic : ng.IAngularStatic
-

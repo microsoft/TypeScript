@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty2.ts(2,6): error TS2304: Cannot find name 'Symbol'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty2.ts (1 errors) ====
-    interface I {
-        [Symbol.unscopables](): string;
-         ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
-    }

@@ -1,7 +1,0 @@
-tests/cases/conformance/es6/templates/templateStringInNewOperatorES6.ts(1,9): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-
-
-==== tests/cases/conformance/es6/templates/templateStringInNewOperatorES6.ts (1 errors) ====
-    var x = new `abc${ 1 }def`;
-            ~~~~~~~~~~~~~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.

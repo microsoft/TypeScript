@@ -1,4 +1,0 @@
-=== tests/cases/compiler/breakTarget1.ts ===
-target:
-No type information for this code.  break target;
-No type information for this code.

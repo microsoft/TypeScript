@@ -1,9 +1,0 @@
-=== tests/cases/compiler/declFileOptionalInterfaceMethod.ts ===
-interface X {
->X : X
-
-    f? <T>();
->f : <T>() => any
->T : T
-}
-

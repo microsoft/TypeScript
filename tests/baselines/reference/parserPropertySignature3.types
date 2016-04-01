@@ -1,7 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/PropertySignatures/parserPropertySignature3.ts ===
-interface I {
->I : I
-
-  C:any;
->C : any
-}

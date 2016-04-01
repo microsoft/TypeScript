@@ -1,8 +1,0 @@
-=== tests/cases/compiler/interfaceWithOptionalProperty.ts ===
-
-interface I {
->I : I
-
-    x?: number;
->x : number
-}

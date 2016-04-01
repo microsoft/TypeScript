@@ -1,8 +1,0 @@
-tests/cases/compiler/incompleteObjectLiteral1.ts(1,14): error TS1005: ':' expected.
-
-
-==== tests/cases/compiler/incompleteObjectLiteral1.ts (1 errors) ====
-    var tt = { aa; }
-                 ~
-!!! error TS1005: ':' expected.
-    var x = tt;

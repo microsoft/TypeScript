@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement2.ts(1,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement2.ts (1 errors) ====
-    with (1)
-          ~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
-      return;

@@ -1,8 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts(1,8): error TS1035: Only ambient modules can use quoted names.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration1.ts (1 errors) ====
-    module "Foo" {
-           ~~~~~
-!!! error TS1035: Only ambient modules can use quoted names.
-    }

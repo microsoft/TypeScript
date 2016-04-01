@@ -1,4 +1,0 @@
-=== tests/cases/compiler/bom-utf8.ts ===
-var x=10;
->x : Symbol(x, Decl(bom-utf8.ts, 0, 3))
-

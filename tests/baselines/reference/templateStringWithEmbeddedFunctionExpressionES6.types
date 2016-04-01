@@ -1,8 +1,0 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedFunctionExpressionES6.ts ===
-var x = `abc${ function y() { return y; } }def`;
->x : string
->`abc${ function y() { return y; } }def` : string
->function y() { return y; } : () => any
->y : () => any
->y : () => any
-

@@ -1,6 +1,0 @@
-error TS6054: File 'tests/cases/compiler/a.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
-
-
-!!! error TS6054: File 'tests/cases/compiler/a.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
-==== tests/cases/compiler/a.js (0 errors) ====
-    declare var v;

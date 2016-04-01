@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode6-negative.ts(1,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-
-
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode6-negative.ts (1 errors) ====
-    eval++;
-    ~~~~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

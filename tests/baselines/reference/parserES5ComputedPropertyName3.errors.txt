@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName3.ts(1,12): error TS2304: Cannot find name 'e'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName3.ts (1 errors) ====
-    var v = { [e]() { } };
-               ~
-!!! error TS2304: Cannot find name 'e'.

@@ -1,4 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser579071.ts ===
-var x = /fo(o/;
->x : Symbol(x, Decl(parser579071.ts, 0, 3))
-
