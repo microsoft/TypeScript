@@ -163,6 +163,7 @@ class ThisConstructor {
 interface ThisConstructorInterface {
     new(this: ThisConstructor, n: number);
 }
+var thisConstructorType: new (this: number) => number;
 function notFirst(a: number, this: C): number { return this.n; }
 
 ///// parse errors /////

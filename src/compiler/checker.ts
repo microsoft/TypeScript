@@ -12416,7 +12416,7 @@ namespace ts {
                 if (indexOf(func.parameters, node) !== 0) {
                     error(node, Diagnostics.A_this_parameter_must_be_the_first_parameter);
                 }
-                if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature) {
+                if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
                 }
                 if (func.kind === SyntaxKind.SetAccessor) {
