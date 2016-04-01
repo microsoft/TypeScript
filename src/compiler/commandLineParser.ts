@@ -347,6 +347,7 @@ namespace ts {
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
                     "scripthost": "lib.scripthost.d.ts",
+                    "node": "lib.node.d.ts",
                     // ES2015 Or ESNext By-feature options
                     "es2015.core": "lib.es2015.core.d.ts",
                     "es2015.collection": "lib.es2015.collection.d.ts",
