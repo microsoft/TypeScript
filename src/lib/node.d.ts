@@ -41,48 +41,25 @@ declare function clearInterval(intervalId: NodeJS.Timer): void;
 declare function setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
 declare function clearImmediate(immediateId: any): void;
 
-interface NodeRequireFunction {
-    (id: string): any;
-}
-
-interface NodeRequire extends NodeRequireFunction {
-    resolve(id:string): string;
-    cache: any;
-    extensions: any;
-    main: any;
-}
-
-declare var require: NodeRequire;
-
-interface NodeModule {
-    exports: any;
-    require: NodeRequireFunction;
-    id: string;
-    filename: string;
-    loaded: boolean;
-    parent: any;
-    children: any[];
-}
-
-declare var module: NodeModule;
+declare var require: NodeJS.NodeRequire;
+declare var module: NodeJS.NodeModule;
 
 // Same as module.exports
 declare var exports: any;
 declare var SlowBuffer: {
-    new (str: string, encoding?: string): Buffer;
-    new (size: number): Buffer;
-    new (size: Uint8Array): Buffer;
-    new (array: any[]): Buffer;
-    prototype: Buffer;
+    new (str: string, encoding?: string): NodeJS.Buffer;
+    new (size: number): NodeJS.Buffer;
+    new (size: Uint8Array): NodeJS.Buffer;
+    new (array: any[]): NodeJS.Buffer;
+    prototype: NodeJS.Buffer;
     isBuffer(obj: any): boolean;
     byteLength(string: string, encoding?: string): number;
-    concat(list: Buffer[], totalLength?: number): Buffer;
+    concat(list: NodeJS.Buffer[], totalLength?: number): NodeJS.Buffer;
 };
 
 
 // Buffer class
-type BufferEncoding = "ascii" | "utf8" | "utf16le" | "ucs2" | "binary" | "hex";
-interface Buffer extends NodeBuffer {}
+
 
 /**
  * Raw data is stored in instances of the Buffer class.
@@ -96,38 +73,38 @@ declare var Buffer: {
      * @param str String to store in buffer.
      * @param encoding encoding to use, optional.  Default is 'utf8'
      */
-    new (str: string, encoding?: string): Buffer;
+    new (str: string, encoding?: string): NodeJS.Buffer;
     /**
      * Allocates a new buffer of {size} octets.
      *
      * @param size count of octets to allocate.
      */
-    new (size: number): Buffer;
+    new (size: number): NodeJS.Buffer;
     /**
      * Allocates a new buffer containing the given {array} of octets.
      *
      * @param array The octets to store.
      */
-    new (array: Uint8Array): Buffer;
+    new (array: Uint8Array): NodeJS.Buffer;
     /**
      * Allocates a new buffer containing the given {array} of octets.
      *
      * @param array The octets to store.
      */
-    new (array: any[]): Buffer;
+    new (array: any[]): NodeJS.Buffer;
     /**
      * Copies the passed {buffer} data onto a new {Buffer} instance.
      *
      * @param buffer The buffer to copy.
      */
-    new (buffer: Buffer): Buffer;
-    prototype: Buffer;
+    new (buffer: NodeJS.Buffer): NodeJS.Buffer;
+    prototype: NodeJS.Buffer;
     /**
      * Returns true if {obj} is a Buffer
      *
      * @param obj object to test.
      */
-    isBuffer(obj: any): obj is Buffer;
+    isBuffer(obj: any): obj is NodeJS.Buffer;
     /**
      * Returns true if {encoding} is a valid encoding argument.
      * Valid string encodings in Node 0.12: 'ascii'|'utf8'|'utf16le'|'ucs2'(alias of 'utf16le')|'base64'|'binary'(deprecated)|'hex'
@@ -154,11 +131,11 @@ declare var Buffer: {
      * @param totalLength Total length of the buffers when concatenated.
      *   If totalLength is not provided, it is read from the buffers in the list. However, this adds an additional loop to the function, so it is faster to provide the length explicitly.
      */
-    concat(list: Buffer[], totalLength?: number): Buffer;
+    concat(list: NodeJS.Buffer[], totalLength?: number): NodeJS.Buffer;
     /**
      * The same as buf1.compare(buf2).
      */
-    compare(buf1: Buffer, buf2: Buffer): number;
+    compare(buf1: NodeJS.Buffer, buf2: NodeJS.Buffer): number;
 };
 
 /************************************************
@@ -378,59 +355,78 @@ declare namespace NodeJS {
         ref() : void;
         unref() : void;
     }
-}
 
-/**
- * @deprecated
- */
-interface NodeBuffer {
-    [index: number]: number;
-    write(string: string, offset?: number, length?: number, encoding?: string): number;
-    toString(encoding?: string, start?: number, end?: number): string;
-    toJSON(): any;
-    length: number;
-    equals(otherBuffer: Buffer): boolean;
-    compare(otherBuffer: Buffer): number;
-    copy(targetBuffer: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
-    slice(start?: number, end?: number): Buffer;
-    writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-    writeUIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-    writeIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-    writeIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
-    readUIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
-    readUIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
-    readIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
-    readIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
-    readUInt8(offset: number, noAssert?: boolean): number;
-    readUInt16LE(offset: number, noAssert?: boolean): number;
-    readUInt16BE(offset: number, noAssert?: boolean): number;
-    readUInt32LE(offset: number, noAssert?: boolean): number;
-    readUInt32BE(offset: number, noAssert?: boolean): number;
-    readInt8(offset: number, noAssert?: boolean): number;
-    readInt16LE(offset: number, noAssert?: boolean): number;
-    readInt16BE(offset: number, noAssert?: boolean): number;
-    readInt32LE(offset: number, noAssert?: boolean): number;
-    readInt32BE(offset: number, noAssert?: boolean): number;
-    readFloatLE(offset: number, noAssert?: boolean): number;
-    readFloatBE(offset: number, noAssert?: boolean): number;
-    readDoubleLE(offset: number, noAssert?: boolean): number;
-    readDoubleBE(offset: number, noAssert?: boolean): number;
-    writeUInt8(value: number, offset: number, noAssert?: boolean): number;
-    writeUInt16LE(value: number, offset: number, noAssert?: boolean): number;
-    writeUInt16BE(value: number, offset: number, noAssert?: boolean): number;
-    writeUInt32LE(value: number, offset: number, noAssert?: boolean): number;
-    writeUInt32BE(value: number, offset: number, noAssert?: boolean): number;
-    writeInt8(value: number, offset: number, noAssert?: boolean): number;
-    writeInt16LE(value: number, offset: number, noAssert?: boolean): number;
-    writeInt16BE(value: number, offset: number, noAssert?: boolean): number;
-    writeInt32LE(value: number, offset: number, noAssert?: boolean): number;
-    writeInt32BE(value: number, offset: number, noAssert?: boolean): number;
-    writeFloatLE(value: number, offset: number, noAssert?: boolean): number;
-    writeFloatBE(value: number, offset: number, noAssert?: boolean): number;
-    writeDoubleLE(value: number, offset: number, noAssert?: boolean): number;
-    writeDoubleBE(value: number, offset: number, noAssert?: boolean): number;
-    fill(value: any, offset?: number, end?: number): Buffer;
-    indexOf(value: string | number | Buffer, byteOffset?: number): number;
+    export interface NodeRequireFunction {
+        (id: string): any;
+    }
+
+    export interface NodeRequire extends NodeRequireFunction {
+        resolve(id:string): string;
+        cache: any;
+        extensions: any;
+        main: any;
+    }
+
+    export interface NodeModule {
+        exports: any;
+        require: NodeRequireFunction;
+        id: string;
+        filename: string;
+        loaded: boolean;
+        parent: any;
+        children: any[];
+    }
+
+    type BufferEncoding = "ascii" | "utf8" | "utf16le" | "ucs2" | "binary" | "hex";
+    export interface Buffer {
+        [index: number]: number;
+        write(string: string, offset?: number, length?: number, encoding?: string): number;
+        toString(encoding?: string, start?: number, end?: number): string;
+        toJSON(): any;
+        length: number;
+        equals(otherBuffer: Buffer): boolean;
+        compare(otherBuffer: Buffer): number;
+        copy(targetBuffer: Buffer, targetStart?: number, sourceStart?: number, sourceEnd?: number): number;
+        slice(start?: number, end?: number): Buffer;
+        writeUIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+        writeUIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+        writeIntLE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+        writeIntBE(value: number, offset: number, byteLength: number, noAssert?: boolean): number;
+        readUIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
+        readUIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
+        readIntLE(offset: number, byteLength: number, noAssert?: boolean): number;
+        readIntBE(offset: number, byteLength: number, noAssert?: boolean): number;
+        readUInt8(offset: number, noAssert?: boolean): number;
+        readUInt16LE(offset: number, noAssert?: boolean): number;
+        readUInt16BE(offset: number, noAssert?: boolean): number;
+        readUInt32LE(offset: number, noAssert?: boolean): number;
+        readUInt32BE(offset: number, noAssert?: boolean): number;
+        readInt8(offset: number, noAssert?: boolean): number;
+        readInt16LE(offset: number, noAssert?: boolean): number;
+        readInt16BE(offset: number, noAssert?: boolean): number;
+        readInt32LE(offset: number, noAssert?: boolean): number;
+        readInt32BE(offset: number, noAssert?: boolean): number;
+        readFloatLE(offset: number, noAssert?: boolean): number;
+        readFloatBE(offset: number, noAssert?: boolean): number;
+        readDoubleLE(offset: number, noAssert?: boolean): number;
+        readDoubleBE(offset: number, noAssert?: boolean): number;
+        writeUInt8(value: number, offset: number, noAssert?: boolean): number;
+        writeUInt16LE(value: number, offset: number, noAssert?: boolean): number;
+        writeUInt16BE(value: number, offset: number, noAssert?: boolean): number;
+        writeUInt32LE(value: number, offset: number, noAssert?: boolean): number;
+        writeUInt32BE(value: number, offset: number, noAssert?: boolean): number;
+        writeInt8(value: number, offset: number, noAssert?: boolean): number;
+        writeInt16LE(value: number, offset: number, noAssert?: boolean): number;
+        writeInt16BE(value: number, offset: number, noAssert?: boolean): number;
+        writeInt32LE(value: number, offset: number, noAssert?: boolean): number;
+        writeInt32BE(value: number, offset: number, noAssert?: boolean): number;
+        writeFloatLE(value: number, offset: number, noAssert?: boolean): number;
+        writeFloatBE(value: number, offset: number, noAssert?: boolean): number;
+        writeDoubleLE(value: number, offset: number, noAssert?: boolean): number;
+        writeDoubleBE(value: number, offset: number, noAssert?: boolean): number;
+        fill(value: any, offset?: number, end?: number): Buffer;
+        indexOf(value: string | number | Buffer, byteOffset?: number): number;
+    }
 }
 
 /************************************************
@@ -514,8 +510,8 @@ declare module "http" {
     }
     export interface ServerResponse extends events.EventEmitter, stream.Writable {
         // Extended base methods
-        write(buffer: Buffer): boolean;
-        write(buffer: Buffer, cb?: Function): boolean;
+        write(buffer: NodeJS.Buffer): boolean;
+        write(buffer: NodeJS.Buffer, cb?: Function): boolean;
         write(str: string, cb?: Function): boolean;
         write(str: string, encoding?: string, cb?: Function): boolean;
         write(str: string, encoding?: string, fd?: string): boolean;
@@ -535,15 +531,15 @@ declare module "http" {
 
         // Extended base methods
         end(): void;
-        end(buffer: Buffer, cb?: Function): void;
+        end(buffer: NodeJS.Buffer, cb?: Function): void;
         end(str: string, cb?: Function): void;
         end(str: string, encoding?: string, cb?: Function): void;
         end(data?: any, encoding?: string): void;
     }
     export interface ClientRequest extends events.EventEmitter, stream.Writable {
         // Extended base methods
-        write(buffer: Buffer): boolean;
-        write(buffer: Buffer, cb?: Function): boolean;
+        write(buffer: NodeJS.Buffer): boolean;
+        write(buffer: NodeJS.Buffer, cb?: Function): boolean;
         write(str: string, cb?: Function): boolean;
         write(str: string, encoding?: string, cb?: Function): boolean;
         write(str: string, encoding?: string, fd?: string): boolean;
@@ -561,7 +557,7 @@ declare module "http" {
 
         // Extended base methods
         end(): void;
-        end(buffer: Buffer, cb?: Function): void;
+        end(buffer: NodeJS.Buffer, cb?: Function): void;
         end(str: string, cb?: Function): void;
         end(str: string, encoding?: string, cb?: Function): void;
         end(data?: any, encoding?: string): void;
@@ -718,20 +714,20 @@ declare module "zlib" {
     export function createInflateRaw(options?: ZlibOptions): InflateRaw;
     export function createUnzip(options?: ZlibOptions): Unzip;
 
-    export function deflate(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function deflateSync(buf: Buffer, options?: ZlibOptions): any;
-    export function deflateRaw(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function deflateRawSync(buf: Buffer, options?: ZlibOptions): any;
-    export function gzip(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function gzipSync(buf: Buffer, options?: ZlibOptions): any;
-    export function gunzip(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function gunzipSync(buf: Buffer, options?: ZlibOptions): any;
-    export function inflate(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function inflateSync(buf: Buffer, options?: ZlibOptions): any;
-    export function inflateRaw(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function inflateRawSync(buf: Buffer, options?: ZlibOptions): any;
-    export function unzip(buf: Buffer, callback: (error: Error, result: any) =>void ): void;
-    export function unzipSync(buf: Buffer, options?: ZlibOptions): any;
+    export function deflate(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function deflateSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function deflateRaw(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function deflateRawSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function gzip(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function gzipSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function gunzip(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function gunzipSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function inflate(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function inflateSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function inflateRaw(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function inflateRawSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
+    export function unzip(buf: NodeJS.Buffer, callback: (error: Error, result: any) =>void ): void;
+    export function unzipSync(buf: NodeJS.Buffer, options?: ZlibOptions): any;
 
     // Constants
     export var Z_NO_FLUSH: number;
@@ -901,7 +897,7 @@ declare module "readline" {
         pause(): ReadLine;
         resume(): ReadLine;
         close(): void;
-        write(data: string|Buffer, key?: Key): void;
+        write(data: string|NodeJS.Buffer, key?: Key): void;
     }
 
     export interface Completer {
@@ -939,7 +935,7 @@ declare module "vm" {
         columnOffset?: number;
         displayErrors?: boolean;
         timeout?: number;
-        cachedData?: Buffer;
+        cachedData?: NodeJS.Buffer;
         produceCachedData?: boolean;
     }
     export interface RunningScriptOptions {
@@ -1001,7 +997,7 @@ declare module "child_process" {
         gid?: number;
     }
     export interface ExecOptionsWithStringEncoding extends ExecOptions {
-        encoding: BufferEncoding;
+        encoding: NodeJS.BufferEncoding;
     }
     export interface ExecOptionsWithBufferEncoding extends ExecOptions {
         encoding: string; // specify `null`.
@@ -1009,7 +1005,7 @@ declare module "child_process" {
     export function exec(command: string, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     export function exec(command: string, options: ExecOptionsWithStringEncoding, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     // usage. child_process.exec("tsc", {encoding: null as string}, (err, stdout, stderr) => {});
-    export function exec(command: string, options: ExecOptionsWithBufferEncoding, callback?: (error: Error, stdout: Buffer, stderr: Buffer) =>void ): ChildProcess;
+    export function exec(command: string, options: ExecOptionsWithBufferEncoding, callback?: (error: Error, stdout: NodeJS.Buffer, stderr: NodeJS.Buffer) =>void ): ChildProcess;
     export function exec(command: string, options: ExecOptions, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
 
     export interface ExecFileOptions {
@@ -1022,7 +1018,7 @@ declare module "child_process" {
         gid?: number;
     }
     export interface ExecFileOptionsWithStringEncoding extends ExecFileOptions {
-        encoding: BufferEncoding;
+        encoding: NodeJS.BufferEncoding;
     }
     export interface ExecFileOptionsWithBufferEncoding extends ExecFileOptions {
         encoding: string; // specify `null`.
@@ -1030,12 +1026,12 @@ declare module "child_process" {
     export function execFile(file: string, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     export function execFile(file: string, options?: ExecFileOptionsWithStringEncoding, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     // usage. child_process.execFile("file.sh", {encoding: null as string}, (err, stdout, stderr) => {});
-    export function execFile(file: string, options?: ExecFileOptionsWithBufferEncoding, callback?: (error: Error, stdout: Buffer, stderr: Buffer) =>void ): ChildProcess;
+    export function execFile(file: string, options?: ExecFileOptionsWithBufferEncoding, callback?: (error: Error, stdout: NodeJS.Buffer, stderr: NodeJS.Buffer) =>void ): ChildProcess;
     export function execFile(file: string, options?: ExecFileOptions, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     export function execFile(file: string, args?: string[], callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     export function execFile(file: string, args?: string[], options?: ExecFileOptionsWithStringEncoding, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
     // usage. child_process.execFile("file.sh", ["foo"], {encoding: null as string}, (err, stdout, stderr) => {});
-    export function execFile(file: string, args?: string[], options?: ExecFileOptionsWithBufferEncoding, callback?: (error: Error, stdout: Buffer, stderr: Buffer) =>void ): ChildProcess;
+    export function execFile(file: string, args?: string[], options?: ExecFileOptionsWithBufferEncoding, callback?: (error: Error, stdout: NodeJS.Buffer, stderr: NodeJS.Buffer) =>void ): ChildProcess;
     export function execFile(file: string, args?: string[], options?: ExecFileOptions, callback?: (error: Error, stdout: string, stderr: string) =>void ): ChildProcess;
 
     export interface ForkOptions {
@@ -1051,7 +1047,7 @@ declare module "child_process" {
 
     export interface SpawnSyncOptions {
         cwd?: string;
-        input?: string | Buffer;
+        input?: string | NodeJS.Buffer;
         stdio?: any;
         env?: any;
         uid?: number;
@@ -1063,7 +1059,7 @@ declare module "child_process" {
         shell?: boolean | string;
     }
     export interface SpawnSyncOptionsWithStringEncoding extends SpawnSyncOptions {
-        encoding: BufferEncoding;
+        encoding: NodeJS.BufferEncoding;
     }
     export interface SpawnSyncOptionsWithBufferEncoding extends SpawnSyncOptions {
         encoding: string; // specify `null`.
@@ -1077,17 +1073,17 @@ declare module "child_process" {
         signal: string;
         error: Error;
     }
-    export function spawnSync(command: string): SpawnSyncReturns<Buffer>;
+    export function spawnSync(command: string): SpawnSyncReturns<NodeJS.Buffer>;
     export function spawnSync(command: string, options?: SpawnSyncOptionsWithStringEncoding): SpawnSyncReturns<string>;
-    export function spawnSync(command: string, options?: SpawnSyncOptionsWithBufferEncoding): SpawnSyncReturns<Buffer>;
-    export function spawnSync(command: string, options?: SpawnSyncOptions): SpawnSyncReturns<Buffer>;
+    export function spawnSync(command: string, options?: SpawnSyncOptionsWithBufferEncoding): SpawnSyncReturns<NodeJS.Buffer>;
+    export function spawnSync(command: string, options?: SpawnSyncOptions): SpawnSyncReturns<NodeJS.Buffer>;
     export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptionsWithStringEncoding): SpawnSyncReturns<string>;
-    export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptionsWithBufferEncoding): SpawnSyncReturns<Buffer>;
-    export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptions): SpawnSyncReturns<Buffer>;
+    export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptionsWithBufferEncoding): SpawnSyncReturns<NodeJS.Buffer>;
+    export function spawnSync(command: string, args?: string[], options?: SpawnSyncOptions): SpawnSyncReturns<NodeJS.Buffer>;
 
     export interface ExecSyncOptions {
         cwd?: string;
-        input?: string | Buffer;
+        input?: string | NodeJS.Buffer;
         stdio?: any;
         env?: any;
         shell?: string;
@@ -1099,19 +1095,19 @@ declare module "child_process" {
         encoding?: string;
     }
     export interface ExecSyncOptionsWithStringEncoding extends ExecSyncOptions {
-        encoding: BufferEncoding;
+        encoding: NodeJS.BufferEncoding;
     }
     export interface ExecSyncOptionsWithBufferEncoding extends ExecSyncOptions {
         encoding: string; // specify `null`.
     }
-    export function execSync(command: string): Buffer;
+    export function execSync(command: string): NodeJS.Buffer;
     export function execSync(command: string, options?: ExecSyncOptionsWithStringEncoding): string;
-    export function execSync(command: string, options?: ExecSyncOptionsWithBufferEncoding): Buffer;
-    export function execSync(command: string, options?: ExecSyncOptions): Buffer;
+    export function execSync(command: string, options?: ExecSyncOptionsWithBufferEncoding): NodeJS.Buffer;
+    export function execSync(command: string, options?: ExecSyncOptions): NodeJS.Buffer;
 
     export interface ExecFileSyncOptions {
         cwd?: string;
-        input?: string | Buffer;
+        input?: string | NodeJS.Buffer;
         stdio?: any;
         env?: any;
         uid?: number;
@@ -1122,18 +1118,18 @@ declare module "child_process" {
         encoding?: string;
     }
     export interface ExecFileSyncOptionsWithStringEncoding extends ExecFileSyncOptions {
-        encoding: BufferEncoding;
+        encoding: NodeJS.BufferEncoding;
     }
     export interface ExecFileSyncOptionsWithBufferEncoding extends ExecFileSyncOptions {
         encoding: string; // specify `null`.
     }
-    export function execFileSync(command: string): Buffer;
+    export function execFileSync(command: string): NodeJS.Buffer;
     export function execFileSync(command: string, options?: ExecFileSyncOptionsWithStringEncoding): string;
-    export function execFileSync(command: string, options?: ExecFileSyncOptionsWithBufferEncoding): Buffer;
-    export function execFileSync(command: string, options?: ExecFileSyncOptions): Buffer;
+    export function execFileSync(command: string, options?: ExecFileSyncOptionsWithBufferEncoding): NodeJS.Buffer;
+    export function execFileSync(command: string, options?: ExecFileSyncOptions): NodeJS.Buffer;
     export function execFileSync(command: string, args?: string[], options?: ExecFileSyncOptionsWithStringEncoding): string;
-    export function execFileSync(command: string, args?: string[], options?: ExecFileSyncOptionsWithBufferEncoding): Buffer;
-    export function execFileSync(command: string, args?: string[], options?: ExecFileSyncOptions): Buffer;
+    export function execFileSync(command: string, args?: string[], options?: ExecFileSyncOptionsWithBufferEncoding): NodeJS.Buffer;
+    export function execFileSync(command: string, args?: string[], options?: ExecFileSyncOptions): NodeJS.Buffer;
 }
 
 declare module "url" {
@@ -1177,8 +1173,8 @@ declare module "net" {
 
     export interface Socket extends stream.Duplex {
         // Extended base methods
-        write(buffer: Buffer): boolean;
-        write(buffer: Buffer, cb?: Function): boolean;
+        write(buffer: NodeJS.Buffer): boolean;
+        write(buffer: NodeJS.Buffer, cb?: Function): boolean;
         write(str: string, cb?: Function): boolean;
         write(str: string, encoding?: string, cb?: Function): boolean;
         write(str: string, encoding?: string, fd?: string): boolean;
@@ -1208,7 +1204,7 @@ declare module "net" {
 
         // Extended base methods
         end(): void;
-        end(buffer: Buffer, cb?: Function): void;
+        end(buffer: NodeJS.Buffer, cb?: Function): void;
         end(str: string, cb?: Function): void;
         end(str: string, encoding?: string, cb?: Function): void;
         end(data?: any, encoding?: string): void;
@@ -1272,10 +1268,10 @@ declare module "dgram" {
         port: number;
     }
 
-    export function createSocket(type: string, callback?: (msg: Buffer, rinfo: RemoteInfo) => void): Socket;
+    export function createSocket(type: string, callback?: (msg: NodeJS.Buffer, rinfo: RemoteInfo) => void): Socket;
 
     interface Socket extends events.EventEmitter {
-        send(buf: Buffer, offset: number, length: number, port: number, address: string, callback?: (error: Error, bytes: number) => void): void;
+        send(buf: NodeJS.Buffer, offset: number, length: number, port: number, address: string, callback?: (error: Error, bytes: number) => void): void;
         bind(port: number, address?: string, callback?: () => void): void;
         close(): void;
         address(): AddressInfo;
@@ -1463,15 +1459,15 @@ declare module "fs" {
     export function futimesSync(fd: number, atime: Date, mtime: Date): void;
     export function fsync(fd: number, callback?: (err?: NodeJS.ErrnoException) => void): void;
     export function fsyncSync(fd: number): void;
-    export function write(fd: number, buffer: Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: Buffer) => void): void;
-    export function write(fd: number, buffer: Buffer, offset: number, length: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: Buffer) => void): void;
+    export function write(fd: number, buffer: NodeJS.Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: NodeJS.Buffer) => void): void;
+    export function write(fd: number, buffer: NodeJS.Buffer, offset: number, length: number, callback?: (err: NodeJS.ErrnoException, written: number, buffer: NodeJS.Buffer) => void): void;
     export function write(fd: number, data: any, callback?: (err: NodeJS.ErrnoException, written: number, str: string) => void): void;
     export function write(fd: number, data: any, offset: number, callback?: (err: NodeJS.ErrnoException, written: number, str: string) => void): void;
     export function write(fd: number, data: any, offset: number, encoding: string, callback?: (err: NodeJS.ErrnoException, written: number, str: string) => void): void;
-    export function writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
+    export function writeSync(fd: number, buffer: NodeJS.Buffer, offset: number, length: number, position?: number): number;
     export function writeSync(fd: number, data: any, position?: number, enconding?: string): number;
-    export function read(fd: number, buffer: Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, bytesRead: number, buffer: Buffer) => void): void;
-    export function readSync(fd: number, buffer: Buffer, offset: number, length: number, position: number): number;
+    export function read(fd: number, buffer: NodeJS.Buffer, offset: number, length: number, position: number, callback?: (err: NodeJS.ErrnoException, bytesRead: number, buffer: NodeJS.Buffer) => void): void;
+    export function readSync(fd: number, buffer: NodeJS.Buffer, offset: number, length: number, position: number): number;
     /*
      * Asynchronous readFile - Asynchronously reads the entire contents of a file.
      *
@@ -1495,14 +1491,14 @@ declare module "fs" {
      * @param options An object with optional {encoding} and {flag} properties.  If {encoding} is specified, readFile returns a string; otherwise it returns a Buffer.
      * @param callback - The callback is passed two arguments (err, data), where data is the contents of the file.
      */
-    export function readFile(filename: string, options: { flag?: string; }, callback: (err: NodeJS.ErrnoException, data: Buffer) => void): void;
+    export function readFile(filename: string, options: { flag?: string; }, callback: (err: NodeJS.ErrnoException, data: NodeJS.Buffer) => void): void;
     /*
      * Asynchronous readFile - Asynchronously reads the entire contents of a file.
      *
      * @param fileName
      * @param callback - The callback is passed two arguments (err, data), where data is the contents of the file.
      */
-    export function readFile(filename: string, callback: (err: NodeJS.ErrnoException, data: Buffer) => void): void;
+    export function readFile(filename: string, callback: (err: NodeJS.ErrnoException, data: NodeJS.Buffer) => void): void;
     /*
      * Synchronous readFile - Synchronously reads the entire contents of a file.
      *
@@ -1523,7 +1519,7 @@ declare module "fs" {
      * @param fileName
      * @param options An object with optional {encoding} and {flag} properties.  If {encoding} is specified, readFileSync returns a string; otherwise it returns a Buffer.
      */
-    export function readFileSync(filename: string, options?: { flag?: string; }): Buffer;
+    export function readFileSync(filename: string, options?: { flag?: string; }): NodeJS.Buffer;
     export function writeFile(filename: string, data: any, callback?: (err: NodeJS.ErrnoException) => void): void;
     export function writeFile(filename: string, data: any, options: { encoding?: string; mode?: number; flag?: string; }, callback?: (err: NodeJS.ErrnoException) => void): void;
     export function writeFile(filename: string, data: any, options: { encoding?: string; mode?: string; flag?: string; }, callback?: (err: NodeJS.ErrnoException) => void): void;
@@ -1717,8 +1713,8 @@ declare module "path" {
 
 declare module "string_decoder" {
     export interface NodeStringDecoder {
-        write(buffer: Buffer): string;
-        detectIncompleteChar(buffer: Buffer): number;
+        write(buffer: NodeJS.Buffer): string;
+        detectIncompleteChar(buffer: NodeJS.Buffer): number;
     }
     export var StringDecoder: {
         new (encoding: string): NodeStringDecoder;
@@ -1835,42 +1831,42 @@ declare module "crypto" {
     export function createCredentials(details: CredentialDetails): Credentials;
     export function createHash(algorithm: string): Hash;
     export function createHmac(algorithm: string, key: string): Hmac;
-    export function createHmac(algorithm: string, key: Buffer): Hmac;
+    export function createHmac(algorithm: string, key: NodeJS.Buffer): Hmac;
     export interface Hash {
         update(data: any, input_encoding?: string): Hash;
-        digest(encoding: 'buffer'): Buffer;
+        digest(encoding: 'buffer'): NodeJS.Buffer;
         digest(encoding: string): any;
-        digest(): Buffer;
+        digest(): NodeJS.Buffer;
     }
     export interface Hmac extends NodeJS.ReadWriteStream {
         update(data: any, input_encoding?: string): Hmac;
-        digest(encoding: 'buffer'): Buffer;
+        digest(encoding: 'buffer'): NodeJS.Buffer;
         digest(encoding: string): any;
-        digest(): Buffer;
+        digest(): NodeJS.Buffer;
     }
     export function createCipher(algorithm: string, password: any): Cipher;
     export function createCipheriv(algorithm: string, key: any, iv: any): Cipher;
     export interface Cipher extends NodeJS.ReadWriteStream {
-        update(data: Buffer): Buffer;
-        update(data: string, input_encoding: "utf8"|"ascii"|"binary"): Buffer;
-        update(data: Buffer, input_encoding: any, output_encoding: "binary"|"base64"|"hex"): string;
+        update(data: NodeJS.Buffer): NodeJS.Buffer;
+        update(data: string, input_encoding: "utf8"|"ascii"|"binary"): NodeJS.Buffer;
+        update(data: NodeJS.Buffer, input_encoding: any, output_encoding: "binary"|"base64"|"hex"): string;
         update(data: string, input_encoding: "utf8"|"ascii"|"binary", output_encoding: "binary"|"base64"|"hex"): string;
-        final(): Buffer;
+        final(): NodeJS.Buffer;
         final(output_encoding: string): string;
         setAutoPadding(auto_padding: boolean): void;
-        getAuthTag(): Buffer;
+        getAuthTag(): NodeJS.Buffer;
     }
     export function createDecipher(algorithm: string, password: any): Decipher;
     export function createDecipheriv(algorithm: string, key: any, iv: any): Decipher;
     export interface Decipher extends NodeJS.ReadWriteStream {
-        update(data: Buffer): Buffer;
-        update(data: string, input_encoding: "binary"|"base64"|"hex"): Buffer;
-        update(data: Buffer, input_encoding: any, output_encoding: "utf8"|"ascii"|"binary"): string;
+        update(data: NodeJS.Buffer): NodeJS.Buffer;
+        update(data: string, input_encoding: "binary"|"base64"|"hex"): NodeJS.Buffer;
+        update(data: NodeJS.Buffer, input_encoding: any, output_encoding: "utf8"|"ascii"|"binary"): string;
         update(data: string, input_encoding: "binary"|"base64"|"hex", output_encoding: "utf8"|"ascii"|"binary"): string;
-        final(): Buffer;
+        final(): NodeJS.Buffer;
         final(output_encoding: string): string;
         setAutoPadding(auto_padding: boolean): void;
-        setAuthTag(tag: Buffer): void;
+        setAuthTag(tag: NodeJS.Buffer): void;
     }
     export function createSign(algorithm: string): Signer;
     export interface Signer extends NodeJS.WritableStream {
@@ -1895,14 +1891,14 @@ declare module "crypto" {
         setPrivateKey(public_key: string, encoding?: string): void;
     }
     export function getDiffieHellman(group_name: string): DiffieHellman;
-    export function pbkdf2(password: string|Buffer, salt: string|Buffer, iterations: number, keylen: number, callback: (err: Error, derivedKey: Buffer) => any): void;
-    export function pbkdf2(password: string|Buffer, salt: string|Buffer, iterations: number, keylen: number, digest: string, callback: (err: Error, derivedKey: Buffer) => any): void;
-    export function pbkdf2Sync(password: string|Buffer, salt: string|Buffer, iterations: number, keylen: number) : Buffer;
-    export function pbkdf2Sync(password: string|Buffer, salt: string|Buffer, iterations: number, keylen: number, digest: string) : Buffer;
-    export function randomBytes(size: number): Buffer;
-    export function randomBytes(size: number, callback: (err: Error, buf: Buffer) =>void ): void;
-    export function pseudoRandomBytes(size: number): Buffer;
-    export function pseudoRandomBytes(size: number, callback: (err: Error, buf: Buffer) =>void ): void;
+    export function pbkdf2(password: string|NodeJS.Buffer, salt: string|NodeJS.Buffer, iterations: number, keylen: number, callback: (err: Error, derivedKey: NodeJS.Buffer) => any): void;
+    export function pbkdf2(password: string|NodeJS.Buffer, salt: string|NodeJS.Buffer, iterations: number, keylen: number, digest: string, callback: (err: Error, derivedKey: NodeJS.Buffer) => any): void;
+    export function pbkdf2Sync(password: string|NodeJS.Buffer, salt: string|NodeJS.Buffer, iterations: number, keylen: number) : NodeJS.Buffer;
+    export function pbkdf2Sync(password: string|NodeJS.Buffer, salt: string|NodeJS.Buffer, iterations: number, keylen: number, digest: string) : NodeJS.Buffer;
+    export function randomBytes(size: number): NodeJS.Buffer;
+    export function randomBytes(size: number, callback: (err: Error, buf: NodeJS.Buffer) =>void ): void;
+    export function pseudoRandomBytes(size: number): NodeJS.Buffer;
+    export function pseudoRandomBytes(size: number, callback: (err: Error, buf: NodeJS.Buffer) =>void ): void;
     export interface RsaPublicKey {
         key: string;
         padding?: any;
@@ -1912,8 +1908,8 @@ declare module "crypto" {
         passphrase?: string,
         padding?: any;
     }
-    export function publicEncrypt(public_key: string|RsaPublicKey, buffer: Buffer): Buffer
-    export function privateDecrypt(private_key: string|RsaPrivateKey, buffer: Buffer): Buffer
+    export function publicEncrypt(public_key: string|RsaPublicKey, buffer: NodeJS.Buffer): NodeJS.Buffer
+    export function privateDecrypt(private_key: string|RsaPrivateKey, buffer: NodeJS.Buffer): NodeJS.Buffer
 }
 
 declare module "stream" {
