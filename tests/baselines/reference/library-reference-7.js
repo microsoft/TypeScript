@@ -7,10 +7,10 @@
 declare var alpha: { a: string };
 
 //// [foo.ts]
-/// <reference library="alpha" />
+/// <reference types="alpha" />
 var x: string = alpha.a;
 
 
 //// [foo.js]
-/// <reference library="alpha" />
+/// <reference types="alpha" />
 var x = alpha.a;

@@ -1,12 +1,12 @@
-=== tests/cases/conformance/references/src/foo.ts ===
-/// <reference library="alpha" />
+=== /src/foo.ts ===
+/// <reference types="alpha" />
 var x: string = alpha.a;
 >x : string
 >alpha.a : string
 >alpha : { a: string; }
 >a : string
 
-=== tests/cases/conformance/references/typings/alpha/index.d.ts ===
+=== /types/alpha/index.d.ts ===
 
 // The primary lookup folder is relative to tsconfig.json, if present
 

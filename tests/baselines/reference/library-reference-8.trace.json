@@ -1,0 +1,22 @@
+[
+    "======== Resolving type reference directive 'alpha' from '/foo.ts' with compilation root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/alpha/package.json' does not exist.",
+    "File '/types/alpha/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'alpha' was successfully resolved to '/types/alpha/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'beta' from '/foo.ts' with compilation root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/beta/package.json' does not exist.",
+    "File '/types/beta/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'beta' was successfully resolved to '/types/beta/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'beta' from '/types/alpha/index.d.ts' with compilation root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/beta/package.json' does not exist.",
+    "File '/types/beta/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'beta' was successfully resolved to '/types/beta/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'alpha' from '/types/beta/index.d.ts' with compilation root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/alpha/package.json' does not exist.",
+    "File '/types/alpha/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'alpha' was successfully resolved to '/types/alpha/index.d.ts', primary: true. ========"
+]

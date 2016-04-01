@@ -7,10 +7,10 @@
 declare var $: { foo(): void };
 
 //// [consumer.ts]
-/// <reference library="jquery" />
+/// <reference types="jquery" />
 $.foo();
 
 
 //// [consumer.js]
-/// <reference library="jquery" />
+/// <reference types="jquery" />
 $.foo();

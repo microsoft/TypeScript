@@ -1,14 +1,14 @@
-=== tests/cases/conformance/references/consumer.ts ===
-/// <reference library="jquery" />
+=== /consumer.ts ===
+/// <reference types="jquery" />
 $.foo();
 >$.foo() : void
 >$.foo : () => void
 >$ : { foo(): void; }
 >foo : () => void
 
-=== tests/cases/conformance/references/typings/jquery/index.d.ts ===
+=== /types/jquery/index.d.ts ===
 
-// We can find typings in the ./typings folder
+// We can find typings in the ./types folder
 
 declare var $: { foo(): void };
 >$ : { foo(): void; }

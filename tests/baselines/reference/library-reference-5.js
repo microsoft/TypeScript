@@ -4,24 +4,24 @@
 
 // Secondary references may not be duplicated if they disagree in content
 
-/// <reference library="alpha" />
+/// <reference types="alpha" />
 declare var foo: any;
 
 //// [index.d.ts]
 declare var alpha: any;
 
 //// [index.d.ts]
-/// <reference library="alpha" />
+/// <reference types="alpha" />
 declare var bar: any;
 
 //// [index.d.ts]
 declare var alpha: {};
 
 //// [root.ts]
-/// <reference library="foo" />
-/// <reference library="bar" />
+/// <reference types="foo" />
+/// <reference types="bar" />
 
 
 //// [root.js]
-/// <reference library="foo" />
-/// <reference library="bar" />
+/// <reference types="foo" />
+/// <reference types="bar" />

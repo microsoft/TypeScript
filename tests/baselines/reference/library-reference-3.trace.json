@@ -1,0 +1,10 @@
+[
+    "======== Resolving type reference directive 'jquery' from '/src/consumer.ts' with compilation root dir '/src'. ========",
+    "Resolving with primary search path '/src/types/'",
+    "File '/src/types/jquery/package.json' does not exist.",
+    "File '/src/types/jquery/index.d.ts' does not exist.",
+    "Resolving with primary search path '/src/node_modules/'",
+    "File '/src/node_modules/jquery/package.json' does not exist.",
+    "File '/src/node_modules/jquery/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/src/node_modules/jquery/index.d.ts', primary: true. ========"
+]

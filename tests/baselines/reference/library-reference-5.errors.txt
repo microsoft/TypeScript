@@ -1,29 +1,26 @@
-tests/cases/conformance/references/src/root.ts(1,1): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/references/src/root.ts(2,1): error TS2304: Cannot find name 'bar'.
+/node_modules/bar/index.d.ts(1,1): message TS4090: Conflicting library definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Copy the correct file to the 'typings' folder to resolve this conflict.
 
 
-==== tests/cases/conformance/references/src/root.ts (2 errors) ====
-    /// <reference library="foo" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'foo'.
-    /// <reference library="bar" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'bar'.
+==== /src/root.ts (0 errors) ====
+    /// <reference types="foo" />
+    /// <reference types="bar" />
     
-==== tests/cases/conformance/references/node_modules/foo/index.d.ts (0 errors) ====
+==== /node_modules/foo/index.d.ts (0 errors) ====
     
     // Secondary references may not be duplicated if they disagree in content
     
-    /// <reference library="alpha" />
+    /// <reference types="alpha" />
     declare var foo: any;
     
-==== tests/cases/conformance/references/node_modules/foo/node_modules/alpha/index.d.ts (0 errors) ====
+==== /node_modules/foo/node_modules/alpha/index.d.ts (0 errors) ====
     declare var alpha: any;
     
-==== tests/cases/conformance/references/node_modules/bar/index.d.ts (0 errors) ====
-    /// <reference library="alpha" />
+==== /node_modules/bar/index.d.ts (1 errors) ====
+    /// <reference types="alpha" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! message TS4090: Conflicting library definitions for 'alpha' found at 'index.d.ts' and 'index.d.ts'. Copy the correct file to the 'typings' folder to resolve this conflict.
     declare var bar: any;
     
-==== tests/cases/conformance/references/node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====
+==== /node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====
     declare var alpha: {};
     
