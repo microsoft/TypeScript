@@ -5480,7 +5480,7 @@ namespace ts {
                     || compareTypes(target.thisType, source.thisType, reportErrors);
                 if (!related) {
                     if (reportErrors) {
-                        errorReporter(Diagnostics.this_types_of_each_signature_are_incompatible);
+                        errorReporter(Diagnostics.The_this_types_of_each_signature_are_incompatible);
                     }
                     return Ternary.False;
                 }
@@ -10223,7 +10223,7 @@ namespace ts {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
                 const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
-                const headMessage = Diagnostics.this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
+                const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
                     return false;
                 }

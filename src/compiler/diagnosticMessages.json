@@ -1899,11 +1899,11 @@
         "category": "Error",
         "code": 2683
     },
-    "'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
+    "The 'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
         "category": "Error",
         "code": 2684
     },
-    "'this' types of each signature are incompatible.": {
+    "The 'this' types of each signature are incompatible.": {
         "category": "Error",
         "code": 2685
     },
