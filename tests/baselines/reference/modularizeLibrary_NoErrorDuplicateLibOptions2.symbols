@@ -8,9 +8,9 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 2, 32))
 
     return Array.from(arguments);
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -38,9 +38,9 @@ function Baz() { }
 >Baz : Symbol(Baz, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 12, 9))
 
 Baz.name;
->Baz.name : Symbol(Function.name, Decl(lib.es2015.function.d.ts, --, --))
+>Baz.name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 >Baz : Symbol(Baz, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 12, 9))
->name : Symbol(Function.name, Decl(lib.es2015.function.d.ts, --, --))
+>name : Symbol(Function.name, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 generator
 function* gen() {
@@ -79,9 +79,9 @@ function* gen2() {
 
 // Using ES6 math
 Math.sign(1);
->Math.sign : Symbol(Math.sign, Decl(lib.es2015.math.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.math.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->sign : Symbol(Math.sign, Decl(lib.es2015.math.d.ts, --, --))
+>Math.sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 object
 var o = {
@@ -100,9 +100,9 @@ var o = {
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
->o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2015.object.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >o : Symbol(o, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 39, 3))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2015.object.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -148,21 +148,21 @@ Reflect.isExtensible({});
 // Using Es6 regexp
 var reg = new RegExp("/s");
 >reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 65, 3))
->RegExp : Symbol(RegExp, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.regexp.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 reg.flags;
->reg.flags : Symbol(RegExp.flags, Decl(lib.es2015.regexp.d.ts, --, --))
+>reg.flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
 >reg : Symbol(reg, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 65, 3))
->flags : Symbol(RegExp.flags, Decl(lib.es2015.regexp.d.ts, --, --))
+>flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 string
 var str = "Hello world";
 >str : Symbol(str, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 69, 3))
 
 str.includes("hello", 0);
->str.includes : Symbol(String.includes, Decl(lib.es2015.string.d.ts, --, --))
+>str.includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
 >str : Symbol(str, Decl(modularizeLibrary_NoErrorDuplicateLibOptions2.ts, 69, 3))
->includes : Symbol(String.includes, Decl(lib.es2015.string.d.ts, --, --))
+>includes : Symbol(String.includes, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 symbol
 var s = Symbol();

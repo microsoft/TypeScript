@@ -15,7 +15,7 @@ export class BrokenClass {
 
   return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
 >Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 >resolve : Symbol(resolve, Decl(file1.ts, 8, 47))
@@ -23,7 +23,7 @@ export class BrokenClass {
 
     let result: Array<MyModule.MyModel> = [];
 >result : Symbol(result, Decl(file1.ts, 10, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 
@@ -72,7 +72,7 @@ export class BrokenClass {
       .then((orders: Array<MyModule.MyModel>) => {
 >then : Symbol(Promise.then, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >orders : Symbol(orders, Decl(file1.ts, 23, 13))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >MyModule : Symbol(MyModule, Decl(file1.ts, 1, 6))
 >MyModel : Symbol(MyModule.MyModel, Decl(mymodule.ts, 0, 0))
 
