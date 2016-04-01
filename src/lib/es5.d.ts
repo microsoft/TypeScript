@@ -1510,7 +1510,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): Int8Array;
+    filter(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
