@@ -9554,8 +9554,14 @@ namespace ts {
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
             const type = checkExpression(node);
-            if (strictNullChecks && getNullableKind(type)) {
-                error(node, Diagnostics.Object_is_possibly_null_or_undefined);
+            if (strictNullChecks) {
+                const kind = getNullableKind(type);
+                if (kind) {
+                    error(node, kind & TypeFlags.Undefined ? kind & TypeFlags.Null ?
+                        Diagnostics.Object_is_possibly_null_or_undefined :
+                        Diagnostics.Object_is_possibly_undefined :
+                        Diagnostics.Object_is_possibly_null);
+                }
                 return getNonNullableType(type);
             }
             return type;
