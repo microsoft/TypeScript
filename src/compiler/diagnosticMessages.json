@@ -2517,7 +2517,7 @@
         "category": "Message",
         "code": 6084
     },
-    "Enable tracing of the module resolution process.": {
+    "Enable tracing of the name resolution process.": {
         "category": "Message",
         "code": 6085
     },
@@ -2565,7 +2565,7 @@
         "category": "Message",
         "code": 6096
     },
-    "File '{0}' exist - use it as a module resolution result.": {
+    "File '{0}' exist - use it as a name resolution result.": {
         "category": "Message",
         "code": 6097
     },
@@ -2577,11 +2577,11 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'typings' field.": {
+    "'package.json' does not have 'types' field.": {
         "category": "Message",
         "code": 6100
     },
-    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
+    "'package.json' has '{0}' field '{1}' that references '{2}'.": {
         "category": "Message",
         "code": 6101
     },
@@ -2597,7 +2597,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
+    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -2636,6 +2636,30 @@
     "Unknown option 'excludes'. Did you mean 'exclude'?": {
         "category": "Error",
         "code": 6114
+    },
+    "======== Resolving type reference directive '{0}' from '{1}' with compilation root dir '{2}'. ========": {
+        "category": "Message",
+        "code": 6115
+    },
+    "Resolving using primary search paths...": {
+        "category": "Message",
+        "code": 6116
+    },
+    "Resolving from node_modules folder...": {
+        "category": "Message",
+        "code": 6117
+    },
+    "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
+        "category": "Message",
+        "code": 6118
+    },
+    "======== Type reference directive '{0}' was not resolved. ========": {
+        "category": "Message",
+        "code": 6119
+    },
+    "Resolving with primary search path '{0}'": {
+        "category": "Message",
+        "code": 6120
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

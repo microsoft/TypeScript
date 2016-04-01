@@ -222,7 +222,7 @@ namespace FourSlash {
             function tryAdd(path: string) {
                 const inputFile = inputFiles[path];
                 if (inputFile && !Harness.isLibraryFile(path)) {
-                    languageServiceAdapterHost.addScript(path, inputFile);
+                    languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
                 }
             }
@@ -268,7 +268,7 @@ namespace FourSlash {
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
-                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
+                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content, /*isRootFile*/ true);
 
                 const resolvedResult = languageServiceAdapter.getPreProcessedFileInfo(startResolveFileRef.fileName, startResolveFileRef.content);
                 const referencedFiles: ts.FileReference[] = resolvedResult.referencedFiles;
@@ -292,18 +292,18 @@ namespace FourSlash {
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
                     this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                        Harness.Compiler.getDefaultLibrarySourceFile().text);
+                        Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
                 }
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
                     if (!Harness.isLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName]);
+                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
                 });
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                    Harness.Compiler.getDefaultLibrarySourceFile().text);
+                    Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
 
             this.formatCodeOptions = {

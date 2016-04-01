@@ -67,6 +67,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
+        getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
     }
 
@@ -281,6 +282,7 @@ namespace ts {
         private tracingEnabled = false;
 
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
         constructor(private shimHost: LanguageServiceShimHost) {
@@ -297,6 +299,12 @@ namespace ts {
             }
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
+            }
+            if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
+                this.resolveTypeReferenceDirectives = (typeDirectiveNames: string[], containingFile: string) => {
+                    const typeDirectivesForFile = <Map<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile(containingFile));
+                    return map(typeDirectiveNames, name => lookUp(typeDirectivesForFile, name));
+                };
             }
         }
 
@@ -899,6 +907,7 @@ namespace ts {
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
+        private getCanonicalFileName = createGetCanonicalFileName(false);
 
         constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
@@ -919,36 +928,55 @@ namespace ts {
             });
         }
 
+        public computeCompilationRoot(filesJson: string, currentDirectory: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall("computeCompilationRoot", () => {
+                const files = <string[]>JSON.parse(filesJson);
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                return computeCompilationRoot(files, currentDirectory, compilerOptions, this.getCanonicalFileName);
+            });
+        }
+
+        public resolveTypeReferenceDirective(fileName: string, typeReferenceDirective: string, compilationRoot: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall(`resolveTypeReferenceDirective(${fileName})`, () => {
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const result = resolveTypeReferenceDirective(typeReferenceDirective, normalizeSlashes(fileName), compilationRoot, compilerOptions, this.host);
+                return {
+                    resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
+                    primary: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.primary : true,
+                    failedLookupLocations: result.failedLookupLocations
+                };
+            });
+        }
+
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
                     const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
-                    const convertResult = {
-                        referencedFiles: <IFileReference[]>[],
-                        importedFiles: <IFileReference[]>[],
+                    return {
+                        referencedFiles: this.convertFileReferences(result.referencedFiles),
+                        importedFiles: this.convertFileReferences(result.importedFiles),
                         ambientExternalModules: result.ambientExternalModules,
-                        isLibFile: result.isLibFile
+                        isLibFile: result.isLibFile,
+                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives)
                     };
-
-                    forEach(result.referencedFiles, refFile => {
-                        convertResult.referencedFiles.push({
-                            path: normalizePath(refFile.fileName),
-                            position: refFile.pos,
-                            length: refFile.end - refFile.pos
-                        });
-                    });
-
-                    forEach(result.importedFiles, importedFile => {
-                        convertResult.importedFiles.push({
-                            path: normalizeSlashes(importedFile.fileName),
-                            position: importedFile.pos,
-                            length: importedFile.end - importedFile.pos
-                        });
-                    });
-                    return convertResult;
                 });
+        }
+
+        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+            if (!refs) {
+                return undefined;
+            }
+            const result: IFileReference[] = [];
+            for (const ref of refs) {
+                result.push({
+                    path: normalizeSlashes(ref.fileName),
+                    position: ref.pos,
+                    length: ref.end - ref.pos
+                });
+            }
+            return result;
         }
 
         public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {

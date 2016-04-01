@@ -65,6 +65,11 @@ namespace Utils {
         return Buffer ? (new Buffer(s)).toString("utf8") : s;
     }
 
+    export function byteLength(s: string, encoding?: string): number {
+        // stub implementation if Buffer is not available (in-browser case)
+        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
+    }
+
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const environment = getExecutionEnvironment();
         switch (environment) {
@@ -1042,7 +1047,7 @@ namespace Harness {
                 options.newLine);
 
             let traceResults: string[];
-            if (options.traceModuleResolution) {
+            if (options.traceResolution) {
                 traceResults = [];
                 compilerHost.trace = text => traceResults.push(text);
             }

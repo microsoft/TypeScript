@@ -6,7 +6,7 @@ namespace ts {
         fileReference?: FileReference;
         diagnosticMessage?: DiagnosticMessage;
         isNoDefaultLib?: boolean;
-        isLibraryReference?: boolean;
+        isTypeReferenceDirective?: boolean;
     }
 
     export interface SynthesizedNode extends Node {
@@ -117,6 +117,43 @@ namespace ts {
         }
 
         sourceFile.resolvedModules[moduleNameText] = resolvedModule;
+    }
+
+    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
+        if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
+            sourceFile.resolvedTypeReferenceDirectiveNames = {};
+        }
+
+        sourceFile.resolvedTypeReferenceDirectiveNames[typeReferenceDirectiveName] = resolvedTypeReferenceDirective;
+    }
+
+    /* @internal */
+    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModule, newResolution: ResolvedModule): boolean {
+        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport;
+    }
+
+    /* @internal */
+    export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
+        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
+    }
+
+    /* @internal */
+    export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+        if (names.length !== newResolutions.length) {
+            return false;
+        }
+        for (let i = 0; i < names.length; i++) {
+            const newResolution = newResolutions[i];
+            const oldResolution = oldResolutions && hasProperty(oldResolutions, names[i]) ? oldResolutions[names[i]] : undefined;
+            const changed =
+                oldResolution
+                    ? !newResolution || !comparer(oldResolution, newResolution)
+                    : newResolution;
+            if (changed) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -499,7 +536,7 @@ namespace ts {
     }
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export let fullTripleSlashReferenceLibraryRegEx = /^(\/\/\/\s*<reference\s+library\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export let fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
     export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
 
     export function isTypeNode(node: Node): boolean {
@@ -1551,7 +1588,7 @@ namespace ts {
             }
             else {
                 const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
-                const refLibResult = !refMatchResult && fullTripleSlashReferenceLibraryRegEx.exec(comment);
+                const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
                 if (refMatchResult || refLibResult) {
                     const start = commentRange.pos;
                     const end = commentRange.end;
@@ -1562,7 +1599,7 @@ namespace ts {
                             fileName: (refMatchResult || refLibResult)[3]
                         },
                         isNoDefaultLib: false,
-                        isLibraryReference: !!refLibResult
+                        isTypeReferenceDirective: !!refLibResult
                     };
                 }
 

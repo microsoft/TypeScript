@@ -312,19 +312,19 @@ namespace ts {
             }
         },
         {
-            name: "librarySearchPaths",
+            name: "typesSearchPaths",
             type: "list",
             isTSConfigOnly: true,
             element: {
-                name: "librarySearchPaths",
+                name: "typesSearchPaths",
                 type: "string",
                 isFilePath: true
             }
         },
         {
-            name: "traceModuleResolution",
+            name: "traceResolution",
             type: "boolean",
-            description: Diagnostics.Enable_tracing_of_the_module_resolution_process
+            description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
         {
             name: "allowJs",

@@ -81,8 +81,14 @@ namespace ts.server {
         }
     }
 
-    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations {
-        lastCheckTime: number;
+    interface Timestamped {
+        lastCheckTime?: number;
+    }
+
+    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations, Timestamped {
+    }
+
+    interface TimestampedResolvedTypeReferenceDirective extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, Timestamped {
     }
 
     export class LSHost implements ts.LanguageServiceHost {
@@ -90,13 +96,17 @@ namespace ts.server {
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
+        compilationRoot: string;
+
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -105,46 +115,51 @@ namespace ts.server {
             };
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
+        private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
+            names: string[],
+            containingFile: string,
+            cache: ts.FileMap<Map<T>>,
+            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
+            getResult: (s: T) => R): R[] {
+
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const currentResolutionsInFile = this.resolvedModuleNames.get(path);
+            const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<TimestampedResolvedModule> = {};
-            const resolvedModules: ResolvedModule[] = [];
-
+            const newResolutions: Map<T> = {};
+            const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
-            for (const moduleName of moduleNames) {
+            for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, moduleName);
+                let resolution = lookUp(newResolutions, name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
                     if (moduleResolutionIsValid(existingResolution)) {
-                        // ok, it is safe to use existing module resolution results
+                        // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[moduleName] = resolution;
+                        newResolutions[name] = resolution;
                     }
                 }
 
                 ts.Debug.assert(resolution !== undefined);
 
-                resolvedModules.push(resolution.resolvedModule);
+                resolvedModules.push(getResult(resolution));
             }
 
             // replace old results with a new one
-            this.resolvedModuleNames.set(path, newResolutions);
+            cache.set(path, newResolutions);
             return resolvedModules;
 
-            function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
+            function moduleResolutionIsValid(resolution: T): boolean {
                 if (!resolution) {
                     return false;
                 }
 
-                if (resolution.resolvedModule) {
+                if (getResult(resolution)) {
                     // TODO: consider checking failedLookupLocations
                     // TODO: use lastCheckTime to track expiration for module name resolution
                     return true;
@@ -154,6 +169,20 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
+        }
+
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
+            if (this.compilationRoot === undefined) {
+                this.compilationRoot = computeCompilationRoot(this.getScriptFileNames(), this.getCurrentDirectory(), this.getCompilationSettings(), this.getCanonicalFileName);
+            }
+            const loader = (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => {
+                return resolveTypeReferenceDirective(name, containingFile, this.compilationRoot, options, this.moduleResolutionHost);
+            };
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, loader, m => m.resolvedTypeReferenceDirective);
+        }
+
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, resolveModuleName, m => m.resolvedModule);
         }
 
         getDefaultLibFileName() {
@@ -172,6 +201,7 @@ namespace ts.server {
             this.compilationSettings = opt;
             // conservatively assume that changing compiler options might affect module resolution strategy
             this.resolvedModuleNames.clear();
+            this.resolvedTypeReferenceDirectives.clear();
         }
 
         lineAffectsRefs(filename: string, line: number) {
@@ -212,6 +242,7 @@ namespace ts.server {
             if (!info.isOpen) {
                 this.filenameToScript.remove(info.path);
                 this.resolvedModuleNames.remove(info.path);
+                this.resolvedTypeReferenceDirectives.remove(info.path);
             }
         }
 
@@ -231,6 +262,8 @@ namespace ts.server {
             if (!this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.set(info.path, info);
                 this.roots.push(info);
+                // reset compilation root
+                this.compilationRoot = undefined;
             }
         }
 
@@ -239,6 +272,9 @@ namespace ts.server {
                 this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
+                this.resolvedTypeReferenceDirectives.remove(info.path);
+                // reset compilation root
+                this.compilationRoot = undefined;
             }
         }
 
