@@ -856,8 +856,6 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-            const harnessNormalizePath = (f: string) => <ts.Path>ts.normalizePath(getCanonicalFileName(f));
-
             const fileMap: ts.FileMap<ts.SourceFile> = ts.createFileMap<ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
@@ -865,7 +863,6 @@ namespace Harness {
                     const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
                     fileMap.set(path, sourceFile);
-                    fileMap.set(harnessNormalizePath(path), sourceFile);
                 }
             }
 
@@ -902,10 +899,10 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => {
-                    return fileMap.contains(harnessNormalizePath(fileName));
+                    return fileMap.contains(ts.toPath(fileName, currentDirectory, getCanonicalFileName));
                 },
                 readFile: (fileName: string): string => {
-                    return fileMap.get(harnessNormalizePath(fileName)).getText();
+                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)).getText();
                 }
             };
         }
@@ -1493,7 +1490,7 @@ namespace Harness {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
                     tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
-                    tsConfig.options.configFilePath = <ts.Path>data.name;
+                    tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list
                     testUnitData.splice(i, 1);

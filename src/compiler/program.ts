@@ -12,7 +12,7 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    const defaultLibrarySearchPaths = <Path[]>[
+    const defaultLibrarySearchPaths = [
         "types/",
         "node_modules/",
         "node_modules/@types/",
