@@ -89,13 +89,13 @@ define(["require", "exports"], function (require, exports) {
         }
         m1.foo = foo;
     })(m1 || (m1 = {}));
-    var m3;
     (function (m3) {
         function foo() {
             return m1.foo();
         }
         m3.foo = foo;
-    })(m3 = exports.m3 || (exports.m3 = {}));
+    })(exports.m3 || (exports.m3 = {}));
+    var m3 = exports.m3;
     exports.eVar2 = 10;
     var eVar22;
     exports.eVar3 = 10;

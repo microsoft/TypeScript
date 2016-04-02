@@ -25,7 +25,6 @@ class B extends A {
             [super.foo()]() {
                 return 100;
             }
-        }
-        ;
+        };
     }
 }
