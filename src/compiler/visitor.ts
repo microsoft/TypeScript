@@ -437,6 +437,10 @@ namespace ts {
         [SyntaxKind.SourceFile]: [
             { name: "statements", test: isStatement },
         ],
+        [SyntaxKind.NotEmittedStatement]: [],
+        [SyntaxKind.PartiallyEmittedExpression]: [
+            { name: "expression", test: isExpression }
+        ]
     };
 
     /**

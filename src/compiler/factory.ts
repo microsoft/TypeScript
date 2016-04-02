@@ -413,6 +413,11 @@ namespace ts {
         return node;
     }
 
+    export function createOmittedExpression(location?: TextRange) {
+        const node = <OmittedExpression>createNode(SyntaxKind.OmittedExpression, location);
+        return node;
+    }
+
     export function createExpressionWithTypeArguments(expression: Expression, location?: TextRange) {
         const node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments, location);
         node.typeArguments = undefined;
@@ -624,6 +629,34 @@ namespace ts {
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
         node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
+        return node;
+    }
+
+    // Transformation nodes
+
+    /**
+     * Creates a synthetic statement to act as a placeholder for a not-emitted statement in
+     * order to preserve comments.
+     *
+     * @param original The original statement.
+     */
+    export function createNotEmittedStatement(original: Node) {
+        const node = <NotEmittedStatement>createNode(SyntaxKind.NotEmittedStatement, /*location*/ original);
+        node.original = original;
+        return node;
+    }
+
+    /**
+     * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
+     * order to preserve comments.
+     *
+     * @param expression The inner expression to emit.
+     * @param original The original outer expression.
+     */
+    export function createPartiallyEmittedExpression(expression: Expression, original: Node) {
+        const node = <PartiallyEmittedExpression>createNode(SyntaxKind.PartiallyEmittedExpression, /*location*/ original);
+        node.expression = expression;
+        node.original = original;
         return node;
     }
 
@@ -1067,7 +1100,7 @@ namespace ts {
     }
 
     export function createCallBinding(expression: Expression, languageVersion?: ScriptTarget): CallBinding {
-        const callee = skipParentheses(expression);
+        const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
         if (isSuperProperty(callee)) {
@@ -1180,8 +1213,10 @@ namespace ts {
      *                           BinaryExpression.
      */
     export function parenthesizeBinaryOperand(binaryOperator: SyntaxKind, operand: Expression, isLeftSideOfBinary: boolean, leftOperand?: Expression) {
+        const skipped = skipPartiallyEmittedExpressions(operand);
+
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
-        if (operand.kind === SyntaxKind.ParenthesizedExpression) {
+        if (skipped.kind === SyntaxKind.ParenthesizedExpression) {
             return operand;
         }
 
@@ -1217,7 +1252,8 @@ namespace ts {
         // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
-        const operandPrecedence = getExpressionPrecedence(operand);
+        const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        const operandPrecedence = getExpressionPrecedence(emittedOperand);
         switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
                 return true;
@@ -1240,8 +1276,8 @@ namespace ts {
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
-                    if (isBinaryExpression(operand)
-                        && operand.operatorToken.kind === binaryOperator) {
+                    if (isBinaryExpression(emittedOperand)
+                        && emittedOperand.operatorToken.kind === binaryOperator) {
                         // No need to parenthesize the right operand when the binary operator and
                         // operand are the same and one of the following:
                         //  x*(a*b)     => x*a*b
@@ -1260,7 +1296,7 @@ namespace ts {
                         //  "a"+("b"+"c")   => "a"+"b"+"c"
                         if (binaryOperator === SyntaxKind.PlusToken) {
                             const leftKind = leftOperand ? getLiteralKindOfBinaryPlusOperand(leftOperand) : SyntaxKind.Unknown;
-                            if (leftKind === getLiteralKindOfBinaryPlusOperand(operand)) {
+                            if (isLiteralKind(leftKind) && leftKind === getLiteralKindOfBinaryPlusOperand(emittedOperand)) {
                                 return false;
                             }
                         }
@@ -1275,7 +1311,7 @@ namespace ts {
                     // associative:
                     //  x/(a*b)     -> x/(a*b)
                     //  x**(a/b)    -> x**(a/b)
-                    const operandAssociativity = getExpressionAssociativity(operand);
+                    const operandAssociativity = getExpressionAssociativity(emittedOperand);
                     return operandAssociativity === Associativity.Left;
                 }
         }
@@ -1301,6 +1337,41 @@ namespace ts {
             || binaryOperator === SyntaxKind.CaretToken;
     }
 
+    interface BinaryPlusExpression extends BinaryExpression {
+        cachedLiteralKind: SyntaxKind;
+    }
+
+    /**
+     * This function determines whether an expression consists of a homogeneous set of
+     * literal expressions or binary plus expressions that all share the same literal kind.
+     * It is used to determine whether the right-hand operand of a binary plus expression can be
+     * emitted without parentheses.
+     */
+    function getLiteralKindOfBinaryPlusOperand(node: Expression): SyntaxKind {
+        node = skipPartiallyEmittedExpressions(node);
+
+        if (isLiteralKind(node.kind)) {
+            return node.kind;
+        }
+
+        if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
+            if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
+                return (<BinaryPlusExpression>node).cachedLiteralKind;
+            }
+
+            const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+            const literalKind = isLiteralKind(leftKind)
+                && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
+                    ? leftKind
+                    : SyntaxKind.Unknown;
+
+            (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
+            return literalKind;
+        }
+
+        return SyntaxKind.Unknown;
+    }
+
     /**
      * Wraps an expression in parentheses if it is needed in order to use the expression
      * as the expression of a NewExpression node.
@@ -1308,13 +1379,14 @@ namespace ts {
      * @param expression The Expression node.
      */
     export function parenthesizeForNew(expression: Expression): LeftHandSideExpression {
-        switch (expression.kind) {
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        switch (emittedExpression.kind) {
             case SyntaxKind.CallExpression:
                 return createParen(expression);
 
             case SyntaxKind.NewExpression:
-                return (<NewExpression>expression).arguments
-                    ? <NewExpression>expression
+                return (<NewExpression>emittedExpression).arguments
+                    ? <LeftHandSideExpression>expression
                     : createParen(expression);
         }
 
@@ -1336,9 +1408,10 @@ namespace ts {
         //    NumericLiteral
         //       1.x            -> not the same as (1).x
         //
-        if (isLeftHandSideExpression(expression)
-            && (expression.kind !== SyntaxKind.NewExpression || (<NewExpression>expression).arguments)
-            && expression.kind !== SyntaxKind.NumericLiteral) {
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        if (isLeftHandSideExpression(emittedExpression)
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
+            && emittedExpression.kind !== SyntaxKind.NumericLiteral) {
             return <LeftHandSideExpression>expression;
         }
 
@@ -1378,7 +1451,8 @@ namespace ts {
     }
 
     export function parenthesizeExpressionForList(expression: Expression) {
-        const expressionPrecedence = getExpressionPrecedence(expression);
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        const expressionPrecedence = getExpressionPrecedence(emittedExpression);
         const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
         return expressionPrecedence > commaPrecedence
             ? expression
@@ -1386,17 +1460,18 @@ namespace ts {
     }
 
     export function parenthesizeExpressionForExpressionStatement(expression: Expression) {
-        if (isCallExpression(expression)) {
-            const callee = expression.expression;
-            if (callee.kind === SyntaxKind.FunctionExpression
-                || callee.kind === SyntaxKind.ArrowFunction) {
-                const clone = getMutableClone(expression);
-                clone.expression = createParen(callee, /*location*/ callee);
-                return clone;
+        const emittedExpression = skipPartiallyEmittedExpressions(expression);
+        if (isCallExpression(emittedExpression)) {
+            const callee = emittedExpression.expression;
+            const kind = skipPartiallyEmittedExpressions(callee).kind;
+            if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
+                const mutableCall = getMutableClone(emittedExpression);
+                mutableCall.expression = createParen(callee, /*location*/ callee);
+                return recreatePartiallyEmittedExpressions(expression, mutableCall);
             }
         }
         else {
-            const leftmostExpressionKind = getLeftmostExpression(expression).kind;
+            const leftmostExpressionKind = getLeftmostExpression(emittedExpression).kind;
             if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
                 return createParen(expression, /*location*/ expression);
             }
@@ -1405,27 +1480,20 @@ namespace ts {
         return expression;
     }
 
-    export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (body.kind === SyntaxKind.ObjectLiteralExpression) {
-            return createParen(<Expression>body, /*location*/ body);
+    /**
+     * Clones a series of not-emitted expressions with a new inner expression.
+     *
+     * @param originalOuterExpression The original outer expression.
+     * @param newInnerExpression The new inner expression.
+     */
+    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
+        if (isPartiallyEmittedExpression(originalOuterExpression)) {
+            const clone = getMutableClone(originalOuterExpression);
+            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
+            return clone;
         }
 
-        return body;
-    }
-
-    function getLiteralKindOfBinaryPlusOperand(node: Expression): SyntaxKind {
-        if (isLiteralKind(node.kind)) {
-            return node.kind;
-        }
-
-        if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
-            const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
-            if (leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)) {
-                return leftKind;
-            }
-        }
-
-        return SyntaxKind.Unknown;
+        return newInnerExpression;
     }
 
     function getLeftmostExpression(node: Expression): Expression {
@@ -1448,17 +1516,81 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                     node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
                     continue;
+
+                case SyntaxKind.PartiallyEmittedExpression:
+                    node = (<PartiallyEmittedExpression>node).expression;
+                    continue;
             }
 
             return node;
         }
     }
 
-    export function skipParentheses(node: Expression): Expression {
-        while (node.kind === SyntaxKind.ParenthesizedExpression
-            || node.kind === SyntaxKind.TypeAssertionExpression
-            || node.kind === SyntaxKind.AsExpression) {
-            node = (<ParenthesizedExpression | AssertionExpression>node).expression;
+    export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
+        const emittedBody = skipPartiallyEmittedExpressions(body);
+        if (emittedBody.kind === SyntaxKind.ObjectLiteralExpression) {
+            return createParen(<Expression>body, /*location*/ body);
+        }
+
+        return body;
+    }
+
+    export const enum OuterExpressionKinds {
+        Parentheses = 1 << 0,
+        Assertions = 1 << 1,
+        PartiallyEmittedExpressions = 1 << 2,
+
+        All = Parentheses | Assertions | PartiallyEmittedExpressions
+    }
+
+    export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
+    export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
+    export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
+        let previousNode: Node;
+        do {
+            previousNode = node;
+            if (kinds & OuterExpressionKinds.Parentheses) {
+                node = skipParentheses(node);
+            }
+
+            if (kinds & OuterExpressionKinds.Assertions) {
+                node = skipAssertions(node);
+            }
+
+            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
+                node = skipPartiallyEmittedExpressions(node);
+            }
+        }
+        while (previousNode !== node);
+
+        return node;
+    }
+
+    export function skipParentheses(node: Expression): Expression;
+    export function skipParentheses(node: Node): Node;
+    export function skipParentheses(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = (<ParenthesizedExpression>node).expression;
+        }
+
+        return node;
+    }
+
+    export function skipAssertions(node: Expression): Expression;
+    export function skipAssertions(node: Node): Node;
+    export function skipAssertions(node: Node): Node {
+        while (isAssertionExpression(node)) {
+            node = (<AssertionExpression>node).expression;
+        }
+
+        return node;
+    }
+
+    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    export function skipPartiallyEmittedExpressions(node: Node): Node;
+    export function skipPartiallyEmittedExpressions(node: Node) {
+        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
+            node = (<PartiallyEmittedExpression>node).expression;
         }
 
         return node;

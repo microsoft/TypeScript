@@ -6,8 +6,10 @@ namespace ts {
         getSourceMapData(): SourceMapData;
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number): void;
-        emitStart(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean): void;
-        emitEnd(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean): void;
+        emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        emitStart(range: TextRange): void;
+        emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        emitEnd(range: TextRange): void;
         /*@deprecated*/ changeEmitSourcePos(): void;
         /*@deprecated*/ stopOverridingSpan(): void;
         getText(): string;
@@ -33,8 +35,8 @@ namespace ts {
             nullSourceMapWriter = {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange, shouldEmit?: Function, shouldEmitNested?: Function): void { },
+                emitStart(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void { },
+                emitEnd(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void { },
                 emitPos(pos: number): void { },
                 changeEmitSourcePos(): void { },
                 stopOverridingSpan(): void { },
@@ -320,22 +322,26 @@ namespace ts {
             return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
         }
 
-        function emitStart(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean) {
-            if (!shouldEmit || shouldEmit(range)) {
+        function emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        function emitStart(range: TextRange): void;
+        function emitStart(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean) {
+            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>range))) {
                 emitPos(getStartPos(range));
             }
 
-            if (shouldEmitNested && !shouldEmitNested(range)) {
+            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>range)) {
                 disable();
             }
         }
 
-        function emitEnd(range: TextRange, shouldEmit?: (range: TextRange) => boolean, shouldEmitNested?: (range: TextRange) => boolean) {
-            if (shouldEmitNested && !shouldEmitNested(range)) {
+        function emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        function emitEnd(range: TextRange): void;
+        function emitEnd(range: TextRange, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean) {
+            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>range)) {
                 enable();
             }
 
-            if (!shouldEmit || shouldEmit(range)) {
+            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>range))) {
                 emitPos(range.end);
             }
 

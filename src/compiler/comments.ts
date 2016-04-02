@@ -5,14 +5,14 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
-        getLeadingComments(range: Node, getAdditionalRange?: (range: Node) => Node): CommentRange[];
+        getLeadingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[];
         getLeadingComments(range: TextRange): CommentRange[];
         getLeadingCommentsOfPosition(pos: number): CommentRange[];
-        getTrailingComments(range: Node, getAdditionalRange?: (range: Node) => Node): CommentRange[];
+        getTrailingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[];
         getTrailingComments(range: TextRange): CommentRange[];
         getTrailingCommentsOfPosition(pos: number): CommentRange[];
-        emitLeadingComments(range: TextRange, comments?: CommentRange[]): void;
-        emitTrailingComments(range: TextRange, comments?: CommentRange[]): void;
+        emitLeadingComments(range: TextRange, comments: CommentRange[]): void;
+        emitTrailingComments(range: TextRange, comments: CommentRange[]): void;
         emitDetachedComments(range: TextRange): void;
     }
 
@@ -40,12 +40,12 @@ namespace ts {
             return {
                 reset,
                 setSourceFile,
-                getLeadingComments(range: TextRange, getAdditionalRange?: (range: TextRange) => TextRange): CommentRange[] { return undefined; },
+                getLeadingComments(range: TextRange, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[] { return undefined; },
                 getLeadingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
-                getTrailingComments(range: TextRange, getAdditionalRange?: (range: TextRange) => TextRange): CommentRange[] { return undefined; },
+                getTrailingComments(range: TextRange, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[] { return undefined; },
                 getTrailingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
-                emitLeadingComments(range: TextRange, comments?: CommentRange[]): void { },
-                emitTrailingComments(range: TextRange, comments?: CommentRange[]): void { },
+                emitLeadingComments(range: TextRange, comments: CommentRange[]): void { },
+                emitTrailingComments(range: TextRange, comments: CommentRange[]): void { },
                 emitDetachedComments,
             };
 
@@ -68,38 +68,48 @@ namespace ts {
                 emitDetachedComments,
             };
 
-            function getLeadingComments(range: TextRange | Node, getAdditionalRange?: (range: Node) => Node) {
-                let comments = getLeadingCommentsOfPosition(range.pos);
-                if (getAdditionalRange) {
-                    let additionalRange = getAdditionalRange(<Node>range);
-                    while (additionalRange) {
-                        comments = concatenate(
-                            getLeadingCommentsOfPosition(additionalRange.pos),
-                            comments
-                        );
-
-                        additionalRange = getAdditionalRange(additionalRange);
+            function getLeadingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean) {
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
+                    // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                    // unless it is a triple slash comment at the top of the file.
+                    // For Example:
+                    //      /// <reference-path ...>
+                    //      declare var x;
+                    //      /// <reference-path ...>
+                    //      interface F {}
+                    //  The first /// will NOT be removed while the second one will be removed even though both nodes will not be emitted
+                    if (range.pos === 0) {
+                        return filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
                     }
+
+                    return undefined;
                 }
 
-                return comments;
+                return getLeadingCommentsOfPosition(range.pos);
             }
 
-            function getTrailingComments(range: TextRange | Node, getAdditionalRange?: (range: Node) => Node) {
-                let comments = getTrailingCommentsOfPosition(range.end);
-                if (getAdditionalRange) {
-                    let additionalRange = getAdditionalRange(<Node>range);
-                    while (additionalRange) {
-                        comments = concatenate(
-                            comments,
-                            getTrailingCommentsOfPosition(additionalRange.end)
-                        );
+            /**
+             * Determine if the given comment is a triple-slash
+             **/
+            function isTripleSlashComment(comment: CommentRange) {
+                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+                // so that we don't end up computing comment string and doing match for all // comments
+                if (currentText.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                    comment.pos + 2 < comment.end &&
+                    currentText.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
+                    const textSubStr = currentText.substring(comment.pos, comment.end);
+                    return fullTripleSlashReferencePathRegEx.test(textSubStr)
+                        || fullTripleSlashAMDReferencePathRegEx.test(textSubStr);
+                }
+                return false;
+            }
 
-                        additionalRange = getAdditionalRange(additionalRange);
-                    }
+            function getTrailingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean) {
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
+                    return undefined;
                 }
 
-                return comments;
+                return getTrailingCommentsOfPosition(range.end);
             }
 
             function getLeadingCommentsOfPosition(pos: number) {
@@ -124,14 +134,14 @@ namespace ts {
                 return consumeCommentRanges(comments);
             }
 
-            function emitLeadingComments(range: TextRange, comments = getLeadingComments(range)) {
+            function emitLeadingComments(range: TextRange, comments: CommentRange[]) {
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, range, comments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentText, currentLineMap, writer, comments, /*leadingSeparator*/ false, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitTrailingComments(range: TextRange, comments = getTrailingComments(range)) {
+            function emitTrailingComments(range: TextRange, comments: CommentRange[]) {
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
                 emitComments(currentText, currentLineMap, writer, comments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
             }
