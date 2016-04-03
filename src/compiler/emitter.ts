@@ -2926,6 +2926,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
+                    emitLeadingCommentsOfPosition(node.thenStatement.end);
                     writeLine();
                     emitToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
