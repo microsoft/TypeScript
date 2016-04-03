@@ -8,7 +8,7 @@ var f = () => this;
 //// [collisionThisExpressionAndModuleInGlobal.js]
 var _this = this;
 var _this;
-(function (_this) {
+(function (_this) {//Error
     var c = (function () {
         function c() {
         }

@@ -49,4 +49,6 @@ var Foo;
         }
         return Helper;
     }());
+    // Inner should not show up in intellisense
+    // Outer should show up in intellisense
 })(Foo || (Foo = {}));

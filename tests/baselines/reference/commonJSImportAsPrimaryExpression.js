@@ -27,4 +27,5 @@ exports.C1 = C1;
 "use strict";
 var foo = require("./foo_0");
 if (foo.C1.s1) {
+    // Should cause runtime import
 }

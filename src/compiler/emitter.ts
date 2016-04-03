@@ -2845,6 +2845,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
+            function emitEmptyBlockComments(node: Node) {
+                // special handling for empty blocks
+                let pos = node.pos;
+
+                // skipping leading comments
+                const comments = getLeadingCommentRanges(currentText, node.pos);
+
+                if (comments) {
+                    pos = comments[comments.length - 1].end;
+                }
+
+                pos = currentText.indexOf("{", pos) + 1;
+                // emitting all comments after '{'
+                emitTrailingCommentsOfPosition(pos);
+                emitLeadingCommentsOfPosition(pos);
+            }
+
             function emitBlock(node: Block) {
                 if (isSingleLineEmptyBlock(node)) {
                     emitToken(SyntaxKind.OpenBraceToken, node.pos);
@@ -2855,6 +2872,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
+
+                if (!!node.statements.length) {
+                    const firstStatementNode = node.statements[0];
+                    emitTrailingCommentsOfPosition(firstStatementNode.pos);
+                }
+                else {
+                    emitEmptyBlockComments(node);
+                }
+
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
                     emitCaptureThisForNodeIfNecessary(node.parent);
@@ -2863,6 +2889,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     emitTempDeclarations(/*newLine*/ true);
                 }
+
+                if (!!node.statements.length) {
+                    const lastStatementNode = node.statements[node.statements.length - 1];
+                    emitLeadingCommentsOfPosition(lastStatementNode.end);
+                }
+
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);

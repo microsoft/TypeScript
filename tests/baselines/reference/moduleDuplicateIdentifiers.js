@@ -49,7 +49,7 @@ var FooBar;
     FooBar.member1 = 2;
 })(FooBar = exports.FooBar || (exports.FooBar = {}));
 var FooBar;
-(function (FooBar) {
+(function (FooBar) {// Shouldn't error
     FooBar.member2 = 42;
 })(FooBar = exports.FooBar || (exports.FooBar = {}));
 var Kettle = (function () {
