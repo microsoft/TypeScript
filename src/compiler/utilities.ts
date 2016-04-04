@@ -184,21 +184,22 @@ namespace ts {
         const lineStarts = getLineStarts(sourceFile);
 
         const lineIndex = line;
+        const sourceText = sourceFile.text;
         if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
-            return sourceFile.text.length - 1;
+            return sourceText.length - 1;
         }
         else {
             // current line start
             const start = lineStarts[lineIndex];
-            // take the start position of the next line -1 = it should be some line break
+            // take the start position of the next line - 1 = it should be some line break
             let pos = lineStarts[lineIndex + 1] - 1;
-            Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
+            Debug.assert(isLineBreak(sourceText.charCodeAt(pos)));
             // walk backwards skipping line breaks, stop the the beginning of current line.
             // i.e:
             // <some text>
             // $ <- end of line for this position should match the start position
-            while (start <= pos && isLineBreak(sourceFile.text.charCodeAt(pos))) {
+            while (start <= pos && isLineBreak(sourceText.charCodeAt(pos))) {
                 pos--;
             }
             return pos;
