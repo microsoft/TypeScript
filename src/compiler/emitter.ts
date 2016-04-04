@@ -1036,7 +1036,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     return;
                 }
 
-                const emitOuterParens = isPartOfExpression(node.parent)
+                const emitOuterParens = node.parent.kind !== SyntaxKind.ArrowFunction
+                    && isPartOfExpression(node.parent)
                     && templateNeedsParens(node, <Expression>node.parent);
 
                 if (emitOuterParens) {

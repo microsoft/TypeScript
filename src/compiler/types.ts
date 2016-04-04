@@ -344,6 +344,10 @@ namespace ts {
         // Synthesized list
         SyntaxList,
 
+        // Transformation nodes
+        NotEmittedStatement,
+        PartiallyEmittedExpression,
+
         // Enum value count
         Count,
         // Markers
@@ -823,6 +827,14 @@ namespace ts {
     // @kind(SyntaxKind.OmittedExpression)
     export interface OmittedExpression extends Expression { }
 
+    // Represents an expression that is elided as part of a transformation to emit comments on a
+    // not-emitted node. The 'expression' property of a NotEmittedExpression should be emitted.
+    // @internal
+    // @kind(SyntaxKind.NotEmittedExpression)
+    export interface PartiallyEmittedExpression extends LeftHandSideExpression {
+        expression: Expression;
+    }
+
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
@@ -1097,6 +1109,13 @@ namespace ts {
 
     export interface Statement extends Node {
         _statementBrand: any;
+    }
+
+    // Represents a statement that is elided as part of a transformation to emit comments on a
+    // not-emitted node.
+    // @internal
+    // @kind(SyntaxKind.NotEmittedStatement)
+    export interface NotEmittedStatement extends Statement {
     }
 
     // @kind(SyntaxKind.EmptyStatement)
@@ -2850,13 +2869,11 @@ namespace ts {
         NoLexicalEnvironment = 1 << 5,           // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
         SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
         AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
-        IsNotEmittedNode = 1 << 8,               // Is a node that is not emitted but whose comments should be preserved if possible.
-        EmitCommentsOfNotEmittedParent = 1 << 9, // Emits comments of missing parent nodes.
-        NoSubstitution = 1 << 10,                // Disables further substitution of an expression.
-        CapturesThis = 1 << 11,                  // The function captures a lexical `this`
-        NoSourceMap = 1 << 12,                   // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 13,            // Do not emit source map locations for children of this node.
-        PrefixExportedLocal = 1 << 14,
+        NoSubstitution = 1 << 8,                 // Disables further substitution of an expression.
+        CapturesThis = 1 << 9,                   // The function captures a lexical `this`
+        NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
+        NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
+        PrefixExportedLocal = 1 << 12,
     }
 
     /** Additional context provided to `visitEachChild` */

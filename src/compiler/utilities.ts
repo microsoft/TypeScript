@@ -3274,8 +3274,7 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments;
     }
 
-    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
-        const kind = node.kind;
+    function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.PropertyAccessExpression
             || kind === SyntaxKind.ElementAccessExpression
             || kind === SyntaxKind.NewExpression
@@ -3301,8 +3300,11 @@ namespace ts {
             || kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
-        const kind = node.kind;
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+        return isLeftHandSideExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isUnaryExpressionKind(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.PrefixUnaryExpression
             || kind === SyntaxKind.PostfixUnaryExpression
             || kind === SyntaxKind.DeleteExpression
@@ -3310,11 +3312,14 @@ namespace ts {
             || kind === SyntaxKind.VoidExpression
             || kind === SyntaxKind.AwaitExpression
             || kind === SyntaxKind.TypeAssertionExpression
-            || isLeftHandSideExpression(node);
+            || isLeftHandSideExpressionKind(kind);
     }
 
-    export function isExpression(node: Node): node is Expression {
-        const kind = node.kind;
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
+        return isUnaryExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    function isExpressionKind(kind: SyntaxKind) {
         return kind === SyntaxKind.ConditionalExpression
             || kind === SyntaxKind.YieldExpression
             || kind === SyntaxKind.ArrowFunction
@@ -3322,7 +3327,30 @@ namespace ts {
             || kind === SyntaxKind.SpreadElementExpression
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
-            || isUnaryExpression(node);
+            || isUnaryExpressionKind(kind);
+    }
+
+    export function isExpression(node: Node): node is Expression {
+        return isExpressionKind(skipPartiallyEmittedExpressions(node).kind);
+    }
+
+    export function isAssertionExpression(node: Node): node is AssertionExpression {
+        const kind = node.kind;
+        return kind === SyntaxKind.TypeAssertionExpression
+            || kind === SyntaxKind.AsExpression;
+    }
+
+    export function isPartiallyEmittedExpression(node: Node): node is PartiallyEmittedExpression {
+        return node.kind === SyntaxKind.PartiallyEmittedExpression;
+    }
+
+    export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
+        return node.kind === SyntaxKind.NotEmittedStatement;
+    }
+
+    export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
+        return isNotEmittedStatement(node)
+            || isPartiallyEmittedExpression(node);
     }
 
     // Misc
@@ -3455,7 +3483,8 @@ namespace ts {
             || kind === SyntaxKind.TryStatement
             || kind === SyntaxKind.VariableStatement
             || kind === SyntaxKind.WhileStatement
-            || kind === SyntaxKind.WithStatement;
+            || kind === SyntaxKind.WithStatement
+            || kind === SyntaxKind.NotEmittedStatement;
     }
 
     export function isDeclaration(node: Node): node is Declaration {
@@ -3558,6 +3587,11 @@ namespace ts {
 
     export function isEnumMember(node: Node): node is EnumMember {
         return node.kind === SyntaxKind.EnumMember;
+    }
+
+    // Top-level nodes
+    export function isSourceFile(node: Node): node is SourceFile {
+        return node.kind === SyntaxKind.SourceFile;
     }
 }
 

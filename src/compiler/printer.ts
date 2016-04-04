@@ -295,22 +295,23 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, getNotEmittedParent);
-                    const trailingComments = getTrailingComments(node, getNotEmittedParent);
+                    const leadingComments = getLeadingComments(node, isNotEmittedStatement);
+                    const trailingComments = getTrailingComments(node, isNotEmittedStatement);
                     emitLeadingComments(node, leadingComments);
-                    emitStart(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
+                    emitStart(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitWorker(node);
-                    emitEnd(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
+                    emitEnd(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitTrailingComments(node, trailingComments);
                 }
             }
 
-            function shouldEmitSourceMap(node: Node) {
-                return (getNodeEmitFlags(node) & NodeEmitFlags.NoSourceMap) === 0;
+            function shouldIgnoreSourceMapForNode(node: Node) {
+                return isNotEmittedOrPartiallyEmittedNode(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoSourceMap) !== 0;
             }
 
-            function shouldEmitNestedSourceMap(node: Node) {
-                return (getNodeEmitFlags(node) & NodeEmitFlags.NoNestedSourceMaps) === 0;
+            function shouldIgnoreSourceMapForChildren(node: Node) {
+                return (getNodeEmitFlags(node) & NodeEmitFlags.NoNestedSourceMaps) !== 0;
             }
 
             function emitWorker(node: Node): void {
@@ -559,6 +560,8 @@ const _super = (function (geti, seti) {
                         return emitSourceFile(<SourceFile>node);
 
                     // JSDoc nodes (ignored)
+
+                    // Transformation nodes (ignored)
                 }
 
                 if (isExpression(node)) {
@@ -653,6 +656,10 @@ const _super = (function (geti, seti) {
                         return emitJsxOpeningElement(<JsxOpeningElement>node);
                     case SyntaxKind.JsxExpression:
                         return emitJsxExpression(<JsxExpression>node);
+
+                    // Transformation nodes
+                    case SyntaxKind.PartiallyEmittedExpression:
+                        return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
                 }
             }
 
@@ -1475,7 +1482,9 @@ const _super = (function (geti, seti) {
 
                 const endingLine = writer.getLine();
                 emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
-                emitLeadingComments(collapseRangeToEnd(body.statements));
+
+                const range = collapseRangeToEnd(body.statements);
+                emitLeadingComments(range, getLeadingComments(range));
                 decreaseIndent();
             }
 
@@ -1841,7 +1850,13 @@ const _super = (function (geti, seti) {
                     tempFlags = savedTempFlags;
                 }
 
-                emitLeadingComments(node.endOfFileToken);
+                emitLeadingComments(node.endOfFileToken, getLeadingComments(node.endOfFileToken));
+            }
+
+            // Transformation nodes
+
+            function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
+                emitExpression(node.expression);
             }
 
             function emitLexicalEnvironment(declarations: Statement[], newLine: boolean) {
@@ -2217,9 +2232,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
+                    emitStart(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldEmitSourceMap, shouldEmitNestedSourceMap);
+                    emitEnd(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                 }
             }
 
@@ -2398,17 +2413,6 @@ const _super = (function (geti, seti) {
                 return !block.multiLine
                     && block.statements.length === 0
                     && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
-            }
-
-            function getNotEmittedParent(node: Node): Node {
-                if (getNodeEmitFlags(node) & NodeEmitFlags.EmitCommentsOfNotEmittedParent) {
-                    const parent = getOriginalNode(node).parent;
-                    if (getNodeEmitFlags(parent) & NodeEmitFlags.IsNotEmittedNode) {
-                        return parent;
-                    }
-                }
-
-                return undefined;
             }
 
             function isUniqueName(name: string): boolean {
