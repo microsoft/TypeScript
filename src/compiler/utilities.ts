@@ -179,6 +179,33 @@ namespace ts {
         return node.pos;
     }
 
+    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
+        Debug.assert(line >= 0);
+        const lineStarts = getLineStarts(sourceFile);
+
+        const lineIndex = line;
+        const sourceText = sourceFile.text;
+        if (lineIndex + 1 === lineStarts.length) {
+            // last line - return EOF
+            return sourceText.length - 1;
+        }
+        else {
+            // current line start
+            const start = lineStarts[lineIndex];
+            // take the start position of the next line - 1 = it should be some line break
+            let pos = lineStarts[lineIndex + 1] - 1;
+            Debug.assert(isLineBreak(sourceText.charCodeAt(pos)));
+            // walk backwards skipping line breaks, stop the the beginning of current line.
+            // i.e:
+            // <some text>
+            // $ <- end of line for this position should match the start position
+            while (start <= pos && isLineBreak(sourceText.charCodeAt(pos))) {
+                pos--;
+            }
+            return pos;
+        }
+    }
+
     // Returns true if this node is missing from the actual source code. A 'missing' node is different
     // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
     // in the tree), it is definitely missing. However, a node may be defined, but still be
@@ -364,6 +391,20 @@ namespace ts {
         return createTextSpanFromBounds(start, scanner.getTextPos());
     }
 
+    function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
+        const pos = skipTrivia(sourceFile.text, node.pos);
+        if (node.body && node.body.kind === SyntaxKind.Block) {
+            const { line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
+            const { line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
+            if (startLine < endLine) {
+                // The arrow function spans multiple lines, 
+                // make the error span be the first line, inclusive.
+                return createTextSpan(pos, getEndLinePosition(startLine, sourceFile) - pos + 1);
+            }
+        }
+        return createTextSpanFromBounds(pos, node.end);
+    }
+
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode = node;
         switch (node.kind) {
@@ -392,6 +433,8 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
+            case SyntaxKind.ArrowFunction:
+                return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
         }
 
         if (errorNode === undefined) {
