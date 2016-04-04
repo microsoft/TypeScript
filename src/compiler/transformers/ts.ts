@@ -27,6 +27,7 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -2168,13 +2169,31 @@ namespace ts {
         }
 
         /**
+         * Determines whether to emit an enum declaration.
+         *
+         * @param node The enum declaration node.
+         */
+        function shouldEmitEnumDeclaration(node: EnumDeclaration) {
+            return !isConst(node)
+                || compilerOptions.preserveConstEnums
+                || compilerOptions.isolatedModules;
+        }
+
+        function shouldEmitVarForEnumDeclaration(node: EnumDeclaration | ModuleDeclaration) {
+            return !hasModifier(node, ModifierFlags.Export)
+                || (isES6ExportedDeclaration(node) && isFirstDeclarationOfKind(node, node.kind));
+        }
+
+        /**
          * Adds a leading VariableStatement for an enum or module declaration.
          */
-        function addVarForEnumOrModuleDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+        function addVarForEnumDeclaration(statements: Statement[], node: EnumDeclaration) {
             // Emit a variable statement for the enum.
             statements.push(
                 createVariableStatement(
-                    visitNodes(node.modifiers, visitor, isModifier),
+                    isES6ExportedDeclaration(node)
+                        ? visitNodes(node.modifiers, visitor, isModifier)
+                        : undefined,
                     [createVariableDeclaration(
                         getDeclarationName(node)
                     )],
@@ -2186,7 +2205,7 @@ namespace ts {
         /**
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
-        function addVarForEnumOrModuleExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+        function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
             statements.push(
                 createVariableStatement(
                     /*modifiers*/ undefined,
@@ -2197,34 +2216,6 @@ namespace ts {
                     /*location*/ node
                 )
             )
-        }
-
-        function addAssignmentForModuleExportedFromNamespace(statements: Statement[], node: ModuleDeclaration) {
-            statements.push(
-                createStatement(
-                    createAssignment(
-                        getDeclarationName(node),
-                        setNodeEmitFlags(getDeclarationName(node), NodeEmitFlags.PrefixExportedLocal)
-                    ),
-                    /*location*/ node
-                )
-            );
-        }
-
-        /**
-         * Determines whether to emit an enum declaration.
-         *
-         * @param node The enum declaration node.
-         */
-        function shouldEmitEnumDeclaration(node: EnumDeclaration) {
-            return !isConst(node)
-                || compilerOptions.preserveConstEnums
-                || compilerOptions.isolatedModules;
-        }
-
-        function shouldEmitVarForEnumOrModuleDeclaration(node: EnumDeclaration | ModuleDeclaration) {
-            return !hasModifier(node, ModifierFlags.Export)
-                || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, node.kind));
         }
 
         /**
@@ -2240,8 +2231,8 @@ namespace ts {
             }
 
             const statements: Statement[] = [];
-            if (shouldEmitVarForEnumOrModuleDeclaration(node)) {
-                addVarForEnumOrModuleDeclaration(statements, node);
+            if (shouldEmitVarForEnumDeclaration(node)) {
+                addVarForEnumDeclaration(statements, node);
             }
 
             const localName = getGeneratedNameForNode(node);
@@ -2276,7 +2267,7 @@ namespace ts {
             );
 
             if (isNamespaceExport(node)) {
-                addVarForEnumOrModuleExportedFromNamespace(statements, node);
+                addVarForEnumExportedFromNamespace(statements, node);
             }
 
             return statements;
@@ -2357,6 +2348,38 @@ namespace ts {
                 && isMergedWithClass(node);
         }
 
+        function isES6ExportedDeclaration(node: Node) {
+            return isExternalModuleExport(node)
+                && moduleKind >= ModuleKind.ES6;
+        }
+
+        function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
+            return !isModuleMergedWithES6Class(node)
+                && (!isES6ExportedDeclaration(node)
+                    || isFirstDeclarationOfKind(node, node.kind));
+        }
+
+        /**
+         * Adds a leading VariableStatement for a module declaration.
+         */
+        function addVarForModuleDeclaration(statements: Statement[], node: ModuleDeclaration) {
+            // Emit a variable statement for the module.
+            statements.push(
+                setOriginalNode(
+                    createVariableStatement(
+                        isES6ExportedDeclaration(node)
+                            ? visitNodes(node.modifiers, visitor, isModifier)
+                            : undefined,
+                        [createVariableDeclaration(
+                            getDeclarationName(node)
+                        )],
+                        /*location*/ node
+                    ),
+                    node
+                )
+            );
+        }
+
         /**
          * Visits a module declaration node.
          *
@@ -2373,8 +2396,9 @@ namespace ts {
             enableExpressionSubstitutionForNamespaceExports();
 
             const statements: Statement[] = [];
-            if (!isModuleMergedWithES6Class(node) && (isNamespaceExport(node) || shouldEmitVarForEnumOrModuleDeclaration(node))) {
-                addVarForEnumOrModuleDeclaration(statements, node);
+
+            if (shouldEmitVarForModuleDeclaration(node)) {
+                addVarForModuleDeclaration(statements, node);
             }
 
             const localName = getGeneratedNameForNode(node);
@@ -2389,7 +2413,7 @@ namespace ts {
                     )
                 );
 
-            if (isNamespaceExport(node)) {
+            if (hasModifier(node, ModifierFlags.Export) && !isES6ExportedDeclaration(node)) {
                 moduleArg = createAssignment(getDeclarationName(node), moduleArg);
             }
 
