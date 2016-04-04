@@ -35,7 +35,6 @@ let x: Observable<number>;
 
 //// [observable.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
 });
 //// [map1.js]
 define(["require", "exports", "./observable"], function (require, exports, observable_1) {
