@@ -665,14 +665,9 @@ namespace ts {
 
         function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
             const original = getOriginalNode(node);
-            if (hasModifier(original, ModifierFlags.Export)) {
-                switch (original.kind) {
-                    case SyntaxKind.EnumDeclaration:
-                        return visitExpressionStatementForEnumDeclaration(node, <EnumDeclaration>original);
-
-                    case SyntaxKind.ModuleDeclaration:
-                        return visitExpressionStatementForModuleDeclaration(node, <ModuleDeclaration>original);
-                }
+            if (original.kind === SyntaxKind.EnumDeclaration
+                && hasModifier(original, ModifierFlags.Export)) {
+                return visitExpressionStatementForEnumDeclaration(node, <EnumDeclaration>original);
             }
 
             return node;
@@ -681,28 +676,7 @@ namespace ts {
         function visitExpressionStatementForEnumDeclaration(node: ExpressionStatement, original: EnumDeclaration): VisitResult<Statement> {
             if (isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
                 const statements: Statement[] = [node];
-                addVarForExportedEnumOrModule(statements, original);
-                return statements;
-            }
-
-            return node;
-        }
-
-        function isModuleMergedWithES6Class(node: ModuleDeclaration) {
-            return languageVersion === ScriptTarget.ES6
-                && isMergedWithClass(node);
-        }
-
-        function visitExpressionStatementForModuleDeclaration(node: ExpressionStatement, original: ModuleDeclaration): VisitResult<Statement> {
-            if (isFirstDeclarationOfKind(original, SyntaxKind.ModuleDeclaration)) {
-                const statements: Statement[] = [node];
-                if (isModuleMergedWithES6Class(original)) {
-                    addAssignmentForExportedModule(statements, original);
-                }
-                else {
-                    addVarForExportedEnumOrModule(statements, original);
-                }
-
+                addVarForExportedEnumDeclaration(statements, original);
                 return statements;
             }
 
@@ -712,7 +686,7 @@ namespace ts {
         /**
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
-        function addVarForExportedEnumOrModule(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+        function addVarForExportedEnumDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
             statements.push(
                 createVariableStatement(
                     /*modifiers*/ undefined,
@@ -720,21 +694,6 @@ namespace ts {
                         getDeclarationName(node),
                         createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
                     )],
-                    /*location*/ node
-                )
-            );
-        }
-
-        /**
-         * Adds a trailing assignment for a module declaration.
-         */
-        function addAssignmentForExportedModule(statements: Statement[], node: ModuleDeclaration) {
-            statements.push(
-                createStatement(
-                    createAssignment(
-                        getDeclarationName(node),
-                        createPropertyAccess(createIdentifier("exports"), getDeclarationName(node))
-                    ),
                     /*location*/ node
                 )
             );
