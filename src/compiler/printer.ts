@@ -1396,6 +1396,11 @@ const _super = (function (geti, seti) {
                 const body = node.body;
                 if (body) {
                     if (isBlock(body)) {
+                        const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                        if (indentedFlag) {
+                            increaseIndent();
+                        }
+
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         startLexicalEnvironment();
@@ -1403,6 +1408,11 @@ const _super = (function (geti, seti) {
                         write(" {");
                         emitBlockFunctionBody(node, body);
                         write("}");
+
+                        if (indentedFlag) {
+                            decreaseIndent();
+                        }
+
                         tempFlags = savedTempFlags;
                     }
                     else {
@@ -1497,6 +1507,12 @@ const _super = (function (geti, seti) {
                 emitModifiers(node, node.modifiers);
                 write("class");
                 emitWithPrefix(" ", node.name);
+
+                const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                if (indentedFlag) {
+                    increaseIndent();
+                }
+
                 emitTypeParameters(node, node.typeParameters);
                 emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
 
@@ -1506,6 +1522,10 @@ const _super = (function (geti, seti) {
                 write(" {");
                 emitList(node, node.members, ListFormat.ClassMembers);
                 write("}");
+
+                if (indentedFlag) {
+                    decreaseIndent();
+                }
 
                 tempFlags = savedTempFlags;
             }

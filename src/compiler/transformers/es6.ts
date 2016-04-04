@@ -607,14 +607,23 @@ namespace ts {
             //      }(D))
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            const classFunction = createFunctionExpression(
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                baseTypeNode ? [createParameter("_super")] : [],
+                transformClassBody(node, baseTypeNode !== undefined)
+            );
+
+            // To preserve the behavior of the old emitter, we explicitly indent
+            // the body of the function here if it was requested in an earlier
+            // transformation.
+            if (getNodeEmitFlags(node) & NodeEmitFlags.Indented) {
+                setNodeEmitFlags(classFunction, NodeEmitFlags.Indented);
+            }
+
             return createParen(
                 createCall(
-                    createFunctionExpression(
-                        /*asteriskToken*/ undefined,
-                        /*name*/ undefined,
-                        baseTypeNode ? [createParameter("_super")] : [],
-                        transformClassBody(node, baseTypeNode !== undefined)
-                    ),
+                    classFunction,
                     baseTypeNode
                         ? [visitNode(baseTypeNode.expression, visitor, isExpression)]
                         : []
