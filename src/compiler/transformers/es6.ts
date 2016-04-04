@@ -183,9 +183,7 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
-            enclosingBlockScopeContainer = node;
-            currentNode = node;
-            return visitEachChild(node, visitor, context);
+            return visitNode(node, visitor, isSourceFile);
         }
 
         function visitor(node: Node): VisitResult<Node> {

@@ -2245,7 +2245,8 @@ namespace FourSlash {
 
         const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
-            throw new Error(`Error compiling ${fileName}: ${diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n")}`);
+            const diagnosticText = diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, Harness.IO.newLine())).join("\r\n");
+            throw new Error(`Error compiling ${fileName}: ${diagnosticText}`);
         }
 
         program.emit(sourceFile);

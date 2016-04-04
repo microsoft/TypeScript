@@ -727,13 +727,6 @@ namespace ts {
         _indexSignatureDeclarationBrand: any;
     }
 
-    // Represents a member of a class element or object literal that is elided as part of a
-    // transformation to emit comments on a not-emitted node.
-    // @internal
-    // @kind(SyntaxKind.NotEmittedMember)
-    export interface NotEmittedMember extends ClassElement, ObjectLiteralElement {
-    }
-
     // @kind(SyntaxKind.AnyKeyword)
     // @kind(SyntaxKind.NumberKeyword)
     // @kind(SyntaxKind.BooleanKeyword)

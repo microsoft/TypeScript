@@ -68,16 +68,22 @@ namespace ts {
                 emitDetachedComments,
             };
 
+            function getLeadingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[];
+            function getLeadingComments(range: TextRange): CommentRange[];
             function getLeadingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean) {
                 if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
-                    // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
-                    // unless it is a triple slash comment at the top of the file.
+                    // If the node will not be emitted in JS, remove all the comments (normal,
+                    // pinned and `///`) associated with the node, unless it is a triple slash
+                    // comment at the top of the file.
+                    //
                     // For Example:
                     //      /// <reference-path ...>
                     //      declare var x;
                     //      /// <reference-path ...>
                     //      interface F {}
-                    //  The first /// will NOT be removed while the second one will be removed even though both nodes will not be emitted
+                    //
+                    // The first `///` will NOT be removed while the second one will be removed
+                    // even though both nodes will not be emitted.
                     if (range.pos === 0) {
                         return filter(getLeadingCommentsOfPosition(0), isTripleSlashComment);
                     }
@@ -104,6 +110,8 @@ namespace ts {
                 return false;
             }
 
+            function getTrailingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[];
+            function getTrailingComments(range: TextRange): CommentRange[];
             function getTrailingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean) {
                 if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
                     return undefined;

@@ -3344,12 +3344,11 @@ namespace ts {
         return node.kind === SyntaxKind.PartiallyEmittedExpression;
     }
 
-    export function isNotEmittedStatement(node: Node): node is NotEmittedMember | NotEmittedStatement {
+    export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
         return node.kind === SyntaxKind.NotEmittedStatement;
     }
 
-    export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedMember | NotEmittedStatement | PartiallyEmittedExpression {
-        const kind = node.kind;
+    export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
         return isNotEmittedStatement(node)
             || isPartiallyEmittedExpression(node);
     }
@@ -3588,6 +3587,11 @@ namespace ts {
 
     export function isEnumMember(node: Node): node is EnumMember {
         return node.kind === SyntaxKind.EnumMember;
+    }
+
+    // Top-level nodes
+    export function isSourceFile(node: Node): node is SourceFile {
+        return node.kind === SyntaxKind.SourceFile;
     }
 }
 

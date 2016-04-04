@@ -208,7 +208,8 @@ namespace ts {
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
             if (hasModifier(node, ModifierFlags.Ambient)) {
-                // TypeScript ambient declarations are elided.
+                // TypeScript ambient declarations are elided, but some comments may be preserved.
+                // See the implementation of `getLeadingComments` in comments.ts for more details.
                 return isStatement(node)
                     ? createNotEmittedStatement(node)
                     : undefined;
@@ -268,7 +269,8 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.InterfaceDeclaration:
-                    // TypeScript interfaces are elided, but pinned comments are preserved.
+                    // TypeScript interfaces are elided, but some comments may be preserved.
+                    // See the implementation of `getLeadingComments` in comments.ts for more details.
                     return createNotEmittedStatement(node);
 
                 case SyntaxKind.ClassDeclaration:
