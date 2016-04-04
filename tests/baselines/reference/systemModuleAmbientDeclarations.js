@@ -46,6 +46,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file2.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -55,6 +56,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file3.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -64,6 +66,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file4.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -73,6 +76,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file5.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -82,6 +86,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file6.js]
 System.register([], function (exports_1, context_1) {
+    "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

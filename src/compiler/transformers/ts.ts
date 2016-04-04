@@ -41,8 +41,6 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceLocalName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentParent: Node;
-        let currentNode: Node;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -97,8 +95,6 @@ namespace ts {
         function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
             const savedCurrentScope = currentScope;
-            const savedCurrentParent = currentParent;
-            const savedCurrentNode = currentNode;
 
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
@@ -107,8 +103,6 @@ namespace ts {
 
             // Restore state
             currentScope = savedCurrentScope;
-            currentParent = savedCurrentParent;
-            currentNode = savedCurrentNode;
 
             return visited;
         }
@@ -214,8 +208,11 @@ namespace ts {
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
             if (hasModifier(node, ModifierFlags.Ambient)) {
-                // TypeScript ambient declarations are elided.
-                return undefined;
+                // TypeScript ambient declarations are elided, but some comments may be preserved.
+                // See the implementation of `getLeadingComments` in comments.ts for more details.
+                return isStatement(node)
+                    ? createNotEmittedStatement(node)
+                    : undefined;
             }
 
             switch (node.kind) {
@@ -261,9 +258,8 @@ namespace ts {
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of transformClassDeclaration.
 
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    // TypeScript type-only declarations are elided
+                    // TypeScript type-only declarations are elided.
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided.
@@ -271,6 +267,11 @@ namespace ts {
                 case SyntaxKind.Constructor:
                     // TypeScript constructors are transformed in `transformClassDeclaration`.
                     return undefined;
+
+                case SyntaxKind.InterfaceDeclaration:
+                    // TypeScript interfaces are elided, but some comments may be preserved.
+                    // See the implementation of `getLeadingComments` in comments.ts for more details.
+                    return createNotEmittedStatement(node);
 
                 case SyntaxKind.ClassDeclaration:
                     // This is a class declaration with TypeScript syntax extensions.
@@ -376,7 +377,7 @@ namespace ts {
 
                 default:
                     Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -386,9 +387,6 @@ namespace ts {
          * @param node The node to visit.
          */
         function onBeforeVisitNode(node: Node) {
-            currentParent = currentNode;
-            currentNode = node;
-
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.CaseBlock:
@@ -675,9 +673,9 @@ namespace ts {
                 const expressions: Expression[] = [];
                 const temp = createTempVariable();
                 hoistVariableDeclaration(temp);
-                addNode(expressions, createAssignment(temp, classExpression));
-                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
-                addNode(expressions, temp);
+                addNode(expressions, createAssignment(temp, classExpression), true);
+                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
+                addNode(expressions, temp, true);
                 return inlineExpressions(expressions);
             }
 
@@ -1790,13 +1788,12 @@ namespace ts {
 
         /**
          * Determines whether to emit a function-like declaration. We should not emit the
-         * declaration if it is an overload, is abstract, or is an ambient declaration.
+         * declaration if it does not have a body.
          *
          * @param node The declaration node.
          */
         function shouldEmitFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return !nodeIsMissing(node.body)
-                && !hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
+            return !nodeIsMissing(node.body);
         }
 
         /**
@@ -1829,12 +1826,12 @@ namespace ts {
 
         /**
          * Determines whether to emit an accessor declaration. We should not emit the
-         * declaration if it is abstract or is an ambient declaration.
+         * declaration if it does not have a body and is abstract.
          *
          * @param node The declaration node.
          */
         function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
-            return !hasModifier(node, ModifierFlags.Abstract | ModifierFlags.Ambient);
+            return !(nodeIsMissing(node.body) && hasModifier(node, ModifierFlags.Abstract));
         }
 
         /**
@@ -1894,7 +1891,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
-                return undefined;
+                return createNotEmittedStatement(node);
             }
 
             const func = createFunctionDeclaration(
@@ -1926,6 +1923,7 @@ namespace ts {
         function visitFunctionExpression(node: FunctionExpression) {
             if (nodeIsMissing(node.body)) {
                 return createNode(SyntaxKind.OmittedExpression);
+                // return createOmittedExpression(/*location*/ node);
             }
 
             return createFunctionExpression(
@@ -2135,50 +2133,34 @@ namespace ts {
          * @param node The parenthesized expression node.
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-            // Make sure we consider all nested cast expressions, e.g.:
-            // (<any><number><any>-A).x;
-            const expression = visitNode(node.expression, visitor, isExpression);
-            if (currentParent.kind !== SyntaxKind.ArrowFunction) {
-                // We have an expression of the form: (<Type>SubExpr)
-                // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
-                // Omitting the parentheses, however, could cause change in the semantics of the generated
-                // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
-                //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
-                //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
-                //      new (<any>A()) should be emitted as new (A()) and not new A()
-                //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                if (expression.kind !== SyntaxKind.PrefixUnaryExpression &&
-                    expression.kind !== SyntaxKind.VoidExpression &&
-                    expression.kind !== SyntaxKind.TypeOfExpression &&
-                    expression.kind !== SyntaxKind.DeleteExpression &&
-                    expression.kind !== SyntaxKind.PostfixUnaryExpression &&
-                    expression.kind !== SyntaxKind.NewExpression &&
-                    !(expression.kind === SyntaxKind.CallExpression && currentParent.kind === SyntaxKind.NewExpression) &&
-                    !(expression.kind === SyntaxKind.FunctionExpression && currentParent.kind === SyntaxKind.CallExpression) &&
-                    !(expression.kind === SyntaxKind.NumericLiteral && currentParent.kind === SyntaxKind.PropertyAccessExpression)) {
-                    return trackChildOfNotEmittedNode(node, expression, node.expression);
-                }
+            const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
+            if (isAssertionExpression(innerExpression)) {
+                // Make sure we consider all nested cast expressions, e.g.:
+                // (<any><number><any>-A).x;
+                const expression = visitNode(node.expression, visitor, isExpression);
+
+                // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
+                // is really not desirable. We would like to emit the subexpression as-is. Omitting
+                // the parentheses, however, could cause change in the semantics of the generated
+                // code if the casted expression has a lower precedence than the rest of the
+                // expression.
+                //
+                // Due to the auto-parenthesization rules used by the visitor and factory functions
+                // we can safely elide the parentheses here, as a new synthetic
+                // ParenthesizedExpression will be inserted if we remove parentheses too
+                // aggressively.
+                //
+                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
+                // preserve the position information of the original expression.
+                return createPartiallyEmittedExpression(expression, node);
             }
 
-            return setOriginalNode(
-                createParen(expression, node),
-                node
-            );
+            return visitEachChild(node, visitor, context);
         }
 
         function visitAssertionExpression(node: AssertionExpression): Expression {
             const expression = visitNode((<TypeAssertion | AsExpression>node).expression, visitor, isExpression);
-            return trackChildOfNotEmittedNode(node, expression, node.expression);
-        }
-
-        function trackChildOfNotEmittedNode<T extends Node>(parent: Node, child: T, original: T) {
-            if (!child.parent && !child.original) {
-                child = getMutableClone(child);
-            }
-
-            setNodeEmitFlags(parent, NodeEmitFlags.IsNotEmittedNode);
-            setNodeEmitFlags(child, NodeEmitFlags.EmitCommentsOfNotEmittedParent);
-            return child;
+            return createPartiallyEmittedExpression(expression, node);
         }
 
         /**
@@ -2380,7 +2362,7 @@ namespace ts {
          */
         function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
             if (!shouldEmitModuleDeclaration(node)) {
-                return undefined;
+                return createNotEmittedStatement(node);
             }
 
             Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");

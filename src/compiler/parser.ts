@@ -400,6 +400,8 @@ namespace ts {
                 return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
+            case SyntaxKind.PartiallyEmittedExpression:
+                return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }
     }
 

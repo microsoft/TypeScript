@@ -183,9 +183,7 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
-            enclosingBlockScopeContainer = node;
-            currentNode = node;
-            return visitEachChild(node, visitor, context);
+            return visitNode(node, visitor, isSourceFile);
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -1184,6 +1182,7 @@ namespace ts {
         function transformFunctionBody(node: FunctionLikeDeclaration) {
             let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
             let singleLine = false; // indicates whether the block *may* be emitted as a single line
+            let statementsLocation: TextRange;
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
@@ -1198,6 +1197,7 @@ namespace ts {
 
             const body = node.body;
             if (isBlock(body)) {
+                statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement));
 
                 // If the original body was a multi-line block, this must be a multi-line block.
@@ -1207,6 +1207,7 @@ namespace ts {
             }
             else {
                 Debug.assert(node.kind === SyntaxKind.ArrowFunction);
+                statementsLocation = body;
 
                 const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
                 if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
@@ -1232,7 +1233,7 @@ namespace ts {
                 multiLine = true;
             }
 
-            const block = createBlock(statements, node.body, multiLine);
+            const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
             if (!multiLine && singleLine) {
                 setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
             }
@@ -1505,27 +1506,6 @@ namespace ts {
          */
         function visitForOfStatement(node: ForOfStatement): VisitResult<Statement> {
             return convertIterationStatementBodyIfNecessary(node, convertForOfToFor);
-            // debugger;
-            // const statementOrStatements = convertIterationStatementBodyIfNecessary(node);
-            // const lastStatement = isArray(statementOrStatements) ? lastOrUndefined(statementOrStatements) : statementOrStatements;
-            // const loop = lastStatement.kind === SyntaxKind.LabeledStatement
-            //     ? (<LabeledStatement>lastStatement).statement
-            //     : lastStatement;
-
-            // Debug.assert(loop.kind === SyntaxKind.ForOfStatement);
-
-            // const statement =
-            //     lastStatement.kind === SyntaxKind.LabeledStatement
-            //     ? createLabel((<LabeledStatement>lastStatement).label, convertForOfToFor(<ForOfStatement>loop))
-            //     : convertForOfToFor(<ForOfStatement>loop);
-
-            // if (isArray(statementOrStatements)) {
-            //     statementOrStatements[statementOrStatements.length - 1] = statement;
-            //     return statementOrStatements;
-            // }
-            // else {
-            //     return statement;
-            // }
         }
 
         function convertForOfToFor(node: ForOfStatement, convertedLoopBodyStatements: Statement[]): ForStatement {
