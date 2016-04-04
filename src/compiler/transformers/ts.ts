@@ -673,6 +673,10 @@ namespace ts {
                 const expressions: Expression[] = [];
                 const temp = createTempVariable();
                 hoistVariableDeclaration(temp);
+
+                // To preserve the behavior of the old emitter, we explicitly indent
+                // the body of a class with static initializers.
+                setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
                 addNode(expressions, createAssignment(temp, classExpression), true);
                 addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
                 addNode(expressions, temp, true);
