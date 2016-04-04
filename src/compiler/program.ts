@@ -658,7 +658,7 @@ namespace ts {
                 const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                if (options.watch && sys.createHash && sys.getModifiedTime) {
+                if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
                     writeFileIfUpdated(fileName, data, writeByteOrderMark);
                 }
                 else {

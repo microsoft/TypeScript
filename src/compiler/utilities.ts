@@ -2642,6 +2642,11 @@ namespace ts {
         }
         return carriageReturnLineFeed;
     }
+
+    export function isWatchSet(options: CompilerOptions) {
+        // Firefox has Object.prototype.watch
+        return options.watch && options.hasOwnProperty("watch");
+    }
 }
 
 namespace ts {

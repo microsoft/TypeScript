@@ -240,11 +240,6 @@ namespace ts {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
 
-    function isWatchSet(options: CompilerOptions) {
-        // Firefox has Object.prototype.watch
-        return options.watch && options.hasOwnProperty("watch");
-    }
-
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
         let configFileName: string;                                 // Configuration file name (if any)
