@@ -6,7 +6,6 @@ export type CallbackArray<T extends callback> = () => T;
 
 //// [typeAliasDeclarationEmit.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
 });
 
 

@@ -23,8 +23,10 @@ var MyClass = (function () {
     return MyClass;
 }());
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', []), 
-    __metadata('design:returntype', void 0)
+    decorator,
+    __metadata("design:typeinfo", {
+        type: function () { return Function; },
+        paramTypes: function () { return []; },
+        returnType: function () { return void 0; }
+    })
 ], MyClass.prototype, "doSomething", null);
