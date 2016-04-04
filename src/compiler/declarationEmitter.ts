@@ -530,7 +530,10 @@ namespace ts {
             else {
                 // Expression
                 const tempVarName = getExportDefaultTempVariableName();
-                write("declare var ");
+                if (!noDeclare) {
+                    write("declare ");
+                }
+                write("var ");
                 write(tempVarName);
                 write(": ");
                 writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
