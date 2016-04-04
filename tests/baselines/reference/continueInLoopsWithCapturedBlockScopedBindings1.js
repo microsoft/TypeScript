@@ -14,7 +14,7 @@ function foo() {
 
 //// [continueInLoopsWithCapturedBlockScopedBindings1.js]
 function foo() {
-    var _loop_1 = function(i) {
+    var _loop_1 = function (i) {
         if (i === 0) {
             return "continue";
         }
