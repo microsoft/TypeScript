@@ -3412,17 +3412,14 @@ namespace ts {
                     return unknownType;
                 }
 
-                let typeNode: TypeNode;
-                let name: Identifier;
+                let declaration: JSDocTypedefTag | TypeAliasDeclaration;
                 if (node && (node.flags & NodeFlags.JavaScriptFile)) {
-                    const declaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
-                    typeNode = declaration.typeExpression.type;
+                    declaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
                 }
-                if (!typeNode) {
-                    const declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                    typeNode = declaration.type;
+                if (!declaration) {
+                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
                 }
-                let type = getTypeFromTypeNode(typeNode);
+                let type = getTypeFromTypeNode(declaration.type);
                 if (popTypeResolution()) {
                     links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     if (links.typeParameters) {
@@ -3434,7 +3431,7 @@ namespace ts {
                 }
                 else {
                     type = unknownType;
-                    error(name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
                 links.declaredType = type;
             }
@@ -5067,6 +5064,7 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocRecordType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);

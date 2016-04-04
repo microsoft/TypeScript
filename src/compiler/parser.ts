@@ -402,7 +402,15 @@ namespace ts {
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
-                return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
+                return visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
+                    visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocTypedefTag>node).type);
+            case SyntaxKind.JSDocTypeLiteral:
+                return visitNodes(cbNodes, (<JSDocTypeLiteral>node).members);
+            case SyntaxKind.JSDocPropertyTag:
+                return visitNode(cbNode, (<JSDocPropertyTag>node).name) ||
+                    visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocPropertyTag>node).type);
         }
     }
 
@@ -5992,7 +6000,8 @@ namespace ts {
                 Debug.assert(end <= content.length);
 
                 let tags: NodeArray<JSDocTag>;
-                let currentParentJSDocDeclaration: Declaration;
+                let currentParentJSDocTag: JSDocParentTag;
+                let currentParentJSDocTagEnd: number;
 
                 let result: JSDocComment;
 
@@ -6050,6 +6059,10 @@ namespace ts {
                             nextJSDocToken();
                         }
 
+                        if (currentParentJSDocTag) {
+                            finishCurrentParentTag();
+                        }
+
                         result = createJSDocComment();
 
                     });
@@ -6073,6 +6086,40 @@ namespace ts {
                     }
                 }
 
+                function finishCurrentParentTag(): void {
+                    if (!currentParentJSDocTag) {
+                        return;
+                    }
+
+                    if (currentParentJSDocTag.kind === SyntaxKind.JSDocTypedefTag) {
+                        const typedefTag = <JSDocTypedefTag>currentParentJSDocTag;
+                        if (typedefTag.jsDocTypeTag) {
+                            if (typedefTag.jsDocTypeTag.typeExpression.type.kind === SyntaxKind.JSDocTypeReference) {
+                                const typeTagtype = <JSDocTypeReference>typedefTag.jsDocTypeTag.typeExpression.type;
+                                if ((typeTagtype.name.kind !== SyntaxKind.Identifier) ||
+                                    (<Identifier>typeTagtype.name).text !== "Object") {
+                                    typedefTag.type = typedefTag.jsDocTypeTag.typeExpression.type;
+                                }
+                            }
+                            else {
+                                typedefTag.type = typedefTag.jsDocTypeTag.typeExpression.type;
+                            }
+                        }
+                        if (!typedefTag.type) {
+                            const tagType = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, currentParentJSDocTag.pos);
+                            if (typedefTag.jsDocPropertyTags){
+                                tagType.members = <NodeArray<JSDocPropertyTag>>[];
+                                addRange(tagType.members, typedefTag.jsDocPropertyTags);
+                            }
+                            typedefTag.type = finishNode(tagType, currentParentJSDocTagEnd);
+                        }
+                    }
+
+                    addTag(finishNode(currentParentJSDocTag, currentParentJSDocTagEnd));
+                    currentParentJSDocTag = undefined;
+                    currentParentJSDocTagEnd = undefined;
+                }
+
                 function parseTag(): void {
                     Debug.assert(token === SyntaxKind.AtToken);
                     const atToken = createNode(SyntaxKind.AtToken, scanner.getTokenPos());
@@ -6085,22 +6132,30 @@ namespace ts {
                     }
 
                     const tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
-                    addTag(tag);
+                    if (!currentParentJSDocTag) {
+                        addTag(tag);
+                    }
                 }
 
                 function handleTag(atToken: Node, tagName: Identifier): JSDocTag {
                     if (tagName) {
                         switch (tagName.text) {
                             case "param":
+                                finishCurrentParentTag();
                                 return handleParamTag(atToken, tagName);
                             case "return":
                             case "returns":
+                                finishCurrentParentTag();
                                 return handleReturnTag(atToken, tagName);
                             case "template":
+                                finishCurrentParentTag();
                                 return handleTemplateTag(atToken, tagName);
                             case "type":
+                                // @typedef tag is allowed to have one @type tag, therefore seeing
+                                // a @type tag may not indicate the end of the current parent tag.
                                 return handleTypeTag(atToken, tagName);
                             case "typedef":
+                                finishCurrentParentTag();
                                 return handleTypedefTag(atToken, tagName);
                             case "property":
                             case "prop":
@@ -6127,6 +6182,25 @@ namespace ts {
 
                         tags.push(tag);
                         tags.end = tag.end;
+                    }
+                }
+
+                function addToCurrentParentTag(tag: JSDocTag): void {
+                    if (!currentParentJSDocTag) {
+                        return;
+                    }
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocPropertyTag:
+                            if (!currentParentJSDocTag.jsDocPropertyTags) {
+                                currentParentJSDocTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];
+                            }
+                            currentParentJSDocTag.jsDocPropertyTags.push(<JSDocPropertyTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTypeTag:
+                            if (!currentParentJSDocTag.jsDocTypeTag) {
+                                currentParentJSDocTag.jsDocTypeTag = <JSDocTypeTag>tag;
+                            }
+                            break;
                     }
                 }
 
@@ -6205,15 +6279,33 @@ namespace ts {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    const result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
+                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
-                    return finishNode(result);
+                    result = finishNode(result);
+
+                    let typeTagPartOfParentTag = false;
+                    if (currentParentJSDocTag && currentParentJSDocTag.kind === SyntaxKind.JSDocTypedefTag) {
+                        const parentTag = <JSDocTypedefTag>currentParentJSDocTag;
+                        if (!parentTag.typeExpression && !parentTag.jsDocTypeTag) {
+                            typeTagPartOfParentTag = true;
+                            parentTag.jsDocTypeTag = result;
+                            currentParentJSDocTagEnd = scanner.getStartPos();
+                        }
+                    }
+                    if (!typeTagPartOfParentTag) {
+                        // If this @type tag is not part of the current parent tag, then
+                        // it denotes the end of the current parent tag.
+                        finishCurrentParentTag();
+                        return result;
+                    }
+
+                    return undefined;
                 }
 
                 function handlePropertyTag(atToken: Node, tagName: Identifier): JSDocPropertyTag {
-                    if (!currentParentJSDocDeclaration) {
+                    if (!currentParentJSDocTag) {
                         parseErrorAtPosition(tagName.pos, scanner.getTokenPos() - tagName.pos, Diagnostics._0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag, tagName.text);
                         return undefined;
                     }
@@ -6226,12 +6318,17 @@ namespace ts {
                         return undefined;
                     }
 
-                    const result = <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
+                    let result = <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.name = name;
                     result.typeExpression = typeExpression;
-                    return finishNode(result);
+                    result.type = typeExpression.type;
+                    result = finishNode(result);
+
+                    addToCurrentParentTag(result);
+                    currentParentJSDocTagEnd = scanner.getStartPos();
+                    return undefined;
                 }
 
                 function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
@@ -6249,17 +6346,26 @@ namespace ts {
                     result.name = name;
                     result.typeExpression = typeExpression;
 
-                    // if (typeExpression && typeExpression.type.kind === SyntaxKind.JSDocTypeReference) {
-                    //     const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
-                    //     if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
-                    //         const name = <Identifier>jsDocTypeReference.name;
-                    //         if (name.text === "Object") {
-                    //             currentParentJSDocDeclaration = declaration;
-                    //         }
-                    //     }
-                    // }
+                    if (typeExpression && typeExpression.type.kind === SyntaxKind.JSDocTypeReference) {
+                        const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
+                        if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
+                            const name = <Identifier>jsDocTypeReference.name;
+                            if (name.text === "Object") {
+                                currentParentJSDocTag = result;
+                            }
+                        }
+                    }
+                    else if (!typeExpression) {
+                        currentParentJSDocTag = result;
+                    }
 
-                    return result;
+                    if (!currentParentJSDocTag) {
+                        result.type = result.typeExpression.type;
+                        return finishNode(result);
+                    }
+
+                    currentParentJSDocTagEnd = scanner.getStartPos();
+                    return undefined;
                 }
 
                 function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {

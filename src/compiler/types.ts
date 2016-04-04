@@ -344,7 +344,6 @@ namespace ts {
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
-        JSDocTypedefDeclaration,
         JSDocTypeLiteral,
 
         // Synthesized list
@@ -616,6 +615,7 @@ namespace ts {
     // SyntaxKind.PropertyAssignment
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
+    // SyntaxKind.JSDocPropertyTag
     export interface VariableLikeDeclaration extends Declaration {
         propertyName?: PropertyName;
         dotDotDotToken?: Node;
@@ -1515,25 +1515,26 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.JSDocTypedefTag)
-    export interface JSDocTypedefTag extends JSDocTag, Declaration {
+    export interface JSDocTypedefTag extends JSDocTag, Declaration, JSDocParentTag {
         name: Identifier;
-        typeExpression: JSDocTypeExpression;
+        typeExpression?: JSDocTypeExpression;
+        type: JSDocType;
+    }
+
+    export interface JSDocParentTag extends JSDocTag {
+        jsDocPropertyTags?: NodeArray<JSDocPropertyTag>;
+        jsDocTypeTag?: JSDocTypeTag;
     }
 
     // @kind(SyntaxKind.JSDocPropertyTag)
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
         name: Identifier;
         typeExpression: JSDocTypeExpression;
-    }
-
-    // @kind(SyntaxKind.JSDocTypedefDeclaration)
-    export interface JSDocTypedefDeclaration extends Declaration {
-        name: Identifier;
         type: TypeNode;
     }
 
     // @kind(SyntaxKind.JSDocTypeLiteral)
-    export interface JSDocTypeLiteral extends TypeNode {
+    export interface JSDocTypeLiteral extends JSDocType {
         members: NodeArray<TypeElement>;
     }
 
