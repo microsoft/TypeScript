@@ -195,51 +195,7 @@ namespace ts {
         return undefined;
     }
 
-    function tryLoadTypeDeclarationFile(searchPath: string, failedLookupLocations: string[], state: ModuleResolutionState) {
-        let typesFile: string;
-        const packageJsonPath = combinePaths(searchPath, "package.json");
-        if (state.host.fileExists(packageJsonPath)) {
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.Found_package_json_at_0, packageJsonPath);
-            }
-            typesFile = tryReadTypesSection(packageJsonPath, searchPath, state);
-            if (!typesFile) {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_does_not_have_types_field);
-                }
-            }
-        }
-        else {
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.File_0_does_not_exist, packageJsonPath);
-            }
-            failedLookupLocations.push(packageJsonPath);
-        }
-
-        if (!typesFile) {
-            typesFile = "index.d.ts";
-        }
-
-        const combinedPath = normalizePath(combinePaths(searchPath, typesFile));
-        if (state.host.fileExists(combinedPath)) {
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, combinedPath);
-            }
-            return combinedPath;
-        }
-        else {
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.File_0_does_not_exist, combinedPath);
-            }
-            failedLookupLocations.push(combinedPath);
-            return undefined;
-        }
-    }
-
-    function getEffectiveTypesPrimarySearchPaths(options: CompilerOptions): string[] {
-        return options.typesSearchPaths || defaultLibrarySearchPaths;
-    }
-
+    const typeReferenceExtensions = [".d.ts"];
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, compilationRoot: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
         const moduleResolutionState: ModuleResolutionState = {
@@ -254,12 +210,17 @@ namespace ts {
         }
         const failedLookupLocations: string[] = [];
         // Check primary library paths
-        for (const searchPath of getEffectiveTypesPrimarySearchPaths(options)) {
+        const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
+        for (const searchPath of effectivePrimarySearchPaths) {
             const primaryPath = combinePaths(compilationRoot, searchPath);
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
             }
-            const resolvedFile = tryLoadTypeDeclarationFile(combinePaths(primaryPath, typeReferenceDirectiveName), failedLookupLocations, moduleResolutionState);
+            const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
+            const candidateDirectory = getDirectoryPath(candidate);
+            const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
+                !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
+
             if (resolvedFile) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
