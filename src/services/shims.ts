@@ -55,6 +55,7 @@ namespace ts {
 
         /** Returns a JSON-encoded value of the type: string[] */
         getScriptFileNames(): string;
+        getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): ScriptSnapshotShim;
         getLocalizedDiagnosticMessages(): string;
@@ -77,7 +78,9 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string): string;
+        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
+
+        trace(s: string): void;
     }
 
     ///
@@ -229,6 +232,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
+        discoverTypings(discoverTypingsJson: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -344,6 +348,15 @@ namespace ts {
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
+        public getScriptKind(fileName: string): ScriptKind {
+            if ("getScriptKind" in this.shimHost) {
+                return this.shimHost.getScriptKind(fileName);
+            }
+            else {
+                return ScriptKind.Unknown;
+            }
+        }
+
         public getScriptVersion(fileName: string): string {
             return this.shimHost.getScriptVersion(fileName);
         }
@@ -410,8 +423,16 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+            // Wrap the API changes for 2.0 release. This try/catch
+            // should be removed once TypeScript 2.0 has shipped.
+            let encoded: string;
+            try {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+            }
+            catch (e) {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
             return JSON.parse(encoded);
         }
 
@@ -742,7 +763,7 @@ namespace ts {
                 `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
                     const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
-                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    // workaround for VS document highlighting issue - keep only items from the initial file
                     const normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
@@ -941,15 +962,18 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
+                            typingOptions: {},
                             files: [],
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
 
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    const normalizedFileName = normalizeSlashes(fileName);
+                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
+                        typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
@@ -961,6 +985,21 @@ namespace ts {
                 "getDefaultCompilationSettings()",
                 () => getDefaultCompilerOptions()
             );
+        }
+
+        public discoverTypings(discoverTypingsJson: string): string {
+            const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
+            return this.forwardJSONCall("discoverTypings()", () => {
+                const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
+                return ts.JsTyping.discoverTypings(
+                    this.host,
+                    info.fileNames,
+                    toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
+                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    info.packageNameToTypingLocation,
+                    info.typingOptions,
+                    info.compilerOptions);
+            });
         }
     }
 
@@ -1056,6 +1095,6 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "1.8";
+const toolsVersion = "1.9";
 
 /* tslint:enable:no-unused-variable */

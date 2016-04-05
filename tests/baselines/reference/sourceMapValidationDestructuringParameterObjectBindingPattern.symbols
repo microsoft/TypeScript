@@ -1,0 +1,91 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts ===
+interface Robot {
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+
+    skill: string;
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
+}
+declare var console: {
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 11))
+
+    log(msg: string): void;
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>msg : Symbol(msg, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 5, 8))
+}
+var hello = "hello";
+>hello : Symbol(hello, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 7, 3))
+
+var robotA: Robot = { name: "mower", skill: "mowing" };
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 3))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 21))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 36))
+
+function foo1({ name: nameA }: Robot) {
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 55))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 10, 15))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 10, 15))
+}
+function foo2({ name: nameB, skill: skillB }: Robot) {
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 12, 1))
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 17))
+>nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 13, 15))
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 1, 17))
+>skillB : Symbol(skillB, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 13, 28))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+
+    console.log(nameB);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>nameB : Symbol(nameB, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 13, 15))
+}
+function foo3({ name }: Robot) {
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 15, 1))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 16, 15))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 0, 0))
+
+    console.log(name);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 4, 22))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 16, 15))
+}
+
+foo1(robotA);
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 55))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 3))
+
+foo1({ name: "Edger", skill: "cutting edges" });
+>foo1 : Symbol(foo1, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 55))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 21, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 21, 21))
+
+foo2(robotA);
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 12, 1))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 3))
+
+foo2({ name: "Edger", skill: "cutting edges" });
+>foo2 : Symbol(foo2, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 12, 1))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 24, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 24, 21))
+
+foo3(robotA);
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 15, 1))
+>robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 8, 3))
+
+foo3({ name: "Edger", skill: "cutting edges" });
+>foo3 : Symbol(foo3, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 15, 1))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 27, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringParameterObjectBindingPattern.ts, 27, 21))
+

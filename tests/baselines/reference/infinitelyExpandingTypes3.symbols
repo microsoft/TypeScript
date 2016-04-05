@@ -4,16 +4,16 @@ interface List<T> {
 >T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
 
     data: T;
->data : Symbol(data, Decl(infinitelyExpandingTypes3.ts, 0, 19))
+>data : Symbol(List.data, Decl(infinitelyExpandingTypes3.ts, 0, 19))
 >T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
 
     next: List<T>; // will be recursive reference when OwnerList is expanded
->next : Symbol(next, Decl(infinitelyExpandingTypes3.ts, 1, 12))
+>next : Symbol(List.next, Decl(infinitelyExpandingTypes3.ts, 1, 12))
 >List : Symbol(List, Decl(infinitelyExpandingTypes3.ts, 0, 0))
 >T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
 
     owner: OwnerList<T>;
->owner : Symbol(owner, Decl(infinitelyExpandingTypes3.ts, 2, 18))
+>owner : Symbol(List.owner, Decl(infinitelyExpandingTypes3.ts, 2, 18))
 >OwnerList : Symbol(OwnerList, Decl(infinitelyExpandingTypes3.ts, 4, 1))
 >T : Symbol(T, Decl(infinitelyExpandingTypes3.ts, 0, 15))
 }
@@ -26,7 +26,7 @@ interface OwnerList<U> extends List<List<U>> {
 >U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 6, 20))
 
     name: string;
->name : Symbol(name, Decl(infinitelyExpandingTypes3.ts, 6, 46))
+>name : Symbol(OwnerList.name, Decl(infinitelyExpandingTypes3.ts, 6, 46))
 }
 
 interface OwnerList2<U> extends List<List<U>> {
@@ -37,7 +37,7 @@ interface OwnerList2<U> extends List<List<U>> {
 >U : Symbol(U, Decl(infinitelyExpandingTypes3.ts, 10, 21))
 
     name: string;
->name : Symbol(name, Decl(infinitelyExpandingTypes3.ts, 10, 47))
+>name : Symbol(OwnerList2.name, Decl(infinitelyExpandingTypes3.ts, 10, 47))
 }
 
 var o1: OwnerList<number>;

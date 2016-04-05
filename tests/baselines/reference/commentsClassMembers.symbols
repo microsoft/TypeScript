@@ -6,88 +6,88 @@ class c1 {
 
     /** p1 is property of c1*/
     public p1: number;
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 
     /** sum with property*/
     public p2(/** number to add*/b: number) {
->p2 : Symbol(p2, Decl(commentsClassMembers.ts, 4, 22))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 6, 14))
 
         return this.p1 + b;
->this.p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 6, 14))
 
     } /* trailing comment of method*/
     /** getter property*/
     public get p3() {
->p3 : Symbol(p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
 
         return this.p2(this.p1);
->this.p2 : Symbol(p2, Decl(commentsClassMembers.ts, 4, 22))
+>this.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p2 : Symbol(p2, Decl(commentsClassMembers.ts, 4, 22))
->this.p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 
     }// trailing comment Getter
     /** setter property*/
     public set p3(/** this is value*/value: number) {
->p3 : Symbol(p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
+>p3 : Symbol(c1.p3, Decl(commentsClassMembers.ts, 8, 5), Decl(commentsClassMembers.ts, 12, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 14, 18))
 
         this.p1 = this.p2(value);
->this.p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
->this.p2 : Symbol(p2, Decl(commentsClassMembers.ts, 4, 22))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
+>this.p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p2 : Symbol(p2, Decl(commentsClassMembers.ts, 4, 22))
+>p2 : Symbol(c1.p2, Decl(commentsClassMembers.ts, 4, 22))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 14, 18))
 
     }// trailing comment Setter
     /** pp1 is property of c1*/
     private pp1: number;
->pp1 : Symbol(pp1, Decl(commentsClassMembers.ts, 16, 5))
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
 
     /** sum with property*/
     private pp2(/** number to add*/b: number) {
->pp2 : Symbol(pp2, Decl(commentsClassMembers.ts, 18, 24))
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 20, 16))
 
         return this.p1 + b;
->this.p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>this.p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 2, 10))
+>p1 : Symbol(c1.p1, Decl(commentsClassMembers.ts, 2, 10))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 20, 16))
 
     } // trailing comment of method
     /** getter property*/
     private get pp3() {
->pp3 : Symbol(pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
+>pp3 : Symbol(c1.pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
 
         return this.pp2(this.pp1);
->this.pp2 : Symbol(pp2, Decl(commentsClassMembers.ts, 18, 24))
+>this.pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->pp2 : Symbol(pp2, Decl(commentsClassMembers.ts, 18, 24))
->this.pp1 : Symbol(pp1, Decl(commentsClassMembers.ts, 16, 5))
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
+>this.pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->pp1 : Symbol(pp1, Decl(commentsClassMembers.ts, 16, 5))
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
     }
     /** setter property*/
     private set pp3( /** this is value*/value: number) {
->pp3 : Symbol(pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
+>pp3 : Symbol(c1.pp3, Decl(commentsClassMembers.ts, 22, 5), Decl(commentsClassMembers.ts, 26, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 28, 20))
 
         this.pp1 = this.pp2(value);
->this.pp1 : Symbol(pp1, Decl(commentsClassMembers.ts, 16, 5))
+>this.pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->pp1 : Symbol(pp1, Decl(commentsClassMembers.ts, 16, 5))
->this.pp2 : Symbol(pp2, Decl(commentsClassMembers.ts, 18, 24))
+>pp1 : Symbol(c1.pp1, Decl(commentsClassMembers.ts, 16, 5))
+>this.pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->pp2 : Symbol(pp2, Decl(commentsClassMembers.ts, 18, 24))
+>pp2 : Symbol(c1.pp2, Decl(commentsClassMembers.ts, 18, 24))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 28, 20))
     }
     /** Constructor method*/
@@ -137,77 +137,77 @@ class c1 {
 
     }/*trailing comment 2 */ /*setter*/
     public nc_p1: number;
->nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
 
     public nc_p2(b: number) {
->nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 49, 17))
 
         return this.nc_p1 + b;
->this.nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 49, 17))
     }
     public get nc_p3() {
->nc_p3 : Symbol(nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
 
         return this.nc_p2(this.nc_p1);
->this.nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>this.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 48, 25))
->this.nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
     }
     public set nc_p3(value: number) {
->nc_p3 : Symbol(nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
+>nc_p3 : Symbol(c1.nc_p3, Decl(commentsClassMembers.ts, 51, 5), Decl(commentsClassMembers.ts, 54, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 55, 21))
 
         this.nc_p1 = this.nc_p2(value);
->this.nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this.nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 47, 5))
->this.nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>nc_p1 : Symbol(c1.nc_p1, Decl(commentsClassMembers.ts, 47, 5))
+>this.nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 48, 25))
+>nc_p2 : Symbol(c1.nc_p2, Decl(commentsClassMembers.ts, 48, 25))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 55, 21))
     }
     private nc_pp1: number;
->nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
 
     private nc_pp2(b: number) {
->nc_pp2 : Symbol(nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 59, 19))
 
         return this.nc_pp1 + b;
->this.nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 59, 19))
     }
     private get nc_pp3() {
->nc_pp3 : Symbol(nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
+>nc_pp3 : Symbol(c1.nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
 
         return this.nc_pp2(this.nc_pp1);
->this.nc_pp2 : Symbol(nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>this.nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_pp2 : Symbol(nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
->this.nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
     }
     private set nc_pp3(value: number) {
->nc_pp3 : Symbol(nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
+>nc_pp3 : Symbol(c1.nc_pp3, Decl(commentsClassMembers.ts, 61, 5), Decl(commentsClassMembers.ts, 64, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 65, 23))
 
         this.nc_pp1 = this.nc_pp2(value);
->this.nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this.nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_pp1 : Symbol(nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
->this.nc_pp2 : Symbol(nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>nc_pp1 : Symbol(c1.nc_pp1, Decl(commentsClassMembers.ts, 57, 5))
+>this.nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->nc_pp2 : Symbol(nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
+>nc_pp2 : Symbol(c1.nc_pp2, Decl(commentsClassMembers.ts, 58, 27))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 65, 23))
     }
     static nc_s1: number;
@@ -250,84 +250,84 @@ class c1 {
 
     // p1 is property of c1
     public a_p1: number;
->a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 
     // sum with property
     public a_p2(b: number) {
->a_p2 : Symbol(a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 82, 16))
 
         return this.a_p1 + b;
->this.a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 82, 16))
     }
     // getter property
     public get a_p3() {
->a_p3 : Symbol(a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
+>a_p3 : Symbol(c1.a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
 
         return this.a_p2(this.a_p1);
->this.a_p2 : Symbol(a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>this.a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p2 : Symbol(a_p2, Decl(commentsClassMembers.ts, 80, 24))
->this.a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
     }
     // setter property
     public set a_p3(value: number) {
->a_p3 : Symbol(a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
+>a_p3 : Symbol(c1.a_p3, Decl(commentsClassMembers.ts, 84, 5), Decl(commentsClassMembers.ts, 88, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 90, 20))
 
         this.a_p1 = this.a_p2(value);
->this.a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
->this.a_p2 : Symbol(a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this.a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p2 : Symbol(a_p2, Decl(commentsClassMembers.ts, 80, 24))
+>a_p2 : Symbol(c1.a_p2, Decl(commentsClassMembers.ts, 80, 24))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 90, 20))
     }
     // pp1 is property of c1
     private a_pp1: number;
->a_pp1 : Symbol(a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
 
     // sum with property
     private a_pp2(b: number) {
->a_pp2 : Symbol(a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 96, 18))
 
         return this.a_p1 + b;
->this.a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>this.a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_p1 : Symbol(a_p1, Decl(commentsClassMembers.ts, 77, 5))
+>a_p1 : Symbol(c1.a_p1, Decl(commentsClassMembers.ts, 77, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 96, 18))
     }
     // getter property
     private get a_pp3() {
->a_pp3 : Symbol(a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
+>a_pp3 : Symbol(c1.a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
 
         return this.a_pp2(this.a_pp1);
->this.a_pp2 : Symbol(a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>this.a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_pp2 : Symbol(a_pp2, Decl(commentsClassMembers.ts, 94, 26))
->this.a_pp1 : Symbol(a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>this.a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_pp1 : Symbol(a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
     }
     // setter property
     private set a_pp3(value: number) {
->a_pp3 : Symbol(a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
+>a_pp3 : Symbol(c1.a_pp3, Decl(commentsClassMembers.ts, 98, 5), Decl(commentsClassMembers.ts, 102, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 104, 22))
 
         this.a_pp1 = this.a_pp2(value);
->this.a_pp1 : Symbol(a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>this.a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_pp1 : Symbol(a_pp1, Decl(commentsClassMembers.ts, 92, 5))
->this.a_pp2 : Symbol(a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>a_pp1 : Symbol(c1.a_pp1, Decl(commentsClassMembers.ts, 92, 5))
+>this.a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->a_pp2 : Symbol(a_pp2, Decl(commentsClassMembers.ts, 94, 26))
+>a_pp2 : Symbol(c1.a_pp2, Decl(commentsClassMembers.ts, 94, 26))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 104, 22))
     }
     
@@ -376,84 +376,84 @@ class c1 {
 
     /** p1 is property of c1 */
     public b_p1: number;
->b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 
     /** sum with property */
     public b_p2(b: number) {
->b_p2 : Symbol(b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 127, 16))
 
         return this.b_p1 + b;
->this.b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 127, 16))
     }
     /** getter property */
     public get b_p3() {
->b_p3 : Symbol(b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
+>b_p3 : Symbol(c1.b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
 
         return this.b_p2(this.b_p1);
->this.b_p2 : Symbol(b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>this.b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p2 : Symbol(b_p2, Decl(commentsClassMembers.ts, 125, 24))
->this.b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
     }
     /** setter property */
     public set b_p3(value: number) {
->b_p3 : Symbol(b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
+>b_p3 : Symbol(c1.b_p3, Decl(commentsClassMembers.ts, 129, 5), Decl(commentsClassMembers.ts, 133, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 135, 20))
 
         this.b_p1 = this.b_p2(value);
->this.b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
->this.b_p2 : Symbol(b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this.b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p2 : Symbol(b_p2, Decl(commentsClassMembers.ts, 125, 24))
+>b_p2 : Symbol(c1.b_p2, Decl(commentsClassMembers.ts, 125, 24))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 135, 20))
     }
     /** pp1 is property of c1 */
     private b_pp1: number;
->b_pp1 : Symbol(b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
 
     /** sum with property */
     private b_pp2(b: number) {
->b_pp2 : Symbol(b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 141, 18))
 
         return this.b_p1 + b;
->this.b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>this.b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_p1 : Symbol(b_p1, Decl(commentsClassMembers.ts, 122, 5))
+>b_p1 : Symbol(c1.b_p1, Decl(commentsClassMembers.ts, 122, 5))
 >b : Symbol(b, Decl(commentsClassMembers.ts, 141, 18))
     }
     /** getter property */
     private get b_pp3() {
->b_pp3 : Symbol(b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
+>b_pp3 : Symbol(c1.b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
 
         return this.b_pp2(this.b_pp1);
->this.b_pp2 : Symbol(b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>this.b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_pp2 : Symbol(b_pp2, Decl(commentsClassMembers.ts, 139, 26))
->this.b_pp1 : Symbol(b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>this.b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_pp1 : Symbol(b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
     }
     /** setter property */
     private set b_pp3(value: number) {
->b_pp3 : Symbol(b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
+>b_pp3 : Symbol(c1.b_pp3, Decl(commentsClassMembers.ts, 143, 5), Decl(commentsClassMembers.ts, 147, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 149, 22))
 
         this.b_pp1 = this.b_pp2(value);
->this.b_pp1 : Symbol(b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>this.b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_pp1 : Symbol(b_pp1, Decl(commentsClassMembers.ts, 137, 5))
->this.b_pp2 : Symbol(b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>b_pp1 : Symbol(c1.b_pp1, Decl(commentsClassMembers.ts, 137, 5))
+>this.b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
 >this : Symbol(c1, Decl(commentsClassMembers.ts, 0, 0))
->b_pp2 : Symbol(b_pp2, Decl(commentsClassMembers.ts, 139, 26))
+>b_pp2 : Symbol(c1.b_pp2, Decl(commentsClassMembers.ts, 139, 26))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 149, 22))
     }
     
@@ -635,54 +635,54 @@ class cProperties {
 >cProperties : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
 
     private val: number;
->val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 
     /** getter only property*/
     public get p1() {
->p1 : Symbol(p1, Decl(commentsClassMembers.ts, 195, 24))
+>p1 : Symbol(cProperties.p1, Decl(commentsClassMembers.ts, 195, 24))
 
         return this.val;
->this.val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
->val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 
     } // trailing comment of only getter
     public get nc_p1() {
->nc_p1 : Symbol(nc_p1, Decl(commentsClassMembers.ts, 199, 5))
+>nc_p1 : Symbol(cProperties.nc_p1, Decl(commentsClassMembers.ts, 199, 5))
 
         return this.val;
->this.val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
->val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
     }
     /**setter only property*/
     public set p2(value: number) {
->p2 : Symbol(p2, Decl(commentsClassMembers.ts, 202, 5))
+>p2 : Symbol(cProperties.p2, Decl(commentsClassMembers.ts, 202, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 204, 18))
 
         this.val = value;
->this.val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
->val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 204, 18))
     }
     public set nc_p2(value: number) {
->nc_p2 : Symbol(nc_p2, Decl(commentsClassMembers.ts, 206, 5))
+>nc_p2 : Symbol(cProperties.nc_p2, Decl(commentsClassMembers.ts, 206, 5))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 207, 21))
 
         this.val = value;
->this.val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>this.val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >this : Symbol(cProperties, Decl(commentsClassMembers.ts, 193, 14))
->val : Symbol(val, Decl(commentsClassMembers.ts, 194, 19))
+>val : Symbol(cProperties.val, Decl(commentsClassMembers.ts, 194, 19))
 >value : Symbol(value, Decl(commentsClassMembers.ts, 207, 21))
 
     } /* trailing comment of setter only*/
 
     public x = 10; /*trailing comment for property*/
->x : Symbol(x, Decl(commentsClassMembers.ts, 209, 5))
+>x : Symbol(cProperties.x, Decl(commentsClassMembers.ts, 209, 5))
 
     private y = 10; // trailing comment of // style
->y : Symbol(y, Decl(commentsClassMembers.ts, 211, 18))
+>y : Symbol(cProperties.y, Decl(commentsClassMembers.ts, 211, 18))
 }
 var cProperties_i = new cProperties();
 >cProperties_i : Symbol(cProperties_i, Decl(commentsClassMembers.ts, 214, 3))

@@ -3,7 +3,7 @@ class Base {
 >Base : Symbol(Base, Decl(computedPropertyNames31_ES6.ts, 0, 0))
 
     bar() {
->bar : Symbol(bar, Decl(computedPropertyNames31_ES6.ts, 0, 12))
+>bar : Symbol(Base.bar, Decl(computedPropertyNames31_ES6.ts, 0, 12))
 
         return 0;
     }
@@ -13,7 +13,7 @@ class C extends Base {
 >Base : Symbol(Base, Decl(computedPropertyNames31_ES6.ts, 0, 0))
 
     foo() {
->foo : Symbol(foo, Decl(computedPropertyNames31_ES6.ts, 5, 22))
+>foo : Symbol(C.foo, Decl(computedPropertyNames31_ES6.ts, 5, 22))
 
         () => {
             var obj = {

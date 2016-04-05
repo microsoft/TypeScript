@@ -1,4 +1,3 @@
-
 /////////////////////////////
 /// IE DOM APIs
 /////////////////////////////
@@ -378,6 +377,8 @@ interface AudioNode extends EventTarget {
     numberOfOutputs: number;
     connect(destination: AudioNode, output?: number, input?: number): void;
     disconnect(output?: number): void;
+    disconnect(destination: AudioNode, output?: number, input?: number): void;
+    disconnect(destination: AudioParam, output?: number): void;
 }
 
 declare var AudioNode: {
@@ -1255,7 +1256,7 @@ interface Console {
     select(element: Element): void;
     time(timerName?: string): void;
     timeEnd(timerName?: string): void;
-    trace(): void;
+    trace(message?: any, ...optionalParams: any[]): void;
     warn(message?: any, ...optionalParams: any[]): void;
 }
 
@@ -1514,9 +1515,9 @@ interface DataTransferItemList {
     length: number;
     add(data: File): DataTransferItem;
     clear(): void;
-    item(index: number): File;
+    item(index: number): DataTransferItem;
     remove(index: number): void;
-    [index: number]: File;
+    [index: number]: DataTransferItem;
 }
 
 declare var DataTransferItemList: {
@@ -2569,6 +2570,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param content The text and HTML tags to write.
       */
     writeln(...content: string[]): void;
+    createElement(tagName: "picture"): HTMLPictureElement;
+    getElementsByTagName(tagname: "picture"): NodeListOf<HTMLPictureElement>;
     addEventListener(type: "MSContentZoom", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -2981,6 +2984,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitRequestFullscreen(): void;
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
+    getElementsByTagName(tagname: "picture"): NodeListOf<HTMLPictureElement>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -3770,6 +3774,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
+    toBlob(): Blob;
 }
 
 declare var HTMLCanvasElement: {
@@ -6890,7 +6895,7 @@ interface IDBCursor {
     direction: string;
     key: any;
     primaryKey: any;
-    source: any;
+    source: IDBObjectStore | IDBIndex;
     advance(count: number): void;
     continue(key?: any): void;
     delete(): IDBRequest;
@@ -6924,11 +6929,11 @@ interface IDBDatabase extends EventTarget {
     objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
-    version: string;
+    version: number;
     close(): void;
     createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     deleteObjectStore(name: string): void;
-    transaction(storeNames: any, mode?: string): IDBTransaction;
+    transaction(storeNames: string | string[], mode?: string): IDBTransaction;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -6986,9 +6991,10 @@ declare var IDBKeyRange: {
 
 interface IDBObjectStore {
     indexNames: DOMStringList;
-    keyPath: string;
+    keyPath: string | string[];
     name: string;
     transaction: IDBTransaction;
+    autoIncrement: boolean;
     add(value: any, key?: any): IDBRequest;
     clear(): IDBRequest;
     count(key?: any): IDBRequest;
@@ -7027,7 +7033,7 @@ interface IDBRequest extends EventTarget {
     onsuccess: (ev: Event) => any;
     readyState: string;
     result: any;
-    source: any;
+    source: IDBObjectStore | IDBIndex | IDBCursor;
     transaction: IDBTransaction;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -7640,7 +7646,7 @@ declare var MediaQueryList: {
 interface MediaSource extends EventTarget {
     activeSourceBuffers: SourceBufferList;
     duration: number;
-    readyState: number;
+    readyState: string;
     sourceBuffers: SourceBufferList;
     addSourceBuffer(type: string): SourceBuffer;
     endOfStream(error?: number): void;
@@ -10214,11 +10220,14 @@ declare var SVGViewElement: {
 }
 
 interface SVGZoomAndPan {
+    zoomAndPan: number;
+}
+
+declare var SVGZoomAndPan: {
     SVG_ZOOMANDPAN_DISABLE: number;
     SVG_ZOOMANDPAN_MAGNIFY: number;
     SVG_ZOOMANDPAN_UNKNOWN: number;
 }
-declare var SVGZoomAndPan: SVGZoomAndPan;
 
 interface SVGZoomEvent extends UIEvent {
     newScale: number;
@@ -10369,17 +10378,16 @@ declare var Storage: {
 }
 
 interface StorageEvent extends Event {
-    key: string;
-    newValue: any;
-    oldValue: any;
-    storageArea: Storage;
     url: string;
-    initStorageEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, keyArg: string, oldValueArg: any, newValueArg: any, urlArg: string, storageAreaArg: Storage): void;
+    key?: string;
+    oldValue?: string;
+    newValue?: string;
+    storageArea?: Storage;
 }
 
 declare var StorageEvent: {
     prototype: StorageEvent;
-    new(): StorageEvent;
+    new (type: string, eventInitDict?: StorageEventInit): StorageEvent;
 }
 
 interface StyleMedia {
@@ -11977,7 +11985,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     msMatchMedia(mediaQuery: string): MediaQueryList;
     msRequestAnimationFrame(callback: FrameRequestCallback): number;
     msWriteProfilerMark(profilerMarkName: string): void;
-    open(url?: string, target?: string, features?: string, replace?: boolean): any;
+    open(url?: string, target?: string, features?: string, replace?: boolean): Window;
     postMessage(message: any, targetOrigin: string, ports?: any): void;
     print(): void;
     prompt(message?: string, _default?: string): string;
@@ -12579,6 +12587,14 @@ interface XMLHttpRequestEventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
+interface StorageEventInit extends EventInit {
+    key?: string;
+    oldValue?: string;
+    newValue?: string;
+    url: string;
+    storageArea?: Storage;
+}
+
 interface IDBObjectStoreParameters {
     keyPath?: string | string[];
     autoIncrement?: boolean;
@@ -12633,6 +12649,14 @@ declare var HTMLTemplateElement: {
     new(): HTMLTemplateElement;
 }
 
+interface HTMLPictureElement extends HTMLElement {
+}
+
+declare var HTMLPictureElement: {
+    prototype: HTMLPictureElement;
+    new(): HTMLPictureElement;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -12666,7 +12690,7 @@ interface DecodeSuccessCallback {
     (decodedData: AudioBuffer): void;
 }
 interface DecodeErrorCallback {
-    (): void;
+    (error: DOMException): void;
 }
 interface FunctionStringCallback {
     (data: string): void;
@@ -12829,7 +12853,7 @@ declare function msCancelRequestAnimationFrame(handle: number): void;
 declare function msMatchMedia(mediaQuery: string): MediaQueryList;
 declare function msRequestAnimationFrame(callback: FrameRequestCallback): number;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
-declare function open(url?: string, target?: string, features?: string, replace?: boolean): any;
+declare function open(url?: string, target?: string, features?: string, replace?: boolean): Window;
 declare function postMessage(message: any, targetOrigin: string, ports?: any): void;
 declare function print(): void;
 declare function prompt(message?: string, _default?: string): string;

@@ -69,7 +69,7 @@ exports.M = t1_1.M1;
 exports.a = t1_1.a1;
 //// [t3.js]
 "use strict";
-var t1_1 = require("./t1");
+const t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;
 exports.C = t1_1.C1;

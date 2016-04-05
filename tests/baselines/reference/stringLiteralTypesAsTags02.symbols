@@ -1,0 +1,106 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags02.ts ===
+
+type Kind = "A" | "B"
+>Kind : Symbol(Kind, Decl(stringLiteralTypesAsTags02.ts, 0, 0))
+
+interface Entity {
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+
+    kind: Kind;
+>kind : Symbol(Entity.kind, Decl(stringLiteralTypesAsTags02.ts, 3, 18))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesAsTags02.ts, 0, 0))
+}
+
+interface A extends Entity {
+>A : Symbol(A, Decl(stringLiteralTypesAsTags02.ts, 5, 1))
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+
+    kind: "A";
+>kind : Symbol(A.kind, Decl(stringLiteralTypesAsTags02.ts, 7, 28))
+
+    a: number;
+>a : Symbol(A.a, Decl(stringLiteralTypesAsTags02.ts, 8, 14))
+}
+
+interface B extends Entity {
+>B : Symbol(B, Decl(stringLiteralTypesAsTags02.ts, 10, 1))
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+
+    kind: "B";
+>kind : Symbol(B.kind, Decl(stringLiteralTypesAsTags02.ts, 12, 28))
+
+    b: string;
+>b : Symbol(B.b, Decl(stringLiteralTypesAsTags02.ts, 13, 14))
+}
+
+function hasKind(entity: Entity, kind: "A"): entity is A;
+>hasKind : Symbol(hasKind, Decl(stringLiteralTypesAsTags02.ts, 15, 1), Decl(stringLiteralTypesAsTags02.ts, 17, 57), Decl(stringLiteralTypesAsTags02.ts, 18, 57))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 17, 17))
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+>kind : Symbol(kind, Decl(stringLiteralTypesAsTags02.ts, 17, 32))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 17, 17))
+>A : Symbol(A, Decl(stringLiteralTypesAsTags02.ts, 5, 1))
+
+function hasKind(entity: Entity, kind: "B"): entity is B;
+>hasKind : Symbol(hasKind, Decl(stringLiteralTypesAsTags02.ts, 15, 1), Decl(stringLiteralTypesAsTags02.ts, 17, 57), Decl(stringLiteralTypesAsTags02.ts, 18, 57))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 18, 17))
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+>kind : Symbol(kind, Decl(stringLiteralTypesAsTags02.ts, 18, 32))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 18, 17))
+>B : Symbol(B, Decl(stringLiteralTypesAsTags02.ts, 10, 1))
+
+function hasKind(entity: Entity, kind: Kind): entity is (A | B) {
+>hasKind : Symbol(hasKind, Decl(stringLiteralTypesAsTags02.ts, 15, 1), Decl(stringLiteralTypesAsTags02.ts, 17, 57), Decl(stringLiteralTypesAsTags02.ts, 18, 57))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 19, 17))
+>Entity : Symbol(Entity, Decl(stringLiteralTypesAsTags02.ts, 1, 21))
+>kind : Symbol(kind, Decl(stringLiteralTypesAsTags02.ts, 19, 32))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesAsTags02.ts, 0, 0))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 19, 17))
+>A : Symbol(A, Decl(stringLiteralTypesAsTags02.ts, 5, 1))
+>B : Symbol(B, Decl(stringLiteralTypesAsTags02.ts, 10, 1))
+
+    return entity.kind === kind;
+>entity.kind : Symbol(Entity.kind, Decl(stringLiteralTypesAsTags02.ts, 3, 18))
+>entity : Symbol(entity, Decl(stringLiteralTypesAsTags02.ts, 19, 17))
+>kind : Symbol(Entity.kind, Decl(stringLiteralTypesAsTags02.ts, 3, 18))
+>kind : Symbol(kind, Decl(stringLiteralTypesAsTags02.ts, 19, 32))
+}
+
+let x: A = {
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+>A : Symbol(A, Decl(stringLiteralTypesAsTags02.ts, 5, 1))
+
+    kind: "A",
+>kind : Symbol(kind, Decl(stringLiteralTypesAsTags02.ts, 23, 12))
+
+    a: 100,
+>a : Symbol(a, Decl(stringLiteralTypesAsTags02.ts, 24, 14))
+}
+
+if (hasKind(x, "A")) {
+>hasKind : Symbol(hasKind, Decl(stringLiteralTypesAsTags02.ts, 15, 1), Decl(stringLiteralTypesAsTags02.ts, 17, 57), Decl(stringLiteralTypesAsTags02.ts, 18, 57))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+
+    let a = x;
+>a : Symbol(a, Decl(stringLiteralTypesAsTags02.ts, 29, 7))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+}
+else {
+    let b = x;
+>b : Symbol(b, Decl(stringLiteralTypesAsTags02.ts, 32, 7))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+}
+
+if (!hasKind(x, "B")) {
+>hasKind : Symbol(hasKind, Decl(stringLiteralTypesAsTags02.ts, 15, 1), Decl(stringLiteralTypesAsTags02.ts, 17, 57), Decl(stringLiteralTypesAsTags02.ts, 18, 57))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+
+    let c = x;
+>c : Symbol(c, Decl(stringLiteralTypesAsTags02.ts, 36, 7))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+}
+else {
+    let d = x;
+>d : Symbol(d, Decl(stringLiteralTypesAsTags02.ts, 39, 7))
+>x : Symbol(x, Decl(stringLiteralTypesAsTags02.ts, 23, 3))
+}

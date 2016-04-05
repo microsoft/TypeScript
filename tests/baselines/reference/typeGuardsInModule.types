@@ -64,15 +64,15 @@ module m1 {
 >"string" : "string"
 
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : string
 >strOrNum : string | number
->var3 : string | number
+>var3 : string
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : number
 >strOrNum : string | number
->var3 : string | number
+>var3 : number
     }
 }
 // local module
@@ -116,14 +116,14 @@ module m2 {
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
->strOrNum = typeof var3 === "string" && var3 : string | number
+>strOrNum = typeof var3 === "string" && var3 : string
 >strOrNum : string | number
->typeof var3 === "string" && var3 : string | number
+>typeof var3 === "string" && var3 : string
 >typeof var3 === "string" : boolean
 >typeof var3 : string
 >var3 : string | number
 >"string" : "string"
->var3 : string | number
+>var3 : string
 
         // variables in module declaration
         var var4: string | number;
@@ -160,15 +160,15 @@ module m2 {
 >"string" : "string"
 
             strOrNum = var5; // string | number
->strOrNum = var5 : string | number
+>strOrNum = var5 : string
 >strOrNum : string | number
->var5 : string | number
+>var5 : string
         }
         else {
             strOrNum = var5; // string | number
->strOrNum = var5 : string | number
+>strOrNum = var5 : number
 >strOrNum : string | number
->var5 : string | number
+>var5 : number
         }
     }
 }
@@ -225,15 +225,15 @@ module m3.m4 {
 >"string" : "string"
 
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : string
 >strOrNum : string | number
->var3 : string | number
+>var3 : string
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : number
 >strOrNum : string | number
->var3 : string | number
+>var3 : number
     }
 }
 

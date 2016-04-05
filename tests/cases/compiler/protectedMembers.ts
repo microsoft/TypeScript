@@ -82,7 +82,6 @@ interface E extends C {
 }
 
 class CC {
-    // Error, constructor cannot be protected
     protected constructor() {
     }
 }

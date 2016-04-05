@@ -136,7 +136,7 @@ namespace Playback {
         };
         wrapper.startReplayFromData = log => {
             replayLog = log;
-            // Remove non-found files from the log (shouldn't really need them, but we still record them for diganostic purposes)
+            // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result.contents !== undefined);
         };
 
@@ -223,7 +223,18 @@ namespace Playback {
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },
-            (path, extension, exclude) => findResultByPath(wrapper, replayLog.directoriesRead.filter(d => d.extension === extension && ts.arrayIsEqualTo(d.exclude, exclude)), path));
+            (path, extension, exclude) => findResultByPath(wrapper,
+                    replayLog.directoriesRead.filter(
+                        d => {
+                            if (d.extension === extension) {
+                                if (d.exclude) {
+                                    return ts.arrayIsEqualTo(d.exclude, exclude);
+                                }
+                                return true;
+                            }
+                            return false;
+                        }
+                    ), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
             (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),

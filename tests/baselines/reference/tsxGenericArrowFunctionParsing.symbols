@@ -4,7 +4,7 @@ declare module JSX {
 
 	interface Element { isElement; }
 >Element : Symbol(Element, Decl(file.tsx, 0, 20))
->isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
+>isElement : Symbol(Element.isElement, Decl(file.tsx, 1, 20))
 }
 
 var T, T1, T2;

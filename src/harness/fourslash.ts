@@ -231,13 +231,13 @@ namespace FourSlash {
         private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
             switch (testType) {
                 case FourSlashTestType.Native:
-                    return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
                 case FourSlashTestType.ShimsWithPreprocess:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
-                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
@@ -291,7 +291,8 @@ namespace FourSlash {
 
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                        Harness.Compiler.getDefaultLibrarySourceFile().text);
                 }
             }
             else {
@@ -301,7 +302,8 @@ namespace FourSlash {
                         this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName]);
                     }
                 });
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                    Harness.Compiler.getDefaultLibrarySourceFile().text);
             }
 
             this.formatCodeOptions = {
@@ -568,6 +570,31 @@ namespace FourSlash {
             else {
                 if (itemsCount <= count) {
                     this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+        }
+
+        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
+            if (items.length === 0) {
+                return;
+            }
+
+            const entries = this.getCompletionListAtCaret().entries;
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            for (let i = 0; i < items.length; i++) {
+                assert.equal(entries[i].name, items[i], `Unexpected item in completion list`);
+            }
+        }
+
+        public noItemsWithSameNameButDifferentKind(): void {
+            const completions = this.getCompletionListAtCaret();
+            const uniqueItems: ts.Map<string> = {};
+            for (const item of completions.entries) {
+                if (!ts.hasProperty(uniqueItems, item.name)) {
+                    uniqueItems[item.name] = item.kind;
+                }
+                else {
+                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
                 }
             }
         }
@@ -1080,9 +1107,15 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
+                baselineFile = baselineFile.replace(".ts", ".baseline");
+
+            }
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
@@ -1248,7 +1281,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1339,7 +1372,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1383,7 +1416,7 @@ namespace FourSlash {
                 return;
             }
 
-            const incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            const incrementalSourceFile = this.languageService.getNonBoundSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
             const incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
@@ -2740,12 +2773,12 @@ namespace FourSlashInterface {
 
         // Verifies the member list contains the specified symbol. The
         // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
+        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
                 this.state.verifyMemberListDoesNotContain(symbol);
             }
             else {
-                this.state.verifyMemberListContains(symbol, text, documenation, kind);
+                this.state.verifyMemberListContains(symbol, text, documentation, kind);
             }
         }
 
@@ -3283,6 +3316,30 @@ namespace FourSlashInterface {
 
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
+        }
+
+        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxOpenTagName", text, position);
+        }
+
+        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxCloseTagName", text, position);
+        }
+
+        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxSelfClosingTagName", text, position);
+        }
+
+        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttribute", text, position);
+        }
+
+        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxText", text, position);
+        }
+
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttributeStringLiteralValue", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {

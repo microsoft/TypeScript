@@ -6,11 +6,11 @@
 ////export function baz() { return 10; }
 
 // @Filename: m2.ts
-////export {/*1*/, /*2*/ from "m1"
-////export {/*3*/} from "m1"
-////export {foo,/*4*/ from "m1"
-////export {bar as /*5*/, /*6*/ from "m1"
-////export {foo, bar, baz as b,/*7*/} from "m1"
+////export {/*1*/, /*2*/ from "./m1"
+////export {/*3*/} from "./m1"
+////export {foo,/*4*/ from "./m1"
+////export {bar as /*5*/, /*6*/ from "./m1"
+////export {foo, bar, baz as b,/*7*/} from "./m1"
 
 function verifyCompletionAtMarker(marker: string, showBuilder: boolean, ...completions: string[]) {
     goTo.marker(marker);

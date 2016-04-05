@@ -6,7 +6,7 @@ class C {
 >C : Symbol(C, Decl(additionOperatorWithAnyAndEveryType.ts, 0, 18))
 
     public a: string;
->a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
+>a : Symbol(C.a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
 
     static foo() { }
 >foo : Symbol(C.foo, Decl(additionOperatorWithAnyAndEveryType.ts, 2, 21))

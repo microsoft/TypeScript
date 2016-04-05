@@ -16,10 +16,9 @@ tests/cases/compiler/undeclaredModuleError.ts(11,41): error TS2304: Cannot find 
         fs.readFile(originalFilePath, () => {       
             readdir(covFileDir, () => {
                                 ~~~~~~~
-            } , (error: Error, files: {}[]) => {
-    ~~~~~~~~~
 !!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: any, name: string) => boolean'.
 !!! error TS2345:   Type 'void' is not assignable to type 'boolean'.
+            } , (error: Error, files: {}[]) => {
                     files.forEach((file) => {
                         var fullPath = join(IDoNotExist);
                                             ~~~~~~~~~~~

@@ -1,0 +1,435 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringForOfObjectBindingPattern2.ts ===
+declare var console: {
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+
+    log(msg: any): void;
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>msg : Symbol(msg, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 1, 8))
+}
+interface Robot {
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 2, 1))
+
+    name: string;
+>name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 3, 17))
+
+    skill: string;
+>skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 4, 17))
+}
+
+interface MultiRobot {
+>MultiRobot : Symbol(MultiRobot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 6, 1))
+
+    name: string;
+>name : Symbol(MultiRobot.name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 8, 22))
+
+    skills: {
+>skills : Symbol(MultiRobot.skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 9, 17))
+
+        primary: string;
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 10, 13))
+
+        secondary: string;
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 11, 24))
+
+    };
+}
+
+let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+>Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 2, 1))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 24))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 39))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 60))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 77))
+
+let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+>MultiRobot : Symbol(MultiRobot, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 6, 1))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 34))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 49))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 59))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 78))
+
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 5))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 22))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 32))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 53))
+
+function getRobots() {
+>getRobots : Symbol(getRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 79))
+
+    return robots;
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+}
+
+function getMultiRobots() {
+>getMultiRobots : Symbol(getMultiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 22, 1))
+
+    return multiRobots;
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+}
+
+let nameA: string, primaryA: string, secondaryA: string, i: number, skillA: string;
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>i : Symbol(i, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 56))
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 67))
+
+let name: string, primary: string, secondary: string, skill: string;
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 29, 3))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 29, 17))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 29, 34))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 29, 53))
+
+for ({name: nameA } of robots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 31, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA } of getRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 34, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>getRobots : Symbol(getRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 79))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 37, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 37, 25))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 37, 40))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 37, 61))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 37, 78))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({ skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 40, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 40, 16))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 40, 35))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+for ({ skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 43, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 43, 16))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 43, 35))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>getMultiRobots : Symbol(getMultiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 22, 1))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+for ({ skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 16))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 35))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 67))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 82))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 92))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 46, 111))
+
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 47, 5))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 47, 22))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 47, 32))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 47, 53))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+for ({name } of robots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 50, 6))
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name } of getRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 53, 6))
+>getRobots : Symbol(getRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 79))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 56, 6))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 56, 18))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 56, 33))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 56, 54))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 56, 71))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({ skills: { primary, secondary } } of multiRobots) {
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 59, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 59, 16))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 59, 25))
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+for ({ skills: { primary, secondary } } of getMultiRobots()) {
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 62, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 62, 16))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 62, 25))
+>getMultiRobots : Symbol(getMultiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 22, 1))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+for ({ skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 6))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 16))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 25))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 45))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 60))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 70))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 65, 89))
+
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 66, 5))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 66, 22))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 66, 32))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 66, 53))
+
+    console.log(primaryA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+}
+
+
+for ({name: nameA, skill: skillA } of robots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 71, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 71, 18))
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 67))
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA, skill: skillA } of getRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 74, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 74, 18))
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 67))
+>getRobots : Symbol(getRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 79))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 18))
+>skillA : Symbol(skillA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 67))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 40))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 55))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 76))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 77, 93))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 80, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 80, 18))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 80, 28))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 80, 47))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 83, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 83, 18))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 83, 28))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 83, 47))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>getMultiRobots : Symbol(getMultiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 22, 1))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 6))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 18))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 28))
+>primaryA : Symbol(primaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 18))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 47))
+>secondaryA : Symbol(secondaryA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 36))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 79))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 94))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 104))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 86, 123))
+
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 87, 5))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 87, 22))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 87, 32))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 87, 53))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skill } of robots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 90, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 90, 11))
+>robots : Symbol(robots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 16, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skill } of getRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 93, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 93, 11))
+>getRobots : Symbol(getRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 18, 79))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skill } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 6))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 11))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 25))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 40))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 61))
+>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 96, 78))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skills: { primary, secondary } } of multiRobots) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 99, 6))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 99, 11))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 99, 21))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 99, 30))
+>multiRobots : Symbol(multiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 17, 3))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skills: { primary, secondary } } of getMultiRobots()) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 102, 6))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 102, 11))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 102, 21))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 102, 30))
+>getMultiRobots : Symbol(getMultiRobots, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 22, 1))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}
+for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 6))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 11))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 21))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 30))
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 50))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 65))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 75))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 105, 94))
+
+    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
+>name : Symbol(name, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 106, 5))
+>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 106, 22))
+>primary : Symbol(primary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 106, 32))
+>secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 106, 53))
+
+    console.log(nameA);
+>console.log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>console : Symbol(console, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 11))
+>log : Symbol(log, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 0, 22))
+>nameA : Symbol(nameA, Decl(sourceMapValidationDestructuringForOfObjectBindingPattern2.ts, 28, 3))
+}

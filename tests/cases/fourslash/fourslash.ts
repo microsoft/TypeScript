@@ -338,6 +338,36 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         };
+        function jsxOpenTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxCloseTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxSelfClosingTagName(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxAttribute(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxText(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
+        function jsxAttributeStringLiteralValue(text: string, position?: number): {
+            classificationType: string;
+            text: string;
+            textSpan?: TextSpan;
+        };
     }
 }
 declare function verifyOperationIsCancelled(f: any): void;

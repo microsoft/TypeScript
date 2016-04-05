@@ -1,0 +1,69 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts ===
+
+type Kind = "A" | "B"
+>Kind : "A" | "B"
+
+function kindIs(kind: Kind, is: "A"): kind is "A";
+>kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
+>kind : "A" | "B"
+>Kind : "A" | "B"
+>is : "A"
+>kind : any
+
+function kindIs(kind: Kind, is: "B"): kind is "B";
+>kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
+>kind : "A" | "B"
+>Kind : "A" | "B"
+>is : "B"
+>kind : any
+
+function kindIs(kind: Kind, is: Kind): boolean {
+>kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
+>kind : "A" | "B"
+>Kind : "A" | "B"
+>is : "A" | "B"
+>Kind : "A" | "B"
+
+    return kind === is;
+>kind === is : boolean
+>kind : "A" | "B"
+>is : "A" | "B"
+}
+
+var x: Kind = "A";
+>x : "A" | "B"
+>Kind : "A" | "B"
+>"A" : "A"
+
+if (kindIs(x, "A")) {
+>kindIs(x, "A") : boolean
+>kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
+>x : "A" | "B"
+>"A" : "A"
+
+    let a = x;
+>a : "A"
+>x : "A"
+}
+else {
+    let b = x;
+>b : "B"
+>x : "B"
+}
+
+if (!kindIs(x, "B")) {
+>!kindIs(x, "B") : boolean
+>kindIs(x, "B") : boolean
+>kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
+>x : "A" | "B"
+>"B" : "B"
+
+    let c = x;
+>c : "A"
+>x : "A"
+}
+else {
+    let d = x;
+>d : "B"
+>x : "B"
+}
