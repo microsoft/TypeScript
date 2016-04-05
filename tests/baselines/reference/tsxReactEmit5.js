@@ -27,4 +27,4 @@ var test_1 = require("./test");
 // Should emit test_1.React.createElement
 //  and React.__spread
 var foo;
-var spread1 = test_1.React.createElement("div", test_1.React.__spread({x: ''}, foo, {y: ''}));
+var spread1 = test_1.React.createElement("div", test_1.React.__spread({ x: '' }, foo, { y: '' }));

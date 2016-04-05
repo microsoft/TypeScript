@@ -66,7 +66,7 @@ namespace ts {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createSynthesizedNode(node.kind);
+        const clone = <T>createNode(node.kind, /*location*/ undefined);
         clone.flags = node.flags;
         clone.original = node;
 
@@ -784,17 +784,25 @@ namespace ts {
         );
     }
 
-    export function createJsxSpread(reactNamespace: string, segments: Expression[]) {
+    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+        // Create an identifier and give it a parent. This allows us to resolve the react
+        // namespace during emit.
+        const react = createIdentifier(reactNamespace || "React");
+        react.parent = parent;
+        return react;
+    }
+
+    export function createReactSpread(reactNamespace: string, segments: Expression[], parentElement: JsxOpeningLikeElement) {
         return createCall(
             createPropertyAccess(
-                createIdentifier(reactNamespace || "React"),
+                createReactNamespace(reactNamespace, parentElement),
                 "__spread"
             ),
             segments
         );
     }
 
-    export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
+    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -805,15 +813,16 @@ namespace ts {
                 argumentsList.push(createNull());
             }
 
-            addRange(argumentsList, children);
+            addNodes(argumentsList, children, /*startOnNewLine*/ children.length > 1);
         }
 
         return createCall(
             createPropertyAccess(
-                createIdentifier(reactNamespace || "React"),
+                createReactNamespace(reactNamespace, parentElement),
                 "createElement"
             ),
-            argumentsList
+            argumentsList,
+            location
         );
     }
 
