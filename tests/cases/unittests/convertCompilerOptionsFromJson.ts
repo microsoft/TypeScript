@@ -30,7 +30,7 @@ namespace ts {
                         "target": "es5",
                         "noImplicitAny": false,
                         "sourceMap": false,
-                        "lib": ["es5", "es2015.array", "es2015.symbol"]
+                        "lib": ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -39,7 +39,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: ["lib.es5.d.ts", "lib.es2015.array.d.ts", "lib.es2015.symbol.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
@@ -55,7 +55,7 @@ namespace ts {
                         "noImplicitAny": false,
                         "sourceMap": false,
                         "allowJs": false,
-                        "lib": ["es5", "es2015.array", "es2015.symbol"]
+                        "lib": ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "tsconfig.json",
                 {
@@ -65,7 +65,7 @@ namespace ts {
                         noImplicitAny: false,
                         sourceMap: false,
                         allowJs: false,
-                        lib: ["lib.es5.d.ts", "lib.es2015.array.d.ts", "lib.es2015.symbol.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
@@ -218,7 +218,7 @@ namespace ts {
                         "target": "es5",
                         "noImplicitAny": false,
                         "sourceMap": false,
-                        "lib": ["es5", "es2015.array", "incorrectLib"]
+                        "lib": ["es5", "es2015.core", "incorrectLib"]
                     }
                 }, "tsconfig.json",
                 {
@@ -227,13 +227,13 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: ["lib.es5.d.ts", "lib.es2015.array.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts"]
                     },
                     errors: [{
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.array', 'es2015.collection', 'es2015.generator', 'es2015.function', 'es2015.iterable', 'es2015.math', 'es2015.number', 'es2015.object', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.regexp', 'es2015.string', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -264,7 +264,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.array', 'es2015.collection', 'es2015.generator', 'es2015.function', 'es2015.iterable', 'es2015.math', 'es2015.number', 'es2015.object', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.regexp', 'es2015.string', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -295,7 +295,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.array', 'es2015.collection', 'es2015.generator', 'es2015.function', 'es2015.iterable', 'es2015.math', 'es2015.number', 'es2015.object', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.regexp', 'es2015.string', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -326,7 +326,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.array', 'es2015.collection', 'es2015.generator', 'es2015.function', 'es2015.iterable', 'es2015.math', 'es2015.number', 'es2015.object', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.regexp', 'es2015.string', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
+                        messageText: "Argument for '--lib' option must be:  'es5', 'es6', 'es2015', 'es7', 'es2016', 'dom', 'webworker', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include'",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -397,7 +397,7 @@ namespace ts {
                         "target": "es5",
                         "noImplicitAny": false,
                         "sourceMap": false,
-                        "lib": ["es5", "es2015.array", "es2015.symbol"]
+                        "lib": ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -407,7 +407,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: ["lib.es5.d.ts", "lib.es2015.array.d.ts", "lib.es2015.symbol.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
@@ -423,7 +423,7 @@ namespace ts {
                         "noImplicitAny": false,
                         "sourceMap": false,
                         "allowJs": false,
-                        "lib": ["es5", "es2015.array", "es2015.symbol"]
+                        "lib": ["es5", "es2015.core", "es2015.symbol"]
                     }
                 }, "jsconfig.json",
                 {
@@ -433,7 +433,7 @@ namespace ts {
                         target: ScriptTarget.ES5,
                         noImplicitAny: false,
                         sourceMap: false,
-                        lib: ["lib.es5.d.ts", "lib.es2015.array.d.ts", "lib.es2015.symbol.d.ts"]
+                        lib: ["lib.es5.d.ts", "lib.es2015.core.d.ts", "lib.es2015.symbol.d.ts"]
                     },
                     errors: <Diagnostic[]>[]
                 }
