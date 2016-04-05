@@ -20,8 +20,8 @@ var C = (function () {
 }());
 var D = (function () {
     function D(x) {
-        this.x = x;
         _super.call(this); // error
+        this.x = x;
     }
     return D;
 }());

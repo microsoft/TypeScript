@@ -107,30 +107,18 @@ var f7 = function (x, y, z) {
 var f8 = function (x, y, z) {
     if (z === void 0) { z = 10; }
 };
-var f9 = function (a) {
-    return a;
-};
-var f10 = function (a) {
-    return a;
-};
-var f11 = function (a) {
-    return a;
-};
+var f9 = function (a) { return a; };
+var f10 = function (a) { return a; };
+var f11 = function (a) { return a; };
 var f12 = function (a) {
     return a;
 };
 // Should be valid.
-var f11 = function (a) {
-    return a;
-};
+var f11 = function (a) { return a; };
 // Should be valid.
-var f12 = function (a) {
-    return a;
-};
+var f12 = function (a) { return a; };
 // Should be valid.
-var f13 = function (a) {
-    return a;
-};
+var f13 = function (a) { return a; };
 // Should be valid.
 var f14 = function () { };
 // Should be valid.
@@ -141,30 +129,20 @@ var f16 = function (a, b) {
     return a + b;
 };
 function foo(func) { }
-foo(function () {
-    return true;
-});
+foo(function () { return true; });
 foo(function () { return false; });
 var m;
 (function (m) {
     var City = (function () {
         function City(x, thing) {
-            if (thing === void 0) { thing = function () {
-                return 100;
-            }; }
-            this.m = function () {
-                return 2 * 2 * 2;
-            };
+            if (thing === void 0) { thing = function () { return 100; }; }
+            this.m = function () { return 2 * 2 * 2; };
         }
         return City;
     }());
     (function (Enum) {
-        Enum[Enum["claw"] = (function () {
-            return 10;
-        })()] = "claw";
+        Enum[Enum["claw"] = (function () { return 10; })()] = "claw";
     })(m.Enum || (m.Enum = {}));
     var Enum = m.Enum;
-    m.v = function (x) {
-        return new City(Enum.claw);
-    };
+    m.v = function (x) { return new City(Enum.claw); };
 })(m || (m = {}));

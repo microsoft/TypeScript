@@ -6,9 +6,9 @@ function*bar() {
 }
 
 //// [FunctionDeclaration7_es6.js]
-function bar() {
+function* bar() {
     // 'yield' here is an identifier, and not a yield expression.
-    function foo(a) {
+    function* foo(a) {
         if (a === void 0) { a = yield; }
     }
 }

@@ -145,8 +145,7 @@ c3({ b: 1 }); // Implied type is { b: number|string }.
 c5([1, 2, [["string"]]]); // Implied type is is [any, any, [[any]]]
 c5([1, 2, [["string"]], false, true]); // Implied type is is [any, any, [[any]]]
 class C2 {
-    constructor() {
-    }
+    constructor() { }
     d3() { }
     d4() { }
     e0([a, b, c]) { }
