@@ -2016,7 +2016,7 @@ const _super = (function (geti, seti) {
 
             function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
                 if (modifiers && modifiers.length) {
-                    emitList(node, modifiers, ListFormat.SingleLine);
+                    emitList(node, modifiers, ListFormat.Modifiers);
                     write(" ");
                 }
             }
@@ -2622,6 +2622,7 @@ const _super = (function (geti, seti) {
         SingleLine = 1 << 0,            // Prints the list on a single line (default).
         MultiLine = 1 << 1,             // Prints the list on multiple lines.
         PreserveLines = 1 << 2,         // Prints the list using line preservation if possible.
+        LinesMask = SingleLine | MultiLine | PreserveLines,
 
         // Delimiters
         NotDelimited = 0,               // There is no delimiter between list items (default).
@@ -2641,16 +2642,17 @@ const _super = (function (geti, seti) {
         Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
         AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
         SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
-        BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
         OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
         OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
         Optional = OptionalIfUndefined | OptionalIfEmpty,
+        BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
 
         // Other
         PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
         NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
 
         // Precomputed Formats
+        Modifiers = SingleLine | SpaceBetweenSiblings,
         TypeLiteralMembers = MultiLine | Indented,
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
