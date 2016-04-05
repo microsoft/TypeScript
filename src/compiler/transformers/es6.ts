@@ -243,7 +243,7 @@ namespace ts {
             const savedUseCapturedThis = useCapturedThis;
 
             if (nodeStartsNewLexicalEnvironment(node)) {
-                useCapturedThis = false
+                useCapturedThis = false;
             }
 
             let result: VisitResult<Node>;
@@ -511,10 +511,10 @@ namespace ts {
                     if (convertedLoopState.loopOutParameters.length) {
                         const outParams = convertedLoopState.loopOutParameters;
                         let expr: Expression;
-                        for (let i = 0; i < outParams.length; ++i) {
+                        for (let i = 0; i < outParams.length; i++) {
                             const copyExpr = copyOutParameter(outParams[i], CopyDirection.ToOutParameter);
                             if (i === 0) {
-                                expr = copyExpr
+                                expr = copyExpr;
                             }
                             else {
                                 expr = createBinary(expr, SyntaxKind.CommaToken, copyExpr);
@@ -1324,7 +1324,7 @@ namespace ts {
                     if (decl.initializer) {
                         let assignment: Expression;
                         if (isBindingPattern(decl.name)) {
-                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration,/*nameSubstitution*/ undefined, visitor);
+                            assignment = flattenVariableDestructuringToExpression(context, decl, hoistVariableDeclaration, /*nameSubstitution*/ undefined, visitor);
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, decl.initializer);
