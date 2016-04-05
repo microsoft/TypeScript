@@ -176,7 +176,7 @@ interface RegExp {
       * that search.
       * @param string A string to search within.
       */
-    [Symbol.match](string: string): RegExpMatchArray;
+    [Symbol.match](string: string): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using this regular expression.
@@ -230,7 +230,7 @@ interface String {
       * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
       * @param matcher An object that supports being matched against.
       */
-    match(matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray;
+    match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using an object that supports replacement within a string.
