@@ -234,10 +234,10 @@ namespace ts {
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
             if (/^[A-Za-z_]\w*$/.test(name.text)) {
-                return createLiteral(name.text);
+                return name;
             }
             else {
-                return name;
+                return createLiteral(name.text);
             }
         }
 
