@@ -237,12 +237,7 @@ namespace ts {
     }
 
     function getEffectiveTypesPrimarySearchPaths(options: CompilerOptions): string[] {
-        if (options.typesSearchPaths) {
-            return options.typesSearchPaths;
-        }
-        return options.configFilePath
-            ? [getDirectoryPath(options.configFilePath)].concat(defaultLibrarySearchPaths)
-            : defaultLibrarySearchPaths;
+        return options.typesSearchPaths || defaultLibrarySearchPaths;
     }
 
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, compilationRoot: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
@@ -1767,9 +1762,9 @@ namespace ts {
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
                 setResolvedTypeReferenceDirective(file, ref.fileName, resolvedTypeReferenceDirective);
-                // If we already found this library as a primary reference, or failed to find it, nothing to do
+                // If we already found this library as a primary reference - nothing to do
                 const previousResolution = resolvedTypeReferenceDirectives[ref.fileName];
-                if (previousResolution && (previousResolution.primary || (previousResolution.resolvedFileName === undefined))) {
+                if (previousResolution && previousResolution.primary) {
                     continue;
                 }
                 let saveResolution = true;

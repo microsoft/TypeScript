@@ -2750,13 +2750,6 @@ namespace ts {
         isExternalLibraryImport?: boolean;
     }
 
-    export interface ResolvedLibrary {
-        // True if the library was found in a primary lookup location         
-        primary: boolean;
-        // The location of the .d.ts file we located, or undefined if resolution failed
-        resolvedFileName?: string;
-    }
-
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
