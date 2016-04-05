@@ -1,9 +1,8 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(3,9): error TS2352: Neither type '"foo"' nor type '"bar"' is assignable to the other.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(4,9): error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(7,9): error TS2352: Neither type '"foo" | "bar"' nor type '"baz"' is assignable to the other.
-  Type '"foo"' is not assignable to type '"baz"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(8,9): error TS2352: Neither type '"baz"' nor type '"foo" | "bar"' is assignable to the other.
-  Type '"baz"' is not assignable to type '"bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(3,9): error TS2352: Type '"foo"' cannot be converted to type '"bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(4,9): error TS2352: Type '"bar"' cannot be converted to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(7,9): error TS2352: Type '"foo" | "bar"' cannot be converted to type '"baz"'.
+  Type '"bar"' is not comparable to type '"baz"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(8,9): error TS2352: Type '"baz"' cannot be converted to type '"foo" | "bar"'.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts (4 errors) ====
@@ -11,17 +10,16 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.t
     
     let a = "foo" as "bar";
             ~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '"foo"' nor type '"bar"' is assignable to the other.
+!!! error TS2352: Type '"foo"' cannot be converted to type '"bar"'.
     let b = "bar" as "foo";
             ~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
+!!! error TS2352: Type '"bar"' cannot be converted to type '"foo"'.
     let c = fooOrBar as "foo";
     let d = fooOrBar as "bar";
     let e = fooOrBar as "baz";
             ~~~~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '"foo" | "bar"' nor type '"baz"' is assignable to the other.
-!!! error TS2352:   Type '"foo"' is not assignable to type '"baz"'.
+!!! error TS2352: Type '"foo" | "bar"' cannot be converted to type '"baz"'.
+!!! error TS2352:   Type '"bar"' is not comparable to type '"baz"'.
     let f = "baz" as typeof fooOrBar;
             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '"baz"' nor type '"foo" | "bar"' is assignable to the other.
-!!! error TS2352:   Type '"baz"' is not assignable to type '"bar"'.
+!!! error TS2352: Type '"baz"' cannot be converted to type '"foo" | "bar"'.

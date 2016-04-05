@@ -9,5 +9,5 @@ export function f(x: any): x is number {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : any
->"number" : string
+>"number" : "number"
 }

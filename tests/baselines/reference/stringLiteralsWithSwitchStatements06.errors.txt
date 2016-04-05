@@ -1,14 +1,9 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(11,10): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-  Type '"baz"' is not assignable to type '"bar"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,10): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-  Type '"baz"' is not assignable to type '"bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(11,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,24): error TS1005: ':' expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(21,10): error TS2322: Type '"baz" | "bar"' is not assignable to type '"foo" | "bar"'.
-  Type '"baz"' is not assignable to type '"foo" | "bar"'.
-    Type '"baz"' is not assignable to type '"bar"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts (4 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts (3 errors) ====
     let x: "foo";
     let y: "foo" | "bar"; 
     
@@ -21,8 +16,7 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06
             break;
         case x, "baz":
              ~~~~~~~~
-!!! error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-!!! error TS2322:   Type '"baz"' is not assignable to type '"bar"'.
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
             break;
         case "baz", x:
             break;
@@ -30,18 +24,13 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06
             break;
         case "bar" && "baz";
              ~~~~~~~~~~~~~~
-!!! error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
-!!! error TS2322:   Type '"baz"' is not assignable to type '"bar"'.
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
                            ~
 !!! error TS1005: ':' expected.
             break;
         case "baz" && ("foo" || "bar"):
             break;
         case "bar" && ("baz" || "bar"):
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '"baz" | "bar"' is not assignable to type '"foo" | "bar"'.
-!!! error TS2322:   Type '"baz"' is not assignable to type '"foo" | "bar"'.
-!!! error TS2322:     Type '"baz"' is not assignable to type '"bar"'.
             break;
     }
     

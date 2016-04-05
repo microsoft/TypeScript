@@ -1,14 +1,12 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(13,5): error TS2365: Operator '==' cannot be applied to types 'string' and '"foo" | Refrigerator'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(16,5): error TS2365: Operator '==' cannot be applied to types '"foo"' and '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(19,5): error TS2365: Operator '==' cannot be applied to types '"foo" | Refrigerator' and '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(20,5): error TS2365: Operator '==' cannot be applied to types '"bar"' and '"foo" | Refrigerator'.
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(22,5): error TS2365: Operator '!=' cannot be applied to types 'string' and '"foo" | Refrigerator'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(25,5): error TS2365: Operator '!=' cannot be applied to types '"foo"' and '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(28,5): error TS2365: Operator '!=' cannot be applied to types '"foo" | Refrigerator' and '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts(29,5): error TS2365: Operator '!=' cannot be applied to types '"bar"' and '"foo" | Refrigerator'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts (8 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.ts (6 errors) ====
     interface Runnable {
         isRunning: boolean;
     }
@@ -22,8 +20,6 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.t
     
     let b: boolean;
     b = x == y;
-        ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types 'string' and '"foo" | Refrigerator'.
     b = "foo" == y
     b = y == "foo";
     b = "foo" == "bar";
@@ -39,8 +35,6 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks04.t
 !!! error TS2365: Operator '==' cannot be applied to types '"bar"' and '"foo" | Refrigerator'.
     
     b = x != y;
-        ~~~~~~
-!!! error TS2365: Operator '!=' cannot be applied to types 'string' and '"foo" | Refrigerator'.
     b = "foo" != y
     b = y != "foo";
     b = "foo" != "bar";

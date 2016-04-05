@@ -1,14 +1,14 @@
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(3,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(9,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(16,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(22,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(25,18): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(31,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(34,18): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(41,10): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(43,18): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(45,26): error TS2322: Type '"a"' is not assignable to type '""'.
-tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,34): error TS2322: Type '"a"' is not assignable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(3,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(9,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(16,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(22,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(25,18): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(31,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(34,18): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(41,10): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(43,18): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(45,26): error TS2678: Type '"a"' is not comparable to type '""'.
+tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,34): error TS2678: Type '"a"' is not comparable to type '""'.
 
 
 ==== tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts (11 errors) ====
@@ -16,7 +16,7 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             break;
     }
     
@@ -24,7 +24,7 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             break ONE;
     }
     
@@ -33,7 +33,7 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             break THREE;
     }
     
@@ -41,12 +41,12 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             FIVE:
             switch ('') {
                 case 'a':
                      ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
                     break FOUR;
             }
     }
@@ -54,12 +54,12 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             SIX:
             switch ('') {
                 case 'a':
                      ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
                     break SIX;
             }
     }
@@ -68,21 +68,21 @@ tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts(49,3
     switch ('') {
         case 'a':
              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
             switch ('') {
                 case 'a':
                      ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
                     switch ('') {
                         case 'a':
                              ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
                             break SEVEN;
                             EIGHT:
                             switch ('') {
                                 case 'a':
                                      ~~~
-!!! error TS2322: Type '"a"' is not assignable to type '""'.
+!!! error TS2678: Type '"a"' is not comparable to type '""'.
                                     var fn = function () { }
                                     break EIGHT;
                             }
