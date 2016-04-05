@@ -528,12 +528,16 @@ const _super = (function (geti, seti) {
                     // JSX (non-expression)
                     case SyntaxKind.JsxText:
                         return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxOpeningElement:
+                        return emitJsxOpeningElement(<JsxOpeningElement>node);
                     case SyntaxKind.JsxClosingElement:
                         return emitJsxClosingElement(<JsxClosingElement>node);
                     case SyntaxKind.JsxAttribute:
                         return emitJsxAttribute(<JsxAttribute>node);
                     case SyntaxKind.JsxSpreadAttribute:
                         return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
 
                     // Clauses
                     case SyntaxKind.CaseClause:
@@ -652,10 +656,6 @@ const _super = (function (geti, seti) {
                         return emitJsxElement(<JsxElement>node);
                     case SyntaxKind.JsxSelfClosingElement:
                         return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-                    case SyntaxKind.JsxOpeningElement:
-                        return emitJsxOpeningElement(<JsxOpeningElement>node);
-                    case SyntaxKind.JsxExpression:
-                        return emitJsxExpression(<JsxExpression>node);
 
                     // Transformation nodes
                     case SyntaxKind.PartiallyEmittedExpression:
