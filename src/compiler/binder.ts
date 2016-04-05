@@ -2164,7 +2164,7 @@ namespace ts {
             // Destructuring assignments are ES6 syntax.
             transformFlags = TransformFlags.AssertES6 | TransformFlags.DestructuringAssignment;
         }
-        else if (isExponentiation(node)) {
+        else if (isExponentiation(node.operatorToken)) {
             // Exponentiation is ES7 syntax.
             transformFlags = TransformFlags.AssertES7;
         }
