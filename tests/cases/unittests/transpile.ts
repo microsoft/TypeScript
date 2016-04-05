@@ -129,16 +129,16 @@ var x = 0;`,
 
         it("Sets module name", () => {
             let output =
-                `System.register("NamedModule", [], function(exports_1, context_1) {\n` +
+                `System.register("NamedModule", [], function (exports_1, context_1) {\n` +
                 `    "use strict";\n` +
                 `    var __moduleName = context_1 && context_1.id;\n` +
                 `    var x;\n` +
                 `    return {\n` +
-                `        setters:[],\n` +
-                `        execute: function() {\n` +
-                `            var x = 1;\n` +
+                `        setters: [],\n` +
+                `        execute: function () {\n` +
+                `            x = 1;\n` +
                 `        }\n` +
-                `    }\n` +
+                `    };\n` +
                 `});\n`;
             test("var x = 1;",
                 {
@@ -157,19 +157,20 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `System.register(["SomeOtherName"], function(exports_1, context_1) {\n` +
+                `System.register(["SomeOtherName"], function (exports_1, context_1) {\n` +
                 `    "use strict";\n` +
                 `    var __moduleName = context_1 && context_1.id;\n` +
                 `    var SomeName_1;\n` +
                 `    return {\n` +
-                `        setters:[\n` +
+                `        setters: [\n` +
                 `            function (SomeName_1_1) {\n` +
                 `                SomeName_1 = SomeName_1_1;\n` +
-                `            }],\n` +
-                `        execute: function() {\n` +
+                `            }\n` +
+                `        ],\n` +
+                `        execute: function () {\n` +
                 `            use(SomeName_1.foo);\n` +
                 `        }\n` +
-                `    }\n` +
+                `    };\n` +
                 `});\n`
 
             test(input,
@@ -203,18 +204,18 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `(function (factory) {\n` +
+                `(function (dependencies, factory) {\n` +
                 `    if (typeof module === 'object' && typeof module.exports === 'object') {\n` +
                 `        var v = factory(require, exports); if (v !== undefined) module.exports = v;\n` +
                 `    }\n` +
                 `    else if (typeof define === 'function' && define.amd) {\n` +
-                `        define(["require", "exports", "SomeOtherName"], factory);\n` +
+                `        define(dependencies, factory);\n` +
                 `    }\n` +
-                `})(function (require, exports) {\n` +
+                `})(["require", "exports", "SomeOtherName"], function (require, exports) {\n` +
                 `    "use strict";\n` +
                 `    var SomeName_1 = require("SomeOtherName");\n` +
                 `    use(SomeName_1.foo);\n` +
-                `});\n`;
+                `});\n`
 
             test(input,
                 {

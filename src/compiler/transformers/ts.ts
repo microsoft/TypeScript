@@ -2215,7 +2215,7 @@ namespace ts {
                     )],
                     /*location*/ node
                 )
-            )
+            );
         }
 
         /**
