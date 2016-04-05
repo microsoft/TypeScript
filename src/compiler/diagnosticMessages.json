@@ -2637,7 +2637,7 @@
         "category": "Error",
         "code": 6114
     },
-    "======== Resolving type reference directive '{0}' from '{1}' with compilation root dir '{2}'. ========": {
+    "======== Resolving type reference directive '{0}' from '{1}', root dir '{2}'. ========": {
         "category": "Message",
         "code": 6115
     },
@@ -2661,7 +2661,14 @@
         "category": "Message",
         "code": 6120
     },
-
+    "Root directory cannot be determined, skipping primary search paths.": {
+        "category": "Message",
+        "code": 6121
+    },
+    "======== Resolving type reference directive '{0}' from '{1}', root dir not set. ========": {
+        "category": "Message",
+        "code": 6122
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

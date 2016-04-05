@@ -956,9 +956,9 @@ import b = require("./moduleB.ts");
     });
 
     describe("Type reference directive resolution: ", () => {
-        function test(compilationRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
             const host = createModuleResolutionHost(false, ...[initialFile, targetFile].concat(...otherFiles));
-            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, compilationRoot, {}, host);
+            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, {typesRoot}, host);
             assert(result.resolvedTypeReferenceDirective.resolvedFileName !== undefined, "expected type directive to be resolved");
             assert.equal(result.resolvedTypeReferenceDirective.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
             assert.equal(result.resolvedTypeReferenceDirective.primary, primary, "unexpected 'primary' value");
@@ -968,64 +968,64 @@ import b = require("./moduleB.ts");
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/types/lib/index.d.ts" }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
                 const package = { name: "/root/src/types/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/node_modules/lib/index.d.ts" }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/node_modules/lib/typings/lib.d.ts" };
                 const package = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/node_modules/@types/lib/index.d.ts" }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/src/node_modules/@types/lib/typings/lib.d.ts" };
                 const package = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
             }
         });
         it("Can be resolved from secondary location", () => {
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/node_modules/lib.d.ts" };
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/node_modules/lib/index.d.ts" };
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/node_modules/lib/typings/lib.d.ts" };
                 const package = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({typings: "typings/lib.d.ts"}) };
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/node_modules/@types/lib/index.d.ts" };
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" }
                 const f2 = { name: "/root/node_modules/@types/lib/typings/lib.d.ts" };
                 const package = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({typings: "typings/lib.d.ts"}) };
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
             }
         });
         it("Primary resolution overrides secondary resolutions", () => {
@@ -1033,7 +1033,7 @@ import b = require("./moduleB.ts");
                 const f1 = { name: "/root/src/a/b/c/app.ts" };
                 const f2 = { name: "/root/src/types/lib/index.d.ts" };
                 const f3 = { name: "/root/src/a/b/node_modules/lib.d.ts" }
-                test(/*libraryRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, f3);
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, f3);
             }
         })
         it("Reused program keeps errors", () => {

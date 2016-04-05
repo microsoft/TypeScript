@@ -907,7 +907,6 @@ namespace ts {
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
         private logPerformance = false;
-        private getCanonicalFileName = createGetCanonicalFileName(false);
 
         constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
@@ -928,18 +927,10 @@ namespace ts {
             });
         }
 
-        public computeCompilationRoot(filesJson: string, currentDirectory: string, compilerOptionsJson: string): string {
-            return this.forwardJSONCall("computeCompilationRoot", () => {
-                const files = <string[]>JSON.parse(filesJson);
-                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                return computeCompilationRoot(files, currentDirectory, compilerOptions, this.getCanonicalFileName);
-            });
-        }
-
-        public resolveTypeReferenceDirective(fileName: string, typeReferenceDirective: string, compilationRoot: string, compilerOptionsJson: string): string {
+        public resolveTypeReferenceDirective(fileName: string, typeReferenceDirective: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveTypeReferenceDirective(${fileName})`, () => {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                const result = resolveTypeReferenceDirective(typeReferenceDirective, normalizeSlashes(fileName), compilationRoot, compilerOptions, this.host);
+                const result = resolveTypeReferenceDirective(typeReferenceDirective, normalizeSlashes(fileName), compilerOptions, this.host);
                 return {
                     resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
                     primary: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.primary : true,

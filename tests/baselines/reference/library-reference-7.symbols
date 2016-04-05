@@ -1,16 +1,15 @@
-=== /base/src/foo.ts ===
-/// <reference types="alpha" />
-var x: string = alpha.a;
->x : Symbol(x, Decl(foo.ts, 1, 3))
->alpha.a : Symbol(a, Decl(index.d.ts, 3, 20))
->alpha : Symbol(alpha, Decl(index.d.ts, 3, 11))
->a : Symbol(a, Decl(index.d.ts, 3, 20))
+=== /src/consumer.ts ===
+/// <reference types="jquery" />
+$.foo();
+>$.foo : Symbol(foo, Decl(index.d.ts, 3, 16))
+>$ : Symbol($, Decl(index.d.ts, 3, 11))
+>foo : Symbol(foo, Decl(index.d.ts, 3, 16))
 
-=== /base/types/alpha/index.d.ts ===
+=== /src/node_modules/jquery/index.d.ts ===
 
-// The primary lookup folder is relative to tsconfig.json's 'root', if present
+// Secondary references are possible
 
-declare var alpha: { a: string };
->alpha : Symbol(alpha, Decl(index.d.ts, 3, 11))
->a : Symbol(a, Decl(index.d.ts, 3, 20))
+declare var $: { foo(): void };
+>$ : Symbol($, Decl(index.d.ts, 3, 11))
+>foo : Symbol(foo, Decl(index.d.ts, 3, 16))
 

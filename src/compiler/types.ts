@@ -2473,6 +2473,9 @@ namespace ts {
         /* @internal */
         // When options come from a config file, its path is recorded here
         configFilePath?: string;
+        /* @internal */
+        // Path used to used to compute primary search locations 
+        typesRoot?: string;
 
         list?: string[];
         [option: string]: CompilerOptionsValue;

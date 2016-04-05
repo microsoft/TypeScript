@@ -96,7 +96,6 @@ namespace ts.server {
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
-        compilationRoot: string;
 
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
@@ -172,13 +171,7 @@ namespace ts.server {
         }
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            if (this.compilationRoot === undefined) {
-                this.compilationRoot = computeCompilationRoot(this.getScriptFileNames(), this.getCurrentDirectory(), this.getCompilationSettings(), this.getCanonicalFileName);
-            }
-            const loader = (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => {
-                return resolveTypeReferenceDirective(name, containingFile, this.compilationRoot, options, this.moduleResolutionHost);
-            };
-            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, loader, m => m.resolvedTypeReferenceDirective);
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective);
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
@@ -262,8 +255,6 @@ namespace ts.server {
             if (!this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.set(info.path, info);
                 this.roots.push(info);
-                // reset compilation root
-                this.compilationRoot = undefined;
             }
         }
 
@@ -273,8 +264,6 @@ namespace ts.server {
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
                 this.resolvedTypeReferenceDirectives.remove(info.path);
-                // reset compilation root
-                this.compilationRoot = undefined;
             }
         }
 

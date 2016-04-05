@@ -322,6 +322,10 @@ namespace ts {
             }
         },
         {
+            name: "typesRoot",
+            type: "string"
+        },
+        {
             name: "traceResolution",
             type: "boolean",
             description: Diagnostics.Enable_tracing_of_the_name_resolution_process

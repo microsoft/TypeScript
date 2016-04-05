@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @typesRoot: /src
 
 // Secondary references may be duplicated if they agree in content
 

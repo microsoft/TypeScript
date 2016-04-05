@@ -41,14 +41,8 @@ namespace ts {
         return normalizePath(referencedFileName);
     }
 
-    export function computeCompilationRoot(rootFileNames: string[], currentDirectory: string, options: CompilerOptions, getCanonicalFileName: (fileName: string) => string): string {
-        const rootDirOrConfigFilePath = options.rootDir || (options.configFilePath && getDirectoryPath(options.configFilePath));
-        return rootDirOrConfigFilePath
-            ? getNormalizedAbsolutePath(rootDirOrConfigFilePath, currentDirectory)
-            : computeCommonSourceDirectoryOfFilenames(rootFileNames, currentDirectory, getCanonicalFileName);
-    }
-
-    function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string {
+    /* @internal */
+    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: (fileName: string) => string): string {
         let commonPathComponents: string[];
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path
@@ -196,7 +190,8 @@ namespace ts {
     }
 
     const typeReferenceExtensions = [".d.ts"];
-    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, compilationRoot: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+
+    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
         const moduleResolutionState: ModuleResolutionState = {
             compilerOptions: options,
@@ -205,30 +200,47 @@ namespace ts {
             traceEnabled
         };
 
-        if (traceEnabled) {
-            trace(host, Diagnostics.Resolving_type_reference_directive_0_from_1_with_compilation_root_dir_2, typeReferenceDirectiveName, containingFile, compilationRoot);
-        }
-        const failedLookupLocations: string[] = [];
-        // Check primary library paths
-        const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
-        for (const searchPath of effectivePrimarySearchPaths) {
-            const primaryPath = combinePaths(compilationRoot, searchPath);
-            if (traceEnabled) {
-                trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
-            }
-            const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
-            const candidateDirectory = getDirectoryPath(candidate);
-            const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
-                !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
+        // use typesRoot and fallback to directory that contains tsconfig if typesRoot is not set
+        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : undefined);
 
-            if (resolvedFile) {
+        if (traceEnabled) {
+            if (rootDir !== undefined) {
+                trace(host, Diagnostics.Resolving_type_reference_directive_0_from_1_root_dir_2, typeReferenceDirectiveName, containingFile, rootDir);
+            }
+            else {
+                trace(host, Diagnostics.Resolving_type_reference_directive_0_from_1_root_dir_not_set, typeReferenceDirectiveName, containingFile);
+            }
+        }
+
+        const failedLookupLocations: string[] = [];
+
+        // Check primary library paths
+        if (rootDir !== undefined) {
+            const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
+            for (const searchPath of effectivePrimarySearchPaths) {
+                const primaryPath = combinePaths(rootDir, searchPath);
                 if (traceEnabled) {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
+                    trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
                 }
-                return {
-                    resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolvedFile },
-                    failedLookupLocations
-                };
+                const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
+                const candidateDirectory = getDirectoryPath(candidate);
+                const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
+                    !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
+
+                if (resolvedFile) {
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, true);
+                    }
+                    return {
+                        resolvedTypeReferenceDirective: { primary: true, resolvedFileName: resolvedFile },
+                        failedLookupLocations
+                    };
+                }
+            }
+        }
+        else {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Root_directory_cannot_be_determined_skipping_primary_search_paths);
             }
         }
 
@@ -889,8 +901,6 @@ namespace ts {
 
         host = host || createCompilerHost(options);
 
-        const compilationRoot = computeCompilationRoot(rootNames, currentDirectory, options, getCanonicalFileName);
-
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
 
@@ -908,7 +918,7 @@ namespace ts {
             resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
         }
         else {
-            const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, compilationRoot, options, host).resolvedTypeReferenceDirective;
+            const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective;
             resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(typeReferenceDirectiveNames, containingFile, loader);
         }
 
@@ -1690,7 +1700,7 @@ namespace ts {
                 const basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
                     processReferencedFiles(file, basePath, isDefaultLib);
-                    processTypeReferenceDirectives(file, compilationRoot);
+                    processTypeReferenceDirectives(file);
                 }
 
                 // always process imported modules to record module name resolutions
@@ -1714,7 +1724,7 @@ namespace ts {
             });
         }
 
-        function processTypeReferenceDirectives(file: SourceFile, compilationRoot: string) {
+        function processTypeReferenceDirectives(file: SourceFile) {
             const typeDirectives = map(file.typeReferenceDirectives, l => l.fileName);
             const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
 

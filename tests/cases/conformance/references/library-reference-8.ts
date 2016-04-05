@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @typesRoot: /
 
 // Don't crash in circular library reference situations
 

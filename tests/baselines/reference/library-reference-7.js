@@ -2,15 +2,15 @@
 
 //// [index.d.ts]
 
-// The primary lookup folder is relative to tsconfig.json's 'root', if present
+// Secondary references are possible
 
-declare var alpha: { a: string };
+declare var $: { foo(): void };
 
-//// [foo.ts]
-/// <reference types="alpha" />
-var x: string = alpha.a;
+//// [consumer.ts]
+/// <reference types="jquery" />
+$.foo();
 
 
-//// [foo.js]
-/// <reference types="alpha" />
-var x = alpha.a;
+//// [consumer.js]
+/// <reference types="jquery" />
+$.foo();

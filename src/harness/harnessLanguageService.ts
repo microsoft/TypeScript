@@ -247,12 +247,9 @@ namespace Harness.LanguageService {
                     const scriptInfo = this.getScriptInfo(fileName);
                     const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
                     const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
-                    const rootFiles = this.getFilenames();
-                    const currentDirectory = this.getCurrentDirectory();
                     const settings = this.nativeHost.getCompilationSettings();
-                    const compilationRoot = ts.computeCompilationRoot(rootFiles, currentDirectory, settings, ts.createGetCanonicalFileName(false));
                     for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
-                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, compilationRoot, settings, moduleResolutionHost);
+                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
                         if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
                             resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
                         }

@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @typesRoot: /
 
 // package.json in a primary reference can refer to another file
 

@@ -333,40 +333,40 @@ module ts {
 
         it("resolved type directives cache follows type directives", () => {
             let files = [
-                { name: "a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
-                { name: "types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
+                { name: "/a.ts", text: SourceText.New("/// <reference types='typedefs'/>", "", "var x = $") },
+                { name: "/types/typedefs/index.d.ts", text: SourceText.New("", "", "declare var $: number") },
             ];
-            var options: CompilerOptions = { target };
+            var options: CompilerOptions = { target, typesRoot: "/" };
 
-            var program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedTypeDirectivesCache(program_1, "a.ts", { "typedefs": { resolvedFileName: "types/typedefs/index.d.ts", primary: true } });
-            checkResolvedTypeDirectivesCache(program_1, "types/typedefs/index.d.ts", undefined);
+            var program_1 = newProgram(files, ["/a.ts"], options);
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
-            var program_2 = updateProgram(program_1, ["a.ts"], options, files => {
+            var program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program_1, "a.ts", { "typedefs": { resolvedFileName: "types/typedefs/index.d.ts", primary: true } });
-            checkResolvedTypeDirectivesCache(program_1, "types/typedefs/index.d.ts", undefined);
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
 
             // type reference directives has changed - program is not reused
-            var program_3 = updateProgram(program_2, ["a.ts"], options, files => {
+            var program_3 = updateProgram(program_2, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateReferences("");
             });
 
             assert.isTrue(!program_2.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_3, "a.ts", undefined);
+            checkResolvedTypeDirectivesCache(program_3, "/a.ts", undefined);
 
-            var program_4 = updateProgram(program_3, ["a.ts"], options, files => {
+            var program_4 = updateProgram(program_3, ["/a.ts"], options, files => {
                 let newReferences = `/// <reference types="typedefs"/>
                 /// <reference types="typedefs2"/>
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_1, "a.ts", { "typedefs": { resolvedFileName: "types/typedefs/index.d.ts", primary: true } });
+            checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
         });
     })
 }

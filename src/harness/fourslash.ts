@@ -247,6 +247,10 @@ namespace FourSlash {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
+            if (compilationOptions.typesRoot) {
+                compilationOptions.typesRoot = ts.getNormalizedAbsolutePath(compilationOptions.typesRoot, this.basePath);
+            }
+
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = languageServiceAdapter.getLanguageService();
