@@ -10,7 +10,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T;
+    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
 
     /** 
       * Returns the index of the first element in the array where predicate is true, and undefined 
@@ -21,7 +21,7 @@ interface Array<T> {
       * @param thisArg If provided, it will be used as the this value for each invocation of 
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: T) => boolean, thisArg?: any): number | undefined;
 
     /**
       * Returns the this object after filling the section identified by start and end with value
@@ -379,7 +379,7 @@ interface String {
       * If there is no element at that position, the result is undefined. 
       * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
       */
-    codePointAt(pos: number): number;
+    codePointAt(pos: number): number | undefined;
 
     /**
       * Returns true if searchString appears as a substring of the result of converting this 
