@@ -5615,6 +5615,21 @@ namespace ts {
                 return (symbol.flags & SymbolFlags.Alias) && !!getDeclarationOfKind(symbol, SyntaxKind.ImportSpecifier);
             }
 
+            function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol) {
+                const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+                return bindingElement &&
+                    bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
+                    !bindingElement.propertyName;
+            }
+
+            function getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol: Symbol) {
+                if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
+                    const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+                    const typeOfPattern = typeChecker.getTypeAtLocation(bindingElement.parent);
+                    return typeOfPattern && typeChecker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+                }
+            }
+
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
                 // If this is an export or import specifier it could have been renamed using the 'as' syntax.
                 // If so we want to search for whatever under the cursor.
@@ -5657,6 +5672,12 @@ namespace ts {
                 // If the symbol is an import we would like to find it if we are looking for what it imports.
                 // So consider it visible outside its declaration scope.
                 if (symbol.flags & SymbolFlags.Alias) {
+                    return undefined;
+                }
+
+                // If symbol is of object binding pattern element without property name we would want to 
+                // look for property too and that could be anywhere
+                if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
                     return undefined;
                 }
 
@@ -6103,6 +6124,13 @@ namespace ts {
                     result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
                 }
 
+                // If this is symbol of binding element without propertyName declaration in Object binding pattern 
+                // Include the property in the search
+                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol);
+                if (bindingElementPropertySymbol) {
+                    result.push(bindingElementPropertySymbol);
+                }
+
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
                 // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
                 forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
@@ -6210,6 +6238,14 @@ namespace ts {
                     return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
+                }
+
+                // If the reference location is the binding element and doesn't have property name 
+                // then include the binding element in the related symbols
+                //      let { a } : { a };
+                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(referenceSymbol);
+                if (bindingElementPropertySymbol && searchSymbols.indexOf(bindingElementPropertySymbol) >= 0) {
+                    return bindingElementPropertySymbol;
                 }
 
                 // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
