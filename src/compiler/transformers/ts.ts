@@ -1749,7 +1749,7 @@ namespace ts {
                 );
             }
             else {
-                return getSynthesizedClone(name);
+                return name;
             }
         }
 
