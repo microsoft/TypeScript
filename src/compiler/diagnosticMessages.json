@@ -2669,6 +2669,10 @@
         "category": "Message",
         "code": 6122
     },
+    "Type declaration files to be includes in compilation.": {
+        "category": "Message",
+        "code": 6123
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
