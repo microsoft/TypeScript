@@ -412,7 +412,7 @@ class ProjectRunner extends RunnerBase {
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
-                sourceFile => !Harness.isLibraryFile(sourceFile.fileName)),
+                sourceFile => !Harness.isDefaultLibraryFile(sourceFile.fileName)),
                 sourceFile => {
                     return {
                         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
