@@ -606,6 +606,9 @@ namespace ts {
             //          return C;
             //      }(D))
 
+            if (node.name) {
+                enableSubstitutionsForBlockScopedBindings();
+            }
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
