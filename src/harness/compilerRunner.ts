@@ -102,6 +102,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
+                if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
+                    tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
+                }
+
                 const output = Harness.Compiler.compileFiles(
                     toBeCompiled, otherFiles, harnessSettings, /*options*/ tsConfigOptions, /*currentDirectory*/ undefined);
 
@@ -140,7 +144,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
-                if (options.traceModuleResolution) {
+                if (options.traceResolution) {
                     Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
                         return JSON.stringify(result.traceResults || [], undefined, 4);
                     });

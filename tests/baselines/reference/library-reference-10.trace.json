@@ -1,0 +1,8 @@
+[
+    "======== Resolving type reference directive 'jquery' from '/consumer.ts', root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "Found 'package.json' at '/types/jquery/package.json'.",
+    "'package.json' has 'typings' field 'jquery.d.ts' that references '/types/jquery/jquery.d.ts'.",
+    "File '/types/jquery/jquery.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/types/jquery/jquery.d.ts', primary: true. ========"
+]

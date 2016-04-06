@@ -1,0 +1,7 @@
+[
+    "======== Resolving type reference directive 'alpha' from '/src/foo.ts', root dir '/'. ========",
+    "Resolving with primary search path '/types/'",
+    "File '/types/alpha/package.json' does not exist.",
+    "File '/types/alpha/index.d.ts' exist - use it as a name resolution result.",
+    "======== Type reference directive 'alpha' was successfully resolved to '/types/alpha/index.d.ts', primary: true. ========"
+]

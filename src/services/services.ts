@@ -125,6 +125,7 @@ namespace ts {
     }
     export interface PreProcessedFileInfo {
         referencedFiles: FileReference[];
+        typeReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules: string[];
         isLibFile: boolean;
@@ -792,6 +793,7 @@ namespace ts {
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;
         public referencedFiles: FileReference[];
+        public typeReferenceDirectives: FileReference[];
 
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
@@ -813,6 +815,7 @@ namespace ts {
         public identifiers: Map<string>;
         public nameTable: Map<number>;
         public resolvedModules: Map<ResolvedModule>;
+        public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: LiteralExpression[];
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
@@ -1039,6 +1042,7 @@ namespace ts {
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         directoryExists?(directoryName: string): boolean;
     }
 
@@ -2146,6 +2150,7 @@ namespace ts {
 
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const referencedFiles: FileReference[] = [];
+        const typeReferenceDirectives: FileReference[] = [];
         const importedFiles: FileReference[] = [];
         let ambientExternalModules: { ref: FileReference, depth: number }[];
         let isNoDefaultLib = false;
@@ -2174,7 +2179,11 @@ namespace ts {
                     isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     const fileReference = referencePathMatchResult.fileReference;
                     if (fileReference) {
-                        referencedFiles.push(fileReference);
+                        const collection = referencePathMatchResult.isTypeReferenceDirective
+                            ? typeReferenceDirectives
+                            : referencedFiles;
+
+                        collection.push(fileReference);
                     }
                 }
             });
@@ -2475,7 +2484,7 @@ namespace ts {
                     importedFiles.push(decl.ref);
                 }
             }
-            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: undefined };
+            return { referencedFiles, typeReferenceDirectives, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: undefined };
         }
         else {
             // for global scripts ambient modules still can have augmentations - look for ambient modules with depth > 0
@@ -2493,7 +2502,7 @@ namespace ts {
                     }
                 }
             }
-            return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: ambientModuleNames };
+            return { referencedFiles, typeReferenceDirectives, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules: ambientModuleNames };
         }
     }
 
@@ -2830,7 +2839,7 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
-                    Debug.assert(!host.resolveModuleNames);
+                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
@@ -2839,7 +2848,7 @@ namespace ts {
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 },
                 directoryExists: directoryName => {
-                    Debug.assert(!host.resolveModuleNames);
+                    Debug.assert(!host.resolveModuleNames || !host.resolveTypeReferenceDirectives);
                     return directoryProbablyExists(directoryName, host);
                 }
             };
@@ -2849,6 +2858,11 @@ namespace ts {
 
             if (host.resolveModuleNames) {
                 compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+            }
+            if (host.resolveTypeReferenceDirectives) {
+                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
+                    return host.resolveTypeReferenceDirectives(typeReferenceDirectiveNames, containingFile);
+                };
             }
 
             const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
@@ -4670,6 +4684,26 @@ namespace ts {
             }
         }
 
+        function findReferenceInPosition(refs: FileReference[], pos: number): FileReference {
+            for (const ref of refs) {
+                if (ref.pos <= pos && pos < ref.end) {
+                    return ref;
+                }
+            }
+            return undefined;
+        }
+
+        function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
+            return {
+                fileName: targetFileName,
+                textSpan: createTextSpanFromBounds(0, 0),
+                kind: ScriptElementKind.scriptElement,
+                name: name,
+                containerName: undefined,
+                containerKind: undefined
+            };
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -4689,18 +4723,20 @@ namespace ts {
             }
 
             /// Triple slash reference comments
-            const comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
             if (comment) {
                 const referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
-                    return [{
-                        fileName: referenceFile.fileName,
-                        textSpan: createTextSpanFromBounds(0, 0),
-                        kind: ScriptElementKind.scriptElement,
-                        name: comment.fileName,
-                        containerName: undefined,
-                        containerKind: undefined
-                    }];
+                    return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
+                }
+                return undefined;
+            }
+            // Type reference directives
+            const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+            if (typeReferenceDirective) {
+                const referenceFile = lookUp(program.resolvedTypeReferenceDirectives, typeReferenceDirective.fileName);
+                if (referenceFile && referenceFile.resolvedFileName) {
+                    return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
                 }
                 return undefined;
             }
