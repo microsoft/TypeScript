@@ -2867,14 +2867,15 @@ namespace ts {
         EmitAdvancedSuperHelper = 1 << 3,        // Emit the advanced _super helper for async methods.
         UMDDefine = 1 << 4,                      // This node should be replaced with the UMD define helper.
         NoLexicalEnvironment = 1 << 5,           // A new LexicalEnvironment should *not* be introduced when emitting this node, this is primarily used when printing a SystemJS module.
-        SingleLine = 1 << 6,                     // The contents of this node should be emit on a single line.
-        AdviseOnEmitNode = 1 << 7,               // The node printer should invoke the onBeforeEmitNode and onAfterEmitNode callbacks when printing this node.
+        SingleLine = 1 << 6,                     // The contents of this node should be emitted on a single line.
+        AdviseOnEmitNode = 1 << 7,               // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 8,                 // Disables further substitution of an expression.
         CapturesThis = 1 << 9,                   // The function captures a lexical `this`
         NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
-        PrefixExportedLocal = 1 << 12,           // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        Indented = 1 << 13,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoComments = 1 << 12,                    // Do not emit comments for this node.
+        PrefixExportedLocal = 1 << 13,           // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        Indented = 1 << 14,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
     }
 
     /** Additional context provided to `visitEachChild` */

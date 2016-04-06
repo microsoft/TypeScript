@@ -295,14 +295,19 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, isNotEmittedStatement);
-                    const trailingComments = getTrailingComments(node, isNotEmittedStatement);
+                    const leadingComments = getLeadingComments(node, shouldSkipCommentsForNode);
+                    const trailingComments = getTrailingComments(node, shouldSkipCommentsForNode);
                     emitLeadingComments(node, leadingComments);
                     emitStart(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitWorker(node);
                     emitEnd(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitTrailingComments(node, trailingComments);
                 }
+            }
+
+            function shouldSkipCommentsForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoComments) !== 0;
             }
 
             function shouldIgnoreSourceMapForNode(node: Node) {
@@ -2307,7 +2312,8 @@ const _super = (function (geti, seti) {
                 if (format & ListFormat.MultiLine) {
                     return true;
                 }
-                else if (format & ListFormat.PreserveLines) {
+
+                if (format & ListFormat.PreserveLines) {
                     if (format & ListFormat.PreferNewLine) {
                         return true;
                     }

@@ -898,22 +898,23 @@ namespace ts {
         );
     }
 
-    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
         const properties: ObjectLiteralElement[] = [];
-        addPropertyAssignment(properties, "get", get, preferNewLine);
-        addPropertyAssignment(properties, "set", set, preferNewLine);
-        addPropertyAssignment(properties, "value", value, preferNewLine);
-        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine);
-        addPropertyAssignment(properties, "configurable", configurable, preferNewLine);
-        addPropertyAssignment(properties, "writable", writable, preferNewLine);
-        return createObjectLiteral(properties, location);
+        addPropertyAssignment(properties, "get", get, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "set", set, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "value", value, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "configurable", configurable, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "writable", writable, preferNewLine, descriptorLocations);
+        return createObjectLiteral(properties, location, preferNewLine);
     }
 
-    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean) {
+    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean, descriptorLocations?: PropertyDescriptorLocations) {
         if (value !== undefined) {
             const property = createPropertyAssignment(
                 name,
-                typeof value === "boolean" ? createLiteral(value) : value
+                typeof value === "boolean" ? createLiteral(value) : value,
+                descriptorLocations ? descriptorLocations[name] : undefined
             );
 
             if (preferNewLine) {
@@ -933,7 +934,17 @@ namespace ts {
         writable?: boolean | Expression;
     }
 
-    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+    export interface PropertyDescriptorLocations {
+        [key: string]: TextRange;
+        get?: TextRange;
+        set?: TextRange;
+        value?: TextRange;
+        enumerable?: TextRange;
+        configurable?: TextRange;
+        writable?: TextRange;
+    }
+
+    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
         return createCall(
             createPropertyAccess(
                 createIdentifier("Object"),
@@ -942,7 +953,7 @@ namespace ts {
             [
                 target,
                 memberName,
-                createPropertyDescriptor(descriptor, preferNewLine)
+                createPropertyDescriptor(descriptor, preferNewLine, /*location*/ undefined, descriptorLocations)
             ],
             location
         );

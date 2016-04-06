@@ -1094,20 +1094,27 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
-            return createObjectDefineProperty(
-                receiver,
-                createExpressionForPropertyName(
-                    visitNode(firstAccessor.name, visitor, isPropertyName),
-                    /*location*/ firstAccessor.name
+            return setNodeEmitFlags(
+                createObjectDefineProperty(
+                    receiver,
+                    createExpressionForPropertyName(
+                        visitNode(firstAccessor.name, visitor, isPropertyName),
+                        /*location*/ firstAccessor.name
+                    ),
+                    /*descriptor*/ {
+                        get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
+                        set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
+                        enumerable: true,
+                        configurable: true
+                    },
+                    /*preferNewLine*/ true,
+                    /*location*/ firstAccessor,
+                    /*descriptorLocations*/ {
+                        get: getAccessor,
+                        set: setAccessor
+                    }
                 ),
-                {
-                    get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
-                    set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
-                    enumerable: true,
-                    configurable: true
-                },
-                /*preferNewLine*/ true,
-                /*location*/ firstAccessor
+                NodeEmitFlags.NoComments
             );
         }
 
