@@ -1688,10 +1688,13 @@ namespace ts {
             addNode(expressions,
                 createAssignment(
                     temp,
-                    createObjectLiteral(
-                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties),
-                        /*location*/ undefined,
-                        node.multiLine
+                    setNodeEmitFlags(
+                        createObjectLiteral(
+                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties),
+                            /*location*/ undefined,
+                            node.multiLine
+                        ),
+                        NodeEmitFlags.Indented
                     )
                 ),
                 node.multiLine

@@ -964,9 +964,18 @@ const _super = (function (geti, seti) {
                     write("{}");
                 }
                 else {
+                    const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                    if (indentedFlag) {
+                        increaseIndent();
+                    }
+
                     const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
                     const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
                     emitList(node, properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
+
+                    if (indentedFlag) {
+                        decreaseIndent();
+                    }
                 }
             }
 

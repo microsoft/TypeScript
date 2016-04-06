@@ -1637,6 +1637,9 @@ namespace ts {
                 const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
             }
+            if (isStringOrNumericLiteral(nameExpression.kind)) {
+                return (<LiteralExpression>nameExpression).text;
+            }
         }
 
         return undefined;
