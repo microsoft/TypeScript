@@ -14,6 +14,17 @@ namespace ts {
         }
     }
 
+    function reportEmittedFiles(files: string[], host: CompilerHost): void {
+        if (!files || files.length == 0) {
+            return;
+        }
+
+        for (const file of files) {
+            const message = `TSFILE: ${file}${sys.newLine}`;
+            sys.write(message);
+        }
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -108,7 +119,6 @@ namespace ts {
         sys.write(output);
     }
 
-
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
     const blueForegroundEscapeSequence = "\u001b[93m";
@@ -130,7 +140,7 @@ namespace ts {
         let output = "";
 
         if (diagnostic.file) {
-            const { start, length, file } = diagnostic;
+            const {start, length, file} = diagnostic;
             const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
@@ -185,7 +195,7 @@ namespace ts {
             }
 
             output += sys.newLine;
-            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+            output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
         }
 
         const categoryColor = categoryFormatMap[diagnostic.category];
@@ -596,6 +606,8 @@ namespace ts {
             diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
+
+            reportEmittedFiles(emitOutput.emittedFiles, compilerHost);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.
