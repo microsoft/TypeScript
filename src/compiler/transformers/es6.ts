@@ -1564,6 +1564,9 @@ namespace ts {
             // var v = _a[_i];
             if (isVariableDeclarationList(initializer)) {
                 const firstDeclaration = firstOrUndefined(initializer.declarations);
+                if (initializer.flags & NodeFlags.BlockScoped) {
+                    enableSubstitutionsForBlockScopedBindings();
+                }
                 if (firstDeclaration && isBindingPattern(firstDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
