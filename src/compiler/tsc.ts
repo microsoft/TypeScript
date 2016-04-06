@@ -140,7 +140,7 @@ namespace ts {
         let output = "";
 
         if (diagnostic.file) {
-            const {start, length, file} = diagnostic;
+            const { start, length, file } = diagnostic;
             const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
@@ -195,7 +195,7 @@ namespace ts {
             }
 
             output += sys.newLine;
-            output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
+            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
         const categoryColor = categoryFormatMap[diagnostic.category];
