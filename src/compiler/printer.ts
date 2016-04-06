@@ -2034,6 +2034,7 @@ const _super = (function (geti, seti) {
                 const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
+                    writeLine();
                 }
             }
 
