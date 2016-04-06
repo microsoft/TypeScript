@@ -748,7 +748,7 @@ namespace ts {
         function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter(createUniqueName("args"))] : [];
+                : hasExtendsClause ? [createRestParameter("args")] : [];
         }
 
         /**
