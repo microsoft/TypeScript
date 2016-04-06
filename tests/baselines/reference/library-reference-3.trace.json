@@ -1,5 +1,5 @@
 [
-    "======== Resolving type reference directive 'jquery' from '/src/consumer.ts', root dir '/src'. ========",
+    "======== Resolving type reference directive 'jquery', containing file '/src/consumer.ts', root directory '/src'. ========",
     "Resolving with primary search path '/src/types/'",
     "File '/src/types/jquery/package.json' does not exist.",
     "File '/src/types/jquery/index.d.ts' does not exist.",

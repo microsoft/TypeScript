@@ -2637,7 +2637,7 @@
         "category": "Error",
         "code": 6114
     },
-    "======== Resolving type reference directive '{0}' from '{1}', root dir '{2}'. ========": {
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
         "category": "Message",
         "code": 6115
     },
@@ -2665,9 +2665,29 @@
         "category": "Message",
         "code": 6121
     },
-    "======== Resolving type reference directive '{0}' from '{1}', root dir not set. ========": {
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory not set. ========": {
         "category": "Message",
         "code": 6122
+    },
+    "Type declaration files to be included in compilation.": {
+        "category": "Message",
+        "code": 6123
+    },
+    "Looking up in 'node_modules' folder, initial location '{0}'": {
+        "category": "Message",
+        "code": 6124
+    },
+    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6125
+    },
+    "======== Resolving type reference directive '{0}', containing file not set, root directory '{1}'. ========": {
+        "category": "Message",
+        "code": 6126
+    },
+    "======== Resolving type reference directive '{0}', containing file not set, root directory not set. ========": {
+        "category": "Message",
+        "code": 6127
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

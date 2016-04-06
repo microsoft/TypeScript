@@ -191,6 +191,11 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
+    /**
+     * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
+     * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
+     * is assumed to be the same as root directory of the project.
+     */
     export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
         const moduleResolutionState: ModuleResolutionState = {
@@ -204,11 +209,21 @@ namespace ts {
         const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : undefined);
 
         if (traceEnabled) {
-            if (rootDir !== undefined) {
-                trace(host, Diagnostics.Resolving_type_reference_directive_0_from_1_root_dir_2, typeReferenceDirectiveName, containingFile, rootDir);
+            if (containingFile === undefined) {
+                if (rootDir === undefined) {
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
+                }
+                else {
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, rootDir);
+                }
             }
             else {
-                trace(host, Diagnostics.Resolving_type_reference_directive_0_from_1_root_dir_not_set, typeReferenceDirectiveName, containingFile);
+                if (rootDir === undefined) {
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
+                }
+                else {
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, rootDir);
+                }
             }
         }
 
@@ -244,17 +259,33 @@ namespace ts {
             }
         }
 
-        if (traceEnabled) {
-            trace(host, Diagnostics.Resolving_from_node_modules_folder);
+        let resolvedFile: string;
+        let initialLocationForSecondaryLookup: string;
+        if (containingFile) {
+            initialLocationForSecondaryLookup = getDirectoryPath(containingFile);
         }
-        // check secondary locations
-        const resolvedFile = loadModuleFromNodeModules(typeReferenceDirectiveName, getDirectoryPath(containingFile), failedLookupLocations, moduleResolutionState);
-        if (traceEnabled) {
-            if (resolvedFile) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, false);
+        else {
+            initialLocationForSecondaryLookup = rootDir;
+        }
+
+        if (initialLocationForSecondaryLookup !== undefined) {
+            // check secondary locations
+            if (traceEnabled) {
+                trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
             }
-            else {
-                trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
+            resolvedFile = loadModuleFromNodeModules(typeReferenceDirectiveName, initialLocationForSecondaryLookup, failedLookupLocations, moduleResolutionState);
+            if (traceEnabled) {
+                if (resolvedFile) {
+                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFile, false);
+                }
+                else {
+                    trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
+                }
+            }
+        }
+        else {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Containing_file_is_not_specified_and_root_directory_cannot_be_determined_skipping_lookup_in_node_modules_folder);
             }
         }
         return {
@@ -927,24 +958,15 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
-        if (oldProgram) {
-            // check properties that can affect structure of the program or module resolution strategy
-            // if any of these properties has changed - structure cannot be reused
-            const oldOptions = oldProgram.getCompilerOptions();
-            if ((oldOptions.module !== options.module) ||
-                (oldOptions.noResolve !== options.noResolve) ||
-                (oldOptions.target !== options.target) ||
-                (oldOptions.noLib !== options.noLib) ||
-                (oldOptions.jsx !== options.jsx) ||
-                (oldOptions.allowJs !== options.allowJs) ||
-                (oldOptions.rootDir !== options.rootDir) ||
-                (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
-                (oldOptions.configFilePath !== options.configFilePath)) {
-                oldProgram = undefined;
-            }
-        }
-
         if (!tryReuseStructureFromOldProgram()) {
+            // load type declarations specified via 'types' argument
+            if (options.types && options.types.length) {
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(options.types, /*containingFile*/ undefined);
+                for (let i = 0; i < options.types.length; i++) {
+                    processTypeReferenceDirective(options.types[i], resolutions[i]);
+                }
+            }
+
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
@@ -1036,11 +1058,30 @@ namespace ts {
                 return false;
             }
 
+            // check properties that can affect structure of the program or module resolution strategy
+            // if any of these properties has changed - structure cannot be reused
+            const oldOptions = oldProgram.getCompilerOptions();
+            if ((oldOptions.module !== options.module) ||
+                (oldOptions.noResolve !== options.noResolve) ||
+                (oldOptions.target !== options.target) ||
+                (oldOptions.noLib !== options.noLib) ||
+                (oldOptions.jsx !== options.jsx) ||
+                (oldOptions.allowJs !== options.allowJs) ||
+                (oldOptions.rootDir !== options.rootDir) ||
+                (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
+                (oldOptions.configFilePath !== options.configFilePath)) {
+                return false;
+            }
+
             Debug.assert(!oldProgram.structureIsReused);
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
+                return false;
+            }
+
+            if (!arrayIsEqualTo(options.types, oldOptions.types)) {
                 return false;
             }
 
@@ -1733,45 +1774,61 @@ namespace ts {
                 const resolvedTypeReferenceDirective = resolutions[i];
                 // store resolved type directive on the file
                 setResolvedTypeReferenceDirective(file, ref.fileName, resolvedTypeReferenceDirective);
-                // If we already found this library as a primary reference - nothing to do
-                const previousResolution = resolvedTypeReferenceDirectives[ref.fileName];
-                if (previousResolution && previousResolution.primary) {
-                    continue;
-                }
-                let saveResolution = true;
-                if (resolvedTypeReferenceDirective) {
-                    if (resolvedTypeReferenceDirective.primary) {
-                        // resolved from the primary path
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, file, ref.pos, ref.end);
-                    }
-                    else {
-                        // If we already resolved to this file, it must have been a secondary reference. Check file contents
-                        // for sameness and possibly issue an error
-                        if (previousResolution) {
-                            const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
-                            if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos,
-                                    Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_the_typings_folder_to_resolve_this_conflict,
-                                    ref.fileName,
-                                    resolvedTypeReferenceDirective.resolvedFileName,
-                                    previousResolution.resolvedFileName));
-                            }
-                            // don't overwrite previous resolution result
-                            saveResolution = false;
-                        }
-                        else {
-                            // First resolution of this library
-                            processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, file, ref.pos, ref.end);
-                        }
-                    }
+                processTypeReferenceDirective(ref.fileName, resolvedTypeReferenceDirective, file, ref.pos, ref.end);
+            }
+        }
+
+        function processTypeReferenceDirective(typeReferenceDirective: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective,
+            refFile?: SourceFile, refPos?: number, refEnd?: number): void {
+
+            // If we already found this library as a primary reference - nothing to do
+            const previousResolution = resolvedTypeReferenceDirectives[typeReferenceDirective];
+            if (previousResolution && previousResolution.primary) {
+                return;
+            }
+            let saveResolution = true;
+            if (resolvedTypeReferenceDirective) {
+                if (resolvedTypeReferenceDirective.primary) {
+                    // resolved from the primary path
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, refFile, refPos, refEnd);
                 }
                 else {
-                    fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Cannot_find_name_0, ref.fileName));
+                    // If we already resolved to this file, it must have been a secondary reference. Check file contents
+                    // for sameness and possibly issue an error
+                    if (previousResolution) {
+                        const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName);
+                        if (otherFileText !== getSourceFile(previousResolution.resolvedFileName).text) {
+                            fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd,
+                                Diagnostics.Conflicting_library_definitions_for_0_found_at_1_and_2_Copy_the_correct_file_to_the_typings_folder_to_resolve_this_conflict,
+                                typeReferenceDirective,
+                                resolvedTypeReferenceDirective.resolvedFileName,
+                                previousResolution.resolvedFileName
+                            ));
+                        }
+                        // don't overwrite previous resolution result
+                        saveResolution = false;
+                    }
+                    else {
+                        // First resolution of this library
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*isReference*/ true, refFile, refPos, refEnd);
+                    }
                 }
+            }
+            else {
+                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_name_0, typeReferenceDirective));
+            }
 
-                if (saveResolution) {
-                    resolvedTypeReferenceDirectives[ref.fileName] = resolvedTypeReferenceDirective;
-                }
+            if (saveResolution) {
+                resolvedTypeReferenceDirectives[typeReferenceDirective] = resolvedTypeReferenceDirective;
+            }
+        }
+
+        function createDiagnostic(refFile: SourceFile, refPos: number, refEnd: number, message: DiagnosticMessage, ...args: any[]): Diagnostic {
+            if (refFile === undefined || refPos === undefined || refEnd === undefined) {
+                return createCompilerDiagnostic(message, ...args);
+            }
+            else {
+                return createFileDiagnostic(refFile, refPos, refEnd - refPos, message, ...args);
             }
         }
 

@@ -326,6 +326,15 @@ namespace ts {
             type: "string"
         },
         {
+            name: "types",
+            type: "list",
+            element: {
+                name: "types",
+                type: "string"
+            },
+            description: Diagnostics.Type_declaration_files_to_be_included_in_compilation
+        },
+        {
             name: "traceResolution",
             type: "boolean",
             description: Diagnostics.Enable_tracing_of_the_name_resolution_process
