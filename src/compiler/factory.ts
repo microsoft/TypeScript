@@ -1272,10 +1272,19 @@ namespace ts {
         // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
+        const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
         const operandPrecedence = getExpressionPrecedence(emittedOperand);
         switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
+                // If the operand is the right side of a right-associative binary operation
+                // and is a yield expression, then we do not need parentheses.
+                if (!isLeftSideOfBinary
+                    && binaryOperatorAssociativity === Associativity.Right
+                    && operand.kind === SyntaxKind.YieldExpression) {
+                    return false;
+                }
+
                 return true;
 
             case Comparison.GreaterThan:
@@ -1287,12 +1296,11 @@ namespace ts {
                     // left associative:
                     //  (a*b)/x    ->  a*b/x
                     //  (a**b)/x   ->  a**b/x
-
+                    //
                     // Parentheses are needed for the left operand when the binary operator is
                     // right associative:
                     //  (a/b)**x   ->  (a/b)**x
                     //  (a**b)**x  ->  (a**b)**x
-                    const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
@@ -1326,7 +1334,7 @@ namespace ts {
                     // associative:
                     //  x/(a**b)    -> x/a**b
                     //  x**(a**b)   -> x**a**b
-
+                    //
                     // Parentheses are needed for the right operand when the operand is left
                     // associative:
                     //  x/(a*b)     -> x/(a*b)
