@@ -1644,6 +1644,7 @@ const _super = (function (geti, seti) {
                 emitModifiers(node, node.modifiers);
                 write("import ");
                 emit(node.importClause);
+                write(" from ");
                 emitExpression(node.moduleSpecifier);
                 write(";");
             }
@@ -1654,7 +1655,6 @@ const _super = (function (geti, seti) {
                     write(", ");
                 }
                 emit(node.namedBindings);
-                write(" from ");
             }
 
             function emitNamespaceImport(node: NamespaceImport) {
@@ -1680,12 +1680,14 @@ const _super = (function (geti, seti) {
                 write("export ");
                 if (node.exportClause) {
                     emit(node.exportClause);
-                    write(" from ");
                 }
                 else {
-                    write("* from ");
+                    write("*");
                 }
-                emitExpression(node.moduleSpecifier);
+                if (node.moduleSpecifier) {
+                    write(" from ");
+                    emitExpression(node.moduleSpecifier);
+                }
                 write(";");
             }
 
