@@ -13,8 +13,8 @@ declare var x: any;
 
 
 //// [reactNamespaceJSXEmit.js]
-myReactLib.createElement("foo", {data: true});
-myReactLib.createElement(Bar, {x: x});
+myReactLib.createElement("foo", { data: true });
+myReactLib.createElement(Bar, { x: x });
 myReactLib.createElement("x-component", null);
 myReactLib.createElement(Bar, myReactLib.__spread({}, x));
-myReactLib.createElement(Bar, myReactLib.__spread({}, x, {y: 2}));
+myReactLib.createElement(Bar, myReactLib.__spread({}, x, { y: 2 }));

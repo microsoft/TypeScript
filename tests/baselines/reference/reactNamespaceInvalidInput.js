@@ -4,4 +4,4 @@
 
 
 //// [reactNamespaceInvalidInput.js]
-my-React-Lib.createElement("foo", {data: true});
+my-React-Lib.createElement("foo", { data: true });
