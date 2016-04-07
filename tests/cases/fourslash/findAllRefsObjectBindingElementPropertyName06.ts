@@ -13,7 +13,7 @@
 ////for (var { [|property1|]: p1 } of elems) {
 ////}
 ////var p2;
-////for ({ /*This should be referenced too*/property1 : p2 } of elems) {
+////for ({ [|property1|] : p2 } of elems) {
 ////}
 
 // Note: if this test ever changes, consider updating
