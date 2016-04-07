@@ -131,8 +131,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, undefined, emptyArray, unknownType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
@@ -2299,10 +2299,16 @@ namespace ts {
                 }
             }
 
-            function buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
+            function buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
+                if (thisType) {
+                    writeKeyword(writer, SyntaxKind.ThisKeyword);
+                    writePunctuation(writer, SyntaxKind.ColonToken);
+                    writeSpace(writer);
+                    buildTypeDisplay(thisType, writer, enclosingDeclaration, flags, symbolStack);
+                }
                 for (let i = 0; i < parameters.length; i++) {
-                    if (i > 0) {
+                    if (i > 0 || thisType) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
@@ -2358,7 +2364,7 @@ namespace ts {
                     buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, symbolStack);
                 }
 
-                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
+                buildDisplayForParametersAndDelimiters(signature.thisType, signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
 
                 buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -2798,7 +2804,9 @@ namespace ts {
                     }
                 }
                 // Use contextual parameter type if one is available
-                const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                const type = declaration.symbol.name === "this"
+                    ? getContextuallyTypedThisType(func)
+                    : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
                     return strictNullChecks && declaration.questionToken ? addNullableKind(type, TypeFlags.Undefined) : type;
                 }
@@ -3656,12 +3664,13 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
+        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], thisType: Type, parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
+            sig.thisType = thisType;
             sig.resolvedReturnType = resolvedReturnType;
             sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
@@ -3671,7 +3680,7 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType,
+            return createSignature(sig.declaration, sig.typeParameters, sig.thisType, sig.parameters, sig.resolvedReturnType,
                 sig.typePredicate, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
@@ -3679,7 +3688,7 @@ namespace ts {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
             if (baseSignatures.length === 0) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+                return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*typePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
@@ -3716,9 +3725,9 @@ namespace ts {
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexInfo, arrayType.numberIndexInfo);
         }
 
-        function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreReturnTypes: boolean): Signature {
+        function findMatchingSignature(signatureList: Signature[], signature: Signature, partialMatch: boolean, ignoreThisTypes: boolean, ignoreReturnTypes: boolean): Signature {
             for (const s of signatureList) {
-                if (compareSignaturesIdentical(s, signature, partialMatch, ignoreReturnTypes, compareTypesIdentical)) {
+                if (compareSignaturesIdentical(s, signature, partialMatch, ignoreThisTypes, ignoreReturnTypes, compareTypesIdentical)) {
                     return s;
                 }
             }
@@ -3732,7 +3741,7 @@ namespace ts {
                     return undefined;
                 }
                 for (let i = 1; i < signatureLists.length; i++) {
-                    if (!findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ false)) {
+                    if (!findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false)) {
                         return undefined;
                     }
                 }
@@ -3741,7 +3750,7 @@ namespace ts {
             let result: Signature[] = undefined;
             for (let i = 0; i < signatureLists.length; i++) {
                 // Allow matching non-generic signatures to have excess parameters and different return types
-                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreReturnTypes*/ true);
+                const match = i === listIndex ? signature : findMatchingSignature(signatureLists[i], signature, /*partialMatch*/ true, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true);
                 if (!match) {
                     return undefined;
                 }
@@ -3762,13 +3771,16 @@ namespace ts {
             for (let i = 0; i < signatureLists.length; i++) {
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
-                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true)) {
+                    if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true)) {
                         const unionSignatures = findMatchingSignatures(signatureLists, signature, i);
                         if (unionSignatures) {
                             let s = signature;
                             // Union the result types when more than one signature matches
                             if (unionSignatures.length > 1) {
                                 s = cloneSignature(signature);
+                                if (forEach(unionSignatures, sig => sig.thisType)) {
+                                    s.thisType = getUnionType(map(unionSignatures, sig => sig.thisType || anyType));
+                                }
                                 // Clear resolved return type we possibly got from cloneSignature
                                 s.resolvedReturnType = undefined;
                                 s.unionSignatures = unionSignatures;
@@ -4222,6 +4234,8 @@ namespace ts {
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
+                let thisType: Type = undefined;
+                let hasThisParameter: boolean;
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 let returnType: Type = undefined;
                 let typePredicate: TypePredicate = undefined;
@@ -4238,7 +4252,13 @@ namespace ts {
                         const resolvedSymbol = resolveName(param, paramSymbol.name, SymbolFlags.Value, undefined, undefined);
                         paramSymbol = resolvedSymbol;
                     }
-                    parameters.push(paramSymbol);
+                    if (i === 0 && paramSymbol.name === "this") {
+                        hasThisParameter = true;
+                        thisType = param.type ? getTypeFromTypeNode(param.type) : unknownType;
+                    }
+                    else {
+                        parameters.push(paramSymbol);
+                    }
 
                     if (param.type && param.type.kind === SyntaxKind.StringLiteralType) {
                         hasStringLiterals = true;
@@ -4246,7 +4266,7 @@ namespace ts {
 
                     if (param.initializer || param.questionToken || param.dotDotDotToken) {
                         if (minArgumentCount < 0) {
-                            minArgumentCount = i;
+                            minArgumentCount = i - (hasThisParameter ? 1 : 0);
                         }
                     }
                     else {
@@ -4256,7 +4276,7 @@ namespace ts {
                 }
 
                 if (minArgumentCount < 0) {
-                    minArgumentCount = declaration.parameters.length;
+                    minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
                 }
 
                 if (isJSConstructSignature) {
@@ -4292,7 +4312,7 @@ namespace ts {
                     }
                 }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -4984,7 +5004,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getThisType(node: TypeNode): Type {
+        function getThisType(node: Node): Type {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
@@ -5190,6 +5210,7 @@ namespace ts {
                 freshTypePredicate = cloneTypePredicate(signature.typePredicate, mapper);
             }
             const result = createSignature(signature.declaration, freshTypeParameters,
+                signature.thisType && instantiateType(signature.thisType, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
@@ -5358,7 +5379,9 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return !node.typeParameters && node.parameters.length && !forEach(node.parameters, p => p.type);
+            const areAllParametersUntyped = !forEach(node.parameters, p => p.type);
+            const isNullaryArrow = node.kind === SyntaxKind.ArrowFunction && !node.parameters.length;
+            return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -5451,6 +5474,18 @@ namespace ts {
             target = getErasedSignature(target);
 
             let result = Ternary.True;
+            if (source.thisType && target.thisType && source.thisType !== voidType) {
+                // void sources are assignable to anything.
+                const related = compareTypes(source.thisType, target.thisType, /*reportErrors*/ false)
+                    || compareTypes(target.thisType, source.thisType, reportErrors);
+                if (!related) {
+                    if (reportErrors) {
+                        errorReporter(Diagnostics.The_this_types_of_each_signature_are_incompatible);
+                    }
+                    return Ternary.False;
+                }
+                result &= related;
+            }
 
             const sourceMax = getNumNonRestParameters(source);
             const targetMax = getNumNonRestParameters(target);
@@ -6207,7 +6242,7 @@ namespace ts {
                 }
                 let result = Ternary.True;
                 for (let i = 0, len = sourceSignatures.length; i < len; i++) {
-                    const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
+                    const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -6429,7 +6464,7 @@ namespace ts {
         /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
-        function compareSignaturesIdentical(source: Signature, target: Signature, partialMatch: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
+        function compareSignaturesIdentical(source: Signature, target: Signature, partialMatch: boolean, ignoreThisTypes: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
                 return Ternary.True;
@@ -6450,6 +6485,13 @@ namespace ts {
             source = getErasedSignature(source);
             target = getErasedSignature(target);
             let result = Ternary.True;
+            if (!ignoreThisTypes && source.thisType && target.thisType) {
+                const related = compareTypes(source.thisType, target.thisType);
+                if (!related) {
+                    return Ternary.False;
+                }
+                result &= related;
+            }
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
                 const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfParameter(source.parameters[i]);
@@ -6786,29 +6828,23 @@ namespace ts {
         }
 
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
-            let sourceMax = source.parameters.length;
-            let targetMax = target.parameters.length;
+            const sourceMax = source.parameters.length;
+            const targetMax = target.parameters.length;
             let count: number;
             if (source.hasRestParameter && target.hasRestParameter) {
-                count = sourceMax > targetMax ? sourceMax : targetMax;
-                sourceMax--;
-                targetMax--;
+                count = Math.max(sourceMax, targetMax);
             }
             else if (source.hasRestParameter) {
-                sourceMax--;
                 count = targetMax;
             }
             else if (target.hasRestParameter) {
-                targetMax--;
                 count = sourceMax;
             }
             else {
-                count = sourceMax < targetMax ? sourceMax : targetMax;
+                count = Math.min(sourceMax, targetMax);
             }
             for (let i = 0; i < count; i++) {
-                const s = i < sourceMax ? getTypeOfParameter(source.parameters[i]) : getRestTypeOfSignature(source);
-                const t = i < targetMax ? getTypeOfParameter(target.parameters[i]) : getRestTypeOfSignature(target);
-                callback(s, t);
+                callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
         }
 
@@ -8040,7 +8076,24 @@ namespace ts {
             if (needToCaptureLexicalThis) {
                 captureLexicalThis(node, container);
             }
-
+            if (isFunctionLike(container)) {
+                const type = getContextuallyTypedThisType(container);
+                if (type) {
+                    return type;
+                }
+                const signature = getSignatureFromDeclaration(container);
+                if (signature.thisType) {
+                    return signature.thisType;
+                }
+                if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    // Note: this works because object literal methods are deferred,
+                    // which means that the type of the containing object literal is already known.
+                    const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
+                    if (type) {
+                        return type;
+                    }
+                }
+            }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
@@ -8070,6 +8123,10 @@ namespace ts {
                 }
             }
 
+            if (compilerOptions.noImplicitThis) {
+                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+            }
             return anyType;
         }
 
@@ -8285,6 +8342,19 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
+            if ((isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+                isContextSensitive(func) &&
+                func.kind !== SyntaxKind.ArrowFunction) {
+                const contextualSignature = getContextualSignature(func);
+                if (contextualSignature) {
+                    return contextualSignature.thisType;
+                }
+            }
+
+            return undefined;
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
@@ -8696,7 +8766,7 @@ namespace ts {
                         // This signature will contribute to contextual union signature
                         signatureList = [signature];
                     }
-                    else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
+                    else if (!compareSignaturesIdentical(signatureList[0], signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical)) {
                         // Signatures aren't identical, do not use
                         return undefined;
                     }
@@ -10066,6 +10136,12 @@ namespace ts {
                 context.failedTypeParameterIndex = undefined;
             }
 
+            if (signature.thisType) {
+                const thisArgumentNode = getThisArgumentOfCall(node);
+                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                inferTypes(context, thisArgumentType, signature.thisType);
+            }
+
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
             const argCount = getEffectiveArgumentCount(node, args, signature);
@@ -10139,6 +10215,20 @@ namespace ts {
         }
 
         function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+
+            if (signature.thisType && signature.thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
+                // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
+                // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
+                // If the expression is a new expression, then the check is skipped.
+                const thisArgumentNode = getThisArgumentOfCall(node);
+                const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
+                const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
+                const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
+                if (!checkTypeRelatedTo(thisArgumentType, signature.thisType, relation, errorNode, headMessage)) {
+                    return false;
+                }
+            }
+            const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             const argCount = getEffectiveArgumentCount(node, args, signature);
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
@@ -10158,7 +10248,6 @@ namespace ts {
 
                     // Use argument expression as error location when reporting errors
                     const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
-                    const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
                     if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
                         return false;
                     }
@@ -10166,6 +10255,21 @@ namespace ts {
             }
 
             return true;
+        }
+
+        /**
+         * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
+         */
+        function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression {
+            if (node.kind === SyntaxKind.CallExpression) {
+                const callee = (<CallExpression>node).expression;
+                if (callee.kind === SyntaxKind.PropertyAccessExpression) {
+                    return (callee as PropertyAccessExpression).expression;
+                }
+                else if (callee.kind === SyntaxKind.ElementAccessExpression) {
+                    return (callee as ElementAccessExpression).expression;
+                }
+            }
         }
 
         /**
@@ -10825,12 +10929,15 @@ namespace ts {
             // If expressionType's apparent type is an object type with no construct signatures but
             // one or more call signatures, the expression is processed as a function call. A compile-time
             // error occurs if the result of the function call is not Void. The type of the result of the
-            // operation is Any.
+            // operation is Any. It is an error to have a Void this type.
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray);
                 if (getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
+                }
+                if (signature.thisType === voidType) {
+                    error(node, Diagnostics.A_function_that_is_called_with_the_new_keyword_cannot_have_a_this_type_that_is_void);
                 }
                 return signature;
             }
@@ -12313,6 +12420,17 @@ namespace ts {
             }
             if (node.questionToken && isBindingPattern(node.name) && func.body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
+            }
+            if ((<Identifier>node.name).text === "this") {
+                if (indexOf(func.parameters, node) !== 0) {
+                    error(node, Diagnostics.A_this_parameter_must_be_the_first_parameter);
+                }
+                if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
+                    error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
+                }
+                if (func.kind === SyntaxKind.SetAccessor) {
+                    error(node, Diagnostics.A_setter_cannot_have_a_this_parameter);
+                }
             }
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are

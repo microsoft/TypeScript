@@ -2957,4 +2957,13 @@ namespace ts {
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
         return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
+
+    export function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    export function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return str.indexOf(suffix, expectedPos) === expectedPos;
+    }
 }
