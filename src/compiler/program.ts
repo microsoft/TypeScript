@@ -644,7 +644,8 @@ namespace ts {
             fileExists: fileName => sys.fileExists(fileName),
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
-            directoryExists: directoryName => sys.directoryExists(directoryName)
+            directoryExists: directoryName => sys.directoryExists(directoryName),
+            getEnvironmentVariable: sys.getEnvironmentVariable
         };
     }
 
@@ -995,7 +996,7 @@ namespace ts {
             const start = new Date().getTime();
 
             // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
-            if (/^(y(es)?|t(rue|ransforms?)?|1|\+)$/i.test(sys.getEnvironmentVariable("USE_TRANSFORMS"))) {
+            if (/^(y(es)?|t(rue|ransforms?)?|1|\+)$/i.test(getEnvironmentVariable("USE_TRANSFORMS", host))) {
                 options.experimentalTransforms = true;
             }
 

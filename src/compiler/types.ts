@@ -2805,6 +2805,7 @@ namespace ts {
          * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        getEnvironmentVariable?(name: string): string;
     }
 
     /* @internal */

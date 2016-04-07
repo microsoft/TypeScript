@@ -1681,7 +1681,7 @@ namespace Harness {
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
 
-if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+if (ts.sys && ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }
 

@@ -74,6 +74,7 @@ namespace ts {
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        getEnvironmentVariable?(name: string): string;
     };
 
     export var sys: System = (function () {
@@ -632,9 +633,7 @@ namespace ts {
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
-                getEnvironmentVariable(name: string) {
-                    return "";
-                },
+                getEnvironmentVariable: ChakraHost.getEnvironmentVariable || ((name: string) => ""),
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
             };
