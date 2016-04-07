@@ -878,18 +878,18 @@ interface ANGLE_instanced_arrays {
     drawArraysInstancedANGLE(mode: number, first: number, count: number, primcount: number): void;
     drawElementsInstancedANGLE(mode: number, count: number, type: number, offset: number, primcount: number): void;
     vertexAttribDivisorANGLE(index: number, divisor: number): void;
-    VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: number;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: number;
 }
 
 declare var ANGLE_instanced_arrays: {
     prototype: ANGLE_instanced_arrays;
     new(): ANGLE_instanced_arrays;
-    VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: number;
+    readonly VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: number;
 }
 
 interface AnalyserNode extends AudioNode {
     fftSize: number;
-    frequencyBinCount: number;
+    readonly frequencyBinCount: number;
     maxDecibels: number;
     minDecibels: number;
     smoothingTimeConstant: number;
@@ -905,8 +905,8 @@ declare var AnalyserNode: {
 }
 
 interface AnimationEvent extends Event {
-    animationName: string;
-    elapsedTime: number;
+    readonly animationName: string;
+    readonly elapsedTime: number;
     initAnimationEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, animationNameArg: string, elapsedTimeArg: number): void;
 }
 
@@ -924,16 +924,16 @@ interface ApplicationCache extends EventTarget {
     onobsolete: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     onupdateready: (ev: Event) => any;
-    status: number;
+    readonly status: number;
     abort(): void;
     swapCache(): void;
     update(): void;
-    CHECKING: number;
-    DOWNLOADING: number;
-    IDLE: number;
-    OBSOLETE: number;
-    UNCACHED: number;
-    UPDATEREADY: number;
+    readonly CHECKING: number;
+    readonly DOWNLOADING: number;
+    readonly IDLE: number;
+    readonly OBSOLETE: number;
+    readonly UNCACHED: number;
+    readonly UPDATEREADY: number;
     addEventListener(type: "cached", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "checking", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "downloading", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -948,16 +948,16 @@ interface ApplicationCache extends EventTarget {
 declare var ApplicationCache: {
     prototype: ApplicationCache;
     new(): ApplicationCache;
-    CHECKING: number;
-    DOWNLOADING: number;
-    IDLE: number;
-    OBSOLETE: number;
-    UNCACHED: number;
-    UPDATEREADY: number;
+    readonly CHECKING: number;
+    readonly DOWNLOADING: number;
+    readonly IDLE: number;
+    readonly OBSOLETE: number;
+    readonly UNCACHED: number;
+    readonly UPDATEREADY: number;
 }
 
 interface AriaRequestEvent extends Event {
-    attributeName: string;
+    readonly attributeName: string;
     attributeValue: string;
 }
 
@@ -967,10 +967,10 @@ declare var AriaRequestEvent: {
 }
 
 interface Attr extends Node {
-    name: string;
-    ownerElement: Element;
-    prefix: string;
-    specified: boolean;
+    readonly name: string;
+    readonly ownerElement: Element;
+    readonly prefix: string;
+    readonly specified: boolean;
     value: string;
 }
 
@@ -980,10 +980,10 @@ declare var Attr: {
 }
 
 interface AudioBuffer {
-    duration: number;
-    length: number;
-    numberOfChannels: number;
-    sampleRate: number;
+    readonly duration: number;
+    readonly length: number;
+    readonly numberOfChannels: number;
+    readonly sampleRate: number;
     copyFromChannel(destination: Float32Array, channelNumber: number, startInChannel?: number): void;
     copyToChannel(source: Float32Array, channelNumber: number, startInChannel?: number): void;
     getChannelData(channel: number): Float32Array;
@@ -996,12 +996,12 @@ declare var AudioBuffer: {
 
 interface AudioBufferSourceNode extends AudioNode {
     buffer: AudioBuffer;
-    detune: AudioParam;
+    readonly detune: AudioParam;
     loop: boolean;
     loopEnd: number;
     loopStart: number;
     onended: (ev: MediaStreamErrorEvent) => any;
-    playbackRate: AudioParam;
+    readonly playbackRate: AudioParam;
     start(when?: number, offset?: number, duration?: number): void;
     stop(when?: number): void;
     addEventListener(type: "ended", listener: (ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
@@ -1014,10 +1014,10 @@ declare var AudioBufferSourceNode: {
 }
 
 interface AudioContext extends EventTarget {
-    currentTime: number;
-    destination: AudioDestinationNode;
-    listener: AudioListener;
-    sampleRate: number;
+    readonly currentTime: number;
+    readonly destination: AudioDestinationNode;
+    readonly listener: AudioListener;
+    readonly sampleRate: number;
     state: string;
     createAnalyser(): AnalyserNode;
     createBiquadFilter(): BiquadFilterNode;
@@ -1046,7 +1046,7 @@ declare var AudioContext: {
 }
 
 interface AudioDestinationNode extends AudioNode {
-    maxChannelCount: number;
+    readonly maxChannelCount: number;
 }
 
 declare var AudioDestinationNode: {
@@ -1071,9 +1071,9 @@ interface AudioNode extends EventTarget {
     channelCount: number;
     channelCountMode: string;
     channelInterpretation: string;
-    context: AudioContext;
-    numberOfInputs: number;
-    numberOfOutputs: number;
+    readonly context: AudioContext;
+    readonly numberOfInputs: number;
+    readonly numberOfOutputs: number;
     connect(destination: AudioNode, output?: number, input?: number): void;
     disconnect(output?: number): void;
     disconnect(destination: AudioNode, output?: number, input?: number): void;
@@ -1086,7 +1086,7 @@ declare var AudioNode: {
 }
 
 interface AudioParam {
-    defaultValue: number;
+    readonly defaultValue: number;
     value: number;
     cancelScheduledValues(startTime: number): void;
     exponentialRampToValueAtTime(value: number, endTime: number): void;
@@ -1102,9 +1102,9 @@ declare var AudioParam: {
 }
 
 interface AudioProcessingEvent extends Event {
-    inputBuffer: AudioBuffer;
-    outputBuffer: AudioBuffer;
-    playbackTime: number;
+    readonly inputBuffer: AudioBuffer;
+    readonly outputBuffer: AudioBuffer;
+    readonly playbackTime: number;
 }
 
 declare var AudioProcessingEvent: {
@@ -1114,11 +1114,11 @@ declare var AudioProcessingEvent: {
 
 interface AudioTrack {
     enabled: boolean;
-    id: string;
+    readonly id: string;
     kind: string;
-    label: string;
+    readonly label: string;
     language: string;
-    sourceBuffer: SourceBuffer;
+    readonly sourceBuffer: SourceBuffer;
 }
 
 declare var AudioTrack: {
@@ -1127,7 +1127,7 @@ declare var AudioTrack: {
 }
 
 interface AudioTrackList extends EventTarget {
-    length: number;
+    readonly length: number;
     onaddtrack: (ev: TrackEvent) => any;
     onchange: (ev: Event) => any;
     onremovetrack: (ev: TrackEvent) => any;
@@ -1146,7 +1146,7 @@ declare var AudioTrackList: {
 }
 
 interface BarProp {
-    visible: boolean;
+    readonly visible: boolean;
 }
 
 declare var BarProp: {
@@ -1164,10 +1164,10 @@ declare var BeforeUnloadEvent: {
 }
 
 interface BiquadFilterNode extends AudioNode {
-    Q: AudioParam;
-    detune: AudioParam;
-    frequency: AudioParam;
-    gain: AudioParam;
+    readonly Q: AudioParam;
+    readonly detune: AudioParam;
+    readonly frequency: AudioParam;
+    readonly gain: AudioParam;
     type: string;
     getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
 }
@@ -1178,8 +1178,8 @@ declare var BiquadFilterNode: {
 }
 
 interface Blob {
-    size: number;
-    type: string;
+    readonly size: number;
+    readonly type: string;
     msClose(): void;
     msDetachStream(): any;
     slice(start?: number, end?: number, contentType?: string): Blob;
@@ -1213,7 +1213,7 @@ declare var CSSConditionRule: {
 }
 
 interface CSSFontFaceRule extends CSSRule {
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
 }
 
 declare var CSSFontFaceRule: {
@@ -1222,7 +1222,7 @@ declare var CSSFontFaceRule: {
 }
 
 interface CSSGroupingRule extends CSSRule {
-    cssRules: CSSRuleList;
+    readonly cssRules: CSSRuleList;
     deleteRule(index: number): void;
     insertRule(rule: string, index: number): number;
 }
@@ -1233,9 +1233,9 @@ declare var CSSGroupingRule: {
 }
 
 interface CSSImportRule extends CSSRule {
-    href: string;
-    media: MediaList;
-    styleSheet: CSSStyleSheet;
+    readonly href: string;
+    readonly media: MediaList;
+    readonly styleSheet: CSSStyleSheet;
 }
 
 declare var CSSImportRule: {
@@ -1245,7 +1245,7 @@ declare var CSSImportRule: {
 
 interface CSSKeyframeRule extends CSSRule {
     keyText: string;
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
 }
 
 declare var CSSKeyframeRule: {
@@ -1254,7 +1254,7 @@ declare var CSSKeyframeRule: {
 }
 
 interface CSSKeyframesRule extends CSSRule {
-    cssRules: CSSRuleList;
+    readonly cssRules: CSSRuleList;
     name: string;
     appendRule(rule: string): void;
     deleteRule(rule: string): void;
@@ -1267,7 +1267,7 @@ declare var CSSKeyframesRule: {
 }
 
 interface CSSMediaRule extends CSSConditionRule {
-    media: MediaList;
+    readonly media: MediaList;
 }
 
 declare var CSSMediaRule: {
@@ -1276,8 +1276,8 @@ declare var CSSMediaRule: {
 }
 
 interface CSSNamespaceRule extends CSSRule {
-    namespaceURI: string;
-    prefix: string;
+    readonly namespaceURI: string;
+    readonly prefix: string;
 }
 
 declare var CSSNamespaceRule: {
@@ -1286,10 +1286,10 @@ declare var CSSNamespaceRule: {
 }
 
 interface CSSPageRule extends CSSRule {
-    pseudoClass: string;
-    selector: string;
+    readonly pseudoClass: string;
+    readonly selector: string;
     selectorText: string;
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
 }
 
 declare var CSSPageRule: {
@@ -1299,42 +1299,42 @@ declare var CSSPageRule: {
 
 interface CSSRule {
     cssText: string;
-    parentRule: CSSRule;
-    parentStyleSheet: CSSStyleSheet;
-    type: number;
-    CHARSET_RULE: number;
-    FONT_FACE_RULE: number;
-    IMPORT_RULE: number;
-    KEYFRAMES_RULE: number;
-    KEYFRAME_RULE: number;
-    MEDIA_RULE: number;
-    NAMESPACE_RULE: number;
-    PAGE_RULE: number;
-    STYLE_RULE: number;
-    SUPPORTS_RULE: number;
-    UNKNOWN_RULE: number;
-    VIEWPORT_RULE: number;
+    readonly parentRule: CSSRule;
+    readonly parentStyleSheet: CSSStyleSheet;
+    readonly type: number;
+    readonly CHARSET_RULE: number;
+    readonly FONT_FACE_RULE: number;
+    readonly IMPORT_RULE: number;
+    readonly KEYFRAMES_RULE: number;
+    readonly KEYFRAME_RULE: number;
+    readonly MEDIA_RULE: number;
+    readonly NAMESPACE_RULE: number;
+    readonly PAGE_RULE: number;
+    readonly STYLE_RULE: number;
+    readonly SUPPORTS_RULE: number;
+    readonly UNKNOWN_RULE: number;
+    readonly VIEWPORT_RULE: number;
 }
 
 declare var CSSRule: {
     prototype: CSSRule;
     new(): CSSRule;
-    CHARSET_RULE: number;
-    FONT_FACE_RULE: number;
-    IMPORT_RULE: number;
-    KEYFRAMES_RULE: number;
-    KEYFRAME_RULE: number;
-    MEDIA_RULE: number;
-    NAMESPACE_RULE: number;
-    PAGE_RULE: number;
-    STYLE_RULE: number;
-    SUPPORTS_RULE: number;
-    UNKNOWN_RULE: number;
-    VIEWPORT_RULE: number;
+    readonly CHARSET_RULE: number;
+    readonly FONT_FACE_RULE: number;
+    readonly IMPORT_RULE: number;
+    readonly KEYFRAMES_RULE: number;
+    readonly KEYFRAME_RULE: number;
+    readonly MEDIA_RULE: number;
+    readonly NAMESPACE_RULE: number;
+    readonly PAGE_RULE: number;
+    readonly STYLE_RULE: number;
+    readonly SUPPORTS_RULE: number;
+    readonly UNKNOWN_RULE: number;
+    readonly VIEWPORT_RULE: number;
 }
 
 interface CSSRuleList {
-    length: number;
+    readonly length: number;
     item(index: number): CSSRule;
     [index: number]: CSSRule;
 }
@@ -1467,7 +1467,7 @@ interface CSSStyleDeclaration {
     justifyContent: string;
     kerning: string;
     left: string;
-    length: number;
+    readonly length: number;
     letterSpacing: string;
     lightingColor: string;
     lineHeight: string;
@@ -1554,7 +1554,7 @@ interface CSSStyleDeclaration {
     pageBreakAfter: string;
     pageBreakBefore: string;
     pageBreakInside: string;
-    parentRule: CSSRule;
+    readonly parentRule: CSSRule;
     perspective: string;
     perspectiveOrigin: string;
     pointerEvents: string;
@@ -1691,9 +1691,9 @@ declare var CSSStyleDeclaration: {
 }
 
 interface CSSStyleRule extends CSSRule {
-    readOnly: boolean;
+    readonly readOnly: boolean;
     selectorText: string;
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
 }
 
 declare var CSSStyleRule: {
@@ -1702,18 +1702,18 @@ declare var CSSStyleRule: {
 }
 
 interface CSSStyleSheet extends StyleSheet {
-    cssRules: CSSRuleList;
+    readonly cssRules: CSSRuleList;
     cssText: string;
-    href: string;
-    id: string;
-    imports: StyleSheetList;
-    isAlternate: boolean;
-    isPrefAlternate: boolean;
-    ownerRule: CSSRule;
-    owningElement: Element;
-    pages: StyleSheetPageList;
-    readOnly: boolean;
-    rules: CSSRuleList;
+    readonly href: string;
+    readonly id: string;
+    readonly imports: StyleSheetList;
+    readonly isAlternate: boolean;
+    readonly isPrefAlternate: boolean;
+    readonly ownerRule: CSSRule;
+    readonly owningElement: Element;
+    readonly pages: StyleSheetPageList;
+    readonly readOnly: boolean;
+    readonly rules: CSSRuleList;
     addImport(bstrURL: string, lIndex?: number): number;
     addPageRule(bstrSelector: string, bstrStyle: string, lIndex?: number): number;
     addRule(bstrSelector: string, bstrStyle?: string, lIndex?: number): number;
@@ -1754,7 +1754,7 @@ declare var CanvasPattern: {
 }
 
 interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
-    canvas: HTMLCanvasElement;
+    readonly canvas: HTMLCanvasElement;
     fillStyle: string | CanvasGradient | CanvasPattern;
     font: string;
     globalAlpha: number;
@@ -1825,7 +1825,7 @@ declare var ChannelSplitterNode: {
 
 interface CharacterData extends Node, ChildNode {
     data: string;
-    length: number;
+    readonly length: number;
     appendData(arg: string): void;
     deleteData(offset: number, count: number): void;
     insertData(offset: number, arg: string): void;
@@ -1841,11 +1841,11 @@ declare var CharacterData: {
 
 interface ClientRect {
     bottom: number;
-    height: number;
+    readonly height: number;
     left: number;
     right: number;
     top: number;
-    width: number;
+    readonly width: number;
 }
 
 declare var ClientRect: {
@@ -1854,7 +1854,7 @@ declare var ClientRect: {
 }
 
 interface ClientRectList {
-    length: number;
+    readonly length: number;
     item(index: number): ClientRect;
     [index: number]: ClientRect;
 }
@@ -1865,7 +1865,7 @@ declare var ClientRectList: {
 }
 
 interface ClipboardEvent extends Event {
-    clipboardData: DataTransfer;
+    readonly clipboardData: DataTransfer;
 }
 
 declare var ClipboardEvent: {
@@ -1874,9 +1874,9 @@ declare var ClipboardEvent: {
 }
 
 interface CloseEvent extends Event {
-    code: number;
-    reason: string;
-    wasClean: boolean;
+    readonly code: number;
+    readonly reason: string;
+    readonly wasClean: boolean;
     initCloseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, wasCleanArg: boolean, codeArg: number, reasonArg: string): void;
 }
 
@@ -1886,8 +1886,8 @@ declare var CloseEvent: {
 }
 
 interface CommandEvent extends Event {
-    commandName: string;
-    detail: string;
+    readonly commandName: string;
+    readonly detail: string;
 }
 
 declare var CommandEvent: {
@@ -1905,8 +1905,8 @@ declare var Comment: {
 }
 
 interface CompositionEvent extends UIEvent {
-    data: string;
-    locale: string;
+    readonly data: string;
+    readonly locale: string;
     initCompositionEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, dataArg: string, locale: string): void;
 }
 
@@ -1956,13 +1956,13 @@ declare var ConvolverNode: {
 }
 
 interface Coordinates {
-    accuracy: number;
-    altitude: number;
-    altitudeAccuracy: number;
-    heading: number;
-    latitude: number;
-    longitude: number;
-    speed: number;
+    readonly accuracy: number;
+    readonly altitude: number;
+    readonly altitudeAccuracy: number;
+    readonly heading: number;
+    readonly latitude: number;
+    readonly longitude: number;
+    readonly speed: number;
 }
 
 declare var Coordinates: {
@@ -1971,7 +1971,7 @@ declare var Coordinates: {
 }
 
 interface Crypto extends Object, RandomSource {
-    subtle: SubtleCrypto;
+    readonly subtle: SubtleCrypto;
 }
 
 declare var Crypto: {
@@ -1980,10 +1980,10 @@ declare var Crypto: {
 }
 
 interface CryptoKey {
-    algorithm: KeyAlgorithm;
-    extractable: boolean;
-    type: string;
-    usages: string[];
+    readonly algorithm: KeyAlgorithm;
+    readonly extractable: boolean;
+    readonly type: string;
+    readonly usages: string[];
 }
 
 declare var CryptoKey: {
@@ -2002,7 +2002,7 @@ declare var CryptoKeyPair: {
 }
 
 interface CustomEvent extends Event {
-    detail: any;
+    readonly detail: any;
     initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: any): void;
 }
 
@@ -2012,7 +2012,7 @@ declare var CustomEvent: {
 }
 
 interface DOMError {
-    name: string;
+    readonly name: string;
     toString(): string;
 }
 
@@ -2022,69 +2022,69 @@ declare var DOMError: {
 }
 
 interface DOMException {
-    code: number;
-    message: string;
-    name: string;
+    readonly code: number;
+    readonly message: string;
+    readonly name: string;
     toString(): string;
-    ABORT_ERR: number;
-    DATA_CLONE_ERR: number;
-    DOMSTRING_SIZE_ERR: number;
-    HIERARCHY_REQUEST_ERR: number;
-    INDEX_SIZE_ERR: number;
-    INUSE_ATTRIBUTE_ERR: number;
-    INVALID_ACCESS_ERR: number;
-    INVALID_CHARACTER_ERR: number;
-    INVALID_MODIFICATION_ERR: number;
-    INVALID_NODE_TYPE_ERR: number;
-    INVALID_STATE_ERR: number;
-    NAMESPACE_ERR: number;
-    NETWORK_ERR: number;
-    NOT_FOUND_ERR: number;
-    NOT_SUPPORTED_ERR: number;
-    NO_DATA_ALLOWED_ERR: number;
-    NO_MODIFICATION_ALLOWED_ERR: number;
-    PARSE_ERR: number;
-    QUOTA_EXCEEDED_ERR: number;
-    SECURITY_ERR: number;
-    SERIALIZE_ERR: number;
-    SYNTAX_ERR: number;
-    TIMEOUT_ERR: number;
-    TYPE_MISMATCH_ERR: number;
-    URL_MISMATCH_ERR: number;
-    VALIDATION_ERR: number;
-    WRONG_DOCUMENT_ERR: number;
+    readonly ABORT_ERR: number;
+    readonly DATA_CLONE_ERR: number;
+    readonly DOMSTRING_SIZE_ERR: number;
+    readonly HIERARCHY_REQUEST_ERR: number;
+    readonly INDEX_SIZE_ERR: number;
+    readonly INUSE_ATTRIBUTE_ERR: number;
+    readonly INVALID_ACCESS_ERR: number;
+    readonly INVALID_CHARACTER_ERR: number;
+    readonly INVALID_MODIFICATION_ERR: number;
+    readonly INVALID_NODE_TYPE_ERR: number;
+    readonly INVALID_STATE_ERR: number;
+    readonly NAMESPACE_ERR: number;
+    readonly NETWORK_ERR: number;
+    readonly NOT_FOUND_ERR: number;
+    readonly NOT_SUPPORTED_ERR: number;
+    readonly NO_DATA_ALLOWED_ERR: number;
+    readonly NO_MODIFICATION_ALLOWED_ERR: number;
+    readonly PARSE_ERR: number;
+    readonly QUOTA_EXCEEDED_ERR: number;
+    readonly SECURITY_ERR: number;
+    readonly SERIALIZE_ERR: number;
+    readonly SYNTAX_ERR: number;
+    readonly TIMEOUT_ERR: number;
+    readonly TYPE_MISMATCH_ERR: number;
+    readonly URL_MISMATCH_ERR: number;
+    readonly VALIDATION_ERR: number;
+    readonly WRONG_DOCUMENT_ERR: number;
 }
 
 declare var DOMException: {
     prototype: DOMException;
     new(): DOMException;
-    ABORT_ERR: number;
-    DATA_CLONE_ERR: number;
-    DOMSTRING_SIZE_ERR: number;
-    HIERARCHY_REQUEST_ERR: number;
-    INDEX_SIZE_ERR: number;
-    INUSE_ATTRIBUTE_ERR: number;
-    INVALID_ACCESS_ERR: number;
-    INVALID_CHARACTER_ERR: number;
-    INVALID_MODIFICATION_ERR: number;
-    INVALID_NODE_TYPE_ERR: number;
-    INVALID_STATE_ERR: number;
-    NAMESPACE_ERR: number;
-    NETWORK_ERR: number;
-    NOT_FOUND_ERR: number;
-    NOT_SUPPORTED_ERR: number;
-    NO_DATA_ALLOWED_ERR: number;
-    NO_MODIFICATION_ALLOWED_ERR: number;
-    PARSE_ERR: number;
-    QUOTA_EXCEEDED_ERR: number;
-    SECURITY_ERR: number;
-    SERIALIZE_ERR: number;
-    SYNTAX_ERR: number;
-    TIMEOUT_ERR: number;
-    TYPE_MISMATCH_ERR: number;
-    URL_MISMATCH_ERR: number;
-    VALIDATION_ERR: number;
-    WRONG_DOCUMENT_ERR: number;
+    readonly ABORT_ERR: number;
+    readonly DATA_CLONE_ERR: number;
+    readonly DOMSTRING_SIZE_ERR: number;
+    readonly HIERARCHY_REQUEST_ERR: number;
+    readonly INDEX_SIZE_ERR: number;
+    readonly INUSE_ATTRIBUTE_ERR: number;
+    readonly INVALID_ACCESS_ERR: number;
+    readonly INVALID_CHARACTER_ERR: number;
+    readonly INVALID_MODIFICATION_ERR: number;
+    readonly INVALID_NODE_TYPE_ERR: number;
+    readonly INVALID_STATE_ERR: number;
+    readonly NAMESPACE_ERR: number;
+    readonly NETWORK_ERR: number;
+    readonly NOT_FOUND_ERR: number;
+    readonly NOT_SUPPORTED_ERR: number;
+    readonly NO_DATA_ALLOWED_ERR: number;
+    readonly NO_MODIFICATION_ALLOWED_ERR: number;
+    readonly PARSE_ERR: number;
+    readonly QUOTA_EXCEEDED_ERR: number;
+    readonly SECURITY_ERR: number;
+    readonly SERIALIZE_ERR: number;
+    readonly SYNTAX_ERR: number;
+    readonly TIMEOUT_ERR: number;
+    readonly TYPE_MISMATCH_ERR: number;
+    readonly URL_MISMATCH_ERR: number;
+    readonly VALIDATION_ERR: number;
+    readonly WRONG_DOCUMENT_ERR: number;
 }
 
 interface DOMImplementation {
@@ -2118,7 +2118,7 @@ declare var DOMSettableTokenList: {
 }
 
 interface DOMStringList {
-    length: number;
+    readonly length: number;
     contains(str: string): boolean;
     item(index: number): string;
     [index: number]: string;
@@ -2139,7 +2139,7 @@ declare var DOMStringMap: {
 }
 
 interface DOMTokenList {
-    length: number;
+    readonly length: number;
     add(...token: string[]): void;
     contains(token: string): boolean;
     item(index: number): string;
@@ -2166,9 +2166,9 @@ declare var DataCue: {
 interface DataTransfer {
     dropEffect: string;
     effectAllowed: string;
-    files: FileList;
-    items: DataTransferItemList;
-    types: DOMStringList;
+    readonly files: FileList;
+    readonly items: DataTransferItemList;
+    readonly types: DOMStringList;
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
@@ -2180,8 +2180,8 @@ declare var DataTransfer: {
 }
 
 interface DataTransferItem {
-    kind: string;
-    type: string;
+    readonly kind: string;
+    readonly type: string;
     getAsFile(): File;
     getAsString(_callback: FunctionStringCallback): void;
 }
@@ -2192,7 +2192,7 @@ declare var DataTransferItem: {
 }
 
 interface DataTransferItemList {
-    length: number;
+    readonly length: number;
     add(data: File): DataTransferItem;
     clear(): void;
     item(index: number): DataTransferItem;
@@ -2206,9 +2206,9 @@ declare var DataTransferItemList: {
 }
 
 interface DeferredPermissionRequest {
-    id: number;
-    type: string;
-    uri: string;
+    readonly id: number;
+    readonly type: string;
+    readonly uri: string;
     allow(): void;
     deny(): void;
 }
@@ -2219,7 +2219,7 @@ declare var DeferredPermissionRequest: {
 }
 
 interface DelayNode extends AudioNode {
-    delayTime: AudioParam;
+    readonly delayTime: AudioParam;
 }
 
 declare var DelayNode: {
@@ -2228,9 +2228,9 @@ declare var DelayNode: {
 }
 
 interface DeviceAcceleration {
-    x: number;
-    y: number;
-    z: number;
+    readonly x: number;
+    readonly y: number;
+    readonly z: number;
 }
 
 declare var DeviceAcceleration: {
@@ -2239,7 +2239,7 @@ declare var DeviceAcceleration: {
 }
 
 interface DeviceLightEvent extends Event {
-    value: number;
+    readonly value: number;
 }
 
 declare var DeviceLightEvent: {
@@ -2248,10 +2248,10 @@ declare var DeviceLightEvent: {
 }
 
 interface DeviceMotionEvent extends Event {
-    acceleration: DeviceAcceleration;
-    accelerationIncludingGravity: DeviceAcceleration;
-    interval: number;
-    rotationRate: DeviceRotationRate;
+    readonly acceleration: DeviceAcceleration;
+    readonly accelerationIncludingGravity: DeviceAcceleration;
+    readonly interval: number;
+    readonly rotationRate: DeviceRotationRate;
     initDeviceMotionEvent(type: string, bubbles: boolean, cancelable: boolean, acceleration: DeviceAccelerationDict, accelerationIncludingGravity: DeviceAccelerationDict, rotationRate: DeviceRotationRateDict, interval: number): void;
 }
 
@@ -2261,10 +2261,10 @@ declare var DeviceMotionEvent: {
 }
 
 interface DeviceOrientationEvent extends Event {
-    absolute: boolean;
-    alpha: number;
-    beta: number;
-    gamma: number;
+    readonly absolute: boolean;
+    readonly alpha: number;
+    readonly beta: number;
+    readonly gamma: number;
     initDeviceOrientationEvent(type: string, bubbles: boolean, cancelable: boolean, alpha: number, beta: number, gamma: number, absolute: boolean): void;
 }
 
@@ -2274,9 +2274,9 @@ declare var DeviceOrientationEvent: {
 }
 
 interface DeviceRotationRate {
-    alpha: number;
-    beta: number;
-    gamma: number;
+    readonly alpha: number;
+    readonly beta: number;
+    readonly gamma: number;
 }
 
 declare var DeviceRotationRate: {
@@ -2288,15 +2288,15 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Sets or gets the URL for the current document. 
       */
-    URL: string;
+    readonly URL: string;
     /**
       * Gets the URL for the document, stripped of any character encoding.
       */
-    URLUnencoded: string;
+    readonly URLUnencoded: string;
     /**
       * Gets the object that has the focus when the parent document has focus.
       */
-    activeElement: Element;
+    readonly activeElement: Element;
     /**
       * Sets or gets the color of all active links in the document.
       */
@@ -2304,15 +2304,15 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Returns a reference to the collection of elements contained by the object.
       */
-    all: HTMLAllCollection;
+    readonly all: HTMLAllCollection;
     /**
       * Retrieves a collection of all a objects that have a name and/or id property. Objects in this collection are in HTML source order.
       */
-    anchors: HTMLCollection;
+    anchors: HTMLCollectionOf<HTMLAnchorElement>;
     /**
       * Retrieves a collection of all applet objects in the document.
       */
-    applets: HTMLCollection;
+    applets: HTMLCollectionOf<HTMLAppletElement>;
     /**
       * Deprecated. Sets or retrieves a value that indicates the background color behind the object. 
       */
@@ -2321,7 +2321,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Specifies the beginning and end of the document body.
       */
     body: HTMLElement;
-    characterSet: string;
+    readonly characterSet: string;
     /**
       * Gets or sets the character set used to encode the object.
       */
@@ -2329,14 +2329,14 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Gets a value that indicates whether standards-compliant mode is switched on for the object.
       */
-    compatMode: string;
+    readonly compatMode: string;
     cookie: string;
-    currentScript: HTMLScriptElement | SVGScriptElement;
+    readonly currentScript: HTMLScriptElement | SVGScriptElement;
     /**
       * Gets the default character set from the current regional language settings.
       */
-    defaultCharset: string;
-    defaultView: Window;
+    readonly defaultCharset: string;
+    readonly defaultView: Window;
     /**
       * Sets or gets a value that indicates whether the document can be edited.
       */
@@ -2348,7 +2348,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Gets an object representing the document type declaration associated with the current document. 
       */
-    doctype: DocumentType;
+    readonly doctype: DocumentType;
     /**
       * Gets a reference to the root node of the document. 
       */
@@ -2360,7 +2360,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Retrieves a collection of all embed objects in the document.
       */
-    embeds: HTMLCollection;
+    embeds: HTMLCollectionOf<HTMLEmbedElement>;
     /**
       * Sets or gets the foreground (text) color of the document.
       */
@@ -2368,27 +2368,27 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Retrieves a collection, in source order, of all form objects in the document.
       */
-    forms: HTMLCollection;
-    fullscreenElement: Element;
-    fullscreenEnabled: boolean;
-    head: HTMLHeadElement;
-    hidden: boolean;
+    forms: HTMLCollectionOf<HTMLFormElement>;
+    readonly fullscreenElement: Element;
+    readonly fullscreenEnabled: boolean;
+    readonly head: HTMLHeadElement;
+    readonly hidden: boolean;
     /**
       * Retrieves a collection, in source order, of img objects in the document.
       */
-    images: HTMLCollection;
+    images: HTMLCollectionOf<HTMLImageElement>;
     /**
       * Gets the implementation object of the current document. 
       */
-    implementation: DOMImplementation;
+    readonly implementation: DOMImplementation;
     /**
       * Returns the character encoding used to create the webpage that is loaded into the document object.
       */
-    inputEncoding: string;
+    readonly inputEncoding: string;
     /**
       * Gets the date that the page was last modified, if the page supplies one. 
       */
-    lastModified: string;
+    readonly lastModified: string;
     /**
       * Sets or gets the color of the document links. 
       */
@@ -2396,11 +2396,11 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     /**
       * Retrieves a collection of all a objects that specify the href property and all area objects in the document.
       */
-    links: HTMLCollection;
+    links: HTMLCollectionOf<HTMLAnchorElement | HTMLAreaElement>;
     /**
       * Contains information about the current URL. 
       */
-    location: Location;
+    readonly location: Location;
     msCSSOMElementFloatMetrics: boolean;
     msCapsLockWarningOff: boolean;
     /**
@@ -2711,43 +2711,43 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     onwaiting: (ev: Event) => any;
     onwebkitfullscreenchange: (ev: Event) => any;
     onwebkitfullscreenerror: (ev: Event) => any;
-    plugins: HTMLCollection;
-    pointerLockElement: Element;
+    plugins: HTMLCollectionOf<HTMLEmbedElement>;
+    readonly pointerLockElement: Element;
     /**
       * Retrieves a value that indicates the current state of the object.
       */
-    readyState: string;
+    readonly readyState: string;
     /**
       * Gets the URL of the location that referred the user to the current page.
       */
-    referrer: string;
+    readonly referrer: string;
     /**
       * Gets the root svg element in the document hierarchy.
       */
-    rootElement: SVGSVGElement;
+    readonly rootElement: SVGSVGElement;
     /**
       * Retrieves a collection of all script objects in the document.
       */
-    scripts: HTMLCollection;
-    scrollingElement: Element;
+    scripts: HTMLCollectionOf<HTMLScriptElement>;
+    readonly scrollingElement: Element;
     /**
       * Retrieves a collection of styleSheet objects representing the style sheets that correspond to each instance of a link or style object in the document.
       */
-    styleSheets: StyleSheetList;
+    readonly styleSheets: StyleSheetList;
     /**
       * Contains the title of the document.
       */
     title: string;
-    visibilityState: string;
+    readonly visibilityState: string;
     /** 
       * Sets or gets the color of the links that the user has visited.
       */
     vlinkColor: string;
-    webkitCurrentFullScreenElement: Element;
-    webkitFullscreenElement: Element;
-    webkitFullscreenEnabled: boolean;
-    webkitIsFullScreen: boolean;
-    xmlEncoding: string;
+    readonly webkitCurrentFullScreenElement: Element;
+    readonly webkitFullscreenElement: Element;
+    readonly webkitFullscreenEnabled: boolean;
+    readonly webkitIsFullScreen: boolean;
+    readonly xmlEncoding: string;
     xmlStandalone: boolean;
     /**
       * Gets or sets the version attribute specified in the declaration of an XML document.
@@ -3182,8 +3182,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       */
     hasFocus(): boolean;
     importNode(importedNode: Node, deep: boolean): Node;
-    msElementsFromPoint(x: number, y: number): NodeList;
-    msElementsFromRect(left: number, top: number, width: number, height: number): NodeList;
+    msElementsFromPoint(x: number, y: number): NodeListOf<Element>;
+    msElementsFromRect(left: number, top: number, width: number, height: number): NodeListOf<Element>;
     /**
       * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
       * @param url Specifies a MIME type for the document.
@@ -3356,12 +3356,12 @@ declare var DocumentFragment: {
 }
 
 interface DocumentType extends Node, ChildNode {
-    entities: NamedNodeMap;
-    internalSubset: string;
-    name: string;
-    notations: NamedNodeMap;
-    publicId: string;
-    systemId: string;
+    readonly entities: NamedNodeMap;
+    readonly internalSubset: string;
+    readonly name: string;
+    readonly notations: NamedNodeMap;
+    readonly publicId: string;
+    readonly systemId: string;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -3371,7 +3371,7 @@ declare var DocumentType: {
 }
 
 interface DragEvent extends MouseEvent {
-    dataTransfer: DataTransfer;
+    readonly dataTransfer: DataTransfer;
     initDragEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, dataTransferArg: DataTransfer): void;
     msConvertURL(file: File, targetType: string, targetURL?: string): void;
 }
@@ -3382,12 +3382,12 @@ declare var DragEvent: {
 }
 
 interface DynamicsCompressorNode extends AudioNode {
-    attack: AudioParam;
-    knee: AudioParam;
-    ratio: AudioParam;
-    reduction: AudioParam;
-    release: AudioParam;
-    threshold: AudioParam;
+    readonly attack: AudioParam;
+    readonly knee: AudioParam;
+    readonly ratio: AudioParam;
+    readonly reduction: AudioParam;
+    readonly release: AudioParam;
+    readonly threshold: AudioParam;
 }
 
 declare var DynamicsCompressorNode: {
@@ -3404,27 +3404,27 @@ declare var EXT_frag_depth: {
 }
 
 interface EXT_texture_filter_anisotropic {
-    MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
-    TEXTURE_MAX_ANISOTROPY_EXT: number;
+    readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
+    readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
 declare var EXT_texture_filter_anisotropic: {
     prototype: EXT_texture_filter_anisotropic;
     new(): EXT_texture_filter_anisotropic;
-    MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
-    TEXTURE_MAX_ANISOTROPY_EXT: number;
+    readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: number;
+    readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
 interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode {
-    classList: DOMTokenList;
+    readonly classList: DOMTokenList;
     className: string;
-    clientHeight: number;
-    clientLeft: number;
-    clientTop: number;
-    clientWidth: number;
+    readonly clientHeight: number;
+    readonly clientLeft: number;
+    readonly clientTop: number;
+    readonly clientWidth: number;
     id: string;
     msContentZoomFactor: number;
-    msRegionOverflow: string;
+    readonly msRegionOverflow: string;
     onariarequest: (ev: AriaRequestEvent) => any;
     oncommand: (ev: CommandEvent) => any;
     ongotpointercapture: (ev: PointerEvent) => any;
@@ -3452,12 +3452,12 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     ontouchstart: (ev: TouchEvent) => any;
     onwebkitfullscreenchange: (ev: Event) => any;
     onwebkitfullscreenerror: (ev: Event) => any;
-    prefix: string;
-    scrollHeight: number;
+    readonly prefix: string;
+    readonly scrollHeight: number;
     scrollLeft: number;
     scrollTop: number;
-    scrollWidth: number;
-    tagName: string;
+    readonly scrollWidth: number;
+    readonly tagName: string;
     innerHTML: string;
     getAttribute(name?: string): string;
     getAttributeNS(namespaceURI: string, localName: string): string;
@@ -3713,11 +3713,11 @@ declare var Element: {
 }
 
 interface ErrorEvent extends Event {
-    colno: number;
-    error: any;
-    filename: string;
-    lineno: number;
-    message: string;
+    readonly colno: number;
+    readonly error: any;
+    readonly filename: string;
+    readonly lineno: number;
+    readonly message: string;
     initErrorEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, messageArg: string, filenameArg: string, linenoArg: number): void;
 }
 
@@ -3727,33 +3727,33 @@ declare var ErrorEvent: {
 }
 
 interface Event {
-    bubbles: boolean;
+    readonly bubbles: boolean;
     cancelBubble: boolean;
-    cancelable: boolean;
-    currentTarget: EventTarget;
-    defaultPrevented: boolean;
-    eventPhase: number;
-    isTrusted: boolean;
+    readonly cancelable: boolean;
+    readonly currentTarget: EventTarget;
+    readonly defaultPrevented: boolean;
+    readonly eventPhase: number;
+    readonly isTrusted: boolean;
     returnValue: boolean;
-    srcElement: Element;
-    target: EventTarget;
-    timeStamp: number;
-    type: string;
+    readonly srcElement: Element;
+    readonly target: EventTarget;
+    readonly timeStamp: number;
+    readonly type: string;
     initEvent(eventTypeArg: string, canBubbleArg: boolean, cancelableArg: boolean): void;
     preventDefault(): void;
     stopImmediatePropagation(): void;
     stopPropagation(): void;
-    AT_TARGET: number;
-    BUBBLING_PHASE: number;
-    CAPTURING_PHASE: number;
+    readonly AT_TARGET: number;
+    readonly BUBBLING_PHASE: number;
+    readonly CAPTURING_PHASE: number;
 }
 
 declare var Event: {
     prototype: Event;
     new(type: string, eventInitDict?: EventInit): Event;
-    AT_TARGET: number;
-    BUBBLING_PHASE: number;
-    CAPTURING_PHASE: number;
+    readonly AT_TARGET: number;
+    readonly BUBBLING_PHASE: number;
+    readonly CAPTURING_PHASE: number;
 }
 
 interface EventTarget {
@@ -3776,9 +3776,9 @@ declare var External: {
 }
 
 interface File extends Blob {
-    lastModifiedDate: any;
-    name: string;
-    webkitRelativePath: string;
+    readonly lastModifiedDate: any;
+    readonly name: string;
+    readonly webkitRelativePath: string;
 }
 
 declare var File: {
@@ -3787,7 +3787,7 @@ declare var File: {
 }
 
 interface FileList {
-    length: number;
+    readonly length: number;
     item(index: number): File;
     [index: number]: File;
 }
@@ -3798,7 +3798,7 @@ declare var FileList: {
 }
 
 interface FileReader extends EventTarget, MSBaseReader {
-    error: DOMError;
+    readonly error: DOMError;
     readAsArrayBuffer(blob: Blob): void;
     readAsBinaryString(blob: Blob): void;
     readAsDataURL(blob: Blob): void;
@@ -3812,7 +3812,7 @@ declare var FileReader: {
 }
 
 interface FocusEvent extends UIEvent {
-    relatedTarget: EventTarget;
+    readonly relatedTarget: EventTarget;
     initFocusEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, relatedTargetArg: EventTarget): void;
 }
 
@@ -3831,7 +3831,7 @@ declare var FormData: {
 }
 
 interface GainNode extends AudioNode {
-    gain: AudioParam;
+    readonly gain: AudioParam;
 }
 
 declare var GainNode: {
@@ -3840,13 +3840,13 @@ declare var GainNode: {
 }
 
 interface Gamepad {
-    axes: number[];
-    buttons: GamepadButton[];
-    connected: boolean;
-    id: string;
-    index: number;
-    mapping: string;
-    timestamp: number;
+    readonly axes: number[];
+    readonly buttons: GamepadButton[];
+    readonly connected: boolean;
+    readonly id: string;
+    readonly index: number;
+    readonly mapping: string;
+    readonly timestamp: number;
 }
 
 declare var Gamepad: {
@@ -3855,8 +3855,8 @@ declare var Gamepad: {
 }
 
 interface GamepadButton {
-    pressed: boolean;
-    value: number;
+    readonly pressed: boolean;
+    readonly value: number;
 }
 
 declare var GamepadButton: {
@@ -3865,7 +3865,7 @@ declare var GamepadButton: {
 }
 
 interface GamepadEvent extends Event {
-    gamepad: Gamepad;
+    readonly gamepad: Gamepad;
 }
 
 declare var GamepadEvent: {
@@ -3924,12 +3924,12 @@ interface HTMLAnchorElement extends HTMLElement {
       * Sets or retrieves the language code of the object.
       */
     hreflang: string;
-    mimeType: string;
+    readonly mimeType: string;
     /**
       * Sets or retrieves the shape of the object.
       */
     name: string;
-    nameProp: string;
+    readonly nameProp: string;
     /**
       * Contains the pathname of the URL.
       */
@@ -3942,7 +3942,7 @@ interface HTMLAnchorElement extends HTMLElement {
       * Contains the protocol of the URL.
       */
     protocol: string;
-    protocolLong: string;
+    readonly protocolLong: string;
     /**
       * Sets or retrieves the relationship between the object and the destination of the link.
       */
@@ -3984,7 +3984,7 @@ interface HTMLAppletElement extends HTMLElement {
     /**
       * Retrieves a string of the URL where the object tag can be found. This is often the href of the document that the object is in, or the value set by a base element.
       */
-    BaseHref: string;
+    readonly BaseHref: string;
     align: string;
     /**
       * Sets or retrieves a text alternative to the graphic.
@@ -4011,7 +4011,7 @@ interface HTMLAppletElement extends HTMLElement {
     /**
       * Address of a pointer to the document this page or frame contains. If there is no document, then null will be returned.
       */
-    contentDocument: Document;
+    readonly contentDocument: Document;
     /**
       * Sets or retrieves the URL that references the data of the object.
       */
@@ -4020,7 +4020,7 @@ interface HTMLAppletElement extends HTMLElement {
       * Sets or retrieves a character string that can be used to implement your own declare functionality for the object.
       */
     declare: boolean;
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the height of the object.
       */
@@ -4352,7 +4352,7 @@ interface HTMLButtonElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Overrides the action attribute (where the data on a form is sent) on the parent form element.
       */
@@ -4385,11 +4385,11 @@ interface HTMLButtonElement extends HTMLElement {
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     /** 
       * Sets or retrieves the default or selected value of the control.
       */
@@ -4397,7 +4397,7 @@ interface HTMLButtonElement extends HTMLElement {
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     /**
       * Returns whether a form will validate when it is submitted, without having to submit it.
       */
@@ -4451,11 +4451,11 @@ interface HTMLCollection {
     /**
       * Sets or retrieves the number of objects in a collection.
       */
-    length: number;
+    readonly length: number;
     /**
       * Retrieves an object from various collections.
       */
-    item(nameOrIndex?: any, optionalIndex?: any): Element;
+    item(index: number): Element;
     /**
       * Retrieves a select object or an object from an options collection.
       */
@@ -4478,7 +4478,7 @@ declare var HTMLDListElement: {
 }
 
 interface HTMLDataListElement extends HTMLElement {
-    options: HTMLCollection;
+    options: HTMLCollectionOf<HTMLOptionElement>;
 }
 
 declare var HTMLDataListElement: {
@@ -4521,22 +4521,22 @@ declare var HTMLDocument: {
 
 interface HTMLElement extends Element {
     accessKey: string;
-    children: HTMLCollection;
+    readonly children: HTMLCollection;
     contentEditable: string;
-    dataset: DOMStringMap;
+    readonly dataset: DOMStringMap;
     dir: string;
     draggable: boolean;
     hidden: boolean;
     hideFocus: boolean;
     innerHTML: string;
     innerText: string;
-    isContentEditable: boolean;
+    readonly isContentEditable: boolean;
     lang: string;
-    offsetHeight: number;
-    offsetLeft: number;
-    offsetParent: Element;
-    offsetTop: number;
-    offsetWidth: number;
+    readonly offsetHeight: number;
+    readonly offsetLeft: number;
+    readonly offsetParent: Element;
+    readonly offsetTop: number;
+    readonly offsetWidth: number;
     onabort: (ev: Event) => any;
     onactivate: (ev: UIEvent) => any;
     onbeforeactivate: (ev: UIEvent) => any;
@@ -4607,7 +4607,7 @@ interface HTMLElement extends Element {
     outerHTML: string;
     outerText: string;
     spellcheck: boolean;
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
     tabIndex: number;
     title: string;
     blur(): void;
@@ -4752,7 +4752,7 @@ interface HTMLEmbedElement extends HTMLElement, GetSVGDocument {
     /**
       * Gets the source associated with the media element for use by the PlayToManager.
       */
-    msPlayToSource: any;
+    readonly msPlayToSource: any;
     /**
       * Sets or retrieves the name of the object.
       */
@@ -4760,12 +4760,12 @@ interface HTMLEmbedElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves the palette used for the embedded document.
       */
-    palette: string;
+    readonly palette: string;
     /**
       * Retrieves the URL of the plug-in used to view an embedded document.
       */
-    pluginspage: string;
-    readyState: string;
+    readonly pluginspage: string;
+    readonly readyState: string;
     /**
       * Sets or retrieves a URL to be loaded by the object.
       */
@@ -4795,19 +4795,19 @@ interface HTMLFieldSetElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     /**
       * Returns whether a form will validate when it is submitted, without having to submit it.
       */
@@ -4853,7 +4853,7 @@ interface HTMLFormElement extends HTMLElement {
     /**
       * Retrieves a collection, in source order, of all controls in a given form.
       */
-    elements: HTMLCollection;
+    readonly elements: HTMLCollection;
     /**
       * Sets or retrieves the MIME encoding for the form.
       */
@@ -4865,7 +4865,7 @@ interface HTMLFormElement extends HTMLElement {
     /**
       * Sets or retrieves the number of objects in a collection.
       */
-    length: number;
+    readonly length: number;
     /**
       * Sets or retrieves how to send the form data to the server.
       */
@@ -4924,11 +4924,11 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves the document object of the page or frame.
       */
-    contentDocument: Document;
+    readonly contentDocument: Document;
     /**
       * Retrieves the object of the specified.
       */
-    contentWindow: Window;
+    readonly contentWindow: Window;
     /**
       * Sets or retrieves whether to display a border for the frame.
       */
@@ -5329,11 +5329,11 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves the document object of the page or frame.
       */
-    contentDocument: Document;
+    readonly contentDocument: Document;
     /**
       * Retrieves the object of the specified.
       */
-    contentWindow: Window;
+    readonly contentWindow: Window;
     /**
       * Sets or retrieves whether to display a border for the frame.
       */
@@ -5374,7 +5374,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
       * Raised when the object has been completely received from the server.
       */
     onload: (ev: Event) => any;
-    sandbox: DOMSettableTokenList;
+    readonly sandbox: DOMSettableTokenList;
     /**
       * Sets or retrieves whether the frame can be scrolled.
       */
@@ -5519,9 +5519,9 @@ interface HTMLImageElement extends HTMLElement {
     /**
       * Retrieves whether the object is fully loaded.
       */
-    complete: boolean;
+    readonly complete: boolean;
     crossOrigin: string;
-    currentSrc: string;
+    readonly currentSrc: string;
     /**
       * Sets or retrieves the height of the object.
       */
@@ -5551,7 +5551,7 @@ interface HTMLImageElement extends HTMLElement {
     /**
       * Gets the source associated with the media element for use by the PlayToManager.
       */
-    msPlayToSource: any;
+    readonly msPlayToSource: any;
     /**
       * Sets or retrieves the name of the object.
       */
@@ -5559,11 +5559,11 @@ interface HTMLImageElement extends HTMLElement {
     /**
       * The original height of the image resource before sizing.
       */
-    naturalHeight: number;
+    readonly naturalHeight: number;
     /**
       * The original width of the image resource before sizing.
       */
-    naturalWidth: number;
+    readonly naturalWidth: number;
     sizes: string;
     /**
       * The address or URL of the a media resource that is to be considered.
@@ -5582,8 +5582,8 @@ interface HTMLImageElement extends HTMLElement {
       * Sets or retrieves the width of the object.
       */
     width: number;
-    x: number;
-    y: number;
+    readonly x: number;
+    readonly y: number;
     msGetAsCastingSource(): any;
 }
 
@@ -5625,7 +5625,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Retrieves whether the object is fully loaded.
       */
-    complete: boolean;
+    readonly complete: boolean;
     /**
       * Sets or retrieves the state of the check box or radio button.
       */
@@ -5638,11 +5638,11 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Returns a FileList object on a file type input object.
       */
-    files: FileList;
+    readonly files: FileList;
     /**
       * Retrieves a reference to the form that the object is embedded in. 
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Overrides the action attribute (where the data on a form is sent) on the parent form element.
       */
@@ -5675,7 +5675,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Specifies the ID of a pre-defined datalist of options for an input element.
       */
-    list: HTMLElement;
+    readonly list: HTMLElement;
     /**
       * Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field.
       */
@@ -5739,11 +5739,11 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     /**
       * Returns the value of the data at the cursor's current position.
       */
@@ -5765,7 +5765,7 @@ interface HTMLInputElement extends HTMLElement {
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     minLength: number;
     /**
       * Returns whether a form will validate when it is submitted, without having to submit it.
@@ -5820,7 +5820,7 @@ interface HTMLLabelElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the object to which the given label object is assigned.
       */
@@ -5840,7 +5840,7 @@ interface HTMLLegendElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
 }
 
 declare var HTMLLegendElement: {
@@ -5895,7 +5895,7 @@ interface HTMLMapElement extends HTMLElement {
     /**
       * Retrieves a collection of the area objects defined for the given map object.
       */
-    areas: HTMLAreasCollection;
+    readonly areas: HTMLAreasCollection;
     /**
       * Sets or retrieves the name of the object.
       */
@@ -6042,7 +6042,7 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Returns an AudioTrackList object with the audio tracks for a given video element.
       */
-    audioTracks: AudioTrackList;
+    readonly audioTracks: AudioTrackList;
     /**
       * Gets or sets a value that indicates whether to start playing the media automatically.
       */
@@ -6050,7 +6050,7 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Gets a collection of buffered time ranges.
       */
-    buffered: TimeRanges;
+    readonly buffered: TimeRanges;
     /**
       * Gets or sets a flag that indicates whether the client provides a set of controls for the media (in case the developer does not include controls for the player).
       */
@@ -6059,7 +6059,7 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Gets the address or URL of the current media resource that is selected by IHTMLMediaElement.
       */
-    currentSrc: string;
+    readonly currentSrc: string;
     /**
       * Gets or sets the current playback position, in seconds.
       */
@@ -6072,20 +6072,20 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Returns the duration in seconds of the current media resource. A NaN value is returned if duration is not available, or Infinity if the media resource is streaming.
       */
-    duration: number;
+    readonly duration: number;
     /**
       * Gets information about whether the playback has ended or not.
       */
-    ended: boolean;
+    readonly ended: boolean;
     /**
       * Returns an object representing the current error state of the audio or video element.
       */
-    error: MediaError;
+    readonly error: MediaError;
     /**
       * Gets or sets a flag to specify whether playback should restart after it completes.
       */
     loop: boolean;
-    mediaKeys: MediaKeys;
+    readonly mediaKeys: MediaKeys;
     /**
       * Specifies the purpose of the audio or video media, such as background audio or alerts.
       */
@@ -6094,11 +6094,11 @@ interface HTMLMediaElement extends HTMLElement {
       * Specifies the output device id that the audio will be sent to.
       */
     msAudioDeviceType: string;
-    msGraphicsTrustStatus: MSGraphicsTrust;
+    readonly msGraphicsTrustStatus: MSGraphicsTrust;
     /**
       * Gets the MSMediaKeys object, which is used for decrypting media data, that is associated with this media element.
       */
-    msKeys: MSMediaKeys;
+    readonly msKeys: MSMediaKeys;
     /**
       * Gets or sets whether the DLNA PlayTo device is available.
       */
@@ -6114,7 +6114,7 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Gets the source associated with the media element for use by the PlayToManager.
       */
-    msPlayToSource: any;
+    readonly msPlayToSource: any;
     /**
       * Specifies whether or not to enable low-latency playback on the media element.
       */
@@ -6126,13 +6126,13 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Gets the current network activity for the element.
       */
-    networkState: number;
+    readonly networkState: number;
     onencrypted: (ev: MediaEncryptedEvent) => any;
     onmsneedkey: (ev: MSMediaKeyNeededEvent) => any;
     /**
       * Gets a flag that specifies whether playback is paused.
       */
-    paused: boolean;
+    readonly paused: boolean;
     /**
       * Gets or sets the current rate of speed for the media resource to play. This speed is expressed as a multiple of the normal speed of the media resource.
       */
@@ -6140,7 +6140,7 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Gets TimeRanges for the current media resource that has been played.
       */
-    played: TimeRanges;
+    readonly played: TimeRanges;
     /**
       * Gets or sets the current playback position, in seconds.
       */
@@ -6149,18 +6149,18 @@ interface HTMLMediaElement extends HTMLElement {
     /**
       * Returns a TimeRanges object that represents the ranges of the current media resource that can be seeked.
       */
-    seekable: TimeRanges;
+    readonly seekable: TimeRanges;
     /**
       * Gets a flag that indicates whether the the client is currently moving to a new playback position in the media resource.
       */
-    seeking: boolean;
+    readonly seeking: boolean;
     /**
       * The address or URL of the a media resource that is to be considered.
       */
     src: string;
     srcObject: MediaStream;
-    textTracks: TextTrackList;
-    videoTracks: VideoTrackList;
+    readonly textTracks: TextTrackList;
+    readonly videoTracks: VideoTrackList;
     /**
       * Gets or sets the volume level for audio portions of the media element.
       */
@@ -6197,15 +6197,15 @@ interface HTMLMediaElement extends HTMLElement {
       */
     play(): void;
     setMediaKeys(mediaKeys: MediaKeys): PromiseLike<void>;
-    HAVE_CURRENT_DATA: number;
-    HAVE_ENOUGH_DATA: number;
-    HAVE_FUTURE_DATA: number;
-    HAVE_METADATA: number;
-    HAVE_NOTHING: number;
-    NETWORK_EMPTY: number;
-    NETWORK_IDLE: number;
-    NETWORK_LOADING: number;
-    NETWORK_NO_SOURCE: number;
+    readonly HAVE_CURRENT_DATA: number;
+    readonly HAVE_ENOUGH_DATA: number;
+    readonly HAVE_FUTURE_DATA: number;
+    readonly HAVE_METADATA: number;
+    readonly HAVE_NOTHING: number;
+    readonly NETWORK_EMPTY: number;
+    readonly NETWORK_IDLE: number;
+    readonly NETWORK_LOADING: number;
+    readonly NETWORK_NO_SOURCE: number;
     addEventListener(type: "MSContentZoom", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -6317,15 +6317,15 @@ interface HTMLMediaElement extends HTMLElement {
 declare var HTMLMediaElement: {
     prototype: HTMLMediaElement;
     new(): HTMLMediaElement;
-    HAVE_CURRENT_DATA: number;
-    HAVE_ENOUGH_DATA: number;
-    HAVE_FUTURE_DATA: number;
-    HAVE_METADATA: number;
-    HAVE_NOTHING: number;
-    NETWORK_EMPTY: number;
-    NETWORK_IDLE: number;
-    NETWORK_LOADING: number;
-    NETWORK_NO_SOURCE: number;
+    readonly HAVE_CURRENT_DATA: number;
+    readonly HAVE_ENOUGH_DATA: number;
+    readonly HAVE_FUTURE_DATA: number;
+    readonly HAVE_METADATA: number;
+    readonly HAVE_NOTHING: number;
+    readonly NETWORK_EMPTY: number;
+    readonly NETWORK_IDLE: number;
+    readonly NETWORK_LOADING: number;
+    readonly NETWORK_NO_SOURCE: number;
 }
 
 interface HTMLMenuElement extends HTMLElement {
@@ -6418,7 +6418,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves a string of the URL where the object tag can be found. This is often the href of the document that the object is in, or the value set by a base element.
       */
-    BaseHref: string;
+    readonly BaseHref: string;
     align: string;
     /**
       * Sets or retrieves a text alternative to the graphic.
@@ -6448,7 +6448,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves the document object of the page or frame.
       */
-    contentDocument: Document;
+    readonly contentDocument: Document;
     /**
       * Sets or retrieves the URL that references the data of the object.
       */
@@ -6457,7 +6457,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the height of the object.
       */
@@ -6478,7 +6478,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Gets the source associated with the media element for use by the PlayToManager.
       */
-    msPlayToSource: any;
+    readonly msPlayToSource: any;
     /**
       * Sets or retrieves the name of the object.
       */
@@ -6486,8 +6486,8 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Retrieves the contained object.
       */
-    object: any;
-    readyState: number;
+    readonly object: any;
+    readonly readyState: number;
     /**
       * Sets or retrieves a message to be displayed while an object is loading.
       */
@@ -6503,11 +6503,11 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     vspace: number;
     /**
       * Sets or retrieves the width of the object.
@@ -6516,7 +6516,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     /**
       * Returns whether a form will validate when it is submitted, without having to submit it.
       */
@@ -6543,11 +6543,11 @@ interface HTMLOptGroupElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the ordinal position of an option in a list box.
       */
-    index: number;
+    readonly index: number;
     /**
       * Sets or retrieves a value that you can use to implement your own label functionality for the object.
       */
@@ -6559,7 +6559,7 @@ interface HTMLOptGroupElement extends HTMLElement {
     /**
       * Sets or retrieves the text string specified by the option tag.
       */
-    text: string;
+    readonly text: string;
     /**
       * Sets or retrieves the value which is returned to the server when the form control is submitted.
       */
@@ -6580,11 +6580,11 @@ interface HTMLOptionElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the ordinal position of an option in a list box.
       */
-    index: number;
+    readonly index: number;
     /**
       * Sets or retrieves a value that you can use to implement your own label functionality for the object.
       */
@@ -6682,7 +6682,7 @@ interface HTMLProgressElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Defines the maximum, or "done" value for a progress element.
       */
@@ -6690,7 +6690,7 @@ interface HTMLProgressElement extends HTMLElement {
     /**
       * Returns the quotient of value/max when the value attribute is set (determinate progress bar), or -1 when the value attribute is missing (indeterminate progress bar).
       */
-    position: number;
+    readonly position: number;
     /**
       * Sets or gets the current value of a progress element. The value must be a non-negative number between 0 and the max value.
       */
@@ -6760,7 +6760,7 @@ interface HTMLSelectElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in. 
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the number of objects in a collection.
       */
@@ -6773,7 +6773,7 @@ interface HTMLSelectElement extends HTMLElement {
       * Sets or retrieves the name of the object.
       */
     name: string;
-    options: HTMLCollection;
+    options: HTMLCollectionOf<HTMLOptionElement>;
     /**
       * When present, marks an element that can't be submitted without a value.
       */
@@ -6782,7 +6782,7 @@ interface HTMLSelectElement extends HTMLElement {
       * Sets or retrieves the index of the selected option in a select object.
       */
     selectedIndex: number;
-    selectedOptions: HTMLCollection;
+    selectedOptions: HTMLCollectionOf<HTMLOptionElement>;
     /**
       * Sets or retrieves the number of rows in the list box. 
       */
@@ -6790,15 +6790,15 @@ interface HTMLSelectElement extends HTMLElement {
     /**
       * Retrieves the type of select control based on the value of the MULTIPLE attribute.
       */
-    type: string;
+    readonly type: string;
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     /**
       * Sets or retrieves the value which is returned to the server when the form control is submitted.
       */
@@ -6806,7 +6806,7 @@ interface HTMLSelectElement extends HTMLElement {
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     /**
       * Adds an element to the areas, controlRange, or options collection.
       * @param element Variant of type Number that specifies the index position in the collection where the element is placed. If no value is given, the method places the element at the end of the collection.
@@ -6928,7 +6928,7 @@ interface HTMLTableCellElement extends HTMLElement, HTMLTableAlignment {
     /**
       * Retrieves the position of the object in the cells collection of a row.
       */
-    cellIndex: number;
+    readonly cellIndex: number;
     /**
       * Sets or retrieves the number columns in the table that the object should span.
       */
@@ -7035,7 +7035,7 @@ interface HTMLTableElement extends HTMLElement {
     /**
       * Sets or retrieves the number of horizontal rows contained in the object.
       */
-    rows: HTMLCollection;
+    rows: HTMLCollectionOf<HTMLTableRowElement>;
     /**
       * Sets or retrieves which dividing lines (inner borders) are displayed.
       */
@@ -7047,7 +7047,7 @@ interface HTMLTableElement extends HTMLElement {
     /**
       * Retrieves a collection of all tBody objects in the table. Objects in this collection are in source order.
       */
-    tBodies: HTMLCollection;
+    tBodies: HTMLCollectionOf<HTMLTableSectionElement>;
     /**
       * Retrieves the tFoot object of the table.
       */
@@ -7126,7 +7126,7 @@ interface HTMLTableRowElement extends HTMLElement, HTMLTableAlignment {
     /**
       * Retrieves a collection of all cells in the table row.
       */
-    cells: HTMLCollection;
+    cells: HTMLCollectionOf<HTMLTableDataCellElement | HTMLTableHeaderCellElement>;
     /**
       * Sets or retrieves the height of the object.
       */
@@ -7134,11 +7134,11 @@ interface HTMLTableRowElement extends HTMLElement, HTMLTableAlignment {
     /**
       * Retrieves the position of the object in the rows collection for the table.
       */
-    rowIndex: number;
+    readonly rowIndex: number;
     /**
       * Retrieves the position of the object in the collection.
       */
-    sectionRowIndex: number;
+    readonly sectionRowIndex: number;
     /**
       * Removes the specified cell from the table row, as well as from the cells collection.
       * @param index Number that specifies the zero-based position of the cell to remove from the table row. If no value is provided, the last cell in the cells collection is deleted.
@@ -7148,7 +7148,7 @@ interface HTMLTableRowElement extends HTMLElement, HTMLTableAlignment {
       * Creates a new cell in the table row, and adds the cell to the cells collection.
       * @param index Number that specifies where to insert the cell in the tr. The default value is -1, which appends the new cell to the end of the cells collection.
       */
-    insertCell(index?: number): HTMLTableCellElement;
+    insertCell(index?: number): HTMLTableDataCellElement;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -7165,7 +7165,7 @@ interface HTMLTableSectionElement extends HTMLElement, HTMLTableAlignment {
     /**
       * Sets or retrieves the number of horizontal rows contained in the object.
       */
-    rows: HTMLCollection;
+    rows: HTMLCollectionOf<HTMLTableRowElement>;
     /**
       * Removes the specified row (tr) from the element and from the rows collection.
       * @param index Number that specifies the zero-based position in the rows collection of the row to remove.
@@ -7185,7 +7185,7 @@ declare var HTMLTableSectionElement: {
 }
 
 interface HTMLTemplateElement extends HTMLElement {
-    content: DocumentFragment;
+    readonly content: DocumentFragment;
 }
 
 declare var HTMLTemplateElement: {
@@ -7210,7 +7210,7 @@ interface HTMLTextAreaElement extends HTMLElement {
     /**
       * Retrieves a reference to the form that the object is embedded in.
       */
-    form: HTMLFormElement;
+    readonly form: HTMLFormElement;
     /**
       * Sets or retrieves the maximum number of characters that the user can enter in a text control.
       */
@@ -7250,15 +7250,15 @@ interface HTMLTextAreaElement extends HTMLElement {
     /**
       * Retrieves the type of control.
       */
-    type: string;
+    readonly type: string;
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
-    validationMessage: string;
+    readonly validationMessage: string;
     /**
       * Returns a  ValidityState object that represents the validity states of an element.
       */
-    validity: ValidityState;
+    readonly validity: ValidityState;
     /**
       * Retrieves or sets the text in the entry field of the textArea element.
       */
@@ -7266,7 +7266,7 @@ interface HTMLTextAreaElement extends HTMLElement {
     /**
       * Returns whether an element will successfully validate based on forms validation rules and constraints.
       */
-    willValidate: boolean;
+    readonly willValidate: boolean;
     /**
       * Sets or retrieves how to handle wordwrapping in the object.
       */
@@ -7314,23 +7314,23 @@ interface HTMLTrackElement extends HTMLElement {
     default: boolean;
     kind: string;
     label: string;
-    readyState: number;
+    readonly readyState: number;
     src: string;
     srclang: string;
-    track: TextTrack;
-    ERROR: number;
-    LOADED: number;
-    LOADING: number;
-    NONE: number;
+    readonly track: TextTrack;
+    readonly ERROR: number;
+    readonly LOADED: number;
+    readonly LOADING: number;
+    readonly NONE: number;
 }
 
 declare var HTMLTrackElement: {
     prototype: HTMLTrackElement;
     new(): HTMLTrackElement;
-    ERROR: number;
-    LOADED: number;
-    LOADING: number;
-    NONE: number;
+    readonly ERROR: number;
+    readonly LOADED: number;
+    readonly LOADING: number;
+    readonly NONE: number;
 }
 
 interface HTMLUListElement extends HTMLElement {
@@ -7357,8 +7357,8 @@ interface HTMLVideoElement extends HTMLMediaElement {
       */
     height: number;
     msHorizontalMirror: boolean;
-    msIsLayoutOptimalForPlayback: boolean;
-    msIsStereo3D: boolean;
+    readonly msIsLayoutOptimalForPlayback: boolean;
+    readonly msIsStereo3D: boolean;
     msStereo3DPackingMode: string;
     msStereo3DRenderMode: string;
     msZoom: boolean;
@@ -7372,13 +7372,13 @@ interface HTMLVideoElement extends HTMLMediaElement {
     /**
       * Gets the intrinsic height of a video in CSS pixels, or zero if the dimensions are not known.
       */
-    videoHeight: number;
+    readonly videoHeight: number;
     /**
       * Gets the intrinsic width of a video in CSS pixels, or zero if the dimensions are not known.
       */
-    videoWidth: number;
-    webkitDisplayingFullscreen: boolean;
-    webkitSupportsFullscreen: boolean;
+    readonly videoWidth: number;
+    readonly webkitDisplayingFullscreen: boolean;
+    readonly webkitSupportsFullscreen: boolean;
     /**
       * Gets or sets the width of the video element.
       */
@@ -7508,8 +7508,8 @@ declare var HTMLVideoElement: {
 }
 
 interface HashChangeEvent extends Event {
-    newURL: string;
-    oldURL: string;
+    readonly newURL: string;
+    readonly oldURL: string;
 }
 
 declare var HashChangeEvent: {
@@ -7518,8 +7518,8 @@ declare var HashChangeEvent: {
 }
 
 interface History {
-    length: number;
-    state: any;
+    readonly length: number;
+    readonly state: any;
     back(distance?: any): void;
     forward(distance?: any): void;
     go(delta?: any): void;
@@ -7533,31 +7533,31 @@ declare var History: {
 }
 
 interface IDBCursor {
-    direction: string;
+    readonly direction: string;
     key: IDBKeyRange | IDBValidKey;
-    primaryKey: any;
+    readonly primaryKey: any;
     source: IDBObjectStore | IDBIndex;
     advance(count: number): void;
     continue(key?: IDBKeyRange | IDBValidKey): void;
     delete(): IDBRequest;
     update(value: any): IDBRequest;
-    NEXT: string;
-    NEXT_NO_DUPLICATE: string;
-    PREV: string;
-    PREV_NO_DUPLICATE: string;
+    readonly NEXT: string;
+    readonly NEXT_NO_DUPLICATE: string;
+    readonly PREV: string;
+    readonly PREV_NO_DUPLICATE: string;
 }
 
 declare var IDBCursor: {
     prototype: IDBCursor;
     new(): IDBCursor;
-    NEXT: string;
-    NEXT_NO_DUPLICATE: string;
-    PREV: string;
-    PREV_NO_DUPLICATE: string;
+    readonly NEXT: string;
+    readonly NEXT_NO_DUPLICATE: string;
+    readonly PREV: string;
+    readonly PREV_NO_DUPLICATE: string;
 }
 
 interface IDBCursorWithValue extends IDBCursor {
-    value: any;
+    readonly value: any;
 }
 
 declare var IDBCursorWithValue: {
@@ -7566,8 +7566,8 @@ declare var IDBCursorWithValue: {
 }
 
 interface IDBDatabase extends EventTarget {
-    name: string;
-    objectStoreNames: DOMStringList;
+    readonly name: string;
+    readonly objectStoreNames: DOMStringList;
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
     version: number;
@@ -7600,9 +7600,9 @@ declare var IDBFactory: {
 
 interface IDBIndex {
     keyPath: string | string[];
-    name: string;
-    objectStore: IDBObjectStore;
-    unique: boolean;
+    readonly name: string;
+    readonly objectStore: IDBObjectStore;
+    readonly unique: boolean;
     multiEntry: boolean;
     count(key?: IDBKeyRange | IDBValidKey): IDBRequest;
     get(key: IDBKeyRange | IDBValidKey): IDBRequest;
@@ -7617,10 +7617,10 @@ declare var IDBIndex: {
 }
 
 interface IDBKeyRange {
-    lower: any;
-    lowerOpen: boolean;
-    upper: any;
-    upperOpen: boolean;
+    readonly lower: any;
+    readonly lowerOpen: boolean;
+    readonly upper: any;
+    readonly upperOpen: boolean;
 }
 
 declare var IDBKeyRange: {
@@ -7633,10 +7633,10 @@ declare var IDBKeyRange: {
 }
 
 interface IDBObjectStore {
-    indexNames: DOMStringList;
+    readonly indexNames: DOMStringList;
     keyPath: string | string[];
-    name: string;
-    transaction: IDBTransaction;
+    readonly name: string;
+    readonly transaction: IDBTransaction;
     autoIncrement: boolean;
     add(value: any, key?: IDBKeyRange | IDBValidKey): IDBRequest;
     clear(): IDBRequest;
@@ -7671,13 +7671,13 @@ declare var IDBOpenDBRequest: {
 }
 
 interface IDBRequest extends EventTarget {
-    error: DOMError;
+    readonly error: DOMError;
     onerror: (ev: Event) => any;
     onsuccess: (ev: Event) => any;
-    readyState: string;
-    result: any;
+    readonly readyState: string;
+    readonly result: any;
     source: IDBObjectStore | IDBIndex | IDBCursor;
-    transaction: IDBTransaction;
+    readonly transaction: IDBTransaction;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -7689,17 +7689,17 @@ declare var IDBRequest: {
 }
 
 interface IDBTransaction extends EventTarget {
-    db: IDBDatabase;
-    error: DOMError;
-    mode: string;
+    readonly db: IDBDatabase;
+    readonly error: DOMError;
+    readonly mode: string;
     onabort: (ev: Event) => any;
     oncomplete: (ev: Event) => any;
     onerror: (ev: Event) => any;
     abort(): void;
     objectStore(name: string): IDBObjectStore;
-    READ_ONLY: string;
-    READ_WRITE: string;
-    VERSION_CHANGE: string;
+    readonly READ_ONLY: string;
+    readonly READ_WRITE: string;
+    readonly VERSION_CHANGE: string;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
@@ -7709,14 +7709,14 @@ interface IDBTransaction extends EventTarget {
 declare var IDBTransaction: {
     prototype: IDBTransaction;
     new(): IDBTransaction;
-    READ_ONLY: string;
-    READ_WRITE: string;
-    VERSION_CHANGE: string;
+    readonly READ_ONLY: string;
+    readonly READ_WRITE: string;
+    readonly VERSION_CHANGE: string;
 }
 
 interface IDBVersionChangeEvent extends Event {
-    newVersion: number;
-    oldVersion: number;
+    readonly newVersion: number;
+    readonly oldVersion: number;
 }
 
 declare var IDBVersionChangeEvent: {
@@ -7726,8 +7726,8 @@ declare var IDBVersionChangeEvent: {
 
 interface ImageData {
     data: Uint8ClampedArray;
-    height: number;
-    width: number;
+    readonly height: number;
+    readonly width: number;
 }
 
 declare var ImageData: {
@@ -7737,42 +7737,42 @@ declare var ImageData: {
 }
 
 interface KeyboardEvent extends UIEvent {
-    altKey: boolean;
-    char: string;
-    charCode: number;
-    ctrlKey: boolean;
-    key: string;
-    keyCode: number;
-    locale: string;
-    location: number;
-    metaKey: boolean;
-    repeat: boolean;
-    shiftKey: boolean;
-    which: number;
+    readonly altKey: boolean;
+    readonly char: string;
+    readonly charCode: number;
+    readonly ctrlKey: boolean;
+    readonly key: string;
+    readonly keyCode: number;
+    readonly locale: string;
+    readonly location: number;
+    readonly metaKey: boolean;
+    readonly repeat: boolean;
+    readonly shiftKey: boolean;
+    readonly which: number;
     getModifierState(keyArg: string): boolean;
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
-    DOM_KEY_LOCATION_JOYSTICK: number;
-    DOM_KEY_LOCATION_LEFT: number;
-    DOM_KEY_LOCATION_MOBILE: number;
-    DOM_KEY_LOCATION_NUMPAD: number;
-    DOM_KEY_LOCATION_RIGHT: number;
-    DOM_KEY_LOCATION_STANDARD: number;
+    readonly DOM_KEY_LOCATION_JOYSTICK: number;
+    readonly DOM_KEY_LOCATION_LEFT: number;
+    readonly DOM_KEY_LOCATION_MOBILE: number;
+    readonly DOM_KEY_LOCATION_NUMPAD: number;
+    readonly DOM_KEY_LOCATION_RIGHT: number;
+    readonly DOM_KEY_LOCATION_STANDARD: number;
 }
 
 declare var KeyboardEvent: {
     prototype: KeyboardEvent;
     new(typeArg: string, eventInitDict?: KeyboardEventInit): KeyboardEvent;
-    DOM_KEY_LOCATION_JOYSTICK: number;
-    DOM_KEY_LOCATION_LEFT: number;
-    DOM_KEY_LOCATION_MOBILE: number;
-    DOM_KEY_LOCATION_NUMPAD: number;
-    DOM_KEY_LOCATION_RIGHT: number;
-    DOM_KEY_LOCATION_STANDARD: number;
+    readonly DOM_KEY_LOCATION_JOYSTICK: number;
+    readonly DOM_KEY_LOCATION_LEFT: number;
+    readonly DOM_KEY_LOCATION_MOBILE: number;
+    readonly DOM_KEY_LOCATION_NUMPAD: number;
+    readonly DOM_KEY_LOCATION_RIGHT: number;
+    readonly DOM_KEY_LOCATION_STANDARD: number;
 }
 
 interface ListeningStateChangedEvent extends Event {
-    label: string;
-    state: string;
+    readonly label: string;
+    readonly state: string;
 }
 
 declare var ListeningStateChangedEvent: {
@@ -7785,7 +7785,7 @@ interface Location {
     host: string;
     hostname: string;
     href: string;
-    origin: string;
+    readonly origin: string;
     pathname: string;
     port: string;
     protocol: string;
@@ -7802,7 +7802,7 @@ declare var Location: {
 }
 
 interface LongRunningScriptDetectedEvent extends Event {
-    executionTime: number;
+    readonly executionTime: number;
     stopPageScriptExecution: boolean;
 }
 
@@ -7827,23 +7827,23 @@ interface MSApp {
     pageHandlesAllApplicationActivations(enabled: boolean): void;
     suppressSubdownloadCredentialPrompts(suppress: boolean): void;
     terminateApp(exceptionObject: any): void;
-    CURRENT: string;
-    HIGH: string;
-    IDLE: string;
-    NORMAL: string;
+    readonly CURRENT: string;
+    readonly HIGH: string;
+    readonly IDLE: string;
+    readonly NORMAL: string;
 }
 declare var MSApp: MSApp;
 
 interface MSAppAsyncOperation extends EventTarget {
-    error: DOMError;
+    readonly error: DOMError;
     oncomplete: (ev: Event) => any;
     onerror: (ev: Event) => any;
-    readyState: number;
-    result: any;
+    readonly readyState: number;
+    readonly result: any;
     start(): void;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
+    readonly COMPLETED: number;
+    readonly ERROR: number;
+    readonly STARTED: number;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -7852,14 +7852,14 @@ interface MSAppAsyncOperation extends EventTarget {
 declare var MSAppAsyncOperation: {
     prototype: MSAppAsyncOperation;
     new(): MSAppAsyncOperation;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
+    readonly COMPLETED: number;
+    readonly ERROR: number;
+    readonly STARTED: number;
 }
 
 interface MSAssertion {
-    id: string;
-    type: string;
+    readonly id: string;
+    readonly type: string;
 }
 
 declare var MSAssertion: {
@@ -7888,10 +7888,10 @@ declare var MSCredentials: {
 }
 
 interface MSFIDOCredentialAssertion extends MSAssertion {
-    algorithm: string | Algorithm;
-    attestation: any;
-    publicKey: string;
-    transportHints: string[];
+    readonly algorithm: string | Algorithm;
+    readonly attestation: any;
+    readonly publicKey: string;
+    readonly transportHints: string[];
 }
 
 declare var MSFIDOCredentialAssertion: {
@@ -7900,9 +7900,9 @@ declare var MSFIDOCredentialAssertion: {
 }
 
 interface MSFIDOSignature {
-    authnrData: string;
-    clientData: string;
-    signature: string;
+    readonly authnrData: string;
+    readonly clientData: string;
+    readonly signature: string;
 }
 
 declare var MSFIDOSignature: {
@@ -7911,7 +7911,7 @@ declare var MSFIDOSignature: {
 }
 
 interface MSFIDOSignatureAssertion extends MSAssertion {
-    signature: MSFIDOSignature;
+    readonly signature: MSFIDOSignature;
 }
 
 declare var MSFIDOSignatureAssertion: {
@@ -7931,44 +7931,44 @@ declare var MSGesture: {
 }
 
 interface MSGestureEvent extends UIEvent {
-    clientX: number;
-    clientY: number;
-    expansion: number;
-    gestureObject: any;
-    hwTimestamp: number;
-    offsetX: number;
-    offsetY: number;
-    rotation: number;
-    scale: number;
-    screenX: number;
-    screenY: number;
-    translationX: number;
-    translationY: number;
-    velocityAngular: number;
-    velocityExpansion: number;
-    velocityX: number;
-    velocityY: number;
+    readonly clientX: number;
+    readonly clientY: number;
+    readonly expansion: number;
+    readonly gestureObject: any;
+    readonly hwTimestamp: number;
+    readonly offsetX: number;
+    readonly offsetY: number;
+    readonly rotation: number;
+    readonly scale: number;
+    readonly screenX: number;
+    readonly screenY: number;
+    readonly translationX: number;
+    readonly translationY: number;
+    readonly velocityAngular: number;
+    readonly velocityExpansion: number;
+    readonly velocityX: number;
+    readonly velocityY: number;
     initGestureEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, offsetXArg: number, offsetYArg: number, translationXArg: number, translationYArg: number, scaleArg: number, expansionArg: number, rotationArg: number, velocityXArg: number, velocityYArg: number, velocityExpansionArg: number, velocityAngularArg: number, hwTimestampArg: number): void;
-    MSGESTURE_FLAG_BEGIN: number;
-    MSGESTURE_FLAG_CANCEL: number;
-    MSGESTURE_FLAG_END: number;
-    MSGESTURE_FLAG_INERTIA: number;
-    MSGESTURE_FLAG_NONE: number;
+    readonly MSGESTURE_FLAG_BEGIN: number;
+    readonly MSGESTURE_FLAG_CANCEL: number;
+    readonly MSGESTURE_FLAG_END: number;
+    readonly MSGESTURE_FLAG_INERTIA: number;
+    readonly MSGESTURE_FLAG_NONE: number;
 }
 
 declare var MSGestureEvent: {
     prototype: MSGestureEvent;
     new(): MSGestureEvent;
-    MSGESTURE_FLAG_BEGIN: number;
-    MSGESTURE_FLAG_CANCEL: number;
-    MSGESTURE_FLAG_END: number;
-    MSGESTURE_FLAG_INERTIA: number;
-    MSGESTURE_FLAG_NONE: number;
+    readonly MSGESTURE_FLAG_BEGIN: number;
+    readonly MSGESTURE_FLAG_CANCEL: number;
+    readonly MSGESTURE_FLAG_END: number;
+    readonly MSGESTURE_FLAG_INERTIA: number;
+    readonly MSGESTURE_FLAG_NONE: number;
 }
 
 interface MSGraphicsTrust {
-    constrictionActive: boolean;
-    status: string;
+    readonly constrictionActive: boolean;
+    readonly status: string;
 }
 
 declare var MSGraphicsTrust: {
@@ -7977,12 +7977,12 @@ declare var MSGraphicsTrust: {
 }
 
 interface MSHTMLWebViewElement extends HTMLElement {
-    canGoBack: boolean;
-    canGoForward: boolean;
-    containsFullScreenElement: boolean;
-    documentTitle: string;
+    readonly canGoBack: boolean;
+    readonly canGoForward: boolean;
+    readonly containsFullScreenElement: boolean;
+    readonly documentTitle: string;
     height: number;
-    settings: MSWebViewSettings;
+    readonly settings: MSWebViewSettings;
     src: string;
     width: number;
     addWebAllowedObject(name: string, applicationObject: any): void;
@@ -8008,12 +8008,12 @@ declare var MSHTMLWebViewElement: {
 }
 
 interface MSInputMethodContext extends EventTarget {
-    compositionEndOffset: number;
-    compositionStartOffset: number;
+    readonly compositionEndOffset: number;
+    readonly compositionStartOffset: number;
     oncandidatewindowhide: (ev: Event) => any;
     oncandidatewindowshow: (ev: Event) => any;
     oncandidatewindowupdate: (ev: Event) => any;
-    target: HTMLElement;
+    readonly target: HTMLElement;
     getCandidateWindowClientRect(): ClientRect;
     getCompositionAlternatives(): string[];
     hasComposition(): boolean;
@@ -8030,59 +8030,59 @@ declare var MSInputMethodContext: {
 }
 
 interface MSManipulationEvent extends UIEvent {
-    currentState: number;
-    inertiaDestinationX: number;
-    inertiaDestinationY: number;
-    lastState: number;
+    readonly currentState: number;
+    readonly inertiaDestinationX: number;
+    readonly inertiaDestinationY: number;
+    readonly lastState: number;
     initMSManipulationEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, lastState: number, currentState: number): void;
-    MS_MANIPULATION_STATE_ACTIVE: number;
-    MS_MANIPULATION_STATE_CANCELLED: number;
-    MS_MANIPULATION_STATE_COMMITTED: number;
-    MS_MANIPULATION_STATE_DRAGGING: number;
-    MS_MANIPULATION_STATE_INERTIA: number;
-    MS_MANIPULATION_STATE_PRESELECT: number;
-    MS_MANIPULATION_STATE_SELECTING: number;
-    MS_MANIPULATION_STATE_STOPPED: number;
+    readonly MS_MANIPULATION_STATE_ACTIVE: number;
+    readonly MS_MANIPULATION_STATE_CANCELLED: number;
+    readonly MS_MANIPULATION_STATE_COMMITTED: number;
+    readonly MS_MANIPULATION_STATE_DRAGGING: number;
+    readonly MS_MANIPULATION_STATE_INERTIA: number;
+    readonly MS_MANIPULATION_STATE_PRESELECT: number;
+    readonly MS_MANIPULATION_STATE_SELECTING: number;
+    readonly MS_MANIPULATION_STATE_STOPPED: number;
 }
 
 declare var MSManipulationEvent: {
     prototype: MSManipulationEvent;
     new(): MSManipulationEvent;
-    MS_MANIPULATION_STATE_ACTIVE: number;
-    MS_MANIPULATION_STATE_CANCELLED: number;
-    MS_MANIPULATION_STATE_COMMITTED: number;
-    MS_MANIPULATION_STATE_DRAGGING: number;
-    MS_MANIPULATION_STATE_INERTIA: number;
-    MS_MANIPULATION_STATE_PRESELECT: number;
-    MS_MANIPULATION_STATE_SELECTING: number;
-    MS_MANIPULATION_STATE_STOPPED: number;
+    readonly MS_MANIPULATION_STATE_ACTIVE: number;
+    readonly MS_MANIPULATION_STATE_CANCELLED: number;
+    readonly MS_MANIPULATION_STATE_COMMITTED: number;
+    readonly MS_MANIPULATION_STATE_DRAGGING: number;
+    readonly MS_MANIPULATION_STATE_INERTIA: number;
+    readonly MS_MANIPULATION_STATE_PRESELECT: number;
+    readonly MS_MANIPULATION_STATE_SELECTING: number;
+    readonly MS_MANIPULATION_STATE_STOPPED: number;
 }
 
 interface MSMediaKeyError {
-    code: number;
-    systemCode: number;
-    MS_MEDIA_KEYERR_CLIENT: number;
-    MS_MEDIA_KEYERR_DOMAIN: number;
-    MS_MEDIA_KEYERR_HARDWARECHANGE: number;
-    MS_MEDIA_KEYERR_OUTPUT: number;
-    MS_MEDIA_KEYERR_SERVICE: number;
-    MS_MEDIA_KEYERR_UNKNOWN: number;
+    readonly code: number;
+    readonly systemCode: number;
+    readonly MS_MEDIA_KEYERR_CLIENT: number;
+    readonly MS_MEDIA_KEYERR_DOMAIN: number;
+    readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
+    readonly MS_MEDIA_KEYERR_OUTPUT: number;
+    readonly MS_MEDIA_KEYERR_SERVICE: number;
+    readonly MS_MEDIA_KEYERR_UNKNOWN: number;
 }
 
 declare var MSMediaKeyError: {
     prototype: MSMediaKeyError;
     new(): MSMediaKeyError;
-    MS_MEDIA_KEYERR_CLIENT: number;
-    MS_MEDIA_KEYERR_DOMAIN: number;
-    MS_MEDIA_KEYERR_HARDWARECHANGE: number;
-    MS_MEDIA_KEYERR_OUTPUT: number;
-    MS_MEDIA_KEYERR_SERVICE: number;
-    MS_MEDIA_KEYERR_UNKNOWN: number;
+    readonly MS_MEDIA_KEYERR_CLIENT: number;
+    readonly MS_MEDIA_KEYERR_DOMAIN: number;
+    readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
+    readonly MS_MEDIA_KEYERR_OUTPUT: number;
+    readonly MS_MEDIA_KEYERR_SERVICE: number;
+    readonly MS_MEDIA_KEYERR_UNKNOWN: number;
 }
 
 interface MSMediaKeyMessageEvent extends Event {
-    destinationURL: string;
-    message: Uint8Array;
+    readonly destinationURL: string;
+    readonly message: Uint8Array;
 }
 
 declare var MSMediaKeyMessageEvent: {
@@ -8091,7 +8091,7 @@ declare var MSMediaKeyMessageEvent: {
 }
 
 interface MSMediaKeyNeededEvent extends Event {
-    initData: Uint8Array;
+    readonly initData: Uint8Array;
 }
 
 declare var MSMediaKeyNeededEvent: {
@@ -8100,9 +8100,9 @@ declare var MSMediaKeyNeededEvent: {
 }
 
 interface MSMediaKeySession extends EventTarget {
-    error: MSMediaKeyError;
-    keySystem: string;
-    sessionId: string;
+    readonly error: MSMediaKeyError;
+    readonly keySystem: string;
+    readonly sessionId: string;
     close(): void;
     update(key: Uint8Array): void;
 }
@@ -8113,7 +8113,7 @@ declare var MSMediaKeySession: {
 }
 
 interface MSMediaKeys {
-    keySystem: string;
+    readonly keySystem: string;
     createSession(type: string, initData: Uint8Array, cdmData?: Uint8Array): MSMediaKeySession;
 }
 
@@ -8125,18 +8125,18 @@ declare var MSMediaKeys: {
 }
 
 interface MSPointerEvent extends MouseEvent {
-    currentPoint: any;
-    height: number;
-    hwTimestamp: number;
-    intermediatePoints: any;
-    isPrimary: boolean;
-    pointerId: number;
-    pointerType: any;
-    pressure: number;
-    rotation: number;
-    tiltX: number;
-    tiltY: number;
-    width: number;
+    readonly currentPoint: any;
+    readonly height: number;
+    readonly hwTimestamp: number;
+    readonly intermediatePoints: any;
+    readonly isPrimary: boolean;
+    readonly pointerId: number;
+    readonly pointerType: any;
+    readonly pressure: number;
+    readonly rotation: number;
+    readonly tiltX: number;
+    readonly tiltY: number;
+    readonly width: number;
     getCurrentPoint(element: Element): void;
     getIntermediatePoints(element: Element): void;
     initPointerEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, offsetXArg: number, offsetYArg: number, widthArg: number, heightArg: number, pressure: number, rotation: number, tiltX: number, tiltY: number, pointerIdArg: number, pointerType: any, hwTimestampArg: number, isPrimary: boolean): void;
@@ -8148,7 +8148,7 @@ declare var MSPointerEvent: {
 }
 
 interface MSRangeCollection {
-    length: number;
+    readonly length: number;
     item(index: number): Range;
     [index: number]: Range;
 }
@@ -8159,8 +8159,8 @@ declare var MSRangeCollection: {
 }
 
 interface MSSiteModeEvent extends Event {
-    actionURL: string;
-    buttonID: number;
+    readonly actionURL: string;
+    readonly buttonID: number;
 }
 
 declare var MSSiteModeEvent: {
@@ -8169,7 +8169,7 @@ declare var MSSiteModeEvent: {
 }
 
 interface MSStream {
-    type: string;
+    readonly type: string;
     msClose(): void;
     msDetachStream(): any;
 }
@@ -8180,7 +8180,7 @@ declare var MSStream: {
 }
 
 interface MSStreamReader extends EventTarget, MSBaseReader {
-    error: DOMError;
+    readonly error: DOMError;
     readAsArrayBuffer(stream: MSStream, size?: number): void;
     readAsBinaryString(stream: MSStream, size?: number): void;
     readAsBlob(stream: MSStream, size?: number): void;
@@ -8195,20 +8195,20 @@ declare var MSStreamReader: {
 }
 
 interface MSWebViewAsyncOperation extends EventTarget {
-    error: DOMError;
+    readonly error: DOMError;
     oncomplete: (ev: Event) => any;
     onerror: (ev: Event) => any;
-    readyState: number;
-    result: any;
-    target: MSHTMLWebViewElement;
-    type: number;
+    readonly readyState: number;
+    readonly result: any;
+    readonly target: MSHTMLWebViewElement;
+    readonly type: number;
     start(): void;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-    TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
-    TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
-    TYPE_INVOKE_SCRIPT: number;
+    readonly COMPLETED: number;
+    readonly ERROR: number;
+    readonly STARTED: number;
+    readonly TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
+    readonly TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
+    readonly TYPE_INVOKE_SCRIPT: number;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -8217,12 +8217,12 @@ interface MSWebViewAsyncOperation extends EventTarget {
 declare var MSWebViewAsyncOperation: {
     prototype: MSWebViewAsyncOperation;
     new(): MSWebViewAsyncOperation;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-    TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
-    TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
-    TYPE_INVOKE_SCRIPT: number;
+    readonly COMPLETED: number;
+    readonly ERROR: number;
+    readonly STARTED: number;
+    readonly TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
+    readonly TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
+    readonly TYPE_INVOKE_SCRIPT: number;
 }
 
 interface MSWebViewSettings {
@@ -8236,10 +8236,10 @@ declare var MSWebViewSettings: {
 }
 
 interface MediaDeviceInfo {
-    deviceId: string;
-    groupId: string;
-    kind: string;
-    label: string;
+    readonly deviceId: string;
+    readonly groupId: string;
+    readonly kind: string;
+    readonly label: string;
 }
 
 declare var MediaDeviceInfo: {
@@ -8270,8 +8270,8 @@ declare var MediaElementAudioSourceNode: {
 }
 
 interface MediaEncryptedEvent extends Event {
-    initData: ArrayBuffer;
-    initDataType: string;
+    readonly initData: ArrayBuffer;
+    readonly initDataType: string;
 }
 
 declare var MediaEncryptedEvent: {
@@ -8280,28 +8280,28 @@ declare var MediaEncryptedEvent: {
 }
 
 interface MediaError {
-    code: number;
-    msExtendedCode: number;
-    MEDIA_ERR_ABORTED: number;
-    MEDIA_ERR_DECODE: number;
-    MEDIA_ERR_NETWORK: number;
-    MEDIA_ERR_SRC_NOT_SUPPORTED: number;
-    MS_MEDIA_ERR_ENCRYPTED: number;
+    readonly code: number;
+    readonly msExtendedCode: number;
+    readonly MEDIA_ERR_ABORTED: number;
+    readonly MEDIA_ERR_DECODE: number;
+    readonly MEDIA_ERR_NETWORK: number;
+    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: number;
+    readonly MS_MEDIA_ERR_ENCRYPTED: number;
 }
 
 declare var MediaError: {
     prototype: MediaError;
     new(): MediaError;
-    MEDIA_ERR_ABORTED: number;
-    MEDIA_ERR_DECODE: number;
-    MEDIA_ERR_NETWORK: number;
-    MEDIA_ERR_SRC_NOT_SUPPORTED: number;
-    MS_MEDIA_ERR_ENCRYPTED: number;
+    readonly MEDIA_ERR_ABORTED: number;
+    readonly MEDIA_ERR_DECODE: number;
+    readonly MEDIA_ERR_NETWORK: number;
+    readonly MEDIA_ERR_SRC_NOT_SUPPORTED: number;
+    readonly MS_MEDIA_ERR_ENCRYPTED: number;
 }
 
 interface MediaKeyMessageEvent extends Event {
-    message: ArrayBuffer;
-    messageType: string;
+    readonly message: ArrayBuffer;
+    readonly messageType: string;
 }
 
 declare var MediaKeyMessageEvent: {
@@ -8310,10 +8310,10 @@ declare var MediaKeyMessageEvent: {
 }
 
 interface MediaKeySession extends EventTarget {
-    closed: PromiseLike<void>;
-    expiration: number;
-    keyStatuses: MediaKeyStatusMap;
-    sessionId: string;
+    readonly closed: PromiseLike<void>;
+    readonly expiration: number;
+    readonly keyStatuses: MediaKeyStatusMap;
+    readonly sessionId: string;
     close(): PromiseLike<void>;
     generateRequest(initDataType: string, initData: any): PromiseLike<void>;
     load(sessionId: string): PromiseLike<boolean>;
@@ -8327,7 +8327,7 @@ declare var MediaKeySession: {
 }
 
 interface MediaKeyStatusMap {
-    size: number;
+    readonly size: number;
     forEach(callback: ForEachCallback): void;
     get(keyId: any): string;
     has(keyId: any): boolean;
@@ -8339,7 +8339,7 @@ declare var MediaKeyStatusMap: {
 }
 
 interface MediaKeySystemAccess {
-    keySystem: string;
+    readonly keySystem: string;
     createMediaKeys(): PromiseLike<MediaKeys>;
     getConfiguration(): MediaKeySystemConfiguration;
 }
@@ -8360,7 +8360,7 @@ declare var MediaKeys: {
 }
 
 interface MediaList {
-    length: number;
+    readonly length: number;
     mediaText: string;
     appendMedium(newMedium: string): void;
     deleteMedium(oldMedium: string): void;
@@ -8375,8 +8375,8 @@ declare var MediaList: {
 }
 
 interface MediaQueryList {
-    matches: boolean;
-    media: string;
+    readonly matches: boolean;
+    readonly media: string;
     addListener(listener: MediaQueryListListener): void;
     removeListener(listener: MediaQueryListListener): void;
 }
@@ -8387,10 +8387,10 @@ declare var MediaQueryList: {
 }
 
 interface MediaSource extends EventTarget {
-    activeSourceBuffers: SourceBufferList;
+    readonly activeSourceBuffers: SourceBufferList;
     duration: number;
-    readyState: string;
-    sourceBuffers: SourceBufferList;
+    readonly readyState: string;
+    readonly sourceBuffers: SourceBufferList;
     addSourceBuffer(type: string): SourceBuffer;
     endOfStream(error?: number): void;
     removeSourceBuffer(sourceBuffer: SourceBuffer): void;
@@ -8403,8 +8403,8 @@ declare var MediaSource: {
 }
 
 interface MediaStream extends EventTarget {
-    active: boolean;
-    id: string;
+    readonly active: boolean;
+    readonly id: string;
     onactive: (ev: Event) => any;
     onaddtrack: (ev: TrackEvent) => any;
     oninactive: (ev: Event) => any;
@@ -8438,9 +8438,9 @@ declare var MediaStreamAudioSourceNode: {
 }
 
 interface MediaStreamError {
-    constraintName: string;
-    message: string;
-    name: string;
+    readonly constraintName: string;
+    readonly message: string;
+    readonly name: string;
 }
 
 declare var MediaStreamError: {
@@ -8449,7 +8449,7 @@ declare var MediaStreamError: {
 }
 
 interface MediaStreamErrorEvent extends Event {
-    error: MediaStreamError;
+    readonly error: MediaStreamError;
 }
 
 declare var MediaStreamErrorEvent: {
@@ -8459,17 +8459,17 @@ declare var MediaStreamErrorEvent: {
 
 interface MediaStreamTrack extends EventTarget {
     enabled: boolean;
-    id: string;
-    kind: string;
-    label: string;
-    muted: boolean;
+    readonly id: string;
+    readonly kind: string;
+    readonly label: string;
+    readonly muted: boolean;
     onended: (ev: MediaStreamErrorEvent) => any;
     onmute: (ev: Event) => any;
     onoverconstrained: (ev: MediaStreamErrorEvent) => any;
     onunmute: (ev: Event) => any;
-    readonly: boolean;
-    readyState: string;
-    remote: boolean;
+    readonly readonly: boolean;
+    readonly readyState: string;
+    readonly remote: boolean;
     applyConstraints(constraints: MediaTrackConstraints): PromiseLike<void>;
     clone(): MediaStreamTrack;
     getCapabilities(): MediaTrackCapabilities;
@@ -8489,7 +8489,7 @@ declare var MediaStreamTrack: {
 }
 
 interface MediaStreamTrackEvent extends Event {
-    track: MediaStreamTrack;
+    readonly track: MediaStreamTrack;
 }
 
 declare var MediaStreamTrackEvent: {
@@ -8498,8 +8498,8 @@ declare var MediaStreamTrackEvent: {
 }
 
 interface MessageChannel {
-    port1: MessagePort;
-    port2: MessagePort;
+    readonly port1: MessagePort;
+    readonly port2: MessagePort;
 }
 
 declare var MessageChannel: {
@@ -8508,10 +8508,10 @@ declare var MessageChannel: {
 }
 
 interface MessageEvent extends Event {
-    data: any;
-    origin: string;
-    ports: any;
-    source: Window;
+    readonly data: any;
+    readonly origin: string;
+    readonly ports: any;
+    readonly source: Window;
     initMessageEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, dataArg: any, originArg: string, lastEventIdArg: string, sourceArg: Window): void;
 }
 
@@ -8535,10 +8535,10 @@ declare var MessagePort: {
 }
 
 interface MimeType {
-    description: string;
-    enabledPlugin: Plugin;
-    suffixes: string;
-    type: string;
+    readonly description: string;
+    readonly enabledPlugin: Plugin;
+    readonly suffixes: string;
+    readonly type: string;
 }
 
 declare var MimeType: {
@@ -8547,7 +8547,7 @@ declare var MimeType: {
 }
 
 interface MimeTypeArray {
-    length: number;
+    readonly length: number;
     item(index: number): Plugin;
     namedItem(type: string): Plugin;
     [index: number]: Plugin;
@@ -8559,30 +8559,30 @@ declare var MimeTypeArray: {
 }
 
 interface MouseEvent extends UIEvent {
-    altKey: boolean;
-    button: number;
-    buttons: number;
-    clientX: number;
-    clientY: number;
-    ctrlKey: boolean;
-    fromElement: Element;
-    layerX: number;
-    layerY: number;
-    metaKey: boolean;
-    movementX: number;
-    movementY: number;
-    offsetX: number;
-    offsetY: number;
-    pageX: number;
-    pageY: number;
-    relatedTarget: EventTarget;
-    screenX: number;
-    screenY: number;
-    shiftKey: boolean;
-    toElement: Element;
-    which: number;
-    x: number;
-    y: number;
+    readonly altKey: boolean;
+    readonly button: number;
+    readonly buttons: number;
+    readonly clientX: number;
+    readonly clientY: number;
+    readonly ctrlKey: boolean;
+    readonly fromElement: Element;
+    readonly layerX: number;
+    readonly layerY: number;
+    readonly metaKey: boolean;
+    readonly movementX: number;
+    readonly movementY: number;
+    readonly offsetX: number;
+    readonly offsetY: number;
+    readonly pageX: number;
+    readonly pageY: number;
+    readonly relatedTarget: EventTarget;
+    readonly screenX: number;
+    readonly screenY: number;
+    readonly shiftKey: boolean;
+    readonly toElement: Element;
+    readonly which: number;
+    readonly x: number;
+    readonly y: number;
     getModifierState(keyArg: string): boolean;
     initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
 }
@@ -8593,23 +8593,23 @@ declare var MouseEvent: {
 }
 
 interface MutationEvent extends Event {
-    attrChange: number;
-    attrName: string;
-    newValue: string;
-    prevValue: string;
-    relatedNode: Node;
+    readonly attrChange: number;
+    readonly attrName: string;
+    readonly newValue: string;
+    readonly prevValue: string;
+    readonly relatedNode: Node;
     initMutationEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, relatedNodeArg: Node, prevValueArg: string, newValueArg: string, attrNameArg: string, attrChangeArg: number): void;
-    ADDITION: number;
-    MODIFICATION: number;
-    REMOVAL: number;
+    readonly ADDITION: number;
+    readonly MODIFICATION: number;
+    readonly REMOVAL: number;
 }
 
 declare var MutationEvent: {
     prototype: MutationEvent;
     new(): MutationEvent;
-    ADDITION: number;
-    MODIFICATION: number;
-    REMOVAL: number;
+    readonly ADDITION: number;
+    readonly MODIFICATION: number;
+    readonly REMOVAL: number;
 }
 
 interface MutationObserver {
@@ -8624,15 +8624,15 @@ declare var MutationObserver: {
 }
 
 interface MutationRecord {
-    addedNodes: NodeList;
-    attributeName: string;
-    attributeNamespace: string;
-    nextSibling: Node;
-    oldValue: string;
-    previousSibling: Node;
-    removedNodes: NodeList;
-    target: Node;
-    type: string;
+    readonly addedNodes: NodeList;
+    readonly attributeName: string;
+    readonly attributeNamespace: string;
+    readonly nextSibling: Node;
+    readonly oldValue: string;
+    readonly previousSibling: Node;
+    readonly removedNodes: NodeList;
+    readonly target: Node;
+    readonly type: string;
 }
 
 declare var MutationRecord: {
@@ -8641,7 +8641,7 @@ declare var MutationRecord: {
 }
 
 interface NamedNodeMap {
-    length: number;
+    readonly length: number;
     getNamedItem(name: string): Attr;
     getNamedItemNS(namespaceURI: string, localName: string): Attr;
     item(index: number): Attr;
@@ -8658,8 +8658,8 @@ declare var NamedNodeMap: {
 }
 
 interface NavigationCompletedEvent extends NavigationEvent {
-    isSuccess: boolean;
-    webErrorStatus: number;
+    readonly isSuccess: boolean;
+    readonly webErrorStatus: number;
 }
 
 declare var NavigationCompletedEvent: {
@@ -8668,7 +8668,7 @@ declare var NavigationCompletedEvent: {
 }
 
 interface NavigationEvent extends Event {
-    uri: string;
+    readonly uri: string;
 }
 
 declare var NavigationEvent: {
@@ -8677,7 +8677,7 @@ declare var NavigationEvent: {
 }
 
 interface NavigationEventWithReferrer extends NavigationEvent {
-    referer: string;
+    readonly referer: string;
 }
 
 declare var NavigationEventWithReferrer: {
@@ -8686,17 +8686,17 @@ declare var NavigationEventWithReferrer: {
 }
 
 interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, NavigatorGeolocation, MSNavigatorDoNotTrack, MSFileSaver, NavigatorUserMedia {
-    appCodeName: string;
-    cookieEnabled: boolean;
-    language: string;
-    maxTouchPoints: number;
-    mimeTypes: MimeTypeArray;
-    msManipulationViewsEnabled: boolean;
-    msMaxTouchPoints: number;
-    msPointerEnabled: boolean;
-    plugins: PluginArray;
-    pointerEnabled: boolean;
-    webdriver: boolean;
+    readonly appCodeName: string;
+    readonly cookieEnabled: boolean;
+    readonly language: string;
+    readonly maxTouchPoints: number;
+    readonly mimeTypes: MimeTypeArray;
+    readonly msManipulationViewsEnabled: boolean;
+    readonly msMaxTouchPoints: number;
+    readonly msPointerEnabled: boolean;
+    readonly plugins: PluginArray;
+    readonly pointerEnabled: boolean;
+    readonly webdriver: boolean;
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
@@ -8711,21 +8711,21 @@ declare var Navigator: {
 }
 
 interface Node extends EventTarget {
-    attributes: NamedNodeMap;
-    baseURI: string;
-    childNodes: NodeList;
-    firstChild: Node;
-    lastChild: Node;
-    localName: string;
-    namespaceURI: string;
-    nextSibling: Node;
-    nodeName: string;
-    nodeType: number;
+    readonly attributes: NamedNodeMap;
+    readonly baseURI: string;
+    readonly childNodes: NodeList;
+    readonly firstChild: Node;
+    readonly lastChild: Node;
+    readonly localName: string;
+    readonly namespaceURI: string;
+    readonly nextSibling: Node;
+    readonly nodeName: string;
+    readonly nodeType: number;
     nodeValue: string;
-    ownerDocument: Document;
-    parentElement: HTMLElement;
-    parentNode: Node;
-    previousSibling: Node;
+    readonly ownerDocument: Document;
+    readonly parentElement: HTMLElement;
+    readonly parentNode: Node;
+    readonly previousSibling: Node;
     textContent: string;
     appendChild(newChild: Node): Node;
     cloneNode(deep?: boolean): Node;
@@ -8743,47 +8743,47 @@ interface Node extends EventTarget {
     removeChild(oldChild: Node): Node;
     replaceChild(newChild: Node, oldChild: Node): Node;
     contains(node: Node): boolean;
-    ATTRIBUTE_NODE: number;
-    CDATA_SECTION_NODE: number;
-    COMMENT_NODE: number;
-    DOCUMENT_FRAGMENT_NODE: number;
-    DOCUMENT_NODE: number;
-    DOCUMENT_POSITION_CONTAINED_BY: number;
-    DOCUMENT_POSITION_CONTAINS: number;
-    DOCUMENT_POSITION_DISCONNECTED: number;
-    DOCUMENT_POSITION_FOLLOWING: number;
-    DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    DOCUMENT_POSITION_PRECEDING: number;
-    DOCUMENT_TYPE_NODE: number;
-    ELEMENT_NODE: number;
-    ENTITY_NODE: number;
-    ENTITY_REFERENCE_NODE: number;
-    NOTATION_NODE: number;
-    PROCESSING_INSTRUCTION_NODE: number;
-    TEXT_NODE: number;
+    readonly ATTRIBUTE_NODE: number;
+    readonly CDATA_SECTION_NODE: number;
+    readonly COMMENT_NODE: number;
+    readonly DOCUMENT_FRAGMENT_NODE: number;
+    readonly DOCUMENT_NODE: number;
+    readonly DOCUMENT_POSITION_CONTAINED_BY: number;
+    readonly DOCUMENT_POSITION_CONTAINS: number;
+    readonly DOCUMENT_POSITION_DISCONNECTED: number;
+    readonly DOCUMENT_POSITION_FOLLOWING: number;
+    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
+    readonly DOCUMENT_POSITION_PRECEDING: number;
+    readonly DOCUMENT_TYPE_NODE: number;
+    readonly ELEMENT_NODE: number;
+    readonly ENTITY_NODE: number;
+    readonly ENTITY_REFERENCE_NODE: number;
+    readonly NOTATION_NODE: number;
+    readonly PROCESSING_INSTRUCTION_NODE: number;
+    readonly TEXT_NODE: number;
 }
 
 declare var Node: {
     prototype: Node;
     new(): Node;
-    ATTRIBUTE_NODE: number;
-    CDATA_SECTION_NODE: number;
-    COMMENT_NODE: number;
-    DOCUMENT_FRAGMENT_NODE: number;
-    DOCUMENT_NODE: number;
-    DOCUMENT_POSITION_CONTAINED_BY: number;
-    DOCUMENT_POSITION_CONTAINS: number;
-    DOCUMENT_POSITION_DISCONNECTED: number;
-    DOCUMENT_POSITION_FOLLOWING: number;
-    DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
-    DOCUMENT_POSITION_PRECEDING: number;
-    DOCUMENT_TYPE_NODE: number;
-    ELEMENT_NODE: number;
-    ENTITY_NODE: number;
-    ENTITY_REFERENCE_NODE: number;
-    NOTATION_NODE: number;
-    PROCESSING_INSTRUCTION_NODE: number;
-    TEXT_NODE: number;
+    readonly ATTRIBUTE_NODE: number;
+    readonly CDATA_SECTION_NODE: number;
+    readonly COMMENT_NODE: number;
+    readonly DOCUMENT_FRAGMENT_NODE: number;
+    readonly DOCUMENT_NODE: number;
+    readonly DOCUMENT_POSITION_CONTAINED_BY: number;
+    readonly DOCUMENT_POSITION_CONTAINS: number;
+    readonly DOCUMENT_POSITION_DISCONNECTED: number;
+    readonly DOCUMENT_POSITION_FOLLOWING: number;
+    readonly DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: number;
+    readonly DOCUMENT_POSITION_PRECEDING: number;
+    readonly DOCUMENT_TYPE_NODE: number;
+    readonly ELEMENT_NODE: number;
+    readonly ENTITY_NODE: number;
+    readonly ENTITY_REFERENCE_NODE: number;
+    readonly NOTATION_NODE: number;
+    readonly PROCESSING_INSTRUCTION_NODE: number;
+    readonly TEXT_NODE: number;
 }
 
 interface NodeFilter {
@@ -8791,29 +8791,29 @@ interface NodeFilter {
 }
 
 declare var NodeFilter: {
-    FILTER_ACCEPT: number;
-    FILTER_REJECT: number;
-    FILTER_SKIP: number;
-    SHOW_ALL: number;
-    SHOW_ATTRIBUTE: number;
-    SHOW_CDATA_SECTION: number;
-    SHOW_COMMENT: number;
-    SHOW_DOCUMENT: number;
-    SHOW_DOCUMENT_FRAGMENT: number;
-    SHOW_DOCUMENT_TYPE: number;
-    SHOW_ELEMENT: number;
-    SHOW_ENTITY: number;
-    SHOW_ENTITY_REFERENCE: number;
-    SHOW_NOTATION: number;
-    SHOW_PROCESSING_INSTRUCTION: number;
-    SHOW_TEXT: number;
+    readonly FILTER_ACCEPT: number;
+    readonly FILTER_REJECT: number;
+    readonly FILTER_SKIP: number;
+    readonly SHOW_ALL: number;
+    readonly SHOW_ATTRIBUTE: number;
+    readonly SHOW_CDATA_SECTION: number;
+    readonly SHOW_COMMENT: number;
+    readonly SHOW_DOCUMENT: number;
+    readonly SHOW_DOCUMENT_FRAGMENT: number;
+    readonly SHOW_DOCUMENT_TYPE: number;
+    readonly SHOW_ELEMENT: number;
+    readonly SHOW_ENTITY: number;
+    readonly SHOW_ENTITY_REFERENCE: number;
+    readonly SHOW_NOTATION: number;
+    readonly SHOW_PROCESSING_INSTRUCTION: number;
+    readonly SHOW_TEXT: number;
 }
 
 interface NodeIterator {
-    expandEntityReferences: boolean;
-    filter: NodeFilter;
-    root: Node;
-    whatToShow: number;
+    readonly expandEntityReferences: boolean;
+    readonly filter: NodeFilter;
+    readonly root: Node;
+    readonly whatToShow: number;
     detach(): void;
     nextNode(): Node;
     previousNode(): Node;
@@ -8825,7 +8825,7 @@ declare var NodeIterator: {
 }
 
 interface NodeList {
-    length: number;
+    readonly length: number;
     item(index: number): Node;
     [index: number]: Node;
 }
@@ -8844,13 +8844,13 @@ declare var OES_element_index_uint: {
 }
 
 interface OES_standard_derivatives {
-    FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
 }
 
 declare var OES_standard_derivatives: {
     prototype: OES_standard_derivatives;
     new(): OES_standard_derivatives;
-    FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
+    readonly FRAGMENT_SHADER_DERIVATIVE_HINT_OES: number;
 }
 
 interface OES_texture_float {
@@ -8870,7 +8870,7 @@ declare var OES_texture_float_linear: {
 }
 
 interface OfflineAudioCompletionEvent extends Event {
-    renderedBuffer: AudioBuffer;
+    readonly renderedBuffer: AudioBuffer;
 }
 
 declare var OfflineAudioCompletionEvent: {
@@ -8891,8 +8891,8 @@ declare var OfflineAudioContext: {
 }
 
 interface OscillatorNode extends AudioNode {
-    detune: AudioParam;
-    frequency: AudioParam;
+    readonly detune: AudioParam;
+    readonly frequency: AudioParam;
     onended: (ev: MediaStreamErrorEvent) => any;
     type: string;
     setPeriodicWave(periodicWave: PeriodicWave): void;
@@ -8908,24 +8908,24 @@ declare var OscillatorNode: {
 }
 
 interface OverflowEvent extends UIEvent {
-    horizontalOverflow: boolean;
-    orient: number;
-    verticalOverflow: boolean;
-    BOTH: number;
-    HORIZONTAL: number;
-    VERTICAL: number;
+    readonly horizontalOverflow: boolean;
+    readonly orient: number;
+    readonly verticalOverflow: boolean;
+    readonly BOTH: number;
+    readonly HORIZONTAL: number;
+    readonly VERTICAL: number;
 }
 
 declare var OverflowEvent: {
     prototype: OverflowEvent;
     new(): OverflowEvent;
-    BOTH: number;
-    HORIZONTAL: number;
-    VERTICAL: number;
+    readonly BOTH: number;
+    readonly HORIZONTAL: number;
+    readonly VERTICAL: number;
 }
 
 interface PageTransitionEvent extends Event {
-    persisted: boolean;
+    readonly persisted: boolean;
 }
 
 declare var PageTransitionEvent: {
@@ -8953,17 +8953,17 @@ declare var PannerNode: {
 }
 
 interface PerfWidgetExternal {
-    activeNetworkRequestCount: number;
-    averageFrameTime: number;
-    averagePaintTime: number;
-    extraInformationEnabled: boolean;
-    independentRenderingEnabled: boolean;
-    irDisablingContentString: string;
-    irStatusAvailable: boolean;
-    maxCpuSpeed: number;
-    paintRequestsPerSecond: number;
-    performanceCounter: number;
-    performanceCounterFrequency: number;
+    readonly activeNetworkRequestCount: number;
+    readonly averageFrameTime: number;
+    readonly averagePaintTime: number;
+    readonly extraInformationEnabled: boolean;
+    readonly independentRenderingEnabled: boolean;
+    readonly irDisablingContentString: string;
+    readonly irStatusAvailable: boolean;
+    readonly maxCpuSpeed: number;
+    readonly paintRequestsPerSecond: number;
+    readonly performanceCounter: number;
+    readonly performanceCounterFrequency: number;
     addEventListener(eventType: string, callback: Function): void;
     getMemoryUsage(): number;
     getProcessCpuUsage(): number;
@@ -8982,8 +8982,8 @@ declare var PerfWidgetExternal: {
 }
 
 interface Performance {
-    navigation: PerformanceNavigation;
-    timing: PerformanceTiming;
+    readonly navigation: PerformanceNavigation;
+    readonly timing: PerformanceTiming;
     clearMarks(markName?: string): void;
     clearMeasures(measureName?: string): void;
     clearResourceTimings(): void;
@@ -9005,10 +9005,10 @@ declare var Performance: {
 }
 
 interface PerformanceEntry {
-    duration: number;
-    entryType: string;
-    name: string;
-    startTime: number;
+    readonly duration: number;
+    readonly entryType: string;
+    readonly name: string;
+    readonly startTime: number;
 }
 
 declare var PerformanceEntry: {
@@ -9033,47 +9033,47 @@ declare var PerformanceMeasure: {
 }
 
 interface PerformanceNavigation {
-    redirectCount: number;
-    type: number;
+    readonly redirectCount: number;
+    readonly type: number;
     toJSON(): any;
-    TYPE_BACK_FORWARD: number;
-    TYPE_NAVIGATE: number;
-    TYPE_RELOAD: number;
-    TYPE_RESERVED: number;
+    readonly TYPE_BACK_FORWARD: number;
+    readonly TYPE_NAVIGATE: number;
+    readonly TYPE_RELOAD: number;
+    readonly TYPE_RESERVED: number;
 }
 
 declare var PerformanceNavigation: {
     prototype: PerformanceNavigation;
     new(): PerformanceNavigation;
-    TYPE_BACK_FORWARD: number;
-    TYPE_NAVIGATE: number;
-    TYPE_RELOAD: number;
-    TYPE_RESERVED: number;
+    readonly TYPE_BACK_FORWARD: number;
+    readonly TYPE_NAVIGATE: number;
+    readonly TYPE_RELOAD: number;
+    readonly TYPE_RESERVED: number;
 }
 
 interface PerformanceNavigationTiming extends PerformanceEntry {
-    connectEnd: number;
-    connectStart: number;
-    domComplete: number;
-    domContentLoadedEventEnd: number;
-    domContentLoadedEventStart: number;
-    domInteractive: number;
-    domLoading: number;
-    domainLookupEnd: number;
-    domainLookupStart: number;
-    fetchStart: number;
-    loadEventEnd: number;
-    loadEventStart: number;
-    navigationStart: number;
-    redirectCount: number;
-    redirectEnd: number;
-    redirectStart: number;
-    requestStart: number;
-    responseEnd: number;
-    responseStart: number;
-    type: string;
-    unloadEventEnd: number;
-    unloadEventStart: number;
+    readonly connectEnd: number;
+    readonly connectStart: number;
+    readonly domComplete: number;
+    readonly domContentLoadedEventEnd: number;
+    readonly domContentLoadedEventStart: number;
+    readonly domInteractive: number;
+    readonly domLoading: number;
+    readonly domainLookupEnd: number;
+    readonly domainLookupStart: number;
+    readonly fetchStart: number;
+    readonly loadEventEnd: number;
+    readonly loadEventStart: number;
+    readonly navigationStart: number;
+    readonly redirectCount: number;
+    readonly redirectEnd: number;
+    readonly redirectStart: number;
+    readonly requestStart: number;
+    readonly responseEnd: number;
+    readonly responseStart: number;
+    readonly type: string;
+    readonly unloadEventEnd: number;
+    readonly unloadEventStart: number;
 }
 
 declare var PerformanceNavigationTiming: {
@@ -9082,17 +9082,17 @@ declare var PerformanceNavigationTiming: {
 }
 
 interface PerformanceResourceTiming extends PerformanceEntry {
-    connectEnd: number;
-    connectStart: number;
-    domainLookupEnd: number;
-    domainLookupStart: number;
-    fetchStart: number;
-    initiatorType: string;
-    redirectEnd: number;
-    redirectStart: number;
-    requestStart: number;
-    responseEnd: number;
-    responseStart: number;
+    readonly connectEnd: number;
+    readonly connectStart: number;
+    readonly domainLookupEnd: number;
+    readonly domainLookupStart: number;
+    readonly fetchStart: number;
+    readonly initiatorType: string;
+    readonly redirectEnd: number;
+    readonly redirectStart: number;
+    readonly requestStart: number;
+    readonly responseEnd: number;
+    readonly responseStart: number;
 }
 
 declare var PerformanceResourceTiming: {
@@ -9101,27 +9101,27 @@ declare var PerformanceResourceTiming: {
 }
 
 interface PerformanceTiming {
-    connectEnd: number;
-    connectStart: number;
-    domComplete: number;
-    domContentLoadedEventEnd: number;
-    domContentLoadedEventStart: number;
-    domInteractive: number;
-    domLoading: number;
-    domainLookupEnd: number;
-    domainLookupStart: number;
-    fetchStart: number;
-    loadEventEnd: number;
-    loadEventStart: number;
-    msFirstPaint: number;
-    navigationStart: number;
-    redirectEnd: number;
-    redirectStart: number;
-    requestStart: number;
-    responseEnd: number;
-    responseStart: number;
-    unloadEventEnd: number;
-    unloadEventStart: number;
+    readonly connectEnd: number;
+    readonly connectStart: number;
+    readonly domComplete: number;
+    readonly domContentLoadedEventEnd: number;
+    readonly domContentLoadedEventStart: number;
+    readonly domInteractive: number;
+    readonly domLoading: number;
+    readonly domainLookupEnd: number;
+    readonly domainLookupStart: number;
+    readonly fetchStart: number;
+    readonly loadEventEnd: number;
+    readonly loadEventStart: number;
+    readonly msFirstPaint: number;
+    readonly navigationStart: number;
+    readonly redirectEnd: number;
+    readonly redirectStart: number;
+    readonly requestStart: number;
+    readonly responseEnd: number;
+    readonly responseStart: number;
+    readonly unloadEventEnd: number;
+    readonly unloadEventStart: number;
     toJSON(): any;
 }
 
@@ -9139,7 +9139,7 @@ declare var PeriodicWave: {
 }
 
 interface PermissionRequest extends DeferredPermissionRequest {
-    state: string;
+    readonly state: string;
     defer(): void;
 }
 
@@ -9149,7 +9149,7 @@ declare var PermissionRequest: {
 }
 
 interface PermissionRequestedEvent extends Event {
-    permissionRequest: PermissionRequest;
+    readonly permissionRequest: PermissionRequest;
 }
 
 declare var PermissionRequestedEvent: {
@@ -9158,11 +9158,11 @@ declare var PermissionRequestedEvent: {
 }
 
 interface Plugin {
-    description: string;
-    filename: string;
-    length: number;
-    name: string;
-    version: string;
+    readonly description: string;
+    readonly filename: string;
+    readonly length: number;
+    readonly name: string;
+    readonly version: string;
     item(index: number): MimeType;
     namedItem(type: string): MimeType;
     [index: number]: MimeType;
@@ -9174,7 +9174,7 @@ declare var Plugin: {
 }
 
 interface PluginArray {
-    length: number;
+    readonly length: number;
     item(index: number): Plugin;
     namedItem(name: string): Plugin;
     refresh(reload?: boolean): void;
@@ -9187,18 +9187,18 @@ declare var PluginArray: {
 }
 
 interface PointerEvent extends MouseEvent {
-    currentPoint: any;
-    height: number;
-    hwTimestamp: number;
-    intermediatePoints: any;
-    isPrimary: boolean;
-    pointerId: number;
-    pointerType: any;
-    pressure: number;
-    rotation: number;
-    tiltX: number;
-    tiltY: number;
-    width: number;
+    readonly currentPoint: any;
+    readonly height: number;
+    readonly hwTimestamp: number;
+    readonly intermediatePoints: any;
+    readonly isPrimary: boolean;
+    readonly pointerId: number;
+    readonly pointerType: any;
+    readonly pressure: number;
+    readonly rotation: number;
+    readonly tiltX: number;
+    readonly tiltY: number;
+    readonly width: number;
     getCurrentPoint(element: Element): void;
     getIntermediatePoints(element: Element): void;
     initPointerEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, offsetXArg: number, offsetYArg: number, widthArg: number, heightArg: number, pressure: number, rotation: number, tiltX: number, tiltY: number, pointerIdArg: number, pointerType: any, hwTimestampArg: number, isPrimary: boolean): void;
@@ -9210,7 +9210,7 @@ declare var PointerEvent: {
 }
 
 interface PopStateEvent extends Event {
-    state: any;
+    readonly state: any;
     initPopStateEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, stateArg: any): void;
 }
 
@@ -9220,8 +9220,8 @@ declare var PopStateEvent: {
 }
 
 interface Position {
-    coords: Coordinates;
-    timestamp: number;
+    readonly coords: Coordinates;
+    readonly timestamp: number;
 }
 
 declare var Position: {
@@ -9230,24 +9230,24 @@ declare var Position: {
 }
 
 interface PositionError {
-    code: number;
-    message: string;
+    readonly code: number;
+    readonly message: string;
     toString(): string;
-    PERMISSION_DENIED: number;
-    POSITION_UNAVAILABLE: number;
-    TIMEOUT: number;
+    readonly PERMISSION_DENIED: number;
+    readonly POSITION_UNAVAILABLE: number;
+    readonly TIMEOUT: number;
 }
 
 declare var PositionError: {
     prototype: PositionError;
     new(): PositionError;
-    PERMISSION_DENIED: number;
-    POSITION_UNAVAILABLE: number;
-    TIMEOUT: number;
+    readonly PERMISSION_DENIED: number;
+    readonly POSITION_UNAVAILABLE: number;
+    readonly TIMEOUT: number;
 }
 
 interface ProcessingInstruction extends CharacterData {
-    target: string;
+    readonly target: string;
 }
 
 declare var ProcessingInstruction: {
@@ -9256,9 +9256,9 @@ declare var ProcessingInstruction: {
 }
 
 interface ProgressEvent extends Event {
-    lengthComputable: boolean;
-    loaded: number;
-    total: number;
+    readonly lengthComputable: boolean;
+    readonly loaded: number;
+    readonly total: number;
     initProgressEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, lengthComputableArg: boolean, loadedArg: number, totalArg: number): void;
 }
 
@@ -9268,7 +9268,7 @@ declare var ProgressEvent: {
 }
 
 interface RTCDTMFToneChangeEvent extends Event {
-    tone: string;
+    readonly tone: string;
 }
 
 declare var RTCDTMFToneChangeEvent: {
@@ -9279,8 +9279,8 @@ declare var RTCDTMFToneChangeEvent: {
 interface RTCDtlsTransport extends RTCStatsProvider {
     ondtlsstatechange: (ev: RTCDtlsTransportStateChangedEvent) => any;
     onerror: (ev: Event) => any;
-    state: string;
-    transport: RTCIceTransport;
+    readonly state: string;
+    readonly transport: RTCIceTransport;
     getLocalParameters(): RTCDtlsParameters;
     getRemoteCertificates(): ArrayBuffer[];
     getRemoteParameters(): RTCDtlsParameters;
@@ -9297,7 +9297,7 @@ declare var RTCDtlsTransport: {
 }
 
 interface RTCDtlsTransportStateChangedEvent extends Event {
-    state: string;
+    readonly state: string;
 }
 
 declare var RTCDtlsTransportStateChangedEvent: {
@@ -9306,12 +9306,12 @@ declare var RTCDtlsTransportStateChangedEvent: {
 }
 
 interface RTCDtmfSender extends EventTarget {
-    canInsertDTMF: boolean;
-    duration: number;
-    interToneGap: number;
+    readonly canInsertDTMF: boolean;
+    readonly duration: number;
+    readonly interToneGap: number;
     ontonechange: (ev: RTCDTMFToneChangeEvent) => any;
-    sender: RTCRtpSender;
-    toneBuffer: string;
+    readonly sender: RTCRtpSender;
+    readonly toneBuffer: string;
     insertDTMF(tones: string, duration?: number, interToneGap?: number): void;
     addEventListener(type: "tonechange", listener: (ev: RTCDTMFToneChangeEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -9323,7 +9323,7 @@ declare var RTCDtmfSender: {
 }
 
 interface RTCIceCandidatePairChangedEvent extends Event {
-    pair: RTCIceCandidatePair;
+    readonly pair: RTCIceCandidatePair;
 }
 
 declare var RTCIceCandidatePairChangedEvent: {
@@ -9332,7 +9332,7 @@ declare var RTCIceCandidatePairChangedEvent: {
 }
 
 interface RTCIceGatherer extends RTCStatsProvider {
-    component: string;
+    readonly component: string;
     onerror: (ev: Event) => any;
     onlocalcandidate: (ev: RTCIceGathererEvent) => any;
     createAssociatedGatherer(): RTCIceGatherer;
@@ -9349,7 +9349,7 @@ declare var RTCIceGatherer: {
 }
 
 interface RTCIceGathererEvent extends Event {
-    candidate: RTCIceCandidate | RTCIceCandidateComplete;
+    readonly candidate: RTCIceCandidate | RTCIceCandidateComplete;
 }
 
 declare var RTCIceGathererEvent: {
@@ -9358,12 +9358,12 @@ declare var RTCIceGathererEvent: {
 }
 
 interface RTCIceTransport extends RTCStatsProvider {
-    component: string;
-    iceGatherer: RTCIceGatherer;
+    readonly component: string;
+    readonly iceGatherer: RTCIceGatherer;
     oncandidatepairchange: (ev: RTCIceCandidatePairChangedEvent) => any;
     onicestatechange: (ev: RTCIceTransportStateChangedEvent) => any;
-    role: string;
-    state: string;
+    readonly role: string;
+    readonly state: string;
     addRemoteCandidate(remoteCandidate: RTCIceCandidate | RTCIceCandidateComplete): void;
     createAssociatedTransport(): RTCIceTransport;
     getNominatedCandidatePair(): RTCIceCandidatePair;
@@ -9383,7 +9383,7 @@ declare var RTCIceTransport: {
 }
 
 interface RTCIceTransportStateChangedEvent extends Event {
-    state: string;
+    readonly state: string;
 }
 
 declare var RTCIceTransportStateChangedEvent: {
@@ -9393,9 +9393,9 @@ declare var RTCIceTransportStateChangedEvent: {
 
 interface RTCRtpReceiver extends RTCStatsProvider {
     onerror: (ev: Event) => any;
-    rtcpTransport: RTCDtlsTransport;
-    track: MediaStreamTrack;
-    transport: RTCDtlsTransport | RTCSrtpSdesTransport;
+    readonly rtcpTransport: RTCDtlsTransport;
+    readonly track: MediaStreamTrack;
+    readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
     getContributingSources(): RTCRtpContributingSource[];
     receive(parameters: RTCRtpParameters): void;
     requestSendCSRC(csrc: number): void;
@@ -9414,9 +9414,9 @@ declare var RTCRtpReceiver: {
 interface RTCRtpSender extends RTCStatsProvider {
     onerror: (ev: Event) => any;
     onssrcconflict: (ev: RTCSsrcConflictEvent) => any;
-    rtcpTransport: RTCDtlsTransport;
-    track: MediaStreamTrack;
-    transport: RTCDtlsTransport | RTCSrtpSdesTransport;
+    readonly rtcpTransport: RTCDtlsTransport;
+    readonly track: MediaStreamTrack;
+    readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
     send(parameters: RTCRtpParameters): void;
     setTrack(track: MediaStreamTrack): void;
     setTransport(transport: RTCDtlsTransport | RTCSrtpSdesTransport, rtcpTransport?: RTCDtlsTransport): void;
@@ -9434,7 +9434,7 @@ declare var RTCRtpSender: {
 
 interface RTCSrtpSdesTransport extends EventTarget {
     onerror: (ev: Event) => any;
-    transport: RTCIceTransport;
+    readonly transport: RTCIceTransport;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -9446,7 +9446,7 @@ declare var RTCSrtpSdesTransport: {
 }
 
 interface RTCSsrcConflictEvent extends Event {
-    ssrc: number;
+    readonly ssrc: number;
 }
 
 declare var RTCSsrcConflictEvent: {
@@ -9465,12 +9465,12 @@ declare var RTCStatsProvider: {
 }
 
 interface Range {
-    collapsed: boolean;
-    commonAncestorContainer: Node;
-    endContainer: Node;
-    endOffset: number;
-    startContainer: Node;
-    startOffset: number;
+    readonly collapsed: boolean;
+    readonly commonAncestorContainer: Node;
+    readonly endContainer: Node;
+    readonly endOffset: number;
+    readonly startContainer: Node;
+    readonly startOffset: number;
     cloneContents(): DocumentFragment;
     cloneRange(): Range;
     collapse(toStart: boolean): void;
@@ -9493,23 +9493,23 @@ interface Range {
     setStartBefore(refNode: Node): void;
     surroundContents(newParent: Node): void;
     toString(): string;
-    END_TO_END: number;
-    END_TO_START: number;
-    START_TO_END: number;
-    START_TO_START: number;
+    readonly END_TO_END: number;
+    readonly END_TO_START: number;
+    readonly START_TO_END: number;
+    readonly START_TO_START: number;
 }
 
 declare var Range: {
     prototype: Range;
     new(): Range;
-    END_TO_END: number;
-    END_TO_START: number;
-    START_TO_END: number;
-    START_TO_START: number;
+    readonly END_TO_END: number;
+    readonly END_TO_START: number;
+    readonly START_TO_END: number;
+    readonly START_TO_START: number;
 }
 
 interface SVGAElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
-    target: SVGAnimatedString;
+    readonly target: SVGAnimatedString;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9519,32 +9519,32 @@ declare var SVGAElement: {
 }
 
 interface SVGAngle {
-    unitType: number;
+    readonly unitType: number;
     value: number;
     valueAsString: string;
     valueInSpecifiedUnits: number;
     convertToSpecifiedUnits(unitType: number): void;
     newValueSpecifiedUnits(unitType: number, valueInSpecifiedUnits: number): void;
-    SVG_ANGLETYPE_DEG: number;
-    SVG_ANGLETYPE_GRAD: number;
-    SVG_ANGLETYPE_RAD: number;
-    SVG_ANGLETYPE_UNKNOWN: number;
-    SVG_ANGLETYPE_UNSPECIFIED: number;
+    readonly SVG_ANGLETYPE_DEG: number;
+    readonly SVG_ANGLETYPE_GRAD: number;
+    readonly SVG_ANGLETYPE_RAD: number;
+    readonly SVG_ANGLETYPE_UNKNOWN: number;
+    readonly SVG_ANGLETYPE_UNSPECIFIED: number;
 }
 
 declare var SVGAngle: {
     prototype: SVGAngle;
     new(): SVGAngle;
-    SVG_ANGLETYPE_DEG: number;
-    SVG_ANGLETYPE_GRAD: number;
-    SVG_ANGLETYPE_RAD: number;
-    SVG_ANGLETYPE_UNKNOWN: number;
-    SVG_ANGLETYPE_UNSPECIFIED: number;
+    readonly SVG_ANGLETYPE_DEG: number;
+    readonly SVG_ANGLETYPE_GRAD: number;
+    readonly SVG_ANGLETYPE_RAD: number;
+    readonly SVG_ANGLETYPE_UNKNOWN: number;
+    readonly SVG_ANGLETYPE_UNSPECIFIED: number;
 }
 
 interface SVGAnimatedAngle {
-    animVal: SVGAngle;
-    baseVal: SVGAngle;
+    readonly animVal: SVGAngle;
+    readonly baseVal: SVGAngle;
 }
 
 declare var SVGAnimatedAngle: {
@@ -9553,7 +9553,7 @@ declare var SVGAnimatedAngle: {
 }
 
 interface SVGAnimatedBoolean {
-    animVal: boolean;
+    readonly animVal: boolean;
     baseVal: boolean;
 }
 
@@ -9563,7 +9563,7 @@ declare var SVGAnimatedBoolean: {
 }
 
 interface SVGAnimatedEnumeration {
-    animVal: number;
+    readonly animVal: number;
     baseVal: number;
 }
 
@@ -9573,7 +9573,7 @@ declare var SVGAnimatedEnumeration: {
 }
 
 interface SVGAnimatedInteger {
-    animVal: number;
+    readonly animVal: number;
     baseVal: number;
 }
 
@@ -9583,8 +9583,8 @@ declare var SVGAnimatedInteger: {
 }
 
 interface SVGAnimatedLength {
-    animVal: SVGLength;
-    baseVal: SVGLength;
+    readonly animVal: SVGLength;
+    readonly baseVal: SVGLength;
 }
 
 declare var SVGAnimatedLength: {
@@ -9593,8 +9593,8 @@ declare var SVGAnimatedLength: {
 }
 
 interface SVGAnimatedLengthList {
-    animVal: SVGLengthList;
-    baseVal: SVGLengthList;
+    readonly animVal: SVGLengthList;
+    readonly baseVal: SVGLengthList;
 }
 
 declare var SVGAnimatedLengthList: {
@@ -9603,7 +9603,7 @@ declare var SVGAnimatedLengthList: {
 }
 
 interface SVGAnimatedNumber {
-    animVal: number;
+    readonly animVal: number;
     baseVal: number;
 }
 
@@ -9613,8 +9613,8 @@ declare var SVGAnimatedNumber: {
 }
 
 interface SVGAnimatedNumberList {
-    animVal: SVGNumberList;
-    baseVal: SVGNumberList;
+    readonly animVal: SVGNumberList;
+    readonly baseVal: SVGNumberList;
 }
 
 declare var SVGAnimatedNumberList: {
@@ -9623,8 +9623,8 @@ declare var SVGAnimatedNumberList: {
 }
 
 interface SVGAnimatedPreserveAspectRatio {
-    animVal: SVGPreserveAspectRatio;
-    baseVal: SVGPreserveAspectRatio;
+    readonly animVal: SVGPreserveAspectRatio;
+    readonly baseVal: SVGPreserveAspectRatio;
 }
 
 declare var SVGAnimatedPreserveAspectRatio: {
@@ -9633,8 +9633,8 @@ declare var SVGAnimatedPreserveAspectRatio: {
 }
 
 interface SVGAnimatedRect {
-    animVal: SVGRect;
-    baseVal: SVGRect;
+    readonly animVal: SVGRect;
+    readonly baseVal: SVGRect;
 }
 
 declare var SVGAnimatedRect: {
@@ -9643,7 +9643,7 @@ declare var SVGAnimatedRect: {
 }
 
 interface SVGAnimatedString {
-    animVal: string;
+    readonly animVal: string;
     baseVal: string;
 }
 
@@ -9653,8 +9653,8 @@ declare var SVGAnimatedString: {
 }
 
 interface SVGAnimatedTransformList {
-    animVal: SVGTransformList;
-    baseVal: SVGTransformList;
+    readonly animVal: SVGTransformList;
+    readonly baseVal: SVGTransformList;
 }
 
 declare var SVGAnimatedTransformList: {
@@ -9663,9 +9663,9 @@ declare var SVGAnimatedTransformList: {
 }
 
 interface SVGCircleElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    cx: SVGAnimatedLength;
-    cy: SVGAnimatedLength;
-    r: SVGAnimatedLength;
+    readonly cx: SVGAnimatedLength;
+    readonly cy: SVGAnimatedLength;
+    readonly r: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9675,7 +9675,7 @@ declare var SVGCircleElement: {
 }
 
 interface SVGClipPathElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGUnitTypes {
-    clipPathUnits: SVGAnimatedEnumeration;
+    readonly clipPathUnits: SVGAnimatedEnumeration;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9685,30 +9685,30 @@ declare var SVGClipPathElement: {
 }
 
 interface SVGComponentTransferFunctionElement extends SVGElement {
-    amplitude: SVGAnimatedNumber;
-    exponent: SVGAnimatedNumber;
-    intercept: SVGAnimatedNumber;
-    offset: SVGAnimatedNumber;
-    slope: SVGAnimatedNumber;
-    tableValues: SVGAnimatedNumberList;
-    type: SVGAnimatedEnumeration;
-    SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
+    readonly amplitude: SVGAnimatedNumber;
+    readonly exponent: SVGAnimatedNumber;
+    readonly intercept: SVGAnimatedNumber;
+    readonly offset: SVGAnimatedNumber;
+    readonly slope: SVGAnimatedNumber;
+    readonly tableValues: SVGAnimatedNumberList;
+    readonly type: SVGAnimatedEnumeration;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
 }
 
 declare var SVGComponentTransferFunctionElement: {
     prototype: SVGComponentTransferFunctionElement;
     new(): SVGComponentTransferFunctionElement;
-    SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
-    SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
+    readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
 }
 
 interface SVGDefsElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
@@ -9740,8 +9740,8 @@ interface SVGElement extends Element {
     onmouseout: (ev: MouseEvent) => any;
     onmouseover: (ev: MouseEvent) => any;
     onmouseup: (ev: MouseEvent) => any;
-    ownerSVGElement: SVGSVGElement;
-    viewportElement: SVGElement;
+    readonly ownerSVGElement: SVGSVGElement;
+    readonly viewportElement: SVGElement;
     xmlbase: string;
     className: any;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -9799,14 +9799,14 @@ declare var SVGElement: {
 }
 
 interface SVGElementInstance extends EventTarget {
-    childNodes: SVGElementInstanceList;
-    correspondingElement: SVGElement;
-    correspondingUseElement: SVGUseElement;
-    firstChild: SVGElementInstance;
-    lastChild: SVGElementInstance;
-    nextSibling: SVGElementInstance;
-    parentNode: SVGElementInstance;
-    previousSibling: SVGElementInstance;
+    readonly childNodes: SVGElementInstanceList;
+    readonly correspondingElement: SVGElement;
+    readonly correspondingUseElement: SVGUseElement;
+    readonly firstChild: SVGElementInstance;
+    readonly lastChild: SVGElementInstance;
+    readonly nextSibling: SVGElementInstance;
+    readonly parentNode: SVGElementInstance;
+    readonly previousSibling: SVGElementInstance;
 }
 
 declare var SVGElementInstance: {
@@ -9815,7 +9815,7 @@ declare var SVGElementInstance: {
 }
 
 interface SVGElementInstanceList {
-    length: number;
+    readonly length: number;
     item(index: number): SVGElementInstance;
 }
 
@@ -9825,10 +9825,10 @@ declare var SVGElementInstanceList: {
 }
 
 interface SVGEllipseElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    cx: SVGAnimatedLength;
-    cy: SVGAnimatedLength;
-    rx: SVGAnimatedLength;
-    ry: SVGAnimatedLength;
+    readonly cx: SVGAnimatedLength;
+    readonly cy: SVGAnimatedLength;
+    readonly rx: SVGAnimatedLength;
+    readonly ry: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9838,75 +9838,75 @@ declare var SVGEllipseElement: {
 }
 
 interface SVGFEBlendElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    in2: SVGAnimatedString;
-    mode: SVGAnimatedEnumeration;
-    SVG_FEBLEND_MODE_COLOR: number;
-    SVG_FEBLEND_MODE_COLOR_BURN: number;
-    SVG_FEBLEND_MODE_COLOR_DODGE: number;
-    SVG_FEBLEND_MODE_DARKEN: number;
-    SVG_FEBLEND_MODE_DIFFERENCE: number;
-    SVG_FEBLEND_MODE_EXCLUSION: number;
-    SVG_FEBLEND_MODE_HARD_LIGHT: number;
-    SVG_FEBLEND_MODE_HUE: number;
-    SVG_FEBLEND_MODE_LIGHTEN: number;
-    SVG_FEBLEND_MODE_LUMINOSITY: number;
-    SVG_FEBLEND_MODE_MULTIPLY: number;
-    SVG_FEBLEND_MODE_NORMAL: number;
-    SVG_FEBLEND_MODE_OVERLAY: number;
-    SVG_FEBLEND_MODE_SATURATION: number;
-    SVG_FEBLEND_MODE_SCREEN: number;
-    SVG_FEBLEND_MODE_SOFT_LIGHT: number;
-    SVG_FEBLEND_MODE_UNKNOWN: number;
+    readonly in1: SVGAnimatedString;
+    readonly in2: SVGAnimatedString;
+    readonly mode: SVGAnimatedEnumeration;
+    readonly SVG_FEBLEND_MODE_COLOR: number;
+    readonly SVG_FEBLEND_MODE_COLOR_BURN: number;
+    readonly SVG_FEBLEND_MODE_COLOR_DODGE: number;
+    readonly SVG_FEBLEND_MODE_DARKEN: number;
+    readonly SVG_FEBLEND_MODE_DIFFERENCE: number;
+    readonly SVG_FEBLEND_MODE_EXCLUSION: number;
+    readonly SVG_FEBLEND_MODE_HARD_LIGHT: number;
+    readonly SVG_FEBLEND_MODE_HUE: number;
+    readonly SVG_FEBLEND_MODE_LIGHTEN: number;
+    readonly SVG_FEBLEND_MODE_LUMINOSITY: number;
+    readonly SVG_FEBLEND_MODE_MULTIPLY: number;
+    readonly SVG_FEBLEND_MODE_NORMAL: number;
+    readonly SVG_FEBLEND_MODE_OVERLAY: number;
+    readonly SVG_FEBLEND_MODE_SATURATION: number;
+    readonly SVG_FEBLEND_MODE_SCREEN: number;
+    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: number;
+    readonly SVG_FEBLEND_MODE_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEBlendElement: {
     prototype: SVGFEBlendElement;
     new(): SVGFEBlendElement;
-    SVG_FEBLEND_MODE_COLOR: number;
-    SVG_FEBLEND_MODE_COLOR_BURN: number;
-    SVG_FEBLEND_MODE_COLOR_DODGE: number;
-    SVG_FEBLEND_MODE_DARKEN: number;
-    SVG_FEBLEND_MODE_DIFFERENCE: number;
-    SVG_FEBLEND_MODE_EXCLUSION: number;
-    SVG_FEBLEND_MODE_HARD_LIGHT: number;
-    SVG_FEBLEND_MODE_HUE: number;
-    SVG_FEBLEND_MODE_LIGHTEN: number;
-    SVG_FEBLEND_MODE_LUMINOSITY: number;
-    SVG_FEBLEND_MODE_MULTIPLY: number;
-    SVG_FEBLEND_MODE_NORMAL: number;
-    SVG_FEBLEND_MODE_OVERLAY: number;
-    SVG_FEBLEND_MODE_SATURATION: number;
-    SVG_FEBLEND_MODE_SCREEN: number;
-    SVG_FEBLEND_MODE_SOFT_LIGHT: number;
-    SVG_FEBLEND_MODE_UNKNOWN: number;
+    readonly SVG_FEBLEND_MODE_COLOR: number;
+    readonly SVG_FEBLEND_MODE_COLOR_BURN: number;
+    readonly SVG_FEBLEND_MODE_COLOR_DODGE: number;
+    readonly SVG_FEBLEND_MODE_DARKEN: number;
+    readonly SVG_FEBLEND_MODE_DIFFERENCE: number;
+    readonly SVG_FEBLEND_MODE_EXCLUSION: number;
+    readonly SVG_FEBLEND_MODE_HARD_LIGHT: number;
+    readonly SVG_FEBLEND_MODE_HUE: number;
+    readonly SVG_FEBLEND_MODE_LIGHTEN: number;
+    readonly SVG_FEBLEND_MODE_LUMINOSITY: number;
+    readonly SVG_FEBLEND_MODE_MULTIPLY: number;
+    readonly SVG_FEBLEND_MODE_NORMAL: number;
+    readonly SVG_FEBLEND_MODE_OVERLAY: number;
+    readonly SVG_FEBLEND_MODE_SATURATION: number;
+    readonly SVG_FEBLEND_MODE_SCREEN: number;
+    readonly SVG_FEBLEND_MODE_SOFT_LIGHT: number;
+    readonly SVG_FEBLEND_MODE_UNKNOWN: number;
 }
 
 interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    type: SVGAnimatedEnumeration;
-    values: SVGAnimatedNumberList;
-    SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
-    SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
-    SVG_FECOLORMATRIX_TYPE_MATRIX: number;
-    SVG_FECOLORMATRIX_TYPE_SATURATE: number;
-    SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
+    readonly in1: SVGAnimatedString;
+    readonly type: SVGAnimatedEnumeration;
+    readonly values: SVGAnimatedNumberList;
+    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
+    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
+    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: number;
+    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: number;
+    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEColorMatrixElement: {
     prototype: SVGFEColorMatrixElement;
     new(): SVGFEColorMatrixElement;
-    SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
-    SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
-    SVG_FECOLORMATRIX_TYPE_MATRIX: number;
-    SVG_FECOLORMATRIX_TYPE_SATURATE: number;
-    SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
+    readonly SVG_FECOLORMATRIX_TYPE_HUEROTATE: number;
+    readonly SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: number;
+    readonly SVG_FECOLORMATRIX_TYPE_MATRIX: number;
+    readonly SVG_FECOLORMATRIX_TYPE_SATURATE: number;
+    readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
 }
 
 interface SVGFEComponentTransferElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
+    readonly in1: SVGAnimatedString;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9916,70 +9916,70 @@ declare var SVGFEComponentTransferElement: {
 }
 
 interface SVGFECompositeElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    in2: SVGAnimatedString;
-    k1: SVGAnimatedNumber;
-    k2: SVGAnimatedNumber;
-    k3: SVGAnimatedNumber;
-    k4: SVGAnimatedNumber;
-    operator: SVGAnimatedEnumeration;
-    SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
-    SVG_FECOMPOSITE_OPERATOR_ATOP: number;
-    SVG_FECOMPOSITE_OPERATOR_IN: number;
-    SVG_FECOMPOSITE_OPERATOR_OUT: number;
-    SVG_FECOMPOSITE_OPERATOR_OVER: number;
-    SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
-    SVG_FECOMPOSITE_OPERATOR_XOR: number;
+    readonly in1: SVGAnimatedString;
+    readonly in2: SVGAnimatedString;
+    readonly k1: SVGAnimatedNumber;
+    readonly k2: SVGAnimatedNumber;
+    readonly k3: SVGAnimatedNumber;
+    readonly k4: SVGAnimatedNumber;
+    readonly operator: SVGAnimatedEnumeration;
+    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_IN: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_OUT: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_OVER: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_XOR: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFECompositeElement: {
     prototype: SVGFECompositeElement;
     new(): SVGFECompositeElement;
-    SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
-    SVG_FECOMPOSITE_OPERATOR_ATOP: number;
-    SVG_FECOMPOSITE_OPERATOR_IN: number;
-    SVG_FECOMPOSITE_OPERATOR_OUT: number;
-    SVG_FECOMPOSITE_OPERATOR_OVER: number;
-    SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
-    SVG_FECOMPOSITE_OPERATOR_XOR: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_ATOP: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_IN: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_OUT: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_OVER: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
+    readonly SVG_FECOMPOSITE_OPERATOR_XOR: number;
 }
 
 interface SVGFEConvolveMatrixElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    bias: SVGAnimatedNumber;
-    divisor: SVGAnimatedNumber;
-    edgeMode: SVGAnimatedEnumeration;
-    in1: SVGAnimatedString;
-    kernelMatrix: SVGAnimatedNumberList;
-    kernelUnitLengthX: SVGAnimatedNumber;
-    kernelUnitLengthY: SVGAnimatedNumber;
-    orderX: SVGAnimatedInteger;
-    orderY: SVGAnimatedInteger;
-    preserveAlpha: SVGAnimatedBoolean;
-    targetX: SVGAnimatedInteger;
-    targetY: SVGAnimatedInteger;
-    SVG_EDGEMODE_DUPLICATE: number;
-    SVG_EDGEMODE_NONE: number;
-    SVG_EDGEMODE_UNKNOWN: number;
-    SVG_EDGEMODE_WRAP: number;
+    readonly bias: SVGAnimatedNumber;
+    readonly divisor: SVGAnimatedNumber;
+    readonly edgeMode: SVGAnimatedEnumeration;
+    readonly in1: SVGAnimatedString;
+    readonly kernelMatrix: SVGAnimatedNumberList;
+    readonly kernelUnitLengthX: SVGAnimatedNumber;
+    readonly kernelUnitLengthY: SVGAnimatedNumber;
+    readonly orderX: SVGAnimatedInteger;
+    readonly orderY: SVGAnimatedInteger;
+    readonly preserveAlpha: SVGAnimatedBoolean;
+    readonly targetX: SVGAnimatedInteger;
+    readonly targetY: SVGAnimatedInteger;
+    readonly SVG_EDGEMODE_DUPLICATE: number;
+    readonly SVG_EDGEMODE_NONE: number;
+    readonly SVG_EDGEMODE_UNKNOWN: number;
+    readonly SVG_EDGEMODE_WRAP: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEConvolveMatrixElement: {
     prototype: SVGFEConvolveMatrixElement;
     new(): SVGFEConvolveMatrixElement;
-    SVG_EDGEMODE_DUPLICATE: number;
-    SVG_EDGEMODE_NONE: number;
-    SVG_EDGEMODE_UNKNOWN: number;
-    SVG_EDGEMODE_WRAP: number;
+    readonly SVG_EDGEMODE_DUPLICATE: number;
+    readonly SVG_EDGEMODE_NONE: number;
+    readonly SVG_EDGEMODE_UNKNOWN: number;
+    readonly SVG_EDGEMODE_WRAP: number;
 }
 
 interface SVGFEDiffuseLightingElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    diffuseConstant: SVGAnimatedNumber;
-    in1: SVGAnimatedString;
-    kernelUnitLengthX: SVGAnimatedNumber;
-    kernelUnitLengthY: SVGAnimatedNumber;
-    surfaceScale: SVGAnimatedNumber;
+    readonly diffuseConstant: SVGAnimatedNumber;
+    readonly in1: SVGAnimatedString;
+    readonly kernelUnitLengthX: SVGAnimatedNumber;
+    readonly kernelUnitLengthY: SVGAnimatedNumber;
+    readonly surfaceScale: SVGAnimatedNumber;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9989,32 +9989,32 @@ declare var SVGFEDiffuseLightingElement: {
 }
 
 interface SVGFEDisplacementMapElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    in2: SVGAnimatedString;
-    scale: SVGAnimatedNumber;
-    xChannelSelector: SVGAnimatedEnumeration;
-    yChannelSelector: SVGAnimatedEnumeration;
-    SVG_CHANNEL_A: number;
-    SVG_CHANNEL_B: number;
-    SVG_CHANNEL_G: number;
-    SVG_CHANNEL_R: number;
-    SVG_CHANNEL_UNKNOWN: number;
+    readonly in1: SVGAnimatedString;
+    readonly in2: SVGAnimatedString;
+    readonly scale: SVGAnimatedNumber;
+    readonly xChannelSelector: SVGAnimatedEnumeration;
+    readonly yChannelSelector: SVGAnimatedEnumeration;
+    readonly SVG_CHANNEL_A: number;
+    readonly SVG_CHANNEL_B: number;
+    readonly SVG_CHANNEL_G: number;
+    readonly SVG_CHANNEL_R: number;
+    readonly SVG_CHANNEL_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEDisplacementMapElement: {
     prototype: SVGFEDisplacementMapElement;
     new(): SVGFEDisplacementMapElement;
-    SVG_CHANNEL_A: number;
-    SVG_CHANNEL_B: number;
-    SVG_CHANNEL_G: number;
-    SVG_CHANNEL_R: number;
-    SVG_CHANNEL_UNKNOWN: number;
+    readonly SVG_CHANNEL_A: number;
+    readonly SVG_CHANNEL_B: number;
+    readonly SVG_CHANNEL_G: number;
+    readonly SVG_CHANNEL_R: number;
+    readonly SVG_CHANNEL_UNKNOWN: number;
 }
 
 interface SVGFEDistantLightElement extends SVGElement {
-    azimuth: SVGAnimatedNumber;
-    elevation: SVGAnimatedNumber;
+    readonly azimuth: SVGAnimatedNumber;
+    readonly elevation: SVGAnimatedNumber;
 }
 
 declare var SVGFEDistantLightElement: {
@@ -10064,9 +10064,9 @@ declare var SVGFEFuncRElement: {
 }
 
 interface SVGFEGaussianBlurElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    stdDeviationX: SVGAnimatedNumber;
-    stdDeviationY: SVGAnimatedNumber;
+    readonly in1: SVGAnimatedString;
+    readonly stdDeviationX: SVGAnimatedNumber;
+    readonly stdDeviationY: SVGAnimatedNumber;
     setStdDeviation(stdDeviationX: number, stdDeviationY: number): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -10077,7 +10077,7 @@ declare var SVGFEGaussianBlurElement: {
 }
 
 interface SVGFEImageElement extends SVGElement, SVGFilterPrimitiveStandardAttributes, SVGLangSpace, SVGURIReference, SVGExternalResourcesRequired {
-    preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
+    readonly preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10096,7 +10096,7 @@ declare var SVGFEMergeElement: {
 }
 
 interface SVGFEMergeNodeElement extends SVGElement {
-    in1: SVGAnimatedString;
+    readonly in1: SVGAnimatedString;
 }
 
 declare var SVGFEMergeNodeElement: {
@@ -10105,28 +10105,28 @@ declare var SVGFEMergeNodeElement: {
 }
 
 interface SVGFEMorphologyElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    operator: SVGAnimatedEnumeration;
-    radiusX: SVGAnimatedNumber;
-    radiusY: SVGAnimatedNumber;
-    SVG_MORPHOLOGY_OPERATOR_DILATE: number;
-    SVG_MORPHOLOGY_OPERATOR_ERODE: number;
-    SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
+    readonly in1: SVGAnimatedString;
+    readonly operator: SVGAnimatedEnumeration;
+    readonly radiusX: SVGAnimatedNumber;
+    readonly radiusY: SVGAnimatedNumber;
+    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEMorphologyElement: {
     prototype: SVGFEMorphologyElement;
     new(): SVGFEMorphologyElement;
-    SVG_MORPHOLOGY_OPERATOR_DILATE: number;
-    SVG_MORPHOLOGY_OPERATOR_ERODE: number;
-    SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_DILATE: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_ERODE: number;
+    readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
 }
 
 interface SVGFEOffsetElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    dx: SVGAnimatedNumber;
-    dy: SVGAnimatedNumber;
-    in1: SVGAnimatedString;
+    readonly dx: SVGAnimatedNumber;
+    readonly dy: SVGAnimatedNumber;
+    readonly in1: SVGAnimatedString;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10136,9 +10136,9 @@ declare var SVGFEOffsetElement: {
 }
 
 interface SVGFEPointLightElement extends SVGElement {
-    x: SVGAnimatedNumber;
-    y: SVGAnimatedNumber;
-    z: SVGAnimatedNumber;
+    readonly x: SVGAnimatedNumber;
+    readonly y: SVGAnimatedNumber;
+    readonly z: SVGAnimatedNumber;
 }
 
 declare var SVGFEPointLightElement: {
@@ -10147,12 +10147,12 @@ declare var SVGFEPointLightElement: {
 }
 
 interface SVGFESpecularLightingElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
-    kernelUnitLengthX: SVGAnimatedNumber;
-    kernelUnitLengthY: SVGAnimatedNumber;
-    specularConstant: SVGAnimatedNumber;
-    specularExponent: SVGAnimatedNumber;
-    surfaceScale: SVGAnimatedNumber;
+    readonly in1: SVGAnimatedString;
+    readonly kernelUnitLengthX: SVGAnimatedNumber;
+    readonly kernelUnitLengthY: SVGAnimatedNumber;
+    readonly specularConstant: SVGAnimatedNumber;
+    readonly specularExponent: SVGAnimatedNumber;
+    readonly surfaceScale: SVGAnimatedNumber;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10162,14 +10162,14 @@ declare var SVGFESpecularLightingElement: {
 }
 
 interface SVGFESpotLightElement extends SVGElement {
-    limitingConeAngle: SVGAnimatedNumber;
-    pointsAtX: SVGAnimatedNumber;
-    pointsAtY: SVGAnimatedNumber;
-    pointsAtZ: SVGAnimatedNumber;
-    specularExponent: SVGAnimatedNumber;
-    x: SVGAnimatedNumber;
-    y: SVGAnimatedNumber;
-    z: SVGAnimatedNumber;
+    readonly limitingConeAngle: SVGAnimatedNumber;
+    readonly pointsAtX: SVGAnimatedNumber;
+    readonly pointsAtY: SVGAnimatedNumber;
+    readonly pointsAtZ: SVGAnimatedNumber;
+    readonly specularExponent: SVGAnimatedNumber;
+    readonly x: SVGAnimatedNumber;
+    readonly y: SVGAnimatedNumber;
+    readonly z: SVGAnimatedNumber;
 }
 
 declare var SVGFESpotLightElement: {
@@ -10178,7 +10178,7 @@ declare var SVGFESpotLightElement: {
 }
 
 interface SVGFETileElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    in1: SVGAnimatedString;
+    readonly in1: SVGAnimatedString;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10188,41 +10188,41 @@ declare var SVGFETileElement: {
 }
 
 interface SVGFETurbulenceElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
-    baseFrequencyX: SVGAnimatedNumber;
-    baseFrequencyY: SVGAnimatedNumber;
-    numOctaves: SVGAnimatedInteger;
-    seed: SVGAnimatedNumber;
-    stitchTiles: SVGAnimatedEnumeration;
-    type: SVGAnimatedEnumeration;
-    SVG_STITCHTYPE_NOSTITCH: number;
-    SVG_STITCHTYPE_STITCH: number;
-    SVG_STITCHTYPE_UNKNOWN: number;
-    SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
-    SVG_TURBULENCE_TYPE_TURBULENCE: number;
-    SVG_TURBULENCE_TYPE_UNKNOWN: number;
+    readonly baseFrequencyX: SVGAnimatedNumber;
+    readonly baseFrequencyY: SVGAnimatedNumber;
+    readonly numOctaves: SVGAnimatedInteger;
+    readonly seed: SVGAnimatedNumber;
+    readonly stitchTiles: SVGAnimatedEnumeration;
+    readonly type: SVGAnimatedEnumeration;
+    readonly SVG_STITCHTYPE_NOSTITCH: number;
+    readonly SVG_STITCHTYPE_STITCH: number;
+    readonly SVG_STITCHTYPE_UNKNOWN: number;
+    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
+    readonly SVG_TURBULENCE_TYPE_TURBULENCE: number;
+    readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFETurbulenceElement: {
     prototype: SVGFETurbulenceElement;
     new(): SVGFETurbulenceElement;
-    SVG_STITCHTYPE_NOSTITCH: number;
-    SVG_STITCHTYPE_STITCH: number;
-    SVG_STITCHTYPE_UNKNOWN: number;
-    SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
-    SVG_TURBULENCE_TYPE_TURBULENCE: number;
-    SVG_TURBULENCE_TYPE_UNKNOWN: number;
+    readonly SVG_STITCHTYPE_NOSTITCH: number;
+    readonly SVG_STITCHTYPE_STITCH: number;
+    readonly SVG_STITCHTYPE_UNKNOWN: number;
+    readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
+    readonly SVG_TURBULENCE_TYPE_TURBULENCE: number;
+    readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
 }
 
 interface SVGFilterElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLangSpace, SVGURIReference, SVGExternalResourcesRequired {
-    filterResX: SVGAnimatedInteger;
-    filterResY: SVGAnimatedInteger;
-    filterUnits: SVGAnimatedEnumeration;
-    height: SVGAnimatedLength;
-    primitiveUnits: SVGAnimatedEnumeration;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly filterResX: SVGAnimatedInteger;
+    readonly filterResY: SVGAnimatedInteger;
+    readonly filterUnits: SVGAnimatedEnumeration;
+    readonly height: SVGAnimatedLength;
+    readonly primitiveUnits: SVGAnimatedEnumeration;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     setFilterRes(filterResX: number, filterResY: number): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -10233,10 +10233,10 @@ declare var SVGFilterElement: {
 }
 
 interface SVGForeignObjectElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    height: SVGAnimatedLength;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10255,31 +10255,31 @@ declare var SVGGElement: {
 }
 
 interface SVGGradientElement extends SVGElement, SVGStylable, SVGExternalResourcesRequired, SVGURIReference, SVGUnitTypes {
-    gradientTransform: SVGAnimatedTransformList;
-    gradientUnits: SVGAnimatedEnumeration;
-    spreadMethod: SVGAnimatedEnumeration;
-    SVG_SPREADMETHOD_PAD: number;
-    SVG_SPREADMETHOD_REFLECT: number;
-    SVG_SPREADMETHOD_REPEAT: number;
-    SVG_SPREADMETHOD_UNKNOWN: number;
+    readonly gradientTransform: SVGAnimatedTransformList;
+    readonly gradientUnits: SVGAnimatedEnumeration;
+    readonly spreadMethod: SVGAnimatedEnumeration;
+    readonly SVG_SPREADMETHOD_PAD: number;
+    readonly SVG_SPREADMETHOD_REFLECT: number;
+    readonly SVG_SPREADMETHOD_REPEAT: number;
+    readonly SVG_SPREADMETHOD_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGGradientElement: {
     prototype: SVGGradientElement;
     new(): SVGGradientElement;
-    SVG_SPREADMETHOD_PAD: number;
-    SVG_SPREADMETHOD_REFLECT: number;
-    SVG_SPREADMETHOD_REPEAT: number;
-    SVG_SPREADMETHOD_UNKNOWN: number;
+    readonly SVG_SPREADMETHOD_PAD: number;
+    readonly SVG_SPREADMETHOD_REFLECT: number;
+    readonly SVG_SPREADMETHOD_REPEAT: number;
+    readonly SVG_SPREADMETHOD_UNKNOWN: number;
 }
 
 interface SVGImageElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
-    height: SVGAnimatedLength;
-    preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10289,43 +10289,43 @@ declare var SVGImageElement: {
 }
 
 interface SVGLength {
-    unitType: number;
+    readonly unitType: number;
     value: number;
     valueAsString: string;
     valueInSpecifiedUnits: number;
     convertToSpecifiedUnits(unitType: number): void;
     newValueSpecifiedUnits(unitType: number, valueInSpecifiedUnits: number): void;
-    SVG_LENGTHTYPE_CM: number;
-    SVG_LENGTHTYPE_EMS: number;
-    SVG_LENGTHTYPE_EXS: number;
-    SVG_LENGTHTYPE_IN: number;
-    SVG_LENGTHTYPE_MM: number;
-    SVG_LENGTHTYPE_NUMBER: number;
-    SVG_LENGTHTYPE_PC: number;
-    SVG_LENGTHTYPE_PERCENTAGE: number;
-    SVG_LENGTHTYPE_PT: number;
-    SVG_LENGTHTYPE_PX: number;
-    SVG_LENGTHTYPE_UNKNOWN: number;
+    readonly SVG_LENGTHTYPE_CM: number;
+    readonly SVG_LENGTHTYPE_EMS: number;
+    readonly SVG_LENGTHTYPE_EXS: number;
+    readonly SVG_LENGTHTYPE_IN: number;
+    readonly SVG_LENGTHTYPE_MM: number;
+    readonly SVG_LENGTHTYPE_NUMBER: number;
+    readonly SVG_LENGTHTYPE_PC: number;
+    readonly SVG_LENGTHTYPE_PERCENTAGE: number;
+    readonly SVG_LENGTHTYPE_PT: number;
+    readonly SVG_LENGTHTYPE_PX: number;
+    readonly SVG_LENGTHTYPE_UNKNOWN: number;
 }
 
 declare var SVGLength: {
     prototype: SVGLength;
     new(): SVGLength;
-    SVG_LENGTHTYPE_CM: number;
-    SVG_LENGTHTYPE_EMS: number;
-    SVG_LENGTHTYPE_EXS: number;
-    SVG_LENGTHTYPE_IN: number;
-    SVG_LENGTHTYPE_MM: number;
-    SVG_LENGTHTYPE_NUMBER: number;
-    SVG_LENGTHTYPE_PC: number;
-    SVG_LENGTHTYPE_PERCENTAGE: number;
-    SVG_LENGTHTYPE_PT: number;
-    SVG_LENGTHTYPE_PX: number;
-    SVG_LENGTHTYPE_UNKNOWN: number;
+    readonly SVG_LENGTHTYPE_CM: number;
+    readonly SVG_LENGTHTYPE_EMS: number;
+    readonly SVG_LENGTHTYPE_EXS: number;
+    readonly SVG_LENGTHTYPE_IN: number;
+    readonly SVG_LENGTHTYPE_MM: number;
+    readonly SVG_LENGTHTYPE_NUMBER: number;
+    readonly SVG_LENGTHTYPE_PC: number;
+    readonly SVG_LENGTHTYPE_PERCENTAGE: number;
+    readonly SVG_LENGTHTYPE_PT: number;
+    readonly SVG_LENGTHTYPE_PX: number;
+    readonly SVG_LENGTHTYPE_UNKNOWN: number;
 }
 
 interface SVGLengthList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: SVGLength): SVGLength;
     clear(): void;
     getItem(index: number): SVGLength;
@@ -10341,10 +10341,10 @@ declare var SVGLengthList: {
 }
 
 interface SVGLineElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    x1: SVGAnimatedLength;
-    x2: SVGAnimatedLength;
-    y1: SVGAnimatedLength;
-    y2: SVGAnimatedLength;
+    readonly x1: SVGAnimatedLength;
+    readonly x2: SVGAnimatedLength;
+    readonly y1: SVGAnimatedLength;
+    readonly y2: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10354,10 +10354,10 @@ declare var SVGLineElement: {
 }
 
 interface SVGLinearGradientElement extends SVGGradientElement {
-    x1: SVGAnimatedLength;
-    x2: SVGAnimatedLength;
-    y1: SVGAnimatedLength;
-    y2: SVGAnimatedLength;
+    readonly x1: SVGAnimatedLength;
+    readonly x2: SVGAnimatedLength;
+    readonly y1: SVGAnimatedLength;
+    readonly y2: SVGAnimatedLength;
 }
 
 declare var SVGLinearGradientElement: {
@@ -10366,42 +10366,42 @@ declare var SVGLinearGradientElement: {
 }
 
 interface SVGMarkerElement extends SVGElement, SVGStylable, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox {
-    markerHeight: SVGAnimatedLength;
-    markerUnits: SVGAnimatedEnumeration;
-    markerWidth: SVGAnimatedLength;
-    orientAngle: SVGAnimatedAngle;
-    orientType: SVGAnimatedEnumeration;
-    refX: SVGAnimatedLength;
-    refY: SVGAnimatedLength;
+    readonly markerHeight: SVGAnimatedLength;
+    readonly markerUnits: SVGAnimatedEnumeration;
+    readonly markerWidth: SVGAnimatedLength;
+    readonly orientAngle: SVGAnimatedAngle;
+    readonly orientType: SVGAnimatedEnumeration;
+    readonly refX: SVGAnimatedLength;
+    readonly refY: SVGAnimatedLength;
     setOrientToAngle(angle: SVGAngle): void;
     setOrientToAuto(): void;
-    SVG_MARKERUNITS_STROKEWIDTH: number;
-    SVG_MARKERUNITS_UNKNOWN: number;
-    SVG_MARKERUNITS_USERSPACEONUSE: number;
-    SVG_MARKER_ORIENT_ANGLE: number;
-    SVG_MARKER_ORIENT_AUTO: number;
-    SVG_MARKER_ORIENT_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_STROKEWIDTH: number;
+    readonly SVG_MARKERUNITS_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_USERSPACEONUSE: number;
+    readonly SVG_MARKER_ORIENT_ANGLE: number;
+    readonly SVG_MARKER_ORIENT_AUTO: number;
+    readonly SVG_MARKER_ORIENT_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGMarkerElement: {
     prototype: SVGMarkerElement;
     new(): SVGMarkerElement;
-    SVG_MARKERUNITS_STROKEWIDTH: number;
-    SVG_MARKERUNITS_UNKNOWN: number;
-    SVG_MARKERUNITS_USERSPACEONUSE: number;
-    SVG_MARKER_ORIENT_ANGLE: number;
-    SVG_MARKER_ORIENT_AUTO: number;
-    SVG_MARKER_ORIENT_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_STROKEWIDTH: number;
+    readonly SVG_MARKERUNITS_UNKNOWN: number;
+    readonly SVG_MARKERUNITS_USERSPACEONUSE: number;
+    readonly SVG_MARKER_ORIENT_ANGLE: number;
+    readonly SVG_MARKER_ORIENT_AUTO: number;
+    readonly SVG_MARKER_ORIENT_UNKNOWN: number;
 }
 
 interface SVGMaskElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGUnitTypes {
-    height: SVGAnimatedLength;
-    maskContentUnits: SVGAnimatedEnumeration;
-    maskUnits: SVGAnimatedEnumeration;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly maskContentUnits: SVGAnimatedEnumeration;
+    readonly maskUnits: SVGAnimatedEnumeration;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10453,7 +10453,7 @@ declare var SVGNumber: {
 }
 
 interface SVGNumberList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: SVGNumber): SVGNumber;
     clear(): void;
     getItem(index: number): SVGNumber;
@@ -10500,53 +10500,53 @@ declare var SVGPathElement: {
 }
 
 interface SVGPathSeg {
-    pathSegType: number;
-    pathSegTypeAsLetter: string;
-    PATHSEG_ARC_ABS: number;
-    PATHSEG_ARC_REL: number;
-    PATHSEG_CLOSEPATH: number;
-    PATHSEG_CURVETO_CUBIC_ABS: number;
-    PATHSEG_CURVETO_CUBIC_REL: number;
-    PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
-    PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
-    PATHSEG_CURVETO_QUADRATIC_ABS: number;
-    PATHSEG_CURVETO_QUADRATIC_REL: number;
-    PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
-    PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
-    PATHSEG_LINETO_ABS: number;
-    PATHSEG_LINETO_HORIZONTAL_ABS: number;
-    PATHSEG_LINETO_HORIZONTAL_REL: number;
-    PATHSEG_LINETO_REL: number;
-    PATHSEG_LINETO_VERTICAL_ABS: number;
-    PATHSEG_LINETO_VERTICAL_REL: number;
-    PATHSEG_MOVETO_ABS: number;
-    PATHSEG_MOVETO_REL: number;
-    PATHSEG_UNKNOWN: number;
+    readonly pathSegType: number;
+    readonly pathSegTypeAsLetter: string;
+    readonly PATHSEG_ARC_ABS: number;
+    readonly PATHSEG_ARC_REL: number;
+    readonly PATHSEG_CLOSEPATH: number;
+    readonly PATHSEG_CURVETO_CUBIC_ABS: number;
+    readonly PATHSEG_CURVETO_CUBIC_REL: number;
+    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
+    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_ABS: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_REL: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
+    readonly PATHSEG_LINETO_ABS: number;
+    readonly PATHSEG_LINETO_HORIZONTAL_ABS: number;
+    readonly PATHSEG_LINETO_HORIZONTAL_REL: number;
+    readonly PATHSEG_LINETO_REL: number;
+    readonly PATHSEG_LINETO_VERTICAL_ABS: number;
+    readonly PATHSEG_LINETO_VERTICAL_REL: number;
+    readonly PATHSEG_MOVETO_ABS: number;
+    readonly PATHSEG_MOVETO_REL: number;
+    readonly PATHSEG_UNKNOWN: number;
 }
 
 declare var SVGPathSeg: {
     prototype: SVGPathSeg;
     new(): SVGPathSeg;
-    PATHSEG_ARC_ABS: number;
-    PATHSEG_ARC_REL: number;
-    PATHSEG_CLOSEPATH: number;
-    PATHSEG_CURVETO_CUBIC_ABS: number;
-    PATHSEG_CURVETO_CUBIC_REL: number;
-    PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
-    PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
-    PATHSEG_CURVETO_QUADRATIC_ABS: number;
-    PATHSEG_CURVETO_QUADRATIC_REL: number;
-    PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
-    PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
-    PATHSEG_LINETO_ABS: number;
-    PATHSEG_LINETO_HORIZONTAL_ABS: number;
-    PATHSEG_LINETO_HORIZONTAL_REL: number;
-    PATHSEG_LINETO_REL: number;
-    PATHSEG_LINETO_VERTICAL_ABS: number;
-    PATHSEG_LINETO_VERTICAL_REL: number;
-    PATHSEG_MOVETO_ABS: number;
-    PATHSEG_MOVETO_REL: number;
-    PATHSEG_UNKNOWN: number;
+    readonly PATHSEG_ARC_ABS: number;
+    readonly PATHSEG_ARC_REL: number;
+    readonly PATHSEG_CLOSEPATH: number;
+    readonly PATHSEG_CURVETO_CUBIC_ABS: number;
+    readonly PATHSEG_CURVETO_CUBIC_REL: number;
+    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_ABS: number;
+    readonly PATHSEG_CURVETO_CUBIC_SMOOTH_REL: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_ABS: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_REL: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: number;
+    readonly PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: number;
+    readonly PATHSEG_LINETO_ABS: number;
+    readonly PATHSEG_LINETO_HORIZONTAL_ABS: number;
+    readonly PATHSEG_LINETO_HORIZONTAL_REL: number;
+    readonly PATHSEG_LINETO_REL: number;
+    readonly PATHSEG_LINETO_VERTICAL_ABS: number;
+    readonly PATHSEG_LINETO_VERTICAL_REL: number;
+    readonly PATHSEG_MOVETO_ABS: number;
+    readonly PATHSEG_MOVETO_REL: number;
+    readonly PATHSEG_UNKNOWN: number;
 }
 
 interface SVGPathSegArcAbs extends SVGPathSeg {
@@ -10740,7 +10740,7 @@ declare var SVGPathSegLinetoVerticalRel: {
 }
 
 interface SVGPathSegList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: SVGPathSeg): SVGPathSeg;
     clear(): void;
     getItem(index: number): SVGPathSeg;
@@ -10776,13 +10776,13 @@ declare var SVGPathSegMovetoRel: {
 }
 
 interface SVGPatternElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox, SVGURIReference, SVGUnitTypes {
-    height: SVGAnimatedLength;
-    patternContentUnits: SVGAnimatedEnumeration;
-    patternTransform: SVGAnimatedTransformList;
-    patternUnits: SVGAnimatedEnumeration;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly patternContentUnits: SVGAnimatedEnumeration;
+    readonly patternTransform: SVGAnimatedTransformList;
+    readonly patternUnits: SVGAnimatedEnumeration;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10803,7 +10803,7 @@ declare var SVGPoint: {
 }
 
 interface SVGPointList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: SVGPoint): SVGPoint;
     clear(): void;
     getItem(index: number): SVGPoint;
@@ -10839,47 +10839,47 @@ declare var SVGPolylineElement: {
 interface SVGPreserveAspectRatio {
     align: number;
     meetOrSlice: number;
-    SVG_MEETORSLICE_MEET: number;
-    SVG_MEETORSLICE_SLICE: number;
-    SVG_MEETORSLICE_UNKNOWN: number;
-    SVG_PRESERVEASPECTRATIO_NONE: number;
-    SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
+    readonly SVG_MEETORSLICE_MEET: number;
+    readonly SVG_MEETORSLICE_SLICE: number;
+    readonly SVG_MEETORSLICE_UNKNOWN: number;
+    readonly SVG_PRESERVEASPECTRATIO_NONE: number;
+    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
 }
 
 declare var SVGPreserveAspectRatio: {
     prototype: SVGPreserveAspectRatio;
     new(): SVGPreserveAspectRatio;
-    SVG_MEETORSLICE_MEET: number;
-    SVG_MEETORSLICE_SLICE: number;
-    SVG_MEETORSLICE_UNKNOWN: number;
-    SVG_PRESERVEASPECTRATIO_NONE: number;
-    SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMID: number;
-    SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
+    readonly SVG_MEETORSLICE_MEET: number;
+    readonly SVG_MEETORSLICE_SLICE: number;
+    readonly SVG_MEETORSLICE_UNKNOWN: number;
+    readonly SVG_PRESERVEASPECTRATIO_NONE: number;
+    readonly SVG_PRESERVEASPECTRATIO_UNKNOWN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMAXYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMIDYMIN: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMAX: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMID: number;
+    readonly SVG_PRESERVEASPECTRATIO_XMINYMIN: number;
 }
 
 interface SVGRadialGradientElement extends SVGGradientElement {
-    cx: SVGAnimatedLength;
-    cy: SVGAnimatedLength;
-    fx: SVGAnimatedLength;
-    fy: SVGAnimatedLength;
-    r: SVGAnimatedLength;
+    readonly cx: SVGAnimatedLength;
+    readonly cy: SVGAnimatedLength;
+    readonly fx: SVGAnimatedLength;
+    readonly fy: SVGAnimatedLength;
+    readonly r: SVGAnimatedLength;
 }
 
 declare var SVGRadialGradientElement: {
@@ -10900,12 +10900,12 @@ declare var SVGRect: {
 }
 
 interface SVGRectElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    height: SVGAnimatedLength;
-    rx: SVGAnimatedLength;
-    ry: SVGAnimatedLength;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly rx: SVGAnimatedLength;
+    readonly ry: SVGAnimatedLength;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10918,22 +10918,22 @@ interface SVGSVGElement extends SVGElement, DocumentEvent, SVGLocatable, SVGTest
     contentScriptType: string;
     contentStyleType: string;
     currentScale: number;
-    currentTranslate: SVGPoint;
-    height: SVGAnimatedLength;
+    readonly currentTranslate: SVGPoint;
+    readonly height: SVGAnimatedLength;
     onabort: (ev: Event) => any;
     onerror: (ev: Event) => any;
     onresize: (ev: UIEvent) => any;
     onscroll: (ev: UIEvent) => any;
     onunload: (ev: Event) => any;
     onzoom: (ev: SVGZoomEvent) => any;
-    pixelUnitToMillimeterX: number;
-    pixelUnitToMillimeterY: number;
-    screenPixelToMillimeterX: number;
-    screenPixelToMillimeterY: number;
-    viewport: SVGRect;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly pixelUnitToMillimeterX: number;
+    readonly pixelUnitToMillimeterY: number;
+    readonly screenPixelToMillimeterX: number;
+    readonly screenPixelToMillimeterY: number;
+    readonly viewport: SVGRect;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     checkEnclosure(element: SVGElement, rect: SVGRect): boolean;
     checkIntersection(element: SVGElement, rect: SVGRect): boolean;
     createSVGAngle(): SVGAngle;
@@ -10949,8 +10949,8 @@ interface SVGSVGElement extends SVGElement, DocumentEvent, SVGLocatable, SVGTest
     getComputedStyle(elt: Element, pseudoElt?: string): CSSStyleDeclaration;
     getCurrentTime(): number;
     getElementById(elementId: string): Element;
-    getEnclosureList(rect: SVGRect, referenceElement: SVGElement): NodeList;
-    getIntersectionList(rect: SVGRect, referenceElement: SVGElement): NodeList;
+    getEnclosureList(rect: SVGRect, referenceElement: SVGElement): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
+    getIntersectionList(rect: SVGRect, referenceElement: SVGElement): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
     pauseAnimations(): void;
     setCurrentTime(seconds: number): void;
     suspendRedraw(maxWaitMilliseconds: number): number;
@@ -11028,7 +11028,7 @@ declare var SVGScriptElement: {
 }
 
 interface SVGStopElement extends SVGElement, SVGStylable {
-    offset: SVGAnimatedNumber;
+    readonly offset: SVGAnimatedNumber;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -11038,7 +11038,7 @@ declare var SVGStopElement: {
 }
 
 interface SVGStringList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: string): string;
     clear(): void;
     getItem(index: number): string;
@@ -11093,8 +11093,8 @@ declare var SVGTSpanElement: {
 }
 
 interface SVGTextContentElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
-    lengthAdjust: SVGAnimatedEnumeration;
-    textLength: SVGAnimatedLength;
+    readonly lengthAdjust: SVGAnimatedEnumeration;
+    readonly textLength: SVGAnimatedLength;
     getCharNumAtPosition(point: SVGPoint): number;
     getComputedTextLength(): number;
     getEndPositionOfChar(charnum: number): SVGPoint;
@@ -11104,18 +11104,18 @@ interface SVGTextContentElement extends SVGElement, SVGStylable, SVGTests, SVGLa
     getStartPositionOfChar(charnum: number): SVGPoint;
     getSubStringLength(charnum: number, nchars: number): number;
     selectSubString(charnum: number, nchars: number): void;
-    LENGTHADJUST_SPACING: number;
-    LENGTHADJUST_SPACINGANDGLYPHS: number;
-    LENGTHADJUST_UNKNOWN: number;
+    readonly LENGTHADJUST_SPACING: number;
+    readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
+    readonly LENGTHADJUST_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGTextContentElement: {
     prototype: SVGTextContentElement;
     new(): SVGTextContentElement;
-    LENGTHADJUST_SPACING: number;
-    LENGTHADJUST_SPACINGANDGLYPHS: number;
-    LENGTHADJUST_UNKNOWN: number;
+    readonly LENGTHADJUST_SPACING: number;
+    readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
+    readonly LENGTHADJUST_UNKNOWN: number;
 }
 
 interface SVGTextElement extends SVGTextPositioningElement, SVGTransformable {
@@ -11128,35 +11128,35 @@ declare var SVGTextElement: {
 }
 
 interface SVGTextPathElement extends SVGTextContentElement, SVGURIReference {
-    method: SVGAnimatedEnumeration;
-    spacing: SVGAnimatedEnumeration;
-    startOffset: SVGAnimatedLength;
-    TEXTPATH_METHODTYPE_ALIGN: number;
-    TEXTPATH_METHODTYPE_STRETCH: number;
-    TEXTPATH_METHODTYPE_UNKNOWN: number;
-    TEXTPATH_SPACINGTYPE_AUTO: number;
-    TEXTPATH_SPACINGTYPE_EXACT: number;
-    TEXTPATH_SPACINGTYPE_UNKNOWN: number;
+    readonly method: SVGAnimatedEnumeration;
+    readonly spacing: SVGAnimatedEnumeration;
+    readonly startOffset: SVGAnimatedLength;
+    readonly TEXTPATH_METHODTYPE_ALIGN: number;
+    readonly TEXTPATH_METHODTYPE_STRETCH: number;
+    readonly TEXTPATH_METHODTYPE_UNKNOWN: number;
+    readonly TEXTPATH_SPACINGTYPE_AUTO: number;
+    readonly TEXTPATH_SPACINGTYPE_EXACT: number;
+    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: number;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGTextPathElement: {
     prototype: SVGTextPathElement;
     new(): SVGTextPathElement;
-    TEXTPATH_METHODTYPE_ALIGN: number;
-    TEXTPATH_METHODTYPE_STRETCH: number;
-    TEXTPATH_METHODTYPE_UNKNOWN: number;
-    TEXTPATH_SPACINGTYPE_AUTO: number;
-    TEXTPATH_SPACINGTYPE_EXACT: number;
-    TEXTPATH_SPACINGTYPE_UNKNOWN: number;
+    readonly TEXTPATH_METHODTYPE_ALIGN: number;
+    readonly TEXTPATH_METHODTYPE_STRETCH: number;
+    readonly TEXTPATH_METHODTYPE_UNKNOWN: number;
+    readonly TEXTPATH_SPACINGTYPE_AUTO: number;
+    readonly TEXTPATH_SPACINGTYPE_EXACT: number;
+    readonly TEXTPATH_SPACINGTYPE_UNKNOWN: number;
 }
 
 interface SVGTextPositioningElement extends SVGTextContentElement {
-    dx: SVGAnimatedLengthList;
-    dy: SVGAnimatedLengthList;
-    rotate: SVGAnimatedNumberList;
-    x: SVGAnimatedLengthList;
-    y: SVGAnimatedLengthList;
+    readonly dx: SVGAnimatedLengthList;
+    readonly dy: SVGAnimatedLengthList;
+    readonly rotate: SVGAnimatedNumberList;
+    readonly x: SVGAnimatedLengthList;
+    readonly y: SVGAnimatedLengthList;
 }
 
 declare var SVGTextPositioningElement: {
@@ -11174,38 +11174,38 @@ declare var SVGTitleElement: {
 }
 
 interface SVGTransform {
-    angle: number;
-    matrix: SVGMatrix;
-    type: number;
+    readonly angle: number;
+    readonly matrix: SVGMatrix;
+    readonly type: number;
     setMatrix(matrix: SVGMatrix): void;
     setRotate(angle: number, cx: number, cy: number): void;
     setScale(sx: number, sy: number): void;
     setSkewX(angle: number): void;
     setSkewY(angle: number): void;
     setTranslate(tx: number, ty: number): void;
-    SVG_TRANSFORM_MATRIX: number;
-    SVG_TRANSFORM_ROTATE: number;
-    SVG_TRANSFORM_SCALE: number;
-    SVG_TRANSFORM_SKEWX: number;
-    SVG_TRANSFORM_SKEWY: number;
-    SVG_TRANSFORM_TRANSLATE: number;
-    SVG_TRANSFORM_UNKNOWN: number;
+    readonly SVG_TRANSFORM_MATRIX: number;
+    readonly SVG_TRANSFORM_ROTATE: number;
+    readonly SVG_TRANSFORM_SCALE: number;
+    readonly SVG_TRANSFORM_SKEWX: number;
+    readonly SVG_TRANSFORM_SKEWY: number;
+    readonly SVG_TRANSFORM_TRANSLATE: number;
+    readonly SVG_TRANSFORM_UNKNOWN: number;
 }
 
 declare var SVGTransform: {
     prototype: SVGTransform;
     new(): SVGTransform;
-    SVG_TRANSFORM_MATRIX: number;
-    SVG_TRANSFORM_ROTATE: number;
-    SVG_TRANSFORM_SCALE: number;
-    SVG_TRANSFORM_SKEWX: number;
-    SVG_TRANSFORM_SKEWY: number;
-    SVG_TRANSFORM_TRANSLATE: number;
-    SVG_TRANSFORM_UNKNOWN: number;
+    readonly SVG_TRANSFORM_MATRIX: number;
+    readonly SVG_TRANSFORM_ROTATE: number;
+    readonly SVG_TRANSFORM_SCALE: number;
+    readonly SVG_TRANSFORM_SKEWX: number;
+    readonly SVG_TRANSFORM_SKEWY: number;
+    readonly SVG_TRANSFORM_TRANSLATE: number;
+    readonly SVG_TRANSFORM_UNKNOWN: number;
 }
 
 interface SVGTransformList {
-    numberOfItems: number;
+    readonly numberOfItems: number;
     appendItem(newItem: SVGTransform): SVGTransform;
     clear(): void;
     consolidate(): SVGTransform;
@@ -11223,19 +11223,19 @@ declare var SVGTransformList: {
 }
 
 interface SVGUnitTypes {
-    SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: number;
-    SVG_UNIT_TYPE_UNKNOWN: number;
-    SVG_UNIT_TYPE_USERSPACEONUSE: number;
+    readonly SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: number;
+    readonly SVG_UNIT_TYPE_UNKNOWN: number;
+    readonly SVG_UNIT_TYPE_USERSPACEONUSE: number;
 }
 declare var SVGUnitTypes: SVGUnitTypes;
 
 interface SVGUseElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
-    animatedInstanceRoot: SVGElementInstance;
-    height: SVGAnimatedLength;
-    instanceRoot: SVGElementInstance;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly animatedInstanceRoot: SVGElementInstance;
+    readonly height: SVGAnimatedLength;
+    readonly instanceRoot: SVGElementInstance;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -11245,7 +11245,7 @@ declare var SVGUseElement: {
 }
 
 interface SVGViewElement extends SVGElement, SVGExternalResourcesRequired, SVGFitToViewBox, SVGZoomAndPan {
-    viewTarget: SVGStringList;
+    readonly viewTarget: SVGStringList;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -11255,21 +11255,21 @@ declare var SVGViewElement: {
 }
 
 interface SVGZoomAndPan {
-    zoomAndPan: number;
+    readonly zoomAndPan: number;
 }
 
 declare var SVGZoomAndPan: {
-    SVG_ZOOMANDPAN_DISABLE: number;
-    SVG_ZOOMANDPAN_MAGNIFY: number;
-    SVG_ZOOMANDPAN_UNKNOWN: number;
+    readonly SVG_ZOOMANDPAN_DISABLE: number;
+    readonly SVG_ZOOMANDPAN_MAGNIFY: number;
+    readonly SVG_ZOOMANDPAN_UNKNOWN: number;
 }
 
 interface SVGZoomEvent extends UIEvent {
-    newScale: number;
-    newTranslate: SVGPoint;
-    previousScale: number;
-    previousTranslate: SVGPoint;
-    zoomRectScreen: SVGRect;
+    readonly newScale: number;
+    readonly newTranslate: SVGPoint;
+    readonly previousScale: number;
+    readonly previousTranslate: SVGPoint;
+    readonly zoomRectScreen: SVGRect;
 }
 
 declare var SVGZoomEvent: {
@@ -11278,22 +11278,22 @@ declare var SVGZoomEvent: {
 }
 
 interface Screen extends EventTarget {
-    availHeight: number;
-    availWidth: number;
+    readonly availHeight: number;
+    readonly availWidth: number;
     bufferDepth: number;
-    colorDepth: number;
-    deviceXDPI: number;
-    deviceYDPI: number;
-    fontSmoothingEnabled: boolean;
-    height: number;
-    logicalXDPI: number;
-    logicalYDPI: number;
-    msOrientation: string;
+    readonly colorDepth: number;
+    readonly deviceXDPI: number;
+    readonly deviceYDPI: number;
+    readonly fontSmoothingEnabled: boolean;
+    readonly height: number;
+    readonly logicalXDPI: number;
+    readonly logicalYDPI: number;
+    readonly msOrientation: string;
     onmsorientationchange: (ev: Event) => any;
-    pixelDepth: number;
-    systemXDPI: number;
-    systemYDPI: number;
-    width: number;
+    readonly pixelDepth: number;
+    readonly systemXDPI: number;
+    readonly systemYDPI: number;
+    readonly width: number;
     msLockOrientation(orientations: string | string[]): boolean;
     msUnlockOrientation(): void;
     addEventListener(type: "MSOrientationChange", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -11306,8 +11306,8 @@ declare var Screen: {
 }
 
 interface ScriptNotifyEvent extends Event {
-    callingUri: string;
-    value: string;
+    readonly callingUri: string;
+    readonly value: string;
 }
 
 declare var ScriptNotifyEvent: {
@@ -11316,7 +11316,7 @@ declare var ScriptNotifyEvent: {
 }
 
 interface ScriptProcessorNode extends AudioNode {
-    bufferSize: number;
+    readonly bufferSize: number;
     onaudioprocess: (ev: AudioProcessingEvent) => any;
     addEventListener(type: "audioprocess", listener: (ev: AudioProcessingEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -11328,13 +11328,13 @@ declare var ScriptProcessorNode: {
 }
 
 interface Selection {
-    anchorNode: Node;
-    anchorOffset: number;
-    focusNode: Node;
-    focusOffset: number;
-    isCollapsed: boolean;
-    rangeCount: number;
-    type: string;
+    readonly anchorNode: Node;
+    readonly anchorOffset: number;
+    readonly focusNode: Node;
+    readonly focusOffset: number;
+    readonly isCollapsed: boolean;
+    readonly rangeCount: number;
+    readonly type: string;
     addRange(range: Range): void;
     collapse(parentNode: Node, offset: number): void;
     collapseToEnd(): void;
@@ -11359,12 +11359,12 @@ declare var Selection: {
 interface SourceBuffer extends EventTarget {
     appendWindowEnd: number;
     appendWindowStart: number;
-    audioTracks: AudioTrackList;
-    buffered: TimeRanges;
+    readonly audioTracks: AudioTrackList;
+    readonly buffered: TimeRanges;
     mode: string;
     timestampOffset: number;
-    updating: boolean;
-    videoTracks: VideoTrackList;
+    readonly updating: boolean;
+    readonly videoTracks: VideoTrackList;
     abort(): void;
     appendBuffer(data: ArrayBuffer | ArrayBufferView): void;
     appendStream(stream: MSStream, maxSize?: number): void;
@@ -11377,7 +11377,7 @@ declare var SourceBuffer: {
 }
 
 interface SourceBufferList extends EventTarget {
-    length: number;
+    readonly length: number;
     item(index: number): SourceBuffer;
     [index: number]: SourceBuffer;
 }
@@ -11388,7 +11388,7 @@ declare var SourceBufferList: {
 }
 
 interface StereoPannerNode extends AudioNode {
-    pan: AudioParam;
+    readonly pan: AudioParam;
 }
 
 declare var StereoPannerNode: {
@@ -11397,7 +11397,7 @@ declare var StereoPannerNode: {
 }
 
 interface Storage {
-    length: number;
+    readonly length: number;
     clear(): void;
     getItem(key: string): string;
     key(index: number): string;
@@ -11413,7 +11413,7 @@ declare var Storage: {
 }
 
 interface StorageEvent extends Event {
-    url: string;
+    readonly url: string;
     key?: string;
     oldValue?: string;
     newValue?: string;
@@ -11426,7 +11426,7 @@ declare var StorageEvent: {
 }
 
 interface StyleMedia {
-    type: string;
+    readonly type: string;
     matchMedium(mediaquery: string): boolean;
 }
 
@@ -11437,12 +11437,12 @@ declare var StyleMedia: {
 
 interface StyleSheet {
     disabled: boolean;
-    href: string;
-    media: MediaList;
-    ownerNode: Node;
-    parentStyleSheet: StyleSheet;
-    title: string;
-    type: string;
+    readonly href: string;
+    readonly media: MediaList;
+    readonly ownerNode: Node;
+    readonly parentStyleSheet: StyleSheet;
+    readonly title: string;
+    readonly type: string;
 }
 
 declare var StyleSheet: {
@@ -11451,7 +11451,7 @@ declare var StyleSheet: {
 }
 
 interface StyleSheetList {
-    length: number;
+    readonly length: number;
     item(index?: number): StyleSheet;
     [index: number]: StyleSheet;
 }
@@ -11462,7 +11462,7 @@ declare var StyleSheetList: {
 }
 
 interface StyleSheetPageList {
-    length: number;
+    readonly length: number;
     item(index: number): CSSPageRule;
     [index: number]: CSSPageRule;
 }
@@ -11493,7 +11493,7 @@ declare var SubtleCrypto: {
 }
 
 interface Text extends CharacterData {
-    wholeText: string;
+    readonly wholeText: string;
     splitText(offset: number): Text;
 }
 
@@ -11503,39 +11503,39 @@ declare var Text: {
 }
 
 interface TextEvent extends UIEvent {
-    data: string;
-    inputMethod: number;
-    locale: string;
+    readonly data: string;
+    readonly inputMethod: number;
+    readonly locale: string;
     initTextEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, dataArg: string, inputMethod: number, locale: string): void;
-    DOM_INPUT_METHOD_DROP: number;
-    DOM_INPUT_METHOD_HANDWRITING: number;
-    DOM_INPUT_METHOD_IME: number;
-    DOM_INPUT_METHOD_KEYBOARD: number;
-    DOM_INPUT_METHOD_MULTIMODAL: number;
-    DOM_INPUT_METHOD_OPTION: number;
-    DOM_INPUT_METHOD_PASTE: number;
-    DOM_INPUT_METHOD_SCRIPT: number;
-    DOM_INPUT_METHOD_UNKNOWN: number;
-    DOM_INPUT_METHOD_VOICE: number;
+    readonly DOM_INPUT_METHOD_DROP: number;
+    readonly DOM_INPUT_METHOD_HANDWRITING: number;
+    readonly DOM_INPUT_METHOD_IME: number;
+    readonly DOM_INPUT_METHOD_KEYBOARD: number;
+    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
+    readonly DOM_INPUT_METHOD_OPTION: number;
+    readonly DOM_INPUT_METHOD_PASTE: number;
+    readonly DOM_INPUT_METHOD_SCRIPT: number;
+    readonly DOM_INPUT_METHOD_UNKNOWN: number;
+    readonly DOM_INPUT_METHOD_VOICE: number;
 }
 
 declare var TextEvent: {
     prototype: TextEvent;
     new(): TextEvent;
-    DOM_INPUT_METHOD_DROP: number;
-    DOM_INPUT_METHOD_HANDWRITING: number;
-    DOM_INPUT_METHOD_IME: number;
-    DOM_INPUT_METHOD_KEYBOARD: number;
-    DOM_INPUT_METHOD_MULTIMODAL: number;
-    DOM_INPUT_METHOD_OPTION: number;
-    DOM_INPUT_METHOD_PASTE: number;
-    DOM_INPUT_METHOD_SCRIPT: number;
-    DOM_INPUT_METHOD_UNKNOWN: number;
-    DOM_INPUT_METHOD_VOICE: number;
+    readonly DOM_INPUT_METHOD_DROP: number;
+    readonly DOM_INPUT_METHOD_HANDWRITING: number;
+    readonly DOM_INPUT_METHOD_IME: number;
+    readonly DOM_INPUT_METHOD_KEYBOARD: number;
+    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
+    readonly DOM_INPUT_METHOD_OPTION: number;
+    readonly DOM_INPUT_METHOD_PASTE: number;
+    readonly DOM_INPUT_METHOD_SCRIPT: number;
+    readonly DOM_INPUT_METHOD_UNKNOWN: number;
+    readonly DOM_INPUT_METHOD_VOICE: number;
 }
 
 interface TextMetrics {
-    width: number;
+    readonly width: number;
 }
 
 declare var TextMetrics: {
@@ -11544,26 +11544,26 @@ declare var TextMetrics: {
 }
 
 interface TextTrack extends EventTarget {
-    activeCues: TextTrackCueList;
-    cues: TextTrackCueList;
-    inBandMetadataTrackDispatchType: string;
-    kind: string;
-    label: string;
-    language: string;
+    readonly activeCues: TextTrackCueList;
+    readonly cues: TextTrackCueList;
+    readonly inBandMetadataTrackDispatchType: string;
+    readonly kind: string;
+    readonly label: string;
+    readonly language: string;
     mode: any;
     oncuechange: (ev: Event) => any;
     onerror: (ev: Event) => any;
     onload: (ev: Event) => any;
-    readyState: number;
+    readonly readyState: number;
     addCue(cue: TextTrackCue): void;
     removeCue(cue: TextTrackCue): void;
-    DISABLED: number;
-    ERROR: number;
-    HIDDEN: number;
-    LOADED: number;
-    LOADING: number;
-    NONE: number;
-    SHOWING: number;
+    readonly DISABLED: number;
+    readonly ERROR: number;
+    readonly HIDDEN: number;
+    readonly LOADED: number;
+    readonly LOADING: number;
+    readonly NONE: number;
+    readonly SHOWING: number;
     addEventListener(type: "cuechange", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -11573,13 +11573,13 @@ interface TextTrack extends EventTarget {
 declare var TextTrack: {
     prototype: TextTrack;
     new(): TextTrack;
-    DISABLED: number;
-    ERROR: number;
-    HIDDEN: number;
-    LOADED: number;
-    LOADING: number;
-    NONE: number;
-    SHOWING: number;
+    readonly DISABLED: number;
+    readonly ERROR: number;
+    readonly HIDDEN: number;
+    readonly LOADED: number;
+    readonly LOADING: number;
+    readonly NONE: number;
+    readonly SHOWING: number;
 }
 
 interface TextTrackCue extends EventTarget {
@@ -11590,7 +11590,7 @@ interface TextTrackCue extends EventTarget {
     pauseOnExit: boolean;
     startTime: number;
     text: string;
-    track: TextTrack;
+    readonly track: TextTrack;
     getCueAsHTML(): DocumentFragment;
     addEventListener(type: "enter", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "exit", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -11603,7 +11603,7 @@ declare var TextTrackCue: {
 }
 
 interface TextTrackCueList {
-    length: number;
+    readonly length: number;
     getCueById(id: string): TextTrackCue;
     item(index: number): TextTrackCue;
     [index: number]: TextTrackCue;
@@ -11615,7 +11615,7 @@ declare var TextTrackCueList: {
 }
 
 interface TextTrackList extends EventTarget {
-    length: number;
+    readonly length: number;
     onaddtrack: (ev: TrackEvent) => any;
     item(index: number): TextTrack;
     addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
@@ -11629,7 +11629,7 @@ declare var TextTrackList: {
 }
 
 interface TimeRanges {
-    length: number;
+    readonly length: number;
     end(index: number): number;
     start(index: number): number;
 }
@@ -11640,14 +11640,14 @@ declare var TimeRanges: {
 }
 
 interface Touch {
-    clientX: number;
-    clientY: number;
-    identifier: number;
-    pageX: number;
-    pageY: number;
-    screenX: number;
-    screenY: number;
-    target: EventTarget;
+    readonly clientX: number;
+    readonly clientY: number;
+    readonly identifier: number;
+    readonly pageX: number;
+    readonly pageY: number;
+    readonly screenX: number;
+    readonly screenY: number;
+    readonly target: EventTarget;
 }
 
 declare var Touch: {
@@ -11656,13 +11656,13 @@ declare var Touch: {
 }
 
 interface TouchEvent extends UIEvent {
-    altKey: boolean;
-    changedTouches: TouchList;
-    ctrlKey: boolean;
-    metaKey: boolean;
-    shiftKey: boolean;
-    targetTouches: TouchList;
-    touches: TouchList;
+    readonly altKey: boolean;
+    readonly changedTouches: TouchList;
+    readonly ctrlKey: boolean;
+    readonly metaKey: boolean;
+    readonly shiftKey: boolean;
+    readonly targetTouches: TouchList;
+    readonly touches: TouchList;
 }
 
 declare var TouchEvent: {
@@ -11671,7 +11671,7 @@ declare var TouchEvent: {
 }
 
 interface TouchList {
-    length: number;
+    readonly length: number;
     item(index: number): Touch;
     [index: number]: Touch;
 }
@@ -11682,7 +11682,7 @@ declare var TouchList: {
 }
 
 interface TrackEvent extends Event {
-    track: any;
+    readonly track: any;
 }
 
 declare var TrackEvent: {
@@ -11691,8 +11691,8 @@ declare var TrackEvent: {
 }
 
 interface TransitionEvent extends Event {
-    elapsedTime: number;
-    propertyName: string;
+    readonly elapsedTime: number;
+    readonly propertyName: string;
     initTransitionEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, propertyNameArg: string, elapsedTimeArg: number): void;
 }
 
@@ -11703,10 +11703,10 @@ declare var TransitionEvent: {
 
 interface TreeWalker {
     currentNode: Node;
-    expandEntityReferences: boolean;
-    filter: NodeFilter;
-    root: Node;
-    whatToShow: number;
+    readonly expandEntityReferences: boolean;
+    readonly filter: NodeFilter;
+    readonly root: Node;
+    readonly whatToShow: number;
     firstChild(): Node;
     lastChild(): Node;
     nextNode(): Node;
@@ -11722,8 +11722,8 @@ declare var TreeWalker: {
 }
 
 interface UIEvent extends Event {
-    detail: number;
-    view: Window;
+    readonly detail: number;
+    readonly view: Window;
     initUIEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number): void;
 }
 
@@ -11737,7 +11737,7 @@ interface URL {
     host: string;
     hostname: string;
     href: string;
-    origin: string;
+    readonly origin: string;
     password: string;
     pathname: string;
     port: string;
@@ -11755,7 +11755,7 @@ declare var URL: {
 }
 
 interface UnviewableContentIdentifiedEvent extends NavigationEventWithReferrer {
-    mediaType: string;
+    readonly mediaType: string;
 }
 
 declare var UnviewableContentIdentifiedEvent: {
@@ -11764,16 +11764,16 @@ declare var UnviewableContentIdentifiedEvent: {
 }
 
 interface ValidityState {
-    badInput: boolean;
-    customError: boolean;
-    patternMismatch: boolean;
-    rangeOverflow: boolean;
-    rangeUnderflow: boolean;
-    stepMismatch: boolean;
-    tooLong: boolean;
-    typeMismatch: boolean;
-    valid: boolean;
-    valueMissing: boolean;
+    readonly badInput: boolean;
+    readonly customError: boolean;
+    readonly patternMismatch: boolean;
+    readonly rangeOverflow: boolean;
+    readonly rangeUnderflow: boolean;
+    readonly stepMismatch: boolean;
+    readonly tooLong: boolean;
+    readonly typeMismatch: boolean;
+    readonly valid: boolean;
+    readonly valueMissing: boolean;
 }
 
 declare var ValidityState: {
@@ -11782,11 +11782,11 @@ declare var ValidityState: {
 }
 
 interface VideoPlaybackQuality {
-    corruptedVideoFrames: number;
-    creationTime: number;
-    droppedVideoFrames: number;
-    totalFrameDelay: number;
-    totalVideoFrames: number;
+    readonly corruptedVideoFrames: number;
+    readonly creationTime: number;
+    readonly droppedVideoFrames: number;
+    readonly totalFrameDelay: number;
+    readonly totalVideoFrames: number;
 }
 
 declare var VideoPlaybackQuality: {
@@ -11795,12 +11795,12 @@ declare var VideoPlaybackQuality: {
 }
 
 interface VideoTrack {
-    id: string;
+    readonly id: string;
     kind: string;
-    label: string;
+    readonly label: string;
     language: string;
     selected: boolean;
-    sourceBuffer: SourceBuffer;
+    readonly sourceBuffer: SourceBuffer;
 }
 
 declare var VideoTrack: {
@@ -11809,11 +11809,11 @@ declare var VideoTrack: {
 }
 
 interface VideoTrackList extends EventTarget {
-    length: number;
+    readonly length: number;
     onaddtrack: (ev: TrackEvent) => any;
     onchange: (ev: Event) => any;
     onremovetrack: (ev: TrackEvent) => any;
-    selectedIndex: number;
+    readonly selectedIndex: number;
     getTrackById(id: string): VideoTrack;
     item(index: number): VideoTrack;
     addEventListener(type: "addtrack", listener: (ev: TrackEvent) => any, useCapture?: boolean): void;
@@ -11829,41 +11829,41 @@ declare var VideoTrackList: {
 }
 
 interface WEBGL_compressed_texture_s3tc {
-    COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
-    COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
-    COMPRESSED_RGBA_S3TC_DXT5_EXT: number;
-    COMPRESSED_RGB_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT5_EXT: number;
+    readonly COMPRESSED_RGB_S3TC_DXT1_EXT: number;
 }
 
 declare var WEBGL_compressed_texture_s3tc: {
     prototype: WEBGL_compressed_texture_s3tc;
     new(): WEBGL_compressed_texture_s3tc;
-    COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
-    COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
-    COMPRESSED_RGBA_S3TC_DXT5_EXT: number;
-    COMPRESSED_RGB_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT1_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT3_EXT: number;
+    readonly COMPRESSED_RGBA_S3TC_DXT5_EXT: number;
+    readonly COMPRESSED_RGB_S3TC_DXT1_EXT: number;
 }
 
 interface WEBGL_debug_renderer_info {
-    UNMASKED_RENDERER_WEBGL: number;
-    UNMASKED_VENDOR_WEBGL: number;
+    readonly UNMASKED_RENDERER_WEBGL: number;
+    readonly UNMASKED_VENDOR_WEBGL: number;
 }
 
 declare var WEBGL_debug_renderer_info: {
     prototype: WEBGL_debug_renderer_info;
     new(): WEBGL_debug_renderer_info;
-    UNMASKED_RENDERER_WEBGL: number;
-    UNMASKED_VENDOR_WEBGL: number;
+    readonly UNMASKED_RENDERER_WEBGL: number;
+    readonly UNMASKED_VENDOR_WEBGL: number;
 }
 
 interface WEBGL_depth_texture {
-    UNSIGNED_INT_24_8_WEBGL: number;
+    readonly UNSIGNED_INT_24_8_WEBGL: number;
 }
 
 declare var WEBGL_depth_texture: {
     prototype: WEBGL_depth_texture;
     new(): WEBGL_depth_texture;
-    UNSIGNED_INT_24_8_WEBGL: number;
+    readonly UNSIGNED_INT_24_8_WEBGL: number;
 }
 
 interface WaveShaperNode extends AudioNode {
@@ -11877,9 +11877,9 @@ declare var WaveShaperNode: {
 }
 
 interface WebGLActiveInfo {
-    name: string;
-    size: number;
-    type: number;
+    readonly name: string;
+    readonly size: number;
+    readonly type: number;
 }
 
 declare var WebGLActiveInfo: {
@@ -11896,7 +11896,7 @@ declare var WebGLBuffer: {
 }
 
 interface WebGLContextEvent extends Event {
-    statusMessage: string;
+    readonly statusMessage: string;
 }
 
 declare var WebGLContextEvent: {
@@ -11937,9 +11937,9 @@ declare var WebGLRenderbuffer: {
 }
 
 interface WebGLRenderingContext {
-    canvas: HTMLCanvasElement;
-    drawingBufferHeight: number;
-    drawingBufferWidth: number;
+    readonly canvas: HTMLCanvasElement;
+    readonly drawingBufferHeight: number;
+    readonly drawingBufferWidth: number;
     activeTexture(texture: number): void;
     attachShader(program: WebGLProgram, shader: WebGLShader): void;
     bindAttribLocation(program: WebGLProgram, index: number, name: string): void;
@@ -12054,635 +12054,635 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
     uniform1f(location: WebGLUniformLocation, x: number): void;
-    uniform1fv(location: WebGLUniformLocation, v: Float32Array): void;
+    uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform1i(location: WebGLUniformLocation, x: number): void;
-    uniform1iv(location: WebGLUniformLocation, v: Int32Array): void;
+    uniform1iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
     uniform2f(location: WebGLUniformLocation, x: number, y: number): void;
-    uniform2fv(location: WebGLUniformLocation, v: Float32Array): void;
+    uniform2fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform2i(location: WebGLUniformLocation, x: number, y: number): void;
-    uniform2iv(location: WebGLUniformLocation, v: Int32Array): void;
+    uniform2iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
     uniform3f(location: WebGLUniformLocation, x: number, y: number, z: number): void;
-    uniform3fv(location: WebGLUniformLocation, v: Float32Array): void;
+    uniform3fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform3i(location: WebGLUniformLocation, x: number, y: number, z: number): void;
-    uniform3iv(location: WebGLUniformLocation, v: Int32Array): void;
+    uniform3iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
     uniform4f(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
-    uniform4fv(location: WebGLUniformLocation, v: Float32Array): void;
+    uniform4fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform4i(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
-    uniform4iv(location: WebGLUniformLocation, v: Int32Array): void;
-    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
-    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
-    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
+    uniform4iv(location: WebGLUniformLocation, v: Int32Array | number[]): void;
+    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
+    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
+    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array | number[]): void;
     useProgram(program: WebGLProgram): void;
     validateProgram(program: WebGLProgram): void;
     vertexAttrib1f(indx: number, x: number): void;
-    vertexAttrib1fv(indx: number, values: Float32Array): void;
+    vertexAttrib1fv(indx: number, values: Float32Array | number[]): void;
     vertexAttrib2f(indx: number, x: number, y: number): void;
-    vertexAttrib2fv(indx: number, values: Float32Array): void;
+    vertexAttrib2fv(indx: number, values: Float32Array | number[]): void;
     vertexAttrib3f(indx: number, x: number, y: number, z: number): void;
-    vertexAttrib3fv(indx: number, values: Float32Array): void;
+    vertexAttrib3fv(indx: number, values: Float32Array | number[]): void;
     vertexAttrib4f(indx: number, x: number, y: number, z: number, w: number): void;
-    vertexAttrib4fv(indx: number, values: Float32Array): void;
+    vertexAttrib4fv(indx: number, values: Float32Array | number[]): void;
     vertexAttribPointer(indx: number, size: number, type: number, normalized: boolean, stride: number, offset: number): void;
     viewport(x: number, y: number, width: number, height: number): void;
-    ACTIVE_ATTRIBUTES: number;
-    ACTIVE_TEXTURE: number;
-    ACTIVE_UNIFORMS: number;
-    ALIASED_LINE_WIDTH_RANGE: number;
-    ALIASED_POINT_SIZE_RANGE: number;
-    ALPHA: number;
-    ALPHA_BITS: number;
-    ALWAYS: number;
-    ARRAY_BUFFER: number;
-    ARRAY_BUFFER_BINDING: number;
-    ATTACHED_SHADERS: number;
-    BACK: number;
-    BLEND: number;
-    BLEND_COLOR: number;
-    BLEND_DST_ALPHA: number;
-    BLEND_DST_RGB: number;
-    BLEND_EQUATION: number;
-    BLEND_EQUATION_ALPHA: number;
-    BLEND_EQUATION_RGB: number;
-    BLEND_SRC_ALPHA: number;
-    BLEND_SRC_RGB: number;
-    BLUE_BITS: number;
-    BOOL: number;
-    BOOL_VEC2: number;
-    BOOL_VEC3: number;
-    BOOL_VEC4: number;
-    BROWSER_DEFAULT_WEBGL: number;
-    BUFFER_SIZE: number;
-    BUFFER_USAGE: number;
-    BYTE: number;
-    CCW: number;
-    CLAMP_TO_EDGE: number;
-    COLOR_ATTACHMENT0: number;
-    COLOR_BUFFER_BIT: number;
-    COLOR_CLEAR_VALUE: number;
-    COLOR_WRITEMASK: number;
-    COMPILE_STATUS: number;
-    COMPRESSED_TEXTURE_FORMATS: number;
-    CONSTANT_ALPHA: number;
-    CONSTANT_COLOR: number;
-    CONTEXT_LOST_WEBGL: number;
-    CULL_FACE: number;
-    CULL_FACE_MODE: number;
-    CURRENT_PROGRAM: number;
-    CURRENT_VERTEX_ATTRIB: number;
-    CW: number;
-    DECR: number;
-    DECR_WRAP: number;
-    DELETE_STATUS: number;
-    DEPTH_ATTACHMENT: number;
-    DEPTH_BITS: number;
-    DEPTH_BUFFER_BIT: number;
-    DEPTH_CLEAR_VALUE: number;
-    DEPTH_COMPONENT: number;
-    DEPTH_COMPONENT16: number;
-    DEPTH_FUNC: number;
-    DEPTH_RANGE: number;
-    DEPTH_STENCIL: number;
-    DEPTH_STENCIL_ATTACHMENT: number;
-    DEPTH_TEST: number;
-    DEPTH_WRITEMASK: number;
-    DITHER: number;
-    DONT_CARE: number;
-    DST_ALPHA: number;
-    DST_COLOR: number;
-    DYNAMIC_DRAW: number;
-    ELEMENT_ARRAY_BUFFER: number;
-    ELEMENT_ARRAY_BUFFER_BINDING: number;
-    EQUAL: number;
-    FASTEST: number;
-    FLOAT: number;
-    FLOAT_MAT2: number;
-    FLOAT_MAT3: number;
-    FLOAT_MAT4: number;
-    FLOAT_VEC2: number;
-    FLOAT_VEC3: number;
-    FLOAT_VEC4: number;
-    FRAGMENT_SHADER: number;
-    FRAMEBUFFER: number;
-    FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: number;
-    FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: number;
-    FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
-    FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: number;
-    FRAMEBUFFER_BINDING: number;
-    FRAMEBUFFER_COMPLETE: number;
-    FRAMEBUFFER_INCOMPLETE_ATTACHMENT: number;
-    FRAMEBUFFER_INCOMPLETE_DIMENSIONS: number;
-    FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: number;
-    FRAMEBUFFER_UNSUPPORTED: number;
-    FRONT: number;
-    FRONT_AND_BACK: number;
-    FRONT_FACE: number;
-    FUNC_ADD: number;
-    FUNC_REVERSE_SUBTRACT: number;
-    FUNC_SUBTRACT: number;
-    GENERATE_MIPMAP_HINT: number;
-    GEQUAL: number;
-    GREATER: number;
-    GREEN_BITS: number;
-    HIGH_FLOAT: number;
-    HIGH_INT: number;
-    IMPLEMENTATION_COLOR_READ_FORMAT: number;
-    IMPLEMENTATION_COLOR_READ_TYPE: number;
-    INCR: number;
-    INCR_WRAP: number;
-    INT: number;
-    INT_VEC2: number;
-    INT_VEC3: number;
-    INT_VEC4: number;
-    INVALID_ENUM: number;
-    INVALID_FRAMEBUFFER_OPERATION: number;
-    INVALID_OPERATION: number;
-    INVALID_VALUE: number;
-    INVERT: number;
-    KEEP: number;
-    LEQUAL: number;
-    LESS: number;
-    LINEAR: number;
-    LINEAR_MIPMAP_LINEAR: number;
-    LINEAR_MIPMAP_NEAREST: number;
-    LINES: number;
-    LINE_LOOP: number;
-    LINE_STRIP: number;
-    LINE_WIDTH: number;
-    LINK_STATUS: number;
-    LOW_FLOAT: number;
-    LOW_INT: number;
-    LUMINANCE: number;
-    LUMINANCE_ALPHA: number;
-    MAX_COMBINED_TEXTURE_IMAGE_UNITS: number;
-    MAX_CUBE_MAP_TEXTURE_SIZE: number;
-    MAX_FRAGMENT_UNIFORM_VECTORS: number;
-    MAX_RENDERBUFFER_SIZE: number;
-    MAX_TEXTURE_IMAGE_UNITS: number;
-    MAX_TEXTURE_SIZE: number;
-    MAX_VARYING_VECTORS: number;
-    MAX_VERTEX_ATTRIBS: number;
-    MAX_VERTEX_TEXTURE_IMAGE_UNITS: number;
-    MAX_VERTEX_UNIFORM_VECTORS: number;
-    MAX_VIEWPORT_DIMS: number;
-    MEDIUM_FLOAT: number;
-    MEDIUM_INT: number;
-    MIRRORED_REPEAT: number;
-    NEAREST: number;
-    NEAREST_MIPMAP_LINEAR: number;
-    NEAREST_MIPMAP_NEAREST: number;
-    NEVER: number;
-    NICEST: number;
-    NONE: number;
-    NOTEQUAL: number;
-    NO_ERROR: number;
-    ONE: number;
-    ONE_MINUS_CONSTANT_ALPHA: number;
-    ONE_MINUS_CONSTANT_COLOR: number;
-    ONE_MINUS_DST_ALPHA: number;
-    ONE_MINUS_DST_COLOR: number;
-    ONE_MINUS_SRC_ALPHA: number;
-    ONE_MINUS_SRC_COLOR: number;
-    OUT_OF_MEMORY: number;
-    PACK_ALIGNMENT: number;
-    POINTS: number;
-    POLYGON_OFFSET_FACTOR: number;
-    POLYGON_OFFSET_FILL: number;
-    POLYGON_OFFSET_UNITS: number;
-    RED_BITS: number;
-    RENDERBUFFER: number;
-    RENDERBUFFER_ALPHA_SIZE: number;
-    RENDERBUFFER_BINDING: number;
-    RENDERBUFFER_BLUE_SIZE: number;
-    RENDERBUFFER_DEPTH_SIZE: number;
-    RENDERBUFFER_GREEN_SIZE: number;
-    RENDERBUFFER_HEIGHT: number;
-    RENDERBUFFER_INTERNAL_FORMAT: number;
-    RENDERBUFFER_RED_SIZE: number;
-    RENDERBUFFER_STENCIL_SIZE: number;
-    RENDERBUFFER_WIDTH: number;
-    RENDERER: number;
-    REPEAT: number;
-    REPLACE: number;
-    RGB: number;
-    RGB565: number;
-    RGB5_A1: number;
-    RGBA: number;
-    RGBA4: number;
-    SAMPLER_2D: number;
-    SAMPLER_CUBE: number;
-    SAMPLES: number;
-    SAMPLE_ALPHA_TO_COVERAGE: number;
-    SAMPLE_BUFFERS: number;
-    SAMPLE_COVERAGE: number;
-    SAMPLE_COVERAGE_INVERT: number;
-    SAMPLE_COVERAGE_VALUE: number;
-    SCISSOR_BOX: number;
-    SCISSOR_TEST: number;
-    SHADER_TYPE: number;
-    SHADING_LANGUAGE_VERSION: number;
-    SHORT: number;
-    SRC_ALPHA: number;
-    SRC_ALPHA_SATURATE: number;
-    SRC_COLOR: number;
-    STATIC_DRAW: number;
-    STENCIL_ATTACHMENT: number;
-    STENCIL_BACK_FAIL: number;
-    STENCIL_BACK_FUNC: number;
-    STENCIL_BACK_PASS_DEPTH_FAIL: number;
-    STENCIL_BACK_PASS_DEPTH_PASS: number;
-    STENCIL_BACK_REF: number;
-    STENCIL_BACK_VALUE_MASK: number;
-    STENCIL_BACK_WRITEMASK: number;
-    STENCIL_BITS: number;
-    STENCIL_BUFFER_BIT: number;
-    STENCIL_CLEAR_VALUE: number;
-    STENCIL_FAIL: number;
-    STENCIL_FUNC: number;
-    STENCIL_INDEX: number;
-    STENCIL_INDEX8: number;
-    STENCIL_PASS_DEPTH_FAIL: number;
-    STENCIL_PASS_DEPTH_PASS: number;
-    STENCIL_REF: number;
-    STENCIL_TEST: number;
-    STENCIL_VALUE_MASK: number;
-    STENCIL_WRITEMASK: number;
-    STREAM_DRAW: number;
-    SUBPIXEL_BITS: number;
-    TEXTURE: number;
-    TEXTURE0: number;
-    TEXTURE1: number;
-    TEXTURE10: number;
-    TEXTURE11: number;
-    TEXTURE12: number;
-    TEXTURE13: number;
-    TEXTURE14: number;
-    TEXTURE15: number;
-    TEXTURE16: number;
-    TEXTURE17: number;
-    TEXTURE18: number;
-    TEXTURE19: number;
-    TEXTURE2: number;
-    TEXTURE20: number;
-    TEXTURE21: number;
-    TEXTURE22: number;
-    TEXTURE23: number;
-    TEXTURE24: number;
-    TEXTURE25: number;
-    TEXTURE26: number;
-    TEXTURE27: number;
-    TEXTURE28: number;
-    TEXTURE29: number;
-    TEXTURE3: number;
-    TEXTURE30: number;
-    TEXTURE31: number;
-    TEXTURE4: number;
-    TEXTURE5: number;
-    TEXTURE6: number;
-    TEXTURE7: number;
-    TEXTURE8: number;
-    TEXTURE9: number;
-    TEXTURE_2D: number;
-    TEXTURE_BINDING_2D: number;
-    TEXTURE_BINDING_CUBE_MAP: number;
-    TEXTURE_CUBE_MAP: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_X: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_Y: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_Z: number;
-    TEXTURE_CUBE_MAP_POSITIVE_X: number;
-    TEXTURE_CUBE_MAP_POSITIVE_Y: number;
-    TEXTURE_CUBE_MAP_POSITIVE_Z: number;
-    TEXTURE_MAG_FILTER: number;
-    TEXTURE_MIN_FILTER: number;
-    TEXTURE_WRAP_S: number;
-    TEXTURE_WRAP_T: number;
-    TRIANGLES: number;
-    TRIANGLE_FAN: number;
-    TRIANGLE_STRIP: number;
-    UNPACK_ALIGNMENT: number;
-    UNPACK_COLORSPACE_CONVERSION_WEBGL: number;
-    UNPACK_FLIP_Y_WEBGL: number;
-    UNPACK_PREMULTIPLY_ALPHA_WEBGL: number;
-    UNSIGNED_BYTE: number;
-    UNSIGNED_INT: number;
-    UNSIGNED_SHORT: number;
-    UNSIGNED_SHORT_4_4_4_4: number;
-    UNSIGNED_SHORT_5_5_5_1: number;
-    UNSIGNED_SHORT_5_6_5: number;
-    VALIDATE_STATUS: number;
-    VENDOR: number;
-    VERSION: number;
-    VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: number;
-    VERTEX_ATTRIB_ARRAY_ENABLED: number;
-    VERTEX_ATTRIB_ARRAY_NORMALIZED: number;
-    VERTEX_ATTRIB_ARRAY_POINTER: number;
-    VERTEX_ATTRIB_ARRAY_SIZE: number;
-    VERTEX_ATTRIB_ARRAY_STRIDE: number;
-    VERTEX_ATTRIB_ARRAY_TYPE: number;
-    VERTEX_SHADER: number;
-    VIEWPORT: number;
-    ZERO: number;
+    readonly ACTIVE_ATTRIBUTES: number;
+    readonly ACTIVE_TEXTURE: number;
+    readonly ACTIVE_UNIFORMS: number;
+    readonly ALIASED_LINE_WIDTH_RANGE: number;
+    readonly ALIASED_POINT_SIZE_RANGE: number;
+    readonly ALPHA: number;
+    readonly ALPHA_BITS: number;
+    readonly ALWAYS: number;
+    readonly ARRAY_BUFFER: number;
+    readonly ARRAY_BUFFER_BINDING: number;
+    readonly ATTACHED_SHADERS: number;
+    readonly BACK: number;
+    readonly BLEND: number;
+    readonly BLEND_COLOR: number;
+    readonly BLEND_DST_ALPHA: number;
+    readonly BLEND_DST_RGB: number;
+    readonly BLEND_EQUATION: number;
+    readonly BLEND_EQUATION_ALPHA: number;
+    readonly BLEND_EQUATION_RGB: number;
+    readonly BLEND_SRC_ALPHA: number;
+    readonly BLEND_SRC_RGB: number;
+    readonly BLUE_BITS: number;
+    readonly BOOL: number;
+    readonly BOOL_VEC2: number;
+    readonly BOOL_VEC3: number;
+    readonly BOOL_VEC4: number;
+    readonly BROWSER_DEFAULT_WEBGL: number;
+    readonly BUFFER_SIZE: number;
+    readonly BUFFER_USAGE: number;
+    readonly BYTE: number;
+    readonly CCW: number;
+    readonly CLAMP_TO_EDGE: number;
+    readonly COLOR_ATTACHMENT0: number;
+    readonly COLOR_BUFFER_BIT: number;
+    readonly COLOR_CLEAR_VALUE: number;
+    readonly COLOR_WRITEMASK: number;
+    readonly COMPILE_STATUS: number;
+    readonly COMPRESSED_TEXTURE_FORMATS: number;
+    readonly CONSTANT_ALPHA: number;
+    readonly CONSTANT_COLOR: number;
+    readonly CONTEXT_LOST_WEBGL: number;
+    readonly CULL_FACE: number;
+    readonly CULL_FACE_MODE: number;
+    readonly CURRENT_PROGRAM: number;
+    readonly CURRENT_VERTEX_ATTRIB: number;
+    readonly CW: number;
+    readonly DECR: number;
+    readonly DECR_WRAP: number;
+    readonly DELETE_STATUS: number;
+    readonly DEPTH_ATTACHMENT: number;
+    readonly DEPTH_BITS: number;
+    readonly DEPTH_BUFFER_BIT: number;
+    readonly DEPTH_CLEAR_VALUE: number;
+    readonly DEPTH_COMPONENT: number;
+    readonly DEPTH_COMPONENT16: number;
+    readonly DEPTH_FUNC: number;
+    readonly DEPTH_RANGE: number;
+    readonly DEPTH_STENCIL: number;
+    readonly DEPTH_STENCIL_ATTACHMENT: number;
+    readonly DEPTH_TEST: number;
+    readonly DEPTH_WRITEMASK: number;
+    readonly DITHER: number;
+    readonly DONT_CARE: number;
+    readonly DST_ALPHA: number;
+    readonly DST_COLOR: number;
+    readonly DYNAMIC_DRAW: number;
+    readonly ELEMENT_ARRAY_BUFFER: number;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: number;
+    readonly EQUAL: number;
+    readonly FASTEST: number;
+    readonly FLOAT: number;
+    readonly FLOAT_MAT2: number;
+    readonly FLOAT_MAT3: number;
+    readonly FLOAT_MAT4: number;
+    readonly FLOAT_VEC2: number;
+    readonly FLOAT_VEC3: number;
+    readonly FLOAT_VEC4: number;
+    readonly FRAGMENT_SHADER: number;
+    readonly FRAMEBUFFER: number;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: number;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: number;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: number;
+    readonly FRAMEBUFFER_BINDING: number;
+    readonly FRAMEBUFFER_COMPLETE: number;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: number;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: number;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: number;
+    readonly FRAMEBUFFER_UNSUPPORTED: number;
+    readonly FRONT: number;
+    readonly FRONT_AND_BACK: number;
+    readonly FRONT_FACE: number;
+    readonly FUNC_ADD: number;
+    readonly FUNC_REVERSE_SUBTRACT: number;
+    readonly FUNC_SUBTRACT: number;
+    readonly GENERATE_MIPMAP_HINT: number;
+    readonly GEQUAL: number;
+    readonly GREATER: number;
+    readonly GREEN_BITS: number;
+    readonly HIGH_FLOAT: number;
+    readonly HIGH_INT: number;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: number;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: number;
+    readonly INCR: number;
+    readonly INCR_WRAP: number;
+    readonly INT: number;
+    readonly INT_VEC2: number;
+    readonly INT_VEC3: number;
+    readonly INT_VEC4: number;
+    readonly INVALID_ENUM: number;
+    readonly INVALID_FRAMEBUFFER_OPERATION: number;
+    readonly INVALID_OPERATION: number;
+    readonly INVALID_VALUE: number;
+    readonly INVERT: number;
+    readonly KEEP: number;
+    readonly LEQUAL: number;
+    readonly LESS: number;
+    readonly LINEAR: number;
+    readonly LINEAR_MIPMAP_LINEAR: number;
+    readonly LINEAR_MIPMAP_NEAREST: number;
+    readonly LINES: number;
+    readonly LINE_LOOP: number;
+    readonly LINE_STRIP: number;
+    readonly LINE_WIDTH: number;
+    readonly LINK_STATUS: number;
+    readonly LOW_FLOAT: number;
+    readonly LOW_INT: number;
+    readonly LUMINANCE: number;
+    readonly LUMINANCE_ALPHA: number;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: number;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: number;
+    readonly MAX_RENDERBUFFER_SIZE: number;
+    readonly MAX_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_TEXTURE_SIZE: number;
+    readonly MAX_VARYING_VECTORS: number;
+    readonly MAX_VERTEX_ATTRIBS: number;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: number;
+    readonly MAX_VIEWPORT_DIMS: number;
+    readonly MEDIUM_FLOAT: number;
+    readonly MEDIUM_INT: number;
+    readonly MIRRORED_REPEAT: number;
+    readonly NEAREST: number;
+    readonly NEAREST_MIPMAP_LINEAR: number;
+    readonly NEAREST_MIPMAP_NEAREST: number;
+    readonly NEVER: number;
+    readonly NICEST: number;
+    readonly NONE: number;
+    readonly NOTEQUAL: number;
+    readonly NO_ERROR: number;
+    readonly ONE: number;
+    readonly ONE_MINUS_CONSTANT_ALPHA: number;
+    readonly ONE_MINUS_CONSTANT_COLOR: number;
+    readonly ONE_MINUS_DST_ALPHA: number;
+    readonly ONE_MINUS_DST_COLOR: number;
+    readonly ONE_MINUS_SRC_ALPHA: number;
+    readonly ONE_MINUS_SRC_COLOR: number;
+    readonly OUT_OF_MEMORY: number;
+    readonly PACK_ALIGNMENT: number;
+    readonly POINTS: number;
+    readonly POLYGON_OFFSET_FACTOR: number;
+    readonly POLYGON_OFFSET_FILL: number;
+    readonly POLYGON_OFFSET_UNITS: number;
+    readonly RED_BITS: number;
+    readonly RENDERBUFFER: number;
+    readonly RENDERBUFFER_ALPHA_SIZE: number;
+    readonly RENDERBUFFER_BINDING: number;
+    readonly RENDERBUFFER_BLUE_SIZE: number;
+    readonly RENDERBUFFER_DEPTH_SIZE: number;
+    readonly RENDERBUFFER_GREEN_SIZE: number;
+    readonly RENDERBUFFER_HEIGHT: number;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: number;
+    readonly RENDERBUFFER_RED_SIZE: number;
+    readonly RENDERBUFFER_STENCIL_SIZE: number;
+    readonly RENDERBUFFER_WIDTH: number;
+    readonly RENDERER: number;
+    readonly REPEAT: number;
+    readonly REPLACE: number;
+    readonly RGB: number;
+    readonly RGB565: number;
+    readonly RGB5_A1: number;
+    readonly RGBA: number;
+    readonly RGBA4: number;
+    readonly SAMPLER_2D: number;
+    readonly SAMPLER_CUBE: number;
+    readonly SAMPLES: number;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: number;
+    readonly SAMPLE_BUFFERS: number;
+    readonly SAMPLE_COVERAGE: number;
+    readonly SAMPLE_COVERAGE_INVERT: number;
+    readonly SAMPLE_COVERAGE_VALUE: number;
+    readonly SCISSOR_BOX: number;
+    readonly SCISSOR_TEST: number;
+    readonly SHADER_TYPE: number;
+    readonly SHADING_LANGUAGE_VERSION: number;
+    readonly SHORT: number;
+    readonly SRC_ALPHA: number;
+    readonly SRC_ALPHA_SATURATE: number;
+    readonly SRC_COLOR: number;
+    readonly STATIC_DRAW: number;
+    readonly STENCIL_ATTACHMENT: number;
+    readonly STENCIL_BACK_FAIL: number;
+    readonly STENCIL_BACK_FUNC: number;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: number;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: number;
+    readonly STENCIL_BACK_REF: number;
+    readonly STENCIL_BACK_VALUE_MASK: number;
+    readonly STENCIL_BACK_WRITEMASK: number;
+    readonly STENCIL_BITS: number;
+    readonly STENCIL_BUFFER_BIT: number;
+    readonly STENCIL_CLEAR_VALUE: number;
+    readonly STENCIL_FAIL: number;
+    readonly STENCIL_FUNC: number;
+    readonly STENCIL_INDEX: number;
+    readonly STENCIL_INDEX8: number;
+    readonly STENCIL_PASS_DEPTH_FAIL: number;
+    readonly STENCIL_PASS_DEPTH_PASS: number;
+    readonly STENCIL_REF: number;
+    readonly STENCIL_TEST: number;
+    readonly STENCIL_VALUE_MASK: number;
+    readonly STENCIL_WRITEMASK: number;
+    readonly STREAM_DRAW: number;
+    readonly SUBPIXEL_BITS: number;
+    readonly TEXTURE: number;
+    readonly TEXTURE0: number;
+    readonly TEXTURE1: number;
+    readonly TEXTURE10: number;
+    readonly TEXTURE11: number;
+    readonly TEXTURE12: number;
+    readonly TEXTURE13: number;
+    readonly TEXTURE14: number;
+    readonly TEXTURE15: number;
+    readonly TEXTURE16: number;
+    readonly TEXTURE17: number;
+    readonly TEXTURE18: number;
+    readonly TEXTURE19: number;
+    readonly TEXTURE2: number;
+    readonly TEXTURE20: number;
+    readonly TEXTURE21: number;
+    readonly TEXTURE22: number;
+    readonly TEXTURE23: number;
+    readonly TEXTURE24: number;
+    readonly TEXTURE25: number;
+    readonly TEXTURE26: number;
+    readonly TEXTURE27: number;
+    readonly TEXTURE28: number;
+    readonly TEXTURE29: number;
+    readonly TEXTURE3: number;
+    readonly TEXTURE30: number;
+    readonly TEXTURE31: number;
+    readonly TEXTURE4: number;
+    readonly TEXTURE5: number;
+    readonly TEXTURE6: number;
+    readonly TEXTURE7: number;
+    readonly TEXTURE8: number;
+    readonly TEXTURE9: number;
+    readonly TEXTURE_2D: number;
+    readonly TEXTURE_BINDING_2D: number;
+    readonly TEXTURE_BINDING_CUBE_MAP: number;
+    readonly TEXTURE_CUBE_MAP: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: number;
+    readonly TEXTURE_MAG_FILTER: number;
+    readonly TEXTURE_MIN_FILTER: number;
+    readonly TEXTURE_WRAP_S: number;
+    readonly TEXTURE_WRAP_T: number;
+    readonly TRIANGLES: number;
+    readonly TRIANGLE_FAN: number;
+    readonly TRIANGLE_STRIP: number;
+    readonly UNPACK_ALIGNMENT: number;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: number;
+    readonly UNPACK_FLIP_Y_WEBGL: number;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: number;
+    readonly UNSIGNED_BYTE: number;
+    readonly UNSIGNED_INT: number;
+    readonly UNSIGNED_SHORT: number;
+    readonly UNSIGNED_SHORT_4_4_4_4: number;
+    readonly UNSIGNED_SHORT_5_5_5_1: number;
+    readonly UNSIGNED_SHORT_5_6_5: number;
+    readonly VALIDATE_STATUS: number;
+    readonly VENDOR: number;
+    readonly VERSION: number;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: number;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: number;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: number;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: number;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: number;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: number;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: number;
+    readonly VERTEX_SHADER: number;
+    readonly VIEWPORT: number;
+    readonly ZERO: number;
 }
 
 declare var WebGLRenderingContext: {
     prototype: WebGLRenderingContext;
     new(): WebGLRenderingContext;
-    ACTIVE_ATTRIBUTES: number;
-    ACTIVE_TEXTURE: number;
-    ACTIVE_UNIFORMS: number;
-    ALIASED_LINE_WIDTH_RANGE: number;
-    ALIASED_POINT_SIZE_RANGE: number;
-    ALPHA: number;
-    ALPHA_BITS: number;
-    ALWAYS: number;
-    ARRAY_BUFFER: number;
-    ARRAY_BUFFER_BINDING: number;
-    ATTACHED_SHADERS: number;
-    BACK: number;
-    BLEND: number;
-    BLEND_COLOR: number;
-    BLEND_DST_ALPHA: number;
-    BLEND_DST_RGB: number;
-    BLEND_EQUATION: number;
-    BLEND_EQUATION_ALPHA: number;
-    BLEND_EQUATION_RGB: number;
-    BLEND_SRC_ALPHA: number;
-    BLEND_SRC_RGB: number;
-    BLUE_BITS: number;
-    BOOL: number;
-    BOOL_VEC2: number;
-    BOOL_VEC3: number;
-    BOOL_VEC4: number;
-    BROWSER_DEFAULT_WEBGL: number;
-    BUFFER_SIZE: number;
-    BUFFER_USAGE: number;
-    BYTE: number;
-    CCW: number;
-    CLAMP_TO_EDGE: number;
-    COLOR_ATTACHMENT0: number;
-    COLOR_BUFFER_BIT: number;
-    COLOR_CLEAR_VALUE: number;
-    COLOR_WRITEMASK: number;
-    COMPILE_STATUS: number;
-    COMPRESSED_TEXTURE_FORMATS: number;
-    CONSTANT_ALPHA: number;
-    CONSTANT_COLOR: number;
-    CONTEXT_LOST_WEBGL: number;
-    CULL_FACE: number;
-    CULL_FACE_MODE: number;
-    CURRENT_PROGRAM: number;
-    CURRENT_VERTEX_ATTRIB: number;
-    CW: number;
-    DECR: number;
-    DECR_WRAP: number;
-    DELETE_STATUS: number;
-    DEPTH_ATTACHMENT: number;
-    DEPTH_BITS: number;
-    DEPTH_BUFFER_BIT: number;
-    DEPTH_CLEAR_VALUE: number;
-    DEPTH_COMPONENT: number;
-    DEPTH_COMPONENT16: number;
-    DEPTH_FUNC: number;
-    DEPTH_RANGE: number;
-    DEPTH_STENCIL: number;
-    DEPTH_STENCIL_ATTACHMENT: number;
-    DEPTH_TEST: number;
-    DEPTH_WRITEMASK: number;
-    DITHER: number;
-    DONT_CARE: number;
-    DST_ALPHA: number;
-    DST_COLOR: number;
-    DYNAMIC_DRAW: number;
-    ELEMENT_ARRAY_BUFFER: number;
-    ELEMENT_ARRAY_BUFFER_BINDING: number;
-    EQUAL: number;
-    FASTEST: number;
-    FLOAT: number;
-    FLOAT_MAT2: number;
-    FLOAT_MAT3: number;
-    FLOAT_MAT4: number;
-    FLOAT_VEC2: number;
-    FLOAT_VEC3: number;
-    FLOAT_VEC4: number;
-    FRAGMENT_SHADER: number;
-    FRAMEBUFFER: number;
-    FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: number;
-    FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: number;
-    FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
-    FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: number;
-    FRAMEBUFFER_BINDING: number;
-    FRAMEBUFFER_COMPLETE: number;
-    FRAMEBUFFER_INCOMPLETE_ATTACHMENT: number;
-    FRAMEBUFFER_INCOMPLETE_DIMENSIONS: number;
-    FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: number;
-    FRAMEBUFFER_UNSUPPORTED: number;
-    FRONT: number;
-    FRONT_AND_BACK: number;
-    FRONT_FACE: number;
-    FUNC_ADD: number;
-    FUNC_REVERSE_SUBTRACT: number;
-    FUNC_SUBTRACT: number;
-    GENERATE_MIPMAP_HINT: number;
-    GEQUAL: number;
-    GREATER: number;
-    GREEN_BITS: number;
-    HIGH_FLOAT: number;
-    HIGH_INT: number;
-    IMPLEMENTATION_COLOR_READ_FORMAT: number;
-    IMPLEMENTATION_COLOR_READ_TYPE: number;
-    INCR: number;
-    INCR_WRAP: number;
-    INT: number;
-    INT_VEC2: number;
-    INT_VEC3: number;
-    INT_VEC4: number;
-    INVALID_ENUM: number;
-    INVALID_FRAMEBUFFER_OPERATION: number;
-    INVALID_OPERATION: number;
-    INVALID_VALUE: number;
-    INVERT: number;
-    KEEP: number;
-    LEQUAL: number;
-    LESS: number;
-    LINEAR: number;
-    LINEAR_MIPMAP_LINEAR: number;
-    LINEAR_MIPMAP_NEAREST: number;
-    LINES: number;
-    LINE_LOOP: number;
-    LINE_STRIP: number;
-    LINE_WIDTH: number;
-    LINK_STATUS: number;
-    LOW_FLOAT: number;
-    LOW_INT: number;
-    LUMINANCE: number;
-    LUMINANCE_ALPHA: number;
-    MAX_COMBINED_TEXTURE_IMAGE_UNITS: number;
-    MAX_CUBE_MAP_TEXTURE_SIZE: number;
-    MAX_FRAGMENT_UNIFORM_VECTORS: number;
-    MAX_RENDERBUFFER_SIZE: number;
-    MAX_TEXTURE_IMAGE_UNITS: number;
-    MAX_TEXTURE_SIZE: number;
-    MAX_VARYING_VECTORS: number;
-    MAX_VERTEX_ATTRIBS: number;
-    MAX_VERTEX_TEXTURE_IMAGE_UNITS: number;
-    MAX_VERTEX_UNIFORM_VECTORS: number;
-    MAX_VIEWPORT_DIMS: number;
-    MEDIUM_FLOAT: number;
-    MEDIUM_INT: number;
-    MIRRORED_REPEAT: number;
-    NEAREST: number;
-    NEAREST_MIPMAP_LINEAR: number;
-    NEAREST_MIPMAP_NEAREST: number;
-    NEVER: number;
-    NICEST: number;
-    NONE: number;
-    NOTEQUAL: number;
-    NO_ERROR: number;
-    ONE: number;
-    ONE_MINUS_CONSTANT_ALPHA: number;
-    ONE_MINUS_CONSTANT_COLOR: number;
-    ONE_MINUS_DST_ALPHA: number;
-    ONE_MINUS_DST_COLOR: number;
-    ONE_MINUS_SRC_ALPHA: number;
-    ONE_MINUS_SRC_COLOR: number;
-    OUT_OF_MEMORY: number;
-    PACK_ALIGNMENT: number;
-    POINTS: number;
-    POLYGON_OFFSET_FACTOR: number;
-    POLYGON_OFFSET_FILL: number;
-    POLYGON_OFFSET_UNITS: number;
-    RED_BITS: number;
-    RENDERBUFFER: number;
-    RENDERBUFFER_ALPHA_SIZE: number;
-    RENDERBUFFER_BINDING: number;
-    RENDERBUFFER_BLUE_SIZE: number;
-    RENDERBUFFER_DEPTH_SIZE: number;
-    RENDERBUFFER_GREEN_SIZE: number;
-    RENDERBUFFER_HEIGHT: number;
-    RENDERBUFFER_INTERNAL_FORMAT: number;
-    RENDERBUFFER_RED_SIZE: number;
-    RENDERBUFFER_STENCIL_SIZE: number;
-    RENDERBUFFER_WIDTH: number;
-    RENDERER: number;
-    REPEAT: number;
-    REPLACE: number;
-    RGB: number;
-    RGB565: number;
-    RGB5_A1: number;
-    RGBA: number;
-    RGBA4: number;
-    SAMPLER_2D: number;
-    SAMPLER_CUBE: number;
-    SAMPLES: number;
-    SAMPLE_ALPHA_TO_COVERAGE: number;
-    SAMPLE_BUFFERS: number;
-    SAMPLE_COVERAGE: number;
-    SAMPLE_COVERAGE_INVERT: number;
-    SAMPLE_COVERAGE_VALUE: number;
-    SCISSOR_BOX: number;
-    SCISSOR_TEST: number;
-    SHADER_TYPE: number;
-    SHADING_LANGUAGE_VERSION: number;
-    SHORT: number;
-    SRC_ALPHA: number;
-    SRC_ALPHA_SATURATE: number;
-    SRC_COLOR: number;
-    STATIC_DRAW: number;
-    STENCIL_ATTACHMENT: number;
-    STENCIL_BACK_FAIL: number;
-    STENCIL_BACK_FUNC: number;
-    STENCIL_BACK_PASS_DEPTH_FAIL: number;
-    STENCIL_BACK_PASS_DEPTH_PASS: number;
-    STENCIL_BACK_REF: number;
-    STENCIL_BACK_VALUE_MASK: number;
-    STENCIL_BACK_WRITEMASK: number;
-    STENCIL_BITS: number;
-    STENCIL_BUFFER_BIT: number;
-    STENCIL_CLEAR_VALUE: number;
-    STENCIL_FAIL: number;
-    STENCIL_FUNC: number;
-    STENCIL_INDEX: number;
-    STENCIL_INDEX8: number;
-    STENCIL_PASS_DEPTH_FAIL: number;
-    STENCIL_PASS_DEPTH_PASS: number;
-    STENCIL_REF: number;
-    STENCIL_TEST: number;
-    STENCIL_VALUE_MASK: number;
-    STENCIL_WRITEMASK: number;
-    STREAM_DRAW: number;
-    SUBPIXEL_BITS: number;
-    TEXTURE: number;
-    TEXTURE0: number;
-    TEXTURE1: number;
-    TEXTURE10: number;
-    TEXTURE11: number;
-    TEXTURE12: number;
-    TEXTURE13: number;
-    TEXTURE14: number;
-    TEXTURE15: number;
-    TEXTURE16: number;
-    TEXTURE17: number;
-    TEXTURE18: number;
-    TEXTURE19: number;
-    TEXTURE2: number;
-    TEXTURE20: number;
-    TEXTURE21: number;
-    TEXTURE22: number;
-    TEXTURE23: number;
-    TEXTURE24: number;
-    TEXTURE25: number;
-    TEXTURE26: number;
-    TEXTURE27: number;
-    TEXTURE28: number;
-    TEXTURE29: number;
-    TEXTURE3: number;
-    TEXTURE30: number;
-    TEXTURE31: number;
-    TEXTURE4: number;
-    TEXTURE5: number;
-    TEXTURE6: number;
-    TEXTURE7: number;
-    TEXTURE8: number;
-    TEXTURE9: number;
-    TEXTURE_2D: number;
-    TEXTURE_BINDING_2D: number;
-    TEXTURE_BINDING_CUBE_MAP: number;
-    TEXTURE_CUBE_MAP: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_X: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_Y: number;
-    TEXTURE_CUBE_MAP_NEGATIVE_Z: number;
-    TEXTURE_CUBE_MAP_POSITIVE_X: number;
-    TEXTURE_CUBE_MAP_POSITIVE_Y: number;
-    TEXTURE_CUBE_MAP_POSITIVE_Z: number;
-    TEXTURE_MAG_FILTER: number;
-    TEXTURE_MIN_FILTER: number;
-    TEXTURE_WRAP_S: number;
-    TEXTURE_WRAP_T: number;
-    TRIANGLES: number;
-    TRIANGLE_FAN: number;
-    TRIANGLE_STRIP: number;
-    UNPACK_ALIGNMENT: number;
-    UNPACK_COLORSPACE_CONVERSION_WEBGL: number;
-    UNPACK_FLIP_Y_WEBGL: number;
-    UNPACK_PREMULTIPLY_ALPHA_WEBGL: number;
-    UNSIGNED_BYTE: number;
-    UNSIGNED_INT: number;
-    UNSIGNED_SHORT: number;
-    UNSIGNED_SHORT_4_4_4_4: number;
-    UNSIGNED_SHORT_5_5_5_1: number;
-    UNSIGNED_SHORT_5_6_5: number;
-    VALIDATE_STATUS: number;
-    VENDOR: number;
-    VERSION: number;
-    VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: number;
-    VERTEX_ATTRIB_ARRAY_ENABLED: number;
-    VERTEX_ATTRIB_ARRAY_NORMALIZED: number;
-    VERTEX_ATTRIB_ARRAY_POINTER: number;
-    VERTEX_ATTRIB_ARRAY_SIZE: number;
-    VERTEX_ATTRIB_ARRAY_STRIDE: number;
-    VERTEX_ATTRIB_ARRAY_TYPE: number;
-    VERTEX_SHADER: number;
-    VIEWPORT: number;
-    ZERO: number;
+    readonly ACTIVE_ATTRIBUTES: number;
+    readonly ACTIVE_TEXTURE: number;
+    readonly ACTIVE_UNIFORMS: number;
+    readonly ALIASED_LINE_WIDTH_RANGE: number;
+    readonly ALIASED_POINT_SIZE_RANGE: number;
+    readonly ALPHA: number;
+    readonly ALPHA_BITS: number;
+    readonly ALWAYS: number;
+    readonly ARRAY_BUFFER: number;
+    readonly ARRAY_BUFFER_BINDING: number;
+    readonly ATTACHED_SHADERS: number;
+    readonly BACK: number;
+    readonly BLEND: number;
+    readonly BLEND_COLOR: number;
+    readonly BLEND_DST_ALPHA: number;
+    readonly BLEND_DST_RGB: number;
+    readonly BLEND_EQUATION: number;
+    readonly BLEND_EQUATION_ALPHA: number;
+    readonly BLEND_EQUATION_RGB: number;
+    readonly BLEND_SRC_ALPHA: number;
+    readonly BLEND_SRC_RGB: number;
+    readonly BLUE_BITS: number;
+    readonly BOOL: number;
+    readonly BOOL_VEC2: number;
+    readonly BOOL_VEC3: number;
+    readonly BOOL_VEC4: number;
+    readonly BROWSER_DEFAULT_WEBGL: number;
+    readonly BUFFER_SIZE: number;
+    readonly BUFFER_USAGE: number;
+    readonly BYTE: number;
+    readonly CCW: number;
+    readonly CLAMP_TO_EDGE: number;
+    readonly COLOR_ATTACHMENT0: number;
+    readonly COLOR_BUFFER_BIT: number;
+    readonly COLOR_CLEAR_VALUE: number;
+    readonly COLOR_WRITEMASK: number;
+    readonly COMPILE_STATUS: number;
+    readonly COMPRESSED_TEXTURE_FORMATS: number;
+    readonly CONSTANT_ALPHA: number;
+    readonly CONSTANT_COLOR: number;
+    readonly CONTEXT_LOST_WEBGL: number;
+    readonly CULL_FACE: number;
+    readonly CULL_FACE_MODE: number;
+    readonly CURRENT_PROGRAM: number;
+    readonly CURRENT_VERTEX_ATTRIB: number;
+    readonly CW: number;
+    readonly DECR: number;
+    readonly DECR_WRAP: number;
+    readonly DELETE_STATUS: number;
+    readonly DEPTH_ATTACHMENT: number;
+    readonly DEPTH_BITS: number;
+    readonly DEPTH_BUFFER_BIT: number;
+    readonly DEPTH_CLEAR_VALUE: number;
+    readonly DEPTH_COMPONENT: number;
+    readonly DEPTH_COMPONENT16: number;
+    readonly DEPTH_FUNC: number;
+    readonly DEPTH_RANGE: number;
+    readonly DEPTH_STENCIL: number;
+    readonly DEPTH_STENCIL_ATTACHMENT: number;
+    readonly DEPTH_TEST: number;
+    readonly DEPTH_WRITEMASK: number;
+    readonly DITHER: number;
+    readonly DONT_CARE: number;
+    readonly DST_ALPHA: number;
+    readonly DST_COLOR: number;
+    readonly DYNAMIC_DRAW: number;
+    readonly ELEMENT_ARRAY_BUFFER: number;
+    readonly ELEMENT_ARRAY_BUFFER_BINDING: number;
+    readonly EQUAL: number;
+    readonly FASTEST: number;
+    readonly FLOAT: number;
+    readonly FLOAT_MAT2: number;
+    readonly FLOAT_MAT3: number;
+    readonly FLOAT_MAT4: number;
+    readonly FLOAT_VEC2: number;
+    readonly FLOAT_VEC3: number;
+    readonly FLOAT_VEC4: number;
+    readonly FRAGMENT_SHADER: number;
+    readonly FRAMEBUFFER: number;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: number;
+    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: number;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
+    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: number;
+    readonly FRAMEBUFFER_BINDING: number;
+    readonly FRAMEBUFFER_COMPLETE: number;
+    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: number;
+    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: number;
+    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: number;
+    readonly FRAMEBUFFER_UNSUPPORTED: number;
+    readonly FRONT: number;
+    readonly FRONT_AND_BACK: number;
+    readonly FRONT_FACE: number;
+    readonly FUNC_ADD: number;
+    readonly FUNC_REVERSE_SUBTRACT: number;
+    readonly FUNC_SUBTRACT: number;
+    readonly GENERATE_MIPMAP_HINT: number;
+    readonly GEQUAL: number;
+    readonly GREATER: number;
+    readonly GREEN_BITS: number;
+    readonly HIGH_FLOAT: number;
+    readonly HIGH_INT: number;
+    readonly IMPLEMENTATION_COLOR_READ_FORMAT: number;
+    readonly IMPLEMENTATION_COLOR_READ_TYPE: number;
+    readonly INCR: number;
+    readonly INCR_WRAP: number;
+    readonly INT: number;
+    readonly INT_VEC2: number;
+    readonly INT_VEC3: number;
+    readonly INT_VEC4: number;
+    readonly INVALID_ENUM: number;
+    readonly INVALID_FRAMEBUFFER_OPERATION: number;
+    readonly INVALID_OPERATION: number;
+    readonly INVALID_VALUE: number;
+    readonly INVERT: number;
+    readonly KEEP: number;
+    readonly LEQUAL: number;
+    readonly LESS: number;
+    readonly LINEAR: number;
+    readonly LINEAR_MIPMAP_LINEAR: number;
+    readonly LINEAR_MIPMAP_NEAREST: number;
+    readonly LINES: number;
+    readonly LINE_LOOP: number;
+    readonly LINE_STRIP: number;
+    readonly LINE_WIDTH: number;
+    readonly LINK_STATUS: number;
+    readonly LOW_FLOAT: number;
+    readonly LOW_INT: number;
+    readonly LUMINANCE: number;
+    readonly LUMINANCE_ALPHA: number;
+    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_CUBE_MAP_TEXTURE_SIZE: number;
+    readonly MAX_FRAGMENT_UNIFORM_VECTORS: number;
+    readonly MAX_RENDERBUFFER_SIZE: number;
+    readonly MAX_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_TEXTURE_SIZE: number;
+    readonly MAX_VARYING_VECTORS: number;
+    readonly MAX_VERTEX_ATTRIBS: number;
+    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: number;
+    readonly MAX_VERTEX_UNIFORM_VECTORS: number;
+    readonly MAX_VIEWPORT_DIMS: number;
+    readonly MEDIUM_FLOAT: number;
+    readonly MEDIUM_INT: number;
+    readonly MIRRORED_REPEAT: number;
+    readonly NEAREST: number;
+    readonly NEAREST_MIPMAP_LINEAR: number;
+    readonly NEAREST_MIPMAP_NEAREST: number;
+    readonly NEVER: number;
+    readonly NICEST: number;
+    readonly NONE: number;
+    readonly NOTEQUAL: number;
+    readonly NO_ERROR: number;
+    readonly ONE: number;
+    readonly ONE_MINUS_CONSTANT_ALPHA: number;
+    readonly ONE_MINUS_CONSTANT_COLOR: number;
+    readonly ONE_MINUS_DST_ALPHA: number;
+    readonly ONE_MINUS_DST_COLOR: number;
+    readonly ONE_MINUS_SRC_ALPHA: number;
+    readonly ONE_MINUS_SRC_COLOR: number;
+    readonly OUT_OF_MEMORY: number;
+    readonly PACK_ALIGNMENT: number;
+    readonly POINTS: number;
+    readonly POLYGON_OFFSET_FACTOR: number;
+    readonly POLYGON_OFFSET_FILL: number;
+    readonly POLYGON_OFFSET_UNITS: number;
+    readonly RED_BITS: number;
+    readonly RENDERBUFFER: number;
+    readonly RENDERBUFFER_ALPHA_SIZE: number;
+    readonly RENDERBUFFER_BINDING: number;
+    readonly RENDERBUFFER_BLUE_SIZE: number;
+    readonly RENDERBUFFER_DEPTH_SIZE: number;
+    readonly RENDERBUFFER_GREEN_SIZE: number;
+    readonly RENDERBUFFER_HEIGHT: number;
+    readonly RENDERBUFFER_INTERNAL_FORMAT: number;
+    readonly RENDERBUFFER_RED_SIZE: number;
+    readonly RENDERBUFFER_STENCIL_SIZE: number;
+    readonly RENDERBUFFER_WIDTH: number;
+    readonly RENDERER: number;
+    readonly REPEAT: number;
+    readonly REPLACE: number;
+    readonly RGB: number;
+    readonly RGB565: number;
+    readonly RGB5_A1: number;
+    readonly RGBA: number;
+    readonly RGBA4: number;
+    readonly SAMPLER_2D: number;
+    readonly SAMPLER_CUBE: number;
+    readonly SAMPLES: number;
+    readonly SAMPLE_ALPHA_TO_COVERAGE: number;
+    readonly SAMPLE_BUFFERS: number;
+    readonly SAMPLE_COVERAGE: number;
+    readonly SAMPLE_COVERAGE_INVERT: number;
+    readonly SAMPLE_COVERAGE_VALUE: number;
+    readonly SCISSOR_BOX: number;
+    readonly SCISSOR_TEST: number;
+    readonly SHADER_TYPE: number;
+    readonly SHADING_LANGUAGE_VERSION: number;
+    readonly SHORT: number;
+    readonly SRC_ALPHA: number;
+    readonly SRC_ALPHA_SATURATE: number;
+    readonly SRC_COLOR: number;
+    readonly STATIC_DRAW: number;
+    readonly STENCIL_ATTACHMENT: number;
+    readonly STENCIL_BACK_FAIL: number;
+    readonly STENCIL_BACK_FUNC: number;
+    readonly STENCIL_BACK_PASS_DEPTH_FAIL: number;
+    readonly STENCIL_BACK_PASS_DEPTH_PASS: number;
+    readonly STENCIL_BACK_REF: number;
+    readonly STENCIL_BACK_VALUE_MASK: number;
+    readonly STENCIL_BACK_WRITEMASK: number;
+    readonly STENCIL_BITS: number;
+    readonly STENCIL_BUFFER_BIT: number;
+    readonly STENCIL_CLEAR_VALUE: number;
+    readonly STENCIL_FAIL: number;
+    readonly STENCIL_FUNC: number;
+    readonly STENCIL_INDEX: number;
+    readonly STENCIL_INDEX8: number;
+    readonly STENCIL_PASS_DEPTH_FAIL: number;
+    readonly STENCIL_PASS_DEPTH_PASS: number;
+    readonly STENCIL_REF: number;
+    readonly STENCIL_TEST: number;
+    readonly STENCIL_VALUE_MASK: number;
+    readonly STENCIL_WRITEMASK: number;
+    readonly STREAM_DRAW: number;
+    readonly SUBPIXEL_BITS: number;
+    readonly TEXTURE: number;
+    readonly TEXTURE0: number;
+    readonly TEXTURE1: number;
+    readonly TEXTURE10: number;
+    readonly TEXTURE11: number;
+    readonly TEXTURE12: number;
+    readonly TEXTURE13: number;
+    readonly TEXTURE14: number;
+    readonly TEXTURE15: number;
+    readonly TEXTURE16: number;
+    readonly TEXTURE17: number;
+    readonly TEXTURE18: number;
+    readonly TEXTURE19: number;
+    readonly TEXTURE2: number;
+    readonly TEXTURE20: number;
+    readonly TEXTURE21: number;
+    readonly TEXTURE22: number;
+    readonly TEXTURE23: number;
+    readonly TEXTURE24: number;
+    readonly TEXTURE25: number;
+    readonly TEXTURE26: number;
+    readonly TEXTURE27: number;
+    readonly TEXTURE28: number;
+    readonly TEXTURE29: number;
+    readonly TEXTURE3: number;
+    readonly TEXTURE30: number;
+    readonly TEXTURE31: number;
+    readonly TEXTURE4: number;
+    readonly TEXTURE5: number;
+    readonly TEXTURE6: number;
+    readonly TEXTURE7: number;
+    readonly TEXTURE8: number;
+    readonly TEXTURE9: number;
+    readonly TEXTURE_2D: number;
+    readonly TEXTURE_BINDING_2D: number;
+    readonly TEXTURE_BINDING_CUBE_MAP: number;
+    readonly TEXTURE_CUBE_MAP: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: number;
+    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_X: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: number;
+    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: number;
+    readonly TEXTURE_MAG_FILTER: number;
+    readonly TEXTURE_MIN_FILTER: number;
+    readonly TEXTURE_WRAP_S: number;
+    readonly TEXTURE_WRAP_T: number;
+    readonly TRIANGLES: number;
+    readonly TRIANGLE_FAN: number;
+    readonly TRIANGLE_STRIP: number;
+    readonly UNPACK_ALIGNMENT: number;
+    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: number;
+    readonly UNPACK_FLIP_Y_WEBGL: number;
+    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: number;
+    readonly UNSIGNED_BYTE: number;
+    readonly UNSIGNED_INT: number;
+    readonly UNSIGNED_SHORT: number;
+    readonly UNSIGNED_SHORT_4_4_4_4: number;
+    readonly UNSIGNED_SHORT_5_5_5_1: number;
+    readonly UNSIGNED_SHORT_5_6_5: number;
+    readonly VALIDATE_STATUS: number;
+    readonly VENDOR: number;
+    readonly VERSION: number;
+    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: number;
+    readonly VERTEX_ATTRIB_ARRAY_ENABLED: number;
+    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: number;
+    readonly VERTEX_ATTRIB_ARRAY_POINTER: number;
+    readonly VERTEX_ATTRIB_ARRAY_SIZE: number;
+    readonly VERTEX_ATTRIB_ARRAY_STRIDE: number;
+    readonly VERTEX_ATTRIB_ARRAY_TYPE: number;
+    readonly VERTEX_SHADER: number;
+    readonly VIEWPORT: number;
+    readonly ZERO: number;
 }
 
 interface WebGLShader extends WebGLObject {
@@ -12694,9 +12694,9 @@ declare var WebGLShader: {
 }
 
 interface WebGLShaderPrecisionFormat {
-    precision: number;
-    rangeMax: number;
-    rangeMin: number;
+    readonly precision: number;
+    readonly rangeMax: number;
+    readonly rangeMin: number;
 }
 
 declare var WebGLShaderPrecisionFormat: {
@@ -12772,21 +12772,21 @@ declare var WebKitPoint: {
 
 interface WebSocket extends EventTarget {
     binaryType: string;
-    bufferedAmount: number;
-    extensions: string;
+    readonly bufferedAmount: number;
+    readonly extensions: string;
     onclose: (ev: CloseEvent) => any;
     onerror: (ev: Event) => any;
     onmessage: (ev: MessageEvent) => any;
     onopen: (ev: Event) => any;
-    protocol: string;
-    readyState: number;
-    url: string;
+    readonly protocol: string;
+    readonly readyState: number;
+    readonly url: string;
     close(code?: number, reason?: string): void;
     send(data: any): void;
-    CLOSED: number;
-    CLOSING: number;
-    CONNECTING: number;
-    OPEN: number;
+    readonly CLOSED: number;
+    readonly CLOSING: number;
+    readonly CONNECTING: number;
+    readonly OPEN: number;
     addEventListener(type: "close", listener: (ev: CloseEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
@@ -12797,58 +12797,58 @@ interface WebSocket extends EventTarget {
 declare var WebSocket: {
     prototype: WebSocket;
     new(url: string, protocols?: string | string[]): WebSocket;
-    CLOSED: number;
-    CLOSING: number;
-    CONNECTING: number;
-    OPEN: number;
+    readonly CLOSED: number;
+    readonly CLOSING: number;
+    readonly CONNECTING: number;
+    readonly OPEN: number;
 }
 
 interface WheelEvent extends MouseEvent {
-    deltaMode: number;
-    deltaX: number;
-    deltaY: number;
-    deltaZ: number;
-    wheelDelta: number;
-    wheelDeltaX: number;
-    wheelDeltaY: number;
+    readonly deltaMode: number;
+    readonly deltaX: number;
+    readonly deltaY: number;
+    readonly deltaZ: number;
+    readonly wheelDelta: number;
+    readonly wheelDeltaX: number;
+    readonly wheelDeltaY: number;
     getCurrentPoint(element: Element): void;
     initWheelEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, buttonArg: number, relatedTargetArg: EventTarget, modifiersListArg: string, deltaXArg: number, deltaYArg: number, deltaZArg: number, deltaMode: number): void;
-    DOM_DELTA_LINE: number;
-    DOM_DELTA_PAGE: number;
-    DOM_DELTA_PIXEL: number;
+    readonly DOM_DELTA_LINE: number;
+    readonly DOM_DELTA_PAGE: number;
+    readonly DOM_DELTA_PIXEL: number;
 }
 
 declare var WheelEvent: {
     prototype: WheelEvent;
     new(typeArg: string, eventInitDict?: WheelEventInit): WheelEvent;
-    DOM_DELTA_LINE: number;
-    DOM_DELTA_PAGE: number;
-    DOM_DELTA_PIXEL: number;
+    readonly DOM_DELTA_LINE: number;
+    readonly DOM_DELTA_PAGE: number;
+    readonly DOM_DELTA_PIXEL: number;
 }
 
 interface Window extends EventTarget, WindowTimers, WindowSessionStorage, WindowLocalStorage, WindowConsole, GlobalEventHandlers, IDBEnvironment, WindowBase64 {
-    applicationCache: ApplicationCache;
-    clientInformation: Navigator;
-    closed: boolean;
-    crypto: Crypto;
+    readonly applicationCache: ApplicationCache;
+    readonly clientInformation: Navigator;
+    readonly closed: boolean;
+    readonly crypto: Crypto;
     defaultStatus: string;
-    devicePixelRatio: number;
-    doNotTrack: string;
-    document: Document;
+    readonly devicePixelRatio: number;
+    readonly doNotTrack: string;
+    readonly document: Document;
     event: Event;
-    external: External;
-    frameElement: Element;
-    frames: Window;
-    history: History;
-    innerHeight: number;
-    innerWidth: number;
-    length: number;
-    location: Location;
-    locationbar: BarProp;
-    menubar: BarProp;
-    msCredentials: MSCredentials;
+    readonly external: External;
+    readonly frameElement: Element;
+    readonly frames: Window;
+    readonly history: History;
+    readonly innerHeight: number;
+    readonly innerWidth: number;
+    readonly length: number;
+    readonly location: Location;
+    readonly locationbar: BarProp;
+    readonly menubar: BarProp;
+    readonly msCredentials: MSCredentials;
     name: string;
-    navigator: Navigator;
+    readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
     onabort: (ev: Event) => any;
     onafterprint: (ev: Event) => any;
@@ -12941,30 +12941,30 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onunload: (ev: Event) => any;
     onvolumechange: (ev: Event) => any;
     onwaiting: (ev: Event) => any;
-    opener: Window;
+    readonly opener: Window;
     orientation: string | number;
-    outerHeight: number;
-    outerWidth: number;
-    pageXOffset: number;
-    pageYOffset: number;
-    parent: Window;
-    performance: Performance;
-    personalbar: BarProp;
-    screen: Screen;
-    screenLeft: number;
-    screenTop: number;
-    screenX: number;
-    screenY: number;
-    scrollX: number;
-    scrollY: number;
-    scrollbars: BarProp;
-    self: Window;
+    readonly outerHeight: number;
+    readonly outerWidth: number;
+    readonly pageXOffset: number;
+    readonly pageYOffset: number;
+    readonly parent: Window;
+    readonly performance: Performance;
+    readonly personalbar: BarProp;
+    readonly screen: Screen;
+    readonly screenLeft: number;
+    readonly screenTop: number;
+    readonly screenX: number;
+    readonly screenY: number;
+    readonly scrollX: number;
+    readonly scrollY: number;
+    readonly scrollbars: BarProp;
+    readonly self: Window;
     status: string;
-    statusbar: BarProp;
-    styleMedia: StyleMedia;
-    toolbar: BarProp;
-    top: Window;
-    window: Window;
+    readonly statusbar: BarProp;
+    readonly styleMedia: StyleMedia;
+    readonly toolbar: BarProp;
+    readonly top: Window;
+    readonly window: Window;
     URL: typeof URL;
     alert(message?: any): void;
     blur(): void;
@@ -13124,15 +13124,15 @@ declare var XMLDocument: {
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     msCaching: string;
     onreadystatechange: (ev: ProgressEvent) => any;
-    readyState: number;
-    response: any;
-    responseText: string;
+    readonly readyState: number;
+    readonly response: any;
+    readonly responseText: string;
     responseType: string;
-    responseXML: any;
-    status: number;
-    statusText: string;
+    readonly responseXML: any;
+    readonly status: number;
+    readonly statusText: string;
     timeout: number;
-    upload: XMLHttpRequestUpload;
+    readonly upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     abort(): void;
     getAllResponseHeaders(): string;
@@ -13144,11 +13144,11 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     send(data?: string): void;
     send(data?: any): void;
     setRequestHeader(header: string, value: string): void;
-    DONE: number;
-    HEADERS_RECEIVED: number;
-    LOADING: number;
-    OPENED: number;
-    UNSENT: number;
+    readonly DONE: number;
+    readonly HEADERS_RECEIVED: number;
+    readonly LOADING: number;
+    readonly OPENED: number;
+    readonly UNSENT: number;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -13163,11 +13163,11 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
 declare var XMLHttpRequest: {
     prototype: XMLHttpRequest;
     new(): XMLHttpRequest;
-    DONE: number;
-    HEADERS_RECEIVED: number;
-    LOADING: number;
-    OPENED: number;
-    UNSENT: number;
+    readonly DONE: number;
+    readonly HEADERS_RECEIVED: number;
+    readonly LOADING: number;
+    readonly OPENED: number;
+    readonly UNSENT: number;
     create(): XMLHttpRequest;
 }
 
@@ -13219,40 +13219,40 @@ declare var XPathNSResolver: {
 }
 
 interface XPathResult {
-    booleanValue: boolean;
-    invalidIteratorState: boolean;
-    numberValue: number;
-    resultType: number;
-    singleNodeValue: Node;
-    snapshotLength: number;
-    stringValue: string;
+    readonly booleanValue: boolean;
+    readonly invalidIteratorState: boolean;
+    readonly numberValue: number;
+    readonly resultType: number;
+    readonly singleNodeValue: Node;
+    readonly snapshotLength: number;
+    readonly stringValue: string;
     iterateNext(): Node;
     snapshotItem(index: number): Node;
-    ANY_TYPE: number;
-    ANY_UNORDERED_NODE_TYPE: number;
-    BOOLEAN_TYPE: number;
-    FIRST_ORDERED_NODE_TYPE: number;
-    NUMBER_TYPE: number;
-    ORDERED_NODE_ITERATOR_TYPE: number;
-    ORDERED_NODE_SNAPSHOT_TYPE: number;
-    STRING_TYPE: number;
-    UNORDERED_NODE_ITERATOR_TYPE: number;
-    UNORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly ANY_TYPE: number;
+    readonly ANY_UNORDERED_NODE_TYPE: number;
+    readonly BOOLEAN_TYPE: number;
+    readonly FIRST_ORDERED_NODE_TYPE: number;
+    readonly NUMBER_TYPE: number;
+    readonly ORDERED_NODE_ITERATOR_TYPE: number;
+    readonly ORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly STRING_TYPE: number;
+    readonly UNORDERED_NODE_ITERATOR_TYPE: number;
+    readonly UNORDERED_NODE_SNAPSHOT_TYPE: number;
 }
 
 declare var XPathResult: {
     prototype: XPathResult;
     new(): XPathResult;
-    ANY_TYPE: number;
-    ANY_UNORDERED_NODE_TYPE: number;
-    BOOLEAN_TYPE: number;
-    FIRST_ORDERED_NODE_TYPE: number;
-    NUMBER_TYPE: number;
-    ORDERED_NODE_ITERATOR_TYPE: number;
-    ORDERED_NODE_SNAPSHOT_TYPE: number;
-    STRING_TYPE: number;
-    UNORDERED_NODE_ITERATOR_TYPE: number;
-    UNORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly ANY_TYPE: number;
+    readonly ANY_UNORDERED_NODE_TYPE: number;
+    readonly BOOLEAN_TYPE: number;
+    readonly FIRST_ORDERED_NODE_TYPE: number;
+    readonly NUMBER_TYPE: number;
+    readonly ORDERED_NODE_ITERATOR_TYPE: number;
+    readonly ORDERED_NODE_SNAPSHOT_TYPE: number;
+    readonly STRING_TYPE: number;
+    readonly UNORDERED_NODE_ITERATOR_TYPE: number;
+    readonly UNORDERED_NODE_SNAPSHOT_TYPE: number;
 }
 
 interface XSLTProcessor {
@@ -13373,11 +13373,11 @@ interface DocumentEvent {
 }
 
 interface ElementTraversal {
-    childElementCount: number;
-    firstElementChild: Element;
-    lastElementChild: Element;
-    nextElementSibling: Element;
-    previousElementSibling: Element;
+    readonly childElementCount: number;
+    readonly firstElementChild: Element;
+    readonly lastElementChild: Element;
+    readonly nextElementSibling: Element;
+    readonly previousElementSibling: Element;
 }
 
 interface GetSVGDocument {
@@ -13422,11 +13422,11 @@ interface HTMLTableAlignment {
 }
 
 interface IDBEnvironment {
-    indexedDB: IDBFactory;
+    readonly indexedDB: IDBFactory;
 }
 
 interface LinkStyle {
-    sheet: StyleSheet;
+    readonly sheet: StyleSheet;
 }
 
 interface MSBaseReader {
@@ -13436,12 +13436,12 @@ interface MSBaseReader {
     onloadend: (ev: ProgressEvent) => any;
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
-    readyState: number;
-    result: any;
+    readonly readyState: number;
+    readonly result: any;
     abort(): void;
-    DONE: number;
-    EMPTY: number;
-    LOADING: number;
+    readonly DONE: number;
+    readonly EMPTY: number;
+    readonly LOADING: number;
     addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
@@ -13469,29 +13469,29 @@ interface NavigatorContentUtils {
 }
 
 interface NavigatorGeolocation {
-    geolocation: Geolocation;
+    readonly geolocation: Geolocation;
 }
 
 interface NavigatorID {
-    appName: string;
-    appVersion: string;
-    platform: string;
-    product: string;
-    productSub: string;
-    userAgent: string;
-    vendor: string;
-    vendorSub: string;
+    readonly appName: string;
+    readonly appVersion: string;
+    readonly platform: string;
+    readonly product: string;
+    readonly productSub: string;
+    readonly userAgent: string;
+    readonly vendor: string;
+    readonly vendorSub: string;
 }
 
 interface NavigatorOnLine {
-    onLine: boolean;
+    readonly onLine: boolean;
 }
 
 interface NavigatorStorageUtils {
 }
 
 interface NavigatorUserMedia {
-    mediaDevices: MediaDevices;
+    readonly mediaDevices: MediaDevices;
     getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
 }
 
@@ -13505,29 +13505,29 @@ interface RandomSource {
 }
 
 interface SVGAnimatedPathData {
-    pathSegList: SVGPathSegList;
+    readonly pathSegList: SVGPathSegList;
 }
 
 interface SVGAnimatedPoints {
-    animatedPoints: SVGPointList;
-    points: SVGPointList;
+    readonly animatedPoints: SVGPointList;
+    readonly points: SVGPointList;
 }
 
 interface SVGExternalResourcesRequired {
-    externalResourcesRequired: SVGAnimatedBoolean;
+    readonly externalResourcesRequired: SVGAnimatedBoolean;
 }
 
 interface SVGFilterPrimitiveStandardAttributes extends SVGStylable {
-    height: SVGAnimatedLength;
-    result: SVGAnimatedString;
-    width: SVGAnimatedLength;
-    x: SVGAnimatedLength;
-    y: SVGAnimatedLength;
+    readonly height: SVGAnimatedLength;
+    readonly result: SVGAnimatedString;
+    readonly width: SVGAnimatedLength;
+    readonly x: SVGAnimatedLength;
+    readonly y: SVGAnimatedLength;
 }
 
 interface SVGFitToViewBox {
-    preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
-    viewBox: SVGAnimatedRect;
+    readonly preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
+    readonly viewBox: SVGAnimatedRect;
 }
 
 interface SVGLangSpace {
@@ -13536,8 +13536,8 @@ interface SVGLangSpace {
 }
 
 interface SVGLocatable {
-    farthestViewportElement: SVGElement;
-    nearestViewportElement: SVGElement;
+    readonly farthestViewportElement: SVGElement;
+    readonly nearestViewportElement: SVGElement;
     getBBox(): SVGRect;
     getCTM(): SVGMatrix;
     getScreenCTM(): SVGMatrix;
@@ -13546,22 +13546,22 @@ interface SVGLocatable {
 
 interface SVGStylable {
     className: any;
-    style: CSSStyleDeclaration;
+    readonly style: CSSStyleDeclaration;
 }
 
 interface SVGTests {
-    requiredExtensions: SVGStringList;
-    requiredFeatures: SVGStringList;
-    systemLanguage: SVGStringList;
+    readonly requiredExtensions: SVGStringList;
+    readonly requiredFeatures: SVGStringList;
+    readonly systemLanguage: SVGStringList;
     hasExtension(extension: string): boolean;
 }
 
 interface SVGTransformable extends SVGLocatable {
-    transform: SVGAnimatedTransformList;
+    readonly transform: SVGAnimatedTransformList;
 }
 
 interface SVGURIReference {
-    href: SVGAnimatedString;
+    readonly href: SVGAnimatedString;
 }
 
 interface WindowBase64 {
@@ -13570,15 +13570,15 @@ interface WindowBase64 {
 }
 
 interface WindowConsole {
-    console: Console;
+    readonly console: Console;
 }
 
 interface WindowLocalStorage {
-    localStorage: Storage;
+    readonly localStorage: Storage;
 }
 
 interface WindowSessionStorage {
-    sessionStorage: Storage;
+    readonly sessionStorage: Storage;
 }
 
 interface WindowTimers extends Object, WindowTimersExtension {
@@ -13623,6 +13623,12 @@ interface NodeListOf<TNode extends Node> extends NodeList {
     length: number;
     item(index: number): TNode;
     [index: number]: TNode;
+}
+
+interface HTMLCollectionOf<T extends Element> extends HTMLCollection {
+    item(index: number): T;
+    namedItem(name: string): T;
+    [index: number]: T;
 }
 
 interface BlobPropertyBag {
