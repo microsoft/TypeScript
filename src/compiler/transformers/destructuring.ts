@@ -66,8 +66,7 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
-            recordTempVariable(name);
+            const name = createTempVariable(recordTempVariable);
             emitAssignment(name, value, location);
             return name;
         }
@@ -102,7 +101,7 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
             emitAssignment(name, value, location);
             return name;
         }
@@ -142,7 +141,7 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
             emitAssignment(name, value, location, /*original*/ undefined);
             return name;
         }
@@ -177,8 +176,7 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
-            recordTempVariable(name);
+            const name = createTempVariable(recordTempVariable);
             emitPendingAssignment(name, value, location, /*original*/ undefined);
             return name;
         }

@@ -149,10 +149,13 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(location?: TextRange): Identifier {
+    export function createTempVariable(recordTempVariable: (node: Identifier) => void, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.autoGenerateKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
+        if (recordTempVariable) {
+            recordTempVariable(name);
+        }
         return name;
     }
 
@@ -1143,7 +1146,19 @@ namespace ts {
         thisArg: Expression;
     }
 
-    export function createCallBinding(expression: Expression, languageVersion?: ScriptTarget): CallBinding {
+    function shouldBeCapturedInTempVariable(node: Expression): boolean {
+        switch (skipParentheses(node).kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -1158,32 +1173,44 @@ namespace ts {
         else {
             switch (callee.kind) {
                 case SyntaxKind.PropertyAccessExpression: {
-                    // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                    thisArg = createTempVariable();
-                    target = createPropertyAccess(
-                        createAssignment(
-                            thisArg,
-                            (<PropertyAccessExpression>callee).expression,
-                            /*location*/ (<PropertyAccessExpression>callee).expression
-                        ),
-                        (<PropertyAccessExpression>callee).name,
+                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression)) {
+                        // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                        thisArg = createTempVariable(recordTempVariable);
+                        target = createPropertyAccess(
+                            createAssignment(
+                                thisArg,
+                                (<PropertyAccessExpression>callee).expression,
+                            /*location*/(<PropertyAccessExpression>callee).expression
+                            ),
+                            (<PropertyAccessExpression>callee).name,
                         /*location*/ callee
-                    );
+                        );
+                    }
+                    else {
+                        thisArg = (<PropertyAccessExpression>callee).expression;
+                        target = <PropertyAccessExpression>callee; 
+                    }
                     break;
                 }
 
                 case SyntaxKind.ElementAccessExpression: {
-                    // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                    thisArg = createTempVariable();
-                    target = createElementAccess(
-                        createAssignment(
-                            thisArg,
-                            (<ElementAccessExpression>callee).expression,
-                            /*location*/ (<ElementAccessExpression>callee).expression
-                        ),
-                        (<ElementAccessExpression>callee).argumentExpression,
+                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression)) {
+                        // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                        thisArg = createTempVariable(recordTempVariable);
+                        target = createElementAccess(
+                            createAssignment(
+                                thisArg,
+                                (<ElementAccessExpression>callee).expression,
+                            /*location*/(<ElementAccessExpression>callee).expression
+                            ),
+                            (<ElementAccessExpression>callee).argumentExpression,
                         /*location*/ callee
-                    );
+                        );
+                    }
+                    else {
+                        thisArg = (<ElementAccessExpression>callee).expression;
+                        target = <ElementAccessExpression>callee;
+                    }
 
                     break;
                 }
