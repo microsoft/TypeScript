@@ -549,7 +549,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            getDeclarationName(node),
+                            node.name || getGeneratedNameForNode(node),
                             transformClassLikeDeclarationToExpression(node)
                         )
                     ]),
