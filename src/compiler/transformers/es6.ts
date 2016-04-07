@@ -1796,7 +1796,7 @@ namespace ts {
                 }
             }
 
-            let loopBody = visitEachChild(node.statement, visitor, context);
+            let loopBody = visitNode(node.statement, visitor, isStatement);
 
             const currentState = convertedLoopState;
             convertedLoopState = outerConvertedLoopState;
