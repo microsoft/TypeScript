@@ -46,27 +46,27 @@ namespace ts {
     const nodeEdgeTraversalMap: Map<NodeTraversalPath> = {
         [SyntaxKind.QualifiedName]: [
             { name: "left", test: isEntityName },
-            { name: "right", test: isIdentifier },
+            { name: "right", test: isIdentifier }
         ],
         [SyntaxKind.ComputedPropertyName]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.Parameter]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.Decorator]: [
-            { name: "expression", test: isLeftHandSideExpression },
+            { name: "expression", test: isLeftHandSideExpression }
         ],
         [SyntaxKind.PropertyDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isPropertyName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true },
+            { name: "initializer", test: isExpression, optional: true }
         ],
         [SyntaxKind.MethodDeclaration]: [
             { name: "decorators", test: isDecorator },
@@ -75,7 +75,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.Constructor]: [
             { name: "decorators", test: isDecorator },
@@ -83,7 +83,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.GetAccessor]: [
             { name: "decorators", test: isDecorator },
@@ -92,7 +92,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.SetAccessor]: [
             { name: "decorators", test: isDecorator },
@@ -101,53 +101,53 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.ObjectBindingPattern]: [
-            { name: "elements", test: isBindingElement },
+            { name: "elements", test: isBindingElement }
         ],
         [SyntaxKind.ArrayBindingPattern]: [
-            { name: "elements", test: isBindingElement },
+            { name: "elements", test: isBindingElement }
         ],
         [SyntaxKind.BindingElement]: [
             { name: "propertyName", test: isPropertyName, optional: true },
             { name: "name", test: isBindingName },
-            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.ArrayLiteralExpression]: [
-            { name: "elements", test: isExpression, parenthesize: parenthesizeExpressionForList },
+            { name: "elements", test: isExpression, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.ObjectLiteralExpression]: [
-            { name: "properties", test: isObjectLiteralElement },
+            { name: "properties", test: isObjectLiteralElement }
         ],
         [SyntaxKind.PropertyAccessExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
-            { name: "name", test: isIdentifier },
+            { name: "name", test: isIdentifier }
         ],
         [SyntaxKind.ElementAccessExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
-            { name: "argumentExpression", test: isExpression },
+            { name: "argumentExpression", test: isExpression }
         ],
         [SyntaxKind.CallExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
-            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList },
+            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.NewExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForNew },
             { name: "typeArguments", test: isTypeNode },
-            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList },
+            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.TaggedTemplateExpression]: [
             { name: "tag", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
-            { name: "template", test: isTemplate },
+            { name: "template", test: isTemplate }
         ],
         [SyntaxKind.TypeAssertionExpression]: [
             { name: "type", test: isTypeNode },
-            { name: "expression", test: isUnaryExpression },
+            { name: "expression", test: isUnaryExpression }
         ],
         [SyntaxKind.ParenthesizedExpression]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.FunctionExpression]: [
             { name: "decorators", test: isDecorator },
@@ -156,7 +156,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.ArrowFunction]: [
             { name: "decorators", test: isDecorator },
@@ -164,44 +164,44 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isConciseBody, lift: liftToBlock, parenthesize: parenthesizeConciseBody },
+            { name: "body", test: isConciseBody, lift: liftToBlock, parenthesize: parenthesizeConciseBody }
         ],
         [SyntaxKind.DeleteExpression]: [
-            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.TypeOfExpression]: [
-            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.VoidExpression]: [
-            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.AwaitExpression]: [
-            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
+            { name: "expression", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.PrefixUnaryExpression]: [
-            { name: "operand", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand },
+            { name: "operand", test: isUnaryExpression, parenthesize: parenthesizePrefixOperand }
         ],
         [SyntaxKind.PostfixUnaryExpression]: [
-            { name: "operand", test: isLeftHandSideExpression, parenthesize: parenthesizePostfixOperand },
+            { name: "operand", test: isLeftHandSideExpression, parenthesize: parenthesizePostfixOperand }
         ],
         [SyntaxKind.BinaryExpression]: [
             { name: "left", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, true, /*leftOperand*/ undefined) },
-            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false, parent.left) },
+            { name: "right", test: isExpression, parenthesize: (node: Expression, parent: BinaryExpression) => parenthesizeBinaryOperand(getOperator(parent), node, false, parent.left) }
         ],
         [SyntaxKind.ConditionalExpression]: [
             { name: "condition", test: isExpression },
             { name: "whenTrue", test: isExpression },
-            { name: "whenFalse", test: isExpression },
+            { name: "whenFalse", test: isExpression }
         ],
         [SyntaxKind.TemplateExpression]: [
             { name: "head", test: isTemplateLiteralFragment },
-            { name: "templateSpans", test: isTemplateSpan },
+            { name: "templateSpans", test: isTemplateSpan }
         ],
         [SyntaxKind.YieldExpression]: [
-            { name: "expression", test: isExpression, optional: true },
+            { name: "expression", test: isExpression, optional: true }
         ],
         [SyntaxKind.SpreadElementExpression]: [
-            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.ClassExpression]: [
             { name: "decorators", test: isDecorator },
@@ -209,96 +209,96 @@ namespace ts {
             { name: "name", test: isIdentifier, optional: true },
             { name: "typeParameters", test: isTypeParameter },
             { name: "heritageClauses", test: isHeritageClause },
-            { name: "members", test: isClassElement },
+            { name: "members", test: isClassElement }
         ],
         [SyntaxKind.ExpressionWithTypeArguments]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
-            { name: "typeArguments", test: isTypeNode },
+            { name: "typeArguments", test: isTypeNode }
         ],
         [SyntaxKind.AsExpression]: [
             { name: "expression", test: isExpression },
-            { name: "type", test: isTypeNode },
+            { name: "type", test: isTypeNode }
         ],
         [SyntaxKind.TemplateSpan]: [
             { name: "expression", test: isExpression },
-            { name: "literal", test: isTemplateLiteralFragment },
+            { name: "literal", test: isTemplateLiteralFragment }
         ],
         [SyntaxKind.Block]: [
-            { name: "statements", test: isStatement },
+            { name: "statements", test: isStatement }
         ],
         [SyntaxKind.VariableStatement]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
-            { name: "declarationList", test: isVariableDeclarationList },
+            { name: "declarationList", test: isVariableDeclarationList }
         ],
         [SyntaxKind.ExpressionStatement]: [
-            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForExpressionStatement },
+            { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForExpressionStatement }
         ],
         [SyntaxKind.IfStatement]: [
             { name: "expression", test: isExpression },
             { name: "thenStatement", test: isStatement, lift: liftToBlock },
-            { name: "elseStatement", test: isStatement, lift: liftToBlock, optional: true },
+            { name: "elseStatement", test: isStatement, lift: liftToBlock, optional: true }
         ],
         [SyntaxKind.DoStatement]: [
             { name: "statement", test: isStatement, lift: liftToBlock },
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.WhileStatement]: [
             { name: "expression", test: isExpression },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.ForStatement]: [
             { name: "initializer", test: isForInitializer, optional: true },
             { name: "condition", test: isExpression, optional: true },
             { name: "incrementor", test: isExpression, optional: true },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.ForInStatement]: [
             { name: "initializer", test: isForInitializer },
             { name: "expression", test: isExpression },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.ForOfStatement]: [
             { name: "initializer", test: isForInitializer },
             { name: "expression", test: isExpression },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.ContinueStatement]: [
-            { name: "label", test: isIdentifier, optional: true },
+            { name: "label", test: isIdentifier, optional: true }
         ],
         [SyntaxKind.BreakStatement]: [
-            { name: "label", test: isIdentifier, optional: true },
+            { name: "label", test: isIdentifier, optional: true }
         ],
         [SyntaxKind.ReturnStatement]: [
-            { name: "expression", test: isExpression, optional: true },
+            { name: "expression", test: isExpression, optional: true }
         ],
         [SyntaxKind.WithStatement]: [
             { name: "expression", test: isExpression },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.SwitchStatement]: [
             { name: "expression", test: isExpression },
-            { name: "caseBlock", test: isCaseBlock },
+            { name: "caseBlock", test: isCaseBlock }
         ],
         [SyntaxKind.LabeledStatement]: [
             { name: "label", test: isIdentifier },
-            { name: "statement", test: isStatement, lift: liftToBlock },
+            { name: "statement", test: isStatement, lift: liftToBlock }
         ],
         [SyntaxKind.ThrowStatement]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.TryStatement]: [
             { name: "tryBlock", test: isBlock },
             { name: "catchClause", test: isCatchClause, optional: true },
-            { name: "finallyBlock", test: isBlock, optional: true },
+            { name: "finallyBlock", test: isBlock, optional: true }
         ],
         [SyntaxKind.VariableDeclaration]: [
             { name: "name", test: isBindingName },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.VariableDeclarationList]: [
-            { name: "declarations", test: isVariableDeclaration },
+            { name: "declarations", test: isVariableDeclaration }
         ],
         [SyntaxKind.FunctionDeclaration]: [
             { name: "decorators", test: isDecorator },
@@ -307,7 +307,7 @@ namespace ts {
             { name: "typeParameters", test: isTypeParameter },
             { name: "parameters", test: isParameter },
             { name: "type", test: isTypeNode, optional: true },
-            { name: "body", test: isBlock, optional: true },
+            { name: "body", test: isBlock, optional: true }
         ],
         [SyntaxKind.ClassDeclaration]: [
             { name: "decorators", test: isDecorator },
@@ -315,127 +315,127 @@ namespace ts {
             { name: "name", test: isIdentifier, optional: true },
             { name: "typeParameters", test: isTypeParameter },
             { name: "heritageClauses", test: isHeritageClause },
-            { name: "members", test: isClassElement },
+            { name: "members", test: isClassElement }
         ],
         [SyntaxKind.EnumDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isIdentifier },
-            { name: "members", test: isEnumMember },
+            { name: "members", test: isEnumMember }
         ],
         [SyntaxKind.ModuleDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isModuleName },
-            { name: "body", test: isModuleBody },
+            { name: "body", test: isModuleBody }
         ],
         [SyntaxKind.ModuleBlock]: [
-            { name: "statements", test: isStatement },
+            { name: "statements", test: isStatement }
         ],
         [SyntaxKind.CaseBlock]: [
-            { name: "clauses", test: isCaseOrDefaultClause },
+            { name: "clauses", test: isCaseOrDefaultClause }
         ],
         [SyntaxKind.ImportEqualsDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "name", test: isIdentifier },
-            { name: "moduleReference", test: isModuleReference },
+            { name: "moduleReference", test: isModuleReference }
         ],
         [SyntaxKind.ImportDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "importClause", test: isImportClause, optional: true },
-            { name: "moduleSpecifier", test: isExpression },
+            { name: "moduleSpecifier", test: isExpression }
         ],
         [SyntaxKind.ImportClause]: [
             { name: "name", test: isIdentifier, optional: true },
-            { name: "namedBindings", test: isNamedImportBindings, optional: true },
+            { name: "namedBindings", test: isNamedImportBindings, optional: true }
         ],
         [SyntaxKind.NamespaceImport]: [
-            { name: "name", test: isIdentifier },
+            { name: "name", test: isIdentifier }
         ],
         [SyntaxKind.NamedImports]: [
-            { name: "elements", test: isImportSpecifier },
+            { name: "elements", test: isImportSpecifier }
         ],
         [SyntaxKind.ImportSpecifier]: [
             { name: "propertyName", test: isIdentifier, optional: true },
-            { name: "name", test: isIdentifier },
+            { name: "name", test: isIdentifier }
         ],
         [SyntaxKind.ExportAssignment]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.ExportDeclaration]: [
             { name: "decorators", test: isDecorator },
             { name: "modifiers", test: isModifier },
             { name: "exportClause", test: isNamedExports, optional: true },
-            { name: "moduleSpecifier", test: isExpression, optional: true },
+            { name: "moduleSpecifier", test: isExpression, optional: true }
         ],
         [SyntaxKind.NamedExports]: [
-            { name: "elements", test: isExportSpecifier },
+            { name: "elements", test: isExportSpecifier }
         ],
         [SyntaxKind.ExportSpecifier]: [
             { name: "propertyName", test: isIdentifier, optional: true },
-            { name: "name", test: isIdentifier },
+            { name: "name", test: isIdentifier }
         ],
         [SyntaxKind.ExternalModuleReference]: [
-            { name: "expression", test: isExpression, optional: true },
+            { name: "expression", test: isExpression, optional: true }
         ],
         [SyntaxKind.JsxElement]: [
             { name: "openingElement", test: isJsxOpeningElement },
             { name: "children", test: isJsxChild },
-            { name: "closingElement", test: isJsxClosingElement },
+            { name: "closingElement", test: isJsxClosingElement }
         ],
         [SyntaxKind.JsxSelfClosingElement]: [
             { name: "tagName", test: isEntityName },
-            { name: "attributes", test: isJsxAttributeLike },
+            { name: "attributes", test: isJsxAttributeLike }
         ],
         [SyntaxKind.JsxOpeningElement]: [
             { name: "tagName", test: isEntityName },
-            { name: "attributes", test: isJsxAttributeLike },
+            { name: "attributes", test: isJsxAttributeLike }
         ],
         [SyntaxKind.JsxClosingElement]: [
-            { name: "tagName", test: isEntityName },
+            { name: "tagName", test: isEntityName }
         ],
         [SyntaxKind.JsxAttribute]: [
             { name: "name", test: isIdentifier },
-            { name: "initializer", test: isStringLiteralOrJsxExpression, optional: true },
+            { name: "initializer", test: isStringLiteralOrJsxExpression, optional: true }
         ],
         [SyntaxKind.JsxSpreadAttribute]: [
-            { name: "expression", test: isExpression },
+            { name: "expression", test: isExpression }
         ],
         [SyntaxKind.JsxExpression]: [
-            { name: "expression", test: isExpression, optional: true },
+            { name: "expression", test: isExpression, optional: true }
         ],
         [SyntaxKind.CaseClause]: [
             { name: "expression", test: isExpression, parenthesize: parenthesizeExpressionForList },
-            { name: "statements", test: isStatement },
+            { name: "statements", test: isStatement }
         ],
         [SyntaxKind.DefaultClause]: [
-            { name: "statements", test: isStatement },
+            { name: "statements", test: isStatement }
         ],
         [SyntaxKind.HeritageClause]: [
-            { name: "types", test: isExpressionWithTypeArguments },
+            { name: "types", test: isExpressionWithTypeArguments }
         ],
         [SyntaxKind.CatchClause]: [
             { name: "variableDeclaration", test: isVariableDeclaration },
-            { name: "block", test: isBlock },
+            { name: "block", test: isBlock }
         ],
         [SyntaxKind.PropertyAssignment]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression, parenthesize: parenthesizeExpressionForList },
+            { name: "initializer", test: isExpression, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.ShorthandPropertyAssignment]: [
             { name: "name", test: isIdentifier },
-            { name: "objectAssignmentInitializer", test: isExpression, optional: true },
+            { name: "objectAssignmentInitializer", test: isExpression, optional: true }
         ],
         [SyntaxKind.EnumMember]: [
             { name: "name", test: isPropertyName },
-            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList },
+            { name: "initializer", test: isExpression, optional: true, parenthesize: parenthesizeExpressionForList }
         ],
         [SyntaxKind.SourceFile]: [
-            { name: "statements", test: isStatement },
+            { name: "statements", test: isStatement }
         ],
         [SyntaxKind.NotEmittedStatement]: [],
         [SyntaxKind.PartiallyEmittedExpression]: [
