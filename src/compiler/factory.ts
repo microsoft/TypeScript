@@ -1202,7 +1202,7 @@ namespace ts {
     // Utilities
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
-        return !!(node.expression as StringLiteral).text.match(/use strict/);
+        return (node.expression as StringLiteral).text === "use strict";
     }
 
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
