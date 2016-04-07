@@ -710,6 +710,26 @@ namespace ts {
         return createVoid(createLiteral(0));
     }
 
+    export function createImportDeclaration(importClause: ImportClause, moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration {
+        const node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, location);
+        node.importClause = importClause;
+        node.moduleSpecifier = moduleSpecifier;
+        return node;
+    }
+
+    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings, location?: TextRange): ImportClause {
+        const node = <ImportClause>createNode(SyntaxKind.ImportClause, location);
+        node.name = name;
+        node.namedBindings = namedBindings;
+        return node;
+    }
+
+    export function createNamedImports(elements: NodeArray<ImportSpecifier>, location?: TextRange): NamedImports {
+        const node = <NamedImports>createNode(SyntaxKind.NamedImports, location);
+        node.elements = elements;
+        return node;
+    }
+
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isIdentifier(memberName)) {
             return createPropertyAccess(target, getSynthesizedClone(memberName), location);
