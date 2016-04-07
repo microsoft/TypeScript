@@ -1879,6 +1879,34 @@
         "category": "Error",
         "code": 2678
     },
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.": {
+        "category": "Error",
+        "code": 2679
+    },
+    "A 'this' parameter must be the first parameter.": {
+        "category": "Error",
+        "code": 2680
+    },
+    "A constructor cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2681
+    },
+    "A setter cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2682
+    },
+    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+        "category": "Error",
+        "code": 2683
+    },
+    "The 'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
+        "category": "Error",
+        "code": 2684
+    },
+    "The 'this' types of each signature are incompatible.": {
+        "category": "Error",
+        "code": 2685
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2632,7 +2660,10 @@
         "category": "Error",
         "code": 6114
     },
-
+    "Raise error on 'this' expressions with an implied 'any' type.": {
+        "category": "Message",
+        "code": 6115
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

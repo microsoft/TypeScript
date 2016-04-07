@@ -95,13 +95,13 @@ namespace RWC {
                             continue;
                         }
 
-                        if (!Harness.isLibraryFile(fileRead.path)) {
+                        if (!Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (inInputList) {
                                 continue;
                             }
                             otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
-                        else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)) {
+                        else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (!inInputList) {
                                 // If useCustomLibraryFile is true, we will use lib.d.ts from json object
                                 // otherwise use the lib.d.ts from built/local
