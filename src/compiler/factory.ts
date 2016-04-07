@@ -854,14 +854,12 @@ namespace ts {
         );
     }
 
-    export function createMetadataHelper(metadataKey: string, metadataValue: Expression, defer?: boolean) {
+    export function createMetadataHelper(metadataKey: string, metadataValue: Expression) {
         return createCall(
             createIdentifier("__metadata"),
             [
                 createLiteral(metadataKey),
-                defer
-                    ? createArrowFunction([], metadataValue)
-                    : metadataValue
+                metadataValue
             ]
         );
     }

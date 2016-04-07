@@ -49,15 +49,11 @@ var MyComponent = (function () {
 }());
 __decorate([
     decorator,
-    __metadata("design:typeinfo", {
-        type: function () { return Function; },
-        paramTypes: function () { return [Object]; },
-        returnType: function () { return void 0; }
-    })
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
 ], MyComponent.prototype, "method", null);
 MyComponent = __decorate([
     decorator,
-    __metadata("design:typeinfo", {
-        paramTypes: function () { return [service_1.default]; }
-    })
+    __metadata("design:paramtypes", [service_1.default])
 ], MyComponent);

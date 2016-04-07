@@ -6,6 +6,11 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
+    /**
+     * Indicates whether to emit type metadata in the new format.
+     */
+    const USE_NEW_TYPE_METADATA_FORMAT = false;
+
     const enum TypeScriptSubstitutionFlags {
         /** Enables substitutions for decorated classes. */
         DecoratedClasses = 1 << 0,
@@ -1354,6 +1359,30 @@ namespace ts {
          * @param decoratorExpressions The destination array to which to add new decorator expressions.
          */
         function addTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+            if (USE_NEW_TYPE_METADATA_FORMAT) {
+                addNewTypeMetadata(node, decoratorExpressions);
+            }
+            else {
+                addOldTypeMetadata(node, decoratorExpressions);
+            }
+        }
+
+        function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+            if (compilerOptions.emitDecoratorMetadata) {
+                let properties: ObjectLiteralElement[];
+                if (shouldAddTypeMetadata(node)) {
+                    decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node)));
+                }
+                if (shouldAddParamTypesMetadata(node)) {
+                    decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node)));
+                }
+                if (shouldAddReturnTypeMetadata(node)) {
+                    decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node)));
+                }
+            }
+        }
+
+        function addNewTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 let properties: ObjectLiteralElement[];
                 if (shouldAddTypeMetadata(node)) {
@@ -1366,7 +1395,7 @@ namespace ts {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction([], serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true), /*defer*/ false));
+                    decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
