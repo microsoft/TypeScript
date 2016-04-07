@@ -5624,8 +5624,34 @@ namespace ts {
                 };
             }
 
-            function isImportSpecifierSymbol(symbol: Symbol) {
-                return (symbol.flags & SymbolFlags.Alias) && !!getDeclarationOfKind(symbol, SyntaxKind.ImportSpecifier);
+            function getImportOrExportSpecifierPropertyNameSymbolSpecifier(symbol: Symbol, location: Node): ImportOrExportSpecifier {
+                if (symbol.flags & SymbolFlags.Alias) {
+                    const importOrExportSpecifier = <ImportOrExportSpecifier>forEach(symbol.declarations,
+                        declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
+                            declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
+                    if (importOrExportSpecifier &&
+                        // export { a } 
+                        (!importOrExportSpecifier.propertyName ||
+                            // export {a as class } where a is location
+                            importOrExportSpecifier.propertyName === location)) {
+                        return importOrExportSpecifier;
+                    }
+                }
+            }
+
+            function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol) {
+                const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+                return bindingElement &&
+                    bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
+                    !bindingElement.propertyName;
+            }
+
+            function getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol: Symbol) {
+                if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
+                    const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+                    const typeOfPattern = typeChecker.getTypeAtLocation(bindingElement.parent);
+                    return typeOfPattern && typeChecker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
+                }
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
@@ -5670,6 +5696,12 @@ namespace ts {
                 // If the symbol is an import we would like to find it if we are looking for what it imports.
                 // So consider it visible outside its declaration scope.
                 if (symbol.flags & SymbolFlags.Alias) {
+                    return undefined;
+                }
+
+                // If symbol is of object binding pattern element without property name we would want to 
+                // look for property too and that could be anywhere
+                if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
                     return undefined;
                 }
 
@@ -6068,18 +6100,33 @@ namespace ts {
                 // The search set contains at least the current symbol
                 let result = [symbol];
 
-                // If the symbol is an alias, add what it aliases to the list
-                if (isImportSpecifierSymbol(symbol)) {
-                     result.push(typeChecker.getAliasedSymbol(symbol));
+                // If the location is name of property symbol from object literal destructuring pattern
+                // Search the property symbol
+                //      for ( { property: p2 } of elems) { }
+                if (isNameOfPropertyAssignment(location) &&
+                    location.parent.kind !== SyntaxKind.ShorthandPropertyAssignment &&
+                    isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent)) {
+                    const typeOfObjectLiteral = typeChecker.getTypeAtLocation(location.parent.parent);
+                    if (typeOfObjectLiteral) {
+                        const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>location).text);
+                        result.push(propertySymbol);
+                    }
                 }
 
-                // For export specifiers, the exported name can be referring to a local symbol, e.g.:
+                // If the symbol is an alias, add what it aliases to the list
                 //     import {a} from "mod";
-                //     export {a as somethingElse}
-                // We want the *local* declaration of 'a' as declared in the import,
-                // *not* as declared within "mod" (or farther)
-                if (location.parent.kind === SyntaxKind.ExportSpecifier) {
-                    result.push(typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>location.parent));
+                //     export {a}
+                //// For export specifiers, the exported name can be referring to a local symbol, e.g.:
+                ////     import {a} from "mod";
+                ////     export {a as somethingElse}
+                //// We want the *local* declaration of 'a' as declared in the import,
+                //// *not* as declared within "mod" (or farther)
+                const importOrExportSpecifier = getImportOrExportSpecifierPropertyNameSymbolSpecifier(symbol, location);
+                if (importOrExportSpecifier) {
+                    result = result.concat(populateSearchSymbolSet(
+                        importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                        typeChecker.getAliasedSymbol(symbol) :
+                        typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier), location));
                 }
 
                 // If the location is in a context sensitive location (i.e. in an object literal) try
@@ -6114,6 +6161,13 @@ namespace ts {
                 if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
                     isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
                     result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
+                }
+
+                // If this is symbol of binding element without propertyName declaration in Object binding pattern 
+                // Include the property in the search
+                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol);
+                if (bindingElementPropertySymbol) {
+                    result.push(bindingElementPropertySymbol);
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
@@ -6197,32 +6251,49 @@ namespace ts {
                 }
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
-                // symbols.
-                if (isImportSpecifierSymbol(referenceSymbol)) {
-                    const aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
-                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
-                        return aliasedSymbol;
-                    }
+                // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
+                const importOrExportSpecifier = getImportOrExportSpecifierPropertyNameSymbolSpecifier(referenceSymbol, referenceLocation);
+                if (importOrExportSpecifier) {
+                    const aliasedSymbol = importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                        typeChecker.getAliasedSymbol(referenceSymbol) :
+                        typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
+                    return getRelatedSymbol(searchSymbols, aliasedSymbol, referenceLocation);
                 }
 
-                // For export specifiers, it can be a local symbol, e.g. 
-                //     import {a} from "mod";
-                //     export {a as somethingElse}
-                // We want the local target of the export (i.e. the import symbol) and not the final target (i.e. "mod".a)
-                if (referenceLocation.parent.kind === SyntaxKind.ExportSpecifier) {
-                    const aliasedSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>referenceLocation.parent);
-                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
-                        return aliasedSymbol;
-                    }
-                }
 
                 // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                    const contexualSymbol = forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
+
+                    if (contexualSymbol) {
+                        return contexualSymbol;
+                    }
+
+                    // If the reference location is name of property symbol from object literal destructuring pattern
+                    // Compare it to search symbol something similar to 'property' from
+                    //      for ( { property: p2 } of elems) { }
+                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(referenceLocation.parent.parent)) {
+                        // Do work to determine if this is property symbol corresponding to the search symbol
+                        const typeOfObjectLiteral = typeChecker.getTypeAtLocation(referenceLocation.parent.parent);
+                        if (typeOfObjectLiteral) {
+                            const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>referenceLocation).text);
+                            if (searchSymbols.indexOf(propertySymbol) >= 0) {
+                                return propertySymbol;
+                            }
+                        }
+                    }
+                }
+
+                // If the reference location is the binding element and doesn't have property name 
+                // then include the binding element in the related symbols
+                //      let { a } : { a };
+                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(referenceSymbol);
+                if (bindingElementPropertySymbol && searchSymbols.indexOf(bindingElementPropertySymbol) >= 0) {
+                    return bindingElementPropertySymbol;
                 }
 
                 // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)

@@ -11797,39 +11797,43 @@ namespace ts {
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
             const properties = node.properties;
             for (const p of properties) {
-                if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    const name = <PropertyName>(<PropertyAssignment>p).name;
-                    if (name.kind === SyntaxKind.ComputedPropertyName) {
-                        checkComputedPropertyName(<ComputedPropertyName>name);
-                    }
-                    if (isComputedNonLiteralName(name)) {
-                        continue;
-                    }
+                checkObjectLiteralDestructuringPropertyAssignment(sourceType, p, contextualMapper);
+            }
+            return sourceType;
+        }
 
-                    const text = getTextOfPropertyName(name);
-                    const type = isTypeAny(sourceType)
-                        ? sourceType
-                        : getTypeOfPropertyOfType(sourceType, text) ||
-                        isNumericLiteralName(text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
-                        getIndexTypeOfType(sourceType, IndexKind.String);
-                    if (type) {
-                        if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                            checkDestructuringAssignment(<ShorthandPropertyAssignment>p, type);
-                        }
-                        else {
-                            // non-shorthand property assignments should always have initializers
-                            checkDestructuringAssignment((<PropertyAssignment>p).initializer, type);
-                        }
+        function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElement, contextualMapper?: TypeMapper) {
+            if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                const name = <PropertyName>(<PropertyAssignment>property).name;
+                if (name.kind === SyntaxKind.ComputedPropertyName) {
+                    checkComputedPropertyName(<ComputedPropertyName>name);
+                }
+                if (isComputedNonLiteralName(name)) {
+                    return undefined;
+                }
+
+                const text = getTextOfPropertyName(name);
+                const type = isTypeAny(objectLiteralType)
+                    ? objectLiteralType
+                    : getTypeOfPropertyOfType(objectLiteralType, text) ||
+                    isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                    getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                if (type) {
+                    if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        return checkDestructuringAssignment(<ShorthandPropertyAssignment>property, type);
                     }
                     else {
-                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(sourceType), declarationNameToString(name));
+                        // non-shorthand property assignments should always have initializers
+                        return checkDestructuringAssignment((<PropertyAssignment>property).initializer, type);
                     }
                 }
                 else {
-                    error(p, Diagnostics.Property_assignment_expected);
+                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
                 }
             }
-            return sourceType;
+            else {
+                error(property, Diagnostics.Property_assignment_expected);
+            }
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
@@ -11839,44 +11843,49 @@ namespace ts {
             const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
-                const e = elements[i];
-                if (e.kind !== SyntaxKind.OmittedExpression) {
-                    if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                        const propName = "" + i;
-                        const type = isTypeAny(sourceType)
-                            ? sourceType
-                            : isTupleLikeType(sourceType)
-                                ? getTypeOfPropertyOfType(sourceType, propName)
-                                : elementType;
-                        if (type) {
-                            checkDestructuringAssignment(e, type, contextualMapper);
-                        }
-                        else {
-                            if (isTupleType(sourceType)) {
-                                error(e, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), (<TupleType>sourceType).elementTypes.length, elements.length);
-                            }
-                            else {
-                                error(e, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
-                            }
-                        }
+                checkArrayLiteralDestructuringElementAssignment(node, sourceType, elements[i], i, elementType, contextualMapper);
+            }
+            return sourceType;
+        }
+
+        function checkArrayLiteralDestructuringElementAssignment(node: ArrayLiteralExpression, sourceType: Type,
+            element: Expression, index: number, elementType: Type, contextualMapper?: TypeMapper) {
+            const elements = node.elements;
+            if (element.kind !== SyntaxKind.OmittedExpression) {
+                if (element.kind !== SyntaxKind.SpreadElementExpression) {
+                    const propName = "" + index;
+                    const type = isTypeAny(sourceType)
+                        ? sourceType
+                        : isTupleLikeType(sourceType)
+                            ? getTypeOfPropertyOfType(sourceType, propName)
+                            : elementType;
+                    if (type) {
+                        return checkDestructuringAssignment(element, type, contextualMapper);
                     }
                     else {
-                        if (i < elements.length - 1) {
-                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                        if (isTupleType(sourceType)) {
+                            error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), (<TupleType>sourceType).elementTypes.length, elements.length);
                         }
                         else {
-                            const restExpression = (<SpreadElementExpression>e).expression;
-                            if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                                error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
-                            }
-                            else {
-                                checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
-                            }
+                            error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName);
+                        }
+                    }
+                }
+                else {
+                    if (index < elements.length - 1) {
+                        error(element, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                    }
+                    else {
+                        const restExpression = (<SpreadElementExpression>element).expression;
+                        if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                            error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                        }
+                        else {
+                            return checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
                         }
                     }
                 }
             }
-            return sourceType;
         }
 
         function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, contextualMapper?: TypeMapper): Type {
@@ -16553,6 +16562,36 @@ namespace ts {
         function getTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
+            }
+            // If this is array literal or object literal from destructuring assignment
+            // handle it specially
+            if (isArrayLiteralOrObjectLiteralDestructuringPattern(expr)) {
+                // If this is from "for of"
+                //     for ( { a } of elemns) {
+                //     }
+                if (expr.parent.kind === SyntaxKind.ForOfStatement) {
+                    const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression);
+                    return checkDestructuringAssignment(expr, iteratedType || unknownType);
+                }
+                // If this is from "for" initializer
+                //     for ({a } = elems[0];.....) { }
+                if (expr.parent.kind === SyntaxKind.BinaryExpression) {
+                    const iteratedType = checkExpression((<BinaryExpression>expr.parent).right);
+                    return checkDestructuringAssignment(expr, iteratedType || unknownType);
+                }
+                // If this is from nested object binding pattern
+                //     for ({ skills: { primary, secondary } } = multiRobot, i = 0; i < 1; i++) {
+                if (expr.parent.kind === SyntaxKind.PropertyAssignment) {
+                    const typeOfParentObjectLiteral = getTypeOfNode(expr.parent.parent);
+                    return checkObjectLiteralDestructuringPropertyAssignment(typeOfParentObjectLiteral, <ObjectLiteralElement>expr.parent);
+                }
+                // Array literal assignment - array destructuring pattern
+                Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
+                //    [{ property1: p1, property2 }] = elems;
+                const typeOfArrayLiteral = getTypeOfNode(expr.parent);
+                const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral, expr.parent, /*allowStringInput*/ false) || unknownType;
+                return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
+                    expr, indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType);
             }
             return checkExpression(expr);
         }
