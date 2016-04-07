@@ -1859,6 +1859,10 @@ const _super = (function (geti, seti) {
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 emit(node.name);
+                if (node.objectAssignmentInitializer) {
+                    write(" = ");
+                    emitExpression(node.objectAssignmentInitializer);
+                }
             }
 
             //
