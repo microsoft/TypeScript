@@ -711,9 +711,15 @@ namespace ts {
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
-        return isIdentifier(memberName)
-            ? createPropertyAccess(target, getSynthesizedClone(memberName), location)
-            : createElementAccess(target, getSynthesizedClone(isComputedPropertyName(memberName) ? memberName.expression : memberName), location);
+        if (isIdentifier(memberName)) {
+            return createPropertyAccess(target, getSynthesizedClone(memberName), location);
+        }
+        else if (isComputedPropertyName(memberName)) {
+            return createElementAccess(target, memberName.expression, location);
+        }
+        else {
+            return createElementAccess(target, memberName, location);
+        }
     }
 
     export function createRestParameter(name: string | Identifier) {
