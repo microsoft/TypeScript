@@ -46,8 +46,6 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    ,
-    ,
     Object.defineProperty(_a, a, {
         set: function (v) { },
         enumerable: true,
