@@ -651,18 +651,9 @@ namespace ts {
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, heritageClauses !== undefined);
 
-            // emit name if
-            // - node has a name
-            // - node has static initializers
-            //
-            let name = node.name;
-            if (!name && staticProperties.length > 0) {
-                name = getGeneratedNameForNode(node);
-            }
-
             const classExpression = setOriginalNode(
                 createClassExpression(
-                    name,
+                    node.name,
                     heritageClauses,
                     members,
                     /*location*/ node

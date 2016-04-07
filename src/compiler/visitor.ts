@@ -131,12 +131,12 @@ namespace ts {
         [SyntaxKind.CallExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
             { name: "typeArguments", test: isTypeNode },
-            { name: "arguments", test: isExpression },
+            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.NewExpression]: [
             { name: "expression", test: isLeftHandSideExpression, parenthesize: parenthesizeForNew },
             { name: "typeArguments", test: isTypeNode },
-            { name: "arguments", test: isExpression },
+            { name: "arguments", test: isExpression, parenthesize: parenthesizeExpressionForList },
         ],
         [SyntaxKind.TaggedTemplateExpression]: [
             { name: "tag", test: isLeftHandSideExpression, parenthesize: parenthesizeForAccess },
