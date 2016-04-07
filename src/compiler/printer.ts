@@ -1095,7 +1095,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                writeToken(node.operator);
+                writeTokenText(node.operator);
                 if (shouldEmitWhitespaceBeforeOperand(node)) {
                     write(" ");
                 }
@@ -1123,7 +1123,7 @@ const _super = (function (geti, seti) {
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
                 emitExpression(node.operand);
-                writeToken(node.operator);
+                writeTokenText(node.operator);
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
@@ -1419,8 +1419,7 @@ const _super = (function (geti, seti) {
                         emitSignatureHead(node);
                         write(" {");
                         emitBlockFunctionBody(node, body);
-                        write("}");
-
+                        writeToken(SyntaxKind.CloseBraceToken, node.end)
                         if (indentedFlag) {
                             decreaseIndent();
                         }
@@ -1826,7 +1825,7 @@ const _super = (function (geti, seti) {
 
             function emitHeritageClause(node: HeritageClause) {
                 write(" ");
-                writeToken(node.token);
+                writeTokenText(node.token);
                 write(" ");
                 emitList(node, node.types, ListFormat.HeritageClauseTypes);
             }
@@ -2275,10 +2274,9 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, pos?: number) {
-                const tokenStartPos = skipTrivia(currentText, pos);
+            function writeToken(token: SyntaxKind, tokenStartPos: number) {
                 emitPos(tokenStartPos);
-                const tokenEndPos = writeTokenText(token, pos);
+                const tokenEndPos = writeTokenText(token, tokenStartPos);
                 emitPos(tokenEndPos);
                 return tokenEndPos;
             }

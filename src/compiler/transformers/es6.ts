@@ -609,12 +609,14 @@ namespace ts {
             if (node.name) {
                 enableSubstitutionsForBlockScopedBindings();
             }
+            const closingBraceLocation = { pos: node.end - 1, end: node.end };
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 baseTypeNode ? [createParameter("_super")] : [],
-                transformClassBody(node, baseTypeNode !== undefined)
+                transformClassBody(node, baseTypeNode !== undefined, closingBraceLocation),
+                closingBraceLocation
             );
 
             // To preserve the behavior of the old emitter, we explicitly indent
@@ -629,8 +631,10 @@ namespace ts {
                     classFunction,
                     baseTypeNode
                         ? [visitNode(baseTypeNode.expression, visitor, isExpression)]
-                        : []
-                )
+                        : [],
+                    closingBraceLocation
+                ),
+                closingBraceLocation
             );
         }
 
@@ -640,13 +644,13 @@ namespace ts {
          * @param node A ClassExpression or ClassDeclaration node.
          * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
          */
-        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): Block {
+        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean, closingBraceLocation: TextRange): Block {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             addExtendsHelperIfNeeded(statements, node, hasExtendsClause);
             addConstructor(statements, node, hasExtendsClause);
             addClassMembers(statements, node);
-            statements.push(createReturn(getDeclarationName(node)));
+            statements.push(createReturn(getDeclarationName(node), /*location*/ closingBraceLocation));
             addRange(statements, endLexicalEnvironment());
             return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
         }
@@ -685,7 +689,7 @@ namespace ts {
                     getDeclarationName(node),
                     transformConstructorParameters(constructor, hasSynthesizedSuper),
                     transformConstructorBody(constructor, hasExtendsClause, hasSynthesizedSuper),
-                    /*location*/ constructor
+                    /*location*/ constructor || node
                 )
             );
         }
