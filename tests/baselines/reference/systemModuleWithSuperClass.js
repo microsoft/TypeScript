@@ -13,13 +13,13 @@ export class Bar extends Foo {
 }
 
 //// [foo.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var Foo;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             Foo = (function () {
                 function Foo() {
                 }
@@ -27,7 +27,7 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("Foo", Foo);
         }
-    }
+    };
 });
 //// [bar.js]
 System.register(['./foo'], function(exports_1, context_1) {
@@ -38,14 +38,14 @@ System.register(['./foo'], function(exports_1, context_1) {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var foo_1;
-    var Bar;
+    var foo_1, Bar;
     return {
-        setters:[
+        setters: [
             function (foo_1_1) {
                 foo_1 = foo_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             Bar = (function (_super) {
                 __extends(Bar, _super);
                 function Bar() {
@@ -55,5 +55,5 @@ System.register(['./foo'], function(exports_1, context_1) {
             }(foo_1.Foo));
             exports_1("Bar", Bar);
         }
-    }
+    };
 });

@@ -42,9 +42,9 @@ var Q = (function (_super) {
     // Super is not allowed in constructor args
     function Q(z, zz, zzz) {
         var _this = this;
-        if (z === void 0) { z = _super.prototype.; }
-        if (zz === void 0) { zz = _super.prototype.; }
-        if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
+        if (z === void 0) { z = _super.; }
+        if (zz === void 0) { zz = _super.; }
+        if (zzz === void 0) { zzz = function () { return _super.; }; }
         _super.call(this);
         this.z = z;
         this.xx = _super.prototype.;
