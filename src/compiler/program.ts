@@ -44,15 +44,6 @@ namespace ts {
         return compilerOptions.traceModuleResolution && host.trace !== undefined;
     }
 
-    function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return str.indexOf(suffix, expectedPos) === expectedPos;
-    }
-
     function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
