@@ -333,8 +333,7 @@ namespace ts {
         },
         {
             name: "listEmittedFiles",
-            type: "boolean",
-            description: Diagnostics.List_emitted_files
+            type: "boolean"
         },
         {
             name: "lib",
