@@ -13,6 +13,8 @@ namespace ts {
         NamespaceExports = 1 << 1,
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 2,
+        /* Enables substitutions for unqualified enum members */
+        NonQualifiedEnumMembers = 1 << 3
     }
 
     export function transformTypeScript(context: TransformationContext) {
@@ -65,7 +67,7 @@ namespace ts {
          * Keeps track of whether  we are within any containing namespaces when performing
          * just-in-time substitution while printing an expression identifier.
          */
-        let isEnclosedInNamespace: boolean;
+        let applicableSubstitutions: TypeScriptSubstitutionFlags;
 
         /**
          * This keeps track of containers where `super` is valid, for use with
@@ -2234,26 +2236,29 @@ namespace ts {
             //      ...
             //  })(x || (x = {}));
             statements.push(
-                setOriginalNode(
-                    createStatement(
-                        createCall(
-                            createFunctionExpression(
+                setNodeEmitFlags(
+                    setOriginalNode(
+                        createStatement(
+                            createCall(
+                                createFunctionExpression(
                                 /*asteriskToken*/ undefined,
                                 /*name*/ undefined,
-                                [createParameter(localName)],
-                                transformEnumBody(node, localName)
-                            ),
-                            [createLogicalOr(
-                                name,
-                                createAssignment(
+                                    [createParameter(localName)],
+                                    transformEnumBody(node, localName)
+                                ),
+                                [createLogicalOr(
                                     name,
-                                    createObjectLiteral()
-                                )
-                            )]
-                        ),
+                                    createAssignment(
+                                        name,
+                                        createObjectLiteral()
+                                    )
+                                )]
+                            ),
                         /*location*/ node
-                    ),
+                        ),
                     /*original*/ node
+                    ),
+                    NodeEmitFlags.AdviseOnEmitNode
                 )
             );
 
@@ -2317,11 +2322,14 @@ namespace ts {
             if (value !== undefined) {
                 return createLiteral(value);
             }
-            else if (member.initializer) {
-                return visitNode(member.initializer, visitor, isExpression);
-            }
             else {
-                return createVoidZero();
+                enableSubstitutionForNonQualifiedEnumMembers();
+                if (member.initializer) {
+                    return visitNode(member.initializer, visitor, isExpression);
+                }
+                else {
+                    return createVoidZero();
+                }
             }
         }
 
@@ -2634,8 +2642,12 @@ namespace ts {
             return getOriginalNode(node).kind === SyntaxKind.ModuleDeclaration;
         }
 
+        function isTransformedEnumDeclaration(node: Node): boolean {
+            return getOriginalNode(node).kind === SyntaxKind.EnumDeclaration;
+        }
+
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
-            const savedIsEnclosedInNamespace = isEnclosedInNamespace;
+            const savedApplicableSubstitutions = applicableSubstitutions;
             const savedCurrentSuperContainer = currentSuperContainer;
 
             // If we need support substitutions for aliases for decorated classes,
@@ -2651,7 +2663,10 @@ namespace ts {
             }
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
-                isEnclosedInNamespace = true;
+                applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+            }
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
+                applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
             previousOnEmitNode(node, emit);
@@ -2660,7 +2675,7 @@ namespace ts {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
             }
 
-            isEnclosedInNamespace = savedIsEnclosedInNamespace;
+            applicableSubstitutions = savedApplicableSubstitutions;
             currentSuperContainer = savedCurrentSuperContainer;
         }
 
@@ -2705,18 +2720,22 @@ namespace ts {
                 }
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isEnclosedInNamespace) {
+            if (enabledSubstitutions & applicableSubstitutions) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const container = resolver.getReferencedExportContainer(original);
-                    if (container && container.kind === SyntaxKind.ModuleDeclaration) {
-                        return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
+                    if (container) {
+                        const substitute =
+                            (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
+                            (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                        if (substitute) {
+                            return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
+                        }
                     }
                 }
             }
-
             return node;
         }
 
@@ -2768,6 +2787,13 @@ namespace ts {
             }
 
             return node;
+        }
+
+        function enableSubstitutionForNonQualifiedEnumMembers() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
+                context.enableExpressionSubstitution(SyntaxKind.Identifier);
+            }
         }
 
         function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
