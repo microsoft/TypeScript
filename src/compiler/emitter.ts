@@ -7651,7 +7651,7 @@ const _super = (function (geti, seti) {
             }
 
             function isUseStrictPrologue(node: ExpressionStatement): boolean {
-                return !!(node.expression as StringLiteral).text.match(/use strict/);
+                return (node.expression as StringLiteral).text === "use strict";
             }
 
             function ensureUseStrictPrologue(startWithNewLine: boolean, writeUseStrict: boolean) {
