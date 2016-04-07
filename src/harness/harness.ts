@@ -1623,9 +1623,9 @@ namespace Harness {
     }
 
     export function isDefaultLibraryFile(filePath: string): boolean {
-        // We need to make sure that the filePath is prefix with "lib." not just containing "lib." and end with ".d.ts"
+        // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
         const fileName = Path.getFileName(filePath);
-        return fileName.indexOf("lib.") === 0 && !!fileName.match(/\.d\.ts/);
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
