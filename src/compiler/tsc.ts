@@ -19,8 +19,10 @@ namespace ts {
             return;
         }
 
+        const currentDir = sys.getCurrentDirectory();
+
         for (const file of files) {
-            const filepath = getNormalizedAbsolutePath(file, sys.getCurrentDirectory());
+            const filepath = getNormalizedAbsolutePath(file, currentDir);
 
             sys.write(`TSFILE: ${filepath}${sys.newLine}`);
         }
