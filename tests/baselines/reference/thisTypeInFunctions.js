@@ -129,6 +129,10 @@ c.explicitC = function(m) { return this.n + m };
 c.explicitProperty = function(m) { return this.n + m };
 c.explicitThis = function(m) { return this.n + m };
 
+// this: contextual typing
+c.explicitThis = function(this, m) { return this.n + m };
+
+// this: superclass compatibility
 c.explicitC = function(this: B, m: number) { return this.n + m };
 
 // this:void compatibility
@@ -314,6 +318,9 @@ c.explicitThis = function (m) { return this.n + m; };
 c.explicitC = function (m) { return this.n + m; };
 c.explicitProperty = function (m) { return this.n + m; };
 c.explicitThis = function (m) { return this.n + m; };
+// this: contextual typing
+c.explicitThis = function (m) { return this.n + m; };
+// this: superclass compatibility
 c.explicitC = function (m) { return this.n + m; };
 // this:void compatibility
 c.explicitVoid = function (n) { return n; };

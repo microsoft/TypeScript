@@ -560,163 +560,176 @@ c.explicitThis = function(m) { return this.n + m };
 >n : Symbol(C.n, Decl(thisTypeInFunctions.ts, 4, 9))
 >m : Symbol(m, Decl(thisTypeInFunctions.ts, 128, 26))
 
+// this: contextual typing
+c.explicitThis = function(this, m) { return this.n + m };
+>c.explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
+>c : Symbol(c, Decl(thisTypeInFunctions.ts, 65, 3))
+>explicitThis : Symbol(C.explicitThis, Decl(thisTypeInFunctions.ts, 5, 14))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 131, 26))
+>m : Symbol(m, Decl(thisTypeInFunctions.ts, 131, 31))
+>this.n : Symbol(C.n, Decl(thisTypeInFunctions.ts, 4, 9))
+>this : Symbol(C, Decl(thisTypeInFunctions.ts, 3, 1))
+>n : Symbol(C.n, Decl(thisTypeInFunctions.ts, 4, 9))
+>m : Symbol(m, Decl(thisTypeInFunctions.ts, 131, 31))
+
+// this: superclass compatibility
 c.explicitC = function(this: B, m: number) { return this.n + m };
 >c.explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 65, 3))
 >explicitC : Symbol(C.explicitC, Decl(thisTypeInFunctions.ts, 8, 5))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 130, 23))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 134, 23))
 >B : Symbol(B, Decl(thisTypeInFunctions.ts, 0, 0))
->m : Symbol(m, Decl(thisTypeInFunctions.ts, 130, 31))
+>m : Symbol(m, Decl(thisTypeInFunctions.ts, 134, 31))
 >this.n : Symbol(B.n, Decl(thisTypeInFunctions.ts, 1, 9))
 >this : Symbol(B, Decl(thisTypeInFunctions.ts, 0, 0))
 >n : Symbol(B.n, Decl(thisTypeInFunctions.ts, 1, 9))
->m : Symbol(m, Decl(thisTypeInFunctions.ts, 130, 31))
+>m : Symbol(m, Decl(thisTypeInFunctions.ts, 134, 31))
 
 // this:void compatibility
 c.explicitVoid = n => n;
 >c.explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctions.ts, 14, 5))
 >c : Symbol(c, Decl(thisTypeInFunctions.ts, 65, 3))
 >explicitVoid : Symbol(C.explicitVoid, Decl(thisTypeInFunctions.ts, 14, 5))
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 133, 16))
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 133, 16))
+>n : Symbol(n, Decl(thisTypeInFunctions.ts, 137, 16))
+>n : Symbol(n, Decl(thisTypeInFunctions.ts, 137, 16))
 
 // class-based assignability
 class Base1 {
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
 
     x: number;
->x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
+>x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
 
     public polymorphic(this: this): number { return this.x; }
->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 138, 23))
->this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
->this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
+>polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 142, 23))
+>this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
+>this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
 
     explicit(this: Base1): number { return this.x; }
->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 138, 61))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 139, 13))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
->this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
+>explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 142, 61))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 143, 13))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
+>this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
 
     static explicitStatic(this: typeof Base1): number { return this.y; }
->explicitStatic : Symbol(Base1.explicitStatic, Decl(thisTypeInFunctions.ts, 139, 52))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 140, 26))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->this.y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 140, 72))
->this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 140, 72))
+>explicitStatic : Symbol(Base1.explicitStatic, Decl(thisTypeInFunctions.ts, 143, 52))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 144, 26))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>this.y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 144, 72))
+>this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 144, 72))
 
     static y: number;
->y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 140, 72))
+>y : Symbol(Base1.y, Decl(thisTypeInFunctions.ts, 144, 72))
 }
 class Derived1 extends Base1 {
->Derived1 : Symbol(Derived1, Decl(thisTypeInFunctions.ts, 142, 1))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
+>Derived1 : Symbol(Derived1, Decl(thisTypeInFunctions.ts, 146, 1))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
 
     y: number
->y : Symbol(Derived1.y, Decl(thisTypeInFunctions.ts, 143, 30))
+>y : Symbol(Derived1.y, Decl(thisTypeInFunctions.ts, 147, 30))
 }
 class Base2 {
->Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 145, 1))
+>Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 149, 1))
 
     y: number
->y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 146, 13))
+>y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 150, 13))
 
     polymorphic(this: this): number { return this.y; }
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 148, 16))
->this.y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 146, 13))
->this : Symbol(Base2, Decl(thisTypeInFunctions.ts, 145, 1))
->y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 146, 13))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 152, 16))
+>this.y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 150, 13))
+>this : Symbol(Base2, Decl(thisTypeInFunctions.ts, 149, 1))
+>y : Symbol(Base2.y, Decl(thisTypeInFunctions.ts, 150, 13))
 
     explicit(this: Base1): number { return this.x; }
->explicit : Symbol(Base2.explicit, Decl(thisTypeInFunctions.ts, 148, 54))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 149, 13))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
->this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
->x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 136, 13))
+>explicit : Symbol(Base2.explicit, Decl(thisTypeInFunctions.ts, 152, 54))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 153, 13))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>this.x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
+>this : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
+>x : Symbol(Base1.x, Decl(thisTypeInFunctions.ts, 140, 13))
 }
 class Derived2 extends Base2 {
->Derived2 : Symbol(Derived2, Decl(thisTypeInFunctions.ts, 150, 1))
->Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 145, 1))
+>Derived2 : Symbol(Derived2, Decl(thisTypeInFunctions.ts, 154, 1))
+>Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 149, 1))
 
     x: number
->x : Symbol(Derived2.x, Decl(thisTypeInFunctions.ts, 151, 30))
+>x : Symbol(Derived2.x, Decl(thisTypeInFunctions.ts, 155, 30))
 }
 let b1 = new Base1();
->b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 154, 3))
->Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 133, 24))
+>b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 158, 3))
+>Base1 : Symbol(Base1, Decl(thisTypeInFunctions.ts, 137, 24))
 
 let b2 = new Base2();
->b2 : Symbol(b2, Decl(thisTypeInFunctions.ts, 155, 3))
->Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 145, 1))
+>b2 : Symbol(b2, Decl(thisTypeInFunctions.ts, 159, 3))
+>Base2 : Symbol(Base2, Decl(thisTypeInFunctions.ts, 149, 1))
 
 let d1 = new Derived1();
->d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 156, 3))
->Derived1 : Symbol(Derived1, Decl(thisTypeInFunctions.ts, 142, 1))
+>d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 160, 3))
+>Derived1 : Symbol(Derived1, Decl(thisTypeInFunctions.ts, 146, 1))
 
 let d2 = new Derived2();
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->Derived2 : Symbol(Derived2, Decl(thisTypeInFunctions.ts, 150, 1))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>Derived2 : Symbol(Derived2, Decl(thisTypeInFunctions.ts, 154, 1))
 
 d2.polymorphic = d1.polymorphic // ok, 'x' and 'y' in { x, y }
->d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 156, 3))
->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
+>d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 160, 3))
+>polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
 
 d1.polymorphic = d2.polymorphic // ok, 'x' and 'y' in { x, y }
->d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 156, 3))
->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
+>d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 160, 3))
+>polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
 
 // bivariance-allowed cases
 d1.polymorphic = b2.polymorphic // ok, 'y' in D: { x, y }
->d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 156, 3))
->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->b2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->b2 : Symbol(b2, Decl(thisTypeInFunctions.ts, 155, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
+>d1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 160, 3))
+>polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>b2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>b2 : Symbol(b2, Decl(thisTypeInFunctions.ts, 159, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
 
 d2.polymorphic = d1.explicit // ok, 'y' in { x, y }
->d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 138, 61))
->d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 156, 3))
->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 138, 61))
+>d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 142, 61))
+>d1 : Symbol(d1, Decl(thisTypeInFunctions.ts, 160, 3))
+>explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 142, 61))
 
 b1.polymorphic = d2.polymorphic // ok, 'x' and 'y' not in Base1: { x }
->b1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 154, 3))
->polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 137, 14))
->d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
+>b1.polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 158, 3))
+>polymorphic : Symbol(Base1.polymorphic, Decl(thisTypeInFunctions.ts, 141, 14))
+>d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
 
 b1.explicit = d2.polymorphic // ok, 'x' and 'y' not in Base1: { x }
->b1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 138, 61))
->b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 154, 3))
->explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 138, 61))
->d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
->d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 157, 3))
->polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 147, 13))
+>b1.explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 142, 61))
+>b1 : Symbol(b1, Decl(thisTypeInFunctions.ts, 158, 3))
+>explicit : Symbol(Base1.explicit, Decl(thisTypeInFunctions.ts, 142, 61))
+>d2.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
+>d2 : Symbol(d2, Decl(thisTypeInFunctions.ts, 161, 3))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctions.ts, 151, 13))
 
 ////// use this-type for construction with new ////
 function InterfaceThis(this: I) {
->InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 165, 28))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 168, 23))
+>InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 169, 28))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 172, 23))
 >I : Symbol(I, Decl(thisTypeInFunctions.ts, 19, 21))
 
     this.a = 12;
@@ -725,60 +738,60 @@ function InterfaceThis(this: I) {
 >a : Symbol(I.a, Decl(thisTypeInFunctions.ts, 20, 13))
 }
 function LiteralTypeThis(this: {x: string}) {
->LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 170, 1))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 171, 25))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 171, 32))
+>LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 174, 1))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 175, 25))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 175, 32))
 
     this.x = "ok";
->this.x : Symbol(x, Decl(thisTypeInFunctions.ts, 171, 32))
->this : Symbol(, Decl(thisTypeInFunctions.ts, 171, 30))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 171, 32))
+>this.x : Symbol(x, Decl(thisTypeInFunctions.ts, 175, 32))
+>this : Symbol(, Decl(thisTypeInFunctions.ts, 175, 30))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 175, 32))
 }
 function AnyThis(this: any) {
->AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 173, 1))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 174, 17))
+>AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 177, 1))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 178, 17))
 
     this.x = "ok";
 }
 let interfaceThis = new InterfaceThis();
->interfaceThis : Symbol(interfaceThis, Decl(thisTypeInFunctions.ts, 177, 3))
->InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 165, 28))
+>interfaceThis : Symbol(interfaceThis, Decl(thisTypeInFunctions.ts, 181, 3))
+>InterfaceThis : Symbol(InterfaceThis, Decl(thisTypeInFunctions.ts, 169, 28))
 
 let literalTypeThis = new LiteralTypeThis();
->literalTypeThis : Symbol(literalTypeThis, Decl(thisTypeInFunctions.ts, 178, 3))
->LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 170, 1))
+>literalTypeThis : Symbol(literalTypeThis, Decl(thisTypeInFunctions.ts, 182, 3))
+>LiteralTypeThis : Symbol(LiteralTypeThis, Decl(thisTypeInFunctions.ts, 174, 1))
 
 let anyThis = new AnyThis();
->anyThis : Symbol(anyThis, Decl(thisTypeInFunctions.ts, 179, 3))
->AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 173, 1))
+>anyThis : Symbol(anyThis, Decl(thisTypeInFunctions.ts, 183, 3))
+>AnyThis : Symbol(AnyThis, Decl(thisTypeInFunctions.ts, 177, 1))
 
 //// type parameter inference ////
 declare var f: { 
->f : Symbol(f, Decl(thisTypeInFunctions.ts, 182, 11))
+>f : Symbol(f, Decl(thisTypeInFunctions.ts, 186, 11))
 
     (this: void, x: number): number, 
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 183, 5))
->x : Symbol(x, Decl(thisTypeInFunctions.ts, 183, 16))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 187, 5))
+>x : Symbol(x, Decl(thisTypeInFunctions.ts, 187, 16))
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
->call : Symbol(call, Decl(thisTypeInFunctions.ts, 183, 36))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 184, 9))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 184, 12))
->argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 184, 19))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 184, 9))
->argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 184, 44))
->U : Symbol(U, Decl(thisTypeInFunctions.ts, 184, 9))
+>call : Symbol(call, Decl(thisTypeInFunctions.ts, 187, 36))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 188, 9))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 188, 12))
+>argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 188, 19))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 188, 9))
+>argArray : Symbol(argArray, Decl(thisTypeInFunctions.ts, 188, 44))
+>U : Symbol(U, Decl(thisTypeInFunctions.ts, 188, 9))
 
 };
 let n: number = f.call(12);
->n : Symbol(n, Decl(thisTypeInFunctions.ts, 186, 3))
->f.call : Symbol(call, Decl(thisTypeInFunctions.ts, 183, 36))
->f : Symbol(f, Decl(thisTypeInFunctions.ts, 182, 11))
->call : Symbol(call, Decl(thisTypeInFunctions.ts, 183, 36))
+>n : Symbol(n, Decl(thisTypeInFunctions.ts, 190, 3))
+>f.call : Symbol(call, Decl(thisTypeInFunctions.ts, 187, 36))
+>f : Symbol(f, Decl(thisTypeInFunctions.ts, 186, 11))
+>call : Symbol(call, Decl(thisTypeInFunctions.ts, 187, 36))
 
 function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; } 
->missingTypeIsImplicitAny : Symbol(missingTypeIsImplicitAny, Decl(thisTypeInFunctions.ts, 186, 27))
->this : Symbol(this, Decl(thisTypeInFunctions.ts, 188, 34))
->a : Symbol(a, Decl(thisTypeInFunctions.ts, 188, 39))
->a : Symbol(a, Decl(thisTypeInFunctions.ts, 188, 39))
+>missingTypeIsImplicitAny : Symbol(missingTypeIsImplicitAny, Decl(thisTypeInFunctions.ts, 190, 27))
+>this : Symbol(this, Decl(thisTypeInFunctions.ts, 192, 34))
+>a : Symbol(a, Decl(thisTypeInFunctions.ts, 192, 39))
+>a : Symbol(a, Decl(thisTypeInFunctions.ts, 192, 39))
 

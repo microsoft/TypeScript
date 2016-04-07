@@ -690,6 +690,22 @@ c.explicitThis = function(m) { return this.n + m };
 >n : number
 >m : number
 
+// this: contextual typing
+c.explicitThis = function(this, m) { return this.n + m };
+>c.explicitThis = function(this, m) { return this.n + m } : (this: any, m: number) => number
+>c.explicitThis : (this: C, m: number) => number
+>c : C
+>explicitThis : (this: C, m: number) => number
+>function(this, m) { return this.n + m } : (this: any, m: number) => number
+>this : C
+>m : number
+>this.n + m : number
+>this.n : number
+>this : C
+>n : number
+>m : number
+
+// this: superclass compatibility
 c.explicitC = function(this: B, m: number) { return this.n + m };
 >c.explicitC = function(this: B, m: number) { return this.n + m } : (this: B, m: number) => number
 >c.explicitC : (this: C, m: number) => number
