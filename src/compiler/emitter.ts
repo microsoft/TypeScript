@@ -4558,6 +4558,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 const { kind, parent } = node;
                 if (kind !== SyntaxKind.MethodDeclaration &&
                     kind !== SyntaxKind.MethodSignature &&
+                    kind !== SyntaxKind.ArrowFunction &&
                     parent &&
                     parent.kind !== SyntaxKind.PropertyAssignment &&
                     parent.kind !== SyntaxKind.CallExpression &&
