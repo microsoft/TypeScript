@@ -187,7 +187,7 @@ namespace ts {
         function classElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `transformClassDeclaration`.
+                    // TypeScript constructors are transformed in `visitClassDeclaration`.
                     // We elide them here as `visitorWorker` checks transform flags, which could
                     // erronously include an ES6 constructor without TypeScript syntax.
                     return undefined;
@@ -264,7 +264,7 @@ namespace ts {
                     // TypeScript index signatures are elided.
 
                 case SyntaxKind.Decorator:
-                    // TypeScript decorators are elided. They will be emitted as part of transformClassDeclaration.
+                    // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
@@ -273,7 +273,7 @@ namespace ts {
                     // TypeScript property declarations are elided.
 
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `transformClassDeclaration`.
+                    // TypeScript constructors are transformed in `visitClassDeclaration`.
                     return undefined;
 
                 case SyntaxKind.InterfaceDeclaration:
@@ -608,11 +608,9 @@ namespace ts {
                 addNode(statements,
                     createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList([
+                        createLetDeclarationList([
                             createVariableDeclaration(decoratedClassAlias)
-                        ],
-                        /*location*/ undefined,
-                        NodeFlags.Let)
+                        ])
                     )
                 );
 
@@ -623,19 +621,25 @@ namespace ts {
                     /*location*/ node);
             }
 
+            // When emitting as a *default* export, we'll add a subsequent `export default` statement,
+            // so we should only be creating a local binding without any modifiers.
+            // Otherwise, we need preserve and visit all the modifiers.
+            const bindingModifiers =
+                isDefaultExternalModuleExport(node)
+                    ? undefined
+                    : visitNodes(node.modifiers, visitor, isModifier);
+
             //  let ${name} = ${classExpression};
             addNode(statements,
                 setOriginalNode(
                     createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
+                        bindingModifiers,
+                        createLetDeclarationList([
                             createVariableDeclaration(
                                 name,
                                 classExpression
                             )
-                        ],
-                        /*location*/ undefined,
-                        NodeFlags.Let)
+                        ])
                     ),
                     /*original*/ node
                 )
