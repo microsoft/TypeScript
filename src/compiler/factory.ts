@@ -66,7 +66,7 @@ namespace ts {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createSynthesizedNode(node.kind);
+        const clone = <T>createNode(node.kind, /*location*/ undefined);
         clone.flags = node.flags;
         clone.original = node;
 
@@ -711,9 +711,15 @@ namespace ts {
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
-        return isIdentifier(memberName)
-            ? createPropertyAccess(target, getSynthesizedClone(memberName), location)
-            : createElementAccess(target, getSynthesizedClone(isComputedPropertyName(memberName) ? memberName.expression : memberName), location);
+        if (isIdentifier(memberName)) {
+            return createPropertyAccess(target, getSynthesizedClone(memberName), location);
+        }
+        else if (isComputedPropertyName(memberName)) {
+            return createElementAccess(target, memberName.expression, location);
+        }
+        else {
+            return createElementAccess(target, memberName, location);
+        }
     }
 
     export function createRestParameter(name: string | Identifier) {
@@ -784,17 +790,25 @@ namespace ts {
         );
     }
 
-    export function createJsxSpread(reactNamespace: string, segments: Expression[]) {
+    function createReactNamespace(reactNamespace: string, parent: JsxOpeningLikeElement) {
+        // Create an identifier and give it a parent. This allows us to resolve the react
+        // namespace during emit.
+        const react = createIdentifier(reactNamespace || "React");
+        react.parent = parent;
+        return react;
+    }
+
+    export function createReactSpread(reactNamespace: string, segments: Expression[], parentElement: JsxOpeningLikeElement) {
         return createCall(
             createPropertyAccess(
-                createIdentifier(reactNamespace || "React"),
+                createReactNamespace(reactNamespace, parentElement),
                 "__spread"
             ),
             segments
         );
     }
 
-    export function createJsxCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[]): LeftHandSideExpression {
+    export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -805,15 +819,16 @@ namespace ts {
                 argumentsList.push(createNull());
             }
 
-            addRange(argumentsList, children);
+            addNodes(argumentsList, children, /*startOnNewLine*/ children.length > 1);
         }
 
         return createCall(
             createPropertyAccess(
-                createIdentifier(reactNamespace || "React"),
+                createReactNamespace(reactNamespace, parentElement),
                 "createElement"
             ),
-            argumentsList
+            argumentsList,
+            location
         );
     }
 
@@ -889,22 +904,23 @@ namespace ts {
         );
     }
 
-    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
         const properties: ObjectLiteralElement[] = [];
-        addPropertyAssignment(properties, "get", get, preferNewLine);
-        addPropertyAssignment(properties, "set", set, preferNewLine);
-        addPropertyAssignment(properties, "value", value, preferNewLine);
-        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine);
-        addPropertyAssignment(properties, "configurable", configurable, preferNewLine);
-        addPropertyAssignment(properties, "writable", writable, preferNewLine);
-        return createObjectLiteral(properties, location);
+        addPropertyAssignment(properties, "get", get, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "set", set, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "value", value, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "configurable", configurable, preferNewLine, descriptorLocations);
+        addPropertyAssignment(properties, "writable", writable, preferNewLine, descriptorLocations);
+        return createObjectLiteral(properties, location, preferNewLine);
     }
 
-    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean) {
+    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean, descriptorLocations?: PropertyDescriptorLocations) {
         if (value !== undefined) {
             const property = createPropertyAssignment(
                 name,
-                typeof value === "boolean" ? createLiteral(value) : value
+                typeof value === "boolean" ? createLiteral(value) : value,
+                descriptorLocations ? descriptorLocations[name] : undefined
             );
 
             if (preferNewLine) {
@@ -924,7 +940,17 @@ namespace ts {
         writable?: boolean | Expression;
     }
 
-    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange) {
+    export interface PropertyDescriptorLocations {
+        [key: string]: TextRange;
+        get?: TextRange;
+        set?: TextRange;
+        value?: TextRange;
+        enumerable?: TextRange;
+        configurable?: TextRange;
+        writable?: TextRange;
+    }
+
+    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
         return createCall(
             createPropertyAccess(
                 createIdentifier("Object"),
@@ -933,7 +959,7 @@ namespace ts {
             [
                 target,
                 memberName,
-                createPropertyDescriptor(descriptor, preferNewLine)
+                createPropertyDescriptor(descriptor, preferNewLine, /*location*/ undefined, descriptorLocations)
             ],
             location
         );
@@ -1252,10 +1278,19 @@ namespace ts {
         // If `a ** d` is on the left of operator `**`, we need to parenthesize to preserve
         // the intended order of operations: `(a ** b) ** c`
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
+        const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
         const operandPrecedence = getExpressionPrecedence(emittedOperand);
         switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
+                // If the operand is the right side of a right-associative binary operation
+                // and is a yield expression, then we do not need parentheses.
+                if (!isLeftSideOfBinary
+                    && binaryOperatorAssociativity === Associativity.Right
+                    && operand.kind === SyntaxKind.YieldExpression) {
+                    return false;
+                }
+
                 return true;
 
             case Comparison.GreaterThan:
@@ -1267,12 +1302,11 @@ namespace ts {
                     // left associative:
                     //  (a*b)/x    ->  a*b/x
                     //  (a**b)/x   ->  a**b/x
-
+                    //
                     // Parentheses are needed for the left operand when the binary operator is
                     // right associative:
                     //  (a/b)**x   ->  (a/b)**x
                     //  (a**b)**x  ->  (a**b)**x
-                    const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
                     return binaryOperatorAssociativity === Associativity.Right;
                 }
                 else {
@@ -1306,7 +1340,7 @@ namespace ts {
                     // associative:
                     //  x/(a**b)    -> x/a**b
                     //  x**(a**b)   -> x**a**b
-
+                    //
                     // Parentheses are needed for the right operand when the operand is left
                     // associative:
                     //  x/(a*b)     -> x/(a*b)

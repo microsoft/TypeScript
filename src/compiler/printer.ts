@@ -295,14 +295,19 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, isNotEmittedStatement);
-                    const trailingComments = getTrailingComments(node, isNotEmittedStatement);
+                    const leadingComments = getLeadingComments(node, shouldSkipCommentsForNode);
+                    const trailingComments = getTrailingComments(node, shouldSkipCommentsForNode);
                     emitLeadingComments(node, leadingComments);
                     emitStart(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitWorker(node);
                     emitEnd(node, shouldIgnoreSourceMapForNode, shouldIgnoreSourceMapForChildren);
                     emitTrailingComments(node, trailingComments);
                 }
+            }
+
+            function shouldSkipCommentsForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoComments) !== 0;
             }
 
             function shouldIgnoreSourceMapForNode(node: Node) {
@@ -959,9 +964,18 @@ const _super = (function (geti, seti) {
                     write("{}");
                 }
                 else {
+                    const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                    if (indentedFlag) {
+                        increaseIndent();
+                    }
+
                     const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
                     const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
                     emitList(node, properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
+
+                    if (indentedFlag) {
+                        decreaseIndent();
+                    }
                 }
             }
 
@@ -1017,9 +1031,7 @@ const _super = (function (geti, seti) {
             function emitNewExpression(node: NewExpression) {
                 write("new ");
                 emitExpression(node.expression);
-                if (node.arguments) {
-                    emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
-                }
+                emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
@@ -1536,7 +1548,7 @@ const _super = (function (geti, seti) {
                 write("interface ");
                 emit(node.name);
                 emitTypeParameters(node, node.typeParameters);
-                emitList(node, node.heritageClauses, ListFormat.SingleLine);
+                emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
                 write(" {");
                 emitList(node, node.members, ListFormat.InterfaceMembers);
                 write("}");
@@ -1722,7 +1734,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
                 write("<");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 write(" ");
                 emitList(node, node.attributes, ListFormat.JsxElementAttributes);
                 write("/>");
@@ -1730,7 +1742,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxOpeningElement(node: JsxOpeningElement) {
                 write("<");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 writeIfAny(node.attributes, " ");
                 emitList(node, node.attributes, ListFormat.JsxElementAttributes);
                 write(">");
@@ -1742,7 +1754,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxClosingElement(node: JsxClosingElement) {
                 write("</");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 write(">");
             }
 
@@ -1758,9 +1770,20 @@ const _super = (function (geti, seti) {
             }
 
             function emitJsxExpression(node: JsxExpression) {
-                write("{");
-                emitExpression(node.expression);
-                write("}");
+                if (node.expression) {
+                    write("{");
+                    emitExpression(node.expression);
+                    write("}");
+                }
+            }
+
+            function emitJsxTagName(node: EntityName) {
+                if (node.kind === SyntaxKind.Identifier) {
+                    emitExpression(<Identifier>node);
+                }
+                else {
+                    emit(node);
+                }
             }
 
             //
@@ -2168,6 +2191,7 @@ const _super = (function (geti, seti) {
 
                     // Emit each child.
                     let previousSibling: Node;
+                    let shouldDecreaseIndentAfterEmit: boolean;
                     const delimiter = getDelimiter(format);
                     for (let i = 0; i < count; i++) {
                         const child = children[start + i];
@@ -2178,6 +2202,13 @@ const _super = (function (geti, seti) {
 
                             // Write either a line terminator or whitespace to separate the elements.
                             if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
+                                // If a synthesized node in a single-line list starts on a new
+                                // line, we should increase the indent.
+                                if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
+                                    increaseIndent();
+                                    shouldDecreaseIndentAfterEmit = true;
+                                }
+
                                 writeLine();
                                 shouldEmitInterveningComments = false;
                             }
@@ -2195,6 +2226,11 @@ const _super = (function (geti, seti) {
 
                         // Emit this child.
                         emit(child);
+
+                        if (shouldDecreaseIndentAfterEmit) {
+                            decreaseIndent();
+                            shouldDecreaseIndentAfterEmit = false;
+                        }
 
                         previousSibling = child;
                     }
@@ -2285,7 +2321,8 @@ const _super = (function (geti, seti) {
                 if (format & ListFormat.MultiLine) {
                     return true;
                 }
-                else if (format & ListFormat.PreserveLines) {
+
+                if (format & ListFormat.PreserveLines) {
                     if (format & ListFormat.PreferNewLine) {
                         return true;
                     }
@@ -2322,7 +2359,7 @@ const _super = (function (geti, seti) {
                     }
                 }
                 else {
-                    return false;
+                    return nextNode.startsOnNewLine;
                 }
             }
 
@@ -2619,40 +2656,43 @@ const _super = (function (geti, seti) {
         None = 0,
 
         // Line separators
-        SingleLine = 1 << 0,            // Prints the list on a single line (default).
-        MultiLine = 1 << 1,             // Prints the list on multiple lines.
-        PreserveLines = 1 << 2,         // Prints the list using line preservation if possible.
+        SingleLine = 0,                 // Prints the list on a single line (default).
+        MultiLine = 1 << 0,             // Prints the list on multiple lines.
+        PreserveLines = 1 << 1,         // Prints the list using line preservation if possible.
         LinesMask = SingleLine | MultiLine | PreserveLines,
 
         // Delimiters
         NotDelimited = 0,               // There is no delimiter between list items (default).
-        BarDelimited = 1 << 3,          // Each list item is space-and-bar (" |") delimited.
-        AmpersandDelimited = 1 << 4,    // Each list item is space-and-ampersand (" &") delimited.
-        CommaDelimited = 1 << 5,        // Each list item is comma (",") delimited.
-        AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.
+        BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
+        AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
+        CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
         DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
 
+        AllowTrailingComma = 1 << 5,    // Write a trailing comma (",") if present.
+
         // Whitespace
-        Indented = 1 << 7,              // The list should be indented.
-        SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
-        SpaceBetweenSiblings = 1 << 9,  // Inserts a space between each sibling node.
+        Indented = 1 << 6,              // The list should be indented.
+        SpaceBetweenBraces = 1 << 7,    // Inserts a space after the opening brace and before the closing brace.
+        SpaceBetweenSiblings = 1 << 8,  // Inserts a space between each sibling node.
 
         // Brackets/Braces
-        Braces = 1 << 10,                // The list is surrounded by "{" and "}".
-        Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
-        AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
-        SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
-        OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
-        Optional = OptionalIfUndefined | OptionalIfEmpty,
+        Braces = 1 << 9,                 // The list is surrounded by "{" and "}".
+        Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
+        AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
+        SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
         BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
 
+        OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
+        OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
+        Optional = OptionalIfUndefined | OptionalIfEmpty,
+
         // Other
-        PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
+        PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
+        NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings,
+        HeritageClauses = SingleLine | SpaceBetweenSiblings,
         TypeLiteralMembers = MultiLine | Indented,
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,

@@ -606,6 +606,9 @@ namespace ts {
             //          return C;
             //      }(D))
 
+            if (node.name) {
+                enableSubstitutionsForBlockScopedBindings();
+            }
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
@@ -1094,20 +1097,27 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
-            return createObjectDefineProperty(
-                receiver,
-                createExpressionForPropertyName(
-                    visitNode(firstAccessor.name, visitor, isPropertyName),
-                    /*location*/ firstAccessor.name
+            return setNodeEmitFlags(
+                createObjectDefineProperty(
+                    receiver,
+                    createExpressionForPropertyName(
+                        visitNode(firstAccessor.name, visitor, isPropertyName),
+                        /*location*/ firstAccessor.name
+                    ),
+                    /*descriptor*/ {
+                        get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
+                        set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
+                        enumerable: true,
+                        configurable: true
+                    },
+                    /*preferNewLine*/ true,
+                    /*location*/ firstAccessor,
+                    /*descriptorLocations*/ {
+                        get: getAccessor,
+                        set: setAccessor
+                    }
                 ),
-                {
-                    get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
-                    set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
-                    enumerable: true,
-                    configurable: true
-                },
-                /*preferNewLine*/ true,
-                /*location*/ firstAccessor
+                NodeEmitFlags.NoComments
             );
         }
 
@@ -1681,10 +1691,13 @@ namespace ts {
             addNode(expressions,
                 createAssignment(
                     temp,
-                    createObjectLiteral(
-                        visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties),
-                        /*location*/ undefined,
-                        node.multiLine
+                    setNodeEmitFlags(
+                        createObjectLiteral(
+                            visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties),
+                            /*location*/ undefined,
+                            node.multiLine
+                        ),
+                        NodeEmitFlags.Indented
                     )
                 ),
                 node.multiLine
@@ -1786,7 +1799,7 @@ namespace ts {
                 }
             }
 
-            let loopBody = visitEachChild(node.statement, visitor, context);
+            let loopBody = visitNode(node.statement, visitor, isStatement);
 
             const currentState = convertedLoopState;
             convertedLoopState = outerConvertedLoopState;

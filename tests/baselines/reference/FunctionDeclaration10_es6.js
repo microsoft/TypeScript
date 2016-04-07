@@ -4,7 +4,7 @@ function * foo(a = yield => yield) {
 
 //// [FunctionDeclaration10_es6.js]
 function* foo(a) {
-    if (a === void 0) { a = (yield); }
+    if (a === void 0) { a = yield; }
 }
 yield;
 {
