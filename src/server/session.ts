@@ -141,8 +141,8 @@ namespace ts.server {
         ) {
             this.projectService =
                 new ProjectService(host, logger, (eventName, project, fileName) => {
-                this.handleEvent(eventName, project, fileName);
-            });
+                    this.handleEvent(eventName, project, fileName);
+                });
         }
 
         private handleEvent(eventName: string, project: Project, fileName: string) {
@@ -412,11 +412,13 @@ namespace ts.server {
 
         private getRenameLocations(line: number, offset: number, fileName: string, findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             const file = ts.normalizePath(fileName);
-            const defaultProject = this.projectService.getProjectForFile(file);
-            if (!defaultProject) {
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            if (!projects.length) {
                 throw Errors.NoProject;
             }
 
+            const defaultProject = projects[0];
             // The rename info should be the same for every project
             const defaultProjectCompilerService = defaultProject.compilerService;
             const position = defaultProjectCompilerService.host.lineOffsetToPosition(file, line, offset);
@@ -432,75 +434,73 @@ namespace ts.server {
                 };
             }
 
-            const locs: protocol.SpanGroup[] = [];
-            const info = this.projectService.getScriptInfo(file);
-            const projects = this.projectService.findReferencingProjects(info);
-            for (const project of projects) {
-                const compilerService = project.compilerService;
-                const renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
-                if (!renameLocations) {
-                    continue;
-                }
-
-                const bakedRenameLocs = renameLocations.map(location => (<protocol.FileSpan>{
-                    file: location.fileName,
-                    start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
-                    end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
-                })).sort((a, b) => {
-                    if (a.file < b.file) {
-                        return -1;
+            const fileSpans = forEachProject(
+                projects,
+                (project: Project) => {
+                    const compilerService = project.compilerService;
+                    const renameLocations = compilerService.languageService.findRenameLocations(file, position, findInStrings, findInComments);
+                    if (!renameLocations) {
+                        return [];
                     }
-                    else if (a.file > b.file) {
+
+                    return renameLocations.map(location => (<protocol.FileSpan>{
+                        file: location.fileName,
+                        start: compilerService.host.positionToLineOffset(location.fileName, location.textSpan.start),
+                        end: compilerService.host.positionToLineOffset(location.fileName, ts.textSpanEnd(location.textSpan)),
+                    }));
+                },
+                compareRenameLocation,
+                (a, b) => a.file === b.file && a.start.line === b.start.line && a.start.offset === b.start.offset
+            );
+            const locs = fileSpans.reduce<protocol.SpanGroup[]>((accum, cur) => {
+                let curFileAccum: protocol.SpanGroup;
+                if (accum.length > 0) {
+                    curFileAccum = accum[accum.length - 1];
+                    if (curFileAccum.file !== cur.file) {
+                        curFileAccum = undefined;
+                    }
+                }
+                if (!curFileAccum) {
+                    curFileAccum = { file: cur.file, locs: [] };
+                    accum.push(curFileAccum);
+                }
+                curFileAccum.locs.push({ start: cur.start, end: cur.end });
+                return accum;
+            }, []);
+
+            return { info: renameInfo, locs };
+
+            function compareRenameLocation(a: protocol.FileSpan, b: protocol.FileSpan) {
+                if (a.file < b.file) {
+                    return -1;
+                }
+                else if (a.file > b.file) {
+                    return 1;
+                }
+                else {
+                    // reverse sort assuming no overlap
+                    if (a.start.line < b.start.line) {
                         return 1;
                     }
+                    else if (a.start.line > b.start.line) {
+                        return -1;
+                    }
                     else {
-                        // reverse sort assuming no overlap
-                        if (a.start.line < b.start.line) {
-                            return 1;
-                        }
-                        else if (a.start.line > b.start.line) {
-                            return -1;
-                        }
-                        else {
-                            return b.start.offset - a.start.offset;
-                        }
+                        return b.start.offset - a.start.offset;
                     }
-                }).reduce<protocol.SpanGroup[]>((accum: protocol.SpanGroup[], cur: protocol.FileSpan) => {
-                    let curFileAccum: protocol.SpanGroup;
-                    if (accum.length > 0) {
-                        curFileAccum = accum[accum.length - 1];
-                        if (curFileAccum.file != cur.file) {
-                            curFileAccum = undefined;
-                        }
-                    }
-                    if (!curFileAccum) {
-                        curFileAccum = { file: cur.file, locs: [] };
-                        accum.push(curFileAccum);
-                    }
-                    curFileAccum.locs.push({ start: cur.start, end: cur.end });
-                    return accum;
-                }, []);
-
-                addRange(locs, bakedRenameLocs);
-            }
-
-            return { info: renameInfo, locs: deduplicate(locs, areSpanGroupsForTheSameFile) };
-
-            function areSpanGroupsForTheSameFile(a: protocol.SpanGroup, b: protocol.SpanGroup) {
-                if (a && b) {
-                    return a.file === b.file;
                 }
-                return false;
             }
         }
 
         private getReferences(line: number, offset: number, fileName: string): protocol.ReferencesResponseBody {
             const file = ts.normalizePath(fileName);
-            const defaultProject = this.projectService.getProjectForFile(file);
-            if (!defaultProject) {
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            if (!projects.length) {
                 throw Errors.NoProject;
             }
 
+            const defaultProject = projects[0];
             const position = defaultProject.compilerService.host.lineOffsetToPosition(file, line, offset);
             const nameInfo = defaultProject.compilerService.languageService.getQuickInfoAtPosition(file, position);
             if (!nameInfo) {
@@ -511,34 +511,31 @@ namespace ts.server {
             const nameSpan = nameInfo.textSpan;
             const nameColStart = defaultProject.compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             const nameText = defaultProject.compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
+            const refs = forEachProject<protocol.ReferencesResponseItem>(
+                projects,
+                (project: Project) => {
+                    const compilerService = project.compilerService;
+                    const references = compilerService.languageService.getReferencesAtPosition(file, position);
+                    if (!references) {
+                        return [];
+                    }
 
-            const info = this.projectService.getScriptInfo(file);
-            const projects = this.projectService.findReferencingProjects(info);
-            const refs: protocol.ReferencesResponseItem[] = [];
-            for (const project of projects)
-            {
-                const compilerService = project.compilerService;
-                const references = compilerService.languageService.getReferencesAtPosition(file, position);
-                if (!references) {
-                    continue;
-                }
-
-                const bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
-                    const start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
-                    const refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
-                    const snap = compilerService.host.getScriptSnapshot(ref.fileName);
-                    const lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
-                    return {
-                        file: ref.fileName,
-                        start: start,
-                        lineText: lineText,
-                        end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
-                        isWriteAccess: ref.isWriteAccess
-                    };
-                }).sort(compareFileStart);
-
-                addRange(refs, bakedRefs);
-            }
+                    return references.map(ref => {
+                        const start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
+                        const refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
+                        const snap = compilerService.host.getScriptSnapshot(ref.fileName);
+                        const lineText = snap.getText(refLineSpan.start, ts.textSpanEnd(refLineSpan)).replace(/\r|\n/g, "");
+                        return {
+                            file: ref.fileName,
+                            start: start,
+                            lineText: lineText,
+                            end: compilerService.host.positionToLineOffset(ref.fileName, ts.textSpanEnd(ref.textSpan)),
+                            isWriteAccess: ref.isWriteAccess
+                        };
+                    });
+                },
+                compareFileStart
+            );
 
             return {
                 refs: deduplicate(refs, areReferencesResponseItemsForTheSameLocation),
@@ -550,8 +547,8 @@ namespace ts.server {
             function areReferencesResponseItemsForTheSameLocation(a: protocol.ReferencesResponseItem, b: protocol.ReferencesResponseItem) {
                 if (a && b) {
                     return a.file === b.file &&
-                           a.start === b.start &&
-                           a.end === b.end;
+                        a.start === b.start &&
+                        a.end === b.end;
                 }
                 return false;
             }
@@ -868,54 +865,57 @@ namespace ts.server {
 
         private getNavigateToItems(searchValue: string, fileName: string, maxResultCount?: number): protocol.NavtoItem[] {
             const file = ts.normalizePath(fileName);
-            const defaultProject = this.projectService.getProjectForFile(file);
+            const info = this.projectService.getScriptInfo(file);
+            const projects = this.projectService.findReferencingProjects(info);
+            const defaultProject = projects[0];
             if (!defaultProject) {
                 throw Errors.NoProject;
             }
 
-            const info = this.projectService.getScriptInfo(file);
-            const projects = this.projectService.findReferencingProjects(info);
-            const allNavToItems: protocol.NavtoItem[] = [];
-            for (const project of projects) {
-                const compilerService = project.compilerService;
-                const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
-                if (!navItems) {
-                    continue;
-                }
+            const allNavToItems = forEachProject(
+                projects,
+                (project: Project) => {
+                    const compilerService = project.compilerService;
+                    const navItems = compilerService.languageService.getNavigateToItems(searchValue, maxResultCount);
+                    if (!navItems) {
+                        return [];
+                    }
 
-                const bakedNavItems = navItems.map((navItem) => {
-                    const start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
-                    const end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
-                    const bakedItem: protocol.NavtoItem = {
-                        name: navItem.name,
-                        kind: navItem.kind,
-                        file: navItem.fileName,
-                        start: start,
-                        end: end,
-                    };
-                    if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
-                        bakedItem.kindModifiers = navItem.kindModifiers;
-                    }
-                    if (navItem.matchKind !== "none") {
-                        bakedItem.matchKind = navItem.matchKind;
-                    }
-                    if (navItem.containerName && (navItem.containerName.length > 0)) {
-                        bakedItem.containerName = navItem.containerName;
-                    }
-                    if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                        bakedItem.containerKind = navItem.containerKind;
-                    }
-                    return bakedItem;
-                });
-                addRange(allNavToItems, bakedNavItems);
-            }
-            return deduplicate(allNavToItems, areNavToItemsForTheSameLocation);
+                    return navItems.map((navItem) => {
+                        const start = compilerService.host.positionToLineOffset(navItem.fileName, navItem.textSpan.start);
+                        const end = compilerService.host.positionToLineOffset(navItem.fileName, ts.textSpanEnd(navItem.textSpan));
+                        const bakedItem: protocol.NavtoItem = {
+                            name: navItem.name,
+                            kind: navItem.kind,
+                            file: navItem.fileName,
+                            start: start,
+                            end: end,
+                        };
+                        if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                            bakedItem.kindModifiers = navItem.kindModifiers;
+                        }
+                        if (navItem.matchKind !== "none") {
+                            bakedItem.matchKind = navItem.matchKind;
+                        }
+                        if (navItem.containerName && (navItem.containerName.length > 0)) {
+                            bakedItem.containerName = navItem.containerName;
+                        }
+                        if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                            bakedItem.containerKind = navItem.containerKind;
+                        }
+                        return bakedItem;
+                    });
+                },
+                /*comparer*/ undefined,
+                areNavToItemsForTheSameLocation
+            );
+            return allNavToItems;
 
             function areNavToItemsForTheSameLocation(a: protocol.NavtoItem, b: protocol.NavtoItem) {
                 if (a && b) {
                     return a.file === b.file &&
-                           a.start === b.start &&
-                           a.end === b.end;
+                        a.start === b.start &&
+                        a.end === b.end;
                 }
                 return false;
             }
@@ -992,129 +992,131 @@ namespace ts.server {
         exit() {
         }
 
-        private handlers: Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
+        private handlers: Map<(request: protocol.Request) => { response?: any, responseRequired?: boolean }> = {
             [CommandNames.Exit]: () => {
                 this.exit();
-                return { responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Definition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
+                return { response: this.getDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
             },
             [CommandNames.TypeDefinition]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
+                return { response: this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
             },
             [CommandNames.References]: (request: protocol.Request) => {
                 const defArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true};
+                return { response: this.getReferences(defArgs.line, defArgs.offset, defArgs.file), responseRequired: true };
             },
             [CommandNames.Rename]: (request: protocol.Request) => {
                 const renameArgs = <protocol.RenameRequestArgs>request.arguments;
-                return {response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings), responseRequired: true};
+                return { response: this.getRenameLocations(renameArgs.line, renameArgs.offset, renameArgs.file, renameArgs.findInComments, renameArgs.findInStrings), responseRequired: true };
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
                 this.openClientFile(openArgs.file, openArgs.fileContent);
-                return {responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {
                 const quickinfoArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file), responseRequired: true};
+                return { response: this.getQuickInfo(quickinfoArgs.line, quickinfoArgs.offset, quickinfoArgs.file), responseRequired: true };
             },
             [CommandNames.Format]: (request: protocol.Request) => {
                 const formatArgs = <protocol.FormatRequestArgs>request.arguments;
-                return {response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file), responseRequired: true};
+                return { response: this.getFormattingEditsForRange(formatArgs.line, formatArgs.offset, formatArgs.endLine, formatArgs.endOffset, formatArgs.file), responseRequired: true };
             },
             [CommandNames.Formatonkey]: (request: protocol.Request) => {
                 const formatOnKeyArgs = <protocol.FormatOnKeyRequestArgs>request.arguments;
-                return {response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true};
+                return { response: this.getFormattingEditsAfterKeystroke(formatOnKeyArgs.line, formatOnKeyArgs.offset, formatOnKeyArgs.key, formatOnKeyArgs.file), responseRequired: true };
             },
             [CommandNames.Completions]: (request: protocol.Request) => {
                 const completionsArgs = <protocol.CompletionsRequestArgs>request.arguments;
-                return {response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true};
+                return { response: this.getCompletions(completionsArgs.line, completionsArgs.offset, completionsArgs.prefix, completionsArgs.file), responseRequired: true };
             },
             [CommandNames.CompletionDetails]: (request: protocol.Request) => {
                 const completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
-                return {response: this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
-                                                                  completionDetailsArgs.entryNames, completionDetailsArgs.file), responseRequired: true};
+                return {
+                    response: this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
+                        completionDetailsArgs.entryNames, completionDetailsArgs.file), responseRequired: true
+                };
             },
             [CommandNames.SignatureHelp]: (request: protocol.Request) => {
                 const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
-                return {response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true};
+                return { response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true };
             },
             [CommandNames.Geterr]: (request: protocol.Request) => {
                 const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
-                return {response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false};
+                return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
             },
             [CommandNames.GeterrForProject]: (request: protocol.Request) => {
                 const { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
-                return {response: this.getDiagnosticsForProject(delay, file), responseRequired: false};
+                return { response: this.getDiagnosticsForProject(delay, file), responseRequired: false };
             },
             [CommandNames.Change]: (request: protocol.Request) => {
                 const changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                 this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
-                            changeArgs.insertString, changeArgs.file);
-                return {responseRequired: false};
+                    changeArgs.insertString, changeArgs.file);
+                return { responseRequired: false };
             },
             [CommandNames.Configure]: (request: protocol.Request) => {
                 const configureArgs = <protocol.ConfigureRequestArguments>request.arguments;
                 this.projectService.setHostConfiguration(configureArgs);
                 this.output(undefined, CommandNames.Configure, request.seq);
-                return {responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Reload]: (request: protocol.Request) => {
                 const reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
                 this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
-                return {responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Saveto]: (request: protocol.Request) => {
                 const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
                 this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
-                return {responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Close]: (request: protocol.Request) => {
                 const closeArgs = <protocol.FileRequestArgs>request.arguments;
                 this.closeClientFile(closeArgs.file);
-                return {responseRequired: false};
+                return { responseRequired: false };
             },
             [CommandNames.Navto]: (request: protocol.Request) => {
                 const navtoArgs = <protocol.NavtoRequestArgs>request.arguments;
-                return {response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true};
+                return { response: this.getNavigateToItems(navtoArgs.searchValue, navtoArgs.file, navtoArgs.maxResultCount), responseRequired: true };
             },
             [CommandNames.Brace]: (request: protocol.Request) => {
                 const braceArguments = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file), responseRequired: true};
+                return { response: this.getBraceMatching(braceArguments.line, braceArguments.offset, braceArguments.file), responseRequired: true };
             },
             [CommandNames.NavBar]: (request: protocol.Request) => {
                 const navBarArgs = <protocol.FileRequestArgs>request.arguments;
-                return {response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true};
+                return { response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true };
             },
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 const { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
-                return {response: this.getOccurrences(line, offset, fileName), responseRequired: true};
+                return { response: this.getOccurrences(line, offset, fileName), responseRequired: true };
             },
             [CommandNames.DocumentHighlights]: (request: protocol.Request) => {
                 const { line, offset, file: fileName, filesToSearch } = <protocol.DocumentHighlightsRequestArgs>request.arguments;
-                return {response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true};
+                return { response: this.getDocumentHighlights(line, offset, fileName, filesToSearch), responseRequired: true };
             },
             [CommandNames.ProjectInfo]: (request: protocol.Request) => {
                 const { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
-                return {response: this.getProjectInfo(file, needFileNameList), responseRequired: true};
+                return { response: this.getProjectInfo(file, needFileNameList), responseRequired: true };
             },
             [CommandNames.ReloadProjects]: (request: protocol.ReloadProjectsRequest) => {
                 this.reloadProjects();
-                return {responseRequired: false};
+                return { responseRequired: false };
             }
         };
-        public addProtocolHandler(command: string, handler: (request: protocol.Request) => {response?: any, responseRequired: boolean}) {
+        public addProtocolHandler(command: string, handler: (request: protocol.Request) => { response?: any, responseRequired: boolean }) {
             if (this.handlers[command]) {
                 throw new Error(`Protocol handler already exists for command "${command}"`);
             }
             this.handlers[command] = handler;
         }
 
-        public executeCommand(request: protocol.Request): {response?: any, responseRequired?: boolean} {
+        public executeCommand(request: protocol.Request): { response?: any, responseRequired?: boolean } {
             const handler = this.handlers[request.command];
             if (handler) {
                 return handler(request);
@@ -1122,7 +1124,7 @@ namespace ts.server {
             else {
                 this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
                 this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
-                return {responseRequired: false};
+                return { responseRequired: false };
             }
         }
 
