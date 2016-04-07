@@ -326,7 +326,7 @@ namespace ts {
                     statements.push(
                         createVariableStatement(
                             /*modifiers*/ undefined,
-                            createVariableDeclarationList(variables),
+                            createConstDeclarationList(variables),
                             /*location*/ node
                         )
                     );
