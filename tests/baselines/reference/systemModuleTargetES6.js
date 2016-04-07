@@ -14,21 +14,21 @@ export function myFunction2() {
 }
 
 //// [systemModuleTargetES6.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
-    var MyClass, MyClass2;
     function myFunction() {
         return new MyClass();
     }
-    exports_1("myFunction", myFunction);
     function myFunction2() {
         return new MyClass2();
     }
+    var MyClass, MyClass2;
+    exports_1("myFunction", myFunction);
     exports_1("myFunction2", myFunction2);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             MyClass = class MyClass {
             };
             exports_1("MyClass", MyClass);
@@ -38,5 +38,5 @@ System.register([], function(exports_1, context_1) {
             MyClass2.value = 42;
             exports_1("MyClass2", MyClass2);
         }
-    }
+    };
 });
