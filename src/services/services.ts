@@ -6087,6 +6087,19 @@ namespace ts {
                 // The search set contains at least the current symbol
                 let result = [symbol];
 
+                // If the location is name of property symbol from object literal destructuring pattern
+                // Search the property symbol
+                //      for ( { property: p2 } of elems) { }
+                if (isNameOfPropertyAssignment(location) &&
+                    location.parent.kind !== SyntaxKind.ShorthandPropertyAssignment &&
+                    isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent)) {
+                    const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
+                    if (typeOfObjectLiteral) {
+                        const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>location).text);
+                        result.push(propertySymbol);
+                    }
+                }
+
                 // If the symbol is an alias, add what it aliases to the list
                 //     import {a} from "mod";
                 //     export {a}
@@ -6234,13 +6247,32 @@ namespace ts {
                     return getRelatedSymbol(searchSymbols, aliasedSymbol, referenceLocation);
                 }
 
+
                 // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    return forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                    const contexualSymbol = forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
+
+                    if (contexualSymbol) {
+                        return contexualSymbol;
+                    }
+
+                    // If the reference location is name of property symbol from object literal destructuring pattern
+                    // Compare it to search symbol something similar to 'property' from
+                    //      for ( { property: p2 } of elems) { }
+                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(referenceLocation.parent.parent)) {
+                        // Do work to determine if this is property symbol corresponding to the search symbol
+                        const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>referenceLocation.parent.parent);
+                        if (typeOfObjectLiteral) {
+                            const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>referenceLocation).text);
+                            if (searchSymbols.indexOf(propertySymbol) >= 0) {
+                                return propertySymbol;
+                            }
+                        }
+                    }
                 }
 
                 // If the reference location is the binding element and doesn't have property name 
