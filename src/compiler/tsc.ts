@@ -20,8 +20,9 @@ namespace ts {
         }
 
         for (const file of files) {
-            const message = `TSFILE: ${file}${sys.newLine}`;
-            sys.write(message);
+            const filepath = getNormalizedAbsolutePath(file, sys.getCurrentDirectory());
+
+            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
         }
     }
 
