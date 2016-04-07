@@ -1561,7 +1561,7 @@ namespace ts {
             const counter = createLoopVariable();
             const rhsReference = expression.kind === SyntaxKind.Identifier
                 ? createUniqueName((<Identifier>expression).text)
-                : createTempVariable();
+                : createTempVariable(/*recordTempVariable*/ undefined);
 
             // Initialize LHS
             // var v = _a[_i];
@@ -1596,7 +1596,7 @@ namespace ts {
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
                                 createVariableDeclaration(
-                                    firstDeclaration ? firstDeclaration.name : createTempVariable(),
+                                    firstDeclaration ? firstDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
                                     createElementAccess(rhsReference, counter)
                                 )
                             ]),
@@ -1686,8 +1686,7 @@ namespace ts {
 
             // For computed properties, we need to create a unique handle to the object
             // literal so we can modify it without risking internal assignments tainting the object.
-            const temp = createTempVariable();
-            hoistVariableDeclaration(temp);
+            const temp = createTempVariable(hoistVariableDeclaration);
 
             // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
             const expressions: Expression[] = [];
@@ -2232,7 +2231,7 @@ namespace ts {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
 
-            const { target, thisArg } = createCallBinding(node.expression);
+            const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
             if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 // [source]
                 //      f(...a, b)
@@ -2289,7 +2288,7 @@ namespace ts {
             // [output]
             //      new ((_a = C).bind.apply(_a, [void 0].concat(a)))()
 
-            const { target, thisArg } = createCallBinding(createPropertyAccess(node.expression, "bind"));
+            const { target, thisArg } = createCallBinding(createPropertyAccess(node.expression, "bind"), hoistVariableDeclaration);
             return createNew(
                 createFunctionApply(
                     visitNode(target, visitor, isExpression),
@@ -2380,8 +2379,7 @@ namespace ts {
             const tag = visitNode(node.tag, visitor, isExpression);
 
             // Allocate storage for the template site object
-            const temp = createTempVariable();
-            hoistVariableDeclaration(temp);
+            const temp = createTempVariable(hoistVariableDeclaration);
 
             // Build up the template arguments and the raw and cooked strings for the template.
             const templateArguments: Expression[] = [temp];

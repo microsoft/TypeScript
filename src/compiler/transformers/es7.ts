@@ -44,11 +44,9 @@ namespace ts {
                 let value: Expression;
                 if (isElementAccessExpression(left)) {
                     // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
-                    const expressionTemp = createTempVariable();
-                    hoistVariableDeclaration(expressionTemp);
+                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
 
-                    const argumentExpressionTemp = createTempVariable();
-                    hoistVariableDeclaration(argumentExpressionTemp);
+                    const argumentExpressionTemp = createTempVariable(hoistVariableDeclaration);
 
                     target = createElementAccess(
                         createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
@@ -64,8 +62,7 @@ namespace ts {
                 }
                 else if (isPropertyAccessExpression(left)) {
                     // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-                    const expressionTemp = createTempVariable();
-                    hoistVariableDeclaration(expressionTemp);
+                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
 
                     target = createPropertyAccess(
                         createAssignment(expressionTemp, left.expression, /*location*/ left.expression),

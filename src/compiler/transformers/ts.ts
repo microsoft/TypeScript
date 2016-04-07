@@ -674,8 +674,7 @@ namespace ts {
 
             if (staticProperties.length > 0) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable();
-                hoistVariableDeclaration(temp);
+                const temp = createTempVariable(hoistVariableDeclaration);
 
                 // To preserve the behavior of the old emitter, we explicitly indent
                 // the body of a class with static initializers.
@@ -1614,8 +1613,7 @@ namespace ts {
             switch (resolver.getTypeReferenceSerializationKind(typeName)) {
                 case TypeReferenceSerializationKind.Unknown:
                     const serialized = serializeEntityNameAsExpression(typeName, /*useFallback*/ true);
-                    const temp = createTempVariable();
-                    hoistVariableDeclaration(temp);
+                    const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
                             createStrictEquality(
@@ -1701,8 +1699,7 @@ namespace ts {
                 left = serializeEntityNameAsExpression(node.left, useFallback);
             }
             else if (useFallback) {
-                const temp = createTempVariable();
-                hoistVariableDeclaration(temp);
+                const temp = createTempVariable(hoistVariableDeclaration);
                 left = createLogicalAnd(
                     createAssignment(
                         temp,
