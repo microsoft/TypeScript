@@ -2285,10 +2285,12 @@ namespace ts {
         }
 
         function onBundledEmit(host: EmitHost) {
+            const moduleKind = getEmitModuleKind(options);
+            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             const bundledSources = filter(host.getSourceFiles(), sourceFile =>
                 !isDeclarationFile(sourceFile)                                       // Not a declaration file
-                && (!isExternalModule(sourceFile) || !!getEmitModuleKind(options))); // and not a module, unless module emit enabled
+                && (!isExternalModule(sourceFile) || moduleEmitEnabled)); // and not a module, unless module emit enabled
 
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
