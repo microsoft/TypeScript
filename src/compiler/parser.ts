@@ -5977,7 +5977,7 @@ namespace ts {
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
-                const comment = parseJSDocCommentWorker(start, length);
+                const comment = parseJSDocCommentWorker(start, length, parent);
                 if (comment) {
                     comment.parent = parent;
                 }
@@ -5989,7 +5989,7 @@ namespace ts {
                 return comment;
             }
 
-            export function parseJSDocCommentWorker(start: number, length: number): JSDocComment {
+            export function parseJSDocCommentWorker(start: number, length: number, parentNode?: Node): JSDocComment {
                 const content = sourceText;
                 start = start || 0;
                 const end = length === undefined ? content.length : start + length;
@@ -6334,10 +6334,22 @@ namespace ts {
                 function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    const name = parseJSDocIdentifier();
+                    let name = parseJSDocIdentifier();
                     if (!name) {
-                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                        return undefined;
+                        let foundNameFromParentNode = false;
+                        if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
+                            if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
+                                const nameFromParentNode = (<VariableStatement>parentNode).declarationList.declarations[0].name;
+                                if (nameFromParentNode.kind === SyntaxKind.Identifier) {
+                                    foundNameFromParentNode = true;
+                                    name = <Identifier>nameFromParentNode;
+                                }
+                            }
+                        }
+                        if (!foundNameFromParentNode) {
+                            parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
                     }
 
                     const result = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);

@@ -3403,7 +3403,7 @@ namespace ts {
             return <InterfaceType>links.declaredType;
         }
 
-        function getDeclaredTypeOfTypeAlias(symbol: Symbol, node?: Node): Type {
+        function getDeclaredTypeOfTypeAlias(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.declaredType) {
                 // Note that we use the links object as the target here because the symbol object is used as the unique
@@ -3412,10 +3412,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let declaration: JSDocTypedefTag | TypeAliasDeclaration;
-                if (node && (node.flags & NodeFlags.JavaScriptFile)) {
-                    declaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
-                }
+                let declaration: JSDocTypedefTag | TypeAliasDeclaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
                 if (!declaration) {
                     declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
                 }
@@ -3469,13 +3466,13 @@ namespace ts {
             return links.declaredType;
         }
 
-        function getDeclaredTypeOfSymbol(symbol: Symbol, node?: Node): Type {
+        function getDeclaredTypeOfSymbol(symbol: Symbol): Type {
             Debug.assert((symbol.flags & SymbolFlags.Instantiated) === 0);
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getDeclaredTypeOfClassOrInterface(symbol);
             }
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getDeclaredTypeOfTypeAlias(symbol, node);
+                return getDeclaredTypeOfTypeAlias(symbol);
             }
             if (symbol.flags & SymbolFlags.Enum) {
                 return getDeclaredTypeOfEnum(symbol);
@@ -4571,7 +4568,7 @@ namespace ts {
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
         function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
-            const type = getDeclaredTypeOfSymbol(symbol, node);
+            const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters;
             if (typeParameters) {
