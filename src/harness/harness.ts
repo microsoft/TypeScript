@@ -480,6 +480,8 @@ namespace Harness {
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        tryEnableSourceMapsForHost?(): void;
+        getEnvironmentVariable?(name: string): string;
     }
     export var IO: IO;
 
@@ -518,6 +520,7 @@ namespace Harness {
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -587,6 +590,13 @@ namespace Harness {
             export const log: typeof IO.log = s => console.log(s);
 
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
+
+            export function tryEnableSourceMapsForHost() {
+                if (ts.sys.tryEnableSourceMapsForHost) {
+                    ts.sys.tryEnableSourceMapsForHost();
+                }
+            }
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -1681,8 +1691,8 @@ namespace Harness {
     if (Error) (<any>Error).stackTraceLimit = 1;
 }
 
-if (ts.sys && ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-    ts.sys.tryEnableSourceMapsForHost();
+if (Harness.IO.tryEnableSourceMapsForHost && /^development$/i.test(Harness.IO.getEnvironmentVariable("NODE_ENV"))) {
+    Harness.IO.tryEnableSourceMapsForHost();
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
