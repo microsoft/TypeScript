@@ -4,7 +4,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
 
     split: (parts: number) => T[][];
->split : Symbol(split, Decl(arrayAugment.ts, 0, 20))
+>split : Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
 >parts : Symbol(parts, Decl(arrayAugment.ts, 1, 12))
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(arrayAugment.ts, 0, 16))
 }

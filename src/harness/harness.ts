@@ -809,8 +809,26 @@ namespace Harness {
         const lineFeed = "\n";
 
         export const defaultLibFileName = "lib.d.ts";
-        export const defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export const defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.core.es6.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export const es2015DefaultLibFileName = "lib.es2015.d.ts";
+
+        const libFileNameSourceFileMap: ts.Map<ts.SourceFile> = {
+            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+        };
+
+        export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
+            if (!isDefaultLibraryFile(fileName)) {
+                return undefined;
+            }
+
+            if (!libFileNameSourceFileMap[fileName]) {
+                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName,  IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+            }
+            return libFileNameSourceFileMap[fileName];
+        }
+
+        export function getDefaultLibFileName(options: ts.CompilerOptions): string {
+            return options.target === ts.ScriptTarget.ES6 ? es2015DefaultLibFileName : defaultLibFileName;
+        }
 
         // Cache these between executions so we don't have to re-parse them for every test
         export const fourslashFileName = "fourslash.ts";
@@ -842,23 +860,21 @@ namespace Harness {
                 }
             }
 
-            function getSourceFile(fn: string, languageVersion: ts.ScriptTarget) {
-                fn = ts.normalizePath(fn);
-                const path = ts.toPath(fn, currentDirectory, getCanonicalFileName);
+            function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget) {
+                fileName = ts.normalizePath(fileName);
+                const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                 if (fileMap.contains(path)) {
                     return fileMap.get(path);
                 }
-                else if (fn === fourslashFileName) {
+                else if (fileName === fourslashFileName) {
                     const tsFn = "tests/cases/fourslash/" + fourslashFileName;
                     fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
                     return fourslashSourceFile;
                 }
                 else {
-                    if (fn === defaultLibFileName) {
-                        return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
-                    }
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
-                    return undefined;
+                    // Return if it is other library file, otherwise return undefined
+                    return getDefaultLibrarySourceFile(fileName);
                 }
             }
 
@@ -870,13 +886,13 @@ namespace Harness {
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
-                getDefaultLibFileName: options => defaultLibFileName,
+                getDefaultLibFileName,
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { throw new Error("NotYetImplemented"); }
+                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
             };
         }
 
@@ -896,7 +912,8 @@ namespace Harness {
             { name: "fileName", type: "string" },
             { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" },
-            { name: "suppressOutputPathCheck", type: "boolean" }
+            { name: "suppressOutputPathCheck", type: "boolean" },
+            { name: "noImplicitReferences", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -920,6 +937,7 @@ namespace Harness {
                     }
                     const option = getCommandLineOption(name);
                     if (option) {
+                        const errors: ts.Diagnostic[] = [];
                         switch (option.type) {
                             case "boolean":
                                 options[option.name] = value.toLowerCase() === "true";
@@ -928,15 +946,16 @@ namespace Harness {
                                 options[option.name] = value;
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
+                            case "list":
+                                options[option.name] = ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                                break;
                             default:
-                                let map = <ts.Map<number>>option.type;
-                                let key = value.toLowerCase();
-                                if (ts.hasProperty(map, key)) {
-                                    options[option.name] = map[key];
-                                }
-                                else {
-                                    throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
-                                }
+                                options[option.name] = ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
+                                break;
+                        }
+
+                        if (errors.length > 0) {
+                            throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
                         }
                     }
                     else {
@@ -963,7 +982,6 @@ namespace Harness {
             compilerOptions: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): CompilationOutput {
-
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.clone(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
@@ -1138,7 +1156,7 @@ namespace Harness {
                 // then they will be added twice thus triggering 'total errors' assertion with condition
                 // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
 
-                if (!error.file || !isLibraryFile(error.file.fileName)) {
+                if (!error.file || !isDefaultLibraryFile(error.file.fileName)) {
                     totalErrorsReportedInNonLibraryFiles++;
                 }
             }
@@ -1217,7 +1235,7 @@ namespace Harness {
             });
 
             const numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.file && (isLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
+                return diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
             });
 
             const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
@@ -1604,8 +1622,10 @@ namespace Harness {
         }
     }
 
-    export function isLibraryFile(filePath: string): boolean {
-        return (Path.getFileName(filePath) === "lib.d.ts") || (Path.getFileName(filePath) === "lib.core.d.ts");
+    export function isDefaultLibraryFile(filePath: string): boolean {
+        // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
+        const fileName = Path.getFileName(filePath);
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
@@ -1613,7 +1633,7 @@ namespace Harness {
     }
 
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib.d.ts";
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

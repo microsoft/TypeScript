@@ -1,9 +1,9 @@
 tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
   Types of parameters 'x' and 'x' are incompatible.
-    Type '"bye"' is not assignable to type '"hi"'.
+    Type '"hi"' is not assignable to type '"bye"'.
 tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
   Types of parameters 'x' and 'x' are incompatible.
-    Type 'number' is not assignable to type '"hi"'.
+    Type '"hi"' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (2 errors) ====
@@ -28,10 +28,10 @@ tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS23
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:     Type '"bye"' is not assignable to type '"hi"'.
+!!! error TS2345:     Type '"hi"' is not assignable to type '"bye"'.
     c.x1(1, (x: string) => { return 1; } );
     c.x1(1, (x: number) => { return 1; } );
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:     Type 'number' is not assignable to type '"hi"'.
+!!! error TS2345:     Type '"hi"' is not assignable to type 'number'.

@@ -15,8 +15,8 @@ namespace ts {
     export const version = "1.9.0";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
-        let fileName = "tsconfig.json";
         while (true) {
+            const fileName = combinePaths(searchPath, "tsconfig.json");
             if (fileExists(fileName)) {
                 return fileName;
             }
@@ -25,7 +25,6 @@ namespace ts {
                 break;
             }
             searchPath = parentPath;
-            fileName = "../" + fileName;
         }
         return undefined;
     }
@@ -43,15 +42,6 @@ namespace ts {
 
     function isTraceEnabled(compilerOptions: CompilerOptions, host: ModuleResolutionHost): boolean {
         return compilerOptions.traceModuleResolution && host.trace !== undefined;
-    }
-
-    function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
     function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -566,6 +556,12 @@ namespace ts {
         sourceMap: false,
     };
 
+    interface OutputFingerprint {
+        hash: string;
+        byteOrderMark: boolean;
+        mtime: Date;
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         const existingDirectories: Map<boolean> = {};
 
@@ -616,11 +612,50 @@ namespace ts {
             }
         }
 
+        let outputFingerprints: Map<OutputFingerprint>;
+
+        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
+            if (!outputFingerprints) {
+                outputFingerprints = {};
+            }
+
+            const hash = sys.createHash(data);
+            const mtimeBefore = sys.getModifiedTime(fileName);
+
+            if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
+                const fingerprint = outputFingerprints[fileName];
+
+                // If output has not been changed, and the file has no external modification
+                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                    fingerprint.hash === hash &&
+                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                    return;
+                }
+            }
+
+            sys.writeFile(fileName, data, writeByteOrderMark);
+
+            const mtimeAfter = sys.getModifiedTime(fileName);
+
+            outputFingerprints[fileName] = {
+                hash,
+                byteOrderMark: writeByteOrderMark,
+                mtime: mtimeAfter
+            };
+        }
+
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                sys.writeFile(fileName, data, writeByteOrderMark);
+
+                if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
+                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                }
+                else {
+                    sys.writeFile(fileName, data, writeByteOrderMark);
+                }
+
                 ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
@@ -630,11 +665,16 @@ namespace ts {
             }
         }
 
+        function getDefaultLibLocation(): string {
+            return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
+        }
+
         const newLine = getNewLineCharacter(options);
 
         return {
             getSourceFile,
-            getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
+            getDefaultLibLocation,
+            getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
@@ -754,7 +794,17 @@ namespace ts {
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
             if (!skipDefaultLib) {
-                processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                // If '--lib' is not specified, include default library file according to '--target'
+                // otherwise, using options specified in '--lib' instead of '--target' default library file
+                if (!options.lib) {
+                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                }
+                else {
+                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
+                    forEach(options.lib, libFileName => {
+                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
+                    });
+                }
             }
         }
 
@@ -931,7 +981,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
-                    (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
+                    (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
             };
         }
@@ -956,7 +1006,7 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -973,7 +1023,12 @@ namespace ts {
                 }
 
                 if (diagnostics.length > 0 || declarationDiagnostics.length > 0) {
-                    return { diagnostics, sourceMaps: undefined, emitSkipped: true };
+                    return {
+                        diagnostics: concatenate(diagnostics, declarationDiagnostics),
+                        sourceMaps: undefined,
+                        emittedFiles: undefined,
+                        emitSkipped: true
+                    };
                 }
             }
 
@@ -1282,7 +1337,7 @@ namespace ts {
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+            processSourceFile(normalizePath(fileName), isDefaultLib, /*isReference*/ true);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -1376,7 +1431,10 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        /**
+          * 'isReference' indicates whether the file was brought in via a reference directive (rather than an import declaration)
+          */
+        function processSourceFile(fileName: string, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -1384,7 +1442,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -1394,13 +1452,13 @@ namespace ts {
                 }
             }
             else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
+                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, isReference, refFile, refPos, refEnd))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -1429,13 +1487,17 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, isReference: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                }
+
+                if (file) {
+                    file.wasReferenced = file.wasReferenced || isReference;
                 }
 
                 return file;
@@ -1454,6 +1516,7 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
+                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1471,7 +1534,7 @@ namespace ts {
 
                 const basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
-                    processReferencedFiles(file, basePath);
+                    processReferencedFiles(file, basePath, /*isDefaultLib*/ isDefaultLib);
                 }
 
                 // always process imported modules to record module name resolutions
@@ -1488,10 +1551,10 @@ namespace ts {
             return file;
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string) {
+        function processReferencedFiles(file: SourceFile, basePath: string, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, /*isReference*/ true, file, ref.pos, ref.end);
             });
         }
 
@@ -1517,7 +1580,7 @@ namespace ts {
                         i < file.imports.length;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
@@ -1688,6 +1751,10 @@ namespace ts {
                 }
             }
 
+            if (options.lib && options.noLib) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib"));
+            }
+
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
@@ -1734,24 +1801,7 @@ namespace ts {
                 }
             }
 
-            if (options.noEmit) {
-                if (options.out) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "out"));
-                }
-
-                if (options.outFile) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outFile"));
-                }
-
-                if (options.outDir) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "outDir"));
-                }
-
-                if (options.declaration) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "declaration"));
-                }
-            }
-            else if (options.allowJs && options.declaration) {
+            if (!options.noEmit && options.allowJs && options.declaration) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
             }
 

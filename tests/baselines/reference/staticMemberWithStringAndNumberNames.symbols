@@ -6,17 +6,17 @@ class C {
     static 0 = 1;
 
     x = C['foo'];
->x : Symbol(x, Decl(staticMemberWithStringAndNumberNames.ts, 2, 17))
+>x : Symbol(C.x, Decl(staticMemberWithStringAndNumberNames.ts, 2, 17))
 >C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
 >'foo' : Symbol(C."foo", Decl(staticMemberWithStringAndNumberNames.ts, 0, 9))
 
     x2 = C['0'];
->x2 : Symbol(x2, Decl(staticMemberWithStringAndNumberNames.ts, 4, 17))
+>x2 : Symbol(C.x2, Decl(staticMemberWithStringAndNumberNames.ts, 4, 17))
 >C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
 >'0' : Symbol(C.0, Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
 
     x3 = C[0];
->x3 : Symbol(x3, Decl(staticMemberWithStringAndNumberNames.ts, 5, 16))
+>x3 : Symbol(C.x3, Decl(staticMemberWithStringAndNumberNames.ts, 5, 16))
 >C : Symbol(C, Decl(staticMemberWithStringAndNumberNames.ts, 0, 0))
 >0 : Symbol(C.0, Decl(staticMemberWithStringAndNumberNames.ts, 1, 21))
         

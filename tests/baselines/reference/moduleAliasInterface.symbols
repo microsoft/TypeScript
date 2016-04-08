@@ -40,7 +40,7 @@ module editor {
 >Mode : Symbol(modes.Mode, Decl(moduleAliasInterface.ts, 3, 2))
 
   public foo(p1:modes.IMode) {
->foo : Symbol(foo, Decl(moduleAliasInterface.ts, 19, 50))
+>foo : Symbol(Bug.foo, Decl(moduleAliasInterface.ts, 19, 50))
 >p1 : Symbol(p1, Decl(moduleAliasInterface.ts, 20, 13))
 >modes : Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
 >IMode : Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))

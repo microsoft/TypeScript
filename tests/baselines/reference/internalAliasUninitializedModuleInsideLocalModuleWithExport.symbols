@@ -9,7 +9,7 @@ export module a {
 >I : Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
 
             foo();
->foo : Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+>foo : Symbol(I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
         }
     }
 }

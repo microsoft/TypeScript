@@ -4,7 +4,7 @@ class B<V>{
 >V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
 
     private id: V;
->id : Symbol(id, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 11))
+>id : Symbol(B.id, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 11))
 >V : Symbol(V, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 8))
 }
 class A<U>{
@@ -12,7 +12,7 @@ class A<U>{
 >U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
 
     GetEnumerator: () => B<U>;
->GetEnumerator : Symbol(GetEnumerator, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 11))
+>GetEnumerator : Symbol(A.GetEnumerator, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 11))
 >B : Symbol(B, Decl(overloadGenericFunctionWithRestArgs.ts, 0, 0))
 >U : Symbol(U, Decl(overloadGenericFunctionWithRestArgs.ts, 3, 8))
 }

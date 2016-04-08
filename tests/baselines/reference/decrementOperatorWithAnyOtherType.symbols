@@ -19,7 +19,7 @@ class A {
 >A : Symbol(A, Decl(decrementOperatorWithAnyOtherType.ts, 5, 23))
 
     public a: any;
->a : Symbol(a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
+>a : Symbol(A.a, Decl(decrementOperatorWithAnyOtherType.ts, 6, 9))
 }
 module M {
 >M : Symbol(M, Decl(decrementOperatorWithAnyOtherType.ts, 8, 1))

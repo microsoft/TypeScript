@@ -22,10 +22,10 @@ export class App extends React.Component<any, any> {
 >Component : Symbol(React.Component, Decl(react.d.ts, 1, 24))
 
     render() {
->render : Symbol(render, Decl(app.tsx, 5, 52))
+>render : Symbol(App.render, Decl(app.tsx, 5, 52))
 
         return <Button />;
->Button : Symbol(Button, Decl(button.tsx, 0, 31))
+>Button : Symbol(Button, Decl(app.tsx, 3, 8))
     }
 
 }
@@ -41,7 +41,7 @@ export class Button extends React.Component<any, any> {
 >Component : Symbol(React.Component, Decl(react.d.ts, 1, 24))
 
     render() {
->render : Symbol(render, Decl(button.tsx, 2, 55))
+>render : Symbol(Button.render, Decl(button.tsx, 2, 55))
 
         return <button>Some button</button>;
 >button : Symbol(unknown)

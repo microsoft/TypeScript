@@ -17,13 +17,13 @@ module m3 {
 >connectExport : Symbol(connectExport, Decl(declFileExportAssignmentImportInternalModule.ts, 4, 9))
 
             use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(declFileExportAssignmentImportInternalModule.ts, 5, 40))
+>use : Symbol(connectExport.use, Decl(declFileExportAssignmentImportInternalModule.ts, 5, 40))
 >mod : Symbol(mod, Decl(declFileExportAssignmentImportInternalModule.ts, 6, 18))
 >connectModule : Symbol(connectModule, Decl(declFileExportAssignmentImportInternalModule.ts, 1, 22))
 >connectExport : Symbol(connectExport, Decl(declFileExportAssignmentImportInternalModule.ts, 4, 9))
 
             listen: (port: number) => void;
->listen : Symbol(listen, Decl(declFileExportAssignmentImportInternalModule.ts, 6, 55))
+>listen : Symbol(connectExport.listen, Decl(declFileExportAssignmentImportInternalModule.ts, 6, 55))
 >port : Symbol(port, Decl(declFileExportAssignmentImportInternalModule.ts, 7, 21))
         }
 

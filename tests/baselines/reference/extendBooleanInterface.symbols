@@ -3,10 +3,10 @@ interface Boolean {
 >Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(extendBooleanInterface.ts, 0, 0))
 
     doStuff(): string;
->doStuff : Symbol(doStuff, Decl(extendBooleanInterface.ts, 0, 19))
+>doStuff : Symbol(Boolean.doStuff, Decl(extendBooleanInterface.ts, 0, 19))
 
     doOtherStuff<T>(x: T): T;
->doOtherStuff : Symbol(doOtherStuff, Decl(extendBooleanInterface.ts, 1, 22))
+>doOtherStuff : Symbol(Boolean.doOtherStuff, Decl(extendBooleanInterface.ts, 1, 22))
 >T : Symbol(T, Decl(extendBooleanInterface.ts, 2, 17))
 >x : Symbol(x, Decl(extendBooleanInterface.ts, 2, 20))
 >T : Symbol(T, Decl(extendBooleanInterface.ts, 2, 17))

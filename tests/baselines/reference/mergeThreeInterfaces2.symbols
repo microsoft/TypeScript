@@ -9,7 +9,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
 
         foo: string;
->foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 4, 24))
     }
 
     var a: A;
@@ -36,14 +36,14 @@ module M2 {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
 
         bar: number;
->bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 14, 24))
     }
 
     export interface A {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 3, 11), Decl(mergeThreeInterfaces2.ts, 13, 11), Decl(mergeThreeInterfaces2.ts, 16, 5))
 
         baz: boolean;
->baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 18, 24))
     }
 
     var a: A;
@@ -80,7 +80,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
 
             foo: string;
->foo : Symbol(foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
+>foo : Symbol(A.foo, Decl(mergeThreeInterfaces2.ts, 31, 28))
         }
 
         var a: A;
@@ -111,7 +111,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
 
             bar: number;
->bar : Symbol(bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
+>bar : Symbol(A.bar, Decl(mergeThreeInterfaces2.ts, 43, 28))
         }
 
         var a: A;
@@ -148,7 +148,7 @@ module M2 {
 >A : Symbol(A, Decl(mergeThreeInterfaces2.ts, 30, 22), Decl(mergeThreeInterfaces2.ts, 42, 22), Decl(mergeThreeInterfaces2.ts, 56, 22))
 
             baz: boolean;
->baz : Symbol(baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
+>baz : Symbol(A.baz, Decl(mergeThreeInterfaces2.ts, 57, 28))
         }
 
         var a: A;

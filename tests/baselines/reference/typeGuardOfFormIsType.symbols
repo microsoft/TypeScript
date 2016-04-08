@@ -4,20 +4,20 @@ class C1 {
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
 
     p1: string;
->p1 : Symbol(p1, Decl(typeGuardOfFormIsType.ts, 1, 10))
+>p1 : Symbol(C1.p1, Decl(typeGuardOfFormIsType.ts, 1, 10))
 }
 class C2 {
 >C2 : Symbol(C2, Decl(typeGuardOfFormIsType.ts, 3, 1))
 
     p2: number;
->p2 : Symbol(p2, Decl(typeGuardOfFormIsType.ts, 4, 10))
+>p2 : Symbol(C2.p2, Decl(typeGuardOfFormIsType.ts, 4, 10))
 }
 class D1 extends C1 {
 >D1 : Symbol(D1, Decl(typeGuardOfFormIsType.ts, 6, 1))
 >C1 : Symbol(C1, Decl(typeGuardOfFormIsType.ts, 0, 0))
 
     p3: number;
->p3 : Symbol(p3, Decl(typeGuardOfFormIsType.ts, 7, 21))
+>p3 : Symbol(D1.p3, Decl(typeGuardOfFormIsType.ts, 7, 21))
 }
 var str: string;
 >str : Symbol(str, Decl(typeGuardOfFormIsType.ts, 10, 3))
