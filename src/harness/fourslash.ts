@@ -221,7 +221,7 @@ namespace FourSlash {
 
             function tryAdd(path: string) {
                 const inputFile = inputFiles[path];
-                if (inputFile && !Harness.isLibraryFile(path)) {
+                if (inputFile && !Harness.isDefaultLibraryFile(path)) {
                     languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
                 }
@@ -302,7 +302,7 @@ namespace FourSlash {
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
-                    if (!Harness.isLibraryFile(fileName)) {
+                    if (!Harness.isDefaultLibraryFile(fileName)) {
                         this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
                 });

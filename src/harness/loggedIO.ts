@@ -237,8 +237,8 @@ namespace Playback {
                     ), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
-            (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
-            (path, contents) => noOpReplay("writeFile"));
+            (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
+            (path: string, contents: string) => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {

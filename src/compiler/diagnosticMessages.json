@@ -1879,6 +1879,34 @@
         "category": "Error",
         "code": 2678
     },
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.": {
+        "category": "Error",
+        "code": 2679
+    },
+    "A 'this' parameter must be the first parameter.": {
+        "category": "Error",
+        "code": 2680
+    },
+    "A constructor cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2681
+    },
+    "A setter cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2682
+    },
+    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+        "category": "Error",
+        "code": 2683
+    },
+    "The 'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
+        "category": "Error",
+        "code": 2684
+    },
+    "The 'this' types of each signature are incompatible.": {
+        "category": "Error",
+        "code": 2685
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2637,57 +2665,61 @@
         "category": "Error",
         "code": 6114
     },
-    "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
+    "Raise error on 'this' expressions with an implied 'any' type.": {
         "category": "Message",
         "code": 6115
     },
-    "Resolving using primary search paths...": {
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
         "category": "Message",
         "code": 6116
     },
-    "Resolving from node_modules folder...": {
+    "Resolving using primary search paths...": {
         "category": "Message",
         "code": 6117
     },
-    "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
+    "Resolving from node_modules folder...": {
         "category": "Message",
         "code": 6118
     },
-    "======== Type reference directive '{0}' was not resolved. ========": {
+    "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
         "category": "Message",
         "code": 6119
     },
-    "Resolving with primary search path '{0}'": {
+    "======== Type reference directive '{0}' was not resolved. ========": {
         "category": "Message",
         "code": 6120
     },
-    "Root directory cannot be determined, skipping primary search paths.": {
+    "Resolving with primary search path '{0}'": {
         "category": "Message",
         "code": 6121
     },
-    "======== Resolving type reference directive '{0}', containing file '{1}', root directory not set. ========": {
+    "Root directory cannot be determined, skipping primary search paths.": {
         "category": "Message",
         "code": 6122
     },
-    "Type declaration files to be included in compilation.": {
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory not set. ========": {
         "category": "Message",
         "code": 6123
     },
-    "Looking up in 'node_modules' folder, initial location '{0}'": {
+    "Type declaration files to be included in compilation.": {
         "category": "Message",
         "code": 6124
     },
-    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder.": {
+    "Looking up in 'node_modules' folder, initial location '{0}'": {
         "category": "Message",
         "code": 6125
     },
-    "======== Resolving type reference directive '{0}', containing file not set, root directory '{1}'. ========": {
+    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder.": {
         "category": "Message",
         "code": 6126
     },
-    "======== Resolving type reference directive '{0}', containing file not set, root directory not set. ========": {
+    "======== Resolving type reference directive '{0}', containing file not set, root directory '{1}'. ========": {
         "category": "Message",
         "code": 6127
+    },
+    "======== Resolving type reference directive '{0}', containing file not set, root directory not set. ========": {
+        "category": "Message",
+        "code": 6128
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2776,6 +2808,10 @@
     "Not all code paths return a value.": {
         "category": "Error",
         "code": 7030
+    },
+    "Binding element '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7031
     },
     "You cannot rename this element.": {
         "category": "Error",

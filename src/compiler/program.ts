@@ -95,15 +95,6 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
-    }
-
-    function endsWith(str: string, suffix: string): boolean {
-        const expectedPos = str.length - suffix.length;
-        return str.indexOf(suffix, expectedPos) === expectedPos;
-    }
-
     function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -768,6 +759,12 @@ namespace ts {
         sourceMap: false,
     };
 
+    interface OutputFingerprint {
+        hash: string;
+        byteOrderMark: boolean;
+        mtime: Date;
+    }
+
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         const existingDirectories: Map<boolean> = {};
 
@@ -818,11 +815,50 @@ namespace ts {
             }
         }
 
+        let outputFingerprints: Map<OutputFingerprint>;
+
+        function writeFileIfUpdated(fileName: string, data: string, writeByteOrderMark: boolean): void {
+            if (!outputFingerprints) {
+                outputFingerprints = {};
+            }
+
+            const hash = sys.createHash(data);
+            const mtimeBefore = sys.getModifiedTime(fileName);
+
+            if (mtimeBefore && hasProperty(outputFingerprints, fileName)) {
+                const fingerprint = outputFingerprints[fileName];
+
+                // If output has not been changed, and the file has no external modification
+                if (fingerprint.byteOrderMark === writeByteOrderMark &&
+                    fingerprint.hash === hash &&
+                    fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
+                    return;
+                }
+            }
+
+            sys.writeFile(fileName, data, writeByteOrderMark);
+
+            const mtimeAfter = sys.getModifiedTime(fileName);
+
+            outputFingerprints[fileName] = {
+                hash,
+                byteOrderMark: writeByteOrderMark,
+                mtime: mtimeAfter
+            };
+        }
+
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 const start = new Date().getTime();
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
-                sys.writeFile(fileName, data, writeByteOrderMark);
+
+                if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
+                    writeFileIfUpdated(fileName, data, writeByteOrderMark);
+                }
+                else {
+                    sys.writeFile(fileName, data, writeByteOrderMark);
+                }
+
                 ioWriteTime += new Date().getTime() - start;
             }
             catch (e) {
@@ -1213,7 +1249,7 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -1233,6 +1269,7 @@ namespace ts {
                     return {
                         diagnostics: concatenate(diagnostics, declarationDiagnostics),
                         sourceMaps: undefined,
+                        emittedFiles: undefined,
                         emitSkipped: true
                     };
                 }

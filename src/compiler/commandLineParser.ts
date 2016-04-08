@@ -123,6 +123,11 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
         },
         {
+            name: "noImplicitThis",
+            type: "boolean",
+            description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
+        },
+        {
             name: "noLib",
             type: "boolean",
         },
@@ -355,6 +360,10 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
+            name: "listEmittedFiles",
+            type: "boolean"
+        },
+        {
             name: "lib",
             type: "list",
             element: {
@@ -371,19 +380,13 @@ namespace ts {
                     "webworker": "lib.webworker.d.ts",
                     "scripthost": "lib.scripthost.d.ts",
                     // ES2015 Or ESNext By-feature options
-                    "es2015.array": "lib.es2015.array.d.ts",
+                    "es2015.core": "lib.es2015.core.d.ts",
                     "es2015.collection": "lib.es2015.collection.d.ts",
                     "es2015.generator": "lib.es2015.generator.d.ts",
-                    "es2015.function": "lib.es2015.function.d.ts",
                     "es2015.iterable": "lib.es2015.iterable.d.ts",
-                    "es2015.math": "lib.es2015.math.d.ts",
-                    "es2015.number": "lib.es2015.number.d.ts",
-                    "es2015.object": "lib.es2015.object.d.ts",
                     "es2015.promise": "lib.es2015.promise.d.ts",
                     "es2015.proxy": "lib.es2015.proxy.d.ts",
                     "es2015.reflect": "lib.es2015.reflect.d.ts",
-                    "es2015.regexp": "lib.es2015.regexp.d.ts",
-                    "es2015.string": "lib.es2015.string.d.ts",
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
                     "es2016.array.include": "lib.es2016.array.include.d.ts"

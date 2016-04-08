@@ -742,6 +742,7 @@ namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
+        thisType: Type;
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;
@@ -4123,6 +4124,9 @@ namespace ts {
             if (typeChecker.isArgumentsSymbol(symbol)) {
                 return ScriptElementKind.localVariableElement;
             }
+            if (location.kind === SyntaxKind.ThisKeyword && isExpression(location)) {
+                return ScriptElementKind.parameterElement;
+            }
             if (flags & SymbolFlags.Variable) {
                 if (isFirstDeclarationOfSymbolParameter(symbol)) {
                     return ScriptElementKind.parameterElement;
@@ -4185,6 +4189,7 @@ namespace ts {
             const symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
+            const isThisExpression: boolean = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
             let type: Type;
 
             // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -4195,7 +4200,7 @@ namespace ts {
                 }
 
                 let signature: Signature;
-                type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+                type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                         const right = (<PropertyAccessExpression>location.parent).name;
@@ -4306,7 +4311,7 @@ namespace ts {
                     }
                 }
             }
-            if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo) {
+            if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo && !isThisExpression) {
                 if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
                     // Special case for class expressions because we would like to indicate that
                     // the class name is local to the class body (similar to function expression)
@@ -4448,11 +4453,19 @@ namespace ts {
             if (!hasAddedSymbolInfo) {
                 if (symbolKind !== ScriptElementKind.unknown) {
                     if (type) {
-                        addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                        if (isThisExpression) {
+                            addNewLineIfDisplayPartsExist();
+                            displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
+                        }
+                        else {
+                            addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                        }
+
                         // For properties, variables and local vars: show the type
                         if (symbolKind === ScriptElementKind.memberVariableElement ||
                             symbolFlags & SymbolFlags.Variable ||
-                            symbolKind === ScriptElementKind.localVariableElement) {
+                            symbolKind === ScriptElementKind.localVariableElement ||
+                            isThisExpression) {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
                             // If the type is type parameter, format it specially

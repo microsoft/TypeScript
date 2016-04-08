@@ -14,6 +14,20 @@ namespace ts {
         }
     }
 
+    function reportEmittedFiles(files: string[], host: CompilerHost): void {
+        if (!files || files.length == 0) {
+            return;
+        }
+
+        const currentDir = sys.getCurrentDirectory();
+
+        for (const file of files) {
+            const filepath = getNormalizedAbsolutePath(file, currentDir);
+
+            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
+        }
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -107,7 +121,6 @@ namespace ts {
 
         sys.write(output);
     }
-
 
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
@@ -240,11 +253,6 @@ namespace ts {
         return typeof JSON === "object" && typeof JSON.parse === "function";
     }
 
-    function isWatchSet(options: CompilerOptions) {
-        // Firefox has Object.prototype.watch
-        return options.watch && options.hasOwnProperty("watch");
-    }
-
     export function executeCommandLine(args: string[]): void {
         const commandLine = parseCommandLine(args);
         let configFileName: string;                                 // Configuration file name (if any)
@@ -338,8 +346,7 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
-                const configFilePath = toPath(configFileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
-                configFileWatcher = sys.watchFile(configFilePath, configFileChanged);
+                configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
             if (sys.watchDirectory && configFileName) {
                 const directory = ts.getDirectoryPath(configFileName);
@@ -451,8 +458,7 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
-                const filePath = toPath(sourceFile.fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
-                sourceFile.fileWatcher = sys.watchFile(filePath, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -603,6 +609,8 @@ namespace ts {
             diagnostics = diagnostics.concat(emitOutput.diagnostics);
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
+
+            reportEmittedFiles(emitOutput.emittedFiles, compilerHost);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.

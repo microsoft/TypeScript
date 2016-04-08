@@ -821,8 +821,7 @@ namespace Harness {
         };
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile {
-            if (!isLibraryFile(fileName)) {
-                assert(!isLibraryFile(fileName), "Expected library fileName");
+            if (!isDefaultLibraryFile(fileName)) {
                 return undefined;
             }
 
@@ -1167,7 +1166,7 @@ namespace Harness {
                 // then they will be added twice thus triggering 'total errors' assertion with condition
                 // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
 
-                if (!error.file || !isLibraryFile(error.file.fileName)) {
+                if (!error.file || !isDefaultLibraryFile(error.file.fileName)) {
                     totalErrorsReportedInNonLibraryFiles++;
                 }
             }
@@ -1246,7 +1245,7 @@ namespace Harness {
             });
 
             const numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.file && (isLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
+                return diagnostic.file && (isDefaultLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
             });
 
             const numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
@@ -1634,10 +1633,10 @@ namespace Harness {
         }
     }
 
-    // Regex for check if the give filePath is a library file
-    const libRegex = /lib(\.\S+)*\.d\.ts/;
-    export function isLibraryFile(filePath: string): boolean {
-        return !!libRegex.exec(Path.getFileName(filePath));
+    export function isDefaultLibraryFile(filePath: string): boolean {
+        // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
+        const fileName = Path.getFileName(filePath);
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
     }
 
     export function isBuiltFile(filePath: string): boolean {
