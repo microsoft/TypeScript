@@ -1217,7 +1217,8 @@ namespace ts {
             const body = node.body;
             if (isBlock(body)) {
                 statementsLocation = body.statements;
-                addRange(statements, visitNodes(body.statements, visitor, isStatement));
+                const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ !context.getCompilerOptions().noImplicitUseStrict);
+                addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
                 // If the original body was a multi-line block, this must be a multi-line block.
                 if (!multiLine && body.multiLine) {

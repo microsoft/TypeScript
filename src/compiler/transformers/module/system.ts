@@ -188,7 +188,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements, !compilerOptions.noImplicitUseStrict);
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict);
 
             // var __moduleName = context_1 && context_1.id;
             addNode(statements,
