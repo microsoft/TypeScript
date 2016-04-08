@@ -735,7 +735,14 @@ namespace ts {
             }
 
             addRange(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ constructor && constructor.body, /*multiLine*/ true);
+            return createBlock(
+                createNodeArray(
+                    statements,
+                    /*location*/ constructor ? constructor.body.statements : undefined
+                ),
+                /*location*/ constructor ? constructor.body : undefined,
+                /*multiLine*/ true
+            );
         }
 
         function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
