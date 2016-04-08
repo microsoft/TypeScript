@@ -6116,15 +6116,18 @@ namespace ts {
                 // If the symbol is an alias, add what it aliases to the list
                 //     import {a} from "mod";
                 //     export {a}
+                // If the symbol is an alias to default declaration, add what it aliases to the list
+                //     declare "mod" { export default class B { } }
+                //     import B from "mod";
                 //// For export specifiers, the exported name can be referring to a local symbol, e.g.:
                 ////     import {a} from "mod";
                 ////     export {a as somethingElse}
                 //// We want the *local* declaration of 'a' as declared in the import,
                 //// *not* as declared within "mod" (or farther)
                 const importOrExportSpecifier = getImportOrExportSpecifierPropertyNameSymbolSpecifier(symbol, location);
-                if (importOrExportSpecifier) {
+                if (importOrExportSpecifier || getDeclarationOfKind(symbol, SyntaxKind.ImportClause)) {
                     result = result.concat(populateSearchSymbolSet(
-                        importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                        !importOrExportSpecifier || importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
                         typeChecker.getAliasedSymbol(symbol) :
                         typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier), location));
                 }
@@ -6253,8 +6256,8 @@ namespace ts {
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
                 const importOrExportSpecifier = getImportOrExportSpecifierPropertyNameSymbolSpecifier(referenceSymbol, referenceLocation);
-                if (importOrExportSpecifier) {
-                    const aliasedSymbol = importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                if (importOrExportSpecifier || getDeclarationOfKind(referenceSymbol, SyntaxKind.ImportClause)) {
+                    const aliasedSymbol = !importOrExportSpecifier || importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
                         typeChecker.getAliasedSymbol(referenceSymbol) :
                         typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
                     return getRelatedSymbol(searchSymbols, aliasedSymbol, referenceLocation);
