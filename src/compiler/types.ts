@@ -2463,6 +2463,7 @@ namespace ts {
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
         listEmittedFiles?: boolean;
+        listEmittedFilesJson?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
 

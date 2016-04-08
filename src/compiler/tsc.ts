@@ -14,18 +14,31 @@ namespace ts {
         }
     }
 
-    function reportEmittedFiles(files: string[], host: CompilerHost): void {
+    function reportEmittedFiles(files: string[], host: CompilerHost, toFile: boolean): void {
         if (!files || files.length == 0) {
             return;
         }
 
         const currentDir = sys.getCurrentDirectory();
 
-        for (const file of files) {
-            const filepath = getNormalizedAbsolutePath(file, currentDir);
+        function jsonWriter(files: string[]) {
+            const filesJson = JSON.stringify(files);
 
-            sys.write(`TSFILE: ${filepath}${sys.newLine}`);
+            sys.writeFile(getNormalizedAbsolutePath("emittedfiles.json", currentDir), filesJson );
         }
+
+        function stdOutWriter(files: string[]) {
+            for (const file of files) {
+
+                sys.write(`TSFILE: ${file}${sys.newLine}`);
+            }
+        }
+
+        const writer = toFile ? jsonWriter : stdOutWriter;
+
+        const filesWithPath = files.map((f) => getNormalizedAbsolutePath(f, currentDir));
+
+        writer(filesWithPath);
     }
 
     /**
@@ -610,7 +623,7 @@ namespace ts {
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
-            reportEmittedFiles(emitOutput.emittedFiles, compilerHost);
+            reportEmittedFiles(emitOutput.emittedFiles, compilerHost, /* toFile */ emitOutput.emittedFiles && compilerOptions.listEmittedFilesJson);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.

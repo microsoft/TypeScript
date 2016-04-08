@@ -341,6 +341,10 @@ namespace ts {
             type: "boolean"
         },
         {
+            name: "listEmittedFilesJson",
+            type: "boolean"
+        },
+        {
             name: "lib",
             type: "list",
             element: {
