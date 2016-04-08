@@ -65,6 +65,11 @@ namespace Utils {
         return Buffer ? (new Buffer(s)).toString("utf8") : s;
     }
 
+    export function byteLength(s: string, encoding?: string): number {
+        // stub implementation if Buffer is not available (in-browser case)
+        return Buffer ? Buffer.byteLength(s, encoding) : s.length;
+    }
+
     export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
         const environment = getExecutionEnvironment();
         switch (environment) {
@@ -835,7 +840,7 @@ namespace Harness {
         export let fourslashSourceFile: ts.SourceFile;
 
         export function getCanonicalFileName(fileName: string): string {
-            return Harness.IO.useCaseSensitiveFileNames() ? fileName : fileName.toLowerCase();
+            return fileName;
         }
 
         export function createCompilerHost(
@@ -883,6 +888,7 @@ namespace Harness {
                     newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
                         Harness.IO.newLine();
 
+
             return {
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
@@ -891,8 +897,12 @@ namespace Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
-                readFile: (fileName: string): string => { return Harness.IO.readFile(fileName); }
+                fileExists: fileName => {
+                    return fileMap.contains(ts.toPath(fileName, currentDirectory, getCanonicalFileName));
+                },
+                readFile: (fileName: string): string => {
+                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)).getText();
+                }
             };
         }
 
@@ -1033,7 +1043,7 @@ namespace Harness {
                 options.newLine);
 
             let traceResults: string[];
-            if (options.traceModuleResolution) {
+            if (options.traceResolution) {
                 traceResults = [];
                 compilerHost.trace = text => traceResults.push(text);
             }
@@ -1479,6 +1489,7 @@ namespace Harness {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
                     tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+                    tsConfig.options.configFilePath = data.name;
 
                     // delete entry from the list
                     testUnitData.splice(i, 1);
