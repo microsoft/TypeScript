@@ -16,11 +16,112 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>// This should error
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^^^^^^^^^->
+3 >                    ^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >// This should error
 1 >Emitted(6, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(6, 21) Source(2, 21) + SourceIndex(0)
 ---
+>>>(function (dependencies, factory) {
+>>>    if (typeof module === 'object' && typeof module.exports === 'object') {
+>>>        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+>>>    }
+>>>    else if (typeof define === 'function' && define.amd) {
+>>>        define(dependencies, factory);
+>>>    }
+>>>})(["require", "exports"], function (require, exports) {
+>>>    "use strict";
+>>>    var A = (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+1->Emitted(16, 5) Source(4, 1) + SourceIndex(0)
+---
+>>>        function A() {
+>>>        }
+>>>        return A;
+>>>    }());
+1->^^^^^^^^^
+2 >         ^^^^^^^^^^->
+1->export class A { }
+1->Emitted(20, 10) Source(4, 19) + SourceIndex(0)
+---
+>>>    exports.A = A;
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^
+4 >                 ^
+1->
+2 >    export class 
+3 >                A
+4 >                  { }
+1->Emitted(21, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(21, 17) Source(4, 14) + SourceIndex(0)
+3 >Emitted(21, 18) Source(4, 15) + SourceIndex(0)
+4 >Emitted(21, 19) Source(4, 19) + SourceIndex(0)
+---
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/b.ts
+-------------------------------------------------------------------
+>>>});
+>>>(function (dependencies, factory) {
+>>>    if (typeof module === 'object' && typeof module.exports === 'object') {
+>>>        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+>>>    }
+>>>    else if (typeof define === 'function' && define.amd) {
+>>>        define(dependencies, factory);
+>>>    }
+>>>})(["require", "exports", "./ref/a"], function (require, exports) {
+>>>    "use strict";
+>>>    var a_1 = require("./ref/a");
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >    import {A} from "./ref/a";
+1 >Emitted(32, 5) Source(1, 1) + SourceIndex(1)
+2 >Emitted(32, 34) Source(1, 27) + SourceIndex(1)
+---
+>>>    var B = (function (_super) {
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+1 >Emitted(33, 5) Source(2, 1) + SourceIndex(1)
+---
+>>>        __extends(B, _super);
+>>>        function B() {
+>>>            _super.apply(this, arguments);
+>>>        }
+>>>        return B;
+>>>    }(a_1.A));
+1->^^^^^^
+2 >      ^^^^^
+3 >           ^^^
+4 >              ^^^^^->
+1->export class B extends 
+2 >      A
+3 >            { }
+1->Emitted(39, 7) Source(2, 24) + SourceIndex(1)
+2 >Emitted(39, 12) Source(2, 25) + SourceIndex(1)
+3 >Emitted(39, 15) Source(2, 29) + SourceIndex(1)
+---
+>>>    exports.B = B;
+1->^^^^
+2 >    ^^^^^^^^^^^^
+3 >                ^
+4 >                 ^
+1->
+2 >    export class 
+3 >                B
+4 >                  extends A { }
+1->Emitted(40, 5) Source(2, 1) + SourceIndex(1)
+2 >Emitted(40, 17) Source(2, 14) + SourceIndex(1)
+3 >Emitted(40, 18) Source(2, 15) + SourceIndex(1)
+4 >Emitted(40, 19) Source(2, 29) + SourceIndex(1)
+---
+>>>});
 >>>//# sourceMappingURL=all.js.map

@@ -29,7 +29,6 @@ let x: Observable<number>;
 let y = x.map(x => x + 1);
 
 //// [observable.js]
-"use strict";
 //// [map.js]
 "use strict";
 var observable_1 = require("./observable");

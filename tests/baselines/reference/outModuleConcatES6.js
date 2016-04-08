@@ -12,6 +12,11 @@ export class B extends A { }
 
 //// [all.js]
 // This should be an error
+export class A {
+}
+import { A } from "./ref/a";
+export class B extends A {
+}
 //# sourceMappingURL=all.js.map
 
 //// [all.d.ts]

@@ -17,6 +17,23 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 // This should be an error
+"use strict";
+var A = (function () {
+    function A() {
+    }
+    return A;
+}());
+exports.A = A;
+"use strict";
+var a_1 = require("./ref/a");
+var B = (function (_super) {
+    __extends(B, _super);
+    function B() {
+        _super.apply(this, arguments);
+    }
+    return B;
+}(a_1.A));
+exports.B = B;
 //# sourceMappingURL=all.js.map
 
 //// [all.d.ts]

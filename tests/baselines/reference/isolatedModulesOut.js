@@ -7,4 +7,5 @@ export var x;
 var y;
 
 //// [all.js]
+export var x;
 var y;
