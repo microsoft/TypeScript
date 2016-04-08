@@ -10,6 +10,7 @@ namespace ts {
         }
 
         const {
+            getNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -120,7 +121,7 @@ namespace ts {
             );
 
             // Write the call to `System.register`
-            return updateSourceFile(node, [
+            const updated = updateSourceFile(node, [
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
@@ -130,6 +131,10 @@ namespace ts {
                     )
                 )
             ]);
+
+            // Reset the sourcefile's nodeFlag to not emit helpers because we already set one in the body
+            setNodeEmitFlags(updated, ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(updated));
+            return updated;
         }
 
         /**
