@@ -169,6 +169,18 @@ namespace ts {
         return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
     }
