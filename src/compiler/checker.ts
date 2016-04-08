@@ -2836,10 +2836,15 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean): Type {
             if (element.initializer) {
-                return getWidenedType(checkExpressionCached(element.initializer));
+                const type = checkExpressionCached(element.initializer);
+                reportErrorsFromWidening(element, type);
+                return getWidenedType(type);
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType);
+            }
+            if (compilerOptions.noImplicitAny) {
+                reportImplicitAnyError(element, anyType);
             }
             return anyType;
         }
@@ -6798,6 +6803,9 @@ namespace ts {
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?
                         Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
                         Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                    break;
+                case SyntaxKind.BindingElement:
+                    diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
                     break;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:

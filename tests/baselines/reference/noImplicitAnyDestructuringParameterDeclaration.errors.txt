@@ -1,0 +1,55 @@
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(1,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(1,19): error TS7031: Binding element 'b' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(1,23): error TS7006: Parameter 'c' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(1,26): error TS7006: Parameter 'd' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(3,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(3,31): error TS7031: Binding element 'b' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(3,42): error TS7006: Parameter 'c' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(3,57): error TS7006: Parameter 'd' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(7,20): error TS7008: Member 'b' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(7,30): error TS7008: Member 'b' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(9,14): error TS7031: Binding element 'a1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(9,34): error TS7031: Binding element 'b1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(9,54): error TS7006: Parameter 'c1' implicitly has an 'any' type.
+tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts(9,70): error TS7006: Parameter 'd1' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts (14 errors) ====
+    function f1([a], {b}, c, d) { // error
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                      ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                          ~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
+                             ~
+!!! error TS7006: Parameter 'd' implicitly has an 'any' type.
+    }
+    function f2([a = undefined], {b = null}, c = undefined, d = null) { // error
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                                  ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                                             ~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
+                                                            ~~~~~~~~
+!!! error TS7006: Parameter 'd' implicitly has an 'any' type.
+    }
+    function f3([a]: [any], {b}: { b: any }, c: any, d: any) {
+    }
+    function f4({b}: { b }, x: { b }) { // error in type instead
+                       ~
+!!! error TS7008: Member 'b' implicitly has an 'any' type.
+                                 ~
+!!! error TS7008: Member 'b' implicitly has an 'any' type.
+    }
+    function f5([a1] = [undefined], {b1} = { b1: null }, c1 = undefined, d1 = null) { // error
+                 ~~
+!!! error TS7031: Binding element 'a1' implicitly has an 'any' type.
+                                     ~~
+!!! error TS7031: Binding element 'b1' implicitly has an 'any' type.
+                                                         ~~~~~~~~~~~~~~
+!!! error TS7006: Parameter 'c1' implicitly has an 'any' type.
+                                                                         ~~~~~~~~~
+!!! error TS7006: Parameter 'd1' implicitly has an 'any' type.
+    }

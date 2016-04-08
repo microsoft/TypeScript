@@ -2752,6 +2752,10 @@
         "category": "Error",
         "code": 7030
     },
+    "Binding element '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7031
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
