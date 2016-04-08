@@ -549,7 +549,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            getDeclarationName(node),
+                            getDeclarationName(node, /*allowComments*/ true),
                             transformClassLikeDeclarationToExpression(node)
                         )
                     ]),
@@ -2686,8 +2686,25 @@ namespace ts {
             return node;
         }
 
-        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        /**
+         * Gets the name of a declaration, without source map or comments.
+         *
+         * @param node The declaration.
+         * @param allowComments Allow comments for the name.
+         */
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean) {
+            if (node.name) {
+                const name = getMutableClone(node.name);
+                let flags = NodeEmitFlags.NoSourceMap;
+                if (!allowComments) {
+                    flags |= NodeEmitFlags.NoComments;
+                }
+
+                setNodeEmitFlags(name, flags | getNodeEmitFlags(name));
+                return name;
+            }
+
+            return getGeneratedNameForNode(node);
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
