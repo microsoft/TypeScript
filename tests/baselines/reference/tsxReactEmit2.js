@@ -17,9 +17,10 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 
 //// [file.js]
 var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var i = 1; i < arguments.length; i++) {
-        var s = arguments[i];
-        for (var p in s) if (s.hasOwnProperty(p)) t[p] = s[p];
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
     }
     return t;
 };
