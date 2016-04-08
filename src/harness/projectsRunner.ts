@@ -463,23 +463,30 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-
                     it("Baseline of emitted result (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (testCase.baselineCheck) {
+                            var lastError: any = undefined;
                             ts.forEach(compilerResult.outputFiles, outputFile => {
-
-                                Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
-                                    try {
-                                        return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
-                                    }
-                                    catch (e) {
-                                        return undefined;
-                                    }
-                                });
+                                try {
+                                    Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
+                                        try {
+                                            return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                        }
+                                        catch (e) {
+                                            return undefined;
+                                        }
+                                    });
+                                }
+                                catch (e) {
+                                    lastError = e;
+                                }
                             });
+
+                            if (lastError) {
+                                throw lastError;
+                            }
                         }
                     });
-
 
                     it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (compilerResult.sourceMapData) {
