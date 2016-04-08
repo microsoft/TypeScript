@@ -94,12 +94,7 @@ namespace ts {
     export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {
-                if (areEqual) {
-                    if (areEqual(v, value)) {
-                        return true;
-                    }
-                }
-                else if (v === value) {
+                if (areEqual ? areEqual(v, value) : v === value) {
                     return true;
                 }
             }

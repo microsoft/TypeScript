@@ -464,7 +464,7 @@ namespace ts.server {
         return copiedList;
     }
 
-    export function forEachProject<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
+    export function processEachProjectThenConcatSortDeduplicateResults<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
         const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
         return projects.length > 1 ? deduplicate(result, areEqual) : result;
     }

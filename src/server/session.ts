@@ -434,7 +434,7 @@ namespace ts.server {
                 };
             }
 
-            const fileSpans = forEachProject(
+            const fileSpans = processEachProjectThenConcatSortDeduplicateResults(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
@@ -511,7 +511,7 @@ namespace ts.server {
             const nameSpan = nameInfo.textSpan;
             const nameColStart = defaultProject.compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             const nameText = defaultProject.compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            const refs = forEachProject<protocol.ReferencesResponseItem>(
+            const refs = processEachProjectThenConcatSortDeduplicateResults<protocol.ReferencesResponseItem>(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
@@ -872,7 +872,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const allNavToItems = forEachProject(
+            const allNavToItems = processEachProjectThenConcatSortDeduplicateResults(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
@@ -891,7 +891,7 @@ namespace ts.server {
                             start: start,
                             end: end,
                         };
-                        if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                        if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                             bakedItem.kindModifiers = navItem.kindModifiers;
                         }
                         if (navItem.matchKind !== "none") {
