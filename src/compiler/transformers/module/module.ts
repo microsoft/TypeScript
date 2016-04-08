@@ -31,7 +31,7 @@ namespace ts {
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let hasExportStars: boolean;
+        let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
 
@@ -45,7 +45,7 @@ namespace ts {
                 currentSourceFile = node;
 
                 // Collect information about the external module.
-                ({ externalImports, exportSpecifiers, exportEquals, hasExportStars } = collectExternalModuleInfo(node, resolver));
+                ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
                 // Perform the transformation.
                 const updated = transformModuleDelegates[moduleKind](node);
@@ -55,7 +55,7 @@ namespace ts {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 return updated;
             }
 
@@ -77,7 +77,7 @@ namespace ts {
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             const updated = updateSourceFile(node, statements);
-            if (hasExportStars) {
+            if (hasExportStarsToExportValues) {
                 setNodeEmitFlags(updated, NodeEmitFlags.EmitExportStar | getNodeEmitFlags(node));
             }
 
@@ -200,7 +200,7 @@ namespace ts {
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-            if (hasExportStars) {
+            if (hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 setNodeEmitFlags(body, NodeEmitFlags.EmitExportStar);
@@ -442,7 +442,7 @@ namespace ts {
 
                 return singleOrMany(statements);
             }
-            else {
+            else if (resolver.moduleExportsSomeValue(node.moduleSpecifier)) {
                 // export * from "mod";
                 return createStatement(
                     createCall(

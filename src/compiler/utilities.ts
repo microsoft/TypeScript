@@ -2984,7 +2984,7 @@ namespace ts {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers: Map<ExportSpecifier[]> = {};
         let exportEquals: ExportAssignment = undefined;
-        let hasExportStars = false;
+        let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -3009,8 +3009,10 @@ namespace ts {
                     if ((<ExportDeclaration>node).moduleSpecifier) {
                         if (!(<ExportDeclaration>node).exportClause) {
                             // export * from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                            hasExportStars = true;
+                            if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
+                                externalImports.push(<ExportDeclaration>node);
+                                hasExportStarsToExportValues = true;
+                            }
                         }
                         else if (resolver.isValueAliasDeclaration(getOriginalNode(node))) {
                             // export { x, y } from "mod" where at least one export is a value symbol
@@ -3040,7 +3042,7 @@ namespace ts {
             }
         }
 
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStars };
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues };
     }
 
     export function getInitializedVariables(node: VariableDeclarationList) {
