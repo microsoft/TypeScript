@@ -1163,11 +1163,11 @@ namespace ts {
         let thisArg: Expression;
         let target: LeftHandSideExpression;
         if (isSuperProperty(callee)) {
-            thisArg = createThis(/*location*/ callee.expression);
+            thisArg = createThis();
             target = callee;
         }
         else if (callee.kind === SyntaxKind.SuperKeyword) {
-            thisArg = createThis(/*location*/ callee);
+            thisArg = createThis();
             target = languageVersion < ScriptTarget.ES6 ? createIdentifier("_super", /*location*/ callee) : <PrimaryExpression>callee;
         }
         else {
@@ -1180,15 +1180,15 @@ namespace ts {
                             createAssignment(
                                 thisArg,
                                 (<PropertyAccessExpression>callee).expression,
-                            /*location*/(<PropertyAccessExpression>callee).expression
+                                /*location*/ (<PropertyAccessExpression>callee).expression
                             ),
                             (<PropertyAccessExpression>callee).name,
-                        /*location*/ callee
+                            /*location*/ callee
                         );
                     }
                     else {
                         thisArg = (<PropertyAccessExpression>callee).expression;
-                        target = <PropertyAccessExpression>callee; 
+                        target = <PropertyAccessExpression>callee;
                     }
                     break;
                 }
@@ -1201,10 +1201,10 @@ namespace ts {
                             createAssignment(
                                 thisArg,
                                 (<ElementAccessExpression>callee).expression,
-                            /*location*/(<ElementAccessExpression>callee).expression
+                                /*location*/ (<ElementAccessExpression>callee).expression
                             ),
                             (<ElementAccessExpression>callee).argumentExpression,
-                        /*location*/ callee
+                            /*location*/ callee
                         );
                     }
                     else {
