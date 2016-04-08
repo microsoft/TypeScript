@@ -7358,13 +7358,22 @@ namespace ts {
             return createArrayType(elementType);
         }
 
-        function getAssignedTypeOfPropertyAssignment(node: PropertyAssignment): Type {
+        function getAssignedTypeOfPropertyAssignment(node: PropertyAssignment | ShorthandPropertyAssignment): Type {
             const objectType = getAssignedType(<ObjectLiteralExpression>node.parent);
             const text = getTextOfPropertyName(node.name);
             return getTypeOfPropertyOfType(objectType, text) ||
                 isNumericLiteralName(text) && getIndexTypeOfType(objectType, IndexKind.Number) ||
                 getIndexTypeOfType(objectType, IndexKind.String) ||
                 unknownType;
+        }
+
+        function getAssignedTypeOfShorthandPropertyAssignment(node: ShorthandPropertyAssignment): Type {
+            if (node.objectAssignmentInitializer) {
+                const defaultType = checkExpressionCached(node.objectAssignmentInitializer);
+                const assignedType = getAssignedTypeOfPropertyAssignment(node);
+                return getUnionType([getTypeWithFacts(assignedType, TypeFacts.NEUndefined), defaultType]);
+            }
+            return getAssignedTypeOfPropertyAssignment(node);
         }
 
         function getAssignedType(node: Expression): Type {
@@ -7383,7 +7392,7 @@ namespace ts {
                 case SyntaxKind.PropertyAssignment:
                     return getAssignedTypeOfPropertyAssignment(<PropertyAssignment>parent);
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    break; // !!! TODO
+                    return getAssignedTypeOfShorthandPropertyAssignment(<ShorthandPropertyAssignment>parent);
             }
             return unknownType;
         }

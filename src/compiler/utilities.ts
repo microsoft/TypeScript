@@ -1329,7 +1329,7 @@ namespace ts {
                 node = parent;
                 continue;
             }
-            if (parent.kind === SyntaxKind.PropertyAssignment) {
+            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 node = parent.parent;
                 continue;
             }
