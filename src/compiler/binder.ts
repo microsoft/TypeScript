@@ -105,8 +105,10 @@ namespace ts {
         // state used by reachability checks
         let hasExplicitReturn: boolean;
         let currentFlow: FlowNode;
-        let breakTarget: FlowLabel;
-        let continueTarget: FlowLabel;
+        let currentBreakTarget: FlowLabel;
+        let currentContinueTarget: FlowLabel;
+        let currentTrueTarget: FlowLabel;
+        let currentFalseTarget: FlowLabel;
         let preSwitchCaseFlow: FlowNode;
         let activeLabels: ActiveLabel[];
 
@@ -151,8 +153,10 @@ namespace ts {
             seenThisKeyword = false;
             hasExplicitReturn = false;
             currentFlow = undefined;
-            breakTarget = undefined;
-            continueTarget = undefined;
+            currentBreakTarget = undefined;
+            currentContinueTarget = undefined;
+            currentTrueTarget = undefined;
+            currentFalseTarget = undefined;
             activeLabels = undefined;
             hasClassExtends = false;
             hasAsyncFunctions = false;
@@ -437,6 +441,8 @@ namespace ts {
             let savedCurrentFlow: FlowNode;
             let savedBreakTarget: FlowLabel;
             let savedContinueTarget: FlowLabel;
+            let savedTrueTarget: FlowLabel;
+            let savedFalseTarget: FlowLabel;
             let savedActiveLabels: ActiveLabel[];
 
             const kind = node.kind;
@@ -456,14 +462,14 @@ namespace ts {
             if (saveState) {
                 savedHasExplicitReturn = hasExplicitReturn;
                 savedCurrentFlow = currentFlow;
-                savedBreakTarget = breakTarget;
-                savedContinueTarget = continueTarget;
+                savedBreakTarget = currentBreakTarget;
+                savedContinueTarget = currentContinueTarget;
                 savedActiveLabels = activeLabels;
 
                 hasExplicitReturn = false;
                 currentFlow = { kind: FlowKind.Start };
-                breakTarget = undefined;
-                continueTarget = undefined;
+                currentBreakTarget = undefined;
+                currentContinueTarget = undefined;
                 activeLabels = undefined;
             }
 
@@ -502,11 +508,11 @@ namespace ts {
             node.flags = flags;
 
             if (saveState) {
-                activeLabels = savedActiveLabels;
-                continueTarget = savedContinueTarget;
-                breakTarget = savedBreakTarget;
-                currentFlow = savedCurrentFlow;
                 hasExplicitReturn = savedHasExplicitReturn;
+                currentFlow = savedCurrentFlow;
+                currentBreakTarget = savedBreakTarget;
+                currentContinueTarget = savedContinueTarget;
+                activeLabels = savedActiveLabels;
             }
 
             container = saveContainer;
@@ -561,6 +567,9 @@ namespace ts {
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
                     break;
+                case SyntaxKind.PrefixUnaryExpression:
+                    bindPrefixUnaryExpressionFlow(<PrefixUnaryExpression>node);
+                    break;
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
@@ -613,9 +622,6 @@ namespace ts {
                         return true;
                     }
                     return false;
-                case SyntaxKind.AmpersandAmpersandToken:
-                case SyntaxKind.BarBarToken:
-                    return isNarrowingExpression(expr.left) || isNarrowingExpression(expr.right);
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowingExpression(expr.left);
             }
@@ -656,7 +662,7 @@ namespace ts {
             };
         }
 
-        function createFlowAssignment(antecedent: FlowNode, node: BinaryExpression | VariableDeclaration | ForInStatement | ForOfStatement): FlowNode {
+        function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             return <FlowAssignment>{
                 kind: FlowKind.Assignment,
                 antecedent,
@@ -678,21 +684,78 @@ namespace ts {
             return flow;
         }
 
+        function isStatementCondition(node: Node) {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
+                    return (<IfStatement | WhileStatement | DoStatement>parent).expression === node;
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ConditionalExpression:
+                    return (<ForStatement | ConditionalExpression>parent).condition === node;
+            }
+            return false;
+        }
+
+        function isLogicalExpression(node: Node) {
+            while (true) {
+                if (node.kind === SyntaxKind.ParenthesizedExpression) {
+                    node = (<ParenthesizedExpression>node).expression;
+                }
+                else if (node.kind === SyntaxKind.PrefixUnaryExpression && (<PrefixUnaryExpression>node).operator === SyntaxKind.ExclamationToken) {
+                    node = (<PrefixUnaryExpression>node).operand;
+                }
+                else {
+                    return node.kind === SyntaxKind.BinaryExpression && (
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken ||
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken);
+                }
+            }
+        }
+
+        function isTopLevelLogicalExpression(node: Node): boolean {
+            while (node.parent.kind === SyntaxKind.ParenthesizedExpression ||
+                node.parent.kind === SyntaxKind.PrefixUnaryExpression &&
+                (<PrefixUnaryExpression>node.parent).operator === SyntaxKind.ExclamationToken) {
+                node = node.parent;
+            }
+            return !isStatementCondition(node) && !isLogicalExpression(node.parent);
+        }
+
+        function bindCondition(node: Expression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const saveTrueTarget = currentTrueTarget;
+            const saveFalseTarget = currentFalseTarget;
+            currentTrueTarget = trueTarget;
+            currentFalseTarget = falseTarget;
+            bind(node);
+            currentTrueTarget = saveTrueTarget;
+            currentFalseTarget = saveFalseTarget;
+            if (!node || !isLogicalExpression(node)) {
+                addAntecedent(trueTarget, createFlowCondition(currentFlow, node, /*assumeTrue*/ true));
+                addAntecedent(falseTarget, createFlowCondition(currentFlow, node, /*assumeTrue*/ false));
+            }
+        }
+
+        function bindIterativeStatement(node: Statement, breakTarget: FlowLabel, continueTarget: FlowLabel): void {
+            const saveBreakTarget = currentBreakTarget;
+            const saveContinueTarget = currentContinueTarget;
+            currentBreakTarget = breakTarget;
+            currentContinueTarget = continueTarget;
+            bind(node);
+            currentBreakTarget = saveBreakTarget;
+            currentContinueTarget = saveContinueTarget;
+        }
+
         function bindWhileStatement(node: WhileStatement): void {
             const preWhileLabel = createFlowLabel();
+            const preBodyLabel = createFlowLabel();
             const postWhileLabel = createFlowLabel();
             addAntecedent(preWhileLabel, currentFlow);
             currentFlow = preWhileLabel;
-            bind(node.expression);
-            addAntecedent(postWhileLabel, createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ false));
-            currentFlow = createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ true);
-            const saveBreakTarget = breakTarget;
-            const saveContinueTarget = continueTarget;
-            breakTarget = postWhileLabel;
-            continueTarget = preWhileLabel;
-            bind(node.statement);
-            breakTarget = saveBreakTarget;
-            continueTarget = saveContinueTarget;
+            bindCondition(node.expression, preBodyLabel, postWhileLabel);
+            currentFlow = finishFlow(preBodyLabel);
+            bindIterativeStatement(node.statement, postWhileLabel, preWhileLabel);
             addAntecedent(preWhileLabel, currentFlow);
             currentFlow = finishFlow(postWhileLabel);
         }
@@ -703,38 +766,24 @@ namespace ts {
             const postDoLabel = createFlowLabel();
             addAntecedent(preDoLabel, currentFlow);
             currentFlow = preDoLabel;
-            const saveBreakTarget = breakTarget;
-            const saveContinueTarget = continueTarget;
-            breakTarget = postDoLabel;
-            continueTarget = preConditionLabel;
-            bind(node.statement);
-            breakTarget = saveBreakTarget;
-            continueTarget = saveContinueTarget;
+            bindIterativeStatement(node.statement, postDoLabel, preConditionLabel);
             addAntecedent(preConditionLabel, currentFlow);
             currentFlow = finishFlow(preConditionLabel);
-            bind(node.expression);
-            addAntecedent(preDoLabel, createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ true));
-            addAntecedent(postDoLabel, createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ false));
+            bindCondition(node.expression, preDoLabel, postDoLabel);
             currentFlow = finishFlow(postDoLabel);
         }
 
         function bindForStatement(node: ForStatement): void {
             const preLoopLabel = createFlowLabel();
+            const preBodyLabel = createFlowLabel();
             const postLoopLabel = createFlowLabel();
             bind(node.initializer);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
-            bind(node.condition);
-            addAntecedent(postLoopLabel, createFlowCondition(currentFlow, node.condition, /*assumeTrue*/ false));
-            currentFlow = createFlowCondition(currentFlow, node.condition, /*assumeTrue*/ true);
-            const saveBreakTarget = breakTarget;
-            const saveContinueTarget = continueTarget;
-            breakTarget = postLoopLabel;
-            continueTarget = preLoopLabel;
-            bind(node.statement);
+            bindCondition(node.condition, preBodyLabel, postLoopLabel);
+            currentFlow = finishFlow(preBodyLabel);
+            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
             bind(node.incrementor);
-            breakTarget = saveBreakTarget;
-            continueTarget = saveContinueTarget;
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = finishFlow(postLoopLabel);
         }
@@ -742,31 +791,28 @@ namespace ts {
         function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
             const preLoopLabel = createFlowLabel();
             const postLoopLabel = createFlowLabel();
-            bind(node.initializer);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
             bind(node.expression);
             addAntecedent(postLoopLabel, currentFlow);
-            const saveBreakTarget = breakTarget;
-            const saveContinueTarget = continueTarget;
-            breakTarget = postLoopLabel;
-            continueTarget = preLoopLabel;
-            currentFlow = createFlowAssignment(currentFlow, node);
-            bind(node.statement);
-            breakTarget = saveBreakTarget;
-            continueTarget = saveContinueTarget;
+            bind(node.initializer);
+            if (node.initializer.kind !== SyntaxKind.VariableDeclarationList) {
+                bindAssignmentTargetFlow(<Expression>node.initializer);
+            }
+            bindIterativeStatement(node.statement, postLoopLabel, preLoopLabel);
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = finishFlow(postLoopLabel);
         }
 
         function bindIfStatement(node: IfStatement): void {
+            const thenLabel = createFlowLabel();
+            const elseLabel = createFlowLabel();
             const postIfLabel = createFlowLabel();
-            bind(node.expression);
-            const postConditionFlow = currentFlow;
-            currentFlow = createFlowCondition(currentFlow, node.expression, /*assumeTrue*/ true);
+            bindCondition(node.expression, thenLabel, elseLabel);
+            currentFlow = finishFlow(thenLabel);
             bind(node.thenStatement);
             addAntecedent(postIfLabel, currentFlow);
-            currentFlow = createFlowCondition(postConditionFlow, node.expression, /*assumeTrue*/ false);
+            currentFlow = finishFlow(elseLabel);
             bind(node.elseStatement);
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlow(postIfLabel);
@@ -809,7 +855,7 @@ namespace ts {
                 }
             }
             else {
-                bindbreakOrContinueFlow(node, breakTarget, continueTarget);
+                bindbreakOrContinueFlow(node, currentBreakTarget, currentContinueTarget);
             }
         }
 
@@ -834,9 +880,9 @@ namespace ts {
         function bindSwitchStatement(node: SwitchStatement): void {
             const postSwitchLabel = createFlowLabel();
             bind(node.expression);
-            const saveBreakTarget = breakTarget;
+            const saveBreakTarget = currentBreakTarget;
             const savePreSwitchCaseFlow = preSwitchCaseFlow;
-            breakTarget = postSwitchLabel;
+            currentBreakTarget = postSwitchLabel;
             preSwitchCaseFlow = currentFlow;
             bind(node.caseBlock);
             addAntecedent(postSwitchLabel, currentFlow);
@@ -844,7 +890,7 @@ namespace ts {
             if (!hasDefault) {
                 addAntecedent(postSwitchLabel, preSwitchCaseFlow);
             }
-            breakTarget = saveBreakTarget;
+            currentBreakTarget = saveBreakTarget;
             preSwitchCaseFlow = savePreSwitchCaseFlow;
             currentFlow = finishFlow(postSwitchLabel);
         }
@@ -904,43 +950,118 @@ namespace ts {
             currentFlow = finishFlow(postStatementLabel);
         }
 
-        function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
-                const postExpressionLabel = createFlowLabel();
-                bind(node.left);
-                bind(node.operatorToken);
-                addAntecedent(postExpressionLabel, currentFlow);
-                currentFlow = createFlowCondition(currentFlow, node.left, /*assumeTrue*/ operator === SyntaxKind.AmpersandAmpersandToken);
-                bind(node.right);
-                addAntecedent(postExpressionLabel, currentFlow);
-                currentFlow = finishFlow(postExpressionLabel);
+        function bindDestructuringTargetFlow(node: Expression) {
+            if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                bindAssignmentTargetFlow((<BinaryExpression>node).left);
+            }
+            else {
+                bindAssignmentTargetFlow(node);
+            }
+        }
+
+        function bindAssignmentTargetFlow(node: Expression) {
+            if (isNarrowableReference(node)) {
+                currentFlow = createFlowAssignment(currentFlow, node);
+            }
+            else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
+                for (const e of (<ArrayLiteralExpression>node).elements) {
+                    if (e.kind === SyntaxKind.SpreadElementExpression) {
+                        bindAssignmentTargetFlow((<SpreadElementExpression>e).expression);
+                    }
+                    else {
+                        bindDestructuringTargetFlow(e);
+                    }
+                }
+            }
+            else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
+                for (const p of (<ObjectLiteralExpression>node).properties) {
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        bindDestructuringTargetFlow((<PropertyAssignment>p).initializer);
+                    }
+                    else if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        bindAssignmentTargetFlow((<ShorthandPropertyAssignment>p).name);
+                    }
+                }
+            }
+        }
+
+        function bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+            const preRightLabel = createFlowLabel();
+            if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                bindCondition(node.left, preRightLabel, falseTarget);
+            }
+            else {
+                bindCondition(node.left, trueTarget, preRightLabel);
+            }
+            currentFlow = finishFlow(preRightLabel);
+            bind(node.operatorToken);
+            bindCondition(node.right, trueTarget, falseTarget);
+        }
+
+        function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
+            if (node.operator === SyntaxKind.ExclamationToken) {
+                const saveTrueTarget = currentTrueTarget;
+                currentTrueTarget = currentFalseTarget;
+                currentFalseTarget = saveTrueTarget;
+                forEachChild(node, bind);
+                currentFalseTarget = currentTrueTarget;
+                currentTrueTarget = saveTrueTarget;
             }
             else {
                 forEachChild(node, bind);
-                if (operator === SyntaxKind.EqualsToken) {
-                    currentFlow = createFlowAssignment(currentFlow, node);
+            }
+        }
+
+        function bindBinaryExpressionFlow(node: BinaryExpression) {
+            const operator = node.operatorToken.kind;
+            if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
+                if (isTopLevelLogicalExpression(node)) {
+                    const postExpressionLabel = createFlowLabel();
+                    bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                    currentFlow = finishFlow(postExpressionLabel);
+                }
+                else {
+                    bindLogicalExpression(node, currentTrueTarget, currentFalseTarget);
+                }
+            }
+            else {
+                forEachChild(node, bind);
+                if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
+                    bindAssignmentTargetFlow(node.left);
                 }
             }
         }
 
         function bindConditionalExpressionFlow(node: ConditionalExpression) {
+            const trueLabel = createFlowLabel();
+            const falseLabel = createFlowLabel();
             const postExpressionLabel = createFlowLabel();
-            bind(node.condition);
-            const postConditionFlow = currentFlow;
-            currentFlow = createFlowCondition(currentFlow, node.condition, /*assumeTrue*/ true);
+            bindCondition(node.condition, trueLabel, falseLabel);
+            currentFlow = finishFlow(trueLabel);
             bind(node.whenTrue);
             addAntecedent(postExpressionLabel, currentFlow);
-            currentFlow = createFlowCondition(postConditionFlow, node.condition, /*assumeTrue*/ false);
+            currentFlow = finishFlow(falseLabel);
             bind(node.whenFalse);
             addAntecedent(postExpressionLabel, currentFlow);
             currentFlow = finishFlow(postExpressionLabel);
         }
 
+        function bindInitializedVariableFlow(node: VariableDeclaration | BindingElement) {
+            const name = node.name;
+            if (isBindingPattern(name)) {
+                for (const child of name.elements) {
+                    bindInitializedVariableFlow(child);
+                }
+            }
+            else {
+                currentFlow = createFlowAssignment(currentFlow, node);
+            }
+        }
+
         function bindVariableDeclarationFlow(node: VariableDeclaration) {
             forEachChild(node, bind);
-            if (node.initializer) {
-                currentFlow = createFlowAssignment(currentFlow, node);
+            if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                bindInitializedVariableFlow(node);
             }
         }
 

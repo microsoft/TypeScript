@@ -7335,6 +7335,59 @@ namespace ts {
             return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : emptyUnionType;
         }
 
+        function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
+            const type = checkExpressionCached(node.right);
+            const parent = node.parent;
+            if (parent.kind === SyntaxKind.ArrayLiteralExpression || parent.kind === SyntaxKind.PropertyAssignment) {
+                const assignedType = getAssignedType(node);
+                return getUnionType([getTypeWithFacts(assignedType, TypeFacts.NEUndefined), type]);
+            }
+            return type;
+        }
+
+        function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
+            const arrayLikeType = getAssignedType(node);
+            const elementType = checkIteratedTypeOrElementType(arrayLikeType, node, /*allowStringInput*/ false);
+            const propName = "" + indexOf(node.elements, element);
+            return isTupleLikeType(arrayLikeType) && getTypeOfPropertyOfType(arrayLikeType, propName) || elementType;
+        }
+
+        function getAssignedTypeOfSpreadElement(node: SpreadElementExpression): Type {
+            const arrayLikeType = getAssignedType(<ArrayLiteralExpression>node.parent);
+            const elementType = checkIteratedTypeOrElementType(arrayLikeType, node, /*allowStringInput*/ false);
+            return createArrayType(elementType);
+        }
+
+        function getAssignedTypeOfPropertyAssignment(node: PropertyAssignment): Type {
+            const objectType = getAssignedType(<ObjectLiteralExpression>node.parent);
+            const text = getTextOfPropertyName(node.name);
+            return getTypeOfPropertyOfType(objectType, text) ||
+                isNumericLiteralName(text) && getIndexTypeOfType(objectType, IndexKind.Number) ||
+                getIndexTypeOfType(objectType, IndexKind.String) ||
+                unknownType;
+        }
+
+        function getAssignedType(node: Expression): Type {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.ForInStatement:
+                    return stringType;
+                case SyntaxKind.ForOfStatement:
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression);
+                case SyntaxKind.BinaryExpression:
+                    return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return getAssignedTypeOfArrayLiteralElement(<ArrayLiteralExpression>parent, node);
+                case SyntaxKind.SpreadElementExpression:
+                    return getAssignedTypeOfSpreadElement(<SpreadElementExpression>parent);
+                case SyntaxKind.PropertyAssignment:
+                    return getAssignedTypeOfPropertyAssignment(<PropertyAssignment>parent);
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    break; // !!! TODO
+            }
+            return unknownType;
+        }
+
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
             if (!(type.flags & TypeFlags.Narrowable) || !isNarrowableReference(reference)) {
                 return type;
@@ -7384,58 +7437,34 @@ namespace ts {
                 }
             }
 
-            function getTypeAtVariableDeclaration(node: VariableDeclaration) {
-                if (reference.kind === SyntaxKind.Identifier && !isBindingPattern(node.name) && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
-                    return getAssignmentReducedType(declaredType, checkExpressionCached((<VariableDeclaration>node).initializer));
-                }
-                return undefined;
-            }
-
-            function getTypeAtForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
-                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                    if (reference.kind === SyntaxKind.Identifier) {
-                        const variable = (<VariableDeclarationList>node.initializer).declarations[0];
-                        if (variable && !isBindingPattern(variable.name) && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(variable)) {
-                            return declaredType;
-                        }
+            function getTypeAtVariableDeclaration(node: VariableDeclaration | BindingElement) {
+                if (reference.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
+                    if (node.initializer) {
+                        return getAssignmentReducedType(declaredType, checkExpressionCached(node.initializer));
                     }
-                }
-                else {
-                    if (isMatchingReference(reference, <Expression>node.initializer)) {
-                        const type = node.kind === SyntaxKind.ForOfStatement ? checkRightHandSideOfForOf(node.expression) : stringType;
-                        return getAssignmentReducedType(declaredType, type);
-                    }
-                    if (reference.kind === SyntaxKind.PropertyAccessExpression &&
-                        containsMatchingReference((<PropertyAccessExpression>reference).expression, <Expression>node.initializer)) {
-                        return declaredType;
-                    }
+                    return declaredType; // !!! TODO
                 }
                 return undefined;
             }
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
-                switch (node.kind) {
-                    case SyntaxKind.BinaryExpression:
-                        // If reference matches left hand side and type on right is properly assignable,
-                        // return type on right. Otherwise default to the declared type.
-                        if (isMatchingReference(reference, (<BinaryExpression>node).left)) {
-                            return getAssignmentReducedType(declaredType, checkExpressionCached((<BinaryExpression>node).right));
-                        }
-                        // We didn't have a direct match. However, if the reference is a dotted name, this
-                        // may be an assignment to a left hand part of the reference. For example, for a
-                        // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
-                        // return the declared type.
-                        if (reference.kind === SyntaxKind.PropertyAccessExpression &&
-                            containsMatchingReference((<PropertyAccessExpression>reference).expression, (<BinaryExpression>node).left)) {
-                            return declaredType;
-                        }
-                        break;
-                    case SyntaxKind.VariableDeclaration:
-                        return getTypeAtVariableDeclaration(<VariableDeclaration>node);
-                    case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
-                        return getTypeAtForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                    return getTypeAtVariableDeclaration(<VariableDeclaration | BindingElement>node);
+                }
+                // If the node is not a variable declaration or binding element, it is an identifier
+                // or a dotted name that is the target of an assignment. If we have a match, reduce
+                // the declared type by the assigned type.
+                if (isMatchingReference(reference, node)) {
+                    return getAssignmentReducedType(declaredType, getAssignedType(<Expression>node));
+                }
+                // We didn't have a direct match. However, if the reference is a dotted name, this
+                // may be an assignment to a left hand part of the reference. For example, for a
+                // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
+                // return the declared type.
+                if (reference.kind === SyntaxKind.PropertyAccessExpression &&
+                    containsMatchingReference((<PropertyAccessExpression>reference).expression, node)) {
+                    return declaredType;
                 }
                 // Assignment doesn't affect reference
                 return undefined;
@@ -7503,10 +7532,6 @@ namespace ts {
                             return narrowTypeByTypeof(type, expr, assumeTrue);
                         }
                         break;
-                    case SyntaxKind.AmpersandAmpersandToken:
-                        return narrowTypeByAnd(type, expr, assumeTrue);
-                    case SyntaxKind.BarBarToken:
-                        return narrowTypeByOr(type, expr, assumeTrue);
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                 }
@@ -7556,36 +7581,6 @@ namespace ts {
                     getProperty(typeofEQFacts, right.text) || TypeFacts.TypeofEQHostObject :
                     getProperty(typeofNEFacts, right.text) || TypeFacts.TypeofNEHostObject;
                 return getTypeWithFacts(type, facts);
-            }
-
-            function narrowTypeByAnd(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                if (assumeTrue) {
-                    // The assumed result is true, therefore we narrow assuming each operand to be true.
-                    return narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ true);
-                }
-                else {
-                    // The assumed result is false. This means either the first operand was false, or the first operand was true
-                    // and the second operand was false. We narrow with those assumptions and union the two resulting types.
-                    return getUnionType([
-                        narrowType(type, expr.left, /*assumeTrue*/ false),
-                        narrowType(type, expr.right, /*assumeTrue*/ false)
-                    ]);
-                }
-            }
-
-            function narrowTypeByOr(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                if (assumeTrue) {
-                    // The assumed result is true. This means either the first operand was true, or the first operand was false
-                    // and the second operand was true. We narrow with those assumptions and union the two resulting types.
-                    return getUnionType([
-                        narrowType(type, expr.left, /*assumeTrue*/ true),
-                        narrowType(type, expr.right, /*assumeTrue*/ true)
-                    ]);
-                }
-                else {
-                    // The assumed result is false, therefore we narrow assuming each operand to be false.
-                    return narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ false);
-                }
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -8716,32 +8711,6 @@ namespace ts {
          */
         function isInferentialContext(mapper: TypeMapper) {
             return mapper && mapper.context;
-        }
-
-        // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
-        // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
-        // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
-        function isAssignmentTarget(node: Node): boolean {
-            while (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
-                node = node.parent;
-            }
-            while (true) {
-                if (node.parent.kind === SyntaxKind.PropertyAssignment) {
-                    node = node.parent.parent;
-                }
-                else if (node.parent.kind === SyntaxKind.ArrayLiteralExpression) {
-                    node = node.parent;
-                }
-                else {
-                    break;
-                }
-            }
-            const parent = node.parent;
-            return parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
-                (<BinaryExpression>parent).left === node ||
-                (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
-                (<ForInStatement | ForOfStatement>parent).initializer === node;
         }
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {

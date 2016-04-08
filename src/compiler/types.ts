@@ -1537,10 +1537,10 @@ namespace ts {
         antecedents: FlowNode[];
     }
 
-    // FlowAssignment represents a node that possibly assigns a value to one or more
-    // references.
+    // FlowAssignment represents a node that assigns a value to a narrowable reference,
+    // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
     export interface FlowAssignment extends FlowNode {
-        node: BinaryExpression | VariableDeclaration | ForInStatement | ForOfStatement;
+        node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
 
