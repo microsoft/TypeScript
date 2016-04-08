@@ -1217,7 +1217,9 @@ namespace ts {
             const body = node.body;
             if (isBlock(body)) {
                 statementsLocation = body.statements;
-                const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ !context.getCompilerOptions().noImplicitUseStrict);
+                // ensureUseStrict is false because no new prologue-directive should be added.
+                // the function will simply put already existed directive as a first statement in the target statement-array.
+                const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
                 // If the original body was a multi-line block, this must be a multi-line block.
