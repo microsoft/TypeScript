@@ -13,8 +13,15 @@ declare var x: any;
 
 
 //// [reactNamespaceJSXEmit.js]
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var i = 1, n = arguments.length; i < n; i++) {
+        var s = arguments[i];
+        if (s != null) for (var p in s) if (s.hasOwnProperty(p)) t[p] = s[p];
+    }
+    return t;
+};
 myReactLib.createElement("foo", {data: true});
 myReactLib.createElement(Bar, {x: x});
 myReactLib.createElement("x-component", null);
-myReactLib.createElement(Bar, myReactLib.__spread({}, x));
-myReactLib.createElement(Bar, myReactLib.__spread({}, x, {y: 2}));
+myReactLib.createElement(Bar, __assign({}, x));
+myReactLib.createElement(Bar, __assign({}, x, {y: 2}));
