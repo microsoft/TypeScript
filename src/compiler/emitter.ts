@@ -345,6 +345,16 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };`;
 
+        const assignHelper = `
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};`;
+
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -542,6 +552,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             let convertedLoopState: ConvertedLoopState;
 
             let extendsEmitted: boolean;
+            let assignEmitted: boolean;
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
             let awaiterEmitted: boolean;
@@ -625,6 +636,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 decorateEmitted = false;
                 paramEmitted = false;
                 awaiterEmitted = false;
+                assignEmitted = false;
                 tempFlags = 0;
                 tempVariables = undefined;
                 tempParameters = undefined;
@@ -1261,11 +1273,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     }
                     else {
                         // Either emit one big object literal (no spread attribs), or
-                        // a call to React.__spread
+                        // a call to the __assign helper
                         const attrs = openingNode.attributes;
                         if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
-                            emitExpressionIdentifier(syntheticReactRef);
-                            write(".__spread(");
+                            write("__assign(");
 
                             let haveOpenedObjectLiteral = false;
                             for (let i = 0; i < attrs.length; i++) {
@@ -7704,9 +7715,14 @@ const _super = (function (geti, seti) {
                 if (!compilerOptions.noEmitHelpers) {
                     // Only Emit __extends function when target ES5.
                     // For target ES6 and above, we can emit classDeclaration as is.
-                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
+                    if (languageVersion < ScriptTarget.ES6 && !extendsEmitted && node.flags & NodeFlags.HasClassExtends) {
                         writeLines(extendsHelper);
                         extendsEmitted = true;
+                    }
+
+                    if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttribute)) {
+                        writeLines(assignHelper);
+                        assignEmitted = true;
                     }
 
                     if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
