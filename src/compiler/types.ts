@@ -2462,8 +2462,7 @@ namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
-        listEmittedFiles?: boolean;
-        listEmittedFilesJson?: boolean;
+        listEmittedFiles?: EmittedFilesTarget;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
@@ -2507,6 +2506,11 @@ namespace ts {
         None = 0,
         Preserve = 1,
         React = 2
+    }
+
+    export const enum EmittedFilesTarget {
+        StdOut = 0,
+        JsonFile = 1,
     }
 
     export const enum NewLineKind {

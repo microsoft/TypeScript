@@ -623,7 +623,7 @@ namespace ts {
 
             reportDiagnostics(sortAndDeduplicateDiagnostics(diagnostics), compilerHost);
 
-            reportEmittedFiles(emitOutput.emittedFiles, compilerHost, /* toFile */ emitOutput.emittedFiles && compilerOptions.listEmittedFilesJson);
+            reportEmittedFiles(emitOutput.emittedFiles, compilerHost, compilerOptions.listEmittedFiles == EmittedFilesTarget.JsonFile);
 
             if (emitOutput.emitSkipped && diagnostics.length > 0) {
                 // If the emitter didn't emit anything, then pass that value along.

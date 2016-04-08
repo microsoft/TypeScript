@@ -338,11 +338,10 @@ namespace ts {
         },
         {
             name: "listEmittedFiles",
-            type: "boolean"
-        },
-        {
-            name: "listEmittedFilesJson",
-            type: "boolean"
+            type: {
+                "stdout": EmittedFilesTarget.StdOut,
+                "file": EmittedFilesTarget.JsonFile
+            }
         },
         {
             name: "lib",
