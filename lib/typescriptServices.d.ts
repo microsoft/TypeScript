@@ -360,6 +360,7 @@ declare namespace ts {
         HasDecorators = 8388608,
         HasParamDecorators = 16777216,
         HasAsyncFunctions = 33554432,
+        HasJsxSpreadAttribute = 1073741824,
         Modifier = 1022,
         AccessibilityModifier = 56,
         BlockScoped = 24576,
