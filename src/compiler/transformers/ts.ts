@@ -596,7 +596,7 @@ namespace ts {
 
             // Record an alias to avoid class double-binding.
             let decoratedClassAlias: Identifier;
-            if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.DecoratedClassWithSelfReference) {
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
                 enableExpressionSubstitutionForDecoratedClasses();
                 decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                 decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
@@ -1380,7 +1380,6 @@ namespace ts {
 
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
-                let properties: ObjectLiteralElement[];
                 if (shouldAddTypeMetadata(node)) {
                     decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node)));
                 }
@@ -1614,11 +1613,9 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode) {
-            // Clone the type name and parent it to a location outside of the current declaration.
-            const typeName = cloneEntityName(node.typeName, currentScope);
-            switch (resolver.getTypeReferenceSerializationKind(typeName)) {
+            switch (resolver.getTypeReferenceSerializationKind(node.typeName, currentScope)) {
                 case TypeReferenceSerializationKind.Unknown:
-                    const serialized = serializeEntityNameAsExpression(typeName, /*useFallback*/ true);
+                    const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
@@ -1634,7 +1631,7 @@ namespace ts {
                     );
 
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                    return serializeEntityNameAsExpression(typeName, /*useFallback*/ false);
+                    return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
 
                 case TypeReferenceSerializationKind.VoidType:
                     return createVoidZero();
@@ -1675,17 +1672,20 @@ namespace ts {
         function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
+                    const name = getMutableClone(<Identifier>node);
+                    name.original = undefined;
+                    name.parent = currentScope;
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
-                                createTypeOf(<Identifier>node),
+                                createTypeOf(name),
                                 createLiteral("undefined")
                             ),
-                            <Identifier>node
+                            name
                         );
                     }
 
-                    return <Identifier>node;
+                    return name;
 
                 case SyntaxKind.QualifiedName:
                     return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
@@ -2646,7 +2646,7 @@ namespace ts {
             else {
                 // We set the "PrefixExportedLocal" flag to indicate to any module transformer
                 // downstream that any `exports.` prefix should be added.
-                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.PrefixExportedLocal);
+                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
                 return name;
             }
         }
@@ -2738,41 +2738,52 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            return trySubstituteDecoratedClassName(node)
+                || trySubstituteNamespaceExportedName(node)
+                || node;
+        }
+
+        function trySubstituteDecoratedClassName(node: Identifier): Expression {
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original)) {
-                    if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
-                        // Due to the emit for class decorators, any reference to the class from inside of the class body
-                        // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                        // behavior of class names in ES6.
-                        const declaration = resolver.getReferencedValueDeclaration(original);
-                        if (declaration) {
-                            const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
-                            if (classAlias) {
-                                return getRelocatedClone(classAlias, /*location*/ node);
-                            }
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
+                    // Due to the emit for class decorators, any reference to the class from inside of the class body
+                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                    // behavior of class names in ES6.
+                    const declaration = resolver.getReferencedValueDeclaration(node);
+                    if (declaration) {
+                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                        if (classAlias) {
+                            return getRelocatedClone(classAlias, /*location*/ node);
                         }
                     }
                 }
             }
 
+            return undefined;
+        }
+
+        function trySubstituteNamespaceExportedName(node: Identifier): Expression {
             if (enabledSubstitutions & applicableSubstitutions) {
+                // If this is explicitly a local name, do not substitute.
+                if (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) {
+                    return node;
+                }
+
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
-                const original = getOriginalNode(node);
-                if (isIdentifier(original) && original.parent) {
-                    const container = resolver.getReferencedExportContainer(original);
-                    if (container) {
-                        const substitute =
-                            (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
-                            (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
-                        if (substitute) {
-                            return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
-                        }
+                const original = getSourceTreeNodeOfType(node, isIdentifier);
+                const container = resolver.getReferencedExportContainer(original, /*prefixLocals*/ false);
+                if (container && original !== container.name) {
+                    const substitute =
+                        (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
+                        (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                    if (substitute) {
+                        return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
                     }
                 }
             }
-            return node;
+
+            return undefined;
         }
 
         function substituteCallExpression(node: CallExpression): Expression {
@@ -2900,7 +2911,7 @@ namespace ts {
 
         function getSuperContainerAsyncMethodFlags() {
             return currentSuperContainer !== undefined
-                && resolver.getNodeCheckFlags(getOriginalNode(currentSuperContainer)) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+                && resolver.getNodeCheckFlags(currentSuperContainer) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
         }
     }
 }

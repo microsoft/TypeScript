@@ -309,7 +309,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal"
         }
 
-        if (useBuiltCompiler && !/^(no?|f(alse)?|0|-)$/i.test(process.env.USE_TRANSFORMS)) {
+        if (useBuiltCompiler && !environmentVariableIsDisabled("USE_TRANSFORMS")) {
             console.warn("\u001b[93mwarning: 'USE_TRANSFORMS' environment variable is not set to 'false'. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
@@ -658,19 +658,21 @@ function exec(cmd, completeHandler, errorHandler) {
 }
 
 function cleanTestDirs() {
-    // Clean the local baselines directory
-    if (fs.existsSync(localBaseline)) {
-        jake.rmRf(localBaseline);
-    }
+    if (!environmentVariableIsDisabled("CLEAN_TESTS")) {
+        // Clean the local baselines directory
+        if (fs.existsSync(localBaseline)) {
+            jake.rmRf(localBaseline);
+        }
 
-    // Clean the local Rwc baselines directory
-    if (fs.existsSync(localRwcBaseline)) {
-        jake.rmRf(localRwcBaseline);
-    }
+        // Clean the local Rwc baselines directory
+        if (fs.existsSync(localRwcBaseline)) {
+            jake.rmRf(localRwcBaseline);
+        }
 
-    jake.mkdirP(localRwcBaseline);
-    jake.mkdirP(localTest262Baseline);
-    jake.mkdirP(localBaseline);
+        jake.mkdirP(localRwcBaseline);
+        jake.mkdirP(localTest262Baseline);
+        jake.mkdirP(localBaseline);
+    }
 }
 
 // used to pass data from jake command line directly to run.js
@@ -833,7 +835,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit || 1;
     var testConfigFile = 'test.config';
-    if(fs.existsSync(testConfigFile)) {
+    if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
@@ -866,7 +868,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0) {
+            if (i === 0 && !environmentVariableIsDisabled("lint")) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -1259,3 +1261,11 @@ ProgressBar.prototype = {
         this.visible = true;
     }
 };
+
+function environmentVariableIsEnabled(name) {
+    return /^(y(es)?|t(rue)?|on|enabled?|1|\+)$/.test(process.env[name]);
+}
+
+function environmentVariableIsDisabled(name) {
+    return /^(no?|f(alse)?|off|disabled?|0|-)$/.test(process.env[name]);
+}

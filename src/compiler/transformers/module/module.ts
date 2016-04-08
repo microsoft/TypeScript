@@ -460,8 +460,7 @@ namespace ts {
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
             if (!node.isExportEquals) {
-                const original = getOriginalNode(node);
-                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
                     const statements: Statement[] = [];
                     addExportDefault(statements, node.expression, /*location*/ node);
                     return statements;
@@ -713,46 +712,43 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            const original = getOriginalNode(node);
-            if (isIdentifier(original)) {
-                const container = resolver.getReferencedExportContainer(original, (getNodeEmitFlags(node) & NodeEmitFlags.PrefixExportedLocal) !== 0);
-                if (container) {
-                    if (container.kind === SyntaxKind.SourceFile) {
-                        return createPropertyAccess(
-                            createIdentifier("exports"),
-                            getSynthesizedClone(node),
-                            /*location*/ node
-                        );
-                    }
+            const container = resolver.getReferencedExportContainer(node, (getNodeEmitFlags(node) & NodeEmitFlags.ExportName) !== 0);
+            if (container) {
+                if (container.kind === SyntaxKind.SourceFile) {
+                    return createPropertyAccess(
+                        createIdentifier("exports"),
+                        getSynthesizedClone(node),
+                        /*location*/ node
+                    );
                 }
-                else {
-                    const declaration = resolver.getReferencedImportDeclaration(node.parent ? node : original);
-                    if (declaration) {
-                        if (declaration.kind === SyntaxKind.ImportClause) {
-                            if (languageVersion >= ScriptTarget.ES5) {
-                                return createPropertyAccess(
-                                    getGeneratedNameForNode(declaration.parent),
-                                    createIdentifier("default"),
-                                    /*location*/ node
-                                );
-                            }
-                            else {
-                                return createElementAccess(
-                                    getGeneratedNameForNode(declaration.parent),
-                                    createLiteral("default"),
-                                    /*location*/ node
-                                );
-                            }
-                        }
-                        else if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                            const name = (<ImportSpecifier>declaration).propertyName
-                                || (<ImportSpecifier>declaration).name;
+            }
+            else {
+                const declaration = resolver.getReferencedImportDeclaration(node);
+                if (declaration) {
+                    if (declaration.kind === SyntaxKind.ImportClause) {
+                        if (languageVersion >= ScriptTarget.ES5) {
                             return createPropertyAccess(
-                                getGeneratedNameForNode(declaration.parent.parent.parent),
-                                getSynthesizedClone(name),
+                                getGeneratedNameForNode(declaration.parent),
+                                createIdentifier("default"),
                                 /*location*/ node
                             );
                         }
+                        else {
+                            return createElementAccess(
+                                getGeneratedNameForNode(declaration.parent),
+                                createLiteral("default"),
+                                /*location*/ node
+                            );
+                        }
+                    }
+                    else if (declaration.kind === SyntaxKind.ImportSpecifier) {
+                        const name = (<ImportSpecifier>declaration).propertyName
+                            || (<ImportSpecifier>declaration).name;
+                        return createPropertyAccess(
+                            getGeneratedNameForNode(declaration.parent.parent.parent),
+                            getSynthesizedClone(name),
+                            /*location*/ node
+                        );
                     }
                 }
             }
