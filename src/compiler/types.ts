@@ -397,6 +397,10 @@ namespace ts {
         HasParamDecorators =    1 << 24,  // If the file has parameter decorators (initialized by binding)
         HasAsyncFunctions =     1 << 25,  // If the file has async functions (initialized by binding)
 
+        // This was picked out from the 'master' branch.
+        // To keep the flags consistent, we're skipping a few ahead.
+        HasJsxSpreadAttribute = 1 << 30,
+
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,
