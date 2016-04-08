@@ -34,6 +34,7 @@ namespace ts.server {
         fileWatcher: FileWatcher;
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
         path: Path;
+        scriptKind: ScriptKind;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
@@ -192,8 +193,16 @@ namespace ts.server {
             return this.roots.map(root => root.fileName);
         }
 
-        getScriptKind() {
-            return ScriptKind.Unknown;
+        getScriptKind(fileName: string) {
+            const info = this.getScriptInfo(fileName);
+            if (!info) {
+                return undefined;
+            }
+
+            if (!info.scriptKind) {
+                info.scriptKind = getScriptKindFromFileName(fileName);
+            }
+            return info.scriptKind;
         }
 
         getScriptVersion(filename: string) {
@@ -988,7 +997,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
+        openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -1003,6 +1012,7 @@ namespace ts.server {
                 }
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.scriptKind = scriptKind;
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
@@ -1052,9 +1062,9 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string) {
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
             return info;

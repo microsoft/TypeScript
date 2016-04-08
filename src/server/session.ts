@@ -529,9 +529,9 @@ namespace ts.server {
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
          */
-        private openClientFile(fileName: string, fileContent?: string) {
+        private openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file, fileContent);
+            this.projectService.openClientFile(file, fileContent, scriptKind);
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -967,7 +967,22 @@ namespace ts.server {
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                this.openClientFile(openArgs.file, openArgs.fileContent);
+                let scriptKind: ScriptKind;
+                switch (openArgs.scriptKindName) {
+                    case ".ts":
+                        scriptKind = ScriptKind.TS;
+                        break;
+                    case ".js":
+                        scriptKind = ScriptKind.JS;
+                        break;
+                    case ".tsx":
+                        scriptKind = ScriptKind.TSX;
+                        break;
+                    case ".jsx":
+                        scriptKind = ScriptKind.JSX;
+                        break;
+                }
+                this.openClientFile(openArgs.file, openArgs.fileContent, scriptKind);
                 return {responseRequired: false};
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {

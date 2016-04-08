@@ -110,8 +110,8 @@ declare namespace FourSlashInterface {
         type(definitionIndex?: number): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
-        file(index: number, content?: string): any;
-        file(name: string, content?: string): any;
+        file(index: number, content?: string, scriptKindName?: string): any;
+        file(name: string, content?: string, scriptKindName?: string): any;
     }
     class verifyNegatable {
         private negative;

@@ -358,14 +358,14 @@ namespace FourSlash {
         }
 
         // Opens a file given its 0-based index or fileName
-        public openFile(index: number, content?: string): void;
-        public openFile(name: string, content?: string): void;
-        public openFile(indexOrName: any, content?: string) {
+        public openFile(index: number, content?: string, scriptKindName?: string): void;
+        public openFile(name: string, content?: string, scriptKindName?: string): void;
+        public openFile(indexOrName: any, content?: string, scriptKindName?: string) {
             const fileToOpen: FourSlashFile = this.findFile(indexOrName);
             fileToOpen.fileName = ts.normalizeSlashes(fileToOpen.fileName);
             this.activeFile = fileToOpen;
             // Let the host know that this file is now open
-            this.languageServiceAdapterHost.openFile(fileToOpen.fileName, content);
+            this.languageServiceAdapterHost.openFile(fileToOpen.fileName, content, scriptKindName);
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
@@ -2755,10 +2755,10 @@ namespace FourSlashInterface {
         // Opens a file, given either its index as it
         // appears in the test source, or its filename
         // as specified in the test metadata
-        public file(index: number, content?: string): void;
-        public file(name: string, content?: string): void;
-        public file(indexOrName: any, content?: string): void {
-            this.state.openFile(indexOrName, content);
+        public file(index: number, content?: string, scriptKindName?: string): void;
+        public file(name: string, content?: string, scriptKindName?: string): void;
+        public file(indexOrName: any, content?: string, scriptKindName?: string): void {
+            this.state.openFile(indexOrName, content, scriptKindName);
         }
     }
 

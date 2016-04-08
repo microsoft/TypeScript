@@ -518,6 +518,11 @@ declare namespace ts.server.protocol {
          * Then the known content will be used upon opening instead of the disk copy   
          */
         fileContent?: string;
+        /**
+         * Used to specify the script kind of the file explicitly. It could be one of the following:
+         *      ".ts", ".js", ".tsx", ".jsx"
+         */
+        scriptKindName?: string;
     }
 
     /**
