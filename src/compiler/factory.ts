@@ -149,10 +149,13 @@ namespace ts {
         return node;
     }
 
-    export function createTempVariable(location?: TextRange): Identifier {
+    export function createTempVariable(recordTempVariable: (node: Identifier) => void, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.autoGenerateKind = GeneratedIdentifierKind.Auto;
         getNodeId(name);
+        if (recordTempVariable) {
+            recordTempVariable(name);
+        }
         return name;
     }
 
@@ -710,6 +713,26 @@ namespace ts {
         return createVoid(createLiteral(0));
     }
 
+    export function createImportDeclaration(importClause: ImportClause, moduleSpecifier?: Expression, location?: TextRange): ImportDeclaration {
+        const node = <ImportDeclaration>createNode(SyntaxKind.ImportDeclaration, location);
+        node.importClause = importClause;
+        node.moduleSpecifier = moduleSpecifier;
+        return node;
+    }
+
+    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings, location?: TextRange): ImportClause {
+        const node = <ImportClause>createNode(SyntaxKind.ImportClause, location);
+        node.name = name;
+        node.namedBindings = namedBindings;
+        return node;
+    }
+
+    export function createNamedImports(elements: NodeArray<ImportSpecifier>, location?: TextRange): NamedImports {
+        const node = <NamedImports>createNode(SyntaxKind.NamedImports, location);
+        node.elements = elements;
+        return node;
+    }
+
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isIdentifier(memberName)) {
             return createPropertyAccess(target, getSynthesizedClone(memberName), location);
@@ -854,14 +877,12 @@ namespace ts {
         );
     }
 
-    export function createMetadataHelper(metadataKey: string, metadataValue: Expression, defer?: boolean) {
+    export function createMetadataHelper(metadataKey: string, metadataValue: Expression) {
         return createCall(
             createIdentifier("__metadata"),
             [
                 createLiteral(metadataKey),
-                defer
-                    ? createArrowFunction([], metadataValue)
-                    : metadataValue
+                metadataValue
             ]
         );
     }
@@ -1125,7 +1146,19 @@ namespace ts {
         thisArg: Expression;
     }
 
-    export function createCallBinding(expression: Expression, languageVersion?: ScriptTarget): CallBinding {
+    function shouldBeCapturedInTempVariable(node: Expression): boolean {
+        switch (skipParentheses(node).kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.ThisKeyword:
+            case SyntaxKind.NumericLiteral:
+            case SyntaxKind.StringLiteral:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    export function createCallBinding(expression: Expression, recordTempVariable: (temp: Identifier) => void, languageVersion?: ScriptTarget): CallBinding {
         const callee = skipOuterExpressions(expression, OuterExpressionKinds.All);
         let thisArg: Expression;
         let target: LeftHandSideExpression;
@@ -1140,32 +1173,44 @@ namespace ts {
         else {
             switch (callee.kind) {
                 case SyntaxKind.PropertyAccessExpression: {
-                    // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                    thisArg = createTempVariable();
-                    target = createPropertyAccess(
-                        createAssignment(
-                            thisArg,
-                            (<PropertyAccessExpression>callee).expression,
-                            /*location*/ (<PropertyAccessExpression>callee).expression
-                        ),
-                        (<PropertyAccessExpression>callee).name,
+                    if (shouldBeCapturedInTempVariable((<PropertyAccessExpression>callee).expression)) {
+                        // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
+                        thisArg = createTempVariable(recordTempVariable);
+                        target = createPropertyAccess(
+                            createAssignment(
+                                thisArg,
+                                (<PropertyAccessExpression>callee).expression,
+                            /*location*/(<PropertyAccessExpression>callee).expression
+                            ),
+                            (<PropertyAccessExpression>callee).name,
                         /*location*/ callee
-                    );
+                        );
+                    }
+                    else {
+                        thisArg = (<PropertyAccessExpression>callee).expression;
+                        target = <PropertyAccessExpression>callee; 
+                    }
                     break;
                 }
 
                 case SyntaxKind.ElementAccessExpression: {
-                    // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                    thisArg = createTempVariable();
-                    target = createElementAccess(
-                        createAssignment(
-                            thisArg,
-                            (<ElementAccessExpression>callee).expression,
-                            /*location*/ (<ElementAccessExpression>callee).expression
-                        ),
-                        (<ElementAccessExpression>callee).argumentExpression,
+                    if (shouldBeCapturedInTempVariable((<ElementAccessExpression>callee).expression)) {
+                        // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
+                        thisArg = createTempVariable(recordTempVariable);
+                        target = createElementAccess(
+                            createAssignment(
+                                thisArg,
+                                (<ElementAccessExpression>callee).expression,
+                            /*location*/(<ElementAccessExpression>callee).expression
+                            ),
+                            (<ElementAccessExpression>callee).argumentExpression,
                         /*location*/ callee
-                    );
+                        );
+                    }
+                    else {
+                        thisArg = (<ElementAccessExpression>callee).expression;
+                        target = <ElementAccessExpression>callee;
+                    }
 
                     break;
                 }
@@ -1204,7 +1249,7 @@ namespace ts {
     // Utilities
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
-        return !!(node.expression as StringLiteral).text.match(/use strict/);
+        return (node.expression as StringLiteral).text === "use strict";
     }
 
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
