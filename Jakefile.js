@@ -309,8 +309,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal"
         }
 
-        if (useBuiltCompiler && Boolean(process.env.USE_TRANSFORMS)) {
-            console.warn("\u001b[93mwarning: Found 'USE_TRANSFORMS' environment variable. Experimental transforms will be enabled by default.\u001b[0m");
+        if (useBuiltCompiler && !/^(no?|f(alse)?|0|-)$/i.test(process.env.USE_TRANSFORMS)) {
+            console.warn("\u001b[93mwarning: 'USE_TRANSFORMS' environment variable is not set to 'false'. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";

@@ -645,7 +645,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
-            getEnvironmentVariable: sys.getEnvironmentVariable
+            getEnvironmentVariable: name => getEnvironmentVariable(name, /*host*/ undefined)
         };
     }
 
@@ -996,11 +996,12 @@ namespace ts {
             const start = new Date().getTime();
 
             // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
-            if (/^(y(es)?|t(rue|ransforms?)?|1|\+)$/i.test(getEnvironmentVariable("USE_TRANSFORMS", host))) {
-                options.experimentalTransforms = true;
+            let useLegacyEmitter = options.useLegacyEmitter;
+            if (/^(no?|f(alse)?|0|-)$/i.test(getEnvironmentVariable("USE_TRANSFORMS", host))) {
+                useLegacyEmitter = true;
             }
 
-            const fileEmitter = options.experimentalTransforms ? printFiles : emitFiles;
+            const fileEmitter = useLegacyEmitter ? emitFiles : printFiles;
             const emitResult = fileEmitter(
                 emitResolver,
                 getEmitHost(writeFileCallback),
