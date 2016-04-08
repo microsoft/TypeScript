@@ -1261,6 +1261,7 @@ namespace ts {
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
      */
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+        Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         for (let i = 0; i < source.length; i++) {
             if (isPrologueDirective(source[i])) {
@@ -1268,11 +1269,11 @@ namespace ts {
                     foundUseStrict = true;
                 }
 
-                target.unshift(source[i]);
+                target.push(source[i]);
             }
             else {
                 if (ensureUseStrict && !foundUseStrict) {
-                    target.unshift(startOnNewLine(createStatement(createLiteral("use strict"))));
+                    target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
                 }
 
                 return i;
