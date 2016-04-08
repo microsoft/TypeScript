@@ -13,7 +13,7 @@ namespace ts {
 
     const emptyArray: any[] = [];
 
-    export const version = "1.8.9";
+    export const version = "1.8.10";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         let fileName = "tsconfig.json";
