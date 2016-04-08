@@ -333,11 +333,10 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
-            // this option will be removed when this is merged with master and exists solely
-            // to enable the tree transforming emitter side-by-side with the existing emitter.
-            name: "experimentalTransforms",
+            name: "useLegacyEmitter",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Use_the_legacy_emitter_instead_of_the_transforming_emitter
         }
     ];
 

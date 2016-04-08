@@ -2498,7 +2498,7 @@ namespace ts {
         noImplicitUseStrict?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
-        /* @internal */ experimentalTransforms?: boolean;
+        /* @internal */ useLegacyEmitter?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;

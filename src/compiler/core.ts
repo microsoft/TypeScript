@@ -1105,11 +1105,11 @@ namespace ts {
                 return currentAssertionLevel;
             }
 
-            const developmentMode = sys && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"));
-            if (developmentMode === undefined) {
+            if (sys === undefined) {
                 return AssertionLevel.None;
             }
 
+            const developmentMode = /^development$/i.test(getEnvironmentVariable("NODE_ENV"));
             currentAssertionLevel = developmentMode
                 ? AssertionLevel.Normal
                 : AssertionLevel.None;
