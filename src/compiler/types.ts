@@ -1709,6 +1709,7 @@ namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: Diagnostic[];
+        emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -2460,6 +2461,7 @@ namespace ts {
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        listEmittedFiles?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
 

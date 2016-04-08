@@ -337,6 +337,10 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
+            name: "listEmittedFiles",
+            type: "boolean"
+        },
+        {
             name: "lib",
             type: "list",
             element: {

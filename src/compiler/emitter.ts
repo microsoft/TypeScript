@@ -380,6 +380,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const modulekind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         let emitSkipped = false;
         const newLine = host.getNewLine();
@@ -390,6 +391,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         return {
             emitSkipped,
             diagnostics: emitterDiagnostics.getDiagnostics(),
+            emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList
         };
 
@@ -8232,6 +8234,16 @@ const _super = (function (geti, seti) {
 
             if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+            }
+
+            if (!emitSkipped && emittedFilesList) {
+                emittedFilesList.push(jsFilePath);
+                if (sourceMapFilePath) {
+                    emittedFilesList.push(sourceMapFilePath);
+                }
+                if (declarationFilePath) {
+                    emittedFilesList.push(declarationFilePath);
+                }
             }
         }
     }

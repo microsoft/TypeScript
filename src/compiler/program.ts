@@ -1006,7 +1006,7 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -1026,6 +1026,7 @@ namespace ts {
                     return {
                         diagnostics: concatenate(diagnostics, declarationDiagnostics),
                         sourceMaps: undefined,
+                        emittedFiles: undefined,
                         emitSkipped: true
                     };
                 }
