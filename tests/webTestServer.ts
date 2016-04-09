@@ -48,6 +48,53 @@ function log(msg: string) {
     }
 }
 
+
+let directorySeparator = "/";
+
+function getRootLength(path: string): number {
+    if (path.charAt(0) === directorySeparator) {
+        if (path.charAt(1) !== directorySeparator) return 1;
+        const p1 = path.indexOf("/", 2);
+        if (p1 < 0) return 2;
+        const p2 = path.indexOf("/", p1 + 1);
+        if (p2 < 0) return p1 + 1;
+        return p2 + 1;
+    }
+    if (path.charAt(1) === ":") {
+        if (path.charAt(2) === directorySeparator) return 3;
+        return 2;
+    }
+    // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
+    // if <host> is omitted then it is assumed that host value is 'localhost',
+    // however slash after the omitted <host> is not removed.
+    // file:///folder1/file1 - this is a correct URI
+    // file://folder2/file2 - this is an incorrect URI
+    if (path.lastIndexOf("file:///", 0) === 0) {
+        return "file:///".length;
+    }
+    const idx = path.indexOf("://");
+    if (idx !== -1) {
+        return idx + "://".length;
+    }
+    return 0;
+}
+
+function getDirectoryPath(path: string): any {
+    path = switchToForwardSlashes(path);
+    return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
+}
+
+function ensureDirectoriesExist(path: string) {
+    path = switchToForwardSlashes(path);
+    if (path.length > getRootLength(path) && !fs.existsSync(path)) {
+        const parentDirectory = getDirectoryPath(path);
+        ensureDirectoriesExist(parentDirectory);
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path);
+        }
+    }
+}
+
 // Copied from the compiler sources
 function dir(path: string, spec?: string, options?: any) {
     options = options || <{ recursive?: boolean; }>{};
@@ -94,28 +141,16 @@ function deleteFolderRecursive(path: string) {
 };
 
 function writeFile(path: string, data: any, opts: { recursive: boolean }) {
-    try {
-        fs.writeFileSync(path, data);
-    } catch (e) {
-        // assume file was written to a directory that exists, if not, start recursively creating them as necessary
-        var parts = switchToForwardSlashes(path).split('/');
-        for (var i = 0; i < parts.length; i++) {
-            var subDir = parts.slice(0, i).join('/');
-            if (!fs.existsSync(subDir)) {
-                fs.mkdir(subDir);
-            }
-        }
-        fs.writeFileSync(path, data);
-    }
+    ensureDirectoriesExist(getDirectoryPath(path));
+    fs.writeFileSync(path, data);
 }
 
 /// Request Handling ///
 
 function handleResolutionRequest(filePath: string, res: http.ServerResponse) {    
-    var resolvedPath = path.resolve(filePath, '');
-    resolvedPath = resolvedPath.substring(resolvedPath.indexOf('tests'));
+    var resolvedPath = path.resolve(filePath);
     resolvedPath = switchToForwardSlashes(resolvedPath);
-    send('success', res, resolvedPath);
+    send('success', res, resolvedPath, 'text/javascript');
     return;
 }
 
@@ -174,6 +209,7 @@ function getRequestOperation(req: http.ServerRequest, filename: string) {
         else return RequestType.GetDir;
     }
     else {
+
         var queryData: any = url.parse(req.url, true).query;
         if (req.method === 'GET' && queryData.resolve !== undefined) return RequestType.ResolveFile
         // mocha uses ?grep=<regexp> query string as equivalent to the --grep command line option used to filter tests
@@ -223,7 +259,7 @@ function handleRequestOperation(req: http.ServerRequest, res: http.ServerRespons
             send('success', res, null);
             break;
         case RequestType.WriteDir:
-            fs.mkdirSync(reqPath);
+            ensureDirectoriesExist(reqPath);
             send('success', res, null);
             break;
         case RequestType.DeleteFile:
