@@ -2853,7 +2853,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 const comments = getLeadingCommentRanges(currentText, node.pos);
 
                 if (comments) {
-                    pos = comments[comments.length - 1].end;
+                    const lastComment = lastOrUndefined(comments);
+                    if (lastComment) {
+                        pos = lastComment.end;
+                    }
                 }
 
                 pos = currentText.indexOf("{", pos) + 1;
@@ -2891,7 +2894,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
 
                 if (!!node.statements.length) {
-                    const lastStatementNode = node.statements[node.statements.length - 1];
+                    const lastStatementNode = lastOrUndefined(node.statements);
                     emitLeadingCommentsOfPosition(lastStatementNode.end);
                 }
 
