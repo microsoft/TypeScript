@@ -488,14 +488,14 @@ class ProjectRunner extends RunnerBase {
                         }
                     });
 
-                    it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
-                        if (compilerResult.sourceMapData) {
-                            Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
-                                return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
-                            });
-                        }
-                    });
+                    // it("SourceMapRecord for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
+                    //     if (compilerResult.sourceMapData) {
+                    //         Harness.Baseline.runBaseline("SourceMapRecord for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
+                    //             return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                    //                 ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
+                    //         });
+                    //     }
+                    // });
 
                     // Verify that all the generated .d.ts files compile
 
