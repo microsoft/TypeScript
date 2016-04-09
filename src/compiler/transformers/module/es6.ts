@@ -23,6 +23,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return visitImportClause(<ImportClause>node);
                 case SyntaxKind.NamedImports:
@@ -30,9 +32,23 @@ namespace ts {
                     return visitNamedBindings(<NamedImportBindings>node);
                 case SyntaxKind.ImportSpecifier:
                     return visitImportSpecifier(<ImportSpecifier>node);
+                case SyntaxKind.ExportAssignment:
+                    return visitExportAssignment(<ExportAssignment>node);
             }
 
             return node;
+        }
+
+        function visitExportAssignment(node: ExportAssignment): ExportDeclaration {
+            if (node.isExportEquals) {
+                return undefined; // do not emit export equals for ES6
+            }
+            const original = getOriginalNode(node);
+            return nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original) ? node: undefined;
+        }
+
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): ImportEqualsDeclaration {
+            return !isExternalModuleImportEqualsDeclaration(node) || resolver.isReferencedAliasDeclaration(node) ? node : undefined;
         }
 
         function visitImportDeclaration(node: ImportDeclaration) {
