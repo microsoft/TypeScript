@@ -121,7 +121,9 @@ namespace ts {
             );
 
             // Write the call to `System.register`
-            const updated = updateSourceFile(node, [
+            // Reset the source-file's nodeFlag to not emit helpers because we already set one in the body
+            // So the helper will be emit at the correct position instead of at the top of the source-file
+            return updateSourceFile(node, [
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
@@ -130,11 +132,7 @@ namespace ts {
                             : [dependencies, body]
                     )
                 )
-            ]);
-
-            // Reset the sourcefile's nodeFlag to not emit helpers because we already set one in the body
-            setNodeEmitFlags(updated, ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(updated));
-            return updated;
+            ], /*nodeEmitFlags*/ ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(node));
         }
 
         /**
@@ -1379,9 +1377,10 @@ namespace ts {
             hoistBindingElement(node, /*isExported*/ false);
         }
 
-        function updateSourceFile(node: SourceFile, statements: Statement[]) {
+        function updateSourceFile(node: SourceFile, statements: Statement[], nodeEmitFlags: NodeEmitFlags) {
             const updated = getMutableClone(node);
             updated.statements = createNodeArray(statements, node.statements);
+            setNodeEmitFlags(updated, nodeEmitFlags);
             return updated;
         }
     }
