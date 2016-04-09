@@ -7335,45 +7335,52 @@ namespace ts {
             return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : emptyUnionType;
         }
 
-        function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
-            const type = checkExpressionCached(node.right);
-            const parent = node.parent;
-            if (parent.kind === SyntaxKind.ArrayLiteralExpression || parent.kind === SyntaxKind.PropertyAssignment) {
-                const assignedType = getAssignedType(node);
-                return getUnionType([getTypeWithFacts(assignedType, TypeFacts.NEUndefined), type]);
+        function getTypeWithDefault(type: Type, defaultExpression: Expression) {
+            if (defaultExpression) {
+                const defaultType = checkExpressionCached(defaultExpression);
+                return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType]);
             }
             return type;
         }
 
-        function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
-            const arrayLikeType = getAssignedType(node);
-            const elementType = checkIteratedTypeOrElementType(arrayLikeType, node, /*allowStringInput*/ false);
-            const propName = "" + indexOf(node.elements, element);
-            return isTupleLikeType(arrayLikeType) && getTypeOfPropertyOfType(arrayLikeType, propName) || elementType;
-        }
-
-        function getAssignedTypeOfSpreadElement(node: SpreadElementExpression): Type {
-            const arrayLikeType = getAssignedType(<ArrayLiteralExpression>node.parent);
-            const elementType = checkIteratedTypeOrElementType(arrayLikeType, node, /*allowStringInput*/ false);
-            return createArrayType(elementType);
-        }
-
-        function getAssignedTypeOfPropertyAssignment(node: PropertyAssignment | ShorthandPropertyAssignment): Type {
-            const objectType = getAssignedType(<ObjectLiteralExpression>node.parent);
-            const text = getTextOfPropertyName(node.name);
-            return getTypeOfPropertyOfType(objectType, text) ||
-                isNumericLiteralName(text) && getIndexTypeOfType(objectType, IndexKind.Number) ||
-                getIndexTypeOfType(objectType, IndexKind.String) ||
+        function getTypeOfDestructuredProperty(type: Type, name: Identifier | LiteralExpression | ComputedPropertyName) {
+            const text = getTextOfPropertyName(name);
+            return getTypeOfPropertyOfType(type, text) ||
+                isNumericLiteralName(text) && getIndexTypeOfType(type, IndexKind.Number) ||
+                getIndexTypeOfType(type, IndexKind.String) ||
                 unknownType;
         }
 
+        function getTypeOfDestructuredArrayElement(type: Type, index: number) {
+            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index) ||
+                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) ||
+                unknownType;
+        }
+
+        function getTypeOfDestructuredSpreadElement(type: Type) {
+            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false) || unknownType);
+        }
+
+        function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
+            return node.parent.kind === SyntaxKind.ArrayLiteralExpression || node.parent.kind === SyntaxKind.PropertyAssignment ?
+                getTypeWithDefault(getAssignedType(node), node.right) :
+                checkExpressionCached(node.right);
+        }
+
+        function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
+            return getTypeOfDestructuredArrayElement(getAssignedType(node), indexOf(node.elements, element));
+        }
+
+        function getAssignedTypeOfSpreadElement(node: SpreadElementExpression): Type {
+            return getTypeOfDestructuredSpreadElement(getAssignedType(<ArrayLiteralExpression>node.parent));
+        }
+
+        function getAssignedTypeOfPropertyAssignment(node: PropertyAssignment | ShorthandPropertyAssignment): Type {
+            return getTypeOfDestructuredProperty(getAssignedType(<ObjectLiteralExpression>node.parent), node.name);
+        }
+
         function getAssignedTypeOfShorthandPropertyAssignment(node: ShorthandPropertyAssignment): Type {
-            if (node.objectAssignmentInitializer) {
-                const defaultType = checkExpressionCached(node.objectAssignmentInitializer);
-                const assignedType = getAssignedTypeOfPropertyAssignment(node);
-                return getUnionType([getTypeWithFacts(assignedType, TypeFacts.NEUndefined), defaultType]);
-            }
-            return getAssignedTypeOfPropertyAssignment(node);
+            return getTypeWithDefault(getAssignedTypeOfPropertyAssignment(node), node.objectAssignmentInitializer);
         }
 
         function getAssignedType(node: Expression): Type {
@@ -7382,7 +7389,7 @@ namespace ts {
                 case SyntaxKind.ForInStatement:
                     return stringType;
                 case SyntaxKind.ForOfStatement:
-                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression);
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression) || unknownType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
                 case SyntaxKind.ArrayLiteralExpression:
@@ -7395,6 +7402,36 @@ namespace ts {
                     return getAssignedTypeOfShorthandPropertyAssignment(<ShorthandPropertyAssignment>parent);
             }
             return unknownType;
+        }
+
+        function getInitialTypeOfBindingElement(node: BindingElement): Type {
+            const pattern = <BindingPattern>node.parent;
+            const parentType = getInitialType(<VariableDeclaration | BindingElement>pattern.parent);
+            const type = pattern.kind === SyntaxKind.ObjectBindingPattern ?
+                getTypeOfDestructuredProperty(parentType, node.propertyName || <Identifier>node.name) :
+                !node.dotDotDotToken ?
+                    getTypeOfDestructuredArrayElement(parentType, indexOf(pattern.elements, node)) :
+                    getTypeOfDestructuredSpreadElement(parentType);
+            return getTypeWithDefault(type, node.initializer);
+        }
+
+        function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
+            if (node.initializer) {
+                return checkExpressionCached(node.initializer);
+            }
+            if (node.parent.parent.kind === SyntaxKind.ForInStatement) {
+                return stringType;
+            }
+            if (node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                return checkRightHandSideOfForOf((<ForOfStatement>node.parent.parent).expression) || unknownType;
+            }
+            return unknownType;
+        }
+
+        function getInitialType(node: VariableDeclaration | BindingElement) {
+            return node.kind === SyntaxKind.VariableDeclaration ?
+                getInitialTypeOfVariableDeclaration(<VariableDeclaration>node) :
+                getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
@@ -7446,20 +7483,12 @@ namespace ts {
                 }
             }
 
-            function getTypeAtVariableDeclaration(node: VariableDeclaration | BindingElement) {
-                if (reference.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
-                    if (node.initializer) {
-                        return getAssignmentReducedType(declaredType, checkExpressionCached(node.initializer));
-                    }
-                    return declaredType; // !!! TODO
-                }
-                return undefined;
-            }
-
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
-                if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
-                    return getTypeAtVariableDeclaration(<VariableDeclaration | BindingElement>node);
+                if ((node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) &&
+                    reference.kind === SyntaxKind.Identifier &&
+                    getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
+                    return getAssignmentReducedType(declaredType, getInitialType(<VariableDeclaration | BindingElement>node));
                 }
                 // If the node is not a variable declaration or binding element, it is an identifier
                 // or a dotted name that is the target of an assignment. If we have a match, reduce
@@ -14091,23 +14120,21 @@ namespace ts {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
-
             if (languageVersion >= ScriptTarget.ES6) {
                 return checkElementTypeOfIterable(inputType, errorNode);
             }
-
             if (allowStringInput) {
                 return checkElementTypeOfArrayOrString(inputType, errorNode);
             }
-
             if (isArrayLikeType(inputType)) {
                 const indexType = getIndexTypeOfType(inputType, IndexKind.Number);
                 if (indexType) {
                     return indexType;
                 }
             }
-
-            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            if (errorNode) {
+                error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            }
             return unknownType;
         }
 
