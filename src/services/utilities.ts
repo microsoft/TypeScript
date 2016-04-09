@@ -260,29 +260,29 @@ namespace ts {
     /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
-    export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, n => isWord(n.kind));
+    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTouchingToken(sourceFile, position, n => isWord(n.kind), includeJsDocComment);
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
      * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind), includeJsDocComment);
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition);
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, includeJsDocComment = false): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment = false): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -290,10 +290,34 @@ namespace ts {
                 return current;
             }
 
+            if (includeJsDocComment) {
+                const jsDocChildren = ts.filter(current.getChildren(), isJSDocNode);
+                for (const jsDocChild of jsDocChildren) {
+                    let start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
+                    if (start <= position) {
+                        let end = jsDocChild.getEnd();
+                        if (position < end || (position === end && jsDocChild.kind === SyntaxKind.EndOfFileToken)) {
+                            current = jsDocChild;
+                            continue outer;
+                        }
+                        else if (includeItemAtEndPosition && end === position) {
+                            let previousToken = findPrecedingToken(position, sourceFile, jsDocChild);
+                            if (previousToken && includeItemAtEndPosition(previousToken)) {
+                                return previousToken;
+                            }
+                        }
+                    }
+                }
+            }
+
             // find the child that contains 'position'
             for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 let child = current.getChildAt(i);
-                let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+                // all jsDocComment nodes were already visited
+                if (isJSDocNode(child)) {
+                    continue;
+                }
+                let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
                 if (start <= position) {
                     let end = child.getEnd();
                     if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
@@ -308,6 +332,7 @@ namespace ts {
                     }
                 }
             }
+
             return current;
         }
     }
@@ -501,11 +526,13 @@ namespace ts {
         }
 
         if (node) {
-            let jsDocComment = node.jsDocComment;
-            if (jsDocComment) {
-                for (let tag of jsDocComment.tags) {
-                    if (tag.pos <= position && position <= tag.end) {
-                        return tag;
+            let jsDocComments = node.jsDocComments;
+            if (jsDocComments) {
+                for (const jsDocComment of jsDocComments) {
+                    for (const tag of jsDocComment.tags) {
+                        if (tag.pos <= position && position <= tag.end) {
+                            return tag;
+                        }
                     }
                 }
             }
@@ -615,7 +642,7 @@ namespace ts {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
             if (node.parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).left === node &&
                 (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
@@ -629,7 +656,7 @@ namespace ts {
 
             // [a, b, c] of
             // [x, [a, b, c] ] = someExpression
-            // or 
+            // or
             // {x, a: {a, b, c} } = someExpression
             if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;

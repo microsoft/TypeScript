@@ -402,15 +402,15 @@ namespace ts {
             case SyntaxKind.JSDocTemplateTag:
                 return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
-                return visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
-                    visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocTypedefTag>node).name) ||
                     visitNode(cbNode, (<JSDocTypedefTag>node).type);
             case SyntaxKind.JSDocTypeLiteral:
                 return visitNodes(cbNodes, (<JSDocTypeLiteral>node).members);
             case SyntaxKind.JSDocPropertyTag:
-                return visitNode(cbNode, (<JSDocPropertyTag>node).name) ||
-                    visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
-                    visitNode(cbNode, (<JSDocPropertyTag>node).type);
+                return visitNode(cbNode, (<JSDocPropertyTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocPropertyTag>node).type) ||
+                    visitNode(cbNode, (<JSDocPropertyTag>node).name);
         }
     }
 
@@ -638,9 +638,14 @@ namespace ts {
                 if (comments) {
                     for (const comment of comments) {
                         const jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
-                        if (jsDocComment) {
-                            node.jsDocComment = jsDocComment;
+                        if (!jsDocComment) {
+                            continue;
                         }
+
+                        if (!node.jsDocComments) {
+                            node.jsDocComments = [];
+                        }
+                        node.jsDocComments.push(jsDocComment);
                     }
                 }
             }
@@ -6105,13 +6110,15 @@ namespace ts {
                                 typedefTag.type = typedefTag.jsDocTypeTag.typeExpression.type;
                             }
                         }
-                        if (!typedefTag.type) {
-                            const tagType = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, currentParentJSDocTag.pos);
-                            if (typedefTag.jsDocPropertyTags){
-                                tagType.members = <NodeArray<JSDocPropertyTag>>[];
-                                addRange(tagType.members, typedefTag.jsDocPropertyTags);
-                            }
-                            typedefTag.type = finishNode(tagType, currentParentJSDocTagEnd);
+                        if (!typedefTag.type && typedefTag.jsDocPropertyTags) {
+                            const childrenTagPoses = ts.map(typedefTag.jsDocPropertyTags, tag => tag.pos);
+                            const childrenTagEnds = ts.map(typedefTag.jsDocPropertyTags, tag => tag.end);
+                            const pos = Math.min(...childrenTagPoses);
+                            const end = Math.max(...childrenTagEnds);
+                            const tagType = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, pos);
+                            tagType.members = <NodeArray<JSDocPropertyTag>>[];
+                            addRange(tagType.members, typedefTag.jsDocPropertyTags);
+                            typedefTag.type = finishNode(tagType, end);
                         }
                     }
 
@@ -6545,10 +6552,6 @@ namespace ts {
                     node._children = undefined;
                 }
 
-                if (node.jsDocComment) {
-                    node.jsDocComment = undefined;
-                }
-
                 node.pos += delta;
                 node.end += delta;
 
@@ -6557,6 +6560,11 @@ namespace ts {
                 }
 
                 forEachChild(node, visitNode, visitArray);
+                if (node.jsDocComments) {
+                    for (const jsDocComment of node.jsDocComments) {
+                        forEachChild(jsDocComment, visitNode, visitArray);
+                    }
+                }
                 checkNodePositions(node, aggressiveChecks);
             }
 

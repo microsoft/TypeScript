@@ -203,14 +203,52 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
             return node.pos;
         }
 
+        if (isJSDocNode(node)) {
+            return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        }
+
+        if (node.jsDocComments && node.jsDocComments.length > 0 && includeJsDocComment) {
+            return getTokenPosOfNode(node.jsDocComments[0]);
+        }
+
+        if (node.kind === SyntaxKind.SyntaxList) {
+            const childrenPoses = ts.map((<SyntaxList>node)._children, child => getTokenPosOfNode(<Node>child, sourceFile, includeJsDocComment));
+            return Math.min(...childrenPoses);
+        }
+
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+    }
+
+    export function isJSDocNode(node: Node) {
+        return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+    export function isJSDocType(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.JSDocAllType:
+            case SyntaxKind.JSDocUnknownType:
+            case SyntaxKind.JSDocArrayType:
+            case SyntaxKind.JSDocUnionType:
+            case SyntaxKind.JSDocTupleType:
+            case SyntaxKind.JSDocNullableType:
+            case SyntaxKind.JSDocNonNullableType:
+            case SyntaxKind.JSDocRecordType:
+            case SyntaxKind.JSDocRecordMember:
+            case SyntaxKind.JSDocTypeReference:
+            case SyntaxKind.JSDocOptionalType:
+            case SyntaxKind.JSDocFunctionType:
+            case SyntaxKind.JSDocVariadicType:
+            case SyntaxKind.JSDocConstructorType:
+            case SyntaxKind.JSDocThisType:
+                return true;
+        }
+        return false;
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
@@ -1199,26 +1237,28 @@ namespace ts {
             return undefined;
         }
 
-        const jsDocComment = getJSDocComment(node, checkParentVariableStatement);
-        if (!jsDocComment) {
+        const jsDocComments = getJSDocComments(node, checkParentVariableStatement);
+        if (!jsDocComments) {
             return undefined;
         }
 
-        for (const tag of jsDocComment.tags) {
-            if (tag.kind === kind) {
-                return tag;
+        for (const jsDocComment of jsDocComments) {
+            for (const tag of jsDocComment.tags) {
+                if (tag.kind === kind) {
+                    return tag;
+                }
             }
         }
     }
 
-    function getJSDocComment(node: Node, checkParentVariableStatement: boolean): JSDocComment {
-        if (node.jsDocComment) {
-            return node.jsDocComment;
+    function getJSDocComments(node: Node, checkParentVariableStatement: boolean): JSDocComment[] {
+        if (node.jsDocComments) {
+            return node.jsDocComments;
         }
-        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement. 
-        // /** 
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
+        // /**
         //   * @param {number} name
-        //   * @returns {number} 
+        //   * @returns {number}
         //   */
         // var x = function(name) { return name.length; }
         if (checkParentVariableStatement) {
@@ -1229,7 +1269,7 @@ namespace ts {
 
             const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
             if (variableStatementNode) {
-                return variableStatementNode.jsDocComment;
+                return variableStatementNode.jsDocComments;
             }
 
             // Also recognize when the node is the RHS of an assignment expression
@@ -1240,12 +1280,12 @@ namespace ts {
                 (parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
                 parent.parent.kind === SyntaxKind.ExpressionStatement;
             if (isSourceOfAssignmentExpressionStatement) {
-                return parent.parent.jsDocComment;
+                return parent.parent.jsDocComments;
             }
 
             const isPropertyAssignmentExpression = parent && parent.kind === SyntaxKind.PropertyAssignment;
             if (isPropertyAssignmentExpression) {
-                return parent.jsDocComment;
+                return parent.jsDocComments;
             }
         }
 
@@ -1270,14 +1310,16 @@ namespace ts {
             // annotation.
             const parameterName = (<Identifier>parameter.name).text;
 
-            const jsDocComment = getJSDocComment(parameter.parent, /*checkParentVariableStatement*/ true);
-            if (jsDocComment) {
-                for (const tag of jsDocComment.tags) {
-                    if (tag.kind === SyntaxKind.JSDocParameterTag) {
-                        const parameterTag = <JSDocParameterTag>tag;
-                        const name = parameterTag.preParameterName || parameterTag.postParameterName;
-                        if (name.text === parameterName) {
-                            return parameterTag;
+            const jsDocComments = getJSDocComments(parameter.parent, /*checkParentVariableStatement*/ true);
+            if (jsDocComments) {
+                for (const jsDocComment of jsDocComments) {
+                    for (const tag of jsDocComment.tags) {
+                        if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                            const parameterTag = <JSDocParameterTag>tag;
+                            const name = parameterTag.preParameterName || parameterTag.postParameterName;
+                            if (name.text === parameterName) {
+                                return parameterTag;
+                            }
                         }
                     }
                 }
@@ -1374,6 +1416,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.TypeParameter:
             case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.JSDocTypedefTag:
                 return true;
         }
         return false;
