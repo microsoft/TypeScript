@@ -7590,7 +7590,7 @@ namespace ts {
                     assumeTrue ? TypeFacts.EQUndefinedOrNull : TypeFacts.NEUndefinedOrNull :
                     expr.right.kind === SyntaxKind.NullKeyword ?
                         assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
-                        assumeTrue ? TypeFacts.EQUndefined: TypeFacts.NEUndefined;
+                        assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                 return getTypeWithFacts(type, facts);
             }
 

@@ -441,8 +441,6 @@ namespace ts {
             let savedCurrentFlow: FlowNode;
             let savedBreakTarget: FlowLabel;
             let savedContinueTarget: FlowLabel;
-            let savedTrueTarget: FlowLabel;
-            let savedFalseTarget: FlowLabel;
             let savedActiveLabels: ActiveLabel[];
 
             const kind = node.kind;
