@@ -34,27 +34,27 @@ Date.prototype.toTimeString();
 
 Date.prototype.toLocaleString();
 >Date.prototype.toLocaleString() : string
->Date.prototype.toLocaleString : () => string
+>Date.prototype.toLocaleString : { (): string; (locales?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 >Date.prototype : Date
 >Date : DateConstructor
 >prototype : Date
->toLocaleString : () => string
+>toLocaleString : { (): string; (locales?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 
 Date.prototype.toLocaleDateString();
 >Date.prototype.toLocaleDateString() : string
->Date.prototype.toLocaleDateString : () => string
+>Date.prototype.toLocaleDateString : { (): string; (locales?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 >Date.prototype : Date
 >Date : DateConstructor
 >prototype : Date
->toLocaleDateString : () => string
+>toLocaleDateString : { (): string; (locales?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 
 Date.prototype.toLocaleTimeString();
 >Date.prototype.toLocaleTimeString() : string
->Date.prototype.toLocaleTimeString : () => string
+>Date.prototype.toLocaleTimeString : { (): string; (locale?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 >Date.prototype : Date
 >Date : DateConstructor
 >prototype : Date
->toLocaleTimeString : () => string
+>toLocaleTimeString : { (): string; (locale?: string[], options?: Intl.DateTimeFormatOptions): string; (locale?: string, options?: Intl.DateTimeFormatOptions): string; }
 
 Date.prototype.valueOf();
 >Date.prototype.valueOf() : number

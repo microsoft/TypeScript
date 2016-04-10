@@ -117,6 +117,7 @@ namespace ts {
         let hasAsyncFunctions: boolean;
         let hasDecorators: boolean;
         let hasParameterDecorators: boolean;
+        let hasJsxSpreadAttribute: boolean;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -162,6 +163,7 @@ namespace ts {
             hasAsyncFunctions = false;
             hasDecorators = false;
             hasParameterDecorators = false;
+            hasJsxSpreadAttribute = false;
         }
 
         return bindSourceFile;
@@ -500,6 +502,9 @@ namespace ts {
                 }
                 if (hasAsyncFunctions) {
                     flags |= NodeFlags.HasAsyncFunctions;
+                }
+                if (hasJsxSpreadAttribute) {
+                    flags |= NodeFlags.HasJsxSpreadAttribute;
                 }
             }
 
@@ -1636,6 +1641,10 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
+
+                case SyntaxKind.JsxSpreadAttribute:
+                    hasJsxSpreadAttribute = true;
+                    return;
 
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
