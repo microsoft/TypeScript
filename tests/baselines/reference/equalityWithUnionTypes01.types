@@ -35,36 +35,36 @@ var z: I1 = x;
 if (y === z || z === y) {
 >y === z || z === y : boolean
 >y === z : boolean
->y : number | I2
+>y : I2
 >z : I1
 >z === y : boolean
 >z : I1
->y : number | I2
+>y : I2
 }
 else if (y !== z || z !== y) {
 >y !== z || z !== y : boolean
 >y !== z : boolean
->y : number | I2
+>y : I2
 >z : I1
 >z !== y : boolean
 >z : I1
->y : number | I2
+>y : I2
 }
 else if (y == z || z == y) {
 >y == z || z == y : boolean
 >y == z : boolean
->y : number | I2
+>y : I2
 >z : I1
 >z == y : boolean
 >z : I1
->y : number | I2
+>y : I2
 }
 else if (y != z || z != y) {
 >y != z || z != y : boolean
 >y != z : boolean
->y : number | I2
+>y : I2
 >z : I1
 >z != y : boolean
 >z : I1
->y : number | I2
+>y : I2
 }
