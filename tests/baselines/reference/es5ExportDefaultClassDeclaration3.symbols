@@ -9,7 +9,7 @@ export default class C {
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
     method(): C {
->method : Symbol(method, Decl(es5ExportDefaultClassDeclaration3.ts, 3, 24))
+>method : Symbol(C.method, Decl(es5ExportDefaultClassDeclaration3.ts, 3, 24))
 >C : Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
         return new C();

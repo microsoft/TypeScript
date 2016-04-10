@@ -3,10 +3,10 @@ class D {
 >D : Symbol(D, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 0))
 
     _bar: string;
->_bar : Symbol(_bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+>_bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
 
     foo() { }
->foo : Symbol(foo, Decl(emitClassDeclarationWithMethodInES6.ts, 1, 17))
+>foo : Symbol(D.foo, Decl(emitClassDeclarationWithMethodInES6.ts, 1, 17))
 
     ["computedName1"]() { }
     ["computedName2"](a: string) { }
@@ -16,15 +16,15 @@ class D {
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 22))
 
     bar(): string {
->bar : Symbol(bar, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 54))
+>bar : Symbol(D.bar, Decl(emitClassDeclarationWithMethodInES6.ts, 5, 54))
 
         return this._bar;
->this._bar : Symbol(_bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+>this._bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
 >this : Symbol(D, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 0))
->_bar : Symbol(_bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
+>_bar : Symbol(D._bar, Decl(emitClassDeclarationWithMethodInES6.ts, 0, 9))
     } 
     baz(a: any, x: string): string {
->baz : Symbol(baz, Decl(emitClassDeclarationWithMethodInES6.ts, 8, 5))
+>baz : Symbol(D.baz, Decl(emitClassDeclarationWithMethodInES6.ts, 8, 5))
 >a : Symbol(a, Decl(emitClassDeclarationWithMethodInES6.ts, 9, 8))
 >x : Symbol(x, Decl(emitClassDeclarationWithMethodInES6.ts, 9, 15))
 

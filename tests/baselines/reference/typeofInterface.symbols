@@ -7,10 +7,10 @@ interface I {
 >I : Symbol(I, Decl(typeofInterface.ts, 0, 3), Decl(typeofInterface.ts, 0, 20))
 
     I: number;
->I : Symbol(I, Decl(typeofInterface.ts, 2, 13))
+>I : Symbol(I.I, Decl(typeofInterface.ts, 2, 13))
 
     foo: typeof I;
->foo : Symbol(foo, Decl(typeofInterface.ts, 3, 14))
+>foo : Symbol(I.foo, Decl(typeofInterface.ts, 3, 14))
 >I : Symbol(I, Decl(typeofInterface.ts, 0, 3), Decl(typeofInterface.ts, 0, 20))
 }
 

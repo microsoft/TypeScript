@@ -37,7 +37,7 @@ class C {
 >C : Symbol(C, Decl(callSignaturesWithOptionalParameters.ts, 11, 9))
 
     foo(x?: number) { }
->foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+>foo : Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 14, 8))
 }
 
@@ -62,7 +62,7 @@ interface I {
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 22, 5))
 
     foo(x: number, y?: number);
->foo : Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>foo : Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
 >x : Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 23, 8))
 >y : Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 23, 18))
 }

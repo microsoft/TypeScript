@@ -40,7 +40,7 @@ interface Window {
 >Window : Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 18, 1))
 
     someMethod();
->someMethod : Symbol(someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 20, 18))
+>someMethod : Symbol(Window.someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 20, 18))
 }
 
 module M {

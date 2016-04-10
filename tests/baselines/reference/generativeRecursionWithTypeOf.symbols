@@ -8,7 +8,7 @@ class C<T> {
 >x : Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 1, 15))
 
     type: T;
->type : Symbol(type, Decl(generativeRecursionWithTypeOf.ts, 1, 29))
+>type : Symbol(C.type, Decl(generativeRecursionWithTypeOf.ts, 1, 29))
 >T : Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
 }
 
