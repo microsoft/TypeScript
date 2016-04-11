@@ -1640,7 +1640,12 @@ namespace ts {
             }
 
             checkStrictModeFunctionName(<FunctionDeclaration>node);
-            return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            if (inStrictMode) {
+                bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            }
+            else {
+                return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            }
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
