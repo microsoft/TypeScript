@@ -5637,6 +5637,7 @@ namespace ts {
                         return importOrExportSpecifier;
                     }
                 }
+                return undefined;
             }
 
             function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol) {
@@ -5652,6 +5653,7 @@ namespace ts {
                     const typeOfPattern = typeChecker.getTypeAtLocation(bindingElement.parent);
                     return typeOfPattern && typeChecker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
                 }
+                return undefined;
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {

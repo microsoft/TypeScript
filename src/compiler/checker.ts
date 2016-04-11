@@ -11844,17 +11844,18 @@ namespace ts {
             const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
-                checkArrayLiteralDestructuringElementAssignment(node, sourceType, elements[i], i, elementType, contextualMapper);
+                checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, contextualMapper);
             }
             return sourceType;
         }
 
         function checkArrayLiteralDestructuringElementAssignment(node: ArrayLiteralExpression, sourceType: Type,
-            element: Expression, index: number, elementType: Type, contextualMapper?: TypeMapper) {
+            elementIndex: number, elementType: Type, contextualMapper?: TypeMapper) {
             const elements = node.elements;
+            const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElementExpression) {
-                    const propName = "" + index;
+                    const propName = "" + elementIndex;
                     const type = isTypeAny(sourceType)
                         ? sourceType
                         : isTupleLikeType(sourceType)
@@ -11873,7 +11874,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (index < elements.length - 1) {
+                    if (elementIndex < elements.length - 1) {
                         error(element, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                     }
                     else {
@@ -11887,6 +11888,7 @@ namespace ts {
                     }
                 }
             }
+            return undefined;
         }
 
         function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, contextualMapper?: TypeMapper): Type {
@@ -16559,9 +16561,15 @@ namespace ts {
             return unknownType;
         }
 
+        // Gets the type of object literal or array literal of destructuring assignment.
+        // { a } from 
+        //     for ( { a } of elems) {
+        //     }
+        // [ a ] from 
+        //     [a] = [ some array ...]
         function getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(expr: Expression): Type {
             // If this is from "for of"
-            //     for ( { a } of elemns) {
+            //     for ( { a } of elems) {
             //     }
             if (expr.parent.kind === SyntaxKind.ForOfStatement) {
                 const iteratedType = checkRightHandSideOfForOf((<ForOfStatement>expr.parent).expression);
@@ -16577,15 +16585,15 @@ namespace ts {
             //     for ({ skills: { primary, secondary } } = multiRobot, i = 0; i < 1; i++) {
             if (expr.parent.kind === SyntaxKind.PropertyAssignment) {
                 const typeOfParentObjectLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent.parent);
-                return checkObjectLiteralDestructuringPropertyAssignment(typeOfParentObjectLiteral, <ObjectLiteralElement>expr.parent);
+                return checkObjectLiteralDestructuringPropertyAssignment(typeOfParentObjectLiteral || unknownType, <ObjectLiteralElement>expr.parent);
             }
             // Array literal assignment - array destructuring pattern
             Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
-            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral, expr.parent, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
-                expr, indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType);
+                indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
         }
 
         function getTypeOfExpression(expr: Expression): Type {
