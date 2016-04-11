@@ -1,5 +1,5 @@
-tests/cases/compiler/downlevelLetConst18.ts(5,14): error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
-tests/cases/compiler/downlevelLetConst18.ts(9,14): error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
+tests/cases/compiler/downlevelLetConst18.ts(5,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+tests/cases/compiler/downlevelLetConst18.ts(9,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
 
 
 ==== tests/cases/compiler/downlevelLetConst18.ts (2 errors) ====
@@ -9,13 +9,13 @@ tests/cases/compiler/downlevelLetConst18.ts(9,14): error TS1250: In ES5 or lower
     for (let x; ;) {
         function foo() { x };
                  ~~~
-!!! error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
     }
     
     for (let x; ;) {
         function foo1() { x };
                  ~~~~
-!!! error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
     }
     
     for (let x; ;) {
