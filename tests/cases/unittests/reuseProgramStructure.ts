@@ -368,5 +368,11 @@ module ts {
             assert.isTrue(!program_3.structureIsReused);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", { "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } });
         });
-    })
+    });
+
+    describe("host is optional", () => {
+        it("should work if host is not provided", () => {
+            createProgram([], {});
+        })
+    });
 }
