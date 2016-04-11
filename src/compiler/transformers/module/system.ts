@@ -121,7 +121,7 @@ namespace ts {
             );
 
             // Write the call to `System.register`
-            // Reset the source-file's nodeFlag to not emit helpers because we already set one in the body
+            // Clear the emit-helpers flag for later passes since we'll have already used it in the module body
             // So the helper will be emit at the correct position instead of at the top of the source-file
             return updateSourceFile(node, [
                 createStatement(
