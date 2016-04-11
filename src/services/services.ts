@@ -5647,7 +5647,7 @@ namespace ts {
                     !bindingElement.propertyName;
             }
 
-            function getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol: Symbol) {
+            function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol) {
                 if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
                     const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
                     const typeOfPattern = typeChecker.getTypeAtLocation(bindingElement.parent);
@@ -6170,7 +6170,7 @@ namespace ts {
 
                 // If this is symbol of binding element without propertyName declaration in Object binding pattern 
                 // Include the property in the search
-                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(symbol);
+                const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol);
                 if (bindingElementPropertySymbol) {
                     result.push(bindingElementPropertySymbol);
                 }
@@ -6297,7 +6297,7 @@ namespace ts {
                 // If the reference location is the binding element and doesn't have property name 
                 // then include the binding element in the related symbols
                 //      let { a } : { a };
-                const bindingElementPropertySymbol = getPropertySymbolIfObjectBindingPatternWithoutPropertyName(referenceSymbol);
+                const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol);
                 if (bindingElementPropertySymbol && searchSymbols.indexOf(bindingElementPropertySymbol) >= 0) {
                     return bindingElementPropertySymbol;
                 }
