@@ -5624,8 +5624,14 @@ namespace ts {
                 };
             }
 
-            function getImportOrExportSpecifierForPropertyNameSymbol(symbol: Symbol, location: Node): ImportOrExportSpecifier {
+            function getAliasSymbolForPropertyNameSymbol(symbol: Symbol, location: Node): Symbol {
                 if (symbol.flags & SymbolFlags.Alias) {
+                    // Default import get alias
+                    const defaultImport = getDeclarationOfKind(symbol, SyntaxKind.ImportClause);
+                    if (defaultImport) {
+                        return typeChecker.getAliasedSymbol(symbol);
+                    }
+
                     const importOrExportSpecifier = <ImportOrExportSpecifier>forEach(symbol.declarations,
                         declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
                             declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
@@ -5634,7 +5640,22 @@ namespace ts {
                         (!importOrExportSpecifier.propertyName ||
                             // export {a as class } where a is location
                             importOrExportSpecifier.propertyName === location)) {
-                        return importOrExportSpecifier;
+                        // If Import specifier -> get alias
+                        // else Export specifier -> get local target
+                        return importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
+                            typeChecker.getAliasedSymbol(symbol) :
+                            typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
+                    }
+                }
+                return undefined;
+            }
+
+            function getPropertySymbolOfDestructuringAssignment(location: Node) {
+                if (isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent)) {
+                    // Do work to determine if this is a property symbol corresponding to the search symbol
+                    const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
+                    if (typeOfObjectLiteral) {
+                        return typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>location).text);
                     }
                 }
                 return undefined;
@@ -6105,12 +6126,9 @@ namespace ts {
                 // If the location is name of property symbol from object literal destructuring pattern
                 // Search the property symbol
                 //      for ( { property: p2 } of elems) { }
-                if (isNameOfPropertyAssignment(location) &&
-                    location.parent.kind !== SyntaxKind.ShorthandPropertyAssignment &&
-                    isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent)) {
-                    const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
-                    if (typeOfObjectLiteral) {
-                        const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>location).text);
+                if (isNameOfPropertyAssignment(location) && location.parent.kind !== SyntaxKind.ShorthandPropertyAssignment) {
+                    const propertySymbol = getPropertySymbolOfDestructuringAssignment(location);
+                    if (propertySymbol) {
                         result.push(propertySymbol);
                     }
                 }
@@ -6126,12 +6144,9 @@ namespace ts {
                 ////     export {a as somethingElse}
                 //// We want the *local* declaration of 'a' as declared in the import,
                 //// *not* as declared within "mod" (or farther)
-                const importOrExportSpecifier = getImportOrExportSpecifierForPropertyNameSymbol(symbol, location);
-                if (importOrExportSpecifier || getDeclarationOfKind(symbol, SyntaxKind.ImportClause)) {
-                    result = result.concat(populateSearchSymbolSet(
-                        !importOrExportSpecifier || importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
-                        typeChecker.getAliasedSymbol(symbol) :
-                        typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier), location));
+                const aliasSymbol = getAliasSymbolForPropertyNameSymbol(symbol, location);
+                if (aliasSymbol) {
+                    result = result.concat(populateSearchSymbolSet(aliasSymbol, location));
                 }
 
                 // If the location is in a context sensitive location (i.e. in an object literal) try
@@ -6257,14 +6272,10 @@ namespace ts {
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols but by looking up for related symbol of this alias so it can handle multiple level of indirectness.
-                const importOrExportSpecifier = getImportOrExportSpecifierForPropertyNameSymbol(referenceSymbol, referenceLocation);
-                if (importOrExportSpecifier || getDeclarationOfKind(referenceSymbol, SyntaxKind.ImportClause)) {
-                    const aliasedSymbol = !importOrExportSpecifier || importOrExportSpecifier.kind === SyntaxKind.ImportSpecifier ?
-                        typeChecker.getAliasedSymbol(referenceSymbol) :
-                        typeChecker.getExportSpecifierLocalTargetSymbol(importOrExportSpecifier);
-                    return getRelatedSymbol(searchSymbols, aliasedSymbol, referenceLocation);
+                const aliasSymbol = getAliasSymbolForPropertyNameSymbol(referenceSymbol, referenceLocation);
+                if (aliasSymbol) {
+                    return getRelatedSymbol(searchSymbols, aliasSymbol, referenceLocation);
                 }
-
 
                 // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
@@ -6282,15 +6293,9 @@ namespace ts {
                     // Get the property symbol from the object literal's type and look if thats the search symbol
                     // In below eg. get 'property' from type of elems iterating type
                     //      for ( { property: p2 } of elems) { }
-                    if (isArrayLiteralOrObjectLiteralDestructuringPattern(referenceLocation.parent.parent)) {
-                        // Do work to determine if this is a property symbol corresponding to the search symbol
-                        const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>referenceLocation.parent.parent);
-                        if (typeOfObjectLiteral) {
-                            const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>referenceLocation).text);
-                            if (searchSymbols.indexOf(propertySymbol) >= 0) {
-                                return propertySymbol;
-                            }
-                        }
+                    const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation);
+                    if (propertySymbol && searchSymbols.indexOf(propertySymbol) >= 0) {
+                        return propertySymbol;
                     }
                 }
 
