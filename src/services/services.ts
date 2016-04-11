@@ -3834,10 +3834,10 @@ namespace ts {
                 }
 
                 if (isEmpty(existingImportsOrExports)) {
-                    return exportsOfModule;
+                    return filter(exportsOfModule, e => e.name !== "default");
                 }
 
-                return filter(exportsOfModule, e => !lookUp(existingImportsOrExports, e.name));
+                return filter(exportsOfModule, e => e.name !== "default" && !lookUp(existingImportsOrExports, e.name));
             }
 
             /**
