@@ -1,0 +1,15 @@
+tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts(2,14): error TS1252: In ES5 or lower, function declarations are not allowed in block scope. Modules are automatically in strict mode.
+tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts(6,10): error TS2304: Cannot find name 'foo'.
+
+
+==== tests/cases/compiler/blockScopedFunctionDeclarationInStrictModule.ts (2 errors) ====
+    if (true) {
+        function foo() { }
+                 ~~~
+!!! error TS1252: In ES5 or lower, function declarations are not allowed in block scope. Modules are automatically in strict mode.
+        foo(); // ok
+    }
+    
+    export = foo; // not ok
+             ~~~
+!!! error TS2304: Cannot find name 'foo'.
