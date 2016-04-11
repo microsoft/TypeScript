@@ -1,4 +1,4 @@
-tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts(3,14): error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
+tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts(3,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
 tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts(6,1): error TS2304: Cannot find name 'foo'.
 
 
@@ -7,7 +7,7 @@ tests/cases/compiler/blockScopedFunctionDeclarationStrictES5.ts(6,1): error TS23
     if (true) {
         function foo() { } // Error to declare function in block scope
                  ~~~
-!!! error TS1250: In ES5 or lower, function declarations are not allowed in block scope in strict mode.
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
         foo(); // This call should be ok
     }
     foo(); // Error to find name foo

@@ -104,6 +104,7 @@ namespace ts {
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         let file: SourceFile;
         let options: CompilerOptions;
+        let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -136,6 +137,7 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
+            languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
 
@@ -149,6 +151,7 @@ namespace ts {
 
             file = undefined;
             options = undefined;
+            languageVersion = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
@@ -1129,18 +1132,18 @@ namespace ts {
             // Provide specialized messages to help the user understand why we think they're in
             // strict mode.
             if (getContainingClass(node)) {
-                return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_Class_definitions_are_automatically_in_strict_mode;
+                return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Class_definitions_are_automatically_in_strict_mode;
             }
 
             if (file.externalModuleIndicator) {
-                return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_Modules_are_automatically_in_strict_mode;
+                return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Modules_are_automatically_in_strict_mode;
             }
 
-            return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_in_strict_mode;
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5;
         }
 
         function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
-            if (getEmitScriptTarget(options) < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 // Report error if function is not top level function declaration
                 if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
                     blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
@@ -1671,7 +1674,7 @@ namespace ts {
             checkStrictModeFunctionName(<FunctionDeclaration>node);
             if (inStrictMode) {
                 checkStrictModeFunctionDeclaration(node);
-                bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                return bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
             else {
                 return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
