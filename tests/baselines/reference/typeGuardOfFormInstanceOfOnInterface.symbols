@@ -12,11 +12,11 @@ interface C1 {
 >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 0, 0))
 
     prototype: C1;
->prototype : Symbol(prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 7, 11))
+>prototype : Symbol(C1.prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 7, 11))
 >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 0, 0))
 
     p1: string;
->p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 8, 18))
+>p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 8, 18))
 }
 interface C2 {
 >C2 : Symbol(C2, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 10, 1))
@@ -25,22 +25,22 @@ interface C2 {
 >C2 : Symbol(C2, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 10, 1))
 
     prototype: C2;
->prototype : Symbol(prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 12, 11))
+>prototype : Symbol(C2.prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 12, 11))
 >C2 : Symbol(C2, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 10, 1))
 
     p2: number;
->p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 13, 18))
+>p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 13, 18))
 }
 interface D1 extends C1 {
 >D1 : Symbol(D1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 15, 1))
 >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 0, 0))
 
     prototype: D1;
->prototype : Symbol(prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 16, 25))
+>prototype : Symbol(D1.prototype, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 16, 25))
 >D1 : Symbol(D1, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 15, 1))
 
     p3: number;
->p3 : Symbol(p3, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 17, 18))
+>p3 : Symbol(D1.p3, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 17, 18))
 }
 var str: string;
 >str : Symbol(str, Decl(typeGuardOfFormInstanceOfOnInterface.ts, 20, 3))

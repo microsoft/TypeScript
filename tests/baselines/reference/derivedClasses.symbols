@@ -4,7 +4,7 @@ class Red extends Color {
 >Color : Symbol(Color, Decl(derivedClasses.ts, 5, 1))
 
     public shade() { 
->shade : Symbol(shade, Decl(derivedClasses.ts, 0, 25))
+>shade : Symbol(Red.shade, Decl(derivedClasses.ts, 0, 25))
 
     	var getHue = () => { return this.hue(); };
 >getHue : Symbol(getHue, Decl(derivedClasses.ts, 2, 8))
@@ -21,10 +21,10 @@ class Color {
 >Color : Symbol(Color, Decl(derivedClasses.ts, 5, 1))
 
     public shade() { return "some shade"; }
->shade : Symbol(shade, Decl(derivedClasses.ts, 7, 13))
+>shade : Symbol(Color.shade, Decl(derivedClasses.ts, 7, 13))
 
     public hue() { return "some hue"; }
->hue : Symbol(hue, Decl(derivedClasses.ts, 8, 43))
+>hue : Symbol(Color.hue, Decl(derivedClasses.ts, 8, 43))
 }
 
 class Blue extends Color {
@@ -32,7 +32,7 @@ class Blue extends Color {
 >Color : Symbol(Color, Decl(derivedClasses.ts, 5, 1))
     
     public shade() { 
->shade : Symbol(shade, Decl(derivedClasses.ts, 12, 26))
+>shade : Symbol(Blue.shade, Decl(derivedClasses.ts, 12, 26))
 
     	var getHue = () => { return this.hue(); };
 >getHue : Symbol(getHue, Decl(derivedClasses.ts, 15, 8))

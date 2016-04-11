@@ -3,7 +3,7 @@ class Message {
 >Message : Symbol(Message, Decl(TypeGuardWithArrayUnion.ts, 0, 0))
 
     value: string;
->value : Symbol(value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
+>value : Symbol(Message.value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
 }
 
 function saySize(message: Message | Message[]) {

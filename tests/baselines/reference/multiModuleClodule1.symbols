@@ -6,10 +6,10 @@ class C {
 >x : Symbol(x, Decl(multiModuleClodule1.ts, 1, 16))
 
     foo() { }
->foo : Symbol(foo, Decl(multiModuleClodule1.ts, 1, 30))
+>foo : Symbol(C.foo, Decl(multiModuleClodule1.ts, 1, 30))
 
     bar() { }
->bar : Symbol(bar, Decl(multiModuleClodule1.ts, 2, 13))
+>bar : Symbol(C.bar, Decl(multiModuleClodule1.ts, 2, 13))
 
     static boo() { }
 >boo : Symbol(C.boo, Decl(multiModuleClodule1.ts, 3, 13))

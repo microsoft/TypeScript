@@ -8,7 +8,7 @@ interface I {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 3, 5))
 
     foo: any; // ok, any identical to itself
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 3, 21))
+>foo : Symbol(I.foo, Decl(anyAssignableToEveryType2.ts, 3, 21))
 }
 
 
@@ -19,7 +19,7 @@ interface I2 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 9, 5))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 9, 24))
+>foo : Symbol(I2.foo, Decl(anyAssignableToEveryType2.ts, 9, 24))
 }
 
 
@@ -30,7 +30,7 @@ interface I3 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 15, 5))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 15, 24))
+>foo : Symbol(I3.foo, Decl(anyAssignableToEveryType2.ts, 15, 24))
 }
 
 
@@ -41,7 +41,7 @@ interface I4 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 21, 5))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 21, 25))
+>foo : Symbol(I4.foo, Decl(anyAssignableToEveryType2.ts, 21, 25))
 }
 
 
@@ -50,10 +50,10 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 27, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 27, 22))
+>foo : Symbol(I5.foo, Decl(anyAssignableToEveryType2.ts, 27, 22))
 }
 
 
@@ -65,7 +65,7 @@ interface I6 {
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 33, 24))
+>foo : Symbol(I6.foo, Decl(anyAssignableToEveryType2.ts, 33, 24))
 }
 
 
@@ -77,7 +77,7 @@ interface I7 {
 >bar : Symbol(bar, Decl(anyAssignableToEveryType2.ts, 39, 18))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 39, 33))
+>foo : Symbol(I7.foo, Decl(anyAssignableToEveryType2.ts, 39, 33))
 }
 
 
@@ -88,7 +88,7 @@ interface I8 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 45, 5))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 45, 26))
+>foo : Symbol(I8.foo, Decl(anyAssignableToEveryType2.ts, 45, 26))
 }
 
 
@@ -100,12 +100,12 @@ interface I9 {
 >I8 : Symbol(I8, Decl(anyAssignableToEveryType2.ts, 41, 1))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 51, 20))
+>foo : Symbol(I9.foo, Decl(anyAssignableToEveryType2.ts, 51, 20))
 }
 
 class A { foo: number; }
 >A : Symbol(A, Decl(anyAssignableToEveryType2.ts, 53, 1))
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 55, 9))
+>foo : Symbol(A.foo, Decl(anyAssignableToEveryType2.ts, 55, 9))
 
 interface I10 {
 >I10 : Symbol(I10, Decl(anyAssignableToEveryType2.ts, 55, 24))
@@ -115,13 +115,13 @@ interface I10 {
 >A : Symbol(A, Decl(anyAssignableToEveryType2.ts, 53, 1))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 57, 19))
+>foo : Symbol(I10.foo, Decl(anyAssignableToEveryType2.ts, 57, 19))
 }
 
 class A2<T> { foo: T; }
 >A2 : Symbol(A2, Decl(anyAssignableToEveryType2.ts, 59, 1))
 >T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 61, 9))
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 61, 13))
+>foo : Symbol(A2.foo, Decl(anyAssignableToEveryType2.ts, 61, 13))
 >T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 61, 9))
 
 interface I11 {
@@ -132,7 +132,7 @@ interface I11 {
 >A2 : Symbol(A2, Decl(anyAssignableToEveryType2.ts, 59, 1))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 63, 28))
+>foo : Symbol(I11.foo, Decl(anyAssignableToEveryType2.ts, 63, 28))
 }
 
 
@@ -144,7 +144,7 @@ interface I12 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 69, 18))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 69, 31))
+>foo : Symbol(I12.foo, Decl(anyAssignableToEveryType2.ts, 69, 31))
 }
 
 
@@ -159,7 +159,7 @@ interface I13 {
 >T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 75, 18))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 75, 32))
+>foo : Symbol(I13.foo, Decl(anyAssignableToEveryType2.ts, 75, 32))
 }
 
 
@@ -175,7 +175,7 @@ interface I14 {
 >E : Symbol(E, Decl(anyAssignableToEveryType2.ts, 77, 1))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 82, 19))
+>foo : Symbol(I14.foo, Decl(anyAssignableToEveryType2.ts, 82, 19))
 }
 
 
@@ -196,13 +196,13 @@ interface I15 {
 >f : Symbol(f, Decl(anyAssignableToEveryType2.ts, 84, 1), Decl(anyAssignableToEveryType2.ts, 87, 16))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 92, 26))
+>foo : Symbol(I15.foo, Decl(anyAssignableToEveryType2.ts, 92, 26))
 }
 
 
 class c { baz: string }
 >c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
->baz : Symbol(baz, Decl(anyAssignableToEveryType2.ts, 97, 9))
+>baz : Symbol(c.baz, Decl(anyAssignableToEveryType2.ts, 97, 9))
 
 module c {
 >c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
@@ -218,7 +218,7 @@ interface I16 {
 >c : Symbol(c, Decl(anyAssignableToEveryType2.ts, 94, 1), Decl(anyAssignableToEveryType2.ts, 97, 23))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 102, 26))
+>foo : Symbol(I16.foo, Decl(anyAssignableToEveryType2.ts, 102, 26))
 }
 
 
@@ -231,7 +231,7 @@ interface I17<T> {
 >T : Symbol(T, Decl(anyAssignableToEveryType2.ts, 107, 14))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 108, 19))
+>foo : Symbol(I17.foo, Decl(anyAssignableToEveryType2.ts, 108, 19))
 }
 
 
@@ -246,7 +246,7 @@ interface I18<T, U extends T> {
 >U : Symbol(U, Decl(anyAssignableToEveryType2.ts, 113, 16))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 114, 19))
+>foo : Symbol(I18.foo, Decl(anyAssignableToEveryType2.ts, 114, 19))
 }
 
 
@@ -258,7 +258,7 @@ interface I19 {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 120, 24))
+>foo : Symbol(I19.foo, Decl(anyAssignableToEveryType2.ts, 120, 24))
 }
 
 
@@ -269,6 +269,6 @@ interface I20 {
 >x : Symbol(x, Decl(anyAssignableToEveryType2.ts, 126, 5))
 
     foo: any;
->foo : Symbol(foo, Decl(anyAssignableToEveryType2.ts, 126, 20))
+>foo : Symbol(I20.foo, Decl(anyAssignableToEveryType2.ts, 126, 20))
 }
 

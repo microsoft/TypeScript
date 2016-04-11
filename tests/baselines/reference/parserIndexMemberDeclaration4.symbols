@@ -4,5 +4,5 @@ class C {
 
    [a: string]: number; public v: number
 >a : Symbol(a, Decl(parserIndexMemberDeclaration4.ts, 1, 4))
->v : Symbol(v, Decl(parserIndexMemberDeclaration4.ts, 1, 23))
+>v : Symbol(C.v, Decl(parserIndexMemberDeclaration4.ts, 1, 23))
 }

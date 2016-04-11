@@ -6,32 +6,6 @@ namespace ts {
         list: Node;
     }
 
-    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 0);
-        let lineStarts = sourceFile.getLineStarts();
-
-        let lineIndex = line;
-        if (lineIndex + 1 === lineStarts.length) {
-            // last line - return EOF
-            return sourceFile.text.length - 1;
-        }
-        else {
-            // current line start
-            let start = lineStarts[lineIndex];
-            // take the start position of the next line -1 = it should be some line break
-            let pos = lineStarts[lineIndex + 1] - 1;
-            Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
-            // walk backwards skipping line breaks, stop the the beginning of current line.
-            // i.e:
-            // <some text>
-            // $ <- end of line for this position should match the start position
-            while (start <= pos && isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                pos--;
-            }
-            return pos;
-        }
-    }
-
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         let lineStarts = sourceFile.getLineStarts();
         let line = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -836,5 +810,20 @@ namespace ts {
             return name.substring(1, length - 1);
         };
         return name;
+    }
+
+    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
+        const scriptKind = getScriptKind(fileName, host);
+        return forEach(scriptKinds, k => k === scriptKind);
+    }
+
+    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+        // First check to see if the script kind can be determined from the file name
+        var scriptKind = getScriptKindFromFileName(fileName);
+        if (scriptKind === ScriptKind.Unknown && host && host.getScriptKind) {
+            // Next check to see if the host can resolve the script kind
+            scriptKind = host.getScriptKind(fileName);
+        }
+        return ensureScriptKind(fileName, scriptKind);
     }
 }

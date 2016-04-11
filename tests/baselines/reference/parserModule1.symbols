@@ -9,7 +9,7 @@
 >IDiagnosticWriter : Symbol(IDiagnosticWriter, Decl(parserModule1.ts, 1, 33))
 
             Alert(output: string): void;
->Alert : Symbol(Alert, Decl(parserModule1.ts, 2, 44))
+>Alert : Symbol(IDiagnosticWriter.Alert, Decl(parserModule1.ts, 2, 44))
 >output : Symbol(output, Decl(parserModule1.ts, 3, 18))
         }
 
