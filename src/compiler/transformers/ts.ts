@@ -157,7 +157,15 @@ namespace ts {
          * @param node The node to visit.
          */
         function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
+            if (node.kind === SyntaxKind.ExportDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ImportClause ||
+                (node.kind === SyntaxKind.ImportEqualsDeclaration &&
+                 (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
+                // do not emit ES6 imports and exports since they are illegal inside a namespace
+                return createNotEmittedStatement(node);
+           }
+           else if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
                 return visitTypeScript(node);
