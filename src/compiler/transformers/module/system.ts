@@ -10,6 +10,7 @@ namespace ts {
         }
 
         const {
+            getNodeEmitFlags,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -120,6 +121,8 @@ namespace ts {
             );
 
             // Write the call to `System.register`
+            // Clear the emit-helpers flag for later passes since we'll have already used it in the module body
+            // So the helper will be emit at the correct position instead of at the top of the source-file
             return updateSourceFile(node, [
                 createStatement(
                     createCall(
@@ -129,7 +132,7 @@ namespace ts {
                             : [dependencies, body]
                     )
                 )
-            ]);
+            ], /*nodeEmitFlags*/ ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(node));
         }
 
         /**
@@ -1374,9 +1377,10 @@ namespace ts {
             hoistBindingElement(node, /*isExported*/ false);
         }
 
-        function updateSourceFile(node: SourceFile, statements: Statement[]) {
+        function updateSourceFile(node: SourceFile, statements: Statement[], nodeEmitFlags: NodeEmitFlags) {
             const updated = getMutableClone(node);
             updated.statements = createNodeArray(statements, node.statements);
+            setNodeEmitFlags(updated, nodeEmitFlags);
             return updated;
         }
     }
