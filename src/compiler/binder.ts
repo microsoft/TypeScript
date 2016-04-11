@@ -1125,6 +1125,35 @@ namespace ts {
             }
         }
 
+        function getStrictModeBlockScopeFunctionDeclarationMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in
+            // strict mode.
+            if (getContainingClass(node)) {
+                return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.In_ES5_or_lower_function_declarations_are_not_allowed_in_block_scope_in_strict_mode;
+        }
+
+        function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
+            if (getEmitScriptTarget(options) < ScriptTarget.ES6) {
+                // Report error if function is not top level function declaration
+                if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
+                    blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
+                    !isFunctionLike(blockScopeContainer)) {
+                    // We check first if the name is inside class declaration or class expression; if so give explicit message
+                    // otherwise report generic error message.
+                    const errorSpan = getErrorSpanForNode(file, node);
+                    file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length,
+                        getStrictModeBlockScopeFunctionDeclarationMessage(node)));
+                }
+            }
+        }
+
         function checkStrictModeNumericLiteral(node: LiteralExpression) {
             if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
@@ -1641,6 +1670,7 @@ namespace ts {
 
             checkStrictModeFunctionName(<FunctionDeclaration>node);
             if (inStrictMode) {
+                checkStrictModeFunctionDeclaration(node);
                 bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
             }
             else {

@@ -811,6 +811,18 @@
         "category": "Error",
         "code": 1249
     },
+    "In ES5 or lower, function declarations are not allowed in block scope in strict mode.": {
+        "category": "Error",
+        "code": 1250
+    },
+    "In ES5 or lower, function declarations are not allowed in block scope. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1251
+    },
+    "In ES5 or lower, function declarations are not allowed in block scope. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1252
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
