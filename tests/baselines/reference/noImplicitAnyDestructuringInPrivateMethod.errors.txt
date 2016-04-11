@@ -1,0 +1,17 @@
+tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts(10,19): error TS7031: Binding element 'a' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts (1 errors) ====
+    type Arg = {
+        a: number;
+    };
+    export class Bar {
+        private bar({ a, }: Arg): number {
+            return a;
+        }
+    }
+    export declare class Bar2 {
+        private bar({ a, });
+                      ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+    }
