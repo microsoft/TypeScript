@@ -6270,19 +6270,20 @@ namespace ts {
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
                 if (isNameOfPropertyAssignment(referenceLocation)) {
-                    const contexualSymbol = forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                    const contextualSymbol = forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
 
-                    if (contexualSymbol) {
-                        return contexualSymbol;
+                    if (contextualSymbol) {
+                        return contextualSymbol;
                     }
 
-                    // If the reference location is name of property symbol from object literal destructuring pattern
-                    // Compare it to search symbol something similar to 'property' from
+                    // If the reference location is the name of property from object literal destructuring pattern
+                    // Get the property symbol from the object literal's type and look if thats the search symbol
+                    // In below eg. get 'property' from type of elems iterating type
                     //      for ( { property: p2 } of elems) { }
                     if (isArrayLiteralOrObjectLiteralDestructuringPattern(referenceLocation.parent.parent)) {
-                        // Do work to determine if this is property symbol corresponding to the search symbol
+                        // Do work to determine if this is a property symbol corresponding to the search symbol
                         const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>referenceLocation.parent.parent);
                         if (typeOfObjectLiteral) {
                             const propertySymbol = typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>referenceLocation).text);
