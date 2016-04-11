@@ -104,6 +104,7 @@ namespace ts {
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         let file: SourceFile;
         let options: CompilerOptions;
+        let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -136,6 +137,7 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
+            languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
 
@@ -149,6 +151,7 @@ namespace ts {
 
             file = undefined;
             options = undefined;
+            languageVersion = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
@@ -1125,6 +1128,35 @@ namespace ts {
             }
         }
 
+        function getStrictModeBlockScopeFunctionDeclarationMessage(node: Node) {
+            // Provide specialized messages to help the user understand why we think they're in
+            // strict mode.
+            if (getContainingClass(node)) {
+                return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Class_definitions_are_automatically_in_strict_mode;
+            }
+
+            if (file.externalModuleIndicator) {
+                return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Modules_are_automatically_in_strict_mode;
+            }
+
+            return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5;
+        }
+
+        function checkStrictModeFunctionDeclaration(node: FunctionDeclaration) {
+            if (languageVersion < ScriptTarget.ES6) {
+                // Report error if function is not top level function declaration
+                if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
+                    blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
+                    !isFunctionLike(blockScopeContainer)) {
+                    // We check first if the name is inside class declaration or class expression; if so give explicit message
+                    // otherwise report generic error message.
+                    const errorSpan = getErrorSpanForNode(file, node);
+                    file.bindDiagnostics.push(createFileDiagnostic(file, errorSpan.start, errorSpan.length,
+                        getStrictModeBlockScopeFunctionDeclarationMessage(node)));
+                }
+            }
+        }
+
         function checkStrictModeNumericLiteral(node: LiteralExpression) {
             if (inStrictMode && node.isOctalLiteral) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
@@ -1640,7 +1672,13 @@ namespace ts {
             }
 
             checkStrictModeFunctionName(<FunctionDeclaration>node);
-            return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            if (inStrictMode) {
+                checkStrictModeFunctionDeclaration(node);
+                return bindBlockScopedDeclaration(node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            }
+            else {
+                return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+            }
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
