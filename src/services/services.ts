@@ -4677,10 +4677,12 @@ namespace ts {
                 let definition: Declaration;
 
                 forEach(signatureDeclarations, d => {
-                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature || d.kind === SyntaxKind.VariableDeclaration))) {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) || (!selectConstructors && getMeaningFromDeclaration(d) === SemanticMeaning.Value)) {
                         declarations.push(d);
                         if ((<FunctionLikeDeclaration>d).body) definition = d;
+                    }
+                    else if (getMeaningFromDeclaration(d) === SemanticMeaning.Type && getMeaningFromLocation(node) === SemanticMeaning.Type) {
+                        declarations.push(d);
                     }
                 });
 
