@@ -244,7 +244,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var host = (process.env.TYPESCRIPT_HOST || process.env.host || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
