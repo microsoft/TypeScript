@@ -53,7 +53,6 @@ var Bbb;
         return SomeType;
     }());
     Bbb.SomeType = SomeType;
-     // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
 
