@@ -2607,8 +2607,10 @@ const _super = (function (geti, seti) {
             function getSourceNodeForGeneratedName(name: Identifier) {
                 let node: Node = name;
                 while (node.original !== undefined) {
+                    const nodeId = node.id;
                     node = node.original;
-                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node) {
+                    // If this is not the exact clone of identifier use this identifier to generate the name
+                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node && node.id !== nodeId) {
                         break;
                     }
                 }
