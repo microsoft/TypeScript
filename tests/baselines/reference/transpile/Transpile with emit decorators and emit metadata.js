@@ -1,5 +1,5 @@
 "use strict";
-var db_1 = require('./db');
+var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }

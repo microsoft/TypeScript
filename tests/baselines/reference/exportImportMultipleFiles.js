@@ -25,7 +25,7 @@ define(["require", "exports", "exportImportMultipleFiles_math"], function (requi
     exports.math.add(3, 4); // OK
 });
 //// [exportImportMultipleFiles_userCode.js]
-define(["require", "exports", './exportImportMultipleFiles_library'], function (require, exports, lib) {
+define(["require", "exports", "./exportImportMultipleFiles_library"], function (require, exports, lib) {
     "use strict";
     lib.math.add(3, 4); // Shouldnt be error
 });
