@@ -80,7 +80,7 @@ z[3].toExponential();
 z[4].toExponential();
 var X;
 (function (X) {
-    X[X["1"] = 1] = "1";
+    X[X[1] = 1] = 1;
     X[X[2] = 2] = 2;
     X[X["3"] = 3] = "3";
     X[X["4"] = 4] = "4";
