@@ -2892,6 +2892,7 @@ namespace ts {
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;

@@ -21,6 +21,7 @@ namespace ts {
 
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
+        const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const previousExpressionSubstitution = context.expressionSubstitution;
@@ -91,7 +92,7 @@ namespace ts {
          */
         function transformAMDModule(node: SourceFile) {
             const define = createIdentifier("define");
-            const moduleName = node.moduleName ? createLiteral(node.moduleName) : undefined;
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             return transformAsynchronousModule(node, define, moduleName, /*includeNonAmdDependencies*/ true);
         }
 
@@ -771,8 +772,9 @@ namespace ts {
         function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || createLiteral(<StringLiteral>moduleName);
+                return tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
+                    || tryRenameExternalModule(<StringLiteral>moduleName)
+                    || getSynthesizedClone(<StringLiteral>moduleName);
             }
 
             return undefined;
@@ -800,6 +802,23 @@ namespace ts {
             if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
                 return getGeneratedNameForNode(node);
             }
+        }
+
+        function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral {
+            if (!file) {
+                return undefined;
+            }
+            if (file.moduleName) {
+                return createLiteral(file.moduleName);
+            }
+            if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+                return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
+            }
+            return undefined;
+        }
+
+        function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+            return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
         }
 
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {

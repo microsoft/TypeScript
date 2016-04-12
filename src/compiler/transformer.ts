@@ -68,6 +68,7 @@ namespace ts {
         const context: TransformationContext = {
             getCompilerOptions: () => host.getCompilerOptions(),
             getEmitResolver: () => resolver,
+            getEmitHost: () => host,
             getNodeEmitFlags,
             setNodeEmitFlags,
             hoistVariableDeclaration,

@@ -20,6 +20,7 @@ namespace ts {
 
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
+        const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const previousExpressionSubstitution = context.expressionSubstitution;
         context.enableExpressionSubstitution(SyntaxKind.Identifier);
@@ -106,6 +107,7 @@ namespace ts {
             // Add the body of the module.
             addSystemModuleBody(statements, node, dependencyGroups);
 
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
             const body = createFunctionExpression(
                 /*asteriskToken*/ undefined,
@@ -127,8 +129,8 @@ namespace ts {
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        node.moduleName
-                            ? [createLiteral(node.moduleName), dependencies, body]
+                        moduleName
+                            ? [moduleName, dependencies, body]
                             : [dependencies, body]
                     )
                 )
@@ -1155,7 +1157,8 @@ namespace ts {
         function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
             const moduleName = getExternalModuleName(importNode);
             if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryRenameExternalModule(<StringLiteral>moduleName)
+                return tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
+                    || tryRenameExternalModule(<StringLiteral>moduleName)
                     || getSynthesizedClone(<StringLiteral>moduleName);
             }
 
@@ -1185,6 +1188,23 @@ namespace ts {
             if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
                 return getGeneratedNameForNode(node);
             }
+        }
+
+        function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral {
+            if (!file) {
+                return undefined;
+            }
+            if (file.moduleName) {
+                return createLiteral(file.moduleName);
+            }
+            if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+                return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
+            }
+            return undefined;
+        }
+
+        function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+            return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
         }
 
         /**
