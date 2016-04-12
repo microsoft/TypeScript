@@ -207,7 +207,7 @@ namespace ts {
             TypeofEQSymbol = 1 << 3,      // typeof x === "symbol"
             TypeofEQObject = 1 << 4,      // typeof x === "object"
             TypeofEQFunction = 1 << 5,    // typeof x === "function"
-            TypeofEQHostObject =  1 << 6, // typeof x === "xxx"
+            TypeofEQHostObject = 1 << 6,  // typeof x === "xxx"
             TypeofNEString = 1 << 7,      // typeof x !== "string"
             TypeofNENumber = 1 << 8,      // typeof x !== "number"
             TypeofNEBoolean = 1 << 9,     // typeof x !== "boolean"
@@ -16328,7 +16328,7 @@ namespace ts {
             }
 
             if (entityName.parent.kind === SyntaxKind.ExportAssignment) {
-                return resolveEntityName(<Identifier><EntityName>entityName,
+                return resolveEntityName(<Identifier>entityName,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
 
