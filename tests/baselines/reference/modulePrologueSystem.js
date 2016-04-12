@@ -4,13 +4,13 @@
 export class Foo {}
 
 //// [modulePrologueSystem.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var Foo;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             Foo = (function () {
                 function Foo() {
                 }
@@ -18,5 +18,5 @@ System.register([], function(exports_1, context_1) {
             }());
             exports_1("Foo", Foo);
         }
-    }
+    };
 });
