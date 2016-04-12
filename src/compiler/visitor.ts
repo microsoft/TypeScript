@@ -461,7 +461,7 @@ namespace ts {
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
             for (const edge of edgeTraversalPath) {
-                const value = (<Map<any>>node)[edge.name];
+                const value = edge && (<Map<any>>node)[edge.name];
                 if (value !== undefined) {
                     result = isArray(value)
                         ? reduceLeft(<NodeArray<Node>>value, f, result)
@@ -619,7 +619,7 @@ namespace ts {
         const edgeTraversalPath = nodeEdgeTraversalMap[node.kind];
         if (edgeTraversalPath) {
             for (const edge of edgeTraversalPath) {
-                const value = <Node | NodeArray<Node>>node[edge.name];
+                const value = edge && <Node | NodeArray<Node>>node[edge.name];
                 if (value !== undefined) {
                     let visited: Node | NodeArray<Node>;
                     if (isArray(value)) {
