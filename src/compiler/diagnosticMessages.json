@@ -811,6 +811,18 @@
         "category": "Error",
         "code": 1249
     },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+        "category": "Error",
+        "code": 1250
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1251
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1252
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

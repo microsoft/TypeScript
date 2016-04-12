@@ -959,14 +959,15 @@ namespace ts {
 
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
-        let skipDefaultLib = options.noLib;
-        const programDiagnostics = createDiagnosticCollection();
-        const currentDirectory = host.getCurrentDirectory();
-        const supportedExtensions = getSupportedExtensions(options);
 
         const start = new Date().getTime();
 
         host = host || createCompilerHost(options);
+
+        let skipDefaultLib = options.noLib;
+        const programDiagnostics = createDiagnosticCollection();
+        const currentDirectory = host.getCurrentDirectory();
+        const supportedExtensions = getSupportedExtensions(options);
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);

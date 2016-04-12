@@ -13,7 +13,7 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
-/// <reference path="lib.core.d.ts" />
+/// <reference no-default-lib="true"/>
 
 
 /////////////////////////////
