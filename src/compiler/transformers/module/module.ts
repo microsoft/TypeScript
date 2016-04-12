@@ -769,60 +769,8 @@ namespace ts {
             );
         }
 
-        function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-            const moduleName = getExternalModuleName(importNode);
-            if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
-                    || tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedClone(<StringLiteral>moduleName);
-            }
-
-            return undefined;
-        }
-
-        /**
-         * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
-         * Here we check if alternative name was provided for a given moduleName and return it if possible.
-         */
-        function tryRenameExternalModule(moduleName: LiteralExpression) {
-            if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                return createLiteral(currentSourceFile.renamedDependencies[moduleName.text]);
-            }
-            return undefined;
-        }
-
-        function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            const namespaceDeclaration = getNamespaceDeclarationNode(node);
-            if (namespaceDeclaration && !isDefaultImport(node)) {
-                return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
-            }
-            if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
-                return getGeneratedNameForNode(node);
-            }
-            if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
-                return getGeneratedNameForNode(node);
-            }
-        }
-
-        function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral {
-            if (!file) {
-                return undefined;
-            }
-            if (file.moduleName) {
-                return createLiteral(file.moduleName);
-            }
-            if (!isDeclarationFile(file) && (options.out || options.outFile)) {
-                return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
-            }
-            return undefined;
-        }
-
-        function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
-            return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
-        }
-
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-            const moduleName = getExternalModuleNameLiteral(importNode);
+            const moduleName = getExternalModuleNameLiteral(importNode, currentSourceFile, host, resolver, compilerOptions);
             const args: Expression[] = [];
             if (isDefined(moduleName)) {
                 args.push(moduleName);
@@ -881,10 +829,10 @@ namespace ts {
 
             for (const importNode of externalImports) {
                 // Find the name of the external module
-                const externalModuleName = getExternalModuleNameLiteral(importNode);
+                const externalModuleName = getExternalModuleNameLiteral(importNode, currentSourceFile, host, resolver, compilerOptions);
 
                 // Find the name of the module alias, if there is one
-                const importAliasName = getLocalNameForExternalImport(importNode);
+                const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
                 if (includeNonAmdDependencies && importAliasName) {
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(createParameter(importAliasName));
