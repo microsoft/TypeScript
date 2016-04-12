@@ -44,7 +44,7 @@ function fn2() {
     }
     finally { } // error missing try
     try {
-    } // error missing try
+    }
     catch (x) { } // error missing try
     // no error
     try {
