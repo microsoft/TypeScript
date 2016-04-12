@@ -829,7 +829,13 @@ namespace ts {
             // End the lexical environment.
             addNodes(statements, endLexicalEnvironment());
             return setMultiLine(
-                createBlock(statements, constructor ? constructor.body : undefined),
+                createBlock(
+                    createNodeArray(
+                        statements,
+                        /*location*/ constructor ? constructor.body.statements : undefined
+                    ),
+                    /*location*/ constructor ? constructor.body : undefined
+                ),
                 true
             );
         }

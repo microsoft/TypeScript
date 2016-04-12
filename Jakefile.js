@@ -187,20 +187,20 @@ var harnessSources = harnessCoreSources.concat([
     "protocol.d.ts",
     "session.ts",
     "client.ts",
-    "editorServices.ts",
+    "editorServices.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
 
 var librarySourceMap = [
         { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
-        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
+        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"] },
+        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"] },
+        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"] },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
+        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"] },
         { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
@@ -242,7 +242,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var host = process.env.host || process.env.TYPESCRIPT_HOST || "node";
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
@@ -291,7 +291,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --out " + outFile;
         }
         else {
-            options += " --module commonjs"
+            options += " --module commonjs";
         }
 
         if(opts.noResolve) {
@@ -306,7 +306,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (opts.stripInternal) {
-            options += " --stripInternal"
+            options += " --stripInternal";
         }
 
         if (useBuiltCompiler && !/^(no?|f(alse)?|0|-)$/i.test(process.env.USE_TRANSFORMS)) {
@@ -448,9 +448,9 @@ file(scriptsTsdJson);
 
 task("tsd-scripts", [scriptsTsdJson], function () {
     var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd)
+    console.log(cmd);
     exec(cmd);
-}, { async: true })
+}, { async: true });
 
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
@@ -617,7 +617,7 @@ directory(builtLocalDirectory);
 var run = path.join(builtLocalDirectory, "run.js");
 compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
 
-var internalTests = "internal/"
+var internalTests = "internal/";
 
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
@@ -845,7 +845,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         testTimeout = 100000;
     }
 
-    colors = process.env.colors || process.env.color
+    colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
 
@@ -853,7 +853,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var subsetRegexes;
     if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests]
+        subsetRegexes = [tests];
     }
     else {
         var subsets = tests ? tests.split("|") : defaultSubsets;
@@ -903,8 +903,8 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 }, { async: true });
 
 // Browser tests
-var nodeServerOutFile = 'tests/webTestServer.js'
-var nodeServerInFile = 'tests/webTestServer.ts'
+var nodeServerOutFile = 'tests/webTestServer.js';
+var nodeServerInFile = 'tests/webTestServer.ts';
 compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
@@ -916,7 +916,7 @@ task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function()
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
 task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
-    host = "node"
+    host = "node";
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
@@ -930,13 +930,13 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
+    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests;
     console.log(cmd);
     exec(cmd);
 }, {async: true});
 
 function getDiffTool() {
-    var program = process.env['DIFF']
+    var program = process.env['DIFF'];
     if (!program) {
         fail("Add the 'DIFF' environment variable to the path of the program you want to use.");
     }
@@ -965,11 +965,11 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function(hardOrSoft) {
-    if (!hardOrSoft || hardOrSoft == "hard") {
+    if (!hardOrSoft || hardOrSoft === "hard") {
         jake.rmRf(refBaseline);
         fs.renameSync(localBaseline, refBaseline);
     }
-    else if (hardOrSoft == "soft") {
+    else if (hardOrSoft === "soft") {
         var files = jake.readdirR(localBaseline);
         for (var i in files) {
             jake.cpR(files[i], refBaseline);
@@ -1048,7 +1048,7 @@ task("update-sublime", ["local", serverFile], function() {
 });
 
 var tslintRuleDir = "scripts/tslint";
-var tslintRules = ([
+var tslintRules = [
     "nextLineRule",
     "noNullRule",
     "preferConstRule",
@@ -1056,7 +1056,7 @@ var tslintRules = ([
     "typeOperatorSpacingRule",
     "noInOperatorRule",
     "noIncrementDecrementRule"
-]);
+];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
 });
@@ -1081,7 +1081,7 @@ function getLinterOptions() {
 
 function lintFileContents(options, path, contents) {
     var ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.")
+    console.log("Linting '" + path + "'.");
     return ll.lint();
 }
 

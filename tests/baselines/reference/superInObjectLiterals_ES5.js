@@ -65,6 +65,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var _this = this;
 var obj = {
     __proto__: {
         method: function () {
@@ -87,7 +88,7 @@ var obj = {
         _super.method.call(this);
     },
     p3: function () {
-        _super.method.call(this);
+        _super.method.call(_this);
     }
 };
 var A = (function () {

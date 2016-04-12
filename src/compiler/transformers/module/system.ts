@@ -37,7 +37,7 @@ namespace ts {
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let hasExportStars: boolean;
+        let hasExportStarsToExportValues: boolean;
         let exportFunctionForFile: Identifier;
         let contextObjectForFile: Identifier;
         let exportedLocalNames: Identifier[];
@@ -62,7 +62,7 @@ namespace ts {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 exportFunctionForFile = undefined;
                 contextObjectForFile = undefined;
                 exportedLocalNames = undefined;
@@ -89,7 +89,7 @@ namespace ts {
             Debug.assert(!exportFunctionForFile);
 
             // Collect information about the external module and dependency groups.
-            ({ externalImports, exportSpecifiers, exportEquals, hasExportStars } = collectExternalModuleInfo(node, resolver));
+            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
@@ -253,7 +253,7 @@ namespace ts {
         }
 
         function addExportStarIfNeeded(statements: Statement[]) {
-            if (!hasExportStars) {
+            if (!hasExportStarsToExportValues) {
                 return;
             }
             // when resolving exports local exported entries/indirect exported entries in the module

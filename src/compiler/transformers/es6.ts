@@ -735,7 +735,14 @@ namespace ts {
             }
 
             addRange(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ constructor && constructor.body, /*multiLine*/ true);
+            return createBlock(
+                createNodeArray(
+                    statements,
+                    /*location*/ constructor ? constructor.body.statements : undefined
+                ),
+                /*location*/ constructor ? constructor.body : undefined,
+                /*multiLine*/ true
+            );
         }
 
         function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
@@ -924,7 +931,7 @@ namespace ts {
          *                                          synthesized call to `super`
          */
         function shouldAddRestParameter(node: ParameterDeclaration, inConstructorWithSynthesizedSuper: boolean) {
-            return node && node.dotDotDotToken && !inConstructorWithSynthesizedSuper;
+            return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
         }
 
         /**

@@ -424,7 +424,7 @@ namespace Utils {
                 filtered.push(line);
             }
 
-            (<any>error).stack = filtered.join(ts.sys.newLine);
+            (<any>error).stack = filtered.join(Harness.IO.newLine());
         }
 
         return error;
@@ -751,7 +751,16 @@ namespace Harness {
                 return dirPath;
             }
             export let directoryName: typeof IO.directoryName = Utils.memoize(directoryNameImpl);
-            export const resolvePath = (path: string) => directoryName(path);
+
+            export function resolvePath(path: string) {
+                const response = Http.getFileFromServerSync(serverRoot + path + "?resolve=true");
+                if (response.status === 200) {
+                    return response.responseText;
+                }
+                else {
+                    return null;
+                }
+            }
 
             export function fileExists(path: string): boolean {
                 const response = Http.getFileFromServerSync(serverRoot + path);
