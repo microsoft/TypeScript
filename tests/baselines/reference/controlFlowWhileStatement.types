@@ -117,10 +117,16 @@ function e() {
     while (cond) {
 >cond : boolean
 
+        x; // string | number
+>x : string | number
+
         x = 42;
 >x = 42 : number
 >x : string | number
 >42 : number
+
+        x; // number
+>x : number
     }
     x; // string | number
 >x : string | number

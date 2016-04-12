@@ -38,7 +38,9 @@ function e() {
     let x: string | number;
     x = "";
     while (cond) {
+        x; // string | number
         x = 42;
+        x; // number
     }
     x; // string | number
 }
@@ -117,7 +119,9 @@ function e() {
     var x;
     x = "";
     while (cond) {
+        x; // string | number
         x = 42;
+        x; // number
     }
     x; // string | number
 }

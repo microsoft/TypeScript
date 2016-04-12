@@ -98,22 +98,28 @@ function e() {
     while (cond) {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
         x = 42;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
+
+        x; // number
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
     }
     x; // string | number
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 36, 7))
 }
 function f() {
->f : Symbol(f, Decl(controlFlowWhileStatement.ts, 42, 1))
+>f : Symbol(f, Decl(controlFlowWhileStatement.ts, 44, 1))
 
     let x: string | number | boolean | RegExp | Function;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x = "";
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
 
     while (cond) {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
@@ -122,7 +128,7 @@ function f() {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
             x = 42;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
 
             break;
         }
@@ -130,33 +136,33 @@ function f() {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
             x = true;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
 
             continue;
         }
         x = /a/;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
     }
     x; // string | number | boolean | RegExp
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 44, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 46, 7))
 }
 function g() {
->g : Symbol(g, Decl(controlFlowWhileStatement.ts, 58, 1))
+>g : Symbol(g, Decl(controlFlowWhileStatement.ts, 60, 1))
 
     let x: string | number | boolean | RegExp | Function;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 >RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     x = "";
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 
     while (true) {
         if (cond) {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
             x = 42;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 
             break;
         }
@@ -164,14 +170,14 @@ function g() {
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 
             x = true;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 
             continue;
         }
         x = /a/;
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
     }
     x; // number
->x : Symbol(x, Decl(controlFlowWhileStatement.ts, 60, 7))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 }
 
