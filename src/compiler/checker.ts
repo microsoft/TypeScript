@@ -16947,6 +16947,25 @@ namespace ts {
         }
 
         function createResolver(): EmitResolver {
+            // this variable and functions that use it are deliberately moved here from the outer scope
+            // to avoid scope pollution
+            const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
+            let fileToDirective: FileMap<string>;
+            if (resolvedTypeReferenceDirectives) {
+                // populate reverse mapping: file path -> type reference directive that was resolved to this file
+                fileToDirective = createFileMap<string>();
+                for (const key in resolvedTypeReferenceDirectives) {
+                    if (!hasProperty(resolvedTypeReferenceDirectives, key)) {
+                        continue;
+                    }
+                    const resolvedDirective = resolvedTypeReferenceDirectives[key];
+                    if (!resolvedDirective) {
+                        continue;
+                    }
+                    const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                    fileToDirective.set(file.path, key);
+                }
+            }
             return {
                 getReferencedExportContainer,
                 getReferencedImportDeclaration,
@@ -16972,8 +16991,84 @@ namespace ts {
                 isOptionalParameter,
                 moduleExportsSomeValue,
                 isArgumentsLocalBinding,
-                getExternalModuleFileFromDeclaration
+                getExternalModuleFileFromDeclaration,
+                getTypeReferenceDirectivesForEntityName,
+                getTypeReferenceDirectivesForSymbol
             };
+
+            // defined here to avoid outer scope pollution
+            function getTypeReferenceDirectivesForEntityName(node: EntityName | PropertyAccessExpression): string[] {
+                // program does not have any files with type reference directives - bail out
+                if (!fileToDirective) {
+                    return undefined;
+                }
+                // property access can only be used as values
+                // qualified names can only be used as types\namespaces
+                // identifiers are treated as values only if they appear in type queries
+                const meaning = (node.kind === SyntaxKind.PropertyAccessExpression) || (node.kind === SyntaxKind.Identifier && isInTypeQuery(node))
+                    ? SymbolFlags.Value | SymbolFlags.ExportValue
+                    : SymbolFlags.Type | SymbolFlags.Namespace;
+
+                const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/true);
+                return symbol && symbol !== unknownSymbol ? getTypeReferenceDirectivesForSymbol(symbol, meaning) : undefined;
+            }
+
+            // defined here to avoid outer scope pollution
+            function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] {
+                // program does not have any files with type reference directives - bail out
+                if (!fileToDirective) {
+                    return undefined;
+                }
+                if (!isSymbolFromTypeDeclarationFile(symbol)) {
+                    return undefined;
+                }
+                // check what declarations in the symbol can contribute to the target meaning
+                let typeReferenceDirectives: string[];
+                for (const decl of symbol.declarations) {
+                    // check meaning of the local symbol to see if declaration needs to be analyzed further
+                    if (decl.symbol && decl.symbol.flags & meaning) {
+                        const file = getSourceFileOfNode(decl);
+                        const typeReferenceDirective = fileToDirective.get(file.path);
+                        if (typeReferenceDirective) {
+                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(typeReferenceDirective);
+                        }
+                    }
+                }
+                return typeReferenceDirectives;
+            }
+
+            function isSymbolFromTypeDeclarationFile(symbol: Symbol): boolean {
+                // bail out if symbol does not have associated declarations (i.e. this is transient symbol created for property in binding pattern)
+                if (!symbol.declarations) {
+                    return false;
+                }
+
+                // walk the parent chain for symbols to make sure that top level parent symbol is in the global scope
+                // external modules cannot define or contribute to type declaration files
+                let current =  symbol;
+                while (true) {
+                    const parent = getParentOfSymbol(current);
+                    if (parent) {
+                        current = parent;
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                if (current.valueDeclaration && current.valueDeclaration.kind === SyntaxKind.SourceFile && current.flags & SymbolFlags.ValueModule) {
+                    return false;
+                }
+
+                // check that at least one declaration of top level symbol originates from type declaration file
+                for (const decl of symbol.declarations) {
+                    const file = getSourceFileOfNode(decl);
+                    if (fileToDirective.contains(file.path)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile {
