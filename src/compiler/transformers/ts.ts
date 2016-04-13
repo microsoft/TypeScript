@@ -2390,7 +2390,21 @@ namespace ts {
                         [createVariableDeclaration(
                             getDeclarationName(node)
                         )],
-                        /*location*/ node
+                        // Trailing comments for module declaration should be emitted with function closure instead of variable statement
+                        // So do not set the end position for the variable statement node
+                        //     /** Module comment*/
+                        //     module m1 {
+                        //         function foo4Export() {
+                        //         }
+                        //     } // trailing comment module
+                        // Should emit
+                        //     /** Module comment*/
+                        //     var m1;
+                        //     (function (m1) {
+                        //         function foo4Export() {
+                        //         }
+                        //     })(m1 || (m1 = {})); // trailing comment module
+                        /*location*/ { pos: node.pos, end: -1 }
                     ),
                     node
                 )
