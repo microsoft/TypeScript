@@ -117,6 +117,25 @@ namespace ts {
                     return undefined;
                 }
 
+                const node = range as Node;
+                if (node.kind === SyntaxKind.VariableStatement &&
+                    node.original &&
+                    node.original.kind === SyntaxKind.ModuleDeclaration) {
+                    // Trailing comments for module declaration should be emitted with function closure instead of variable statement
+                    //     /** Module comment*/
+                    //     module m1 {
+                    //         function foo4Export() {
+                    //         }
+                    //     } // trailing comment module
+                    // Should emit
+                    //     /** Module comment*/
+                    //     var m1;
+                    //     (function (m1) {
+                    //         function foo4Export() {
+                    //         }
+                    //     })(m1 || (m1 = {})); // trailing comment module
+                    return undefined;
+                }
                 return getTrailingCommentsOfPosition(range.end);
             }
 
