@@ -553,7 +553,7 @@ namespace ts {
             }
             else {
                 statements.push(
-                    createExportStatement(node.name, node.name, /*location*/ node)
+                    createExportStatement(node.name, setNodeEmitFlags(getSynthesizedClone(node.name), NodeEmitFlags.LocalName), /*location*/ node)
                 );
             }
         }
@@ -713,6 +713,10 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            if (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) {
+                return node;
+            }
+
             const container = resolver.getReferencedExportContainer(node, (getNodeEmitFlags(node) & NodeEmitFlags.ExportName) !== 0);
             if (container) {
                 if (container.kind === SyntaxKind.SourceFile) {
