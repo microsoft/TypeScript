@@ -1910,6 +1910,9 @@ namespace ts {
                 // This is so that they can flow through PropertyName transforms unaffected.
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
                 transformFlags = TransformFlags.ContainsComputedPropertyName;
+                if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+                    transformFlags |= TransformFlags.ContainsLexicalThisInComputedPropertyName;
+                }
                 break;
 
             case SyntaxKind.SpreadElementExpression:
@@ -1944,6 +1947,9 @@ namespace ts {
                     // If an ObjectLiteralExpression contains a ComputedPropertyName, then it
                     // is an ES6 node.
                     transformFlags = TransformFlags.AssertES6;
+                }
+                if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+                    transformFlags |= TransformFlags.ContainsLexicalThis;
                 }
                 break;
 
@@ -2256,6 +2262,9 @@ namespace ts {
             || hasModifier(node, ModifierFlags.Export)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
+        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+            transformFlags |= TransformFlags.ContainsLexicalThis;
+        }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ClassExcludes);
     }
@@ -2271,6 +2280,9 @@ namespace ts {
                 | TransformFlags.ContainsPropertyInitializer
                 | TransformFlags.ContainsDecorators)) {
             transformFlags |= TransformFlags.AssertTypeScript;
+        }
+        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+            transformFlags |= TransformFlags.ContainsLexicalThis;
         }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ClassExcludes);

@@ -2830,11 +2830,12 @@ namespace ts {
         ContainsPropertyInitializer = 1 << 10,
         ContainsLexicalThis = 1 << 11,
         ContainsCapturedLexicalThis = 1 << 12,
-        ContainsDefaultValueAssignments = 1 << 13,
-        ContainsParameterPropertyAssignments = 1 << 14,
-        ContainsSpreadElementExpression = 1 << 15,
-        ContainsComputedPropertyName = 1 << 16,
-        ContainsBlockScopedBinding = 1 << 17,
+        ContainsLexicalThisInComputedPropertyName = 1 << 13,
+        ContainsDefaultValueAssignments = 1 << 14,
+        ContainsParameterPropertyAssignments = 1 << 15,
+        ContainsSpreadElementExpression = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
 
         HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
@@ -2853,10 +2854,10 @@ namespace ts {
         FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
-        ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments,
+        ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName,
+        ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
     }
 
