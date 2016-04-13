@@ -18,7 +18,7 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;

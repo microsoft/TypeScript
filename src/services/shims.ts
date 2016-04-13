@@ -19,7 +19,7 @@
 let debugObjectHost = (<any>this);
 
 // We need to use 'null' to interface with the managed side.
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 /* tslint:disable:no-in-operator */
 
 /* @internal */
