@@ -2609,7 +2609,7 @@ const _super = (function (geti, seti) {
                 while (node.original !== undefined) {
                     const nodeId = node.id;
                     node = node.original;
-                    // If this is not the exact clone of identifier use this identifier to generate the name
+                    // If "node" is not the exact clone of "original" identifier, use "original" identifier to generate the name
                     if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node && node.id !== nodeId) {
                         break;
                     }
