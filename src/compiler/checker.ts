@@ -7528,7 +7528,7 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
-            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : initialType;
+            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : declaredType;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
@@ -7548,6 +7548,10 @@ namespace ts {
                                 continue;
                             }
                             return getTypeAtFlowLabel(<FlowLabel>flow);
+                        case FlowKind.Unreachable:
+                            // Unreachable code errors are reported in the binding phase. Here we
+                            // simply return the declared type to reduce follow-on errors.
+                            return declaredType;
                     }
                     // At the top of the flow we have the initial type
                     return initialType;
@@ -7909,6 +7913,8 @@ namespace ts {
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
+                // Return the declared type to reduce follow-on errors
+                return type;
             }
             return flowType;
         }
