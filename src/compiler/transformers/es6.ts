@@ -467,7 +467,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return node;
             }
-            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(<Identifier>getOriginalNode(node))) {
+            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(node)) {
                 return node;
             }
             return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
@@ -1426,10 +1426,7 @@ namespace ts {
             //   * Why loop initializer is excluded?
             //     - Since we've introduced a fresh name it already will be undefined.
 
-            const original = getOriginalNode(node);
-            Debug.assert(isVariableDeclaration(original));
-
-            const flags = resolver.getNodeCheckFlags(original);
+            const flags = resolver.getNodeCheckFlags(node);
             const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
             const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
             const emittedAsTopLevel =
@@ -1443,7 +1440,7 @@ namespace ts {
                 !emittedAsTopLevel
                 && enclosingBlockScopeContainer.kind !== SyntaxKind.ForInStatement
                 && enclosingBlockScopeContainer.kind !== SyntaxKind.ForOfStatement
-                && (!resolver.isDeclarationWithCollidingName(<Declaration>original)
+                && (!resolver.isDeclarationWithCollidingName(node)
                     || (isDeclaredInLoop
                         && !isCapturedInFunction
                         && !isIterationStatement(enclosingBlockScopeContainer, /*lookInLabeledStatements*/ false)));
@@ -1721,7 +1718,7 @@ namespace ts {
         }
 
         function shouldConvertIterationStatementBody(node: IterationStatement): boolean {
-            return (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
+            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
         }
 
         /**
@@ -2614,8 +2611,8 @@ namespace ts {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original) && !nodeIsSynthesized(original) && original.parent && isNameOfDeclarationWithCollidingName(original)) {
+                const original = getSourceTreeNodeOfType(node, isIdentifier);
+                if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
                 }
             }
@@ -2668,12 +2665,9 @@ namespace ts {
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original)) {
-                    const declaration = resolver.getReferencedDeclarationWithCollidingName(original);
-                    if (declaration) {
-                        return getGeneratedNameForNode(declaration.name);
-                    }
+                const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
+                if (declaration) {
+                    return getGeneratedNameForNode(declaration.name);
                 }
             }
 

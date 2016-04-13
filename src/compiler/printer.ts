@@ -1643,8 +1643,10 @@ const _super = (function (geti, seti) {
             function emitImportDeclaration(node: ImportDeclaration) {
                 emitModifiers(node, node.modifiers);
                 write("import ");
-                emit(node.importClause);
-                write(" from ");
+                if (node.importClause) {
+                    emit(node.importClause);
+                    write(" from ");
+                }
                 emitExpression(node.moduleSpecifier);
                 write(";");
             }
