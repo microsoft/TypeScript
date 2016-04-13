@@ -2214,24 +2214,6 @@ namespace ts {
         }
 
         /**
-         * Adds a leading VariableStatement for an enum or module declaration.
-         */
-        function addVarForEnumDeclaration(statements: Statement[], node: EnumDeclaration) {
-            // Emit a variable statement for the enum.
-            statements.push(
-                createVariableStatement(
-                    isES6ExportedDeclaration(node)
-                        ? visitNodes(node.modifiers, visitor, isModifier)
-                        : undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node)
-                    )],
-                    /*location*/ node
-                )
-            );
-        }
-
-        /**
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
@@ -2261,7 +2243,7 @@ namespace ts {
 
             const statements: Statement[] = [];
             if (shouldEmitVarForEnumDeclaration(node)) {
-                addVarForEnumDeclaration(statements, node);
+                addVarForEnumOrModuleDeclaration(statements, node);
             }
 
             const localName = getGeneratedNameForNode(node);
@@ -2395,9 +2377,9 @@ namespace ts {
         }
 
         /**
-         * Adds a leading VariableStatement for a module declaration.
+         * Adds a leading VariableStatement for a enum or module declaration.
          */
-        function addVarForModuleDeclaration(statements: Statement[], node: ModuleDeclaration) {
+        function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
             // Emit a variable statement for the module.
             statements.push(
                 setOriginalNode(
@@ -2433,7 +2415,7 @@ namespace ts {
             const statements: Statement[] = [];
 
             if (shouldEmitVarForModuleDeclaration(node)) {
-                addVarForModuleDeclaration(statements, node);
+                addVarForEnumOrModuleDeclaration(statements, node);
             }
 
             const localName = getGeneratedNameForNode(node);

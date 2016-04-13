@@ -120,7 +120,7 @@ namespace ts {
                 const node = range as Node;
                 if (node.kind === SyntaxKind.VariableStatement &&
                     node.original &&
-                    node.original.kind === SyntaxKind.ModuleDeclaration) {
+                    (node.original.kind === SyntaxKind.ModuleDeclaration || node.original.kind === SyntaxKind.EnumDeclaration)) {
                     // Trailing comments for module declaration should be emitted with function closure instead of variable statement
                     //     /** Module comment*/
                     //     module m1 {
