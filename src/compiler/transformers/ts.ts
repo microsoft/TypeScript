@@ -163,7 +163,7 @@ namespace ts {
                 (node.kind === SyntaxKind.ImportEqualsDeclaration &&
                  (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
-                return createNotEmittedStatement(node);
+                return undefined;
            }
            else if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
