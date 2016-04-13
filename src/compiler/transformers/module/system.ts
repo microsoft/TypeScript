@@ -573,8 +573,7 @@ namespace ts {
 
         function visitExportAssignment(node: ExportAssignment): Statement {
             if (!node.isExportEquals) {
-                const original = getOriginalNode(node);
-                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
                     return createExportStatement(
                         createLiteral("default"),
                         node.expression
@@ -1015,8 +1014,7 @@ namespace ts {
             const left = node.left;
             switch (left.kind) {
                 case SyntaxKind.Identifier:
-                    const originalNode = getOriginalNode(left);
-                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>originalNode);
+                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>left);
                     if (exportDeclaration) {
                         return createExportExpression(<Identifier>left, node);
                     }

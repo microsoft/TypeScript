@@ -1118,7 +1118,7 @@ namespace ts {
         }
 
         // Resolves a qualified name and any involved aliases
-        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol {
+        function resolveEntityName(name: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean, location?: Node): Symbol {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -1127,7 +1127,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
 
-                symbol = resolveName(name, (<Identifier>name).text, meaning, ignoreErrors ? undefined : message, <Identifier>name);
+                symbol = resolveName(location || name, (<Identifier>name).text, meaning, ignoreErrors ? undefined : message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -1136,7 +1136,7 @@ namespace ts {
                 const left = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).left : (<PropertyAccessExpression>name).expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
 
-                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors);
+                const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, location);
                 if (!namespace || namespace === unknownSymbol || nodeIsMissing(right)) {
                     return undefined;
                 }
@@ -16042,7 +16042,14 @@ namespace ts {
         // Emitter support
 
         function isArgumentsLocalBinding(node: Identifier): boolean {
-            return getReferencedValueSymbol(node) === argumentsSymbol;
+            if (!isGeneratedIdentifier(node)) {
+                node = getSourceTreeNodeOfType(node, isIdentifier);
+                if (node) {
+                    return getReferencedValueSymbol(node) === argumentsSymbol;
+                }
+            }
+
+            return false;
         }
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
@@ -16077,37 +16084,49 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration {
-            let symbol = getReferencedValueSymbol(node);
-            if (symbol) {
-                if (symbol.flags & SymbolFlags.ExportValue) {
-                    // If we reference an exported entity within the same module declaration, then whether
-                    // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
-                    // kinds that we do NOT prefix.
-                    const exportSymbol = getMergedSymbol(symbol.exportSymbol);
-                    if (exportSymbol.flags & SymbolFlags.ExportHasLocal && !prefixLocals) {
-                        return undefined;
+            node = getSourceTreeNodeOfType(node, isIdentifier);
+            if (node) {
+                let symbol = getReferencedValueSymbol(node);
+                if (symbol) {
+                    if (symbol.flags & SymbolFlags.ExportValue) {
+                        // If we reference an exported entity within the same module declaration, then whether
+                        // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
+                        // kinds that we do NOT prefix.
+                        const exportSymbol = getMergedSymbol(symbol.exportSymbol);
+                        if (exportSymbol.flags & SymbolFlags.ExportHasLocal && !prefixLocals) {
+                            return undefined;
+                        }
+                        symbol = exportSymbol;
                     }
-                    symbol = exportSymbol;
-                }
-                const parentSymbol = getParentOfSymbol(symbol);
-                if (parentSymbol) {
-                    if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
-                        return <SourceFile>parentSymbol.valueDeclaration;
-                    }
-                    for (let n = node.parent; n; n = n.parent) {
-                        if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
-                            return <ModuleDeclaration | EnumDeclaration>n;
+                    const parentSymbol = getParentOfSymbol(symbol);
+                    if (parentSymbol) {
+                        if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                            return <SourceFile>parentSymbol.valueDeclaration;
+                        }
+                        for (let n = node.parent; n; n = n.parent) {
+                            if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                                return <ModuleDeclaration | EnumDeclaration>n;
+                            }
                         }
                     }
                 }
             }
+
+            return undefined;
         }
 
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(node: Identifier): Declaration {
-            const symbol = getReferencedValueSymbol(node);
-            return symbol && symbol.flags & SymbolFlags.Alias ? getDeclarationOfAliasSymbol(symbol) : undefined;
+            node = getSourceTreeNodeOfType(node, isIdentifier);
+            if (node) {
+                const symbol = getReferencedValueSymbol(node);
+                if (symbol && symbol.flags & SymbolFlags.Alias) {
+                    return getDeclarationOfAliasSymbol(symbol);
+                }
+            }
+
+            return undefined;
         }
 
         function isSymbolOfDeclarationWithCollidingName(symbol: Symbol): boolean {
@@ -16157,35 +16176,57 @@ namespace ts {
         // a name that either hides an existing name or might hide it when compiled downlevel,
         // return the declaration of that entity. Otherwise, return undefined.
         function getReferencedDeclarationWithCollidingName(node: Identifier): Declaration {
-            const symbol = getReferencedValueSymbol(node);
-            return symbol && isSymbolOfDeclarationWithCollidingName(symbol) ? symbol.valueDeclaration : undefined;
+            if (!isGeneratedIdentifier(node)) {
+                node = getSourceTreeNodeOfType(node, isIdentifier);
+                if (node) {
+                    const symbol = getReferencedValueSymbol(node);
+                    if (symbol && isSymbolOfDeclarationWithCollidingName(symbol)) {
+                        return symbol.valueDeclaration;
+                    }
+                }
+            }
+
+            return undefined;
         }
 
         // Return true if the given node is a declaration of a nested block scoped entity with a name that either hides an
         // existing name or might hide a name when compiled downlevel
         function isDeclarationWithCollidingName(node: Declaration): boolean {
-            return isSymbolOfDeclarationWithCollidingName(getSymbolOfNode(node));
+            node = getSourceTreeNodeOfType(node, isDeclaration);
+            if (node) {
+                const symbol = getSymbolOfNode(node);
+                if (symbol) {
+                    return isSymbolOfDeclarationWithCollidingName(symbol);
+                }
+            }
+
+            return false;
         }
 
         function isValueAliasDeclaration(node: Node): boolean {
+            node = getSourceTreeNode(node);
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ImportClause:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    return isAliasResolvedToValue(getSymbolOfNode(node));
+                    return isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (<ExportDeclaration>node).exportClause;
                     return exportClause && forEach(exportClause.elements, isValueAliasDeclaration);
                 case SyntaxKind.ExportAssignment:
-                    return (<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ? isAliasResolvedToValue(getSymbolOfNode(node)) : true;
+                    return (<ExportAssignment>node).expression
+                        && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier
+                            ? isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol)
+                            : true;
             }
             return false;
         }
 
         function isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean {
-            if (node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportEqualsDeclaration(node)) {
+            node = getSourceTreeNodeOfType(node, isImportEqualsDeclaration);
+            if (node === undefined || node.parent.kind !== SyntaxKind.SourceFile || !isInternalModuleImportEqualsDeclaration(node)) {
                 // parent is not source file or it is not reference to internal module
                 return false;
             }
@@ -16212,9 +16253,10 @@ namespace ts {
         }
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
+            node = getSourceTreeNode(node);
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
-                if (getSymbolLinks(symbol).referenced) {
+                if (symbol && getSymbolLinks(symbol).referenced) {
                     return true;
                 }
             }
@@ -16247,7 +16289,8 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            return getNodeLinks(node).flags;
+            node = getSourceTreeNode(node);
+            return node ? getNodeLinks(node).flags : undefined;
         }
 
         function getEnumMemberValue(node: EnumMember): number {
@@ -16275,16 +16318,16 @@ namespace ts {
             return type.flags & TypeFlags.ObjectType && getSignaturesOfType(type, SignatureKind.Call).length > 0;
         }
 
-        function getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind {
+        function getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind {
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
-            const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true);
+            const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, location);
             const constructorType = valueSymbol ? getTypeOfSymbol(valueSymbol) : undefined;
             if (constructorType && isConstructorType(constructorType)) {
                 return TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
             }
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
-            const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true);
+            const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, location);
             // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
             if (!typeSymbol) {
                 return TypeReferenceSerializationKind.ObjectType;
@@ -16363,9 +16406,17 @@ namespace ts {
         }
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
-            Debug.assert(!nodeIsSynthesized(reference));
-            const symbol = getReferencedValueSymbol(reference);
-            return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
+            if (!isGeneratedIdentifier(reference)) {
+                reference = getSourceTreeNodeOfType(reference, isIdentifier);
+                if (reference) {
+                    const symbol = getReferencedValueSymbol(reference);
+                    if (symbol) {
+                        return getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
+                    }
+                }
+            }
+
+            return undefined;
         }
 
         function createResolver(): EmitResolver {
