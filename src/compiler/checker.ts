@@ -83,7 +83,7 @@ namespace ts {
             getShorthandAssignmentValueSymbol,
             getExportSpecifierLocalTargetSymbol,
             getTypeAtLocation: getTypeOfNode,
-            getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment,
+            getPropertySymbolOfDestructuringAssignment,
             typeToString,
             getSymbolDisplayBuilder,
             symbolToString,
@@ -16568,6 +16568,7 @@ namespace ts {
         // [ a ] from 
         //     [a] = [ some array ...]
         function getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(expr: Expression): Type {
+            Debug.assert(expr.kind === SyntaxKind.ObjectLiteralExpression || expr.kind === SyntaxKind.ArrayLiteralExpression);
             // If this is from "for of"
             //     for ( { a } of elems) {
             //     }
@@ -16594,6 +16595,18 @@ namespace ts {
             const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
                 indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
+        }
+
+        // Gets the property symbol corresponding to the property in destructuring assignment
+        // 'property1' from 
+        //     for ( { property1: a } of elems) {
+        //     }
+        // 'property1' at location 'a' from: 
+        //     [a] = [ property1, property2 ]
+        function getPropertySymbolOfDestructuringAssignment(location: Identifier) {
+            // Get the type of the object or array literal and then look for property of given name in the type
+            const typeOfObjectLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
+            return typeOfObjectLiteral && getPropertyOfType(typeOfObjectLiteral, location.text);
         }
 
         function getTypeOfExpression(expr: Expression): Type {

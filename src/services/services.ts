@@ -5651,14 +5651,8 @@ namespace ts {
             }
 
             function getPropertySymbolOfDestructuringAssignment(location: Node) {
-                if (isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent)) {
-                    // Do work to determine if this is a property symbol corresponding to the search symbol
-                    const typeOfObjectLiteral = typeChecker.getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
-                    if (typeOfObjectLiteral) {
-                        return typeChecker.getPropertyOfType(typeOfObjectLiteral, (<Identifier>location).text);
-                    }
-                }
-                return undefined;
+                return isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent) &&
+                    typeChecker.getPropertySymbolOfDestructuringAssignment(<Identifier>location);
             }
 
             function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol) {
