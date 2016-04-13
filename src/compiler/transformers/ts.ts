@@ -1276,7 +1276,7 @@ namespace ts {
             //
 
             const prefix = getClassMemberPrefix(node, member);
-            const memberName = getExpressionForPropertyName(member);
+            const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ true);
             const descriptor = languageVersion > ScriptTarget.ES3
                 ? member.kind === SyntaxKind.PropertyDeclaration
                     // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
@@ -1750,10 +1750,12 @@ namespace ts {
          *
          * @param member The member whose name should be converted into an expression.
          */
-        function getExpressionForPropertyName(member: ClassElement | EnumMember): Expression {
+        function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return getGeneratedNameForNode(name);
+                return generateNameForComputedPropertyName 
+                    ? getGeneratedNameForNode(name)
+                    : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
                 return createLiteral(name.text);
@@ -2337,7 +2339,10 @@ namespace ts {
          * @param member The enum member node.
          */
         function transformEnumMember(member: EnumMember): Statement {
-            const name = getExpressionForPropertyName(member);
+            // enums don't support computed properties
+            // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
+            // old emitter always generate 'expression' part of the name as-is.
+            const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
             return createStatement(
                 createAssignment(
                     createElementAccess(
