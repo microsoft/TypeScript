@@ -5,13 +5,13 @@ run(1);
 
 
 //// [isolatedModulesPlainFile-System.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             run(1);
         }
-    }
+    };
 });

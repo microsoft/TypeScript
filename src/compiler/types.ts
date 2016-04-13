@@ -1963,7 +1963,7 @@ namespace ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
+        getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
@@ -2875,8 +2875,9 @@ namespace ts {
         NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
         NoComments = 1 << 12,                    // Do not emit comments for this node.
-        PrefixExportedLocal = 1 << 13,           // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        Indented = 1 << 14,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2892,6 +2893,7 @@ namespace ts {
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;

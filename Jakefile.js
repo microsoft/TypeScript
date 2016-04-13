@@ -309,7 +309,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             options += " --stripInternal";
         }
 
-        if (useBuiltCompiler && !/^(no?|f(alse)?|0|-)$/i.test(process.env.USE_TRANSFORMS)) {
+        if (useBuiltCompiler && !environmentVariableIsDisabled("USE_TRANSFORMS")) {
             console.warn("\u001b[93mwarning: 'USE_TRANSFORMS' environment variable is not set to 'false'. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
@@ -826,14 +826,17 @@ function runTestsAndWriteOutput(file) {
     });
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets) {
-    cleanTestDirs();
+function runConsoleTests(defaultReporter, defaultSubsets, dirty) {
+    if (!dirty) {
+        cleanTestDirs();
+    }
+
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit || 1;
     var testConfigFile = 'test.config';
-    if(fs.existsSync(testConfigFile)) {
+    if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
@@ -866,7 +869,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0) {
+            if (i === 0 && !dirty) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -893,6 +896,9 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 
 task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
     runTestsAndWriteOutput("tests/baselines/local/testresults.tap");
+}, { async: true });
+task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
+    runConsoleTests("mocha-fivemat-progress-reporter", [], /*dirty*/ true);
 }, { async: true });
 
 desc("Generates code coverage data via instanbul");
@@ -1259,3 +1265,11 @@ ProgressBar.prototype = {
         this.visible = true;
     }
 };
+
+function environmentVariableIsEnabled(name) {
+    return /^(y(es)?|t(rue)?|on|enabled?|1|\+)$/.test(process.env[name]);
+}
+
+function environmentVariableIsDisabled(name) {
+    return /^(no?|f(alse)?|off|disabled?|0|-)$/.test(process.env[name]);
+}

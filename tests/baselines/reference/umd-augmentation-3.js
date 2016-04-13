@@ -48,7 +48,7 @@ var t = p.x;
 //// [b.js]
 "use strict";
 /// <reference path="math2d-augment.d.ts" />
-var m = require('math2d');
+var m = require("math2d");
 var v = new m.Vector(3, 2);
 var magnitude = m.getLength(v);
 var p = v.translate(5, 5);

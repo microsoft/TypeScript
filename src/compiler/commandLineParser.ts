@@ -474,7 +474,7 @@ namespace ts {
                 }
 
                 function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string) {
-                    const key = (value || "").trim().toLowerCase();
+                    const key = (value || "").toLowerCase();
                     const map = opt.type;
                     if (hasProperty(map, key)) {
                         return map[key];
@@ -485,7 +485,7 @@ namespace ts {
                 }
 
                 function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (string | number)[] {
-                    const values = (value || "").trim().split(",");
+                    const values = (value || "").split(",");
                     switch (opt.element.type) {
                         case "number":
                             return ts.map(values, parseInt);

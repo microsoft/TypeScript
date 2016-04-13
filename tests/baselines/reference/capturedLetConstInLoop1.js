@@ -114,15 +114,15 @@ for (const y = 0; y < 1;) {
 }
 
 //// [capturedLetConstInLoop1.js]
-//==== let
-var _loop_1 = function(x) {
+var _loop_1 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
+//==== let
 for (var x in {}) {
     _loop_1(x);
 }
-var _loop_2 = function(x) {
+var _loop_2 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
@@ -130,14 +130,14 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var x = _a[_i];
     _loop_2(x);
 }
-var _loop_3 = function(x) {
+var _loop_3 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
 for (var x = 0; x < 1; ++x) {
     _loop_3(x);
 }
-var _loop_4 = function() {
+var _loop_4 = function () {
     var x;
     (function () { return x; });
     (function () { return x; });
@@ -145,7 +145,7 @@ var _loop_4 = function() {
 while (1 === 1) {
     _loop_4();
 }
-var _loop_5 = function() {
+var _loop_5 = function () {
     var x;
     (function () { return x; });
     (function () { return x; });
@@ -153,7 +153,7 @@ var _loop_5 = function() {
 do {
     _loop_5();
 } while (1 === 1);
-var _loop_6 = function(y) {
+var _loop_6 = function (y) {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -161,14 +161,14 @@ var _loop_6 = function(y) {
 for (var y = 0; y < 1; ++y) {
     _loop_6(y);
 }
-var _loop_7 = function(x, y) {
+var _loop_7 = function (x, y) {
     (function () { return x + y; });
     (function () { return x + y; });
 };
 for (var x = 0, y = 1; x < 1; ++x) {
     _loop_7(x, y);
 }
-var _loop_8 = function() {
+var _loop_8 = function () {
     var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -176,7 +176,7 @@ var _loop_8 = function() {
 while (1 === 1) {
     _loop_8();
 }
-var _loop_9 = function() {
+var _loop_9 = function () {
     var x, y;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -184,7 +184,7 @@ var _loop_9 = function() {
 do {
     _loop_9();
 } while (1 === 1);
-var _loop_10 = function(y) {
+var _loop_10 = function (y) {
     var x = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -192,15 +192,15 @@ var _loop_10 = function(y) {
 for (var y = 0; y < 1; ++y) {
     _loop_10(y);
 }
-//=========const
-var _loop_11 = function(x) {
+var _loop_11 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
+//=========const
 for (var x in {}) {
     _loop_11(x);
 }
-var _loop_12 = function(x) {
+var _loop_12 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
@@ -208,14 +208,14 @@ for (var _b = 0, _c = []; _b < _c.length; _b++) {
     var x = _c[_b];
     _loop_12(x);
 }
-var _loop_13 = function(x) {
+var _loop_13 = function (x) {
     (function () { return x; });
     (function () { return x; });
 };
 for (var x = 0; x < 1;) {
     _loop_13(x);
 }
-var _loop_14 = function() {
+var _loop_14 = function () {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -223,7 +223,7 @@ var _loop_14 = function() {
 while (1 === 1) {
     _loop_14();
 }
-var _loop_15 = function() {
+var _loop_15 = function () {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -231,7 +231,7 @@ var _loop_15 = function() {
 do {
     _loop_15();
 } while (1 === 1);
-var _loop_16 = function(y) {
+var _loop_16 = function (y) {
     var x = 1;
     (function () { return x; });
     (function () { return x; });
@@ -239,14 +239,14 @@ var _loop_16 = function(y) {
 for (var y = 0; y < 1;) {
     _loop_16(y);
 }
-var _loop_17 = function(x, y) {
+var _loop_17 = function (x, y) {
     (function () { return x + y; });
     (function () { return x + y; });
 };
 for (var x = 0, y = 1; x < 1;) {
     _loop_17(x, y);
 }
-var _loop_18 = function() {
+var _loop_18 = function () {
     var x = 1, y = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -254,7 +254,7 @@ var _loop_18 = function() {
 while (1 === 1) {
     _loop_18();
 }
-var _loop_19 = function() {
+var _loop_19 = function () {
     var x = 1, y = 1;
     (function () { return x + y; });
     (function () { return x + y; });
@@ -262,7 +262,7 @@ var _loop_19 = function() {
 do {
     _loop_19();
 } while (1 === 1);
-var _loop_20 = function(y) {
+var _loop_20 = function (y) {
     var x = 1;
     (function () { return x + y; });
     (function () { return x + y; });

@@ -1707,4 +1707,75 @@ namespace ts {
         nodes.hasTrailingComma = hasTrailingComma;
         return nodes;
     }
+
+    /**
+     * Get the name of that target module from an import or export declaration
+     */
+    export function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier {
+        const namespaceDeclaration = getNamespaceDeclarationNode(node);
+        if (namespaceDeclaration && !isDefaultImport(node)) {
+            return createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, namespaceDeclaration.name));
+        }
+        if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
+            return getGeneratedNameForNode(node);
+        }
+        if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
+            return getGeneratedNameForNode(node);
+        }
+        return undefined;
+    }
+
+   /**
+     * Get the name of a target module from an import/export declaration as should be written in the emitted output.
+     * The emitted output name can be different from the input if:
+     *  1. The module has a /// <amd-module name="<new name>" />
+     *  2. --out or --outFile is used, making the name relative to the rootDir
+     *  3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
+     * Otherwise, a new StringLiteral node representing the module name will be returned.
+     */
+    export function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+        const moduleName = getExternalModuleName(importNode);
+        if (moduleName.kind === SyntaxKind.StringLiteral) {
+            return tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
+                || tryRenameExternalModule(<StringLiteral>moduleName, sourceFile)
+                || getSynthesizedClone(<StringLiteral>moduleName);
+        }
+
+        return undefined;
+    }
+
+    /**
+     * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
+     * Here we check if alternative name was provided for a given moduleName and return it if possible.
+     */
+    function tryRenameExternalModule(moduleName: LiteralExpression, sourceFile: SourceFile) {
+        if (sourceFile.renamedDependencies && hasProperty(sourceFile.renamedDependencies, moduleName.text)) {
+            return createLiteral(sourceFile.renamedDependencies[moduleName.text]);
+        }
+        return undefined;
+    }
+
+    /**
+     * Get the name of a module as should be written in the emitted output.
+     * The emitted output name can be different from the input if:
+     *  1. The module has a /// <amd-module name="<new name>" />
+     *  2. --out or --outFile is used, making the name relative to the rootDir
+     * Otherwise, a new StringLiteral node representing the module name will be returned.
+     */
+    export function tryGetModuleNameFromFile(file: SourceFile, host: EmitHost, options: CompilerOptions): StringLiteral {
+        if (!file) {
+            return undefined;
+        }
+        if (file.moduleName) {
+            return createLiteral(file.moduleName);
+        }
+        if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+            return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
+        }
+        return undefined;
+    }
+
+    function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+        return tryGetModuleNameFromFile(resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
+    }
 }

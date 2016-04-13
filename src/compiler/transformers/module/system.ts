@@ -20,6 +20,7 @@ namespace ts {
 
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
+        const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const previousExpressionSubstitution = context.expressionSubstitution;
         context.enableExpressionSubstitution(SyntaxKind.Identifier);
@@ -106,6 +107,7 @@ namespace ts {
             // Add the body of the module.
             addSystemModuleBody(statements, node, dependencyGroups);
 
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
             const body = createFunctionExpression(
                 /*asteriskToken*/ undefined,
@@ -127,8 +129,8 @@ namespace ts {
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        node.moduleName
-                            ? [createLiteral(node.moduleName), dependencies, body]
+                        moduleName
+                            ? [moduleName, dependencies, body]
                             : [dependencies, body]
                     )
                 )
@@ -341,11 +343,11 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const localName = forEach(group.externalImports, getLocalNameForExternalImport);
+                const localName = forEach(group.externalImports, i => getLocalNameForExternalImport(i, currentSourceFile));
                 const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
-                    const importVariableName = getLocalNameForExternalImport(entry);
+                    const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!(<ImportDeclaration>entry).importClause) {
@@ -534,7 +536,7 @@ namespace ts {
 
         function visitImportDeclaration(node: ImportDeclaration): Node {
             if (node.importClause && contains(externalImports, node)) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node));
+                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
             }
 
             return undefined;
@@ -542,7 +544,7 @@ namespace ts {
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): Node {
             if (contains(externalImports, node)) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node));
+                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
             }
 
             // NOTE(rbuckton): Do we support export import = require('') in System?
@@ -573,8 +575,7 @@ namespace ts {
 
         function visitExportAssignment(node: ExportAssignment): Statement {
             if (!node.isExportEquals) {
-                const original = getOriginalNode(node);
-                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
                     return createExportStatement(
                         createLiteral("default"),
                         node.expression
@@ -1015,8 +1016,7 @@ namespace ts {
             const left = node.left;
             switch (left.kind) {
                 case SyntaxKind.Identifier:
-                    const originalNode = getOriginalNode(left);
-                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>originalNode);
+                    const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>left);
                     if (exportDeclaration) {
                         return createExportExpression(<Identifier>left, node);
                     }
@@ -1152,41 +1152,6 @@ namespace ts {
             return node;
         }
 
-        function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-            const moduleName = getExternalModuleName(importNode);
-            if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedClone(<StringLiteral>moduleName);
-            }
-
-            return undefined;
-        }
-
-        /**
-         * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
-         * Here we check if alternative name was provided for a given moduleName and return it if possible.
-         */
-        function tryRenameExternalModule(moduleName: LiteralExpression) {
-            if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                return createLiteral(currentSourceFile.renamedDependencies[moduleName.text]);
-            }
-
-            return undefined;
-        }
-
-        function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            const namespaceDeclaration = getNamespaceDeclarationNode(node);
-            if (namespaceDeclaration && !isDefaultImport(node)) {
-                return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
-            }
-            if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
-                return getGeneratedNameForNode(node);
-            }
-            if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
-                return getGeneratedNameForNode(node);
-            }
-        }
-
         /**
          * Gets a name to use for a DeclarationStatement.
          * @param node The declaration statement.
@@ -1316,7 +1281,7 @@ namespace ts {
             const dependencyGroups: DependencyGroup[] = [];
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
-                const externalModuleName = getExternalModuleNameLiteral(externalImport);
+                const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
                 if (hasProperty(groupIndices, text)) {
                     // deduplicate/group entries in dependency list by the dependency name

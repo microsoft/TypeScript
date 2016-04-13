@@ -63,7 +63,7 @@ var f;
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
-var im = require('./declarationEmit_nameConflicts_1');
+var im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
     function f() { }

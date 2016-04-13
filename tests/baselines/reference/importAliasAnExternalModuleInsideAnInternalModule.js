@@ -23,7 +23,7 @@ var m;
 })(m = exports.m || (exports.m = {}));
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
-var r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
+var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
 var m_private;
 (function (m_private) {
     //import r2 = require('m'); // would be error

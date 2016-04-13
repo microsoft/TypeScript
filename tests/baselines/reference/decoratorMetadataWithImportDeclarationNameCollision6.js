@@ -36,7 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = db;
 //// [service.js]
 "use strict";
-var db_1 = require('./db');
+var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }
@@ -48,7 +48,7 @@ var MyClass = (function () {
     return MyClass;
 }());
 MyClass = __decorate([
-    someDecorator, 
-    __metadata('design:paramtypes', [db_1.default])
+    someDecorator,
+    __metadata("design:paramtypes", [db_1.default])
 ], MyClass);
 exports.MyClass = MyClass;

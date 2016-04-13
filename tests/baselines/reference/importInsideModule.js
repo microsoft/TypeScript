@@ -13,5 +13,6 @@ export module myModule {
 "use strict";
 var myModule;
 (function (myModule) {
+    import foo = require("importInsideModule_file1");
     var a = foo.x;
 })(myModule = exports.myModule || (exports.myModule = {}));
