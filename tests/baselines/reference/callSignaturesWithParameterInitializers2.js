@@ -48,7 +48,8 @@ var b = {
     foo: function (x) {
         if (x === void 0) { x = 1; }
     },
-    foo: function (x) {
+    foo: // error
+    function (x) {
         if (x === void 0) { x = 1; }
     }
 };

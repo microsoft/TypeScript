@@ -23,6 +23,7 @@ while (from)
 var ;
 typeof ;
 10;
+function () { }
 throw function () { };
 module;
 void {};

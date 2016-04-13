@@ -10,6 +10,7 @@ export default {
 //// [declarationEmit_inferedDefaultExportType.js]
 "use strict";
 exports.__esModule = true;
+// test.ts
 exports["default"] = {
     foo: [],
     bar: undefined,

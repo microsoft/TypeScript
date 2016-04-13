@@ -57,7 +57,7 @@ define(["require", "exports"], function (require, exports) {
     return D;
 });
 //// [externalModuleAssignToVar_core.js]
-define(["require", "exports", 'externalModuleAssignToVar_core_require', 'externalModuleAssignToVar_core_require2', 'externalModuleAssignToVar_ext'], function (require, exports, ext, ext2, ext3) {
+define(["require", "exports", "externalModuleAssignToVar_core_require", "externalModuleAssignToVar_core_require2", "externalModuleAssignToVar_ext"], function (require, exports, ext, ext2, ext3) {
     "use strict";
     var y1 = ext;
     y1 = ext; // ok

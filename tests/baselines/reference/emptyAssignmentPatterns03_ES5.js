@@ -7,8 +7,8 @@ var a: any;
 
 //// [emptyAssignmentPatterns03_ES5.js]
 var a;
-(a);
-(a);
+({} = a);
+([] = a);
 
 
 //// [emptyAssignmentPatterns03_ES5.d.ts]

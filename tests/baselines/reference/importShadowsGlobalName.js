@@ -26,7 +26,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", 'Foo'], function (require, exports, Error) {
+define(["require", "exports", "Foo"], function (require, exports, Error) {
     "use strict";
     var Bar = (function (_super) {
         __extends(Bar, _super);
