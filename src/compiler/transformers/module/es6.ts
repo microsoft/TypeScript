@@ -55,7 +55,7 @@ namespace ts {
 
         function visitExportDeclaration(node: ExportDeclaration): ExportDeclaration {
             if (!node.exportClause) {
-                return node; // export * is always emitted
+                return resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
             }
             if (!resolver.isValueAliasDeclaration(node)) {
                 return undefined;
