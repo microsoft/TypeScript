@@ -2644,7 +2644,7 @@ namespace ts {
                 return getNamespaceMemberName(name);
             }
             else {
-                // We set the "PrefixExportedLocal" flag to indicate to any module transformer
+                // We set the "ExportName" flag to indicate to any module transformer
                 // downstream that any `exports.` prefix should be added.
                 setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
                 return name;

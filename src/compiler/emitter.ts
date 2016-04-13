@@ -2240,41 +2240,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 emit(node.right);
             }
 
-            function emitQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean) {
+            function emitQualifiedNameAsExpression(node: QualifiedName, useFallback: boolean, location?: Node) {
                 if (node.left.kind === SyntaxKind.Identifier) {
-                    emitEntityNameAsExpression(node.left, useFallback);
+                    emitEntityNameAsExpression(node.left, useFallback, location);
                 }
                 else if (useFallback) {
                     const temp = createAndRecordTempVariable(TempFlags.Auto);
                     write("(");
                     emitNodeWithoutSourceMap(temp);
                     write(" = ");
-                    emitEntityNameAsExpression(node.left, /*useFallback*/ true);
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ true, location);
                     write(") && ");
                     emitNodeWithoutSourceMap(temp);
                 }
                 else {
-                    emitEntityNameAsExpression(node.left, /*useFallback*/ false);
+                    emitEntityNameAsExpression(node.left, /*useFallback*/ false, location);
                 }
 
                 write(".");
                 emit(node.right);
             }
 
-            function emitEntityNameAsExpression(node: EntityName | Expression, useFallback: boolean) {
+            function emitEntityNameAsExpression(node: EntityName | Expression, useFallback: boolean, location?: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
+                        let name = <Identifier>node;
+                        if (location) {
+                            // to resolve the expression to the correct container, create a shallow
+                            // clone of `node` with a new parent.
+                            name = clone(name);
+                            name.parent = location;
+                        }
+
                         if (useFallback) {
                             write("typeof ");
-                            emitExpressionIdentifier(<Identifier>node);
+                            emitExpressionIdentifier(name);
                             write(" !== 'undefined' && ");
                         }
 
-                        emitExpressionIdentifier(<Identifier>node);
+                        emitExpressionIdentifier(name);
                         break;
 
                     case SyntaxKind.QualifiedName:
-                        emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                        emitQualifiedNameAsExpression(<QualifiedName>node, useFallback, location);
                         break;
 
                     default:
@@ -5943,22 +5951,21 @@ const _super = (function (geti, seti) {
                 }
 
                 // Clone the type name and parent it to a location outside of the current declaration.
-                const typeName = cloneEntityName(node.typeName, location);
-                const result = resolver.getTypeReferenceSerializationKind(typeName);
+                const result = resolver.getTypeReferenceSerializationKind(node.typeName, location);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:
                         let temp = createAndRecordTempVariable(TempFlags.Auto);
                         write("(typeof (");
                         emitNodeWithoutSourceMap(temp);
                         write(" = ");
-                        emitEntityNameAsExpression(typeName, /*useFallback*/ true);
+                        emitEntityNameAsExpression(node.typeName, /*useFallback*/ true, location);
                         write(") === 'function' && ");
                         emitNodeWithoutSourceMap(temp);
                         write(") || Object");
                         break;
 
                     case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                        emitEntityNameAsExpression(typeName, /*useFallback*/ false);
+                        emitEntityNameAsExpression(node.typeName, /*useFallback*/ false, location);
                         break;
 
                     case TypeReferenceSerializationKind.VoidType:

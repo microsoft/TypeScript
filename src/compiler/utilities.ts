@@ -1711,28 +1711,6 @@ namespace ts {
             || kind === SyntaxKind.SourceFile;
     }
 
-    /**
-     * Creates a deep clone of an EntityName, with new parent pointers.
-     * NOTE: The new entity name will *not* have "original" pointers.
-     *
-     * @param node The EntityName to clone.
-     * @param parent The parent for the cloned node.
-     */
-    export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
-        const clone = getMutableClone(node);
-        clone.original = undefined;
-        clone.parent = parent;
-        if (isQualifiedName(clone)) {
-            const { left, right } = clone;
-            clone.left = cloneEntityName(left, clone);
-            clone.right = getMutableClone(right);
-            clone.right.original = undefined;
-            clone.right.parent = clone;
-        }
-
-        return clone;
-    }
-
     export function nodeIsSynthesized(node: TextRange): boolean {
         return positionIsSynthesized(node.pos)
             || positionIsSynthesized(node.end);

@@ -16216,7 +16216,10 @@ namespace ts {
                     const exportClause = (<ExportDeclaration>node).exportClause;
                     return exportClause && forEach(exportClause.elements, isValueAliasDeclaration);
                 case SyntaxKind.ExportAssignment:
-                    return (<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier ? isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol) : true;
+                    return (<ExportAssignment>node).expression
+                        && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier
+                            ? isAliasResolvedToValue(getSymbolOfNode(node) || unknownSymbol)
+                            : true;
             }
             return false;
         }
