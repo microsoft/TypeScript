@@ -1,7 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {
     Conformance,

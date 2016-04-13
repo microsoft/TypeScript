@@ -2,7 +2,7 @@
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {

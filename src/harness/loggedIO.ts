@@ -1,7 +1,7 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 interface FileInformation {
     contents: string;
