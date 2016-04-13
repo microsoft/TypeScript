@@ -781,7 +781,7 @@ namespace ts {
 
         function createExportAssignment(name: Identifier, value: Expression) {
             return createAssignment(
-                name.originalKeywordKind && languageVersion === ScriptTarget.ES3
+                name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion === ScriptTarget.ES3
                     ? createElementAccess(
                         createIdentifier("exports"),
                         createLiteral(name.text)
