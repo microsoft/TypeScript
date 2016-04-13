@@ -20,6 +20,8 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        getModifiedTime?(path: string): Date;
+        createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -226,6 +228,7 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _crypto = require("crypto");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -584,6 +587,19 @@ namespace ts {
                     return process.cwd();
                 },
                 readDirectory,
+                getModifiedTime(path) {
+                    try {
+                        return _fs.statSync(path).mtime;
+                    }
+                    catch (e) {
+                        return undefined;
+                    }
+                },
+                createHash(data) {
+                    const hash = _crypto.createHash("md5");
+                    hash.update(data);
+                    return hash.digest("hex");
+                },
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -626,16 +642,16 @@ namespace ts {
             };
         }
 
-        if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
+        if (typeof ChakraHost !== "undefined") {
+            return getChakraSystem();
+        }
+        else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like
             // process.browser check excludes webpack and browserify
             return getNodeSystem();
-        }
-        else if (typeof ChakraHost !== "undefined") {
-            return getChakraSystem();
         }
         else {
             return undefined; // Unsupported host

@@ -410,6 +410,7 @@ namespace ts {
         JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
+        HasJsxSpreadAttribute = 1 << 30,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1566,6 +1567,7 @@ namespace ts {
         amdDependencies: AmdDependency[];
         moduleName: string;
         referencedFiles: FileReference[];
+        typeReferenceDirectives: FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
@@ -1613,6 +1615,7 @@ namespace ts {
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
     }
@@ -1689,6 +1692,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
+        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1739,6 +1743,7 @@ namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: Diagnostic[];
+        emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -1748,6 +1753,7 @@ namespace ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
+        getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -1765,6 +1771,7 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
+        getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -1808,7 +1815,7 @@ namespace ts {
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
@@ -1955,6 +1962,8 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
+        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
     export const enum SymbolFlags {
@@ -2310,6 +2319,7 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        thisType?: Type;                    // type of this-type
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -2445,6 +2455,7 @@ namespace ts {
         jsx?: JsxEmit;
         reactNamespace?: string;
         listFiles?: boolean;
+        typesSearchPaths?: string[];
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -2454,6 +2465,7 @@ namespace ts {
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
+        noImplicitThis?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
@@ -2483,11 +2495,12 @@ namespace ts {
         baseUrl?: string;
         paths?: PathSubstitutions;
         rootDirs?: RootPaths;
-        traceModuleResolution?: boolean;
+        traceResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
         strictNullChecks?: boolean;
+        listEmittedFiles?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
@@ -2496,8 +2509,15 @@ namespace ts {
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
 
-        list?: string[];
+        /* @internal */
+        // When options come from a config file, its path is recorded here
+        configFilePath?: string;
+        /* @internal */
+        // Path used to used to compute primary search locations 
+        typesRoot?: string;
+        types?: string[];
 
+        list?: string[];
         [option: string]: CompilerOptionsValue;
     }
 
@@ -2778,10 +2798,23 @@ namespace ts {
         failedLookupLocations: string[];
     }
 
+    export interface ResolvedTypeReferenceDirective {
+        // True if the type declaration file was found in a primary lookup location
+        primary: boolean;
+        // The location of the .d.ts file we located, or undefined if resolution failed
+        resolvedFileName?: string;
+    }
+
+    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        failedLookupLocations: string[];
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
+        getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2796,6 +2829,10 @@ namespace ts {
          * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        /**
+         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files 
+         */
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
     }
 
     export interface TextSpan {

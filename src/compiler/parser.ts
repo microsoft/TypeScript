@@ -2025,7 +2025,7 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken;
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken || token === SyntaxKind.ThisKeyword;
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -2037,15 +2037,19 @@ namespace ts {
 
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            if (token === SyntaxKind.ThisKeyword) {
+                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.type = parseParameterType();
+                return finishNode(node);
+            }
+
             node.decorators = parseDecorators();
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
-
             node.name = parseIdentifierOrPattern();
-
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
@@ -2488,7 +2492,7 @@ namespace ts {
                 // Skip modifiers
                 parseModifiers();
             }
-            if (isIdentifier()) {
+            if (isIdentifier() || token === SyntaxKind.ThisKeyword) {
                 nextToken();
                 return true;
             }
@@ -5520,6 +5524,7 @@ namespace ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
+            const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
 
@@ -5546,7 +5551,12 @@ namespace ts {
                     sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     const diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
-                        referencedFiles.push(fileReference);
+                        if (referencePathMatchResult.isTypeReferenceDirective) {
+                            typeReferenceDirectives.push(fileReference);
+                        }
+                        else {
+                            referencedFiles.push(fileReference);
+                        }
                     }
                     if (diagnosticMessage) {
                         parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
@@ -5578,6 +5588,7 @@ namespace ts {
             }
 
             sourceFile.referencedFiles = referencedFiles;
+            sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
         }

@@ -18,7 +18,7 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
@@ -221,8 +221,8 @@ namespace FourSlash {
 
             function tryAdd(path: string) {
                 const inputFile = inputFiles[path];
-                if (inputFile && !Harness.isLibraryFile(path)) {
-                    languageServiceAdapterHost.addScript(path, inputFile);
+                if (inputFile && !Harness.isDefaultLibraryFile(path)) {
+                    languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
                 }
             }
@@ -247,6 +247,10 @@ namespace FourSlash {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
+            if (compilationOptions.typesRoot) {
+                compilationOptions.typesRoot = ts.getNormalizedAbsolutePath(compilationOptions.typesRoot, this.basePath);
+            }
+
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = languageServiceAdapter.getLanguageService();
@@ -268,7 +272,7 @@ namespace FourSlash {
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
-                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
+                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content, /*isRootFile*/ true);
 
                 const resolvedResult = languageServiceAdapter.getPreProcessedFileInfo(startResolveFileRef.fileName, startResolveFileRef.content);
                 const referencedFiles: ts.FileReference[] = resolvedResult.referencedFiles;
@@ -291,17 +295,19 @@ namespace FourSlash {
 
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                        Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
                 }
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
-                    if (!Harness.isLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName]);
+                    if (!Harness.isDefaultLibraryFile(fileName)) {
+                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
                 });
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                    Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
 
             this.formatCodeOptions = {

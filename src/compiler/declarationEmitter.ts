@@ -15,7 +15,7 @@ namespace ts {
         reportedDeclarationError: boolean;
         moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
         synchronousDeclarationOutput: string;
-        referencePathsOutput: string;
+        referencesOutput: string;
     }
 
     type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic;
@@ -35,7 +35,7 @@ namespace ts {
         forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
         return declarationDiagnostics.getDiagnostics(targetSourceFile ? targetSourceFile.fileName : undefined);
 
-        function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
+        function getDeclarationDiagnosticsFromFile({ declarationFilePath }: EmitFileNames, sources: SourceFile[], isBundledEmit: boolean) {
             emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
         }
     }
@@ -73,7 +73,9 @@ namespace ts {
         // Contains the reference paths that needs to go in the declaration file.
         // Collecting this separately because reference paths need to be first thing in the declaration file
         // and we could be collecting these paths from multiple files into single one with --out option
-        let referencePathsOutput = "";
+        let referencesOutput = "";
+
+        let usedTypeDirectiveReferences: Map<string>;
 
         // Emit references corresponding to each file
         const emittedReferencedFiles: SourceFile[] = [];
@@ -153,11 +155,19 @@ namespace ts {
             }
         });
 
+        if (usedTypeDirectiveReferences) {
+            for (const directive in usedTypeDirectiveReferences) {
+                if (hasProperty(usedTypeDirectiveReferences, directive)) {
+                    referencesOutput += `/// <reference types="${directive}" />${newLine}`;
+                }
+            }
+        }
+
         return {
             reportedDeclarationError,
             moduleElementDeclarationEmitInfo: allSourcesModuleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
-            referencePathsOutput,
+            referencesOutput,
         };
 
         function hasInternalAnnotation(range: CommentRange) {
@@ -253,6 +263,21 @@ namespace ts {
             setWriter(oldWriter);
         }
 
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[]): void {
+            if (!typeReferenceDirectives) {
+                return;
+            }
+
+            if (!usedTypeDirectiveReferences) {
+                usedTypeDirectiveReferences = {};
+            }
+            for (const directive of typeReferenceDirectives) {
+                if (!hasProperty(usedTypeDirectiveReferences, directive)) {
+                    usedTypeDirectiveReferences[directive] = directive;
+                }
+            }
+        }
+
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
             if (symbolAccessibilityResult.accessibility === SymbolAccessibility.Accessible) {
                 // write the aliases
@@ -284,6 +309,7 @@ namespace ts {
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
+            recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         }
 
         function reportInaccessibleThisError() {
@@ -420,6 +446,7 @@ namespace ts {
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
 
                 handleSymbolAccessibilityError(visibilityResult);
+                recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
                 writeEntityName(entityName);
             }
 
@@ -530,7 +557,10 @@ namespace ts {
             else {
                 // Expression
                 const tempVarName = getExportDefaultTempVariableName();
-                write("declare var ");
+                if (!noDeclare) {
+                    write("declare ");
+                }
+                write("var ");
                 write(tempVarName);
                 write(": ");
                 writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
@@ -1685,7 +1715,7 @@ namespace ts {
                     host.getCanonicalFileName,
                     /*isAbsolutePathAnUrl*/ false);
 
-                referencePathsOutput += '/// <reference path="' + declFileName + '" />' + newLine;
+                referencesOutput += `/// <reference path="${declFileName}" />${newLine}`;
             }
             return addedBundledEmitReference;
 
@@ -1707,7 +1737,7 @@ namespace ts {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
         const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
         if (!emitSkipped) {
-            const declarationOutput = emitDeclarationResult.referencePathsOutput
+            const declarationOutput = emitDeclarationResult.referencesOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM);
         }
