@@ -658,21 +658,19 @@ function exec(cmd, completeHandler, errorHandler) {
 }
 
 function cleanTestDirs() {
-    if (!environmentVariableIsDisabled("CLEAN_TESTS")) {
-        // Clean the local baselines directory
-        if (fs.existsSync(localBaseline)) {
-            jake.rmRf(localBaseline);
-        }
-
-        // Clean the local Rwc baselines directory
-        if (fs.existsSync(localRwcBaseline)) {
-            jake.rmRf(localRwcBaseline);
-        }
-
-        jake.mkdirP(localRwcBaseline);
-        jake.mkdirP(localTest262Baseline);
-        jake.mkdirP(localBaseline);
+    // Clean the local baselines directory
+    if (fs.existsSync(localBaseline)) {
+        jake.rmRf(localBaseline);
     }
+
+    // Clean the local Rwc baselines directory
+    if (fs.existsSync(localRwcBaseline)) {
+        jake.rmRf(localRwcBaseline);
+    }
+
+    jake.mkdirP(localRwcBaseline);
+    jake.mkdirP(localTest262Baseline);
+    jake.mkdirP(localBaseline);
 }
 
 // used to pass data from jake command line directly to run.js
@@ -828,8 +826,11 @@ function runTestsAndWriteOutput(file) {
     });
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets) {
-    cleanTestDirs();
+function runConsoleTests(defaultReporter, defaultSubsets, dirty) {
+    if (!dirty) {
+        cleanTestDirs();
+    }
+
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -868,7 +869,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0 && !environmentVariableIsDisabled("lint")) {
+            if (i === 0 && !dirty) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -895,6 +896,9 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 
 task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
     runTestsAndWriteOutput("tests/baselines/local/testresults.tap");
+}, { async: true });
+task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
+    runConsoleTests("mocha-fivemat-progress-reporter", [], /*dirty*/ true);
 }, { async: true });
 
 desc("Generates code coverage data via instanbul");
