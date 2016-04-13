@@ -852,33 +852,25 @@ namespace ts {
         function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[]): number {
             if (ctor.body) {
                 const statements = ctor.body.statements;
-                // find first statement that is not prologue directive
-                let indexOfFirstNonPrologueDirective = -1;
-                for (let i = 0; i < statements.length; i++) {
-                    if (!isPrologueDirective(statements[i])) {
-                        indexOfFirstNonPrologueDirective = i;
-                        break;
-                    }
+                // add prologue directives to the list (if any)
+                const index = addPrologueDirectives(result, statements);
+                if (index === statements.length) {
+                    // list contains nothing but prologue directives (or empty) - exit
+                    return index;
                 }
 
-                if (indexOfFirstNonPrologueDirective === -1) {
-                    return 0;
-                }
-
-                const statement = statements[indexOfFirstNonPrologueDirective];
+                const statement = statements[index];
                 if (statement.kind === SyntaxKind.ExpressionStatement) {
                     const expression = (<ExpressionStatement>statement).expression;
                     if (expression.kind === SyntaxKind.CallExpression) {
                         if ((<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
-                            for (let i = 0; i < indexOfFirstNonPrologueDirective; i++) {
-                                // push all non-prologue directives
-                                result.push(statements[i]);
-                            }
                             result.push(visitNode(statement, visitor, isStatement));
-                            return indexOfFirstNonPrologueDirective + 1;
+                            return index + 1;
                         }
                     }
                 }
+
+                return index;
             }
 
             return 0;
