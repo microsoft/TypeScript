@@ -130,7 +130,7 @@ namespace ts {
         let classifiableNames: Map<string>;
 
         const unreachableFlow: FlowNode = { kind: FlowKind.Unreachable };
-        const reportedUncreachableFlow: FlowNode = { kind: FlowKind.Unreachable };
+        const reportedUnreachableFlow: FlowNode = { kind: FlowKind.Unreachable };
 
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
@@ -2067,7 +2067,7 @@ namespace ts {
                     (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
 
                 if (reportError) {
-                    currentFlow = reportedUncreachableFlow;
+                    currentFlow = reportedUnreachableFlow;
 
                     // unreachable code is reported if
                     // - user has explicitly asked about it AND
