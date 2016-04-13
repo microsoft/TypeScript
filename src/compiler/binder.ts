@@ -1911,6 +1911,9 @@ namespace ts {
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
                 transformFlags = TransformFlags.ContainsComputedPropertyName;
                 if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
+                    // A computed method name that contains `this` needs to
+                    // distinguish itself from the normal case of a method body containing `this`.
+                    // So convert ContainsLexicalThis to ContainsLexicalThisInComputedPropertyName
                     transformFlags |= TransformFlags.ContainsLexicalThisInComputedPropertyName;
                 }
                 break;
