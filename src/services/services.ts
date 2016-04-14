@@ -1888,7 +1888,7 @@ namespace ts {
 
         options.isolatedModules = true;
 
-        // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths. 
+        // transpileModule does not write anything to disk so there is no need to verify that there are no conflicts between input and output paths.
         options.suppressOutputPathCheck = true;
 
         // Filename can be non-ts file.
@@ -5672,7 +5672,7 @@ namespace ts {
                         declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
                             declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
                     if (importOrExportSpecifier &&
-                        // export { a } 
+                        // export { a }
                         (!importOrExportSpecifier.propertyName ||
                             // export {a as class } where a is location
                             importOrExportSpecifier.propertyName === location)) {
@@ -5752,7 +5752,7 @@ namespace ts {
                     return undefined;
                 }
 
-                // If symbol is of object binding pattern element without property name we would want to 
+                // If symbol is of object binding pattern element without property name we would want to
                 // look for property too and that could be anywhere
                 if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
                     return undefined;
@@ -6213,7 +6213,7 @@ namespace ts {
                     result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
                 }
 
-                // If this is symbol of binding element without propertyName declaration in Object binding pattern 
+                // If this is symbol of binding element without propertyName declaration in Object binding pattern
                 // Include the property in the search
                 const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol);
                 if (bindingElementPropertySymbol) {
@@ -6267,7 +6267,7 @@ namespace ts {
 
                 if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration) {
+                        if (isClassLike(declaration)) {
                             getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
                             forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
@@ -6329,7 +6329,7 @@ namespace ts {
                     }
                 }
 
-                // If the reference location is the binding element and doesn't have property name 
+                // If the reference location is the binding element and doesn't have property name
                 // then include the binding element in the related symbols
                 //      let { a } : { a };
                 const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol);
