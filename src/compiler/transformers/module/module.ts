@@ -358,6 +358,9 @@ namespace ts {
                 return undefined;
             }
 
+            // Set emitFlags on the name of the importEqualsDeclaration
+            // This is so the printer will not substitute the identifier
+            setNodeEmitFlags(node.name, NodeEmitFlags.NoSubstitution);
             const statements: Statement[] = [];
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -639,6 +642,9 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             const name = node.name || getGeneratedNameForNode(node);
+            // Set emitFlags on the name of the classDeclaration
+            // This is so that when printer will not substitute the identifier
+            setNodeEmitFlags(name, NodeEmitFlags.NoSubstitution);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
                     createClassDeclaration(
@@ -834,6 +840,9 @@ namespace ts {
                 // Find the name of the module alias, if there is one
                 const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
                 if (includeNonAmdDependencies && importAliasName) {
+                    // Set emitFlags on the name of the classDeclaration
+                    // This is so that when printer will not substitute the identifier
+                    setNodeEmitFlags(importAliasName, NodeEmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(createParameter(importAliasName));
                 }
