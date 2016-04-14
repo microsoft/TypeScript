@@ -561,8 +561,11 @@ namespace ts {
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             // If the variable is for a generated declaration,
             // we should maintain it and just strip off the 'export' modifier if necesary.
-            const original = getOriginalNode(node);
-            if (original.kind === SyntaxKind.EnumDeclaration || original.kind === SyntaxKind.ModuleDeclaration) {
+            const originalKind = getOriginalNode(node).kind;
+            if (originalKind === SyntaxKind.ModuleDeclaration ||
+                originalKind === SyntaxKind.EnumDeclaration ||
+                originalKind === SyntaxKind.ClassDeclaration) {
+
                 if (!hasModifier(node, ModifierFlags.Export)) {
                     return node;
                 }
@@ -686,7 +689,10 @@ namespace ts {
                 statements.push(node);
             }
 
-            if (node.name) {
+            // Decorators end up creating a series of assignment expressions which overwrite
+            // the local binding that we export, so we need to defer from exporting decorated classes
+            // until the decoration assignments take place. We do this when visiting expression-statements.
+            if (node.name && !(node.decorators && node.decorators.length)) {
                 addExportMemberAssignments(statements, node.name);
             }
 
@@ -696,8 +702,18 @@ namespace ts {
         function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
             const original = getOriginalNode(node);
             const origKind = original.kind;
+
             if (origKind === SyntaxKind.EnumDeclaration || origKind === SyntaxKind.ModuleDeclaration) {
                 return visitExpressionStatementForEnumOrNamespaceDeclaration(node, <EnumDeclaration | ModuleDeclaration>original);
+            }
+            else if (origKind === SyntaxKind.ClassDeclaration) {
+                // The decorated assignment for a class name will need to be transformed.
+                const classDecl = original as ClassDeclaration;
+                if (classDecl.name) {
+                    const statements = [node];
+                    addExportMemberAssignments(statements, classDecl.name);
+                    return statements;
+                }
             }
 
             return node;

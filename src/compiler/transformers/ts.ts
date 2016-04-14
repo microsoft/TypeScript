@@ -1304,7 +1304,7 @@ namespace ts {
         function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration, decoratedClassAlias: Identifier) {
             const expression = generateConstructorDecorationExpression(node, decoratedClassAlias);
             if (expression) {
-                statements.push(createStatement(expression));
+                statements.push(setOriginalNode(createStatement(expression), node));
             }
         }
 
