@@ -707,11 +707,14 @@ namespace ts {
                 return visitExpressionStatementForEnumOrNamespaceDeclaration(node, <EnumDeclaration | ModuleDeclaration>original);
             }
             else if (origKind === SyntaxKind.ClassDeclaration) {
-                // The decorated assignment for a class name will need to be transformed.
+                // The decorated assignment for a class name will potentially need to be transformed.
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
                     addExportMemberAssignments(statements, classDecl.name);
+                    if (statements.length > 1) {
+                        Debug.assert(!!classDecl.decorators, "Expression statements should only have an export member assignment when decorated.")
+                    }
                     return statements;
                 }
             }
