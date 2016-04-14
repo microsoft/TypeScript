@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        "removeComments": true,
+        "removeComments": false,
         "preserveConstEnums": true,
         "out": "../../built/local/tsc.js",
         "sourceMap": true
