@@ -1911,9 +1911,14 @@ namespace ts {
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
                 transformFlags = TransformFlags.ContainsComputedPropertyName;
                 if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
-                    // A computed method name that contains `this` needs to
-                    // distinguish itself from the normal case of a method body containing `this`.
-                    // So convert ContainsLexicalThis to ContainsLexicalThisInComputedPropertyName
+                    // A computed method name like `[this.getName()](x: string) { ... }` needs to
+                    // distinguish itself from the normal case of a method body containing `this`:
+                    // `this` inside a method doesn't need to be rewritten (the method provides `this`),
+                    // whereas `this` inside a computed name *might* need to be rewritten if the class/object
+                    // is inside an arrow function:
+                    // `_this = this; () => class K { [_this.getName()]() { ... } }`
+                    // To make this distinction, use ContainsLexicalThisInComputedPropertyName
+                    // instead of ContainsLexicalThis for computed property names
                     transformFlags |= TransformFlags.ContainsLexicalThisInComputedPropertyName;
                 }
                 break;
@@ -1952,6 +1957,8 @@ namespace ts {
                     transformFlags = TransformFlags.AssertES6;
                 }
                 if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+                    // A computed property name containing `this` might need to be rewritten,
+                    // so propagate the ContainsLexicalThis flag upward.
                     transformFlags |= TransformFlags.ContainsLexicalThis;
                 }
                 break;
@@ -2266,6 +2273,8 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
         if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+            // A computed property name containing `this` might need to be rewritten,
+            // so propagate the ContainsLexicalThis flag upward.
             transformFlags |= TransformFlags.ContainsLexicalThis;
         }
 
@@ -2285,6 +2294,8 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
         if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
+            // A computed property name containing `this` might need to be rewritten,
+            // so propagate the ContainsLexicalThis flag upward.
             transformFlags |= TransformFlags.ContainsLexicalThis;
         }
 
