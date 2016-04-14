@@ -1211,7 +1211,15 @@ namespace ts {
             let statementsLocation: TextRange;
 
             const statements: Statement[] = [];
+            const body = node.body;
+            let statementOffset: number;
+
             startLexicalEnvironment();
+            if (isBlock(body)) {
+                // ensureUseStrict is false because no new prologue-directive should be added.
+                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
+                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
+            }
             addCaptureThisForNodeIfNeeded(statements, node);
             addDefaultValueAssignmentsIfNeeded(statements, node);
             addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
@@ -1221,10 +1229,9 @@ namespace ts {
                 multiLine = true;
             }
 
-            const body = node.body;
             if (isBlock(body)) {
                 statementsLocation = body.statements;
-                addRange(statements, visitNodes(body.statements, visitor, isStatement));
+                addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
                 // If the original body was a multi-line block, this must be a multi-line block.
                 if (!multiLine && body.multiLine) {

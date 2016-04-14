@@ -1252,7 +1252,18 @@ namespace ts {
         return (node.expression as StringLiteral).text === "use strict";
     }
 
+    /**
+     * Add any necessary prologue-directives into target statement-array.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
+     * 
+     * @param target: result statements array
+     * @param source: origin statements array
+     * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
+     */
     export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+        Debug.assert(target.length === 0, "PrologueDirectives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         for (let i = 0; i < source.length; i++) {
             if (isPrologueDirective(source[i])) {
