@@ -40,9 +40,9 @@ var M2;
 })(M2 = exports.M2 || (exports.M2 = {}));
 //// [foo_3.js]
 "use strict";
-var foo0 = require('../foo_0');
-var foo1 = require('./test/foo_1');
-var foo2 = require('./.././test/foo_2');
+var foo0 = require("../foo_0");
+var foo1 = require("./test/foo_1");
+var foo2 = require("./.././test/foo_2");
 if (foo2.M2.x) {
     var x = foo0.foo + foo1.f();
 }

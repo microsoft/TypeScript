@@ -16,7 +16,7 @@ var z = b.x;
 //// [declFileForExportedImport_1.js]
 "use strict";
 ///<reference path='declFileForExportedImport_0.ts'/>
-exports.a = require('./declFileForExportedImport_0');
+exports.a = require("./declFileForExportedImport_0");
 var y = exports.a.x;
 exports.b = exports.a;
 var z = exports.b.x;

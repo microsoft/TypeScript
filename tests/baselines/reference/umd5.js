@@ -18,7 +18,7 @@ let z = Foo;
 
 //// [a.js]
 "use strict";
-var Bar = require('./foo');
+var Bar = require("./foo");
 Bar.fn();
 var x;
 var y = x.n;

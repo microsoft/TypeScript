@@ -1963,7 +1963,7 @@ namespace ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
+        getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
@@ -2498,7 +2498,7 @@ namespace ts {
         noImplicitUseStrict?: boolean;
         lib?: string[];
         /* @internal */ stripInternal?: boolean;
-        /* @internal */ experimentalTransforms?: boolean;
+        /* @internal */ useLegacyEmitter?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
@@ -2805,6 +2805,7 @@ namespace ts {
          * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        getEnvironmentVariable?(name: string): string;
     }
 
     /* @internal */
@@ -2829,11 +2830,12 @@ namespace ts {
         ContainsPropertyInitializer = 1 << 10,
         ContainsLexicalThis = 1 << 11,
         ContainsCapturedLexicalThis = 1 << 12,
-        ContainsDefaultValueAssignments = 1 << 13,
-        ContainsParameterPropertyAssignments = 1 << 14,
-        ContainsSpreadElementExpression = 1 << 15,
-        ContainsComputedPropertyName = 1 << 16,
-        ContainsBlockScopedBinding = 1 << 17,
+        ContainsLexicalThisInComputedPropertyName = 1 << 13,
+        ContainsDefaultValueAssignments = 1 << 14,
+        ContainsParameterPropertyAssignments = 1 << 15,
+        ContainsSpreadElementExpression = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
 
         HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
@@ -2852,10 +2854,10 @@ namespace ts {
         FunctionExcludes = ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding,
         ConstructorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         MethodOrAccessorExcludes = ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
-        ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments,
+        ClassExcludes = ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName,
+        ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
     }
 
@@ -2874,8 +2876,9 @@ namespace ts {
         NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
         NoComments = 1 << 12,                    // Do not emit comments for this node.
-        PrefixExportedLocal = 1 << 13,           // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        Indented = 1 << 14,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
     }
 
     /** Additional context provided to `visitEachChild` */
@@ -2891,6 +2894,7 @@ namespace ts {
     export interface TransformationContext extends LexicalEnvironment {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
+        getEmitHost(): EmitHost;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;

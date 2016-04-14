@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
     ;
 });
 //// [externalModuleReferenceOfImportDeclarationWithExportModifier_1.js]
-define(["require", "exports", 'externalModuleReferenceOfImportDeclarationWithExportModifier_0'], function (require, exports, file1) {
+define(["require", "exports", "externalModuleReferenceOfImportDeclarationWithExportModifier_0"], function (require, exports, file1) {
     "use strict";
     exports.file1 = file1;
     exports.file1.foo();

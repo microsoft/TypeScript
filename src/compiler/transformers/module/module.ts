@@ -21,6 +21,7 @@ namespace ts {
 
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
+        const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const previousExpressionSubstitution = context.expressionSubstitution;
@@ -31,7 +32,7 @@ namespace ts {
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let hasExportStars: boolean;
+        let hasExportStarsToExportValues: boolean;
 
         return transformSourceFile;
 
@@ -45,7 +46,7 @@ namespace ts {
                 currentSourceFile = node;
 
                 // Collect information about the external module.
-                ({ externalImports, exportSpecifiers, exportEquals, hasExportStars } = collectExternalModuleInfo(node, resolver));
+                ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
                 // Perform the transformation.
                 const updated = transformModuleDelegates[moduleKind](node);
@@ -55,7 +56,7 @@ namespace ts {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 return updated;
             }
 
@@ -77,7 +78,7 @@ namespace ts {
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
 
             const updated = updateSourceFile(node, statements);
-            if (hasExportStars) {
+            if (hasExportStarsToExportValues) {
                 setNodeEmitFlags(updated, NodeEmitFlags.EmitExportStar | getNodeEmitFlags(node));
             }
 
@@ -91,7 +92,7 @@ namespace ts {
          */
         function transformAMDModule(node: SourceFile) {
             const define = createIdentifier("define");
-            const moduleName = node.moduleName ? createLiteral(node.moduleName) : undefined;
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
             return transformAsynchronousModule(node, define, moduleName, /*includeNonAmdDependencies*/ true);
         }
 
@@ -200,7 +201,7 @@ namespace ts {
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
-            if (hasExportStars) {
+            if (hasExportStarsToExportValues) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 setNodeEmitFlags(body, NodeEmitFlags.EmitExportStar);
@@ -357,6 +358,9 @@ namespace ts {
                 return undefined;
             }
 
+            // Set emitFlags on the name of the importEqualsDeclaration
+            // This is so the printer will not substitute the identifier
+            setNodeEmitFlags(node.name, NodeEmitFlags.NoSubstitution);
             const statements: Statement[] = [];
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -442,7 +446,7 @@ namespace ts {
 
                 return singleOrMany(statements);
             }
-            else {
+            else if (resolver.moduleExportsSomeValue(node.moduleSpecifier)) {
                 // export * from "mod";
                 return createStatement(
                     createCall(
@@ -460,8 +464,7 @@ namespace ts {
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
             if (!node.isExportEquals) {
-                const original = getOriginalNode(node);
-                if (nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original)) {
+                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
                     const statements: Statement[] = [];
                     addExportDefault(statements, node.expression, /*location*/ node);
                     return statements;
@@ -553,7 +556,7 @@ namespace ts {
             }
             else {
                 statements.push(
-                    createExportStatement(node.name, node.name, /*location*/ node)
+                    createExportStatement(node.name, setNodeEmitFlags(getSynthesizedClone(node.name), NodeEmitFlags.LocalName), /*location*/ node)
                 );
             }
         }
@@ -639,6 +642,9 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             const name = node.name || getGeneratedNameForNode(node);
+            // Set emitFlags on the name of the classDeclaration
+            // This is so that when printer will not substitute the identifier
+            setNodeEmitFlags(name, NodeEmitFlags.NoSubstitution);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
                     createClassDeclaration(
@@ -713,40 +719,50 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            const original = getOriginalNode(node);
-            if (isIdentifier(original)) {
-                const container = resolver.getReferencedExportContainer(original, (getNodeEmitFlags(node) & NodeEmitFlags.PrefixExportedLocal) !== 0);
-                if (container) {
-                    if (container.kind === SyntaxKind.SourceFile) {
-                        return createPropertyAccess(
-                            createIdentifier("exports"),
-                            getSynthesizedClone(node),
-                            /*location*/ node
-                        );
-                    }
+            if (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) {
+                return node;
+            }
+
+            const container = resolver.getReferencedExportContainer(node, (getNodeEmitFlags(node) & NodeEmitFlags.ExportName) !== 0);
+            if (container) {
+                if (container.kind === SyntaxKind.SourceFile) {
+                    return createPropertyAccess(
+                        createIdentifier("exports"),
+                        getSynthesizedClone(node),
+                        /*location*/ node
+                    );
                 }
-                else {
-                    const declaration = resolver.getReferencedImportDeclaration(node.parent ? node : original);
-                    if (declaration) {
-                        if (declaration.kind === SyntaxKind.ImportClause) {
-                            if (languageVersion >= ScriptTarget.ES5) {
-                                return createPropertyAccess(
-                                    getGeneratedNameForNode(declaration.parent),
-                                    createIdentifier("default"),
-                                    /*location*/ node
-                                );
-                            }
-                            else {
-                                return createElementAccess(
-                                    getGeneratedNameForNode(declaration.parent),
-                                    createLiteral("default"),
-                                    /*location*/ node
-                                );
-                            }
+            }
+            else {
+                const declaration = resolver.getReferencedImportDeclaration(node);
+                if (declaration) {
+                    if (declaration.kind === SyntaxKind.ImportClause) {
+                        if (languageVersion >= ScriptTarget.ES5) {
+                            return createPropertyAccess(
+                                getGeneratedNameForNode(declaration.parent),
+                                createIdentifier("default"),
+                                /*location*/ node
+                            );
                         }
-                        else if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                            const name = (<ImportSpecifier>declaration).propertyName
-                                || (<ImportSpecifier>declaration).name;
+                        else {
+                            return createElementAccess(
+                                getGeneratedNameForNode(declaration.parent),
+                                createLiteral("default"),
+                                /*location*/ node
+                            );
+                        }
+                    }
+                    else if (declaration.kind === SyntaxKind.ImportSpecifier) {
+                        const name = (<ImportSpecifier>declaration).propertyName
+                            || (<ImportSpecifier>declaration).name;
+                        if (name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion <= ScriptTarget.ES3) {
+                            return createElementAccess(
+                                getGeneratedNameForNode(declaration.parent.parent.parent),
+                                createLiteral(name.text),
+                                /*location*/ node
+                            );
+                        }
+                        else {
                             return createPropertyAccess(
                                 getGeneratedNameForNode(declaration.parent.parent.parent),
                                 getSynthesizedClone(name),
@@ -768,42 +784,8 @@ namespace ts {
             );
         }
 
-        function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-            const moduleName = getExternalModuleName(importNode);
-            if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || createLiteral(<StringLiteral>moduleName);
-            }
-
-            return undefined;
-        }
-
-        /**
-         * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
-         * Here we check if alternative name was provided for a given moduleName and return it if possible.
-         */
-        function tryRenameExternalModule(moduleName: LiteralExpression) {
-            if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                return createLiteral(currentSourceFile.renamedDependencies[moduleName.text]);
-            }
-            return undefined;
-        }
-
-        function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            const namespaceDeclaration = getNamespaceDeclarationNode(node);
-            if (namespaceDeclaration && !isDefaultImport(node)) {
-                return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
-            }
-            if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
-                return getGeneratedNameForNode(node);
-            }
-            if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
-                return getGeneratedNameForNode(node);
-            }
-        }
-
         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-            const moduleName = getExternalModuleNameLiteral(importNode);
+            const moduleName = getExternalModuleNameLiteral(importNode, currentSourceFile, host, resolver, compilerOptions);
             const args: Expression[] = [];
             if (isDefined(moduleName)) {
                 args.push(moduleName);
@@ -818,7 +800,7 @@ namespace ts {
 
         function createExportAssignment(name: Identifier, value: Expression) {
             return createAssignment(
-                name.originalKeywordKind && languageVersion === ScriptTarget.ES3
+                name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion === ScriptTarget.ES3
                     ? createElementAccess(
                         createIdentifier("exports"),
                         createLiteral(name.text)
@@ -862,11 +844,14 @@ namespace ts {
 
             for (const importNode of externalImports) {
                 // Find the name of the external module
-                const externalModuleName = getExternalModuleNameLiteral(importNode);
+                const externalModuleName = getExternalModuleNameLiteral(importNode, currentSourceFile, host, resolver, compilerOptions);
 
                 // Find the name of the module alias, if there is one
-                const importAliasName = getLocalNameForExternalImport(importNode);
+                const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
                 if (includeNonAmdDependencies && importAliasName) {
+                    // Set emitFlags on the name of the classDeclaration
+                    // This is so that when printer will not substitute the identifier
+                    setNodeEmitFlags(importAliasName, NodeEmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(createParameter(importAliasName));
                 }

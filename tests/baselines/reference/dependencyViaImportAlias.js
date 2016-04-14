@@ -21,7 +21,7 @@ define(["require", "exports"], function (require, exports) {
     exports.A = A;
 });
 //// [B.js]
-define(["require", "exports", 'A'], function (require, exports, a) {
+define(["require", "exports", "A"], function (require, exports, a) {
     "use strict";
     var A = a.A;
     return A;

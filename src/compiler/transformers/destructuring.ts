@@ -17,10 +17,16 @@ namespace ts {
         node: BinaryExpression,
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
-        visitor?: (node: Node) => VisitResult<Node>) {
+        visitor?: (node: Node) => VisitResult<Node>): Expression {
 
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
-            return node.right;
+            const right = node.right;
+            if (isDestructuringAssignment(right)) {
+                return flattenDestructuringAssignment(context, right, needsValue, recordTempVariable, visitor);
+            }
+            else {
+                return node.right;
+            }
         }
 
         let location: TextRange = node;

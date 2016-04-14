@@ -169,6 +169,18 @@ namespace ts {
         return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
+    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
+        if (host && host.getEnvironmentVariable) {
+            return host.getEnvironmentVariable(name);
+        }
+
+        if (sys && sys.getEnvironmentVariable) {
+            return sys.getEnvironmentVariable(name);
+        }
+
+        return "";
+    }
+
     export function getStartPosOfNode(node: Node): number {
         return node.pos;
     }
@@ -1699,24 +1711,6 @@ namespace ts {
             || kind === SyntaxKind.SourceFile;
     }
 
-    /**
-     * Creates a deep clone of an EntityName, with new parent pointers.
-     * @param node The EntityName to clone.
-     * @param parent The parent for the cloned node.
-     */
-    export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
-        const clone = getMutableClone(node);
-        clone.parent = parent;
-        if (isQualifiedName(clone)) {
-            const { left, right } = clone;
-            clone.left = cloneEntityName(left, clone);
-            clone.right = getMutableClone(right);
-            clone.right.parent = clone;
-        }
-
-        return clone;
-    }
-
     export function nodeIsSynthesized(node: TextRange): boolean {
         return positionIsSynthesized(node.pos)
             || positionIsSynthesized(node.end);
@@ -1729,11 +1723,29 @@ namespace ts {
     }
 
     export function getOriginalNode(node: Node): Node {
-        while (node.original !== undefined) {
-            node = node.original;
+        if (node) {
+            while (node.original !== undefined) {
+                node = node.original;
+            }
         }
 
         return node;
+    }
+
+    export function getSourceTreeNode(node: Node): Node {
+        node = getOriginalNode(node);
+        if (node) {
+            if (node.parent || node.kind === SyntaxKind.SourceFile) {
+                return node;
+            }
+        }
+
+        return undefined;
+    }
+
+    export function getSourceTreeNodeOfType<T extends Node>(node: T, nodeTest: (node: Node) => node is T): T {
+        const source = getSourceTreeNode(node);
+        return source && nodeTest(source) ? source : undefined;
     }
 
     export function getOriginalNodeId(node: Node) {
@@ -2972,7 +2984,7 @@ namespace ts {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers: Map<ExportSpecifier[]> = {};
         let exportEquals: ExportAssignment = undefined;
-        let hasExportStars = false;
+        let hasExportStarsToExportValues = false;
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -2987,7 +2999,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(getOriginalNode(node))) {
+                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference && resolver.isReferencedAliasDeclaration(node)) {
                         // import x = require("mod") where x is referenced
                         externalImports.push(<ImportEqualsDeclaration>node);
                     }
@@ -2997,10 +3009,12 @@ namespace ts {
                     if ((<ExportDeclaration>node).moduleSpecifier) {
                         if (!(<ExportDeclaration>node).exportClause) {
                             // export * from "mod"
-                            externalImports.push(<ExportDeclaration>node);
-                            hasExportStars = true;
+                            if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
+                                externalImports.push(<ExportDeclaration>node);
+                                hasExportStarsToExportValues = true;
+                            }
                         }
-                        else if (resolver.isValueAliasDeclaration(getOriginalNode(node))) {
+                        else if (resolver.isValueAliasDeclaration(node)) {
                             // export { x, y } from "mod" where at least one export is a value symbol
                             externalImports.push(<ExportDeclaration>node);
                         }
@@ -3028,7 +3042,7 @@ namespace ts {
             }
         }
 
-        return { externalImports, exportSpecifiers, exportEquals, hasExportStars };
+        return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues };
     }
 
     export function getInitializedVariables(node: VariableDeclarationList) {
@@ -3400,6 +3414,10 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.ModuleBlock
             || kind === SyntaxKind.ModuleDeclaration;
+    }
+
+    export function isImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
+        return node.kind === SyntaxKind.ImportEqualsDeclaration;
     }
 
     export function isImportClause(node: Node): node is ImportClause {

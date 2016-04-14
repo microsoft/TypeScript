@@ -467,7 +467,7 @@ namespace ts {
             if (isGeneratedIdentifier(node)) {
                 return node;
             }
-            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(<Identifier>getOriginalNode(node))) {
+            if (node.text !== "arguments" && !resolver.isArgumentsLocalBinding(node)) {
                 return node;
             }
             return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
@@ -549,7 +549,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            getDeclarationName(node),
+                            getDeclarationName(node, /*allowComments*/ true),
                             transformClassLikeDeclarationToExpression(node)
                         )
                     ]),
@@ -739,7 +739,14 @@ namespace ts {
             }
 
             addRange(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ constructor && constructor.body, /*multiLine*/ true);
+            return createBlock(
+                createNodeArray(
+                    statements,
+                    /*location*/ constructor ? constructor.body.statements : undefined
+                ),
+                /*location*/ constructor ? constructor.body : undefined,
+                /*multiLine*/ true
+            );
         }
 
         function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
@@ -928,7 +935,7 @@ namespace ts {
          *                                          synthesized call to `super`
          */
         function shouldAddRestParameter(node: ParameterDeclaration, inConstructorWithSynthesizedSuper: boolean) {
-            return node && node.dotDotDotToken && !inConstructorWithSynthesizedSuper;
+            return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
         }
 
         /**
@@ -1208,7 +1215,15 @@ namespace ts {
             let statementsLocation: TextRange;
 
             const statements: Statement[] = [];
+            const body = node.body;
+            let statementOffset: number;
+
             startLexicalEnvironment();
+            if (isBlock(body)) {
+                // ensureUseStrict is false because no new prologue-directive should be added.
+                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
+                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
+            }
             addCaptureThisForNodeIfNeeded(statements, node);
             addDefaultValueAssignmentsIfNeeded(statements, node);
             addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
@@ -1218,10 +1233,9 @@ namespace ts {
                 multiLine = true;
             }
 
-            const body = node.body;
             if (isBlock(body)) {
                 statementsLocation = body.statements;
-                addRange(statements, visitNodes(body.statements, visitor, isStatement));
+                addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
                 // If the original body was a multi-line block, this must be a multi-line block.
                 if (!multiLine && body.multiLine) {
@@ -1423,10 +1437,7 @@ namespace ts {
             //   * Why loop initializer is excluded?
             //     - Since we've introduced a fresh name it already will be undefined.
 
-            const original = getOriginalNode(node);
-            Debug.assert(isVariableDeclaration(original));
-
-            const flags = resolver.getNodeCheckFlags(original);
+            const flags = resolver.getNodeCheckFlags(node);
             const isCapturedInFunction = flags & NodeCheckFlags.CapturedBlockScopedBinding;
             const isDeclaredInLoop = flags & NodeCheckFlags.BlockScopedBindingInLoop;
             const emittedAsTopLevel =
@@ -1440,7 +1451,7 @@ namespace ts {
                 !emittedAsTopLevel
                 && enclosingBlockScopeContainer.kind !== SyntaxKind.ForInStatement
                 && enclosingBlockScopeContainer.kind !== SyntaxKind.ForOfStatement
-                && (!resolver.isDeclarationWithCollidingName(<Declaration>original)
+                && (!resolver.isDeclarationWithCollidingName(node)
                     || (isDeclaredInLoop
                         && !isCapturedInFunction
                         && !isIterationStatement(enclosingBlockScopeContainer, /*lookInLabeledStatements*/ false)));
@@ -1718,7 +1729,7 @@ namespace ts {
         }
 
         function shouldConvertIterationStatementBody(node: IterationStatement): boolean {
-            return (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
+            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
         }
 
         /**
@@ -2611,8 +2622,8 @@ namespace ts {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original) && !nodeIsSynthesized(original) && original.parent && isNameOfDeclarationWithCollidingName(original)) {
+                const original = getSourceTreeNodeOfType(node, isIdentifier);
+                if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return getGeneratedNameForNode(original);
                 }
             }
@@ -2665,12 +2676,9 @@ namespace ts {
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original)) {
-                    const declaration = resolver.getReferencedDeclarationWithCollidingName(original);
-                    if (declaration) {
-                        return getGeneratedNameForNode(declaration.name);
-                    }
+                const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
+                if (declaration) {
+                    return getGeneratedNameForNode(declaration.name);
                 }
             }
 
@@ -2690,8 +2698,25 @@ namespace ts {
             return node;
         }
 
-        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        /**
+         * Gets the name of a declaration, without source map or comments.
+         *
+         * @param node The declaration.
+         * @param allowComments Allow comments for the name.
+         */
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean) {
+            if (node.name) {
+                const name = getMutableClone(node.name);
+                let flags = NodeEmitFlags.NoSourceMap;
+                if (!allowComments) {
+                    flags |= NodeEmitFlags.NoComments;
+                }
+
+                setNodeEmitFlags(name, flags | getNodeEmitFlags(name));
+                return name;
+            }
+
+            return getGeneratedNameForNode(node);
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {

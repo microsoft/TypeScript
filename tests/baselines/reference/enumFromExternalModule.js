@@ -19,5 +19,5 @@ var Mode = exports.Mode;
 //// [enumFromExternalModule_1.js]
 "use strict";
 ///<reference path='enumFromExternalModule_0.ts'/>
-var f = require('./enumFromExternalModule_0');
+var f = require("./enumFromExternalModule_0");
 var x = f.Mode.Open;

@@ -92,8 +92,8 @@ define(["require", "exports"], function (require, exports) {
         (function (F) {
             var t;
         })(F || (F = {}));
-        function F() { }
-        M.F = F; // Only one error for duplicate identifier (don't consider visibility)
+        function F() { } // Only one error for duplicate identifier (don't consider visibility)
+        M.F = F;
     })(M || (M = {}));
     var M;
     (function (M) {

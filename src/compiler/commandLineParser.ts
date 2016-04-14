@@ -333,11 +333,10 @@ namespace ts {
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
         {
-            // this option will be removed when this is merged with master and exists solely
-            // to enable the tree transforming emitter side-by-side with the existing emitter.
-            name: "experimentalTransforms",
+            name: "useLegacyEmitter",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Use_the_legacy_emitter_instead_of_the_transforming_emitter
         }
     ];
 
@@ -475,7 +474,7 @@ namespace ts {
                 }
 
                 function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string) {
-                    const key = (value || "").trim().toLowerCase();
+                    const key = (value || "").toLowerCase();
                     const map = opt.type;
                     if (hasProperty(map, key)) {
                         return map[key];
@@ -486,7 +485,7 @@ namespace ts {
                 }
 
                 function parseListTypeOption(opt: CommandLineOptionOfListType, value: string): (string | number)[] {
-                    const values = (value || "").trim().split(",");
+                    const values = (value || "").split(",");
                     switch (opt.element.type) {
                         case "number":
                             return ts.map(values, parseInt);

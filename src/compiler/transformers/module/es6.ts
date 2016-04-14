@@ -23,6 +23,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
+                case SyntaxKind.ImportEqualsDeclaration:
+                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportClause:
                     return visitImportClause(<ImportClause>node);
                 case SyntaxKind.NamedImports:
@@ -30,9 +32,57 @@ namespace ts {
                     return visitNamedBindings(<NamedImportBindings>node);
                 case SyntaxKind.ImportSpecifier:
                     return visitImportSpecifier(<ImportSpecifier>node);
+                case SyntaxKind.ExportAssignment:
+                    return visitExportAssignment(<ExportAssignment>node);
+                case SyntaxKind.ExportDeclaration:
+                    return visitExportDeclaration(<ExportDeclaration>node);
+                case SyntaxKind.NamedExports:
+                    return visitNamedExports(<NamedExports>node);
+                case SyntaxKind.ExportSpecifier:
+                    return visitExportSpecifier(<ExportSpecifier>node);
             }
 
             return node;
+        }
+
+        function visitExportAssignment(node: ExportAssignment): ExportAssignment {
+            if (node.isExportEquals) {
+                return undefined; // do not emit export equals for ES6
+            }
+            const original = getOriginalNode(node);
+            return nodeIsSynthesized(original) || resolver.isValueAliasDeclaration(original) ? node: undefined;
+        }
+
+        function visitExportDeclaration(node: ExportDeclaration): ExportDeclaration {
+            if (!node.exportClause) {
+                return resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
+            }
+            if (!resolver.isValueAliasDeclaration(node)) {
+                return undefined;
+            }
+            const newExportClause = visitNode(node.exportClause, visitor, isNamedExports, /*optional*/ true);
+            if (node.exportClause === newExportClause) {
+                return node;
+            }
+            return newExportClause 
+                ? createExportDeclaration(newExportClause, node.moduleSpecifier)
+                : undefined;
+        }
+
+        function visitNamedExports(node: NamedExports): NamedExports {
+            const newExports = visitNodes(node.elements, visitor, isExportSpecifier);
+            if (node.elements === newExports) {
+                return node;
+            }
+            return newExports.length ? createNamedExports(newExports) : undefined;
+        }
+
+        function visitExportSpecifier(node: ExportSpecifier): ExportSpecifier {
+            return resolver.isValueAliasDeclaration(node) ? node : undefined;
+        }
+
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): ImportEqualsDeclaration {
+            return !isExternalModuleImportEqualsDeclaration(node) || resolver.isReferencedAliasDeclaration(node) ? node : undefined;
         }
 
         function visitImportDeclaration(node: ImportDeclaration) {

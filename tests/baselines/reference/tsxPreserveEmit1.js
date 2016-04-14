@@ -34,7 +34,7 @@ module M {
 
 
 //// [test.jsx]
-define(["require", "exports", 'react', 'react-router'], function (require, exports, React, ReactRouter) {
+define(["require", "exports", "react", "react-router"], function (require, exports, React, ReactRouter) {
     "use strict";
     var Route = ReactRouter.Route;
     var routes1 = <Route />;

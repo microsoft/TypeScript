@@ -1642,8 +1642,10 @@ const _super = (function (geti, seti) {
             function emitImportDeclaration(node: ImportDeclaration) {
                 emitModifiers(node, node.modifiers);
                 write("import ");
-                emit(node.importClause);
-                write(" from ");
+                if (node.importClause) {
+                    emit(node.importClause);
+                    write(" from ");
+                }
                 emitExpression(node.moduleSpecifier);
                 write(";");
             }
@@ -2605,8 +2607,10 @@ const _super = (function (geti, seti) {
             function getSourceNodeForGeneratedName(name: Identifier) {
                 let node: Node = name;
                 while (node.original !== undefined) {
+                    const nodeId = node.id;
                     node = node.original;
-                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node) {
+                    // If "node" is not the exact clone of "original" identifier, use "original" identifier to generate the name
+                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node && node.id !== nodeId) {
                         break;
                     }
                 }
