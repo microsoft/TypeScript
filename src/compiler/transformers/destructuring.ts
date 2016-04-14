@@ -370,16 +370,19 @@ namespace ts {
                 );
             }
             else if (isLiteralExpression(propertyName)) {
-                return createElementAccess(
-                    expression,
-                    getSynthesizedClone(propertyName)
-                );
+                const clone = getSynthesizedClone(propertyName);
+                clone.text = unescapeIdentifier(clone.text);
+                return createElementAccess(expression, clone);
             }
             else {
-                return createPropertyAccess(
-                    expression,
-                    isGeneratedIdentifier(propertyName) ? getSynthesizedClone(propertyName) : createIdentifier(propertyName.text)
-                );
+                if (isGeneratedIdentifier(propertyName)) {
+                    const clone = getSynthesizedClone(propertyName);
+                    clone.text = unescapeIdentifier(clone.text);
+                    return createPropertyAccess(expression, clone);
+                }
+                else {
+                    return createPropertyAccess(expression, createIdentifier(unescapeIdentifier(propertyName.text)));
+                }
             }
         }
     }

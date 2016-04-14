@@ -358,6 +358,9 @@ namespace ts {
                 return undefined;
             }
 
+            // Set emitFlags on the name of the importEqualsDeclaration
+            // This is so the printer will not substitute the identifier
+            setNodeEmitFlags(node.name, NodeEmitFlags.NoSubstitution);
             const statements: Statement[] = [];
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
@@ -672,6 +675,9 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const statements: Statement[] = [];
             const name = node.name || getGeneratedNameForNode(node);
+            // Set emitFlags on the name of the classDeclaration
+            // This is so that when printer will not substitute the identifier
+            setNodeEmitFlags(name, NodeEmitFlags.NoSubstitution);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
                     createClassDeclaration(
@@ -804,11 +810,20 @@ namespace ts {
                     else if (declaration.kind === SyntaxKind.ImportSpecifier) {
                         const name = (<ImportSpecifier>declaration).propertyName
                             || (<ImportSpecifier>declaration).name;
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(declaration.parent.parent.parent),
-                            getSynthesizedClone(name),
-                            /*location*/ node
-                        );
+                        if (name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion <= ScriptTarget.ES3) {
+                            return createElementAccess(
+                                getGeneratedNameForNode(declaration.parent.parent.parent),
+                                createLiteral(name.text),
+                                /*location*/ node
+                            );
+                        }
+                        else {
+                            return createPropertyAccess(
+                                getGeneratedNameForNode(declaration.parent.parent.parent),
+                                getSynthesizedClone(name),
+                                /*location*/ node
+                            );
+                        }
                     }
                 }
             }
@@ -840,7 +855,7 @@ namespace ts {
 
         function createExportAssignment(name: Identifier, value: Expression) {
             return createAssignment(
-                name.originalKeywordKind && languageVersion === ScriptTarget.ES3
+                name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion === ScriptTarget.ES3
                     ? createElementAccess(
                         createIdentifier("exports"),
                         createLiteral(name.text)
@@ -889,6 +904,9 @@ namespace ts {
                 // Find the name of the module alias, if there is one
                 const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
                 if (includeNonAmdDependencies && importAliasName) {
+                    // Set emitFlags on the name of the classDeclaration
+                    // This is so that when printer will not substitute the identifier
+                    setNodeEmitFlags(importAliasName, NodeEmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(createParameter(importAliasName));
                 }

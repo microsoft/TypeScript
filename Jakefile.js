@@ -717,7 +717,7 @@ function runTestsAndWriteOutput(file) {
     }
 
     var args = [];
-    args.push("-R", "TAP");
+    args.push("-R", "tap");
     args.push("--no-colors");
     args.push("-t", testTimeout);
     if (tests) {
