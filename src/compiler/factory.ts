@@ -1254,7 +1254,9 @@ namespace ts {
 
     /**
      * Add any necessary prologue-directives into target statement-array.
-     * The function needs to be called during each transformation steps.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
      * 
      * @param target: result statements array
      * @param source: origin statements array
