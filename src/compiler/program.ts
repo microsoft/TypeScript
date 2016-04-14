@@ -1999,7 +1999,7 @@ namespace ts {
                         }
                     }
                     else {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_patterns_0_should_be_an_array, key));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_pattern_0_should_be_an_array, key));
                     }
                 }
             }
