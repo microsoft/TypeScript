@@ -142,9 +142,9 @@ b++;
 var moduleType1;
 (function (moduleType1) {
 })(moduleType1 || (moduleType1 = {}));
-var moduleType\u0032;
-(function (moduleType2) {
-})(moduleType\u0032 || (moduleType\u0032 = {}));
+var moduleType2;
+(function (moduleType\u0032) {
+})(moduleType2 || (moduleType2 = {}));
 moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
 moduleType2.baz2 = 3;
@@ -192,8 +192,8 @@ var testClass = (function () {
 var constructorTestClass = (function () {
     function constructorTestClass(arg1, arg\u0032, arg\u0033, arg4) {
         this.arg1 = arg1;
-        this.arg\u0032 = arg\u0032;
-        this.arg\u0033 = arg\u0033;
+        this.arg2 = arg2;
+        this.arg3 = arg3;
         this.arg4 = arg4;
     }
     return constructorTestClass;
