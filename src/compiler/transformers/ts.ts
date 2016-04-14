@@ -2229,14 +2229,17 @@ namespace ts {
         function addVarForEnumDeclaration(statements: Statement[], node: EnumDeclaration) {
             // Emit a variable statement for the enum.
             statements.push(
-                createVariableStatement(
-                    isES6ExportedDeclaration(node)
-                        ? visitNodes(node.modifiers, visitor, isModifier)
-                        : undefined,
-                    [createVariableDeclaration(
-                        getDeclarationName(node)
-                    )],
-                    /*location*/ node
+                setOriginalNode(
+                    createVariableStatement(
+                        isES6ExportedDeclaration(node)
+                            ? visitNodes(node.modifiers, visitor, isModifier)
+                            : undefined,
+                        [createVariableDeclaration(
+                            getDeclarationName(node)
+                        )],
+                        /*location*/ node
+                    ),
+                    /*original*/ node
                 )
             );
         }
@@ -2398,7 +2401,7 @@ namespace ts {
 
         function isES6ExportedDeclaration(node: Node) {
             return isExternalModuleExport(node)
-                && moduleKind >= ModuleKind.ES6;
+                && moduleKind === ModuleKind.ES6;
         }
 
         function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
