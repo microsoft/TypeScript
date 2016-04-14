@@ -1533,6 +1533,8 @@ namespace ts {
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
         name: Identifier;
         typeExpression: JSDocTypeExpression;
+        // Add a "type" property here to make the interface compatible 
+        // with the "VariableLikeDeclaration" definition
         type: TypeNode;
     }
 

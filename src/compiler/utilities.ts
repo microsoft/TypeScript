@@ -279,13 +279,16 @@ namespace ts {
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
-        if (node.jsDocComments && node.jsDocComments.length > 0 && includeJsDocComment) {
+        if (includeJsDocComment && node.jsDocComments && node.jsDocComments.length > 0) {
             return getTokenPosOfNode(node.jsDocComments[0]);
         }
 
-        if (node.kind === SyntaxKind.SyntaxList) {
-            const childrenPoses = ts.map((<SyntaxList>node)._children, child => getTokenPosOfNode(<Node>child, sourceFile, includeJsDocComment));
-            return Math.min(...childrenPoses);
+        // For a syntax list, it is possible that one of its children has JSDocComment nodes, while 
+        // the syntax list itself considers them as normal trivia. Therefore if we simply skip 
+        // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
+        // first child to determine the actual position of its first token.
+        if (node.kind === SyntaxKind.SyntaxList && (<SyntaxList>node)._children.length > 0) {
+            return getTokenPosOfNode((<SyntaxList>node)._children[0], sourceFile, includeJsDocComment);
         }
 
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
@@ -293,27 +296,6 @@ namespace ts {
 
     export function isJSDocNode(node: Node) {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
-    }
-    export function isJSDocType(node: Node) {
-        switch (node.kind) {
-            case SyntaxKind.JSDocAllType:
-            case SyntaxKind.JSDocUnknownType:
-            case SyntaxKind.JSDocArrayType:
-            case SyntaxKind.JSDocUnionType:
-            case SyntaxKind.JSDocTupleType:
-            case SyntaxKind.JSDocNullableType:
-            case SyntaxKind.JSDocNonNullableType:
-            case SyntaxKind.JSDocRecordType:
-            case SyntaxKind.JSDocRecordMember:
-            case SyntaxKind.JSDocTypeReference:
-            case SyntaxKind.JSDocOptionalType:
-            case SyntaxKind.JSDocFunctionType:
-            case SyntaxKind.JSDocVariadicType:
-            case SyntaxKind.JSDocConstructorType:
-            case SyntaxKind.JSDocThisType:
-                return true;
-        }
-        return false;
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {

@@ -222,7 +222,9 @@ namespace Utils {
                 return k;
             }
 
-            if (k === (<any>ts).SyntaxKind.FirstJSDocCommentNode || k === (<any>ts).SyntaxKind.LastJSDocCommentNode) {
+            // For some markers in SyntaxKind, we should print its original syntax name instead of
+            // the marker name in tests.
+            if (k === (<any>ts).SyntaxKind.FirstJSDocNode || k === (<any>ts).SyntaxKind.LastJSDocNode) {
                 for (const kindName in (<any>ts).SyntaxKind) {
                     if ((<any>ts).SyntaxKind[kindName] === k) {
                         return kindName;

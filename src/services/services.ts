@@ -173,6 +173,7 @@ namespace ts {
         "type",
         "typedef",
         "property",
+        "prop",
         "version"
     ];
     let jsDocCompletionEntries: CompletionEntry[];
@@ -274,7 +275,7 @@ namespace ts {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 children = [];
                 let pos = this.pos;
-                const isJSDocTag =
+                const useJSDocScanner =
                     this.kind === SyntaxKind.JSDocComment ||
                     this.kind === SyntaxKind.JSDocParameterTag ||
                     this.kind === SyntaxKind.JSDocTag ||
@@ -286,14 +287,14 @@ namespace ts {
                     this.kind === SyntaxKind.JSDocPropertyTag;
                 const processNode = (node: Node) => {
                     if (pos < node.pos) {
-                        pos = this.addSyntheticNodes(children, pos, node.pos, /*useJSDocScanner*/ isJSDocTag);
+                        pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
                     children.push(node);
                     pos = node.end;
                 };
                 const processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
-                        pos = this.addSyntheticNodes(children, pos, nodes.pos, /*useJSDocScanner*/ isJSDocTag);
+                        pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
                     }
                     children.push(this.createSyntaxList(<NodeArray<Node>>nodes));
                     pos = nodes.end;
@@ -7803,7 +7804,7 @@ namespace ts {
                     break;
                 default:
                     forEachChild(node, walk);
-                    if (node.jsDocComments && node.jsDocComments.length > 0) {
+                    if (node.jsDocComments) {
                         for (const jsDocComment of node.jsDocComments) {
                             forEachChild(jsDocComment, walk);
                         }
