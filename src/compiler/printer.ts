@@ -1505,8 +1505,11 @@ const _super = (function (geti, seti) {
                 const endingLine = writer.getLine();
                 emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
 
-                const range = collapseRangeToEnd(body.statements);
-                emitLeadingComments(range, getLeadingComments(range));
+                // Do not emit leading comments if the body belongs to arrow expression
+                if (!body.original || isBlock(body.original)) {
+                    const range = collapseRangeToEnd(body.statements);
+                    emitLeadingComments(range, getLeadingComments(range));
+                }
                 decreaseIndent();
             }
 

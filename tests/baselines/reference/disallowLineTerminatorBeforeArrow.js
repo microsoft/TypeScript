@@ -110,9 +110,7 @@ var f8 = function (x, y, z) {
 var f9 = function (a) { return a; };
 var f10 = function (a) { return a; };
 var f11 = function (a) { return a; };
-var f12 = function (a) {
-    return a;
-};
+var f12 = function (a) { return a; };
 // Should be valid.
 var f11 = function (a) { return a; };
 // Should be valid.
