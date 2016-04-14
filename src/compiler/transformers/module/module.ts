@@ -755,11 +755,20 @@ namespace ts {
                     else if (declaration.kind === SyntaxKind.ImportSpecifier) {
                         const name = (<ImportSpecifier>declaration).propertyName
                             || (<ImportSpecifier>declaration).name;
-                        return createPropertyAccess(
-                            getGeneratedNameForNode(declaration.parent.parent.parent),
-                            getSynthesizedClone(name),
-                            /*location*/ node
-                        );
+                        if (name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion <= ScriptTarget.ES3) {
+                            return createElementAccess(
+                                getGeneratedNameForNode(declaration.parent.parent.parent),
+                                createLiteral(name.text),
+                                /*location*/ node
+                            );
+                        }
+                        else {
+                            return createPropertyAccess(
+                                getGeneratedNameForNode(declaration.parent.parent.parent),
+                                getSynthesizedClone(name),
+                                /*location*/ node
+                            );
+                        }
                     }
                 }
             }
@@ -791,7 +800,7 @@ namespace ts {
 
         function createExportAssignment(name: Identifier, value: Expression) {
             return createAssignment(
-                name.originalKeywordKind && languageVersion === ScriptTarget.ES3
+                name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion === ScriptTarget.ES3
                     ? createElementAccess(
                         createIdentifier("exports"),
                         createLiteral(name.text)
