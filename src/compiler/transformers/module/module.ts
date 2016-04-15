@@ -717,7 +717,13 @@ namespace ts {
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
+                    // Avoid emitting a default because that will typically be taken care of for us.
+                    if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
+                        addExportMemberAssignment(statements, classDecl)
+                    }
+
                     addExportMemberAssignments(statements, classDecl.name);
+
                     if (statements.length > 1) {
                         Debug.assert(!!classDecl.decorators, "Expression statements should only have an export member assignment when decorated.")
                     }
