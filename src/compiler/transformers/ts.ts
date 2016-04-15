@@ -860,14 +860,9 @@ namespace ts {
                 }
 
                 const statement = statements[index];
-                if (statement.kind === SyntaxKind.ExpressionStatement) {
-                    const expression = (<ExpressionStatement>statement).expression;
-                    if (expression.kind === SyntaxKind.CallExpression) {
-                        if ((<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
-                            result.push(visitNode(statement, visitor, isStatement));
-                            return index + 1;
-                        }
-                    }
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                    result.push(visitNode(statement, visitor, isStatement));
+                    return index + 1;
                 }
 
                 return index;
