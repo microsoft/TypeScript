@@ -12,7 +12,7 @@ declare global {
     }
     class Cls {x}
     let [a, b]: number[];
-    import X = M.M1.x;
+    export import X = M.M1.x;
 }
 
 // @filename: main.ts

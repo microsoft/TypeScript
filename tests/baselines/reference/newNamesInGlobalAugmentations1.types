@@ -26,7 +26,7 @@ declare global {
 >a : number
 >b : number
 
-    import X = M.M1.x;
+    export import X = M.M1.x;
 >X : number
 >M : typeof M
 >M1 : typeof M.M1
