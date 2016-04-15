@@ -2,6 +2,13 @@
 
 export {};
 
+declare module M.M1 {
+>M : typeof M
+>M1 : typeof M1
+
+    export let x: number;
+>x : number
+}
 declare global {
 >global : any
 
@@ -18,6 +25,12 @@ declare global {
     let [a, b]: number[];
 >a : number
 >b : number
+
+    import X = M.M1.x;
+>X : number
+>M : typeof M
+>M1 : typeof M.M1
+>x : number
 }
 
 === tests/cases/compiler/main.ts ===
@@ -32,4 +45,12 @@ new Cls().x
 >new Cls() : Cls
 >Cls : typeof Cls
 >x : any
+
+let c = a + b + X;
+>c : number
+>a + b + X : number
+>a + b : number
+>a : number
+>b : number
+>X : number
 

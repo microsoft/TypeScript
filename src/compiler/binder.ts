@@ -355,7 +355,7 @@ namespace ts {
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             const hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
-                if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
+                if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && (hasExportModifier || container.flags & NodeFlags.ExportContext))) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {

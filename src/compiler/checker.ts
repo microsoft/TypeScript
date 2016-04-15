@@ -15572,7 +15572,9 @@ namespace ts {
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
-                        error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        if (!isGlobalAugmentation) {
+                            error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
+                        }
                         break;
                     }
                     // fallthrough
