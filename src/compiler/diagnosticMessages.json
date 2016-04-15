@@ -1819,7 +1819,7 @@
         "category": "Error",
         "code": 2660
     },
-    "Cannot re-export name that is not defined in the module.": {
+    "Cannot export '{0}'. Only local declarations can be exported from a module.": {
         "category": "Error",
         "code": 2661
     },

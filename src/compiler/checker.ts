@@ -15802,7 +15802,7 @@ namespace ts {
                 const symbol = resolveName(exportedName, exportedName.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias,
                     /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 if (symbol && (symbol === undefinedSymbol || isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
-                    error(exportedName, Diagnostics.Cannot_re_export_name_that_is_not_defined_in_the_module);
+                    error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, exportedName.text);
                 }
                 else {
                     markExportAsReferenced(node);
