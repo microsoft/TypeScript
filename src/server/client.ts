@@ -568,6 +568,10 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            throw new Error("Not Implemented Yet."); 
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
