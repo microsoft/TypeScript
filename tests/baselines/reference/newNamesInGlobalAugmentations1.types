@@ -1,0 +1,35 @@
+=== tests/cases/compiler/f1.d.ts ===
+
+export {};
+
+declare global {
+>global : any
+
+    interface SymbolConstructor {
+>SymbolConstructor : SymbolConstructor
+
+        observable: symbol;
+>observable : symbol
+    }
+    class Cls {x}
+>Cls : Cls
+>x : any
+
+    let [a, b]: number[];
+>a : number
+>b : number
+}
+
+=== tests/cases/compiler/main.ts ===
+
+Symbol.observable;
+>Symbol.observable : symbol
+>Symbol : SymbolConstructor
+>observable : symbol
+
+new Cls().x
+>new Cls().x : any
+>new Cls() : Cls
+>Cls : typeof Cls
+>x : any
+

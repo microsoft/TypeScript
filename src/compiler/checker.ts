@@ -15596,6 +15596,9 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
+                    if (isGlobalAugmentation) {
+                        return;
+                    }
                     const symbol = getSymbolOfNode(node);
                     if (symbol) {
                         // module augmentations cannot introduce new names on the top level scope of the module
@@ -15604,14 +15607,8 @@ namespace ts {
                         // 2. main check - report error if value declaration of the parent symbol is module augmentation)
                         let reportError = !(symbol.flags & SymbolFlags.Merged);
                         if (!reportError) {
-                            if (isGlobalAugmentation) {
-                                // global symbol should not have parent since it is not explicitly exported
-                                reportError = symbol.parent !== undefined;
-                            }
-                            else {
-                                // symbol should not originate in augmentation
-                                reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
-                            }
+                            // symbol should not originate in augmentation
+                            reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
                         }
                         if (reportError) {
                             error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);

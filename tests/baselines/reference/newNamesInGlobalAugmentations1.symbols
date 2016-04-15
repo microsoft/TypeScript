@@ -1,0 +1,34 @@
+=== tests/cases/compiler/f1.d.ts ===
+
+export {};
+
+declare global {
+>global : Symbol(, Decl(f1.d.ts, 1, 10))
+
+    interface SymbolConstructor {
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(f1.d.ts, 3, 16))
+
+        observable: symbol;
+>observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 4, 33))
+    }
+    class Cls {x}
+>Cls : Symbol(Cls, Decl(f1.d.ts, 6, 5))
+>x : Symbol(Cls.x, Decl(f1.d.ts, 7, 15))
+
+    let [a, b]: number[];
+>a : Symbol(a, Decl(f1.d.ts, 8, 9))
+>b : Symbol(b, Decl(f1.d.ts, 8, 11))
+}
+
+=== tests/cases/compiler/main.ts ===
+
+Symbol.observable;
+>Symbol.observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 4, 33))
+>Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>observable : Symbol(SymbolConstructor.observable, Decl(f1.d.ts, 4, 33))
+
+new Cls().x
+>new Cls().x : Symbol(Cls.x, Decl(f1.d.ts, 7, 15))
+>Cls : Symbol(Cls, Decl(f1.d.ts, 6, 5))
+>x : Symbol(Cls.x, Decl(f1.d.ts, 7, 15))
+
