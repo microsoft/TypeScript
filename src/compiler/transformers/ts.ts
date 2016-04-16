@@ -770,19 +770,14 @@ namespace ts {
          * @param parameters The transformed parameters for the constructor.
          */
         function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, hasExtendsClause: boolean, parameters: ParameterDeclaration[]) {
-            let hasSuperCall = false;
             const statements: Statement[] = [];
+            let indexOfFirstStatement = 0;
 
             // The body of a constructor is a new lexical environment
             startLexicalEnvironment();
 
             if (constructor) {
-                const superCall = visitNode(findInitialSuperCall(constructor), visitor, isStatement);
-                if (superCall) {
-                    // Adds the existing super call as the first line of the constructor.
-                    addNode(statements, superCall);
-                    hasSuperCall = true;
-                }
+                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements);
 
                 // Add parameters with property assignments. Transforms this:
                 //
@@ -831,7 +826,7 @@ namespace ts {
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
-                addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, hasSuperCall ? 1 : 0));
+                addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement));
             }
 
             // End the lexical environment.
@@ -849,25 +844,31 @@ namespace ts {
         }
 
         /**
-         * Finds the initial super-call for a constructor.
+         * Adds super call and preceding prologue directives into the list of statements.
          *
          * @param ctor The constructor node.
+         * @returns index of the statement that follows super call
          */
-        function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
+        function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[]): number {
             if (ctor.body) {
                 const statements = ctor.body.statements;
-                const statement = firstOrUndefined(statements);
-                if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
-                    const expression = (<ExpressionStatement>statement).expression;
-                    if (expression.kind === SyntaxKind.CallExpression) {
-                        if ((<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
-                            return <ExpressionStatement>statement;
-                        }
-                    }
+                // add prologue directives to the list (if any)
+                const index = addPrologueDirectives(result, statements);
+                if (index === statements.length) {
+                    // list contains nothing but prologue directives (or empty) - exit
+                    return index;
                 }
+
+                const statement = statements[index];
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                    result.push(visitNode(statement, visitor, isStatement));
+                    return index + 1;
+                }
+
+                return index;
             }
 
-            return undefined;
+            return 0;
         }
 
         /**

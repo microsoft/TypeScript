@@ -1331,6 +1331,7 @@ namespace ts {
                 setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
             }
 
+            setOriginalNode(block, node.body);
             return block;
         }
 
