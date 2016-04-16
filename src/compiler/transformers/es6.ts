@@ -357,7 +357,13 @@ namespace ts {
                     return visitParenthesizedExpression(<ParenthesizedExpression>node, /*needsDestructuringValue*/ true);
 
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(<BinaryExpression>node, /*needsDestructuringValue*/ true);
+                    // We should only add parenthesis around expression when the node is within a binaryExpression.
+                    // Parenthesis should not be added when the binaryExpression is in a statement.
+                    // For example:
+                    //      for ([, nameA] = robotA, i = 0; i < 1; i++) => for ((nameA = robotA[1], robotA), i = 0; i < 1; i++)
+                    //      ['', ''] = value; => "" = value[0], "" = value[1];
+                    return visitBinaryExpression(<BinaryExpression>node, /*needsDestructuringValue*/ true,
+                        /*parenthesizeExpression*/ currentParent.kind === SyntaxKind.BinaryExpression);
 
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
@@ -1291,7 +1297,7 @@ namespace ts {
 
                 case SyntaxKind.BinaryExpression:
                     return createStatement(
-                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false),
+                        visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false, /*parenthesizeExpression*/ false),
                         /*location*/ node
                     );
             }
@@ -1318,7 +1324,7 @@ namespace ts {
 
                     case SyntaxKind.BinaryExpression:
                         return createParen(
-                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ true),
+                            visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ true, /*parenthesizeExpression*/ false),
                             /*location*/ node
                         );
                 }
@@ -1334,10 +1340,11 @@ namespace ts {
          * @param needsDestructuringValue A value indicating whether we need to hold onto the rhs
          *                                of a destructuring assignment.
          */
-        function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean): Expression {
+        function visitBinaryExpression(node: BinaryExpression, needsDestructuringValue: boolean, parenthesizeExpression: boolean): Expression {
             // If we are here it is because this is a destructuring assignment.
             Debug.assert(isDestructuringAssignment(node));
-            return flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
+            const flattenDestructuring = flattenDestructuringAssignment(context, node, needsDestructuringValue, hoistVariableDeclaration, visitor);
+            return parenthesizeExpression ? createParen(flattenDestructuring) : flattenDestructuring;
         }
 
         function visitVariableStatement(node: VariableStatement): Statement {
