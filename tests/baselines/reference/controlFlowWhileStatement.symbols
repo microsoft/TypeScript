@@ -180,4 +180,78 @@ function g() {
     x; // number
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 62, 7))
 }
+function h1() {
+>h1 : Symbol(h1, Decl(controlFlowWhileStatement.ts, 76, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+    while (x > 1) {
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 78, 7))
+}
+declare function len(s: string | number): number;
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>s : Symbol(s, Decl(controlFlowWhileStatement.ts, 87, 21))
+
+function h2() {
+>h2 : Symbol(h2, Decl(controlFlowWhileStatement.ts, 87, 49))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+
+        x; // number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 89, 7))
+}
+function h3() {
+>h3 : Symbol(h3, Decl(controlFlowWhileStatement.ts, 96, 1))
+
+    let x: string | number | boolean;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+    x = "";
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+
+        x = len(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+>len : Symbol(len, Decl(controlFlowWhileStatement.ts, 86, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+    }
+    x; // string | number
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
+}
 

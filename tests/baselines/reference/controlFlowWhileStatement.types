@@ -219,4 +219,92 @@ function g() {
     x; // number
 >x : number
 }
+function h1() {
+>h1 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+
+    while (x > 1) {
+>x > 1 : boolean
+>x : string | number
+>1 : number
+
+        x; // string | number
+>x : string | number
+
+        x = 1;
+>x = 1 : number
+>x : string | number | boolean
+>1 : number
+
+        x; // number
+>x : number
+    }
+    x; // string | number
+>x : string | number
+}
+declare function len(s: string | number): number;
+>len : (s: string | number) => number
+>s : string | number
+
+function h2() {
+>h2 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+
+    while (cond) {
+>cond : boolean
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string | number) => number
+>x : string | number
+
+        x; // number
+>x : number
+    }
+    x; // string | number
+>x : string | number
+}
+function h3() {
+>h3 : () => void
+
+    let x: string | number | boolean;
+>x : string | number | boolean
+
+    x = "";
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+
+    while (cond) {
+>cond : boolean
+
+        x; // string | number
+>x : string | number
+
+        x = len(x);
+>x = len(x) : number
+>x : string | number | boolean
+>len(x) : number
+>len : (s: string | number) => number
+>x : string | number
+    }
+    x; // string | number
+>x : string | number
+}
 
