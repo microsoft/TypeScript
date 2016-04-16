@@ -75,3 +75,32 @@ function g() {
     }
     x; // number
 }
+function h1() {
+    let x: string | number | boolean;
+    x = "";
+    while (x > 1) {
+        x; // string | number
+        x = 1;
+        x; // number
+    }
+    x; // string | number
+}
+declare function len(s: string | number): number;
+function h2() {
+    let x: string | number | boolean;
+    x = "";
+    while (cond) {
+        x = len(x);
+        x; // number
+    }
+    x; // string | number
+}
+function h3() {
+    let x: string | number | boolean;
+    x = "";
+    while (cond) {
+        x; // string | number
+        x = len(x);
+    }
+    x; // string | number
+}
