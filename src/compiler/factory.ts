@@ -651,13 +651,14 @@ namespace ts {
 
     /**
      * Creates a synthetic expression to act as a placeholder for a not-emitted expression in
-     * order to preserve comments.
+     * order to preserve comments or sourcemap positions.
      *
      * @param expression The inner expression to emit.
      * @param original The original outer expression.
+     * @param location The location for the expression. Defaults to the positions from "original" if provided.
      */
-    export function createPartiallyEmittedExpression(expression: Expression, original: Node) {
-        const node = <PartiallyEmittedExpression>createNode(SyntaxKind.PartiallyEmittedExpression, /*location*/ original);
+    export function createPartiallyEmittedExpression(expression: Expression, original?: Node, location?: TextRange) {
+        const node = <PartiallyEmittedExpression>createNode(SyntaxKind.PartiallyEmittedExpression, /*location*/ location || original);
         node.expression = expression;
         node.original = original;
         return node;
@@ -1257,7 +1258,7 @@ namespace ts {
      * The function needs to be called during each transformation step.
      * This function needs to be called whenever we transform the statement
      * list of a source file, namespace, or function-like body.
-     * 
+     *
      * @param target: result statements array
      * @param source: origin statements array
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives

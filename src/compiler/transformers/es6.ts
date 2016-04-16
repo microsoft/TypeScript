@@ -156,6 +156,7 @@ namespace ts {
         context.expressionSubstitution = substituteExpression;
 
         let currentSourceFile: SourceFile;
+        let currentText: string;
         let currentParent: Node;
         let currentNode: Node;
         let enclosingBlockScopeContainer: Node;
@@ -183,6 +184,7 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
+            currentText = node.text;
             return visitNode(node, visitor, isSourceFile);
         }
 
@@ -609,14 +611,14 @@ namespace ts {
             if (node.name) {
                 enableSubstitutionsForBlockScopedBindings();
             }
+
             const closingBraceLocation = { pos: node.end - 1, end: node.end };
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 baseTypeNode ? [createParameter("_super")] : [],
-                transformClassBody(node, baseTypeNode !== undefined, closingBraceLocation),
-                closingBraceLocation
+                transformClassBody(node, baseTypeNode !== undefined)
             );
 
             // To preserve the behavior of the old emitter, we explicitly indent
@@ -626,15 +628,23 @@ namespace ts {
                 setNodeEmitFlags(classFunction, NodeEmitFlags.Indented);
             }
 
+            // "inner" and "outer" below are added purely to preserve source map locations from
+            // the old emitter
+            const inner = createPartiallyEmittedExpression(classFunction);
+            inner.end = node.end;
+            setNodeEmitFlags(inner, NodeEmitFlags.NoComments);
+
+            const outer = createPartiallyEmittedExpression(inner);
+            outer.end = node.pos;
+            setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
+
             return createParen(
                 createCall(
-                    classFunction,
+                    outer,
                     baseTypeNode
                         ? [visitNode(baseTypeNode.expression, visitor, isExpression)]
-                        : [],
-                    closingBraceLocation
-                ),
-                closingBraceLocation
+                        : []
+                )
             );
         }
 
@@ -644,15 +654,33 @@ namespace ts {
          * @param node A ClassExpression or ClassDeclaration node.
          * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
          */
-        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean, closingBraceLocation: TextRange): Block {
+        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): Block {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             addExtendsHelperIfNeeded(statements, node, hasExtendsClause);
             addConstructor(statements, node, hasExtendsClause);
             addClassMembers(statements, node);
-            statements.push(createReturn(getDeclarationName(node), /*location*/ closingBraceLocation));
+
+            // Create a synthetic text range for the return statement.
+            const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
+            const name = getDeclarationName(node);
+
+            // The following partially-emitted expression exists purely to align our sourcemap
+            // emit with the original emitter.
+            const outer = createPartiallyEmittedExpression(name);
+            outer.end = closingBraceLocation.end;
+            setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
+
+            const statement = createReturn(outer);
+            statement.pos = closingBraceLocation.pos;
+            statements.push(statement);
+            setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+
             addRange(statements, endLexicalEnvironment());
-            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+            const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
+            setNodeEmitFlags(block, NodeEmitFlags.NoComments);
+
+            return block;
         }
 
         /**
@@ -688,7 +716,7 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     getDeclarationName(node),
                     transformConstructorParameters(constructor, hasSynthesizedSuper),
-                    transformConstructorBody(constructor, hasExtendsClause, hasSynthesizedSuper),
+                    transformConstructorBody(constructor, node, hasExtendsClause, hasSynthesizedSuper),
                     /*location*/ constructor || node
                 )
             );
@@ -718,11 +746,12 @@ namespace ts {
          * Transforms the body of a constructor declaration of a class.
          *
          * @param constructor The constructor for the class.
+         * @param node The node which contains the constructor.
          * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             if (constructor) {
@@ -739,14 +768,20 @@ namespace ts {
             }
 
             addRange(statements, endLexicalEnvironment());
-            return createBlock(
+            const block = createBlock(
                 createNodeArray(
                     statements,
-                    /*location*/ constructor ? constructor.body.statements : undefined
+                    /*location*/ constructor ? constructor.body.statements : node.members
                 ),
-                /*location*/ constructor ? constructor.body : undefined,
+                /*location*/ constructor ? constructor.body : node,
                 /*multiLine*/ true
             );
+
+            if (!constructor) {
+                setNodeEmitFlags(block, NodeEmitFlags.NoComments);
+            }
+
+            return block;
         }
 
         function transformConstructorBodyWithSynthesizedSuper(node: ConstructorDeclaration) {
@@ -1077,16 +1112,24 @@ namespace ts {
          * @param member The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration) {
-            return createStatement(
+            const statement = createStatement(
                 createAssignment(
                     createMemberAccessForPropertyName(
                         receiver,
-                        visitNode(member.name, visitor, isPropertyName)
+                        visitNode(member.name, visitor, isPropertyName),
+                        /*location*/ member.name
                     ),
-                    transformFunctionLikeToExpression(member, /*location*/ undefined, /*name*/ undefined)
+                    transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined),
+                    /*location*/ moveRangeEnd(member, -1)
                 ),
                 /*location*/ member
             );
+
+            // The location for the statement is used to emit comments only.
+            // No source map should be emitted for this statement to align with the
+            // old emitter.
+            setNodeEmitFlags(statement, NodeEmitFlags.NoSourceMap);
+            return statement;
         }
 
         /**
@@ -1096,9 +1139,16 @@ namespace ts {
          * @param accessors The set of related get/set accessors.
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations): Statement {
-            return createStatement(
-                transformAccessorsToExpression(receiver, accessors)
+            const statement = createStatement(
+                transformAccessorsToExpression(receiver, accessors),
+                /*location*/ accessors.firstAccessor
             );
+
+            // The location for the statement is used to emit source maps only.
+            // No comments should be emitted for this statement to align with the
+            // old emitter.
+            setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+            return statement;
         }
 
         /**
@@ -1122,7 +1172,7 @@ namespace ts {
                         configurable: true
                     },
                     /*preferNewLine*/ true,
-                    /*location*/ firstAccessor,
+                    /*location*/ undefined,
                     /*descriptorLocations*/ {
                         get: getAccessor,
                         set: setAccessor
@@ -1224,6 +1274,7 @@ namespace ts {
                 // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
                 statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
             }
+
             addCaptureThisForNodeIfNeeded(statements, node);
             addDefaultValueAssignmentsIfNeeded(statements, node);
             addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false);
@@ -1244,7 +1295,12 @@ namespace ts {
             }
             else {
                 Debug.assert(node.kind === SyntaxKind.ArrowFunction);
-                statementsLocation = body;
+
+                // To align with the old emitter, we use a synthetic end position on the location
+                // for the statement list we synthesize when we down-level an arrow function with
+                // an expression function body. This prevents both comments and source maps from
+                // being emitted for the end position only.
+                statementsLocation = moveRangeEnd(body, -1);
 
                 const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
                 if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
@@ -1258,7 +1314,7 @@ namespace ts {
 
                 const expression = visitNode(body, visitor, isExpression);
                 if (expression) {
-                    statements.push(createReturn(expression));
+                    statements.push(createReturn(expression, /*location*/ statementsLocation));
                 }
             }
 

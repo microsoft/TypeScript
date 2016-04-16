@@ -13,7 +13,10 @@ namespace ts {
         getTrailingCommentsOfPosition(pos: number): CommentRange[];
         emitLeadingComments(range: TextRange, comments: CommentRange[]): void;
         emitTrailingComments(range: TextRange, comments: CommentRange[]): void;
-        emitDetachedComments(range: TextRange): void;
+        emitLeadingDetachedComments(range: TextRange): void;
+        emitLeadingDetachedComments(range: TextRange, contextNode: Node, shouldSkipCommentsForNodeCallback: (node: Node) => boolean): void;
+        emitTrailingDetachedComments(range: TextRange): void;
+        emitTrailingDetachedComments(range: TextRange, contextNode: Node, shouldSkipCommentsForNodeCallback: (node: Node) => boolean): void;
     }
 
     export function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter {
@@ -46,10 +49,15 @@ namespace ts {
                 getTrailingCommentsOfPosition(pos: number): CommentRange[] { return undefined; },
                 emitLeadingComments(range: TextRange, comments: CommentRange[]): void { },
                 emitTrailingComments(range: TextRange, comments: CommentRange[]): void { },
-                emitDetachedComments,
+                emitLeadingDetachedComments,
+                emitTrailingDetachedComments(node: TextRange, contextNode?: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): void {}
             };
 
-            function emitDetachedComments(node: TextRange): void {
+            function emitLeadingDetachedComments(node: TextRange, contextNode?: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): void {
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(contextNode)) {
+                    return;
+                }
+
                 emitDetachedCommentsAndUpdateCommentsInfo(node, /*removeComments*/ true);
             }
         }
@@ -65,7 +73,8 @@ namespace ts {
                 getTrailingCommentsOfPosition,
                 emitLeadingComments,
                 emitTrailingComments,
-                emitDetachedComments,
+                emitLeadingDetachedComments,
+                emitTrailingDetachedComments
             };
 
             function getLeadingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): CommentRange[];
@@ -154,8 +163,21 @@ namespace ts {
                 emitComments(currentText, currentLineMap, writer, comments, /*leadingSeparator*/ true, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
-            function emitDetachedComments(range: TextRange) {
+            function emitLeadingDetachedComments(range: TextRange, contextNode?: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): void {
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(contextNode)) {
+                    return;
+                }
+
                 emitDetachedCommentsAndUpdateCommentsInfo(range, /*removeComments*/ false);
+            }
+
+            function emitTrailingDetachedComments(range: TextRange, contextNode?: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean): void {
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(contextNode)) {
+                    return;
+                }
+
+                range = collapseRangeToEnd(range);
+                emitLeadingComments(range, getLeadingComments(range));
             }
 
             function hasConsumedCommentRange(comment: CommentRange) {
