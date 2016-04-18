@@ -72,7 +72,7 @@ exports.xxxx = server_7.x1;
 var server_8 = require("./server");
 exports.z111 = server_8.z1;
 var server_9 = require("./server");
-exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
+exports.z2 = server_9.z2;
 
 
 //// [server.d.ts]

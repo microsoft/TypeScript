@@ -28,7 +28,7 @@ System.register([], function (exports_1, context_1) {
                         C.foo = foo;
                     })(C = B.C || (B.C = {}));
                 })(B = A.B || (A.B = {}));
-            })(A || (A = {}));
+            })(A = A || (A = {}));
             exports_1("A", A);
         }
     };
