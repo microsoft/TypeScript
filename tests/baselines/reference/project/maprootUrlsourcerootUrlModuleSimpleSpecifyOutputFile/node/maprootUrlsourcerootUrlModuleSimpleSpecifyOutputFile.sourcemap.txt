@@ -1,7 +1,0 @@
-===================================================================
-JsFile: test.js
-mapUrl: http://www.typescriptlang.org/test.js.map
-sourceRoot: http://typescript.codeplex.com/
-sources: m1.ts,test.ts
-===================================================================
->>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map

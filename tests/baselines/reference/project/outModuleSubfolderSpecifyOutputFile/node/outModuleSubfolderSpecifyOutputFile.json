@@ -12,8 +12,5 @@
         "ref/m1.ts",
         "test.ts"
     ],
-    "emittedFiles": [
-        "bin/test.js",
-        "bin/test.d.ts"
-    ]
+    "emittedFiles": []
 }
