@@ -1,3 +1,5 @@
+// @noImplicitAny: true
+
 let cond: boolean;
 
 function len(s: string) {
@@ -45,4 +47,47 @@ function g2() {
         x = foo(x);
     }
     x;
+}
+
+function asNumber(x: string | number): number {
+    return +x;
+}
+
+function h1() {
+    let x: string | number | boolean;
+    x = "0";
+    while (cond) {
+        x = +x + 1;
+        x;
+    }
+}
+
+function h2() {
+    let x: string | number | boolean;
+    x = "0";
+    while (cond) {
+        x = asNumber(x) + 1;
+        x;
+    }
+}
+
+function h3() {
+    let x: string | number | boolean;
+    x = "0";
+    while (cond) {
+        let y = asNumber(x);
+        x = y + 1;
+        x;
+    }
+}
+
+function h4() {
+    let x: string | number | boolean;
+    x = "0";
+    while (cond) {
+        x;
+        let y = asNumber(x);
+        x = y + 1;
+        x;
+    }
 }
