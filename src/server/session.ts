@@ -434,7 +434,7 @@ namespace ts.server {
                 };
             }
 
-            const fileSpans = processEachProjectThenConcatSortDeduplicateResults(
+            const fileSpans = combineProjectOutput(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
@@ -511,7 +511,7 @@ namespace ts.server {
             const nameSpan = nameInfo.textSpan;
             const nameColStart = defaultProject.compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             const nameText = defaultProject.compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            const refs = processEachProjectThenConcatSortDeduplicateResults<protocol.ReferencesResponseItem>(
+            const refs = combineProjectOutput<protocol.ReferencesResponseItem>(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
@@ -534,11 +534,12 @@ namespace ts.server {
                         };
                     });
                 },
-                compareFileStart
+                compareFileStart,
+                areReferencesResponseItemsForTheSameLocation
             );
 
             return {
-                refs: deduplicate(refs, areReferencesResponseItemsForTheSameLocation),
+                refs,
                 symbolName: nameText,
                 symbolStartOffset: nameColStart,
                 symbolDisplayString: displayString
@@ -872,7 +873,7 @@ namespace ts.server {
                 throw Errors.NoProject;
             }
 
-            const allNavToItems = processEachProjectThenConcatSortDeduplicateResults(
+            const allNavToItems = combineProjectOutput(
                 projects,
                 (project: Project) => {
                     const compilerService = project.compilerService;
