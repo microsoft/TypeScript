@@ -7366,7 +7366,7 @@ namespace ts {
             }
             if (flags & TypeFlags.ObjectType) {
                 const resolved = resolveStructuredTypeMembers(type);
-                return resolved.callSignatures.length || resolved.constructSignatures.length ?
+                return resolved.callSignatures.length || resolved.constructSignatures.length || isTypeSubtypeOf(type, globalFunctionType) ?
                     strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
                     strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
