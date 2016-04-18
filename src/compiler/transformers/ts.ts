@@ -1329,20 +1329,38 @@ namespace ts {
             //
             // The emit for the class is:
             //
+            //   C = C_1 = __decorate([dec], C);
+            //
+            if (decoratedClassAlias) {
+                const expression = createAssignment(
+                    decoratedClassAlias,
+                    createDecorateHelper(
+                        decoratorExpressions,
+                        getDeclarationName(node)
+                    )
+                );
+
+                return createAssignment(getDeclarationName(node), expression);
+            }
+            // Emit the call to __decorate. Given the class:
+            //
+            //   @dec
+            //   export declare class C {
+            //   }
+            //
+            // The emit for the class is:
+            //
             //   C = __decorate([dec], C);
             //
-
-            const expression = createAssignment(
-                getDeclarationName(node),
-                createDecorateHelper(
-                    decoratorExpressions,
-                    getDeclarationName(node)
-                )
-            );
-
-            return decoratedClassAlias
-                ? createAssignment(decoratedClassAlias, expression)
-                : expression;
+            else {
+                return createAssignment(
+                    getDeclarationName(node),
+                    createDecorateHelper(
+                        decoratorExpressions,
+                        getDeclarationName(node)
+                    )
+                );
+            }
         }
 
         /**
@@ -2698,8 +2716,16 @@ namespace ts {
 
             // If we need support substitutions for aliases for decorated classes,
             // we should enable it here.
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
-                currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
+                if (isClassWithDecorators(node)) {
+                    currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
+                }
+                else if (node.kind === SyntaxKind.Identifier) {
+                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node)
+                    if (declaration && isClassWithDecorators(declaration)) {
+                        currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
+                    }
+                }
             }
 
             // If we need to support substitutions for `super` in an async method,
@@ -2879,6 +2905,7 @@ namespace ts {
                 // We need to enable substitutions for identifiers. This allows us to
                 // substitute class names inside of a class declaration.
                 context.enableExpressionSubstitution(SyntaxKind.Identifier);
+                context.enableEmitNotification(SyntaxKind.Identifier);
 
                 // Keep track of class aliases.
                 decoratedClassAliases = {};
