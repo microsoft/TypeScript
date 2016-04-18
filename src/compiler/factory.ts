@@ -106,7 +106,7 @@ namespace ts {
      * Gets a clone of a node with a unique node ID.
      */
     export function getUniqueClone<T extends Node>(node: T): T {
-        const clone = getSynthesizedClone(node);
+        const clone = getMutableClone(node);
         clone.id = undefined;
         getNodeId(clone);
         return clone;
@@ -926,34 +926,8 @@ namespace ts {
         );
     }
 
-    function createPropertyDescriptor({ get, set, value, enumerable, configurable, writable }: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
-        const properties: ObjectLiteralElement[] = [];
-        addPropertyAssignment(properties, "get", get, preferNewLine, descriptorLocations);
-        addPropertyAssignment(properties, "set", set, preferNewLine, descriptorLocations);
-        addPropertyAssignment(properties, "value", value, preferNewLine, descriptorLocations);
-        addPropertyAssignment(properties, "enumerable", enumerable, preferNewLine, descriptorLocations);
-        addPropertyAssignment(properties, "configurable", configurable, preferNewLine, descriptorLocations);
-        addPropertyAssignment(properties, "writable", writable, preferNewLine, descriptorLocations);
-        return createObjectLiteral(properties, location, preferNewLine);
-    }
-
-    function addPropertyAssignment(properties: ObjectLiteralElement[], name: string, value: boolean | Expression, preferNewLine: boolean, descriptorLocations?: PropertyDescriptorLocations) {
-        if (value !== undefined) {
-            const property = createPropertyAssignment(
-                name,
-                typeof value === "boolean" ? createLiteral(value) : value,
-                descriptorLocations ? descriptorLocations[name] : undefined
-            );
-
-            if (preferNewLine) {
-                startOnNewLine(property);
-            }
-
-            properties.push(property);
-        }
-    }
-
     export interface PropertyDescriptorOptions {
+        [key: string]: boolean | Expression;
         get?: Expression;
         set?: Expression;
         value?: Expression;
@@ -962,17 +936,23 @@ namespace ts {
         writable?: boolean | Expression;
     }
 
-    export interface PropertyDescriptorLocations {
-        [key: string]: TextRange;
-        get?: TextRange;
-        set?: TextRange;
-        value?: TextRange;
-        enumerable?: TextRange;
-        configurable?: TextRange;
-        writable?: TextRange;
+    export interface PropertyDescriptorExtendedOptions {
+        [key: string]: PropertyDescriptorExtendedOption;
+        get?: PropertyDescriptorExtendedOption;
+        set?: PropertyDescriptorExtendedOption;
+        value?: PropertyDescriptorExtendedOption;
+        enumerable?: PropertyDescriptorExtendedOption;
+        configurable?: PropertyDescriptorExtendedOption;
+        writable?: PropertyDescriptorExtendedOption;
     }
 
-    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorLocations?: PropertyDescriptorLocations) {
+    export interface PropertyDescriptorExtendedOption {
+        location?: TextRange;
+        emitFlags?: NodeEmitFlags;
+        newLine?: boolean;
+    }
+
+    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorOptions?: PropertyDescriptorExtendedOptions, context?: TransformationContext) {
         return createCall(
             createPropertyAccess(
                 createIdentifier("Object"),
@@ -981,10 +961,58 @@ namespace ts {
             [
                 target,
                 memberName,
-                createPropertyDescriptor(descriptor, preferNewLine, /*location*/ undefined, descriptorLocations)
+                createObjectLiteral(
+                    createPropertyDescriptorProperties(descriptor, descriptorOptions, preferNewLine, context),
+                    /*location*/ undefined,
+                    /*multiLine*/ preferNewLine
+                )
             ],
             location
         );
+    }
+
+    function createPropertyDescriptorProperties(descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
+        const properties: ObjectLiteralElement[] = [];
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "get", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "set", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "value", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "enumerable", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "configurable", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "writable", descriptor, descriptorExtendedOptions, preferNewLine, context);
+        return properties;
+    }
+
+    function addPropertyDescriptorPropertyAssignmentIfNeeded(properties: ObjectLiteralElement[], name: string, descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
+        const value = getProperty(descriptor, name);
+        if (value !== undefined) {
+            const options = getProperty(descriptorExtendedOptions, name);
+            let location: TextRange;
+            let emitFlags: NodeEmitFlags;
+            if (isDefined(options)) {
+                location = options.location;
+                emitFlags = options.emitFlags;
+                if (isDefined(options.newLine)) {
+                    preferNewLine = options.newLine;
+                }
+            }
+
+            const property = createPropertyAssignment(
+                name,
+                typeof value === "boolean" ? createLiteral(value) : value,
+                location
+            );
+
+            if (isDefined(emitFlags)) {
+                Debug.assert(isDefined(context), "TransformationContext must be supplied when emitFlags are provided.");
+                context.setNodeEmitFlags(property, emitFlags);
+            }
+
+            if (preferNewLine) {
+                startOnNewLine(property);
+            }
+
+            properties.push(property);
+        }
     }
 
     function createObjectCreate(prototype: Expression) {

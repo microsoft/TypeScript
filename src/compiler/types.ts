@@ -2875,10 +2875,11 @@ namespace ts {
         CapturesThis = 1 << 9,                   // The function captures a lexical `this`
         NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
-        NoComments = 1 << 12,                    // Do not emit comments for this node.
-        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoTokenSourceMaps = 1 << 12,             // Do not emit source map locations for tokens of this node.
+        NoComments = 1 << 13,                    // Do not emit comments for this node.
+        ExportName = 1 << 14,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 15,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
     }
 
     /** Additional context provided to `visitEachChild` */

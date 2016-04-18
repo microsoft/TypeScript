@@ -674,7 +674,7 @@ namespace ts {
             const statement = createReturn(outer);
             statement.pos = closingBraceLocation.pos;
             statements.push(statement);
-            setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+            setNodeEmitFlags(statement, NodeEmitFlags.NoComments | NodeEmitFlags.NoTokenSourceMaps);
 
             addRange(statements, endLexicalEnvironment());
             const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
@@ -1001,7 +1001,8 @@ namespace ts {
                             name,
                             createArrayLiteral([])
                         )
-                    ])
+                    ]),
+                    /*location*/ parameter
                 )
             );
 
@@ -1012,12 +1013,13 @@ namespace ts {
                 createFor(
                     createVariableDeclarationList([
                         createVariableDeclaration(temp, createLiteral(restIndex))
-                    ]),
+                    ], /*location*/ parameter),
                     createLessThan(
                         temp,
-                        createPropertyAccess(createIdentifier("arguments"), "length")
+                        createPropertyAccess(createIdentifier("arguments"), "length"),
+                        /*location*/ parameter
                     ),
-                    createPostfixIncrement(temp),
+                    createPostfixIncrement(temp, /*location*/ parameter),
                     createBlock([
                         startOnNewLine(
                             createStatement(
@@ -1027,7 +1029,8 @@ namespace ts {
                                         createSubtract(temp, createLiteral(restIndex))
                                     ),
                                     createElementAccess(createIdentifier("arguments"), temp)
-                                )
+                                ),
+                                /*location*/ parameter
                             )
                         )
                     ])
@@ -1158,13 +1161,18 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
+            // To align with source maps in the old emitter, the receiver and property name
+            // arguments are both mapped contiguously to the accessor name.
+            const target = getSynthesizedClone(receiver);
+            target.pos = firstAccessor.name.pos;
+
+            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
+            propertyName.end = firstAccessor.name.end;
+
             return setNodeEmitFlags(
                 createObjectDefineProperty(
-                    receiver,
-                    createExpressionForPropertyName(
-                        visitNode(firstAccessor.name, visitor, isPropertyName),
-                        /*location*/ firstAccessor.name
-                    ),
+                    target,
+                    propertyName,
                     /*descriptor*/ {
                         get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
                         set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
@@ -1174,9 +1182,10 @@ namespace ts {
                     /*preferNewLine*/ true,
                     /*location*/ undefined,
                     /*descriptorLocations*/ {
-                        get: getAccessor,
-                        set: setAccessor
-                    }
+                        get: { location: getAccessor, emitFlags: NodeEmitFlags.NoSourceMap },
+                        set: { location: setAccessor, emitFlags: NodeEmitFlags.NoSourceMap }
+                    },
+                    context
                 ),
                 NodeEmitFlags.NoComments
             );

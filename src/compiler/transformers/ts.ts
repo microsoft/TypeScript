@@ -898,13 +898,17 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
 
-            const name = getSynthesizedClone(<Identifier>node.name);
             return startOnNewLine(
                 createStatement(
                     createAssignment(
-                        createPropertyAccess(createThis(), name),
-                        name
-                    )
+                        createPropertyAccess(
+                            createThis(),
+                            getSynthesizedClone(<Identifier>node.name),
+                            /*location*/ node.name
+                        ),
+                        getUniqueClone(<Identifier>node.name)
+                    ),
+                    /*location*/ node
                 )
             );
         }
@@ -994,7 +998,7 @@ namespace ts {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             return createAssignment(
-                createMemberAccessForPropertyName(receiver, propertyName),
+                createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName),
                 initializer,
                 location
             );
@@ -1754,7 +1758,7 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName 
+                return generateNameForComputedPropertyName
                     ? getGeneratedNameForNode(name)
                     : (<ComputedPropertyName>name).expression;
             }

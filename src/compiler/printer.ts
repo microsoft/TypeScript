@@ -1154,7 +1154,7 @@ const _super = (function (geti, seti) {
 
                 emitExpression(node.left);
                 increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-                writeTokenNode(node.operatorToken);
+                writeTokenText(node.operatorToken.kind);
                 increaseIndentIf(indentAfterOperator, " ");
                 emitExpression(node.right);
                 decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1353,7 +1353,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                write("return");
+                writeToken(SyntaxKind.ReturnKeyword, node.pos, node, shouldSkipSourceMapForToken);
                 emitExpressionWithPrefix(" ", node.expression);
                 write(";");
             }
@@ -2301,12 +2301,18 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, tokenStartPos: number) {
+            function writeToken(token: SyntaxKind, tokenStartPos: number): number;
+            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreSourceMapForTokenCallback: (contextNode: Node) => boolean): number;
+            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, shouldIgnoreSourceMapForTokenCallback?: (contextNode: Node) => boolean) {
                 tokenStartPos = skipTrivia(currentText, tokenStartPos);
-                emitPos(tokenStartPos);
+                emitPos(tokenStartPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
                 const tokenEndPos = writeTokenText(token, tokenStartPos);
-                emitPos(tokenEndPos);
+                emitPos(tokenEndPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
                 return tokenEndPos;
+            }
+
+            function shouldSkipSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenSourceMaps) !== 0;
             }
 
             function writeTokenText(token: SyntaxKind, pos?: number) {
