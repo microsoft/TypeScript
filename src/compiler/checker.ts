@@ -180,7 +180,9 @@ namespace ts {
         let jsxElementClassType: Type;
 
         let deferredNodes: Node[];
-        let inFlowCheck = false;
+
+        let flowStackStart = 0;
+        let flowStackCount = 0;
 
         const tupleTypes: Map<TupleType> = {};
         const unionTypes: Map<UnionType> = {};
@@ -195,6 +197,8 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowTypeCaches: Map<Type>[] = [];
+        const flowStackNodes: FlowNode[] = [];
+        const flowStackCacheKeys: string[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
@@ -7409,7 +7413,7 @@ namespace ts {
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             if (defaultExpression) {
-                const defaultType = checkExpressionCached(defaultExpression);
+                const defaultType = checkExpression(defaultExpression);
                 return getUnionType([getTypeWithFacts(type, TypeFacts.NEUndefined), defaultType]);
             }
             return type;
@@ -7436,7 +7440,7 @@ namespace ts {
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
             return node.parent.kind === SyntaxKind.ArrayLiteralExpression || node.parent.kind === SyntaxKind.PropertyAssignment ?
                 getTypeWithDefault(getAssignedType(node), node.right) :
-                checkExpressionCached(node.right);
+                checkExpression(node.right);
         }
 
         function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
@@ -7487,9 +7491,17 @@ namespace ts {
             return getTypeWithDefault(type, node.initializer);
         }
 
+        function getTypeOfInitializer(node: Expression) {
+            // Return the cached type if one is available. If the type of the variable was inferred
+            // from its initializer, we'll already have cached the type. Otherwise we compute it now
+            // without caching such that transient types are reflected.
+            const links = getNodeLinks(node);
+            return links.resolvedType || checkExpression(node);
+        }
+
         function getInitialTypeOfVariableDeclaration(node: VariableDeclaration) {
             if (node.initializer) {
-                return checkExpressionCached(node.initializer);
+                return getTypeOfInitializer(node.initializer);
             }
             if (node.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return stringType;
@@ -7529,11 +7541,7 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
-            const saveInFlowCheck = inFlowCheck;
-            inFlowCheck = true;
-            const result = reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : declaredType;
-            inFlowCheck = saveInFlowCheck;
-            return result;
+            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : declaredType;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
@@ -7601,30 +7609,41 @@ namespace ts {
                 if (!key) {
                     key = getFlowCacheKey(reference);
                 }
-                let type = cache[key];
-                if (type) {
-                    return type;
+                const cached = cache[key];
+                if (cached) {
+                    return cached;
                 }
-                cache[key] = resolvingFlowType;
-                type = getTypeAtFlowNode(flow);
-                cache[key] = type !== resolvingFlowType ? type : undefined;
-                return type;
+                // Return undefined if we're already processing the given node.
+                for (let i = flowStackStart; i < flowStackCount; i++) {
+                    if (flowStackNodes[i] === flow && flowStackCacheKeys[i] === key) {
+                        return undefined;
+                    }
+                }
+                // Record node and key on stack of nodes being processed.
+                flowStackNodes[flowStackCount] = flow;
+                flowStackCacheKeys[flowStackCount] = key;
+                flowStackCount++;
+                const type = getTypeAtFlowNode(flow);
+                flowStackCount--;
+                // Record the result only if the cache is still empty. If checkExpressionCached was called
+                // during processing it is possible we've already recorded a result.
+                return cache[key] || (cache[key] = type);
             }
 
             function getTypeAtFlowLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
-                    const t = getTypeAtFlowNodeCached(antecedent);
-                    if (t !== resolvingFlowType) {
+                    const type = getTypeAtFlowNodeCached(antecedent);
+                    if (type) {
                         // If the type at a particular antecedent path is the declared type and the
                         // reference is known to always be assigned (i.e. when declared and initial types
                         // are the same), there is no reason to process more antecedents since the only
                         // possible outcome is subtypes that will be removed in the final union type anyway.
-                        if (t === declaredType && declaredType === initialType) {
-                            return t;
+                        if (type === declaredType && declaredType === initialType) {
+                            return type;
                         }
-                        if (!contains(antecedentTypes, t)) {
-                            antecedentTypes.push(t);
+                        if (!contains(antecedentTypes, type)) {
+                            antecedentTypes.push(type);
                         }
                     }
                 }
@@ -11107,7 +11126,7 @@ namespace ts {
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
-            links.resolvedSignature = inFlowCheck ? cached : result;
+            links.resolvedSignature = flowStackStart === flowStackCount ? result : cached;
             return result;
         }
 
@@ -12246,7 +12265,13 @@ namespace ts {
         function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                // When computing a type that we're going to cache, we need to ignore any ongoing control flow
+                // analysis because variables may have transient types in indeterminable states. Moving flowStackStart
+                // to the top of the stack ensures all transient types are computed from a known point.
+                const saveFlowStackStart = flowStackStart;
+                flowStackStart = flowStackCount;
                 links.resolvedType = checkExpression(node, contextualMapper);
+                flowStackStart = saveFlowStackStart;
             }
             return links.resolvedType;
         }
