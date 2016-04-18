@@ -1,13 +1,10 @@
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(5,5): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeBase'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeBase'.
   Property 'p' is missing in type 'SomeOther'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeDerived'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeDerived'.
   Property 'x' is missing in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): error TS2352: Type 'SomeDerived' cannot be converted to type 'SomeOther'.
   Property 'q' is missing in type 'SomeDerived'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Type 'SomeBase' cannot be converted to type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Type 'SomeBase' cannot be converted to type 'SomeOther'.
   Property 'q' is missing in type 'SomeBase'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS2304: Cannot find name 'numOrStr'.
@@ -26,7 +23,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (21 errors) ====
+==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (18 errors) ====
     // Function call whose argument is a 1 arg generic function call with explicit type arguments
     function fn1<T>(t: T) { }
     function fn2(t: any) { }
@@ -62,15 +59,11 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someBase = <SomeBase>someOther; // Error
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Type 'SomeOther' cannot be converted to type 'SomeBase'.
-               ~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type 'SomeOther' cannot be converted to type 'SomeBase'.
 !!! error TS2352:   Property 'p' is missing in type 'SomeOther'.
     
     someDerived = <SomeDerived>someDerived;
     someDerived = <SomeDerived>someBase;
     someDerived = <SomeDerived>someOther; // Error
-                  ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type 'SomeOther' cannot be converted to type 'SomeDerived'.
                   ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Type 'SomeOther' cannot be converted to type 'SomeDerived'.
 !!! error TS2352:   Property 'x' is missing in type 'SomeOther'.
@@ -80,8 +73,6 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
 !!! error TS2352: Type 'SomeDerived' cannot be converted to type 'SomeOther'.
 !!! error TS2352:   Property 'q' is missing in type 'SomeDerived'.
     someOther = <SomeOther>someBase; // Error
-                ~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type 'SomeBase' cannot be converted to type 'SomeOther'.
                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Type 'SomeBase' cannot be converted to type 'SomeOther'.
 !!! error TS2352:   Property 'q' is missing in type 'SomeBase'.
