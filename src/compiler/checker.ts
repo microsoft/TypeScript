@@ -7343,9 +7343,9 @@ namespace ts {
         // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
-        function getAssignmentReducedType(declaredType: Type, assignedType: Type) {
+        function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
             if (declaredType !== assignedType && declaredType.flags & TypeFlags.Union) {
-                const reducedTypes = filter((<UnionType>declaredType).types, t => typeMaybeAssignableTo(assignedType, t));
+                const reducedTypes = filter(declaredType.types, t => typeMaybeAssignableTo(assignedType, t));
                 if (reducedTypes.length) {
                     return reducedTypes.length === 1 ? reducedTypes[0] : getUnionType(reducedTypes);
                 }
@@ -7573,16 +7573,22 @@ namespace ts {
 
             function getTypeAtFlowAssignment(flow: FlowAssignment) {
                 const node = flow.node;
+                // Assignments only narrow the computed type if the declared type is a union type. Thus, we
+                // only need to evaluate the assigned type if the declared type is a union type.
                 if ((node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) &&
                     reference.kind === SyntaxKind.Identifier &&
                     getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
-                    return getAssignmentReducedType(declaredType, getInitialType(<VariableDeclaration | BindingElement>node));
+                    return declaredType.flags & TypeFlags.Union ?
+                        getAssignmentReducedType(<UnionType>declaredType, getInitialType(<VariableDeclaration | BindingElement>node)) :
+                        declaredType;
                 }
                 // If the node is not a variable declaration or binding element, it is an identifier
                 // or a dotted name that is the target of an assignment. If we have a match, reduce
                 // the declared type by the assigned type.
                 if (isMatchingReference(reference, node)) {
-                    return getAssignmentReducedType(declaredType, getAssignedType(<Expression>node));
+                    return declaredType.flags & TypeFlags.Union ?
+                        getAssignmentReducedType(<UnionType>declaredType, getAssignedType(<Expression>node)) :
+                        declaredType;
                 }
                 // We didn't have a direct match. However, if the reference is a dotted name, this
                 // may be an assignment to a left hand part of the reference. For example, for a
