@@ -2943,12 +2943,63 @@ namespace ts {
         }
     }
 
-    export function collapseRangeToStart(range: TextRange) {
-        return range.pos === range.end ? range : { pos: range.pos, end: range.pos };
+    /**
+     * Creates a new TextRange from a provided range with a new end position.
+     *
+     * @param range A TextRange.
+     * @param end The new end position.
+     */
+    export function moveRangeEnd(range: TextRange, end: number): TextRange {
+        return { pos: range.pos, end };
     }
 
-    export function collapseRangeToEnd(range: TextRange) {
-        return range.pos === range.end ? range : { pos: range.end, end: range.end };
+    /**
+     * Creates a new TextRange from a provided range with a new start position.
+     *
+     * @param range A TextRange.
+     * @param pos The new Start position.
+     */
+    export function moveRangePos(range: TextRange, pos: number): TextRange {
+        return { pos, end: range.end };
+    }
+
+    /**
+     * Determines whether a TextRange has the same start and end positions.
+     *
+     * @param range A TextRange.
+     */
+    export function isCollapsedRange(range: TextRange) {
+        return range.pos === range.end;
+    }
+
+    /**
+     * Creates a new TextRange from a provided range with its end position collapsed to its
+     * start position.
+     *
+     * @param range A TextRange.
+     */
+    export function collapseRangeToStart(range: TextRange): TextRange {
+        return isCollapsedRange(range) ? range : moveRangeEnd(range, range.pos);
+    }
+
+    /**
+     * Creates a new TextRange from a provided range with its start position collapsed to its
+     * end position.
+     *
+     * @param range A TextRange.
+     */
+    export function collapseRangeToEnd(range: TextRange): TextRange {
+        return isCollapsedRange(range) ? range : moveRangePos(range, range.end);
+    }
+
+    /**
+     * Creates a new TextRange for a token at the provides start position.
+     *
+     * @param pos The start position.
+     * @param token The token.
+     */
+    export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
+        return { pos, end: pos + tokenToString(token).length };
     }
 
     export function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile) {
