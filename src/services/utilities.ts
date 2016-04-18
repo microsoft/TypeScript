@@ -6,32 +6,6 @@ namespace ts {
         list: Node;
     }
 
-    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 0);
-        let lineStarts = sourceFile.getLineStarts();
-
-        let lineIndex = line;
-        if (lineIndex + 1 === lineStarts.length) {
-            // last line - return EOF
-            return sourceFile.text.length - 1;
-        }
-        else {
-            // current line start
-            let start = lineStarts[lineIndex];
-            // take the start position of the next line -1 = it should be some line break
-            let pos = lineStarts[lineIndex + 1] - 1;
-            Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
-            // walk backwards skipping line breaks, stop the the beginning of current line.
-            // i.e:
-            // <some text>
-            // $ <- end of line for this position should match the start position
-            while (start <= pos && isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                pos--;
-            }
-            return pos;
-        }
-    }
-
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         let lineStarts = sourceFile.getLineStarts();
         let line = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -429,11 +403,51 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart();
+        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart(sourceFile);
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
         return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
+    }
+
+    /**
+     * returns true if the position is in between the open and close elements of an JSX expression.
+     */
+    export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (!token) {
+            return false;
+        }
+
+        // <div>Hello |</div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText) {
+            return true;
+        }
+
+        // <div> { | </div> or <div a={| </div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxExpression) {
+            return true;
+        }
+
+        // <div> { 
+        // |
+        // } < /div>
+        if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
+            return true;
+        }
+
+        // <div>|</div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxClosingElement) {
+            return true;
+        }
+
+        return false;
+    }
+
+    export function isInTemplateString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
     /**
@@ -443,7 +457,7 @@ namespace ts {
     export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
         let token = getTokenAtPosition(sourceFile, position);
 
-        if (token && position <= token.getStart()) {
+        if (token && position <= token.getStart(sourceFile)) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
             // The end marker of a single-line comment does not include the newline character.

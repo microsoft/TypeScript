@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2352: Neither type '{ c: null; }' nor type 'IFoo' is assignable to the other.
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2352: Type '{ c: null; }' cannot be converted to type 'IFoo'.
   Property 'a' is missing in type '{ c: null; }'.
 
 
@@ -20,5 +20,5 @@ tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2352: Neith
     // Neither types is assignable to each other
     (<IFoo>{ c: null });
      ~~~~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '{ c: null; }' nor type 'IFoo' is assignable to the other.
+!!! error TS2352: Type '{ c: null; }' cannot be converted to type 'IFoo'.
 !!! error TS2352:   Property 'a' is missing in type '{ c: null; }'.

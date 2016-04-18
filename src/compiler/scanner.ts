@@ -114,6 +114,7 @@ namespace ts {
         "try": SyntaxKind.TryKeyword,
         "type": SyntaxKind.TypeKeyword,
         "typeof": SyntaxKind.TypeOfKeyword,
+        "undefined": SyntaxKind.UndefinedKeyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
         "while": SyntaxKind.WhileKeyword,

@@ -160,6 +160,20 @@ namespace ts.NavigationBar {
             for (let node of nodes) {
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
+                        topLevelNodes.push(node);
+                        for (const member of (<ClassDeclaration>node).members) {
+                            if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.Constructor) {
+                                type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
+                                if ((<FunctionLikeMember>member).body) {
+                                    // We do not include methods that does not have child functions in it, because of duplications.
+                                    if (hasNamedFunctionDeclarations((<Block>(<FunctionLikeMember>member).body).statements)) {
+                                        topLevelNodes.push(member);
+                                    }
+                                    addTopLevelNodes((<Block>(<MethodDeclaration>member).body).statements, topLevelNodes);
+                                }
+                            }
+                        }
+                        break;
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                         topLevelNodes.push(node);
@@ -182,22 +196,39 @@ namespace ts.NavigationBar {
             }
         }
 
-        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration) {
+        function hasNamedFunctionDeclarations(nodes: NodeArray<Statement>): boolean {
+            for (let s of nodes) {
+                if (s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): boolean {
             if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
                 // A function declaration is 'top level' if it contains any function declarations
                 // within it.
                 if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
                     // Proper function declarations can only have identifier names
-                    if (forEach((<Block>functionDeclaration.body).statements,
-                        s => s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text))) {
-
+                    if (hasNamedFunctionDeclarations((<Block>functionDeclaration.body).statements)) {
                         return true;
                     }
 
-                    // Or if it is not parented by another function.  i.e all functions
-                    // at module scope are 'top level'.
+                    // Or if it is not parented by another function. I.e all functions at module scope are 'top level'.
                     if (!isFunctionBlock(functionDeclaration.parent)) {
                         return true;
+                    }
+
+                    // Or if it is nested inside class methods and constructors.
+                    else {
+                        // We have made sure that a grand parent node exists with 'isFunctionBlock()' above.
+                        const grandParentKind = functionDeclaration.parent.parent.kind;
+                        if (grandParentKind === SyntaxKind.MethodDeclaration ||
+                            grandParentKind === SyntaxKind.Constructor) {
+
+                            return true;
+                        }
                     }
                 }
             }
@@ -376,6 +407,10 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ClassDeclaration:
                     return createClassItem(<ClassDeclaration>node);
 
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                    return createMemberFunctionLikeItem(<MethodDeclaration | ConstructorDeclaration>node);
+
                 case SyntaxKind.EnumDeclaration:
                     return createEnumItem(<EnumDeclaration>node);
 
@@ -424,12 +459,37 @@ namespace ts.NavigationBar {
                     getIndent(node));
             }
 
-            function createFunctionItem(node: FunctionDeclaration) {
+            function createFunctionItem(node: FunctionDeclaration): ts.NavigationBarItem  {
                 if (node.body && node.body.kind === SyntaxKind.Block) {
                     let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
-                    return getNavigationBarItem(!node.name ? "default": node.name.text ,
+                    return getNavigationBarItem(!node.name ? "default": node.name.text,
                         ts.ScriptElementKind.functionElement,
+                        getNodeModifiers(node),
+                        [getNodeSpan(node)],
+                        childItems,
+                        getIndent(node));
+                }
+
+                return undefined;
+            }
+
+            function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration): ts.NavigationBarItem  {
+                if (node.body && node.body.kind === SyntaxKind.Block) {
+                    let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
+                    let scriptElementKind: string;
+                    let memberFunctionName: string;
+                    if (node.kind === SyntaxKind.MethodDeclaration) {
+                        memberFunctionName = getPropertyNameForPropertyNameNode(node.name);
+                        scriptElementKind = ts.ScriptElementKind.memberFunctionElement;
+                    }
+                    else {
+                        memberFunctionName = "constructor";
+                        scriptElementKind = ts.ScriptElementKind.constructorImplementationElement;
+                    }
+
+                    return getNavigationBarItem(memberFunctionName,
+                        scriptElementKind,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
                         childItems,
