@@ -45,7 +45,7 @@ System.register([], function (exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var __moduleName = context_1 && context_1.id;
-    var decorator, default_1_1;
+    var decorator, default_1;
     return {
         setters: [],
         execute: function () {
