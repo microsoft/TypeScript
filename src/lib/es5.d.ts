@@ -1064,7 +1064,7 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array. 
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): T[];
+    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1199,7 +1199,7 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array. 
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T[];
+    filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1511,7 +1511,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): Int8Array;
+    filter(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -1784,7 +1784,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): Uint8Array;
+    filter(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -2058,7 +2058,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): Uint8ClampedArray;
+    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -2331,7 +2331,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): Int16Array;
+    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -2605,7 +2605,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): Uint16Array;
+    filter(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -2878,7 +2878,7 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): Int32Array;
+    filter(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -3151,7 +3151,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): Uint32Array;
+    filter(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -3424,7 +3424,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): Float32Array;
+    filter(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
@@ -3698,7 +3698,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. 
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): Float64Array;
+    filter(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
 
     /** 
       * Returns the value of the first element in the array where predicate is true, and undefined 
