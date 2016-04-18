@@ -2058,10 +2058,10 @@ namespace ts {
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
                         if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                            writeTypeOSymbol(type, flags);
+                            writeTypeOfSymbol(type, flags);
                         }
                         else if (shouldWriteTypeOfFunctionSymbol()) {
-                            writeTypeOSymbol(type, flags);
+                            writeTypeOfSymbol(type, flags);
                         }
                         else if (contains(symbolStack, symbol)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
@@ -2106,7 +2106,7 @@ namespace ts {
                     }
                 }
 
-                function writeTypeOSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
+                function writeTypeOfSymbol(type: ObjectType, typeFormatFlags?: TypeFormatFlags) {
                     writeKeyword(writer, SyntaxKind.TypeOfKeyword);
                     writeSpace(writer);
                     buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Value, SymbolFormatFlags.None, typeFormatFlags);
