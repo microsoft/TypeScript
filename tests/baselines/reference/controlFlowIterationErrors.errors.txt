@@ -1,14 +1,21 @@
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(11,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(12,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(23,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(34,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(35,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(46,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(77,13): error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(77,26): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(88,13): error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(88,26): error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts (4 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts (8 errors) ====
+    
     let cond: boolean;
     
     function len(s: string) {
@@ -68,5 +75,58 @@ tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts(45,17): error 
 !!! error TS2345:   Type 'string' is not assignable to type 'number'.
         }
         x;
+    }
+    
+    function asNumber(x: string | number): number {
+        return +x;
+    }
+    
+    function h1() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = +x + 1;
+            x;
+        }
+    }
+    
+    function h2() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x = asNumber(x) + 1;
+            x;
+        }
+    }
+    
+    function h3() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            let y = asNumber(x);
+                ~
+!!! error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                             ~
+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
+            x = y + 1;
+            x;
+        }
+    }
+    
+    function h4() {
+        let x: string | number | boolean;
+        x = "0";
+        while (cond) {
+            x;
+            let y = asNumber(x);
+                ~
+!!! error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                             ~
+!!! error TS2345: Argument of type 'string | number | boolean' is not assignable to parameter of type 'string | number'.
+!!! error TS2345:   Type 'boolean' is not assignable to type 'string | number'.
+            x = y + 1;
+            x;
+        }
     }
     
