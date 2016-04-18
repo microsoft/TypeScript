@@ -296,8 +296,8 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipCommentsForNode);
-                    const trailingComments = getTrailingComments(node, shouldSkipCommentsForNode);
+                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode);
+                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode);
                     emitLeadingComments(node, leadingComments);
                     emitStart(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitWorker(node);
@@ -307,16 +307,29 @@ const _super = (function (geti, seti) {
             }
 
             /**
-             * Determines whether to skip comment emit for a node.
+             * Determines whether to skip leading comment emit for a node.
              *
              * We do not emit comments for NotEmittedStatement nodes or any node that has
-             * NodeEmitFlags.NoComments.
+             * NodeEmitFlags.NoLeadingComments.
              *
              * @param node A Node.
              */
-            function shouldSkipCommentsForNode(node: Node) {
+            function shouldSkipLeadingCommentsForNode(node: Node) {
                 return isNotEmittedStatement(node)
-                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoComments) !== 0;
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingComments) !== 0;
+            }
+
+            /**
+             * Determines whether to skip trailing comment emit for a node.
+             *
+             * We do not emit comments for NotEmittedStatement nodes or any node that has
+             * NodeEmitFlags.NoTrailingComments.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipTrailingCommentsForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingComments) !== 0;
             }
 
             /**
@@ -1227,12 +1240,14 @@ const _super = (function (geti, seti) {
 
             function emitBlock(node: Block, format?: ListFormat) {
                 if (isSingleLineEmptyBlock(node)) {
-                    write("{ }");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
                 }
                 else {
-                    write("{");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
                     emitBlockStatements(node);
-                    write("}");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
                 }
             }
 
@@ -1301,7 +1316,9 @@ const _super = (function (geti, seti) {
             }
 
             function emitForStatement(node: ForStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(";");
                 emitExpressionWithPrefix(" ", node.condition);
@@ -1508,7 +1525,7 @@ const _super = (function (geti, seti) {
 
                 const startingLine = writer.getLine();
                 increaseIndent();
-                emitLeadingDetachedComments(body.statements, body, shouldSkipCommentsForNode);
+                emitLeadingDetachedComments(body.statements, body, shouldSkipLeadingCommentsForNode);
 
                 // Emit all the prologue directives (like "use strict").
                 const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
@@ -1525,7 +1542,7 @@ const _super = (function (geti, seti) {
 
                 const endingLine = writer.getLine();
                 emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
-                emitTrailingDetachedComments(body.statements, body, shouldSkipCommentsForNode);
+                emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, body.statements.end);
             }

@@ -3,6 +3,8 @@
 
 /* @internal */
 namespace ts {
+    const synthesizedLocation: TextRange = { pos: -1, end: -1 };
+
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
@@ -985,14 +987,17 @@ namespace ts {
     function addPropertyDescriptorPropertyAssignmentIfNeeded(properties: ObjectLiteralElement[], name: string, descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
         const value = getProperty(descriptor, name);
         if (value !== undefined) {
-            const options = getProperty(descriptorExtendedOptions, name);
+            let options: PropertyDescriptorExtendedOption;
             let location: TextRange;
             let emitFlags: NodeEmitFlags;
-            if (isDefined(options)) {
-                location = options.location;
-                emitFlags = options.emitFlags;
-                if (isDefined(options.newLine)) {
-                    preferNewLine = options.newLine;
+            if (descriptorExtendedOptions !== undefined) {
+                options = getProperty(descriptorExtendedOptions, name);
+                if (options !== undefined) {
+                    location = options.location;
+                    emitFlags = options.emitFlags;
+                    if (options.newLine !== undefined) {
+                        preferNewLine = options.newLine;
+                    }
                 }
             }
 
@@ -1002,8 +1007,8 @@ namespace ts {
                 location
             );
 
-            if (isDefined(emitFlags)) {
-                Debug.assert(isDefined(context), "TransformationContext must be supplied when emitFlags are provided.");
+            if (emitFlags !== undefined) {
+                Debug.assert(context !== undefined, "TransformationContext must be supplied when emitFlags are provided.");
                 context.setNodeEmitFlags(property, emitFlags);
             }
 
@@ -1271,8 +1276,8 @@ namespace ts {
 
     export function createExpressionForPropertyName(memberName: PropertyName, location?: TextRange): Expression {
         return isIdentifier(memberName) ? createLiteral(memberName.text, location)
-             : isComputedPropertyName(memberName) ? getRelocatedClone(memberName.expression, location)
-             : getRelocatedClone(memberName, location);
+             : isComputedPropertyName(memberName) ? getRelocatedClone(memberName.expression, location || synthesizedLocation)
+             : getRelocatedClone(memberName, location || synthesizedLocation);
     }
 
     // Utilities

@@ -635,7 +635,7 @@ namespace ts {
             setNodeEmitFlags(inner, NodeEmitFlags.NoComments);
 
             const outer = createPartiallyEmittedExpression(inner);
-            outer.end = node.pos;
+            outer.end = skipTrivia(currentText, node.pos);
             setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
 
             return createParen(
@@ -988,7 +988,12 @@ namespace ts {
                 return;
             }
 
-            const name = getSynthesizedClone(<Identifier>parameter.name);
+            // `declarationName` is the name of the local declaration for the parameter.
+            const declarationName = getUniqueClone(<Identifier>parameter.name);
+            setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
+
+            // `expressionName` is the name of the parameter used in expressions.
+            const expressionName = getSynthesizedClone(<Identifier>parameter.name);
             const restIndex = node.parameters.length - 1;
             const temp = createLoopVariable();
 
@@ -998,7 +1003,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            name,
+                            declarationName,
                             createArrayLiteral([])
                         )
                     ]),
@@ -1025,7 +1030,7 @@ namespace ts {
                             createStatement(
                                 createAssignment(
                                     createElementAccess(
-                                        name,
+                                        expressionName,
                                         createSubtract(temp, createLiteral(restIndex))
                                     ),
                                     createElementAccess(createIdentifier("arguments"), temp)

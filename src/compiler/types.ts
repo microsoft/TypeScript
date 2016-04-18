@@ -2876,10 +2876,12 @@ namespace ts {
         NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
         NoTokenSourceMaps = 1 << 12,             // Do not emit source map locations for tokens of this node.
-        NoComments = 1 << 13,                    // Do not emit comments for this node.
-        ExportName = 1 << 14,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 15,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoLeadingComments = 1 << 13,             // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 14,            // Do not emit trailing comments for this node.
+        NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
+        ExportName = 1 << 15,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 16,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 17,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
     }
 
     /** Additional context provided to `visitEachChild` */
