@@ -480,7 +480,7 @@ namespace ts {
             }
             else if (node.decorators) {
                 if (isDefaultExternalModuleExport(node)) {
-                    statements.push(createExportDefault(name || getGeneratedNameForNode(node)));
+                    statements.push(createExportDefault(getLocalName(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
                     statements.push(createExternalModuleExport(name));

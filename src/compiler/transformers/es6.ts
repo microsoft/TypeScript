@@ -612,7 +612,6 @@ namespace ts {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const closingBraceLocation = { pos: node.end - 1, end: node.end };
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
@@ -663,23 +662,23 @@ namespace ts {
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const name = getDeclarationName(node);
+            const localName = getLocalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
-            const outer = createPartiallyEmittedExpression(name);
+            const outer = createPartiallyEmittedExpression(localName);
             outer.end = closingBraceLocation.end;
             setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
 
             const statement = createReturn(outer);
             statement.pos = closingBraceLocation.pos;
-            statements.push(statement);
             setNodeEmitFlags(statement, NodeEmitFlags.NoComments | NodeEmitFlags.NoTokenSourceMaps);
+            statements.push(statement);
 
             addRange(statements, endLexicalEnvironment());
+
             const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
             setNodeEmitFlags(block, NodeEmitFlags.NoComments);
-
             return block;
         }
 
@@ -2770,20 +2769,52 @@ namespace ts {
         }
 
         /**
+         * Gets the local name for a declaration for use in expressions.
+         *
+         * A local name will *never* be prefixed with an module or namespace export modifier like
+         * "exports.".
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         */
+        function getLocalName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.LocalName);
+        }
+
+        /**
+         * Gets the export name for a declaration for use in expressions.
+         *
+         * An export name will *always* be prefixed with an module or namespace export modifier
+         * like "exports." if one is required.
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         */
+        function getExportName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.ExportName);
+        }
+
+        /**
          * Gets the name of a declaration, without source map or comments.
          *
          * @param node The declaration.
          * @param allowComments Allow comments for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean) {
-            if (node.name) {
-                const name = getMutableClone(node.name);
-                let flags = NodeEmitFlags.NoSourceMap;
-                if (!allowComments) {
-                    flags |= NodeEmitFlags.NoComments;
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
+            if (node.name && !isGeneratedIdentifier(node.name)) {
+                const name = getUniqueClone(node.name);
+                emitFlags |= getNodeEmitFlags(node.name);
+                if (!allowSourceMaps) {
+                    emitFlags |= NodeEmitFlags.NoSourceMap;
                 }
-
-                setNodeEmitFlags(name, flags | getNodeEmitFlags(name));
+                if (!allowComments) {
+                    emitFlags |= NodeEmitFlags.NoComments;
+                }
+                if (emitFlags) {
+                    setNodeEmitFlags(name, emitFlags);
+                }
                 return name;
             }
 
@@ -2791,7 +2822,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const expression = getDeclarationName(node);
+            const expression = getLocalName(node);
             return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
         }
 
