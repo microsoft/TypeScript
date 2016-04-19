@@ -728,25 +728,24 @@ namespace ts.formatting {
                         dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container) :
                         Constants.Unknown;
 
+                    let indentNextTokenOrTrivia = true;
                     if (currentTokenInfo.leadingTrivia) {
                         let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
-                        let indentNextTokenOrTrivia = true;
 
                         for (let triviaItem of currentTokenInfo.leadingTrivia) {
-                            if (!rangeContainsRange(originalRange, triviaItem)) {
-                                continue;
-                            }
-
+                            const triviaInRange = rangeContainsRange(originalRange, triviaItem); 
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
-                                    indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                    if (triviaInRange) {
+                                        indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                    }
                                     indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.SingleLineCommentTrivia:
-                                    if (indentNextTokenOrTrivia) {
+                                    if (indentNextTokenOrTrivia && triviaInRange) {
                                         insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
-                                        indentNextTokenOrTrivia = false;
                                     }
+                                    indentNextTokenOrTrivia = false;
                                     break;
                                 case SyntaxKind.NewLineTrivia:
                                     indentNextTokenOrTrivia = true;
@@ -756,7 +755,7 @@ namespace ts.formatting {
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
-                    if (tokenIndentation !== Constants.Unknown) {
+                    if (tokenIndentation !== Constants.Unknown && indentNextTokenOrTrivia) {
                         insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
 
                         lastIndentedLine = tokenStart.line;
