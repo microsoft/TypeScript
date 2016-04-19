@@ -46,7 +46,7 @@ namespace ts {
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
         if (!trySetLanguageAndTerritory(language, territory, errors)) {
-            trySetLanguageAndTerritory(language, undefined, errors)
+            trySetLanguageAndTerritory(language, undefined, errors);
         }
 
         return true;
