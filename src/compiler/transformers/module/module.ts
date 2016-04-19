@@ -586,7 +586,8 @@ namespace ts {
                 return createStatement(
                     inlineExpressions(
                         map(variables, transformInitializedVariable)
-                    )
+                    ),
+                    node
                 );
             }
             return node;
