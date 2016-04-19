@@ -1,7 +1,0 @@
-===================================================================
-JsFile: test.js
-mapUrl: http://www.typescriptlang.org/test.js.map
-sourceRoot: http://typescript.codeplex.com/
-sources: outputdir_module_multifolder/ref/m1.ts,outputdir_module_multifolder_ref/m2.ts,outputdir_module_multifolder/test.ts
-===================================================================
->>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map

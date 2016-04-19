@@ -178,6 +178,8 @@ namespace ts {
             case SyntaxKind.AsExpression:
                 return visitNode(cbNode, (<AsExpression>node).expression) ||
                     visitNode(cbNode, (<AsExpression>node).type);
+            case SyntaxKind.NonNullExpression:
+                return visitNode(cbNode, (<NonNullExpression>node).expression);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -2014,20 +2016,24 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken;
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken || token === SyntaxKind.ThisKeyword;
         }
 
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            if (token === SyntaxKind.ThisKeyword) {
+                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.type = parseParameterType();
+                return finishNode(node);
+            }
+
             node.decorators = parseDecorators();
             node.modifiers = parseModifiers();
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
-
             node.name = parseIdentifierOrPattern();
-
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
@@ -2065,11 +2071,11 @@ namespace ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldContext: boolean,
-                awaitContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldContext: boolean,
+            awaitContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
@@ -2360,12 +2366,14 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.UndefinedKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.ThisKeyword: {
                     const thisKeyword = parseThisTypeNode();
@@ -2397,6 +2405,8 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UndefinedKeyword:
+                case SyntaxKind.NullKeyword:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
@@ -2465,7 +2475,7 @@ namespace ts {
                 // Skip modifiers
                 parseModifiers();
             }
-            if (isIdentifier()) {
+            if (isIdentifier() || token === SyntaxKind.ThisKeyword) {
                 nextToken();
                 return true;
             }
@@ -3717,6 +3727,14 @@ namespace ts {
                     propertyAccess.dotToken = dotToken;
                     propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
+                    continue;
+                }
+
+                if (token === SyntaxKind.ExclamationToken && !scanner.hasPrecedingLineBreak()) {
+                    nextToken();
+                    const nonNullExpression = <NonNullExpression>createNode(SyntaxKind.NonNullExpression, expression.pos);
+                    nonNullExpression.expression = expression;
+                    expression = finishNode(nonNullExpression);
                     continue;
                 }
 
@@ -5486,6 +5504,7 @@ namespace ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
+            const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
 
@@ -5512,7 +5531,12 @@ namespace ts {
                     sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     const diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
-                        referencedFiles.push(fileReference);
+                        if (referencePathMatchResult.isTypeReferenceDirective) {
+                            typeReferenceDirectives.push(fileReference);
+                        }
+                        else {
+                            referencedFiles.push(fileReference);
+                        }
                     }
                     if (diagnosticMessage) {
                         parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
@@ -5544,6 +5568,7 @@ namespace ts {
             }
 
             sourceFile.referencedFiles = referencedFiles;
+            sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
         }

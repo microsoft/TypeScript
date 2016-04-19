@@ -21,9 +21,9 @@ var M;
     var Point = (function () {
         function Point() {
         }
-        return Point;
+        return M.Point;
     }());
-    M.Point = Point;
+    M.Point = M.Point;
     M.Point = 1; // Error
 })(M || (M = {}));
 var M2;

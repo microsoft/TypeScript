@@ -1,7 +1,7 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 interface FileInformation {
     contents: string;
@@ -237,8 +237,8 @@ namespace Playback {
                     ), path));
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
-            (path, contents) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
-            (path, contents) => noOpReplay("writeFile"));
+            (path: string, contents: string) => callAndRecord(underlying.writeFile(path, contents), recordLog.filesWritten, { path, contents, bom: false }),
+            (path: string, contents: string) => noOpReplay("writeFile"));
 
         wrapper.exit = (exitCode) => {
             if (recordLog !== undefined) {

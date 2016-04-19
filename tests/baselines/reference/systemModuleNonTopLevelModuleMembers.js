@@ -30,7 +30,7 @@ System.register([], function (exports_1, context_1) {
             exports_1("TopLevelClass", TopLevelClass);
             (function (TopLevelModule) {
                 var v;
-            })(TopLevelModule || (TopLevelModule = {}));
+            })(TopLevelModule = TopLevelModule || (TopLevelModule = {}));
             exports_1("TopLevelModule", TopLevelModule);
             (function (TopLevelEnum) {
                 TopLevelEnum[TopLevelEnum["E"] = 0] = "E";
@@ -53,7 +53,7 @@ System.register([], function (exports_1, context_1) {
                     NonTopLevelEnum[NonTopLevelEnum["E"] = 0] = "E";
                 })(TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {}));
                 var NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum;
-            })(TopLevelModule2 || (TopLevelModule2 = {}));
+            })(TopLevelModule2 = TopLevelModule2 || (TopLevelModule2 = {}));
             exports_1("TopLevelModule2", TopLevelModule2);
         }
     };

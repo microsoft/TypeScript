@@ -592,7 +592,8 @@ namespace ts {
                     let inlineAssignments = createStatement(
                         inlineExpressions(
                             map(variables, transformInitializedVariable)
-                        )
+                        ),
+                        node
                     );
                     resultStatements.push(inlineAssignments);
                 }

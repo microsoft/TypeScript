@@ -9,13 +9,13 @@ class C {
 >other : () => void
 
       var fn = async () => await other.apply(this, arguments);      
->fn : () => Promise<any>
->async () => await other.apply(this, arguments) : () => Promise<any>
->await other.apply(this, arguments) : any
->other.apply(this, arguments) : any
->other.apply : (thisArg: any, argArray?: any) => any
+>fn : () => Promise<void>
+>async () => await other.apply(this, arguments) : () => Promise<void>
+>await other.apply(this, arguments) : void
+>other.apply(this, arguments) : void
+>other.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
 >other : () => void
->apply : (thisArg: any, argArray?: any) => any
+>apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
 >this : this
 >arguments : IArguments
    }

@@ -13,3 +13,11 @@ declare var Foo, Bar, baz;
 >baz : Symbol(baz, Decl(test.tsx, 4, 21))
 
 <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
+>Foo : Symbol(Foo, Decl(test.tsx, 4, 11))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Foo : Symbol(Foo, Decl(test.tsx, 4, 11))
+
