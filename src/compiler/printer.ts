@@ -26,6 +26,19 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };`;
 
+        // Emit output for the __assign helper function.
+        // This is typically used for JSX spread attributes,
+        // and can be used for object literal spread properties.
+        const assignHelper = `
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};`;
+
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -173,6 +186,7 @@ const _super = (function (geti, seti) {
             let currentText: string;
             let currentFileIdentifiers: Map<string>;
             let extendsEmitted: boolean;
+            let assignEmitted: boolean;
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
             let awaiterEmitted: boolean;
@@ -232,6 +246,7 @@ const _super = (function (geti, seti) {
                 currentSourceFile = undefined;
                 currentText = undefined;
                 extendsEmitted = false;
+                assignEmitted = false;
                 decorateEmitted = false;
                 paramEmitted = false;
                 awaiterEmitted = false;
@@ -2021,6 +2036,11 @@ const _super = (function (geti, seti) {
                         writeLines(extendsHelper);
                         extendsEmitted = true;
                         helpersEmitted = true;
+                    }
+
+                    if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttribute)) {
+                        writeLines(assignHelper);
+                        assignEmitted = true;
                     }
 
                     if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
