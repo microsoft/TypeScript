@@ -612,12 +612,12 @@ namespace ts {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
-                baseTypeNode ? [createParameter("_super")] : [],
-                transformClassBody(node, baseTypeNode !== undefined)
+                extendsClauseElement ? [createParameter("_super")] : [],
+                transformClassBody(node, extendsClauseElement)
             );
 
             // To preserve the behavior of the old emitter, we explicitly indent
@@ -640,8 +640,8 @@ namespace ts {
             return createParen(
                 createCall(
                     outer,
-                    baseTypeNode
-                        ? [visitNode(baseTypeNode.expression, visitor, isExpression)]
+                    extendsClauseElement
+                        ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
                         : []
                 )
             );
@@ -651,13 +651,13 @@ namespace ts {
          * Transforms a ClassExpression or ClassDeclaration into a function body.
          *
          * @param node A ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): Block {
+        function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): Block {
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            addExtendsHelperIfNeeded(statements, node, hasExtendsClause);
-            addConstructor(statements, node, hasExtendsClause);
+            addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
+            addConstructor(statements, node, extendsClauseElement);
             addClassMembers(statements, node);
 
             // Create a synthetic text range for the return statement.
@@ -687,13 +687,14 @@ namespace ts {
          *
          * @param statements The statements of the class body function.
          * @param node The ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
-            if (hasExtendsClause) {
+        function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
+            if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(getDeclarationName(node))
+                        createExtendsHelper(getDeclarationName(node)),
+                        /*location*/ extendsClauseElement
                     )
                 );
             }
@@ -704,18 +705,18 @@ namespace ts {
          *
          * @param statements The statements of the class body function.
          * @param node The ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
+        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
-            const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, hasExtendsClause);
+            const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             statements.push(
                 createFunctionDeclaration(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     getDeclarationName(node),
                     transformConstructorParameters(constructor, hasSynthesizedSuper),
-                    transformConstructorBody(constructor, node, hasExtendsClause, hasSynthesizedSuper),
+                    transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
                 )
             );
@@ -746,11 +747,11 @@ namespace ts {
          *
          * @param constructor The constructor for the class.
          * @param node The node which contains the constructor.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             if (constructor) {
@@ -759,7 +760,7 @@ namespace ts {
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             }
 
-            addDefaultSuperCallIfNeeded(statements, constructor, hasExtendsClause, hasSynthesizedSuper);
+            addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
 
             if (constructor) {
                 const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
@@ -796,24 +797,25 @@ namespace ts {
          *
          * @param statements The statements for the new constructor body.
          * @param constructor The constructor for the class.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
+        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             // If the TypeScript transformer needed to synthesize a constructor for property
             // initializers, it would have also added a synthetic `...args` parameter and
             // `super` call.
             // If this is the case, or if the class has an `extends` clause but no
             // constructor, we emit a synthesized call to `_super`.
-            if (constructor ? hasSynthesizedSuper : hasExtendsClause) {
+            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
                 statements.push(
                     createStatement(
                         createFunctionApply(
                             createIdentifier("_super"),
                             createThis(),
                             createIdentifier("arguments")
-                        )
+                        ),
+                        /*location*/ extendsClauseElement
                     )
                 );
             }
@@ -1669,7 +1671,7 @@ namespace ts {
                                     visitor
                                 )
                             ),
-                            /*location*/ initializer
+                            /*location*/ moveRangeEnd(initializer, -1)
                         )
                     );
                 }
@@ -1684,8 +1686,8 @@ namespace ts {
                                     firstDeclaration ? firstDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
                                     createElementAccess(rhsReference, counter)
                                 )
-                            ]),
-                            /*location*/ initializer
+                            ], /*location*/ moveRangePos(initializer, -1)),
+                            /*location*/ moveRangeEnd(initializer, -1)
                         )
                     );
                 }
@@ -1709,7 +1711,8 @@ namespace ts {
                     );
                 }
                 else {
-                    statements.push(createStatement(assignment, /*location*/ node.initializer));
+                    assignment.end = initializer.end;
+                    statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
                 }
             }
 
@@ -1726,10 +1729,13 @@ namespace ts {
                 }
             }
 
+            // The old emitter does not emit source maps for the expression
+            setNodeEmitFlags(expression, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(expression));
+
             return createFor(
                 createVariableDeclarationList(
                     [
-                        createVariableDeclaration(counter, createLiteral(0), /*location*/ node.expression),
+                        createVariableDeclaration(counter, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
                         createVariableDeclaration(rhsReference, expression, /*location*/ node.expression)
                     ],
                     /*location*/ node.expression
@@ -1737,9 +1743,9 @@ namespace ts {
                 createLessThan(
                     counter,
                     createPropertyAccess(rhsReference, "length"),
-                    /*location*/ initializer
+                    /*location*/ node.expression
                 ),
-                createPostfixIncrement(counter, /*location*/ initializer),
+                createPostfixIncrement(counter, /*location*/ node.expression),
                 createBlock(
                     statements
                 ),

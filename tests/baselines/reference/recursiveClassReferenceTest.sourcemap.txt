@@ -198,24 +198,18 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^
-4 >                           ^^
-5 >                             ^
-6 >                              ^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       Find
-4 >                            
-5 >                             {
 1->Emitted(15, 13) Source(32, 29) + SourceIndex(0)
 2 >Emitted(15, 24) Source(32, 29) + SourceIndex(0)
 3 >Emitted(15, 28) Source(32, 33) + SourceIndex(0)
-4 >Emitted(15, 30) Source(32, 34) + SourceIndex(0)
-5 >Emitted(15, 31) Source(32, 35) + SourceIndex(0)
 ---
 >>>                var StartFindAction = (function () {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >	
 1->Emitted(16, 17) Source(33, 2) + SourceIndex(0)
 ---
@@ -663,24 +657,18 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^
-4 >                          ^^
-5 >                            ^
-6 >                             ^^^^^^^^^^^^^^^->
+4 >                          ^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   Widgets
-4 >                           
-5 >                            {
 1->Emitted(35, 9) Source(44, 21) + SourceIndex(0)
 2 >Emitted(35, 20) Source(44, 21) + SourceIndex(0)
 3 >Emitted(35, 27) Source(44, 28) + SourceIndex(0)
-4 >Emitted(35, 29) Source(44, 29) + SourceIndex(0)
-5 >Emitted(35, 30) Source(44, 30) + SourceIndex(0)
 ---
 >>>            var FindWidget = (function () {
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >	
 1->Emitted(36, 13) Source(45, 2) + SourceIndex(0)
 ---
@@ -1443,24 +1431,18 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^
-5 >                                  ^
-6 >                                   ^^^^^^^^->
+4 >                                ^^^^^^^^^^^->
 1->
 2 >            
 3 >                       PlainText
-4 >                                 
-5 >                                  {
 1->Emitted(70, 13) Source(76, 31) + SourceIndex(0)
 2 >Emitted(70, 24) Source(76, 31) + SourceIndex(0)
 3 >Emitted(70, 33) Source(76, 40) + SourceIndex(0)
-4 >Emitted(70, 35) Source(76, 41) + SourceIndex(0)
-5 >Emitted(70, 36) Source(76, 42) + SourceIndex(0)
 ---
 >>>                var State = (function () {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1-> {
   >	
   >	
 1->Emitted(71, 17) Source(78, 2) + SourceIndex(0)

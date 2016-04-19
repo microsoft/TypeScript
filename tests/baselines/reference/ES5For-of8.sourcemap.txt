@@ -10,9 +10,15 @@ sourceFile:ES5For-of8.ts
 -------------------------------------------------------------------
 >>>function foo() {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^
+4 >            ^^^^^^^^^->
 1 >
+2 >function 
+3 >         foo
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
 ---
 >>>    return { x: 0 };
 1->^^^^
@@ -24,7 +30,7 @@ sourceFile:ES5For-of8.ts
 7 >                ^
 8 >                 ^^
 9 >                   ^
-1->function foo() {
+1->() {
   >    
 2 >    return
 3 >           
@@ -72,7 +78,6 @@ sourceFile:ES5For-of8.ts
 15>                                       ^^^^^^^^^^^^^^
 16>                                                     ^^
 17>                                                       ^^^^
-18>                                                           ^
 1->
   >
 2 >for
@@ -91,7 +96,6 @@ sourceFile:ES5For-of8.ts
 15>                                       ['a', 'b', 'c']
 16>                                                     
 17>                                                       ['a', 'b', 'c']
-18>                                                           )
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(4, 4) Source(4, 4) + SourceIndex(0)
 3 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
@@ -109,7 +113,6 @@ sourceFile:ES5For-of8.ts
 15>Emitted(4, 54) Source(4, 32) + SourceIndex(0)
 16>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
 17>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
-18>Emitted(4, 61) Source(4, 33) + SourceIndex(0)
 ---
 >>>    foo().x = _a[_i];
 1 >^^^^

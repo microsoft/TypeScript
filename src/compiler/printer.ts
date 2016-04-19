@@ -1276,13 +1276,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitIfStatement(node: IfStatement) {
-                write("if (");
+                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    write("else");
+                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -1329,20 +1331,24 @@ const _super = (function (geti, seti) {
             }
 
             function emitForInStatement(node: ForInStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" in ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
             function emitForOfStatement(node: ForOfStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" of ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
@@ -1358,13 +1364,13 @@ const _super = (function (geti, seti) {
             }
 
             function emitContinueStatement(node: ContinueStatement) {
-                write("continue");
+                writeToken(SyntaxKind.ContinueKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
 
             function emitBreakStatement(node: BreakStatement) {
-                write("break");
+                writeToken(SyntaxKind.BreakKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
@@ -1383,9 +1389,12 @@ const _super = (function (geti, seti) {
             }
 
             function emitSwitchStatement(node: SwitchStatement) {
-                write("switch (");
+                const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitExpression(node.expression);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
+                write(" ");
                 emit(node.caseBlock);
             }
 
@@ -1872,9 +1881,12 @@ const _super = (function (geti, seti) {
 
             function emitCatchClause(node: CatchClause) {
                 writeLine();
-                write("catch (");
+                const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emit(node.variableDeclaration);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
+                write(" ");
                 emit(node.block);
             }
 

@@ -2660,13 +2660,22 @@ namespace ts {
         }
 
         function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
-            statements.push(createNamespaceExport(getDeclarationName(node), getDeclarationName(node)));
+            statements.push(
+                createStatement(
+                    createAssignment(
+                        getExportName(node),
+                        getLocalName(node, /*noSourceMaps*/ true),
+                        /*location*/ node
+                    ),
+                    /*location*/ moveRangePos(node, -1)
+                )
+            );
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return createStatement(
                 createAssignment(
-                    getNamespaceMemberName(exportName),
+                    getNamespaceMemberName(exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
                     exportValue
                 ),
                 location
@@ -2720,11 +2729,11 @@ namespace ts {
          * "exports.".
          *
          * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
          * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        function getLocalName(node: ClassDeclaration | FunctionDeclaration | ModuleDeclaration | EnumDeclaration, allowComments?: boolean) {
-            return getDeclarationName(node, allowComments, /*allowSourceMaps*/ true, NodeEmitFlags.LocalName);
+        function getLocalName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.LocalName);
         }
 
         /**
@@ -2734,15 +2743,15 @@ namespace ts {
          * like "exports." if one is required.
          *
          * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
          * @param allowComments A value indicating whether comments may be emitted for the name.
-         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        function getExportName(node: ClassDeclaration | FunctionDeclaration | ModuleDeclaration | EnumDeclaration, allowComments?: boolean) {
+        function getExportName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
             if (isNamespaceExport(node)) {
-                return getNamespaceMemberName(getDeclarationName(node), allowComments, /*allowSourceMaps*/ true);
+                return getNamespaceMemberName(getDeclarationName(node), allowComments, !noSourceMaps);
             }
 
-            return getDeclarationName(node, allowComments, /*allowSourceMaps*/ true, NodeEmitFlags.ExportName);
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.ExportName);
         }
 
         /**
