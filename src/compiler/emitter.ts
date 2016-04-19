@@ -7879,7 +7879,7 @@ const _super = (function (geti, seti) {
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
                     (<ArrowFunction>node.parent).body === node &&
-                    compilerOptions.target <= ScriptTarget.ES5) {
+                    languageVersion <= ScriptTarget.ES5) {
 
                     return false;
                 }
