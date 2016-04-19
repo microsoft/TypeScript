@@ -25,4 +25,4 @@ myReactLib.createElement("foo", {data: true});
 myReactLib.createElement(Bar, {x: x});
 myReactLib.createElement("x-component", null);
 myReactLib.createElement(Bar, __assign({}, x));
-myReactLib.createElement(Bar, __assign({}, x, {y: 2}));
+myReactLib.createElement(Bar, __assign({}, x, { y: 2 }));

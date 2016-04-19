@@ -53,8 +53,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class BrokenClass {
-    constructor() {
-    }
+    constructor() { }
     brokenMethod(field, value) {
         return new Promise((resolve, reject) => {
             let result = [];
