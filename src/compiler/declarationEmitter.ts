@@ -1377,6 +1377,7 @@ namespace ts {
         function emitSignatureDeclaration(node: SignatureDeclaration) {
             const prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
+            let closeParenthesizedFunctionType = false;
 
             if (node.kind === SyntaxKind.IndexSignature) {
                 // Index signature can have readonly modifier
@@ -1387,6 +1388,16 @@ namespace ts {
                 // Construct signature or constructor type write new Signature
                 if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                     write("new ");
+                }
+                else if (node.kind === SyntaxKind.FunctionType) {
+                    const currentOutput = writer.getText();
+                    // Do not generate incorrect type when function type with type parameters is type argument
+                    // This could happen if user used space between two '<' making it error free
+                    // e.g var x: A< <Tany>(a: Tany)=>Tany>;
+                    if (node.typeParameters && currentOutput.charAt(currentOutput.length - 1) === "<") {
+                        closeParenthesizedFunctionType = true;
+                        write("(");
+                    }
                 }
                 emitTypeParameters(node.typeParameters);
                 write("(");
@@ -1420,6 +1431,9 @@ namespace ts {
             if (!isFunctionTypeOrConstructorType) {
                 write(";");
                 writeLine();
+            }
+            else if (closeParenthesizedFunctionType) {
+                write(")");
             }
 
             function getReturnTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
