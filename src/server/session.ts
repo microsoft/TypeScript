@@ -969,16 +969,16 @@ namespace ts.server {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
                 let scriptKind: ScriptKind;
                 switch (openArgs.scriptKindName) {
-                    case ".ts":
+                    case "TS":
                         scriptKind = ScriptKind.TS;
                         break;
-                    case ".js":
+                    case "JS":
                         scriptKind = ScriptKind.JS;
                         break;
-                    case ".tsx":
+                    case "TSX":
                         scriptKind = ScriptKind.TSX;
                         break;
-                    case ".jsx":
+                    case "JSX":
                         scriptKind = ScriptKind.JSX;
                         break;
                 }

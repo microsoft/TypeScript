@@ -496,7 +496,7 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string, content?: string, scriptKindName?: string): void {
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             super.openFile(fileName, content, scriptKindName);
             this.client.openFile(fileName, content, scriptKindName);
         }
