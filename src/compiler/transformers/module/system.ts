@@ -607,7 +607,7 @@ namespace ts {
             }
 
             if (expressions.length) {
-                return createStatement(inlineExpressions(expressions));
+                return createStatement(inlineExpressions(expressions), node);
             }
 
             return undefined;
