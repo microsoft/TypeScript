@@ -3331,7 +3331,7 @@ namespace ts {
     }
 
     export function isParameter(node: Node): node is ParameterDeclaration {
-        return node.kind === SyntaxKind.Parameter && ((node as ParameterDeclaration).name as Identifier).text !== "this";
+        return node.kind === SyntaxKind.Parameter;
     }
 
     export function isDecorator(node: Node): node is Decorator {

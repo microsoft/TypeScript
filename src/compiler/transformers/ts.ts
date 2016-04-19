@@ -359,6 +359,7 @@ namespace ts {
                     // - accessibility modifiers
                     // - the question mark (?) token for optional parameters
                     // - type annotations
+                    // - this parameters
                     return visitParameter(<ParameterDeclaration>node);
 
                 case SyntaxKind.ParenthesizedExpression:
@@ -2114,10 +2115,14 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node has an accessibility modifier.
          * - The node has a questionToken.
+         * - The node's text is "this".
          *
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
+            if ((node.name as Identifier).text === "this") {
+                return undefined;
+            }
             const clone = getMutableClone(node);
             clone.decorators = undefined;
             clone.modifiers = undefined;
