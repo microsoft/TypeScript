@@ -40,7 +40,7 @@ class D1A extends Base {
 
     foo: String;
 >foo : Symbol(D1A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 18, 24))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 
@@ -58,7 +58,7 @@ class D2A extends Base {
 
     foo: Number;
 >foo : Symbol(D2A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 27, 24))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 
@@ -95,7 +95,7 @@ class D5 extends Base {
 
     foo: Date;
 >foo : Symbol(D5.foo, Decl(undefinedIsSubtypeOfEverything.ts, 45, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 

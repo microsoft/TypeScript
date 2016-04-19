@@ -88,6 +88,7 @@ const _super = (function (geti, seti) {
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
 
         let emitSkipped = false;
@@ -98,6 +99,7 @@ const _super = (function (geti, seti) {
         return {
             emitSkipped,
             diagnostics: emitterDiagnostics.getDiagnostics(),
+            emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList
         };
 
@@ -112,6 +114,16 @@ const _super = (function (geti, seti) {
 
             if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+            }
+
+            if (!emitSkipped && emittedFilesList) {
+                emittedFilesList.push(jsFilePath);
+                if (sourceMapFilePath) {
+                    emittedFilesList.push(sourceMapFilePath);
+                }
+                if (declarationFilePath) {
+                    emittedFilesList.push(declarationFilePath);
+                }
             }
         }
 

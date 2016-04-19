@@ -9,18 +9,11 @@ describe('PreProcessFile:', function () {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
         var resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
 
-        var resultIsLibFile = resultPreProcess.isLibFile;
-        var resultImportedFiles = resultPreProcess.importedFiles;
-        var resultReferencedFiles = resultPreProcess.referencedFiles;
+        assert.equal(resultPreProcess.isLibFile, expectedPreProcess.isLibFile, "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess.isLibFile + ". Actual: " + resultPreProcess.isLibFile);
 
-        var expectedIsLibFile = expectedPreProcess.isLibFile;
-        var expectedImportedFiles = expectedPreProcess.importedFiles;
-        var expectedReferencedFiles = expectedPreProcess.referencedFiles;
-
-        assert.equal(resultIsLibFile, expectedIsLibFile, "Pre-processed file has different value for isLibFile. Expected: " + expectedPreProcess + ". Actual: " + resultIsLibFile);
-
-        checkFileReferenceList("Imported files", expectedImportedFiles, resultImportedFiles);
-        checkFileReferenceList("Referenced files", expectedReferencedFiles, resultReferencedFiles);
+        checkFileReferenceList("Imported files", expectedPreProcess.importedFiles, resultPreProcess.importedFiles);
+        checkFileReferenceList("Referenced files", expectedPreProcess.referencedFiles, resultPreProcess.referencedFiles);
+        checkFileReferenceList("Type reference directives", expectedPreProcess.typeReferenceDirectives, resultPreProcess.typeReferenceDirectives);
 
         assert.deepEqual(resultPreProcess.ambientExternalModules, expectedPreProcess.ambientExternalModules);
     }
@@ -52,6 +45,7 @@ describe('PreProcessFile:', function () {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 37 }, { fileName: "refFile2.ts", pos: 38, end: 73 },
                         { fileName: "refFile3.ts", pos: 74, end: 109 }, { fileName: "..\\refFile4d.ts", pos: 110, end: 150 }],
                     importedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -64,6 +58,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -75,6 +70,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
                         { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
                     ambientExternalModules: undefined,
@@ -88,6 +84,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
                     importedFiles: <ts.FileReference[]>[],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -100,6 +97,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
+                    typeReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -112,6 +110,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }, { fileName: "refFile2.ts", pos: 36, end: 71 }],
+                    typeReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -124,6 +123,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }],
+                    typeReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
                     ambientExternalModules: undefined,
                     isLibFile: false
@@ -142,6 +142,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 20, end: 22 },
                         { fileName: "m2", pos: 51, end: 53 },
@@ -165,6 +166,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 14, end: 16 },
                         { fileName: "m2", pos: 36, end: 38 },
@@ -188,6 +190,7 @@ describe('PreProcessFile:', function () {
  
                {
                    referencedFiles: [],
+                   typeReferenceDirectives: [],
                    importedFiles: [],
                    ambientExternalModules: ["B"],
                    isLibFile: false
@@ -200,6 +203,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 26, end: 28 }
                     ],
@@ -218,6 +222,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ true,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "m1", pos: 39, end: 41 },
                         { fileName: "m2", pos: 74, end: 76 },
@@ -237,6 +242,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ true,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "mod1", pos: 21, end: 25 },
                         { fileName: "mod2", pos: 29, end: 33 },
@@ -254,6 +260,7 @@ describe('PreProcessFile:', function () {
                 /* detectJavaScriptImports */ true,
                 {
                     referencedFiles: [],
+                    typeReferenceDirectives: [],
                     importedFiles: [
                         { fileName: "mod1", pos: 28, end: 32 },
                         { fileName: "mod2", pos: 36, end: 40 },
@@ -274,6 +281,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
                 ],
@@ -293,6 +301,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "m", "pos": 135, "end": 136 },
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
@@ -313,6 +322,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "m", "pos": 135, "end": 136 },
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
@@ -333,6 +343,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
                 ],
@@ -352,6 +363,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
                 ],
@@ -370,6 +382,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "../Observable", "pos": 28, "end": 41 }
                 ],
@@ -390,6 +403,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "m2", "pos": 65, "end": 67 },
                     { "fileName": "augmentation", "pos": 102, "end": 114 }
@@ -413,6 +427,7 @@ describe('PreProcessFile:', function () {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [],
+                typeReferenceDirectives: [],
                 importedFiles: [
                     { "fileName": "m2", "pos": 127, "end": 129 },
                     { "fileName": "augmentation", "pos": 164, "end": 176 }
@@ -420,7 +435,30 @@ describe('PreProcessFile:', function () {
                 ambientExternalModules: ["m1"],
                 isLibFile: false
             });
-        });        
+        });
+        it ("correctly recognizes type reference directives", () => {
+            test(`
+            /// <reference path="a"/>
+            /// <reference types="a1"/>
+            /// <reference path="a2"/>
+            /// <reference types="a3"/>
+            `,
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [
+                    { "pos": 13, "end": 38, "fileName": "a" },
+                    { "pos": 91, "end": 117, "fileName": "a2" }
+                ],
+                typeReferenceDirectives: [
+                    { "pos": 51, "end": 78, "fileName": "a1" },
+                    { "pos": 130, "end": 157, "fileName": "a3" }
+                ],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        })
     });
 });
 
