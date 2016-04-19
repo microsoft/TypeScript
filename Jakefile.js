@@ -203,7 +203,7 @@ var librarySourceMap = [
         
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources), },
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts"), },
 ].concat(es2015LibrarySourceMap, es2016LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
