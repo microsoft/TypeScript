@@ -563,7 +563,7 @@ namespace ts {
 
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             // If the variable is for a generated declaration,
-            // we should maintain it and just strip off the 'export' modifier if necesary.
+            // we should maintain it and just strip off the 'export' modifier if necessary.
             const originalKind = getOriginalNode(node).kind;
             if (originalKind === SyntaxKind.ModuleDeclaration ||
                 originalKind === SyntaxKind.EnumDeclaration ||
@@ -713,11 +713,13 @@ namespace ts {
                 return visitExpressionStatementForEnumOrNamespaceDeclaration(node, <EnumDeclaration | ModuleDeclaration>original);
             }
             else if (origKind === SyntaxKind.ClassDeclaration) {
-                // The decorated assignment for a class name will potentially need to be transformed.
+                // The decorated assignment for a class name may need to be transformed.
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
-                    // Avoid emitting a default because that will typically be taken care of for us.
+                    // Avoid emitting a default because a decorated default-exported class will have been rewritten in the TS transformer to
+                    // a decorator assignment (`foo = __decorate(...)`) followed by a separate default export declaration (`export default foo`).
+                    // We will eventually take care of that default export assignment when we transform the generated default export declaration.
                     if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
                         addExportMemberAssignment(statements, classDecl)
                     }
@@ -743,9 +745,8 @@ namespace ts {
                 isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
                 addVarForExportedEnumOrNamespaceDeclaration(statements, original);
             }
-            else {
-                addExportMemberAssignments(statements, original.name);
-            }
+
+            addExportMemberAssignments(statements, original.name);
 
             return statements;
         }
