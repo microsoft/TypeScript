@@ -1377,23 +1377,26 @@ namespace ts {
         return isRestParameter(lastOrUndefined(s.parameters));
     }
 
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (node) {
-            if (node.flags & NodeFlags.JavaScriptFile) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
-                    return true;
-                }
+    export function hasDeclaredRestParameter(s: SignatureDeclaration): boolean {
+        return isDeclaredRestParam(lastOrUndefined(s.parameters));
+    }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
-                }
+    export function isRestParameter(node: ParameterDeclaration) {
+        if (node && (node.flags & NodeFlags.JavaScriptFile)) {
+            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                return true;
             }
 
-            return node.dotDotDotToken !== undefined;
+            const paramTag = getCorrespondingJSDocParameterTag(node);
+            if (paramTag && paramTag.typeExpression) {
+                return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+            }
         }
+        return isDeclaredRestParam(node);
+    }
 
-        return false;
+    export function isDeclaredRestParam(node: ParameterDeclaration) {
+        return node && node.dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
