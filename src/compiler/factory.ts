@@ -822,16 +822,6 @@ namespace ts {
         return react;
     }
 
-    export function createReactSpread(reactNamespace: string, segments: Expression[], parentElement: JsxOpeningLikeElement) {
-        return createCall(
-            createPropertyAccess(
-                createReactNamespace(reactNamespace, parentElement),
-                "__spread"
-            ),
-            segments
-        );
-    }
-
     export function createReactCreateElement(reactNamespace: string, tagName: Expression, props: Expression, children: Expression[], parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
@@ -865,6 +855,13 @@ namespace ts {
                 name,
                 createIdentifier("_super")
             ]
+        );
+    }
+
+    export function createAssignHelper(attributesSegments: Expression[]) {
+        return createCall(
+            createIdentifier("__assign"),
+            attributesSegments
         );
     }
 
