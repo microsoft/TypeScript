@@ -858,11 +858,14 @@ namespace ts {
     }
 
     export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
-        // First check to see if the script kind can be determined from the file name
-        var scriptKind = getScriptKindFromFileName(fileName);
-        if (scriptKind === ScriptKind.Unknown && host && host.getScriptKind) {
-            // Next check to see if the host can resolve the script kind
+        // First check to see if the script kind was specified by the host. Chances are the host
+        // may override the default script kind for the file extension.
+        let scriptKind: ScriptKind;
+        if (host && host.getScriptKind) {
             scriptKind = host.getScriptKind(fileName);
+        }
+        if (!scriptKind || scriptKind === ScriptKind.Unknown) {
+            scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
     }

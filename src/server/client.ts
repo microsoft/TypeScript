@@ -120,8 +120,8 @@ namespace ts.server {
             return response;
         }
 
-        openFile(fileName: string, content?: string): void {
-            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX"  | "JSX"): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content, scriptKindName };
             this.processRequest(CommandNames.Open, args);
         }
 
