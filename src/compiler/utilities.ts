@@ -840,11 +840,11 @@ namespace ts {
         }
     }
 
-    export function getContainingFunctionOrSourceFile(node: Node): FunctionLikeDeclaration | SourceFile {
+    export function getContainingFunctionOrModule(node: Node): Node {
         while (true) {
             node = node.parent;
-            if (isFunctionLike(node) || node.kind === SyntaxKind.SourceFile) {
-                return <FunctionLikeDeclaration | SourceFile>node;
+            if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile) {
+                return node;
             }
         }
     }
