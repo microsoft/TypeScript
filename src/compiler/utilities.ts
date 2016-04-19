@@ -840,6 +840,15 @@ namespace ts {
         }
     }
 
+    export function getContainingFunctionOrSourceFile(node: Node): FunctionLikeDeclaration | SourceFile {
+        while (true) {
+            node = node.parent;
+            if (isFunctionLike(node) || node.kind === SyntaxKind.SourceFile) {
+                return <FunctionLikeDeclaration | SourceFile>node;
+            }
+        }
+    }
+
     export function getContainingClass(node: Node): ClassLikeDeclaration {
         while (true) {
             node = node.parent;
