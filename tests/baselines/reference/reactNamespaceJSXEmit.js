@@ -21,8 +21,8 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-myReactLib.createElement("foo", {data: true});
-myReactLib.createElement(Bar, {x: x});
+myReactLib.createElement("foo", { data: true });
+myReactLib.createElement(Bar, { x: x });
 myReactLib.createElement("x-component", null);
 myReactLib.createElement(Bar, __assign({}, x));
 myReactLib.createElement(Bar, __assign({}, x, { y: 2 }));
