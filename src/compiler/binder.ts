@@ -630,6 +630,8 @@ namespace ts {
                     return false;
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowingExpression(expr.left);
+                case SyntaxKind.CommaToken:
+                    return isNarrowingExpression(expr.right);
             }
             return false;
         }
