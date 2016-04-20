@@ -5,8 +5,7 @@
     "File '/types/lib/index.d.ts' exist - use it as a name resolution result.",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========",
     "======== Resolving module './mod1' from '/mod2.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
-    "Loading module as file / folder, candidate module location '/mod1'.",
+    "Module resolution kind is not specified, using 'Classic'.",
     "File '/mod1.ts' exist - use it as a name resolution result.",
     "======== Module name './mod1' was successfully resolved to '/mod1.ts'. ========"
 ]
