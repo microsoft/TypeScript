@@ -6286,7 +6286,7 @@ namespace ts {
                         if (type) {
                             const propertySymbol = typeChecker.getPropertyOfType(type, propertyName);
                             if (propertySymbol) {
-                                result.push(propertySymbol);
+                                result.push(...typeChecker.getRootSymbols(propertySymbol));
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
