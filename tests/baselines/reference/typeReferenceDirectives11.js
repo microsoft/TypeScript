@@ -15,6 +15,15 @@ import {foo} from "./mod1";
 export const bar = foo();
 
 //// [output.js]
+define("mod1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    function foo() { return { x: 1 }; }
+    exports.foo = foo;
+});
+define("mod2", ["require", "exports", "mod1"], function (require, exports, mod1_1) {
+    "use strict";
+    exports.bar = mod1_1.foo();
+});
 
 
 //// [output.d.ts]
