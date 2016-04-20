@@ -648,12 +648,15 @@ namespace ts {
             setNodeEmitFlags(name, NodeEmitFlags.NoSubstitution);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
-                    createClassDeclaration(
-                        /*modifiers*/ undefined,
-                        name,
-                        node.heritageClauses,
-                        node.members,
-                        /*location*/ node
+                    setOriginalNode(
+                        createClassDeclaration(
+                            /*modifiers*/ undefined,
+                            name,
+                            node.heritageClauses,
+                            node.members,
+                            /*location*/ node
+                        ),
+                        /*original*/ node
                     )
                 );
 

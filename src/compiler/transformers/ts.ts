@@ -47,7 +47,7 @@ namespace ts {
         // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
-        let currentNamespaceLocalName: Identifier;
+        let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
 
         /**
@@ -465,7 +465,9 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            addInitializedPropertyStatements(statements, node, staticProperties, name);
+            if (staticProperties.length) {
+                addInitializedPropertyStatements(statements, node, staticProperties, getLocalName(node, /*noSourceMaps*/ true));
+            }
 
             // Write any decorators of the node.
             addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
@@ -480,7 +482,7 @@ namespace ts {
             }
             else if (node.decorators) {
                 if (isDefaultExternalModuleExport(node)) {
-                    statements.push(createExportDefault(name || getGeneratedNameForNode(node)));
+                    statements.push(createExportDefault(getLocalName(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
                     statements.push(createExternalModuleExport(name));
@@ -898,13 +900,17 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
 
-            const name = getSynthesizedClone(<Identifier>node.name);
             return startOnNewLine(
                 createStatement(
                     createAssignment(
-                        createPropertyAccess(createThis(), name),
-                        name
-                    )
+                        createPropertyAccess(
+                            createThis(),
+                            getSynthesizedClone(<Identifier>node.name),
+                            /*location*/ node.name
+                        ),
+                        getUniqueClone(<Identifier>node.name)
+                    ),
+                    /*location*/ node
                 )
             );
         }
@@ -994,7 +1000,7 @@ namespace ts {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             return createAssignment(
-                createMemberAccessForPropertyName(receiver, propertyName),
+                createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName),
                 initializer,
                 location
             );
@@ -1772,7 +1778,7 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName 
+                return generateNameForComputedPropertyName
                     ? getGeneratedNameForNode(name)
                     : (<ComputedPropertyName>name).expression;
             }
@@ -2251,7 +2257,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     [createVariableDeclaration(
                         getDeclarationName(node),
-                        getDeclarationNameExpression(node)
+                        getExportName(node)
                     )],
                     /*location*/ node
                 )
@@ -2322,15 +2328,15 @@ namespace ts {
          * @param node The enum declaration node.
          */
         function transformEnumBody(node: EnumDeclaration, localName: Identifier): Block {
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            currentNamespaceLocalName = localName;
+            const savedCurrentNamespaceLocalName = currentNamespaceContainerName;
+            currentNamespaceContainerName = localName;
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
             addNodes(statements, map(node.members, transformEnumMember));
             addNodes(statements, endLexicalEnvironment());
 
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
+            currentNamespaceContainerName = savedCurrentNamespaceLocalName;
             return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
         }
 
@@ -2347,10 +2353,10 @@ namespace ts {
             return createStatement(
                 createAssignment(
                     createElementAccess(
-                        currentNamespaceLocalName,
+                        currentNamespaceContainerName,
                         createAssignment(
                             createElementAccess(
-                                currentNamespaceLocalName,
+                                currentNamespaceContainerName,
                                 name
                             ),
                             transformEnumMemberDeclarationValue(member)
@@ -2413,34 +2419,38 @@ namespace ts {
          */
         function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
             // Emit a variable statement for the module.
-            statements.push(
-                setOriginalNode(
-                    createVariableStatement(
-                        isES6ExportedDeclaration(node)
-                            ? visitNodes(node.modifiers, visitor, isModifier)
-                            : undefined,
-                        [createVariableDeclaration(
-                            getDeclarationName(node)
-                        )],
-                        // Trailing comments for module declaration should be emitted with function closure instead of variable statement
-                        // So do not set the end position for the variable statement node
-                        //     /** Module comment*/
-                        //     module m1 {
-                        //         function foo4Export() {
-                        //         }
-                        //     } // trailing comment module
-                        // Should emit
-                        //     /** Module comment*/
-                        //     var m1;
-                        //     (function (m1) {
-                        //         function foo4Export() {
-                        //         }
-                        //     })(m1 || (m1 = {})); // trailing comment module
-                        /*location*/ { pos: node.pos, end: -1 }
-                    ),
-                    node
-                )
+            const statement = createVariableStatement(
+                isES6ExportedDeclaration(node)
+                    ? visitNodes(node.modifiers, visitor, isModifier)
+                    : undefined,
+                [createVariableDeclaration(
+                    getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+                )],
+                /*location*/ node
             );
+
+            // Trailing comments for module declaration should be emitted after the function closure
+            // instead of the variable statement:
+            //
+            //     /** Module comment*/
+            //     module m1 {
+            //         function foo4Export() {
+            //         }
+            //     } // trailing comment module
+            //
+            // Should emit:
+            //
+            //     /** Module comment*/
+            //     var m1;
+            //     (function (m1) {
+            //         function foo4Export() {
+            //         }
+            //     })(m1 || (m1 = {})); // trailing comment module
+            //
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
+
+            setOriginalNode(statement, /*original*/ node);
+            statements.push(statement);
         }
 
         /**
@@ -2464,20 +2474,32 @@ namespace ts {
                 addVarForEnumOrModuleDeclaration(statements, node);
             }
 
-            const localName = getGeneratedNameForNode(node);
-            const name = getDeclarationNameExpression(node);
+            // `parameterName` is the declaration name used inside of the namespace.
+            const parameterName = getNamespaceParameterName(node);
 
+            // `containerName` is the expression used inside of the namespace for exports.
+            const containerName = getNamespaceContainerName(node);
+
+            // `exportName` is the expression used within this node's container for any exported references.
+            const exportName = getExportName(node);
+
+            //  x || (x = {})
+            //  exports.x || (exports.x = {})
             let moduleArg =
                 createLogicalOr(
-                    name,
+                    exportName,
                     createAssignment(
-                        name,
+                        exportName,
                         createObjectLiteral()
                     )
                 );
 
             if (hasModifier(node, ModifierFlags.Export) && !isES6ExportedDeclaration(node)) {
-                moduleArg = createAssignment(getDeclarationName(node), moduleArg);
+                // `localName` is the expression used within this node's containing scope for any local references.
+                const localName = getLocalName(node);
+
+                //  x = (exports.x || (exports.x = {}))
+                moduleArg = createAssignment(localName, moduleArg);
             }
 
             //  (function (x_1) {
@@ -2491,8 +2513,8 @@ namespace ts {
                                 createFunctionExpression(
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
-                                    [createParameter(localName)],
-                                    transformModuleBody(node, localName)
+                                    [createParameter(parameterName)],
+                                    transformModuleBody(node, containerName)
                                 ),
                                 [moduleArg]
                             ),
@@ -2513,26 +2535,56 @@ namespace ts {
          * @param node The module declaration node.
          */
         function transformModuleBody(node: ModuleDeclaration, namespaceLocalName: Identifier): Block {
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
+            const savedCurrentNamespaceContainerName = currentNamespaceContainerName;
             const savedCurrentNamespace = currentNamespace;
-            currentNamespaceLocalName = namespaceLocalName;
+            currentNamespaceContainerName = namespaceLocalName;
             currentNamespace = node;
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
+
+            let statementsLocation: TextRange;
+            let blockLocation: TextRange;
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 addNodes(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
+                statementsLocation = (<ModuleBlock>body).statements;
+                blockLocation = body;
             }
             else {
                 addNode(statements, visitModuleDeclaration(<ModuleDeclaration>body));
+                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
+                statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
             addNodes(statements, endLexicalEnvironment());
 
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
+            currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
-            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+            const block = createBlock(
+                createNodeArray(
+                    statements,
+                    /*location*/ statementsLocation
+                ),
+                /*location*/ blockLocation,
+                /*multiLine*/ true
+            );
+
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            if (body.kind === SyntaxKind.ModuleBlock) {
+                setNodeEmitFlags(block, NodeEmitFlags.SourceMapEmitOpenBraceAsToken);
+            }
+
+            return block;
+        }
+
+        function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
+            if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
+                return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
+            }
         }
 
         /**
@@ -2637,13 +2689,22 @@ namespace ts {
         }
 
         function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
-            statements.push(createNamespaceExport(getDeclarationName(node), getDeclarationName(node)));
+            statements.push(
+                createStatement(
+                    createAssignment(
+                        getExportName(node),
+                        getLocalName(node, /*noSourceMaps*/ true),
+                        /*location*/ node
+                    ),
+                    /*location*/ moveRangePos(node, -1)
+                )
+            );
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return createStatement(
                 createAssignment(
-                    getNamespaceMemberName(exportName),
+                    getNamespaceMemberName(exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
                     exportValue
                 ),
                 location
@@ -2658,12 +2719,99 @@ namespace ts {
             );
         }
 
-        function getNamespaceMemberName(name: Identifier): Expression {
-            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedClone(name));
+        function getNamespaceMemberName(name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): Expression {
+            const qualifiedName = createPropertyAccess(currentNamespaceContainerName, getSynthesizedClone(name), /*location*/ name);
+            let emitFlags: NodeEmitFlags;
+            if (!allowComments) {
+                emitFlags |= NodeEmitFlags.NoComments;
+            }
+            if (!allowSourceMaps) {
+                emitFlags |= NodeEmitFlags.NoSourceMap;
+            }
+            if (emitFlags) {
+                setNodeEmitFlags(qualifiedName, emitFlags);
+            }
+            return qualifiedName;
         }
 
-        function getDeclarationName(node: DeclarationStatement | ClassExpression) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        /**
+         * Gets the declaration name used inside of a namespace or enum.
+         */
+        function getNamespaceParameterName(node: ModuleDeclaration | EnumDeclaration) {
+            const name = getGeneratedNameForNode(node, node.name);
+            setNodeEmitFlags(name, NodeEmitFlags.NoComments);
+            return name;
+        }
+
+        /**
+         * Gets the expression used to refer to a namespace or enum within the body
+         * of its declaration.
+         */
+        function getNamespaceContainerName(node: ModuleDeclaration | EnumDeclaration) {
+            return getGeneratedNameForNode(node);
+        }
+
+        /**
+         * Gets the local name for a declaration for use in expressions.
+         *
+         * A local name will *never* be prefixed with an module or namespace export modifier like
+         * "exports.".
+         *
+         * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         */
+        function getLocalName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.LocalName);
+        }
+
+        /**
+         * Gets the export name for a declaration for use in expressions.
+         *
+         * An export name will *always* be prefixed with an module or namespace export modifier
+         * like "exports." if one is required.
+         *
+         * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         */
+        function getExportName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+            if (isNamespaceExport(node)) {
+                return getNamespaceMemberName(getDeclarationName(node), allowComments, !noSourceMaps);
+            }
+
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.ExportName);
+        }
+
+        /**
+         * Gets the name for a declaration for use in declarations.
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param emitFlags Additional NodeEmitFlags to specify for the name.
+         */
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
+            if (node.name) {
+                const name = getUniqueClone(node.name);
+                emitFlags |= getNodeEmitFlags(node.name);
+                if (!allowSourceMaps) {
+                    emitFlags |= NodeEmitFlags.NoSourceMap;
+                }
+
+                if (!allowComments) {
+                    emitFlags |= NodeEmitFlags.NoComments;
+                }
+
+                if (emitFlags) {
+                    setNodeEmitFlags(name, emitFlags);
+                }
+
+                return name;
+            }
+            else {
+                return getGeneratedNameForNode(node);
+            }
         }
 
         function getDeclarationNameExpression(node: DeclarationStatement) {
