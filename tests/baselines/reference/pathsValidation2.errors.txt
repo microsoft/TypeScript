@@ -1,0 +1,6 @@
+error TS5064: Substitution '1' for pattern '*' has incorrect type, expected 'string', got 'number'.
+
+
+!!! error TS5064: Substitution '1' for pattern '*' has incorrect type, expected 'string', got 'number'.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    let x = 1;

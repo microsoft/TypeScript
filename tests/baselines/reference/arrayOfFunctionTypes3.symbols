@@ -12,7 +12,7 @@ class C {
 >C : Symbol(C, Decl(arrayOfFunctionTypes3.ts, 3, 16))
 
     foo: string;
->foo : Symbol(foo, Decl(arrayOfFunctionTypes3.ts, 5, 9))
+>foo : Symbol(C.foo, Decl(arrayOfFunctionTypes3.ts, 5, 9))
 }
 var y = [C, C];
 >y : Symbol(y, Decl(arrayOfFunctionTypes3.ts, 8, 3))

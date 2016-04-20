@@ -1,4 +1,4 @@
-tests/cases/compiler/b.ts(1,9): error TS2661: Cannot re-export name that is not defined in the module.
+tests/cases/compiler/b.ts(1,9): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
 
 
 ==== tests/cases/compiler/a.d.ts (0 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/b.ts(1,9): error TS2661: Cannot re-export name that is not 
 ==== tests/cases/compiler/b.ts (1 errors) ====
     export {X};
             ~
-!!! error TS2661: Cannot re-export name that is not defined in the module.
+!!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
     export function f() {
         var x: X;
         return x;

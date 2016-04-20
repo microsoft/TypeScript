@@ -4,7 +4,7 @@ module A {
 
     export interface X { s: string }
 >X : Symbol(X, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 0, 10))
->s : Symbol(s, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 1, 24))
+>s : Symbol(X.s, Decl(internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts, 1, 24))
 }
 
 module B {

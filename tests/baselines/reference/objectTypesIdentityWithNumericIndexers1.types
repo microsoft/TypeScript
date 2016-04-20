@@ -50,7 +50,7 @@ var a: {
 var b: { [x: number]: string; } = { foo: '' };
 >b : { [x: number]: string; }
 >x : number
->{ foo: '' } : { [x: number]: string; foo: string; }
+>{ foo: '' } : { foo: string; }
 >foo : string
 >'' : string
 

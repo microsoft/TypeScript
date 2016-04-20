@@ -1,0 +1,48 @@
+=== tests/cases/compiler/specializedOverloadWithRestParameters.ts ===
+class Base { foo() { } }
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(specializedOverloadWithRestParameters.ts, 0, 12))
+
+class Derived1 extends Base { bar() { } }
+>Derived1 : Symbol(Derived1, Decl(specializedOverloadWithRestParameters.ts, 0, 24))
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+>bar : Symbol(Derived1.bar, Decl(specializedOverloadWithRestParameters.ts, 1, 29))
+
+function f(tagName: 'span', ...args): Derived1;   // error
+>f : Symbol(f, Decl(specializedOverloadWithRestParameters.ts, 1, 41), Decl(specializedOverloadWithRestParameters.ts, 2, 47), Decl(specializedOverloadWithRestParameters.ts, 3, 43))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 2, 11))
+>args : Symbol(args, Decl(specializedOverloadWithRestParameters.ts, 2, 27))
+>Derived1 : Symbol(Derived1, Decl(specializedOverloadWithRestParameters.ts, 0, 24))
+
+function f(tagName: number, ...args): Base;
+>f : Symbol(f, Decl(specializedOverloadWithRestParameters.ts, 1, 41), Decl(specializedOverloadWithRestParameters.ts, 2, 47), Decl(specializedOverloadWithRestParameters.ts, 3, 43))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 3, 11))
+>args : Symbol(args, Decl(specializedOverloadWithRestParameters.ts, 3, 27))
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+
+function f(tagName: any): Base {
+>f : Symbol(f, Decl(specializedOverloadWithRestParameters.ts, 1, 41), Decl(specializedOverloadWithRestParameters.ts, 2, 47), Decl(specializedOverloadWithRestParameters.ts, 3, 43))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 4, 11))
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+
+    return null;
+}
+function g(tagName: 'span', arg): Derived1;    // error
+>g : Symbol(g, Decl(specializedOverloadWithRestParameters.ts, 6, 1), Decl(specializedOverloadWithRestParameters.ts, 7, 43), Decl(specializedOverloadWithRestParameters.ts, 8, 39))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 7, 11))
+>arg : Symbol(arg, Decl(specializedOverloadWithRestParameters.ts, 7, 27))
+>Derived1 : Symbol(Derived1, Decl(specializedOverloadWithRestParameters.ts, 0, 24))
+
+function g(tagName: number, arg): Base;
+>g : Symbol(g, Decl(specializedOverloadWithRestParameters.ts, 6, 1), Decl(specializedOverloadWithRestParameters.ts, 7, 43), Decl(specializedOverloadWithRestParameters.ts, 8, 39))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 8, 11))
+>arg : Symbol(arg, Decl(specializedOverloadWithRestParameters.ts, 8, 27))
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+
+function g(tagName: any): Base {
+>g : Symbol(g, Decl(specializedOverloadWithRestParameters.ts, 6, 1), Decl(specializedOverloadWithRestParameters.ts, 7, 43), Decl(specializedOverloadWithRestParameters.ts, 8, 39))
+>tagName : Symbol(tagName, Decl(specializedOverloadWithRestParameters.ts, 9, 11))
+>Base : Symbol(Base, Decl(specializedOverloadWithRestParameters.ts, 0, 0))
+
+    return null;
+}

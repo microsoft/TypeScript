@@ -529,9 +529,9 @@ namespace ts.server {
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
          */
-        private openClientFile(fileName: string, fileContent?: string) {
+        private openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file, fileContent);
+            this.projectService.openClientFile(file, fileContent, scriptKind);
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -603,7 +603,7 @@ namespace ts.server {
             // Check whether we should auto-indent. This will be when
             // the position is on a line containing only whitespace.
             // This should leave the edits returned from
-            // getFormattingEditsAfterKeytroke either empty or pertaining
+            // getFormattingEditsAfterKeystroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
             if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
@@ -967,7 +967,22 @@ namespace ts.server {
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                this.openClientFile(openArgs.file, openArgs.fileContent);
+                let scriptKind: ScriptKind;
+                switch (openArgs.scriptKindName) {
+                    case "TS":
+                        scriptKind = ScriptKind.TS;
+                        break;
+                    case "JS":
+                        scriptKind = ScriptKind.JS;
+                        break;
+                    case "TSX":
+                        scriptKind = ScriptKind.TSX;
+                        break;
+                    case "JSX":
+                        scriptKind = ScriptKind.JSX;
+                        break;
+                }
+                this.openClientFile(openArgs.file, openArgs.fileContent, scriptKind);
                 return {responseRequired: false};
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {

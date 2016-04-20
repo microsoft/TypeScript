@@ -444,7 +444,7 @@ declare namespace ts.server.protocol {
         /** Defines space handling after a comma delimiter. Default value is true. */
         insertSpaceAfterCommaDelimiter?: boolean;
 
-        /** Defines space handling after a semicolon in a for statemen. Default value is true */
+        /** Defines space handling after a semicolon in a for statement. Default value is true */
         insertSpaceAfterSemicolonInForStatements?: boolean;
 
         /** Defines space handling after a binary operator. Default value is true. */
@@ -469,7 +469,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
 
         /** Index operator */
-        [key: string] : string | number | boolean;
+        [key: string]: string | number | boolean;
     }
 
     /**
@@ -518,6 +518,11 @@ declare namespace ts.server.protocol {
          * Then the known content will be used upon opening instead of the disk copy   
          */
         fileContent?: string;
+        /**
+         * Used to specify the script kind of the file explicitly. It could be one of the following:
+         *      "TS", "JS", "TSX", "JSX"
+         */
+        scriptKindName?: "TS" | "JS" | "TSX" | "JSX";
     }
 
     /**
@@ -835,7 +840,7 @@ declare namespace ts.server.protocol {
         prefixDisplayParts: SymbolDisplayPart[];
 
         /**
-         * The suffix disaply parts.
+         * The suffix display parts.
          */
         suffixDisplayParts: SymbolDisplayPart[];
 
@@ -903,7 +908,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-     * Repsonse object for a SignatureHelpRequest.
+     * Response object for a SignatureHelpRequest.
      */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
@@ -970,7 +975,7 @@ declare namespace ts.server.protocol {
       */
     export interface Diagnostic {
         /**
-          * Starting file location at which text appies.
+          * Starting file location at which text applies.
           */
         start: Location;
 
@@ -1179,7 +1184,7 @@ declare namespace ts.server.protocol {
     }
 
     /**
-      * NavBar itesm request; value of command field is "navbar".
+      * NavBar items request; value of command field is "navbar".
       * Return response giving the list of navigation bar entries
       * extracted from the requested file.
       */

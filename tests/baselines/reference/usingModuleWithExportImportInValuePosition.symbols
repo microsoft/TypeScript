@@ -9,8 +9,8 @@ export class Point {
 >Point : Symbol(Point, Decl(usingModuleWithExportImportInValuePosition.ts, 1, 28))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 20))
->y : Symbol(y, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 37))
+>x : Symbol(Point.x, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 20))
+>y : Symbol(Point.y, Decl(usingModuleWithExportImportInValuePosition.ts, 3, 37))
     }
     export module B {
 >B : Symbol(B, Decl(usingModuleWithExportImportInValuePosition.ts, 4, 5))
@@ -19,7 +19,7 @@ export class Point {
 >Id : Symbol(Id, Decl(usingModuleWithExportImportInValuePosition.ts, 5, 21))
 
             name: string;
->name : Symbol(name, Decl(usingModuleWithExportImportInValuePosition.ts, 6, 29))
+>name : Symbol(Id.name, Decl(usingModuleWithExportImportInValuePosition.ts, 6, 29))
         }
     }
 }

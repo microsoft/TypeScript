@@ -114,6 +114,7 @@ namespace ts {
         "try": SyntaxKind.TryKeyword,
         "type": SyntaxKind.TypeKeyword,
         "typeof": SyntaxKind.TypeOfKeyword,
+        "undefined": SyntaxKind.UndefinedKeyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
         "while": SyntaxKind.WhileKeyword,
@@ -511,7 +512,7 @@ namespace ts {
       }
 
       // All conflict markers consist of the same character repeated seven times.  If it is
-      // a <<<<<<< or >>>>>>> marker then it is also followd by a space.
+      // a <<<<<<< or >>>>>>> marker then it is also followed by a space.
     const mergeConflictMarkerLength = "<<<<<<<".length;
 
     function isConflictMarkerTrivia(text: string, pos: number) {
@@ -551,7 +552,7 @@ namespace ts {
         }
         else {
             Debug.assert(ch === CharacterCodes.equals);
-            // Consume everything from the start of the mid-conlict marker to the start of the next
+            // Consume everything from the start of the mid-conflict marker to the start of the next
             // end-conflict marker.
             while (pos < len) {
                 const ch = text.charCodeAt(pos);

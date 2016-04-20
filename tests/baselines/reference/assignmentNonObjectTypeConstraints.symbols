@@ -27,11 +27,11 @@ foo(E.A);
 
 class A { a }
 >A : Symbol(A, Decl(assignmentNonObjectTypeConstraints.ts, 7, 9))
->a : Symbol(a, Decl(assignmentNonObjectTypeConstraints.ts, 9, 9))
+>a : Symbol(A.a, Decl(assignmentNonObjectTypeConstraints.ts, 9, 9))
 
 class B { b }
 >B : Symbol(B, Decl(assignmentNonObjectTypeConstraints.ts, 9, 13))
->b : Symbol(b, Decl(assignmentNonObjectTypeConstraints.ts, 10, 9))
+>b : Symbol(B.b, Decl(assignmentNonObjectTypeConstraints.ts, 10, 9))
 
 function bar<T extends A | B>(x: T) {
 >bar : Symbol(bar, Decl(assignmentNonObjectTypeConstraints.ts, 10, 13))

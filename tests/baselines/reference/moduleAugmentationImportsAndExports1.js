@@ -69,3 +69,4 @@ declare module "./f1" {
     }
 }
 //// [f4.d.ts]
+import "./f3";
