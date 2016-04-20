@@ -119,7 +119,6 @@ namespace ts {
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
-        const resolvingFlowType = createIntrinsicType(TypeFlags.Void, "__resolving__");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyUnionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -7603,11 +7602,7 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                const type = getTypeAtFlowNode(flow.antecedent);
-                if (type === resolvingFlowType) {
-                    return type;
-                }
-                return narrowType(type, (<FlowCondition>flow).expression, (<FlowCondition>flow).assumeTrue);
+                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, flow.assumeTrue);
             }
 
             function getTypeAtFlowNodeCached(flow: FlowNode) {
