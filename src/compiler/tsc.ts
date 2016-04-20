@@ -44,11 +44,9 @@ namespace ts {
         const territory = matchResult[3];
 
         // First try the entire locale, then fall back to just language if that's all we have.
-        if (!trySetLanguageAndTerritory(language, territory, errors) &&
-            !trySetLanguageAndTerritory(language, undefined, errors)) {
-
-            errors.push(createCompilerDiagnostic(Diagnostics.Unsupported_locale_0, locale));
-            return false;
+        // Either ways do not fail, and fallback to the English diagnostic strings.
+        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+            trySetLanguageAndTerritory(language, undefined, errors);
         }
 
         return true;
