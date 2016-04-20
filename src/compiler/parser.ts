@@ -6160,7 +6160,7 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (token === SyntaxKind.Identifier) {
+                    else if (token === SyntaxKind.Identifier || isTSOnlyKeyword(token)) {
                         name = parseJSDocIdentifier();
                     }
 
@@ -6259,7 +6259,7 @@ namespace ts {
                 }
 
                 function parseJSDocIdentifier(): Identifier {
-                    if (token !== SyntaxKind.Identifier) {
+                    if (token !== SyntaxKind.Identifier && !isTSOnlyKeyword(token)) {
                         parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                         return undefined;
                     }
