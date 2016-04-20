@@ -4467,7 +4467,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (languageVersion < ScriptTarget.ES6 && hasRestParameter(node)) {
+                if (languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node)) {
                     const restIndex = node.parameters.length - 1;
                     const restParam = node.parameters[restIndex];
 
@@ -4624,7 +4624,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 if (node) {
                     const parameters = node.parameters;
                     const skipCount = node.parameters.length && (<Identifier>node.parameters[0].name).text === "this" ? 1 : 0;
-                    const omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameter(node) ? 1 : 0;
+                    const omitCount = languageVersion < ScriptTarget.ES6 && hasDeclaredRestParameter(node) ? 1 : 0;
                     emitList(parameters, skipCount, parameters.length - omitCount - skipCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
