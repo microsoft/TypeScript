@@ -675,6 +675,12 @@ namespace ts {
             const originalNode = getOriginalNode(node);
             if ((originalNode.kind === SyntaxKind.ModuleDeclaration || originalNode.kind === SyntaxKind.EnumDeclaration) && hasModifier(originalNode, ModifierFlags.Export)) {
                 const name = getDeclarationName(<ModuleDeclaration | EnumDeclaration>originalNode);
+                // We only need to hoistVariableDeclaration for EnumDeclaration
+                // as ModuleDeclaration is already hoisted when the transformer call visitVariableStatement
+                // which then call transformsVariable for each declaration in declarationList
+                if (originalNode.kind === SyntaxKind.EnumDeclaration) {
+                    hoistVariableDeclaration(name);
+                }
                 return [
                     node,
                     createExportStatement(name, name)
