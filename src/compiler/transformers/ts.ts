@@ -371,6 +371,10 @@ namespace ts {
                     // TypeScript type assertions are removed, but their subtrees are preserved.
                     return visitAssertionExpression(<AssertionExpression>node);
 
+                case SyntaxKind.NonNullExpression:
+                    // TypeScript non-null expressions are removed, but their subtrees are preserved.
+                    return visitNonNullExpression(<NonNullExpression>node);
+
                 case SyntaxKind.EnumDeclaration:
                     // TypeScript enum declarations do not exist in ES6 and must be rewritten.
                     return visitEnumDeclaration(<EnumDeclaration>node);
@@ -2228,7 +2232,12 @@ namespace ts {
         }
 
         function visitAssertionExpression(node: AssertionExpression): Expression {
-            const expression = visitNode((<TypeAssertion | AsExpression>node).expression, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return createPartiallyEmittedExpression(expression, node);
+        }
+
+        function visitNonNullExpression(node: NonNullExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
             return createPartiallyEmittedExpression(expression, node);
         }
 
