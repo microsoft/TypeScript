@@ -562,35 +562,68 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
-                // If the variable is for a declaration that has a local name,
-                // do not elide the declaration.
-                const original = getOriginalNode(node);
-                if (original.kind === SyntaxKind.EnumDeclaration
-                    || original.kind === SyntaxKind.ModuleDeclaration) {
-                    return setOriginalNode(
-                        createVariableStatement(
-                            /*modifiers*/ undefined,
-                            node.declarationList
-                        ),
-                        node
-                    );
+            // If the variable is for a generated declaration,
+            // we should maintain it and just strip off the 'export' modifier if necessary.
+            const originalKind = getOriginalNode(node).kind;
+            if (originalKind === SyntaxKind.ModuleDeclaration ||
+                originalKind === SyntaxKind.EnumDeclaration ||
+                originalKind === SyntaxKind.ClassDeclaration) {
+
+                if (!hasModifier(node, ModifierFlags.Export)) {
+                    return node;
                 }
 
-                const variables = getInitializedVariables(node.declarationList);
-                if (variables.length === 0) {
-                    // elide statement if there are no initialized variables
-                    return undefined;
-                }
-
-                return createStatement(
-                    inlineExpressions(
-                        map(variables, transformInitializedVariable)
+                return setOriginalNode(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        node.declarationList
                     ),
                     node
                 );
             }
-            return node;
+
+            const resultStatements: Statement[] = [];
+
+            // If we're exporting these variables, then these just become assignments to 'exports.blah'.
+            // We only want to emit assignments for variables with initializers.
+            if (hasModifier(node, ModifierFlags.Export)) {
+                const variables = getInitializedVariables(node.declarationList);
+                if (variables.length > 0) {
+                    let inlineAssignments = createStatement(
+                        inlineExpressions(
+                            map(variables, transformInitializedVariable)
+                        ),
+                        node
+                    );
+                    resultStatements.push(inlineAssignments);
+                }
+            }
+            else {
+                resultStatements.push(node);
+            }
+
+            // While we might not have been exported here, each variable might have been exported
+            // later on in an export specifier (e.g. `export {foo as blah, bar}`).
+            for (const decl of node.declarationList.declarations) {
+                addExportMemberAssignmentsForBindingName(resultStatements, decl.name);
+            }
+
+            return resultStatements;
+        }
+
+        /**
+         * Creates appropriate assignments for each binding identifier that is exported in an export specifier,
+         * and inserts it into 'resultStatements'.
+         */
+        function addExportMemberAssignmentsForBindingName(resultStatements: Statement[], name: BindingName): void {
+            if (isBindingPattern(name)) {
+                for (const element of name.elements) {
+                    addExportMemberAssignmentsForBindingName(resultStatements, element.name)
+                }
+            }
+            else {
+                addExportMemberAssignments(resultStatements, name);
+            }
         }
 
         function transformInitializedVariable(node: VariableDeclaration): Expression {
@@ -666,7 +699,10 @@ namespace ts {
                 statements.push(node);
             }
 
-            if (node.name) {
+            // Decorators end up creating a series of assignment expressions which overwrite
+            // the local binding that we export, so we need to defer from exporting decorated classes
+            // until the decoration assignments take place. We do this when visiting expression-statements.
+            if (node.name && !(node.decorators && node.decorators.length)) {
                 addExportMemberAssignments(statements, node.name);
             }
 
@@ -675,28 +711,54 @@ namespace ts {
 
         function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
             const original = getOriginalNode(node);
-            if (original.kind === SyntaxKind.EnumDeclaration
-                && hasModifier(original, ModifierFlags.Export)) {
-                return visitExpressionStatementForEnumDeclaration(node, <EnumDeclaration>original);
+            const origKind = original.kind;
+
+            if (origKind === SyntaxKind.EnumDeclaration || origKind === SyntaxKind.ModuleDeclaration) {
+                return visitExpressionStatementForEnumOrNamespaceDeclaration(node, <EnumDeclaration | ModuleDeclaration>original);
+            }
+            else if (origKind === SyntaxKind.ClassDeclaration) {
+                // The decorated assignment for a class name may need to be transformed.
+                const classDecl = original as ClassDeclaration;
+                if (classDecl.name) {
+                    const statements = [node];
+                    // Avoid emitting a default because a decorated default-exported class will have been rewritten in the TS transformer to
+                    // a decorator assignment (`foo = __decorate(...)`) followed by a separate default export declaration (`export default foo`).
+                    // We will eventually take care of that default export assignment when we transform the generated default export declaration.
+                    if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
+                        addExportMemberAssignment(statements, classDecl)
+                    }
+
+                    addExportMemberAssignments(statements, classDecl.name);
+
+                    if (statements.length > 1) {
+                        Debug.assert(!!classDecl.decorators, "Expression statements should only have an export member assignment when decorated.")
+                    }
+                    return statements;
+                }
             }
 
             return node;
         }
 
-        function visitExpressionStatementForEnumDeclaration(node: ExpressionStatement, original: EnumDeclaration): VisitResult<Statement> {
-            if (isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
-                const statements: Statement[] = [node];
-                addVarForExportedEnumDeclaration(statements, original);
-                return statements;
+        function visitExpressionStatementForEnumOrNamespaceDeclaration(node: ExpressionStatement, original: EnumDeclaration | ModuleDeclaration): VisitResult<Statement> {
+            const statements: Statement[] = [node];
+
+            // Preserve old behavior for enums in which a variable statement is emitted after the body itself.
+            if (hasModifier(original, ModifierFlags.Export) &&
+                original.kind === SyntaxKind.EnumDeclaration &&
+                isFirstDeclarationOfKind(original, SyntaxKind.EnumDeclaration)) {
+                addVarForExportedEnumOrNamespaceDeclaration(statements, original);
             }
 
-            return node;
+            addExportMemberAssignments(statements, original.name);
+
+            return statements;
         }
 
         /**
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
-        function addVarForExportedEnumDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+        function addVarForExportedEnumOrNamespaceDeclaration(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
             statements.push(
                 createVariableStatement(
                     /*modifiers*/ undefined,

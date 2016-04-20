@@ -1312,7 +1312,7 @@ namespace ts {
         function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration, decoratedClassAlias: Identifier) {
             const expression = generateConstructorDecorationExpression(node, decoratedClassAlias);
             if (expression) {
-                statements.push(createStatement(expression));
+                statements.push(setOriginalNode(createStatement(expression), node));
             }
         }
 
@@ -2253,7 +2253,7 @@ namespace ts {
                 || (isES6ExportedDeclaration(node) && isFirstDeclarationOfKind(node, node.kind));
         }
 
-        /**
+        /*
          * Adds a trailing VariableStatement for an enum or module declaration.
          */
         function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
@@ -2410,7 +2410,7 @@ namespace ts {
 
         function isES6ExportedDeclaration(node: Node) {
             return isExternalModuleExport(node)
-                && moduleKind >= ModuleKind.ES6;
+                && moduleKind === ModuleKind.ES6;
         }
 
         function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
