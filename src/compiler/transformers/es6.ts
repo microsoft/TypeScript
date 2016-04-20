@@ -612,13 +612,12 @@ namespace ts {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const closingBraceLocation = { pos: node.end - 1, end: node.end };
-            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            const extendsClauseElement = getClassExtendsHeritageClauseElement(node);
             const classFunction = createFunctionExpression(
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
-                baseTypeNode ? [createParameter("_super")] : [],
-                transformClassBody(node, baseTypeNode !== undefined)
+                extendsClauseElement ? [createParameter("_super")] : [],
+                transformClassBody(node, extendsClauseElement)
             );
 
             // To preserve the behavior of the old emitter, we explicitly indent
@@ -635,14 +634,14 @@ namespace ts {
             setNodeEmitFlags(inner, NodeEmitFlags.NoComments);
 
             const outer = createPartiallyEmittedExpression(inner);
-            outer.end = node.pos;
+            outer.end = skipTrivia(currentText, node.pos);
             setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
 
             return createParen(
                 createCall(
                     outer,
-                    baseTypeNode
-                        ? [visitNode(baseTypeNode.expression, visitor, isExpression)]
+                    extendsClauseElement
+                        ? [visitNode(extendsClauseElement.expression, visitor, isExpression)]
                         : []
                 )
             );
@@ -652,34 +651,34 @@ namespace ts {
          * Transforms a ClassExpression or ClassDeclaration into a function body.
          *
          * @param node A ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function transformClassBody(node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): Block {
+        function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): Block {
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            addExtendsHelperIfNeeded(statements, node, hasExtendsClause);
-            addConstructor(statements, node, hasExtendsClause);
+            addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
+            addConstructor(statements, node, extendsClauseElement);
             addClassMembers(statements, node);
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const name = getDeclarationName(node);
+            const localName = getLocalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
-            const outer = createPartiallyEmittedExpression(name);
+            const outer = createPartiallyEmittedExpression(localName);
             outer.end = closingBraceLocation.end;
             setNodeEmitFlags(outer, NodeEmitFlags.NoComments);
 
             const statement = createReturn(outer);
             statement.pos = closingBraceLocation.pos;
+            setNodeEmitFlags(statement, NodeEmitFlags.NoComments | NodeEmitFlags.NoTokenSourceMaps);
             statements.push(statement);
-            setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
 
             addRange(statements, endLexicalEnvironment());
+
             const block = createBlock(createNodeArray(statements, /*location*/ node.members), /*location*/ undefined, /*multiLine*/ true);
             setNodeEmitFlags(block, NodeEmitFlags.NoComments);
-
             return block;
         }
 
@@ -688,13 +687,14 @@ namespace ts {
          *
          * @param statements The statements of the class body function.
          * @param node The ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
-            if (hasExtendsClause) {
+        function addExtendsHelperIfNeeded(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
+            if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(getDeclarationName(node))
+                        createExtendsHelper(getDeclarationName(node)),
+                        /*location*/ extendsClauseElement
                     )
                 );
             }
@@ -705,18 +705,18 @@ namespace ts {
          *
          * @param statements The statements of the class body function.
          * @param node The ClassExpression or ClassDeclaration node.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, hasExtendsClause: boolean): void {
+        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments): void {
             const constructor = getFirstConstructorWithBody(node);
-            const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, hasExtendsClause);
+            const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             statements.push(
                 createFunctionDeclaration(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     getDeclarationName(node),
                     transformConstructorParameters(constructor, hasSynthesizedSuper),
-                    transformConstructorBody(constructor, node, hasExtendsClause, hasSynthesizedSuper),
+                    transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper),
                     /*location*/ constructor || node
                 )
             );
@@ -747,11 +747,11 @@ namespace ts {
          *
          * @param constructor The constructor for the class.
          * @param node The node which contains the constructor.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
+        function transformConstructorBody(constructor: ConstructorDeclaration, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             if (constructor) {
@@ -760,7 +760,7 @@ namespace ts {
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             }
 
-            addDefaultSuperCallIfNeeded(statements, constructor, hasExtendsClause, hasSynthesizedSuper);
+            addDefaultSuperCallIfNeeded(statements, constructor, extendsClauseElement, hasSynthesizedSuper);
 
             if (constructor) {
                 const body = saveStateAndInvoke(constructor, hasSynthesizedSuper ? transformConstructorBodyWithSynthesizedSuper : transformConstructorBodyWithoutSynthesizedSuper);
@@ -797,24 +797,25 @@ namespace ts {
          *
          * @param statements The statements for the new constructor body.
          * @param constructor The constructor for the class.
-         * @param hasExtendsClause A value indicating whether the class has an `extends` clause.
+         * @param extendsClauseElement The expression for the class `extends` clause.
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, hasExtendsClause: boolean, hasSynthesizedSuper: boolean) {
+        function addDefaultSuperCallIfNeeded(statements: Statement[], constructor: ConstructorDeclaration, extendsClauseElement: ExpressionWithTypeArguments, hasSynthesizedSuper: boolean) {
             // If the TypeScript transformer needed to synthesize a constructor for property
             // initializers, it would have also added a synthetic `...args` parameter and
             // `super` call.
             // If this is the case, or if the class has an `extends` clause but no
             // constructor, we emit a synthesized call to `_super`.
-            if (constructor ? hasSynthesizedSuper : hasExtendsClause) {
+            if (constructor ? hasSynthesizedSuper : extendsClauseElement) {
                 statements.push(
                     createStatement(
                         createFunctionApply(
                             createIdentifier("_super"),
                             createThis(),
                             createIdentifier("arguments")
-                        )
+                        ),
+                        /*location*/ extendsClauseElement
                     )
                 );
             }
@@ -988,7 +989,12 @@ namespace ts {
                 return;
             }
 
-            const name = getSynthesizedClone(<Identifier>parameter.name);
+            // `declarationName` is the name of the local declaration for the parameter.
+            const declarationName = getUniqueClone(<Identifier>parameter.name);
+            setNodeEmitFlags(declarationName, NodeEmitFlags.NoSourceMap);
+
+            // `expressionName` is the name of the parameter used in expressions.
+            const expressionName = getSynthesizedClone(<Identifier>parameter.name);
             const restIndex = node.parameters.length - 1;
             const temp = createLoopVariable();
 
@@ -998,10 +1004,11 @@ namespace ts {
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
-                            name,
+                            declarationName,
                             createArrayLiteral([])
                         )
-                    ])
+                    ]),
+                    /*location*/ parameter
                 )
             );
 
@@ -1012,22 +1019,24 @@ namespace ts {
                 createFor(
                     createVariableDeclarationList([
                         createVariableDeclaration(temp, createLiteral(restIndex))
-                    ]),
+                    ], /*location*/ parameter),
                     createLessThan(
                         temp,
-                        createPropertyAccess(createIdentifier("arguments"), "length")
+                        createPropertyAccess(createIdentifier("arguments"), "length"),
+                        /*location*/ parameter
                     ),
-                    createPostfixIncrement(temp),
+                    createPostfixIncrement(temp, /*location*/ parameter),
                     createBlock([
                         startOnNewLine(
                             createStatement(
                                 createAssignment(
                                     createElementAccess(
-                                        name,
+                                        expressionName,
                                         createSubtract(temp, createLiteral(restIndex))
                                     ),
                                     createElementAccess(createIdentifier("arguments"), temp)
-                                )
+                                ),
+                                /*location*/ parameter
                             )
                         )
                     ])
@@ -1158,13 +1167,18 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
+            // To align with source maps in the old emitter, the receiver and property name
+            // arguments are both mapped contiguously to the accessor name.
+            const target = getSynthesizedClone(receiver);
+            target.pos = firstAccessor.name.pos;
+
+            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
+            propertyName.end = firstAccessor.name.end;
+
             return setNodeEmitFlags(
                 createObjectDefineProperty(
-                    receiver,
-                    createExpressionForPropertyName(
-                        visitNode(firstAccessor.name, visitor, isPropertyName),
-                        /*location*/ firstAccessor.name
-                    ),
+                    target,
+                    propertyName,
                     /*descriptor*/ {
                         get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
                         set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
@@ -1174,9 +1188,10 @@ namespace ts {
                     /*preferNewLine*/ true,
                     /*location*/ undefined,
                     /*descriptorLocations*/ {
-                        get: getAccessor,
-                        set: setAccessor
-                    }
+                        get: { location: getAccessor, emitFlags: NodeEmitFlags.NoSourceMap },
+                        set: { location: setAccessor, emitFlags: NodeEmitFlags.NoSourceMap }
+                    },
+                    context
                 ),
                 NodeEmitFlags.NoComments
             );
@@ -1656,7 +1671,7 @@ namespace ts {
                                     visitor
                                 )
                             ),
-                            /*location*/ initializer
+                            /*location*/ moveRangeEnd(initializer, -1)
                         )
                     );
                 }
@@ -1671,8 +1686,8 @@ namespace ts {
                                     firstDeclaration ? firstDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
                                     createElementAccess(rhsReference, counter)
                                 )
-                            ]),
-                            /*location*/ initializer
+                            ], /*location*/ moveRangePos(initializer, -1)),
+                            /*location*/ moveRangeEnd(initializer, -1)
                         )
                     );
                 }
@@ -1696,7 +1711,8 @@ namespace ts {
                     );
                 }
                 else {
-                    statements.push(createStatement(assignment, /*location*/ node.initializer));
+                    assignment.end = initializer.end;
+                    statements.push(createStatement(assignment, /*location*/ moveRangeEnd(initializer, -1)));
                 }
             }
 
@@ -1713,10 +1729,13 @@ namespace ts {
                 }
             }
 
+            // The old emitter does not emit source maps for the expression
+            setNodeEmitFlags(expression, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(expression));
+
             return createFor(
                 createVariableDeclarationList(
                     [
-                        createVariableDeclaration(counter, createLiteral(0), /*location*/ node.expression),
+                        createVariableDeclaration(counter, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
                         createVariableDeclaration(rhsReference, expression, /*location*/ node.expression)
                     ],
                     /*location*/ node.expression
@@ -1724,9 +1743,9 @@ namespace ts {
                 createLessThan(
                     counter,
                     createPropertyAccess(rhsReference, "length"),
-                    /*location*/ initializer
+                    /*location*/ node.expression
                 ),
-                createPostfixIncrement(counter, /*location*/ initializer),
+                createPostfixIncrement(counter, /*location*/ node.expression),
                 createBlock(
                     statements
                 ),
@@ -2756,20 +2775,52 @@ namespace ts {
         }
 
         /**
+         * Gets the local name for a declaration for use in expressions.
+         *
+         * A local name will *never* be prefixed with an module or namespace export modifier like
+         * "exports.".
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         */
+        function getLocalName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.LocalName);
+        }
+
+        /**
+         * Gets the export name for a declaration for use in expressions.
+         *
+         * An export name will *always* be prefixed with an module or namespace export modifier
+         * like "exports." if one is required.
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         */
+        function getExportName(node: ClassDeclaration | ClassExpression | FunctionDeclaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+            return getDeclarationName(node, allowComments, allowSourceMaps, NodeEmitFlags.ExportName);
+        }
+
+        /**
          * Gets the name of a declaration, without source map or comments.
          *
          * @param node The declaration.
          * @param allowComments Allow comments for the name.
          */
-        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean) {
-            if (node.name) {
-                const name = getMutableClone(node.name);
-                let flags = NodeEmitFlags.NoSourceMap;
-                if (!allowComments) {
-                    flags |= NodeEmitFlags.NoComments;
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
+            if (node.name && !isGeneratedIdentifier(node.name)) {
+                const name = getUniqueClone(node.name);
+                emitFlags |= getNodeEmitFlags(node.name);
+                if (!allowSourceMaps) {
+                    emitFlags |= NodeEmitFlags.NoSourceMap;
                 }
-
-                setNodeEmitFlags(name, flags | getNodeEmitFlags(name));
+                if (!allowComments) {
+                    emitFlags |= NodeEmitFlags.NoComments;
+                }
+                if (emitFlags) {
+                    setNodeEmitFlags(name, emitFlags);
+                }
                 return name;
             }
 
@@ -2777,7 +2828,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const expression = getDeclarationName(node);
+            const expression = getLocalName(node);
             return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
         }
 

@@ -285,6 +285,26 @@ const _super = (function (geti, seti) {
             }
 
             /**
+             * Emits a node with specialized emit flags.
+             */
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecialized(node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    const flagsToAdd = flags & ~getNodeEmitFlags(node);
+                    if (flagsToAdd) {
+                        setNodeEmitFlags(node, flagsToAdd);
+                        emit(node);
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) & ~flagsToAdd);
+                        return;
+                    }
+
+                    emit(node);
+                }
+            }
+
+            /**
              * Emits a node without calling onEmitNode.
              * NOTE: Do not call this method directly.
              */
@@ -323,40 +343,67 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipCommentsForNode);
-                    const trailingComments = getTrailingComments(node, shouldSkipCommentsForNode);
+                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode);
+                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode);
                     emitLeadingComments(node, leadingComments);
-                    emitStart(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitWorker(node);
-                    emitEnd(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitTrailingComments(node, trailingComments);
                 }
             }
 
             /**
-             * Determines whether to skip comment emit for a node.
+             * Determines whether to skip leading comment emit for a node.
              *
              * We do not emit comments for NotEmittedStatement nodes or any node that has
-             * NodeEmitFlags.NoComments.
+             * NodeEmitFlags.NoLeadingComments.
              *
              * @param node A Node.
              */
-            function shouldSkipCommentsForNode(node: Node) {
+            function shouldSkipLeadingCommentsForNode(node: Node) {
                 return isNotEmittedStatement(node)
-                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoComments) !== 0;
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingComments) !== 0;
             }
 
             /**
-             * Determines whether to skip source map emit for a node.
+             * Determines whether to skip trailing comment emit for a node.
              *
-             * We do not emit source maps for NotEmittedStatement nodes or any node that
-             * has NodeEmitFlags.NoSourceMap.
+             * We do not emit comments for NotEmittedStatement nodes or any node that has
+             * NodeEmitFlags.NoTrailingComments.
              *
              * @param node A Node.
              */
-            function shouldSkipSourceMapForNode(node: Node) {
+            function shouldSkipTrailingCommentsForNode(node: Node) {
                 return isNotEmittedStatement(node)
-                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoSourceMap) !== 0;
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingComments) !== 0;
+            }
+
+            /**
+             * Determines whether to skip source map emit for the start position of a node.
+             *
+             * We do not emit source maps for NotEmittedStatement nodes or any node that
+             * has NodeEmitFlags.NoLeadingSourceMap.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipLeadingSourceMapForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingSourceMap) !== 0;
+            }
+
+
+            /**
+             * Determines whether to skip source map emit for the end position of a node.
+             *
+             * We do not emit source maps for NotEmittedStatement nodes or any node that
+             * has NodeEmitFlags.NoTrailingSourceMap.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipTrailingSourceMapForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingSourceMap) !== 0;
             }
 
             /**
@@ -1181,7 +1228,7 @@ const _super = (function (geti, seti) {
 
                 emitExpression(node.left);
                 increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-                writeTokenNode(node.operatorToken);
+                writeTokenText(node.operatorToken.kind);
                 increaseIndentIf(indentAfterOperator, " ");
                 emitExpression(node.right);
                 decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1254,12 +1301,14 @@ const _super = (function (geti, seti) {
 
             function emitBlock(node: Block, format?: ListFormat) {
                 if (isSingleLineEmptyBlock(node)) {
-                    write("{ }");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    write(" ");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
                 }
                 else {
-                    write("{");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
                     emitBlockStatements(node);
-                    write("}");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
                 }
             }
 
@@ -1288,13 +1337,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitIfStatement(node: IfStatement) {
-                write("if (");
+                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    write("else");
+                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -1328,7 +1379,9 @@ const _super = (function (geti, seti) {
             }
 
             function emitForStatement(node: ForStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(";");
                 emitExpressionWithPrefix(" ", node.condition);
@@ -1339,20 +1392,24 @@ const _super = (function (geti, seti) {
             }
 
             function emitForInStatement(node: ForInStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" in ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
             function emitForOfStatement(node: ForOfStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" of ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
@@ -1368,19 +1425,19 @@ const _super = (function (geti, seti) {
             }
 
             function emitContinueStatement(node: ContinueStatement) {
-                write("continue");
+                writeToken(SyntaxKind.ContinueKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
 
             function emitBreakStatement(node: BreakStatement) {
-                write("break");
+                writeToken(SyntaxKind.BreakKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                write("return");
+                writeToken(SyntaxKind.ReturnKeyword, node.pos, node, shouldSkipSourceMapForToken);
                 emitExpressionWithPrefix(" ", node.expression);
                 write(";");
             }
@@ -1393,9 +1450,12 @@ const _super = (function (geti, seti) {
             }
 
             function emitSwitchStatement(node: SwitchStatement) {
-                write("switch (");
+                const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitExpression(node.expression);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
+                write(" ");
                 emit(node.caseBlock);
             }
 
@@ -1449,7 +1509,7 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write(node.asteriskToken ? "function* " : "function ");
-                emit(node.name);
+                emitSpecialized(node.name, NodeEmitFlags.NoSourceMap);
                 emitSignatureAndBody(node, emitSignatureHead);
             }
 
@@ -1531,11 +1591,20 @@ const _super = (function (geti, seti) {
             }
 
             function emitBlockFunctionBodyAndEndLexicalEnvironment(parentNode: Node, body: Block) {
-                write(" {");
+                // TODO(rbuckton): This should be removed once source maps are aligned with the old
+                //                 emitter and new baselines are taken. This exists solely to
+                //                 align with the old emitter.
+                if (getNodeEmitFlags(body) & NodeEmitFlags.SourceMapEmitOpenBraceAsToken) {
+                    write(" ");
+                    writeToken(SyntaxKind.OpenBraceToken, body.pos);
+                }
+                else {
+                    write(" {");
+                }
 
                 const startingLine = writer.getLine();
                 increaseIndent();
-                emitLeadingDetachedComments(body.statements, body, shouldSkipCommentsForNode);
+                emitLeadingDetachedComments(body.statements, body, shouldSkipLeadingCommentsForNode);
 
                 // Emit all the prologue directives (like "use strict").
                 const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
@@ -1552,7 +1621,7 @@ const _super = (function (geti, seti) {
 
                 const endingLine = writer.getLine();
                 emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
-                emitTrailingDetachedComments(body.statements, body, shouldSkipCommentsForNode);
+                emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, body.statements.end);
             }
@@ -1565,7 +1634,7 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write("class");
-                emitWithPrefix(" ", node.name);
+                emitSpecializedWithPrefix(" ", node.name, NodeEmitFlags.NoSourceMap);
 
                 const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
                 if (indentedFlag) {
@@ -1664,9 +1733,9 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseBlock(node: CaseBlock) {
-                write("{");
+                writeToken(SyntaxKind.OpenBraceToken, node.pos);
                 emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-                write("}");
+                writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -1882,9 +1951,12 @@ const _super = (function (geti, seti) {
 
             function emitCatchClause(node: CatchClause) {
                 writeLine();
-                write("catch (");
+                const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emit(node.variableDeclaration);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
+                write(" ");
                 emit(node.block);
             }
 
@@ -2107,6 +2179,16 @@ const _super = (function (geti, seti) {
 
             function emitWithPrefix(prefix: string, node: Node) {
                 emitNodeWithPrefix(prefix, node, emit);
+            }
+
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecializedWithPrefix(prefix: string, node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    write(prefix);
+                    emitSpecialized(node, flags);
+                }
             }
 
             function emitExpressionWithPrefix(prefix: string, node: Node) {
@@ -2333,12 +2415,18 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, tokenStartPos: number) {
+            function writeToken(token: SyntaxKind, tokenStartPos: number): number;
+            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreSourceMapForTokenCallback: (contextNode: Node) => boolean): number;
+            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, shouldIgnoreSourceMapForTokenCallback?: (contextNode: Node) => boolean) {
                 tokenStartPos = skipTrivia(currentText, tokenStartPos);
-                emitPos(tokenStartPos);
+                emitPos(tokenStartPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
                 const tokenEndPos = writeTokenText(token, tokenStartPos);
-                emitPos(tokenEndPos);
+                emitPos(tokenEndPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
                 return tokenEndPos;
+            }
+
+            function shouldSkipSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenSourceMaps) !== 0;
             }
 
             function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -2349,9 +2437,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
                 }
             }
 

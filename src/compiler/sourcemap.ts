@@ -5,6 +5,7 @@ namespace ts {
     export interface SourceMapWriter {
         getSourceMapData(): SourceMapData;
         setSourceFile(sourceFile: SourceFile): void;
+        emitPos(pos: number, contextNode: Node, shouldIgnorePosCallback: (node: Node) => boolean): void;
         emitPos(pos: number): void;
         emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
         emitStart(range: TextRange): void;
@@ -271,8 +272,12 @@ namespace ts {
             sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
-        function emitPos(pos: number) {
+        function emitPos(pos: number, contextNode?: Node, shouldIgnorePosCallback?: (node: Node) => boolean) {
             if (positionIsSynthesized(pos) || disableDepth > 0) {
+                return;
+            }
+
+            if (shouldIgnorePosCallback && shouldIgnorePosCallback(contextNode)) {
                 return;
             }
 
