@@ -12,13 +12,13 @@ module M1 {
 >A : Symbol(A, Decl(returnTypeParameterWithModules.ts, 1, 27))
 
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
->Array.prototype.reduce.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>Array.prototype.reduce.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Array.prototype.reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >prototype : Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, --, --))
 >reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
 >e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))
 >f : Symbol(f, Decl(returnTypeParameterWithModules.ts, 1, 33))

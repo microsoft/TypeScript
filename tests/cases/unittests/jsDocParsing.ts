@@ -61,7 +61,7 @@ module ts {
                 parsesCorrectly("tupleType1", "{[number]}");
                 parsesCorrectly("tupleType2", "{[number,string]}");
                 parsesCorrectly("tupleType3", "{[number,string,boolean]}");
-            });
+           });
 
             describe("parsesIncorrectly", () => {
                 parsesIncorrectly("emptyType", "{}");

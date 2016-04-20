@@ -1433,7 +1433,7 @@ namespace ts {
                     }
                 }
                 if (assignments) {
-                    return createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc)));
+                    return createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted

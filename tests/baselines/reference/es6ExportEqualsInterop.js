@@ -274,7 +274,6 @@ function_1.a;
 function_module_1.a;
 class_1.a;
 class_module_1.a;
-// named export
 var variable_2 = require("variable");
 exports.a2 = variable_2.a;
 var interface_variable_2 = require("interface-variable");
@@ -289,7 +288,6 @@ var function_module_2 = require("function-module");
 exports.a8 = function_module_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
-// export-star
 __export(require("variable"));
 __export(require("interface-variable"));
 __export(require("module"));

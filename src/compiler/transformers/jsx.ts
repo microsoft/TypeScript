@@ -100,9 +100,9 @@ namespace ts {
                 }
 
                 // Either emit one big object literal (no spread attribs), or
-                // a call to React.__spread
+                // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createReactSpread(compilerOptions.reactNamespace, segments, node);
+                    || createAssignHelper(segments);
             }
 
             const element = createReactCreateElement(

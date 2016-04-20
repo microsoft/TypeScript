@@ -47,5 +47,7 @@ var d = <Other />;
 
 var e = <Dotted.Name />;
 >e : Symbol(e, Decl(tsxElementResolution.tsx, 23, 3))
+>Dotted.Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 12, 15))
+>Dotted : Symbol(Dotted, Decl(tsxElementResolution.tsx, 10, 14))
 >Name : Symbol(Dotted.Name, Decl(tsxElementResolution.tsx, 12, 15))
 

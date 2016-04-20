@@ -1,0 +1,15 @@
+error TS2304: Cannot find name 'jquery'.
+/a/b/consumer.ts(1,1): error TS2304: Cannot find name '$'.
+
+
+!!! error TS2304: Cannot find name 'jquery'.
+==== /a/b/consumer.ts (1 errors) ====
+    $.foo();
+    ~
+!!! error TS2304: Cannot find name '$'.
+    
+==== /a/types/jquery/index.d.ts (0 errors) ====
+    
+    declare var $: { foo(): void };
+    
+    
