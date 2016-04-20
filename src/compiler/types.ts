@@ -2873,15 +2873,23 @@ namespace ts {
         AdviseOnEmitNode = 1 << 7,               // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 8,                 // Disables further substitution of an expression.
         CapturesThis = 1 << 9,                   // The function captures a lexical `this`
-        NoSourceMap = 1 << 10,                   // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 11,            // Do not emit source map locations for children of this node.
-        NoTokenSourceMaps = 1 << 12,             // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 13,             // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 14,            // Do not emit trailing comments for this node.
+        NoLeadingSourceMap = 1 << 10,            // Do not emit a leading source map location for this node.
+        NoTrailingSourceMap = 1 << 11,           // Do not emit a trailing source map location for this node.
+        NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
+        NoNestedSourceMaps = 1 << 12,            // Do not emit source map locations for children of this node.
+        NoTokenSourceMaps = 1 << 13,             // Do not emit source map locations for tokens of this node.
+        NoLeadingComments = 1 << 14,             // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 15,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-        ExportName = 1 << 15,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 16,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 17,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        ExportName = 1 << 16,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 17,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 18,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+
+        // SourceMap Specialization.
+        // TODO(rbuckton): This should be removed once source maps are aligned with the old
+        //                 emitter and new baselines are taken. This exists solely to
+        //                 align with the old emitter.
+        SourceMapEmitOpenBraceAsToken = 1 << 19,
     }
 
     /** Additional context provided to `visitEachChild` */

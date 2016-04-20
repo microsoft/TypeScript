@@ -465,7 +465,9 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            addInitializedPropertyStatements(statements, node, staticProperties, name);
+            if (staticProperties.length) {
+                addInitializedPropertyStatements(statements, node, staticProperties, getLocalName(node, /*noSourceMaps*/ true));
+            }
 
             // Write any decorators of the node.
             addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
@@ -2541,7 +2543,7 @@ namespace ts {
 
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
-            return createBlock(
+            const block = createBlock(
                 createNodeArray(
                     statements,
                     /*location*/ statementsLocation
@@ -2549,6 +2551,15 @@ namespace ts {
                 /*location*/ blockLocation,
                 /*multiLine*/ true
             );
+
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            if (body.kind === SyntaxKind.ModuleBlock) {
+                setNodeEmitFlags(block, NodeEmitFlags.SourceMapEmitOpenBraceAsToken);
+            }
+
+            return block;
         }
 
         function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {

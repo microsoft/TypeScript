@@ -258,6 +258,26 @@ const _super = (function (geti, seti) {
             }
 
             /**
+             * Emits a node with specialized emit flags.
+             */
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecialized(node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    const flagsToAdd = flags & ~getNodeEmitFlags(node);
+                    if (flagsToAdd) {
+                        setNodeEmitFlags(node, flagsToAdd);
+                        emit(node);
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) & ~flagsToAdd);
+                        return;
+                    }
+
+                    emit(node);
+                }
+            }
+
+            /**
              * Emits a node without calling onEmitNode.
              * NOTE: Do not call this method directly.
              */
@@ -299,9 +319,9 @@ const _super = (function (geti, seti) {
                     const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode);
                     const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode);
                     emitLeadingComments(node, leadingComments);
-                    emitStart(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitWorker(node);
-                    emitEnd(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitTrailingComments(node, trailingComments);
                 }
             }
@@ -333,16 +353,30 @@ const _super = (function (geti, seti) {
             }
 
             /**
-             * Determines whether to skip source map emit for a node.
+             * Determines whether to skip source map emit for the start position of a node.
              *
              * We do not emit source maps for NotEmittedStatement nodes or any node that
-             * has NodeEmitFlags.NoSourceMap.
+             * has NodeEmitFlags.NoLeadingSourceMap.
              *
              * @param node A Node.
              */
-            function shouldSkipSourceMapForNode(node: Node) {
+            function shouldSkipLeadingSourceMapForNode(node: Node) {
                 return isNotEmittedStatement(node)
-                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoSourceMap) !== 0;
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingSourceMap) !== 0;
+            }
+
+
+            /**
+             * Determines whether to skip source map emit for the end position of a node.
+             *
+             * We do not emit source maps for NotEmittedStatement nodes or any node that
+             * has NodeEmitFlags.NoTrailingSourceMap.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipTrailingSourceMapForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingSourceMap) !== 0;
             }
 
             /**
@@ -1448,7 +1482,7 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write(node.asteriskToken ? "function* " : "function ");
-                emit(node.name);
+                emitSpecialized(node.name, NodeEmitFlags.NoSourceMap);
                 emitSignatureAndBody(node, emitSignatureHead);
             }
 
@@ -1530,7 +1564,16 @@ const _super = (function (geti, seti) {
             }
 
             function emitBlockFunctionBodyAndEndLexicalEnvironment(parentNode: Node, body: Block) {
-                write(" {");
+                // TODO(rbuckton): This should be removed once source maps are aligned with the old
+                //                 emitter and new baselines are taken. This exists solely to
+                //                 align with the old emitter.
+                if (getNodeEmitFlags(body) & NodeEmitFlags.SourceMapEmitOpenBraceAsToken) {
+                    write(" ");
+                    writeToken(SyntaxKind.OpenBraceToken, body.pos);
+                }
+                else {
+                    write(" {");
+                }
 
                 const startingLine = writer.getLine();
                 increaseIndent();
@@ -1564,7 +1607,7 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write("class");
-                emitWithPrefix(" ", node.name);
+                emitSpecializedWithPrefix(" ", node.name, NodeEmitFlags.NoSourceMap);
 
                 const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
                 if (indentedFlag) {
@@ -1663,9 +1706,9 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseBlock(node: CaseBlock) {
-                write("{");
+                writeToken(SyntaxKind.OpenBraceToken, node.pos);
                 emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-                write("}");
+                writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -2106,6 +2149,16 @@ const _super = (function (geti, seti) {
                 emitNodeWithPrefix(prefix, node, emit);
             }
 
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecializedWithPrefix(prefix: string, node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    write(prefix);
+                    emitSpecialized(node, flags);
+                }
+            }
+
             function emitExpressionWithPrefix(prefix: string, node: Node) {
                 emitNodeWithPrefix(prefix, node, emitExpression);
             }
@@ -2352,9 +2405,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldSkipSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
                 }
             }
 
