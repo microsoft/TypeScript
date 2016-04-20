@@ -170,14 +170,11 @@ const _super = (function (geti, seti) {
             } = comments;
 
             let context: TransformationContext;
-            let startLexicalEnvironment: () => void;
-            let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
-            let isExpressionSubstitutionEnabled: (node: Node) => boolean;
+            let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
-            let expressionSubstitution: (node: Expression) => Expression;
-            let identifierSubstitution: (node: Identifier) => Identifier;
+            let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
             let onEmitNode: (node: Node, emit: (node: Node) => void) => void;
             let nodeToGeneratedName: string[];
             let generatedNameSet: Map<string>;
@@ -233,14 +230,11 @@ const _super = (function (geti, seti) {
                 comments.reset();
                 writer.reset();
 
-                startLexicalEnvironment = undefined;
-                endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
-                isExpressionSubstitutionEnabled = undefined;
+                isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
-                expressionSubstitution = undefined;
-                identifierSubstitution = undefined;
+                onSubstituteNode = undefined;
                 onEmitNode = undefined;
                 tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
@@ -255,14 +249,11 @@ const _super = (function (geti, seti) {
 
             function initializePrinter(_context: TransformationContext) {
                 context = _context;
-                startLexicalEnvironment = context.startLexicalEnvironment;
-                endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
-                isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
+                isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
-                expressionSubstitution = context.expressionSubstitution;
-                identifierSubstitution = context.identifierSubstitution;
+                onSubstituteNode = context.onSubstituteNode;
                 onEmitNode = context.onEmitNode;
                 return printSourceFile;
             }
@@ -416,6 +407,10 @@ const _super = (function (geti, seti) {
             }
 
             function emitWorker(node: Node): void {
+                if (tryEmitSubstitute(node, emitWorker, /*isExpression*/ false)) {
+                    return;
+                }
+
                 const kind = node.kind;
                 switch (kind) {
                     // Pseudo-literals
@@ -426,10 +421,6 @@ const _super = (function (geti, seti) {
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        if (tryEmitSubstitute(node, identifierSubstitution)) {
-                            return;
-                        }
-
                         return emitIdentifier(<Identifier>node);
 
                     // Reserved words
@@ -675,11 +666,11 @@ const _super = (function (geti, seti) {
             }
 
             function emitExpressionWorker(node: Node) {
-                const kind = node.kind;
-                if (isExpressionSubstitutionEnabled(node) && tryEmitSubstitute(node, expressionSubstitution)) {
+                if (tryEmitSubstitute(node, emitExpressionWorker, /*isExpression*/ true)) {
                     return;
                 }
 
+                const kind = node.kind;
                 switch (kind) {
                     // Literals
                     case SyntaxKind.NumericLiteral:
@@ -1531,7 +1522,6 @@ const _super = (function (geti, seti) {
 
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
-                        startLexicalEnvironment();
                         emitSignatureHead(node);
                         emitBlockFunctionBodyAndEndLexicalEnvironment(node, body);
                         if (indentedFlag) {
@@ -1609,7 +1599,6 @@ const _super = (function (geti, seti) {
                     write(" {");
                 }
 
-                const startingLine = writer.getLine();
                 increaseIndent();
                 emitLeadingDetachedComments(body.statements, body, shouldSkipLeadingCommentsForNode);
 
@@ -1626,8 +1615,6 @@ const _super = (function (geti, seti) {
                     emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, statementOffset);
                 }
 
-                const endingLine = writer.getLine();
-                emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
                 emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
                 writeToken(SyntaxKind.CloseBraceToken, body.statements.end);
@@ -1725,15 +1712,9 @@ const _super = (function (geti, seti) {
                 else {
                     const savedTempFlags = tempFlags;
                     tempFlags = 0;
-                    startLexicalEnvironment();
                     write("{");
                     increaseIndent();
-
-                    const startingLine = writer.getLine();
                     emitBlockStatements(node);
-
-                    const endingLine = writer.getLine();
-                    emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
                     write("}");
                     tempFlags = savedTempFlags;
                 }
@@ -2020,10 +2001,8 @@ const _super = (function (geti, seti) {
                 else {
                     const savedTempFlags = tempFlags;
                     tempFlags = 0;
-                    startLexicalEnvironment();
                     emitHelpers(node);
                     emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                    emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ true);
                     tempFlags = savedTempFlags;
                 }
 
@@ -2034,28 +2013,6 @@ const _super = (function (geti, seti) {
 
             function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
                 emitExpression(node.expression);
-            }
-
-            function emitLexicalEnvironment(declarations: Statement[], newLine: boolean) {
-                if (declarations && declarations.length > 0) {
-                    for (const node of declarations) {
-                        if (newLine) {
-                            writeLine();
-                        }
-                        else {
-                            write(" ");
-                        }
-
-                        emit(node);
-                    }
-
-                    if (newLine) {
-                        writeLine();
-                    }
-                    else {
-                        write(" ");
-                    }
-                }
             }
 
             /**
@@ -2216,12 +2173,16 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function tryEmitSubstitute(node: Node, substitution: (node: Node) => Node) {
-                if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
-                    const substitute = substitution(node);
+            function tryEmitSubstitute(node: Node, emitNode: (node: Node) => void, isExpression: boolean) {
+                if ((<any>node).text === "localizedDiagnosticMessages" && isExpression) {
+                    debugger;
+                }
+
+                if (isSubstitutionEnabled(node) && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
+                    const substitute = onSubstituteNode(node, isExpression);
                     if (substitute !== node) {
                         setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution | getNodeEmitFlags(substitute));
-                        emitWorker(substitute);
+                        emitNode(substitute);
                         return true;
                     }
                 }

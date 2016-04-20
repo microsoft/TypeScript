@@ -16578,10 +16578,10 @@ namespace ts {
         }
 
         // Gets the type of object literal or array literal of destructuring assignment.
-        // { a } from 
+        // { a } from
         //     for ( { a } of elems) {
         //     }
-        // [ a ] from 
+        // [ a ] from
         //     [a] = [ some array ...]
         function getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(expr: Expression): Type {
             Debug.assert(expr.kind === SyntaxKind.ObjectLiteralExpression || expr.kind === SyntaxKind.ArrayLiteralExpression);
@@ -16614,10 +16614,10 @@ namespace ts {
         }
 
         // Gets the property symbol corresponding to the property in destructuring assignment
-        // 'property1' from 
+        // 'property1' from
         //     for ( { property1: a } of elems) {
         //     }
-        // 'property1' at location 'a' from: 
+        // 'property1' at location 'a' from:
         //     [a] = [ property1, property2 ]
         function getPropertySymbolOfDestructuringAssignment(location: Identifier) {
             // Get the type of the object or array literal and then look for property of given name in the type
@@ -16721,19 +16721,28 @@ namespace ts {
             }
         }
 
+        function isNameOfModuleOrEnumDeclaration(node: Identifier) {
+            const parent = node.parent;
+            return isModuleOrEnumDeclaration(parent) && node === parent.name;
+        }
+
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration {
             node = getSourceTreeNodeOfType(node, isIdentifier);
             if (node) {
-                let symbol = getReferencedValueSymbol(node);
+                // When resolving the export container for the name of a module or enum
+                // declaration, we need to start resolution at the declaration's container.
+                // Otherwise, we could incorrectly resolve the export container as the
+                // declaration if it contains an exported member with the same name.
+                let symbol = getReferencedValueSymbol(node, /*startInDeclarationContainer*/ isNameOfModuleOrEnumDeclaration(node));
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.ExportValue) {
                         // If we reference an exported entity within the same module declaration, then whether
                         // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
                         // kinds that we do NOT prefix.
                         const exportSymbol = getMergedSymbol(symbol.exportSymbol);
-                        if (exportSymbol.flags & SymbolFlags.ExportHasLocal && !prefixLocals) {
+                        if (!prefixLocals && exportSymbol.flags & SymbolFlags.ExportHasLocal) {
                             return undefined;
                         }
                         symbol = exportSymbol;
@@ -16744,7 +16753,7 @@ namespace ts {
                             return <SourceFile>parentSymbol.valueDeclaration;
                         }
                         for (let n = node.parent; n; n = n.parent) {
-                            if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                            if (isModuleOrEnumDeclaration(n) && getSymbolOfNode(n) === parentSymbol) {
                                 return <ModuleDeclaration | EnumDeclaration>n;
                             }
                         }
@@ -17039,10 +17048,23 @@ namespace ts {
             return hasProperty(globals, name);
         }
 
-        function getReferencedValueSymbol(reference: Identifier): Symbol {
-            return getNodeLinks(reference).resolvedSymbol ||
-                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
-                    /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol {
+            const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            if (resolvedSymbol) {
+                return resolvedSymbol;
+            }
+
+            let location: Node = reference;
+            if (startInDeclarationContainer) {
+                // When resolving the name of a declaration as a value, we need to start resolution
+                // at a point outside of the declaration.
+                const parent = reference.parent;
+                if (isDeclaration(parent) && reference === parent.name) {
+                    location = getDeclarationContainer(parent);
+                }
+            }
+
+            return resolveName(location, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {

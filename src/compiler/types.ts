@@ -2541,7 +2541,7 @@ namespace ts {
         // When options come from a config file, its path is recorded here
         configFilePath?: string;
         /* @internal */
-        // Path used to used to compute primary search locations 
+        // Path used to used to compute primary search locations
         typesRoot?: string;
         types?: string[];
 
@@ -2969,28 +2969,22 @@ namespace ts {
         hoistVariableDeclaration(node: Identifier): void;
 
         /**
-         * Hook used by transformers to substitute non-expression identifiers
-         * just before theyare emitted by the pretty printer.
-         */
-        identifierSubstitution?: (node: Identifier) => Identifier;
-
-        /**
          * Enables expression substitutions in the pretty printer for
          * the provided SyntaxKind.
          */
-        enableExpressionSubstitution(kind: SyntaxKind): void;
+        enableSubstitution(kind: SyntaxKind): void;
 
         /**
          * Determines whether expression substitutions are enabled for the
          * provided node.
          */
-        isExpressionSubstitutionEnabled(node: Node): boolean;
+        isSubstitutionEnabled(node: Node): boolean;
 
         /**
          * Hook used by transformers to substitute expressions just before they
          * are emitted by the pretty printer.
          */
-        expressionSubstitution?: (node: Expression) => Expression;
+        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
 
         /**
          * Enables before/after emit notifications in the pretty printer for
