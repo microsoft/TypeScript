@@ -1883,6 +1883,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.ReadonlyKeyword:
                 // These nodes are TypeScript syntax.
                 transformFlags = TransformFlags.AssertTypeScript;

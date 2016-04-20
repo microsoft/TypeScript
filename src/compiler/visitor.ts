@@ -219,6 +219,9 @@ namespace ts {
             { name: "expression", test: isExpression },
             { name: "type", test: isTypeNode }
         ],
+        [SyntaxKind.NonNullExpression]: [
+            { name: "expression", test: isLeftHandSideExpression }
+        ],
         [SyntaxKind.TemplateSpan]: [
             { name: "expression", test: isExpression },
             { name: "literal", test: isTemplateLiteralFragment }

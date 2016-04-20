@@ -751,6 +751,8 @@ const _super = (function (geti, seti) {
                         return;
                     case SyntaxKind.AsExpression:
                         return emitAsExpression(<AsExpression>node);
+                    case SyntaxKind.NonNullExpression:
+                        return emitNonNullExpression(<NonNullExpression>node);
 
                     // JSX
                     case SyntaxKind.JsxElement:
@@ -1284,6 +1286,11 @@ const _super = (function (geti, seti) {
                     write(" as ");
                     emit(node.type);
                 }
+            }
+
+            function emitNonNullExpression(node: NonNullExpression) {
+                emitExpression(node.expression);
+                write("!");
             }
 
             //
