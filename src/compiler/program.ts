@@ -2076,7 +2076,10 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+            // Report this error if user specified --module moduleKind 
+            // or if there is external module in compilation which defaults to commonjs
+            const emitModuleKind = getEmitModuleKind(options);
+            if (outFile && (options.module || firstExternalModuleSourceFile) && !(emitModuleKind === ModuleKind.AMD || emitModuleKind === ModuleKind.System)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
             }
 
