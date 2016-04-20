@@ -509,7 +509,7 @@ namespace ts {
             const { line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
             const { line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
             if (startLine < endLine) {
-                // The arrow function spans multiple lines, 
+                // The arrow function spans multiple lines,
                 // make the error span be the first line, inclusive.
                 return createTextSpan(pos, getEndLinePosition(startLine, sourceFile) - pos + 1);
             }
@@ -3462,7 +3462,8 @@ namespace ts {
             || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.TrueKeyword
-            || kind === SyntaxKind.SuperKeyword;
+            || kind === SyntaxKind.SuperKeyword
+            || kind === SyntaxKind.NonNullExpression;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
