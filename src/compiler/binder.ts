@@ -2267,6 +2267,11 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
+        // If the parameter's name is 'this', then it is TypeScript syntax.
+        if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
         if (hasModifier(node, ModifierFlags.AccessibilityModifier)) {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
