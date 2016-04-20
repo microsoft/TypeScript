@@ -2267,8 +2267,8 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // If the parameter's name is 'this, then it is TypeScript syntax.
-        if ((node.name as Identifier).text === "this") {
+        // If the parameter's name is 'this', then it is TypeScript syntax.
+        if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
