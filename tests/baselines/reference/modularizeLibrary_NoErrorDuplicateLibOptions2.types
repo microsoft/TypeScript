@@ -173,7 +173,7 @@ var p = new Proxy(t, {});
 >new Proxy(t, {}) : {}
 >Proxy : ProxyConstructor
 >t : {}
->{} : {}
+>{} : ProxyHandler<{}>
 
 // Using ES6 reflect
 Reflect.isExtensible({});
@@ -181,7 +181,7 @@ Reflect.isExtensible({});
 >Reflect.isExtensible : (target: any) => boolean
 >Reflect : typeof Reflect
 >isExtensible : (target: any) => boolean
->{} : {}
+>{} : any
 
 // Using Es6 regexp
 var reg = new RegExp("/s");

@@ -9139,13 +9139,6 @@ namespace ts {
             return createIndexInfo(unionType, /*isReadonly*/false);
         }
 
-        function getContextualIndexerOfEmptyObjectLiteral(node: ObjectLiteralExpression, properties: Symbol[], kind: IndexKind, contextualType: Type, contextualMapper: TypeMapper) {
-            if (contextualType && !isInferentialContext(contextualMapper) && !properties.length) {
-                const resolvedType = <ResolvedType>contextualType;
-                return kind === IndexKind.String ? resolvedType.stringIndexInfo : resolvedType.numberIndexInfo;
-            }
-        }
-
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper: TypeMapper): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
@@ -9160,6 +9153,17 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+
+            // Use the contextual type only for empty object literals if the contextual type has only indexers and optional properties
+            if (!node.properties.length &&
+                contextualType &&
+                contextualType !== voidType &&
+                !isInferentialContext(contextualMapper) &&
+                !getSignaturesOfType(contextualType, SignatureKind.Call).length &&
+                !getSignaturesOfType(contextualType, SignatureKind.Construct).length &&
+                !forEach(getPropertiesOfType(contextualType), prop => !(prop.flags & SymbolFlags.Optional))) {
+                return contextualType;
+            }
 
             for (const memberDecl of node.properties) {
                 let member = memberDecl.symbol;
@@ -9253,12 +9257,8 @@ namespace ts {
                 }
             }
 
-            const stringIndexInfo = hasComputedStringProperty ?
-                getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) :
-                getContextualIndexerOfEmptyObjectLiteral(node, propertiesArray, IndexKind.String, contextualType, contextualMapper);
-            const numberIndexInfo = hasComputedNumberProperty ?
-                getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) :
-                getContextualIndexerOfEmptyObjectLiteral(node, propertiesArray, IndexKind.Number, contextualType, contextualMapper);
+            const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) : undefined;
+            const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) : undefined;
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);

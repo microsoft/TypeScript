@@ -12,7 +12,7 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
->{} : {}
+>{} : any
 >"0" : string
 ><PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      }) : PropertyDescriptor
 >PropertyDescriptor : PropertyDescriptor

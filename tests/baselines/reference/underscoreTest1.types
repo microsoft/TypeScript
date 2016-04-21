@@ -1331,7 +1331,7 @@ _.isEmpty({});
 >_.isEmpty : (object: any) => boolean
 >_ : Underscore.Static
 >isEmpty : (object: any) => boolean
->{} : {}
+>{} : any
 
 _.isElement($('body')[0]);
 >_.isElement($('body')[0]) : boolean
@@ -1369,7 +1369,7 @@ _.isObject({});
 >_.isObject : (value: any) => boolean
 >_ : Underscore.Static
 >isObject : (value: any) => boolean
->{} : {}
+>{} : any
 
 _.isObject(1);
 >_.isObject(1) : boolean

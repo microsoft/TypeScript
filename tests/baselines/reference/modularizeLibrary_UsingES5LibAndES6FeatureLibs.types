@@ -14,14 +14,14 @@ var p = new Proxy(t, {});
 >new Proxy(t, {}) : {}
 >Proxy : ProxyConstructor
 >t : {}
->{} : {}
+>{} : ProxyHandler<{}>
 
 Reflect.ownKeys({});
 >Reflect.ownKeys({}) : (string | number | symbol)[]
 >Reflect.ownKeys : (target: any) => (string | number | symbol)[]
 >Reflect : typeof Reflect
 >ownKeys : (target: any) => (string | number | symbol)[]
->{} : {}
+>{} : any
 
 function* idGen() {
 >idGen : () => IterableIterator<number>

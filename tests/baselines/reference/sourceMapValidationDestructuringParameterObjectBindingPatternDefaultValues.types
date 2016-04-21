@@ -34,7 +34,7 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >nameA : string
 >"<NoName>" : string
 >Robot : Robot
->{ } : {}
+>{ } : Robot
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -52,7 +52,7 @@ function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {
 >skillB : string
 >"noSkill" : string
 >Robot : Robot
->{} : {}
+>{} : Robot
 
     console.log(nameB);
 >console.log(nameB) : void
@@ -66,7 +66,7 @@ function foo3({ name = "<NoName>" }: Robot = {}) {
 >name : string
 >"<NoName>" : string
 >Robot : Robot
->{} : {}
+>{} : Robot
 
     console.log(name);
 >console.log(name) : void

@@ -27,11 +27,11 @@ class Bug {
 >ok : () => void
 
         this.values = {};
->this.values = {} : { [s: string]: IOptions; }
+>this.values = {} : IMap
 >this.values : IMap
 >this : this
 >values : IMap
->{} : { [s: string]: IOptions; }
+>{} : IMap
 
         this.values['comments'] = { italic: true };
 >this.values['comments'] = { italic: true } : { italic: boolean; }

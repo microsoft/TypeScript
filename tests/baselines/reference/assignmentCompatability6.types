@@ -30,7 +30,7 @@ module __test2__ {
 >T : T
 >obj3 : interfaceWithOptional<number>
 >interfaceWithOptional : interfaceWithOptional<T>
->{ } : {}
+>{ } : interfaceWithOptional<number>
 
     export var __val__obj3 = obj3;
 >__val__obj3 : interfaceWithOptional<number>
