@@ -1033,7 +1033,7 @@ namespace ts.server {
             [CommandNames.Reload]: (request: protocol.Request) => {
                 const reloadArgs = <protocol.ReloadRequestArgs>request.arguments;
                 this.reload(reloadArgs.file, reloadArgs.tmpfile, request.seq);
-                return {responseRequired: false};
+                return {response: { reloadFinished: true }, responseRequired: true};
             },
             [CommandNames.Saveto]: (request: protocol.Request) => {
                 const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
