@@ -103,8 +103,7 @@ var C = (function () {
     function C() {
     } // ok
     Object.defineProperty(C.prototype, "X", {
-        get: // error
-        function () {
+        get: function () {
             return '';
         },
         set: function (v) { } // ok
