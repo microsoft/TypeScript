@@ -96,8 +96,8 @@ if (hasKind(x, "A")) {
 }
 else {
     let b = x;
->b : A
->x : A
+>b : {}
+>x : {}
 }
 
 if (!hasKind(x, "B")) {
@@ -113,6 +113,6 @@ if (!hasKind(x, "B")) {
 }
 else {
     let d = x;
->d : A
->x : A
+>d : {}
+>x : {}
 }
