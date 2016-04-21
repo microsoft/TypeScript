@@ -910,7 +910,7 @@ namespace ts {
                     createAssignment(
                         createPropertyAccess(
                             createThis(),
-                            getSynthesizedClone(<Identifier>node.name),
+                            getMutableClone(<Identifier>node.name),
                             /*location*/ node.name
                         ),
                         getUniqueClone(<Identifier>node.name)
