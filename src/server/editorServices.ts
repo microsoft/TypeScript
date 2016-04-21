@@ -498,6 +498,14 @@ namespace ts.server {
         return copiedList;
     }
 
+    /**
+     * This helper funciton processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
+     */
+    export function combineProjectOutput<T>(projects: Project[], action: (project: Project) => T[], comparer?: (a: T, b: T) => number, areEqual?: (a: T, b: T) => boolean) {
+        const result = projects.reduce<T[]>((previous, current) => concatenate(previous, action(current)), []).sort(comparer);
+        return projects.length > 1 ? deduplicate(result, areEqual) : result;
+    }
+
     export interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
