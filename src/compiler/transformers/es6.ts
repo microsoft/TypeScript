@@ -1063,7 +1063,8 @@ namespace ts {
                                 "_this",
                                 createThis()
                             )
-                        ])
+                        ]),
+                        /*location*/ node
                     )
                 );
             }
@@ -1343,7 +1344,9 @@ namespace ts {
 
                 const expression = visitNode(body, visitor, isExpression);
                 if (expression) {
-                    statements.push(createReturn(expression, /*location*/ statementsLocation));
+                    const returnStatement = createReturn(expression, /*location*/ statementsLocation);
+                    setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps);
+                    statements.push(returnStatement);
                 }
             }
 

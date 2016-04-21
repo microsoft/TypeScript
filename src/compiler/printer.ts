@@ -1546,7 +1546,7 @@ const _super = (function (geti, seti) {
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         emitSignatureHead(node);
-                        emitBlockFunctionBodyAndEndLexicalEnvironment(node, body);
+                        emitBlockFunctionBody(node, body);
                         if (indentedFlag) {
                             decreaseIndent();
                         }
@@ -1610,7 +1610,7 @@ const _super = (function (geti, seti) {
                 return true;
             }
 
-            function emitBlockFunctionBodyAndEndLexicalEnvironment(parentNode: Node, body: Block) {
+            function emitBlockFunctionBody(parentNode: Node, body: Block) {
                 // TODO(rbuckton): This should be removed once source maps are aligned with the old
                 //                 emitter and new baselines are taken. This exists solely to
                 //                 align with the old emitter.
