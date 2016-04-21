@@ -435,7 +435,7 @@ namespace ts {
             const { line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
             const { line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
             if (startLine < endLine) {
-                // The arrow function spans multiple lines, 
+                // The arrow function spans multiple lines,
                 // make the error span be the first line, inclusive.
                 return createTextSpan(pos, getEndLinePosition(startLine, sourceFile) - pos + 1);
             }
@@ -1301,10 +1301,10 @@ namespace ts {
         if (node.jsDocComment) {
             return node.jsDocComment;
         }
-        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement. 
-        // /** 
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement.
+        // /**
         //   * @param {number} name
-        //   * @returns {number} 
+        //   * @returns {number}
         //   */
         // var x = function(name) { return name.length; }
         if (checkParentVariableStatement) {

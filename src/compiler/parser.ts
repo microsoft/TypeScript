@@ -886,7 +886,7 @@ namespace ts {
 
         /** Invokes the provided callback then unconditionally restores the parser to the state it
          * was in immediately prior to invoking the callback.  The result of invoking the callback
-         * is returned from this function. 
+         * is returned from this function.
          */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
@@ -4988,7 +4988,7 @@ namespace ts {
 
                 if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
                     // We need to ensure that any subsequent modifiers appear on the same line
-                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    // so that when 'const' is a standalone declaration, we don't issue an error.
                     if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                         break;
                     }
@@ -5251,7 +5251,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (token === SyntaxKind.GlobalKeyword) {
-                // parse 'global' as name of global scope augmentation 
+                // parse 'global' as name of global scope augmentation
                 node.name = parseIdentifier();
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
@@ -6087,7 +6087,7 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    const tagName = parseJSDocIdentifier();
+                    const tagName = parseJSDocIdentifierName();
                     if (!tagName) {
                         return;
                     }
@@ -6150,7 +6150,7 @@ namespace ts {
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
                     if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = parseJSDocIdentifier();
+                        name = parseJSDocIdentifierName();
                         isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
@@ -6160,8 +6160,8 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (token === SyntaxKind.Identifier) {
-                        name = parseJSDocIdentifier();
+                    else if (tokenIsIdentifierOrKeyword(token)) {
+                        name = parseJSDocIdentifierName();
                     }
 
                     if (!name) {
@@ -6225,7 +6225,7 @@ namespace ts {
                     typeParameters.pos = scanner.getStartPos();
 
                     while (true) {
-                        const name = parseJSDocIdentifier();
+                        const name = parseJSDocIdentifierName();
                         if (!name) {
                             parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
                             return undefined;
@@ -6258,8 +6258,12 @@ namespace ts {
                     return token = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifier(): Identifier {
-                    if (token !== SyntaxKind.Identifier) {
+                function parseJSDocIdentifierName(): Identifier {
+                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token));
+                }
+
+                function createJSDocIdentifier(isIdentifier: boolean): Identifier {
+                    if (!isIdentifier) {
                         parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                         return undefined;
                     }
