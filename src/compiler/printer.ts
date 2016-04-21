@@ -1981,7 +1981,9 @@ const _super = (function (geti, seti) {
                 //          }
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
-                emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)));
+                if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
+                    emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)));
+                }
                 emitExpression(node.initializer);
             }
 

@@ -1175,13 +1175,25 @@ namespace ts {
             const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
             propertyName.end = firstAccessor.name.end;
 
+            let getAccessorExpression: FunctionExpression;
+            if (getAccessor) {
+                getAccessorExpression = transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined);
+                setNodeEmitFlags(getAccessorExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(getAccessorExpression));
+            }
+
+            let setAccessorExpression: FunctionExpression;
+            if (setAccessor) {
+                setAccessorExpression = transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined);
+                setNodeEmitFlags(setAccessorExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(setAccessorExpression));
+            }
+
             return setNodeEmitFlags(
                 createObjectDefineProperty(
                     target,
                     propertyName,
                     /*descriptor*/ {
-                        get: getAccessor && transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined),
-                        set: setAccessor && transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined),
+                        get: getAccessorExpression,
+                        set: setAccessorExpression,
                         enumerable: true,
                         configurable: true
                     },
@@ -2283,9 +2295,11 @@ namespace ts {
             // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
             // Methods with computed property names are handled in visitObjectLiteralExpression.
             Debug.assert(!isComputedPropertyName(node.name));
+            const functionExpression = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            setNodeEmitFlags(functionExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(functionExpression));
             return createPropertyAssignment(
                 node.name,
-                transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined),
+                functionExpression,
                 /*location*/ node
             );
         }
