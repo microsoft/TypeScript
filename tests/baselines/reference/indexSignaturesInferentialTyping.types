@@ -6,7 +6,7 @@ function foo<T>(items: { [index: number]: T }): T { return undefined; }
 >index : number
 >T : T
 >T : T
->undefined : undefined
+>undefined : T
 
 function bar<T>(items: { [index: string]: T }): T { return undefined; }
 >bar : <T>(items: { [index: string]: T; }) => T
@@ -15,7 +15,7 @@ function bar<T>(items: { [index: string]: T }): T { return undefined; }
 >index : string
 >T : T
 >T : T
->undefined : undefined
+>undefined : T
 
 var x1 = foo({ 0: 0, 1: 1 });       // type should be number
 >x1 : number

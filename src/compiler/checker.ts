@@ -7964,7 +7964,7 @@ namespace ts {
                 checkVariableAssignedBefore(symbol, node);
             }
             type = getNarrowedTypeOfReference(type, node);
-            if (symbol.name === "undefined" && !isInferentialContext(contextualMapper)) {
+            if (symbol.name === "undefined" && !isInferentialContext(contextualMapper) && !isBindingPatternDeclaration(node.parent)) {
                 return getContextualType(node) || type;
             }
             return type;
@@ -8451,8 +8451,15 @@ namespace ts {
             }
         }
 
+        function isBindingPatternDeclaration(node: Node) {
+            if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                const declaration = <ParameterDeclaration | VariableDeclaration | BindingElement>node;
+                return declaration.name.kind === SyntaxKind.ArrayBindingPattern || declaration.name.kind === SyntaxKind.ObjectBindingPattern;
+            }
+        }
+
         function checkNullKeyword(nullNode: Expression, contextualMapper?: TypeMapper) {
-            if (isInferentialContext(contextualMapper)) {
+            if (isInferentialContext(contextualMapper) || isBindingPatternDeclaration(nullNode.parent)) {
                 return nullType;
             }
             return getContextualType(nullNode) || nullType;
@@ -9121,32 +9128,22 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, properties: Symbol[], kind: IndexKind, contextualMapper: TypeMapper): IndexInfo {
+        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, properties: Symbol[], kind: IndexKind): IndexInfo {
             const propTypes: Type[] = [];
             for (let i = 0; i < properties.length; i++) {
                 if (kind === IndexKind.String || isNumericName(node.properties[i].name)) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
+            const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
+            return createIndexInfo(unionType, /*isReadonly*/false);
+        }
 
-            let result: Type;
-            if (!propTypes.length) {
-                const contextualType = getContextualType(node);
-                if (!isInferentialContext(contextualMapper) && contextualType) {
-                    const resolvedType = <ResolvedType>contextualType;
-                    const indexInfo = kind === IndexKind.String ? resolvedType.stringIndexInfo : resolvedType.numberIndexInfo;
-                    if (indexInfo) {
-                        // typeFlags |= resolvedType.flags;
-                        return indexInfo;
-                    }
-                }
-                result = undefinedType;
+        function getContextualIndexerOfEmptyObjectLiteral(node: ObjectLiteralExpression, properties: Symbol[], kind: IndexKind, contextualType: Type, contextualMapper: TypeMapper) {
+            if (contextualType && !isInferentialContext(contextualMapper) && !properties.length) {
+                const resolvedType = <ResolvedType>contextualType;
+                return kind === IndexKind.String ? resolvedType.stringIndexInfo : resolvedType.numberIndexInfo;
             }
-            else {
-                result = getUnionType(propTypes);
-            }
-            // typeFlags |= result.flags;
-            return createIndexInfo(result, /*isReadonly*/false);
         }
 
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper: TypeMapper): Type {
@@ -9256,8 +9253,12 @@ namespace ts {
                 }
             }
 
-            const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String, contextualMapper) : undefined;
-            const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number, contextualMapper) : undefined;
+            const stringIndexInfo = hasComputedStringProperty ?
+                getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.String) :
+                getContextualIndexerOfEmptyObjectLiteral(node, propertiesArray, IndexKind.String, contextualType, contextualMapper);
+            const numberIndexInfo = hasComputedNumberProperty ?
+                getObjectLiteralIndexInfo(node, propertiesArray, IndexKind.Number) :
+                getContextualIndexerOfEmptyObjectLiteral(node, propertiesArray, IndexKind.Number, contextualType, contextualMapper);
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);

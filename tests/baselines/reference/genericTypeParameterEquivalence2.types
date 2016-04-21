@@ -30,7 +30,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >g.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
 >g : (a: A) => B
 >apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
->null : null
+>null : any
 >a : A
 
     };

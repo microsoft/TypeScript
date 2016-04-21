@@ -45,14 +45,14 @@ import {Cls} from "./main";
 >Cls : typeof Cls
 
 Cls.prototype.foo = function() { return undefined; }
->Cls.prototype.foo = function() { return undefined; } : () => any
+>Cls.prototype.foo = function() { return undefined; } : () => Lib
 >Cls.prototype.foo : () => Lib
 >Cls.prototype : Cls
 >Cls : typeof Cls
 >prototype : Cls
 >foo : () => Lib
->function() { return undefined; } : () => any
->undefined : undefined
+>function() { return undefined; } : () => Lib
+>undefined : Lib
 
 declare module "./main" {
     interface Cls {

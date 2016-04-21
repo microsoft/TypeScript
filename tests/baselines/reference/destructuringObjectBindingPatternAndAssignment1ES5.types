@@ -6,7 +6,7 @@
 //      S is the type Any, or
 var { a1 }: any = undefined;
 >a1 : any
->undefined : any
+>undefined : undefined
 
 var { a2 }: any = {};
 >a2 : any

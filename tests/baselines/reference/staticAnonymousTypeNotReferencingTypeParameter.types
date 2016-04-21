@@ -121,7 +121,7 @@ namespace tessst {
             }
         }
         return undefined;
->undefined : undefined
+>undefined : U
     }
 }
 interface Scanner {
@@ -217,7 +217,7 @@ class ListWrapper {
     if (!array) return null;
 >!array : boolean
 >array : T[]
->null : null
+>null : T
 
     return array[0];
 >array[0] : T
@@ -242,7 +242,7 @@ class ListWrapper {
 >array : T[]
 >length : number
 >0 : number
->null : null
+>null : T
 
     return array[array.length - 1];
 >array[array.length - 1] : T
@@ -507,7 +507,7 @@ class ListWrapper {
 >start : number
 >0 : number
 >end : number
->null : null
+>null : number
 
     list.fill(value, start, end === null ? list.length : end);
 >list.fill(value, start, end === null ? list.length : end) : void
@@ -576,7 +576,7 @@ class ListWrapper {
 >from : number
 >0 : number
 >to : number
->null : null
+>null : number
 >T : T
 
     return l.slice(from, to === null ? undefined : to);
@@ -589,7 +589,7 @@ class ListWrapper {
 >to === null : boolean
 >to : number
 >null : null
->undefined : undefined
+>undefined : number
 >to : number
   }
   static splice<T>(dit: typeof ListWrapper, l: T[], from: number, length: number): T[] { return l.splice(from, length); }
@@ -687,12 +687,12 @@ class ListWrapper {
 >0 : number
 
       return null;
->null : null
+>null : T
     }
     var solution: T = null;
 >solution : T
 >T : T
->null : null
+>null : T
 
     var maxValue = -Infinity;
 >maxValue : number

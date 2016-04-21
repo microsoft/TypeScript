@@ -1,5 +1,6 @@
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(3,6): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(3,12): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(4,5): error TS2461: Type 'undefined' is not an array type.
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(9,5): error TS2322: Type '[number, number, string]' is not assignable to type '[number, boolean, string]'.
   Types of property '1' are incompatible.
     Type 'number' is not assignable to type 'boolean'.
@@ -11,7 +12,7 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts(34,5): error TS2461: Type 'F' is not an array type.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts (7 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment2.ts (8 errors) ====
     // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
     //      S is the type Any, or
     var [[a0], [[a1]]] = []         // Error
@@ -20,6 +21,8 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
                ~~~~~~
 !!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
     var [[a2], [[a3]]] = undefined  // Error
+        ~~~~~~~~~~~~~~
+!!! error TS2461: Type 'undefined' is not an array type.
     
     // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
     //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,

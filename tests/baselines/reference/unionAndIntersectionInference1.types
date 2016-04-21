@@ -88,7 +88,7 @@ function isVoid<a>(value: void | a): value is void {
 >value : any
 
     return undefined;
->undefined : value is void
+>undefined : boolean
 }
 
 function isNonVoid<a>(value: void | a) : value is a {
@@ -100,7 +100,7 @@ function isNonVoid<a>(value: void | a) : value is a {
 >a : a
 
     return undefined;
->undefined : value is a
+>undefined : boolean
 }
 
 function foo1<a>(value: void|a): void {

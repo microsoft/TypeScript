@@ -28,7 +28,7 @@ function createSerialNo() {
 let map1: { [x: string]: number } = {};
 >map1 : { [x: string]: number; }
 >x : string
->{} : {}
+>{} : { [x: string]: number; }
 
 let guid = createGuid();
 >guid : string & { $Guid: any; }
@@ -45,7 +45,7 @@ map1[guid] = 123;  // Can with tagged string
 let map2: { [x: number]: string } = {};
 >map2 : { [x: number]: string; }
 >x : number
->{} : {}
+>{} : { [x: number]: string; }
 
 let serialNo = createSerialNo();
 >serialNo : number & { $SerialNo: any; }

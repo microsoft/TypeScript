@@ -21,7 +21,7 @@ class D extends Base {
 >k : void
 >super(undefined) : void
 >super : typeof Base
->undefined : undefined
+>undefined : any
 
             j: this._t,  // no error
 >j : any

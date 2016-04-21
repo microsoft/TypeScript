@@ -30,7 +30,7 @@ export class BrokenClass {
 >Array : T[]
 >MyModule : any
 >MyModel : MyModule.MyModel
->[] : undefined[]
+>[] : MyModule.MyModel[]
 
     let populateItems = (order) => {
 >populateItems : (order: any) => Promise<{}>
