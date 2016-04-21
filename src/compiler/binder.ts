@@ -617,6 +617,8 @@ namespace ts {
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                    return isNarrowableReference(expr.left);
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
