@@ -7084,7 +7084,7 @@ const _super = (function (geti, seti) {
                             hoistedVars = [];
                         }
 
-                        hoistedVars.push(node.name);
+                        hoistedVars.push((<ImportEqualsDeclaration>node).name);
                         return;
                     }
 
