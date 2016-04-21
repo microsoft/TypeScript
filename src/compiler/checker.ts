@@ -7197,19 +7197,7 @@ namespace ts {
 
         // EXPRESSION TYPE CHECKING
 
-        function createTransientIdentifier(symbol: Symbol, location: Node): Identifier {
-            const result = <TransientIdentifier>createNode(SyntaxKind.Identifier);
-            result.text = symbol.name;
-            result.resolvedSymbol = symbol;
-            result.parent = location;
-            result.id = -1;
-            return result;
-        }
-
         function getResolvedSymbol(node: Identifier): Symbol {
-            if (node.id === -1) {
-                return (<TransientIdentifier>node).resolvedSymbol;
-            }
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
                 links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
@@ -7867,7 +7855,7 @@ namespace ts {
                 }
                 // If location is an identifier or property access that references the given
                 // symbol, use the location as the reference with respect to which we narrow.
-                if (isExpression(location)) {
+                if (isExpression(location) && !isAssignmentTarget(location)) {
                     checkExpression(<Expression>location);
                     if (getNodeLinks(location).resolvedSymbol === symbol) {
                         return getNarrowedTypeOfReference(type, <IdentifierOrPropertyAccess>location);
@@ -7876,9 +7864,10 @@ namespace ts {
             }
             // The location isn't a reference to the given symbol, meaning we're being asked
             // a hypothetical question of what type the symbol would have if there was a reference
-            // to it at the given location. To answer that question we manufacture a transient
-            // identifier at the location and narrow with respect to that identifier.
-            return getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+            // to it at the given location. Since we have no control flow information for the
+            // hypotherical reference (control flow information is created and attached by the
+            // binder), we simply return the declared type of the symbol.
+            return type;
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {

@@ -479,11 +479,6 @@ namespace ts {
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
     }
 
-    // Transient identifier node (marked by id === -1)
-    export interface TransientIdentifier extends Identifier {
-        resolvedSymbol: Symbol;
-    }
-
     // @kind(SyntaxKind.QualifiedName)
     export interface QualifiedName extends Node {
         // Must have same layout as PropertyAccess
