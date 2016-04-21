@@ -7339,6 +7339,18 @@ namespace ts {
             return false;
         }
 
+        function typeMaybeSubtypeOf(source: Type, target: Type) {
+            if (!(source.flags & TypeFlags.Union)) {
+                return isTypeSubtypeOf(source, target);
+            }
+            for (const t of (<UnionType>source).types) {
+                if (isTypeSubtypeOf(t, target)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
@@ -7766,30 +7778,29 @@ namespace ts {
                 return type;
             }
 
-            function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type, assumeTrue: boolean) {
-                if (!assumeTrue) {
-                    if (originalType.flags & TypeFlags.Union) {
-                        return getUnionType(filter((<UnionType>originalType).types, t => !isTypeSubtypeOf(t, narrowedTypeCandidate)));
-                    }
-                    return originalType;
+            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean) {
+                if (typeMaybeSubtypeOf(type, candidate)) {
+                    // If the current type, or a constituent of the current type, is a subtype of
+                    // the candidate type then the current type contains the most specific information.
+                    // and we simply filter out constituents that aren't applicable. For example,
+                    // if the current type is string | string[] and the candidate type is any[],
+                    // we filter out string.
+                    return type.flags & TypeFlags.Union ?
+                        getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, candidate) === assumeTrue)) :
+                        assumeTrue ? type : emptyUnionType;
                 }
-
-                // If the current type is a union type, remove all constituents that aren't assignable to target. If that produces
-                // 0 candidates, fall back to the assignability check
-                if (originalType.flags & TypeFlags.Union) {
-                    const assignableConstituents = filter((<UnionType>originalType).types, t => isTypeAssignableTo(t, narrowedTypeCandidate));
-                    if (assignableConstituents.length) {
-                        return getUnionType(assignableConstituents);
-                    }
+                if (assumeTrue) {
+                    // In the true branch of the remaining cases, if the candidate type is assignable
+                    // to the current type, then we narrow to the candidate type. Otherwise, we narrow
+                    // to an empty type (because we now know the types are completely unrelated). For
+                    // example, if the current type is Object and the candidate type is string[], we
+                    // narrow to string[]. But if the current type is string and the candidate is
+                    // string[], we narrow to the empty type.
+                    const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
+                    return isTypeAssignableTo(candidate, targetType) ? candidate : emptyUnionType;
                 }
-
-                const targetType = originalType.flags & TypeFlags.TypeParameter ? getApparentType(originalType) : originalType;
-                if (isTypeAssignableTo(narrowedTypeCandidate, targetType)) {
-                    // Narrow to the target type if it's assignable to the current type
-                    return narrowedTypeCandidate;
-                }
-
-                return originalType;
+                // In the false branch of the remaining cases we leave the type unchanged.
+                return type;
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
