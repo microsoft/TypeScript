@@ -751,7 +751,7 @@ namespace ts {
                     createConstructor(
                         parameters,
                         body,
-                        /*location*/ constructor
+                        /*location*/ constructor || node
                     ),
                     constructor
                 )
@@ -846,7 +846,7 @@ namespace ts {
                 createBlock(
                     createNodeArray(
                         statements,
-                        /*location*/ constructor ? constructor.body.statements : undefined
+                        /*location*/ constructor ? constructor.body.statements : node.members
                     ),
                     /*location*/ constructor ? constructor.body : undefined
                 ),
