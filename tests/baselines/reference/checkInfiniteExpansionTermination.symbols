@@ -7,7 +7,7 @@ interface IObservable<T> {
 >T : Symbol(T, Decl(checkInfiniteExpansionTermination.ts, 3, 22))
 
     n: IObservable<T[]>; // Needed, must be T[]
->n : Symbol(n, Decl(checkInfiniteExpansionTermination.ts, 3, 26))
+>n : Symbol(IObservable.n, Decl(checkInfiniteExpansionTermination.ts, 3, 26))
 >IObservable : Symbol(IObservable, Decl(checkInfiniteExpansionTermination.ts, 0, 0))
 >T : Symbol(T, Decl(checkInfiniteExpansionTermination.ts, 3, 22))
 }
@@ -21,11 +21,11 @@ interface ISubject<T> extends IObservable<T> { }
 
 interface Foo { x }
 >Foo : Symbol(Foo, Decl(checkInfiniteExpansionTermination.ts, 8, 48))
->x : Symbol(x, Decl(checkInfiniteExpansionTermination.ts, 10, 15))
+>x : Symbol(Foo.x, Decl(checkInfiniteExpansionTermination.ts, 10, 15))
 
 interface Bar { y }
 >Bar : Symbol(Bar, Decl(checkInfiniteExpansionTermination.ts, 10, 19))
->y : Symbol(y, Decl(checkInfiniteExpansionTermination.ts, 11, 15))
+>y : Symbol(Bar.y, Decl(checkInfiniteExpansionTermination.ts, 11, 15))
 
 var values: IObservable<Foo>;
 >values : Symbol(values, Decl(checkInfiniteExpansionTermination.ts, 13, 3))

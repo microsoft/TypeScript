@@ -4,7 +4,7 @@ interface I {
 >I : Symbol(I, Decl(forStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(forStatements.ts, 1, 13))
+>id : Symbol(I.id, Decl(forStatements.ts, 1, 13))
 }
 
 class C implements I {
@@ -12,7 +12,7 @@ class C implements I {
 >I : Symbol(I, Decl(forStatements.ts, 0, 0))
 
     id: number;
->id : Symbol(id, Decl(forStatements.ts, 5, 22))
+>id : Symbol(C.id, Decl(forStatements.ts, 5, 22))
 }
 
 class D<T>{
@@ -20,16 +20,16 @@ class D<T>{
 >T : Symbol(T, Decl(forStatements.ts, 9, 8))
 
     source: T;
->source : Symbol(source, Decl(forStatements.ts, 9, 11))
+>source : Symbol(D.source, Decl(forStatements.ts, 9, 11))
 >T : Symbol(T, Decl(forStatements.ts, 9, 8))
 
     recurse: D<T>;
->recurse : Symbol(recurse, Decl(forStatements.ts, 10, 14))
+>recurse : Symbol(D.recurse, Decl(forStatements.ts, 10, 14))
 >D : Symbol(D, Decl(forStatements.ts, 7, 1))
 >T : Symbol(T, Decl(forStatements.ts, 9, 8))
 
     wrapped: D<D<T>>
->wrapped : Symbol(wrapped, Decl(forStatements.ts, 11, 18))
+>wrapped : Symbol(D.wrapped, Decl(forStatements.ts, 11, 18))
 >D : Symbol(D, Decl(forStatements.ts, 7, 1))
 >D : Symbol(D, Decl(forStatements.ts, 7, 1))
 >T : Symbol(T, Decl(forStatements.ts, 9, 8))
@@ -46,7 +46,7 @@ module M {
 >A : Symbol(A, Decl(forStatements.ts, 17, 10))
 
         name: string;
->name : Symbol(name, Decl(forStatements.ts, 18, 20))
+>name : Symbol(A.name, Decl(forStatements.ts, 18, 20))
     }
 
     export function F2(x: number): string { return x.toString(); }
@@ -65,8 +65,8 @@ for(var aString: string = 'this is a string';;){}
 
 for(var aDate: Date = new Date(12);;){}
 >aDate : Symbol(aDate, Decl(forStatements.ts, 27, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 for(var anObject: Object = new Object();;){}
 >anObject : Symbol(anObject, Decl(forStatements.ts, 28, 7))

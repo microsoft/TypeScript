@@ -50,27 +50,27 @@ class C {
 >C : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
 
     s: Date;
->s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     n = this.s;
->n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
->this.s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+>n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+>this.s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
 >this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
->s : Symbol(s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
+>s : Symbol(C.s, Decl(scopeResolutionIdentifiers.ts, 21, 9))
 
     x() {
->x : Symbol(x, Decl(scopeResolutionIdentifiers.ts, 23, 15))
+>x : Symbol(C.x, Decl(scopeResolutionIdentifiers.ts, 23, 15))
 
         var p = this.n;
 >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
->this.n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+>this.n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
 >this : Symbol(C, Decl(scopeResolutionIdentifiers.ts, 19, 1))
->n : Symbol(n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
+>n : Symbol(C.n, Decl(scopeResolutionIdentifiers.ts, 22, 12))
 
         var p: Date;
 >p : Symbol(p, Decl(scopeResolutionIdentifiers.ts, 25, 11), Decl(scopeResolutionIdentifiers.ts, 26, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
 

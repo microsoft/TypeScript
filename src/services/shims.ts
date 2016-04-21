@@ -19,7 +19,7 @@
 let debugObjectHost = (<any>this);
 
 // We need to use 'null' to interface with the managed side.
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 /* tslint:disable:no-in-operator */
 
 /* @internal */
@@ -67,6 +67,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
+        getTypeReferenceDirectiveResolutionsForFile?(fileName: string): string;
         directoryExists(directoryName: string): boolean;
     }
 
@@ -78,7 +79,7 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string): string;
+        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
 
         trace(s: string): void;
     }
@@ -220,6 +221,13 @@ namespace ts {
          */
         getDocCommentTemplateAtPosition(fileName: string, position: number): string;
 
+        /**
+         * Returns JSON-encoded boolean to indicate whether we should support brace location
+         * at the current position.
+         * E.g. we don't want brace completion inside string-literals, comments, etc.
+         */
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -232,6 +240,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
+        discoverTypings(discoverTypingsJson: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -280,6 +289,7 @@ namespace ts {
         private tracingEnabled = false;
 
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
         public directoryExists: (directoryName: string) => boolean;
 
         constructor(private shimHost: LanguageServiceShimHost) {
@@ -296,6 +306,12 @@ namespace ts {
             }
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
+            }
+            if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
+                this.resolveTypeReferenceDirectives = (typeDirectiveNames: string[], containingFile: string) => {
+                    const typeDirectivesForFile = <Map<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile(containingFile));
+                    return map(typeDirectiveNames, name => lookUp(typeDirectivesForFile, name));
+                };
             }
         }
 
@@ -422,8 +438,16 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
+            // Wrap the API changes for 2.0 release. This try/catch
+            // should be removed once TypeScript 2.0 has shipped.
+            let encoded: string;
+            try {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
+            }
+            catch (e) {
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            }
             return JSON.parse(encoded);
         }
 
@@ -716,6 +740,13 @@ namespace ts {
             );
         }
 
+        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
+            return this.forwardJSONCall(
+                `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
+                () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
+            );
+        }
+
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
@@ -910,36 +941,47 @@ namespace ts {
             });
         }
 
+        public resolveTypeReferenceDirective(fileName: string, typeReferenceDirective: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall(`resolveTypeReferenceDirective(${fileName})`, () => {
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const result = resolveTypeReferenceDirective(typeReferenceDirective, normalizeSlashes(fileName), compilerOptions, this.host);
+                return {
+                    resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
+                    primary: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.primary : true,
+                    failedLookupLocations: result.failedLookupLocations
+                };
+            });
+        }
+
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
                     const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
-                    const convertResult = {
-                        referencedFiles: <IFileReference[]>[],
-                        importedFiles: <IFileReference[]>[],
+                    return {
+                        referencedFiles: this.convertFileReferences(result.referencedFiles),
+                        importedFiles: this.convertFileReferences(result.importedFiles),
                         ambientExternalModules: result.ambientExternalModules,
-                        isLibFile: result.isLibFile
+                        isLibFile: result.isLibFile,
+                        typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives)
                     };
-
-                    forEach(result.referencedFiles, refFile => {
-                        convertResult.referencedFiles.push({
-                            path: normalizePath(refFile.fileName),
-                            position: refFile.pos,
-                            length: refFile.end - refFile.pos
-                        });
-                    });
-
-                    forEach(result.importedFiles, importedFile => {
-                        convertResult.importedFiles.push({
-                            path: normalizeSlashes(importedFile.fileName),
-                            position: importedFile.pos,
-                            length: importedFile.end - importedFile.pos
-                        });
-                    });
-                    return convertResult;
                 });
+        }
+
+        private convertFileReferences(refs: FileReference[]): IFileReference[] {
+            if (!refs) {
+                return undefined;
+            }
+            const result: IFileReference[] = [];
+            for (const ref of refs) {
+                result.push({
+                    path: normalizeSlashes(ref.fileName),
+                    position: ref.pos,
+                    length: ref.end - ref.pos
+                });
+            }
+            return result;
         }
 
         public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -953,6 +995,7 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
+                            typingOptions: {},
                             files: [],
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
@@ -963,6 +1006,7 @@ namespace ts {
 
                     return {
                         options: configFile.options,
+                        typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
@@ -974,6 +1018,21 @@ namespace ts {
                 "getDefaultCompilationSettings()",
                 () => getDefaultCompilerOptions()
             );
+        }
+
+        public discoverTypings(discoverTypingsJson: string): string {
+            const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
+            return this.forwardJSONCall("discoverTypings()", () => {
+                const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
+                return ts.JsTyping.discoverTypings(
+                    this.host,
+                    info.fileNames,
+                    toPath(info.projectRootPath, info.projectRootPath, getCanonicalFileName),
+                    toPath(info.safeListPath, info.safeListPath, getCanonicalFileName),
+                    info.packageNameToTypingLocation,
+                    info.typingOptions,
+                    info.compilerOptions);
+            });
         }
     }
 

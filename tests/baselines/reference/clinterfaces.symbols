@@ -20,7 +20,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
 
     a: string;
->a : Symbol(a, Decl(clinterfaces.ts, 7, 18))
+>a : Symbol(Foo.a, Decl(clinterfaces.ts, 7, 18))
 }
 
 class Foo<T>{
@@ -28,7 +28,7 @@ class Foo<T>{
 >T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
 
     b: number;
->b : Symbol(b, Decl(clinterfaces.ts, 11, 13))
+>b : Symbol(Foo.b, Decl(clinterfaces.ts, 11, 13))
 }
 
 class Bar<T>{
@@ -36,7 +36,7 @@ class Bar<T>{
 >T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
 
     b: number;
->b : Symbol(b, Decl(clinterfaces.ts, 15, 13))
+>b : Symbol(Bar.b, Decl(clinterfaces.ts, 15, 13))
 }
 
 interface Bar<T> {
@@ -44,7 +44,7 @@ interface Bar<T> {
 >T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
 
     a: string;
->a : Symbol(a, Decl(clinterfaces.ts, 19, 18))
+>a : Symbol(Bar.a, Decl(clinterfaces.ts, 19, 18))
 }
 
 export = Foo;

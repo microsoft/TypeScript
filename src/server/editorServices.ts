@@ -34,6 +34,7 @@ namespace ts.server {
         fileWatcher: FileWatcher;
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
         path: Path;
+        scriptKind: ScriptKind;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
             this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
@@ -81,8 +82,14 @@ namespace ts.server {
         }
     }
 
-    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations {
-        lastCheckTime: number;
+    interface Timestamped {
+        lastCheckTime?: number;
+    }
+
+    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations, Timestamped {
+    }
+
+    interface TimestampedResolvedTypeReferenceDirective extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, Timestamped {
     }
 
     export class LSHost implements ts.LanguageServiceHost {
@@ -90,13 +97,16 @@ namespace ts.server {
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
+
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
+        private resolvedTypeReferenceDirectives: ts.FileMap<Map<TimestampedResolvedTypeReferenceDirective>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
         private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
             this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
             this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
+            this.resolvedTypeReferenceDirectives = createFileMap<Map<TimestampedResolvedTypeReferenceDirective>>();
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
@@ -105,46 +115,51 @@ namespace ts.server {
             };
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
+        private resolveNamesWithLocalCache<T extends Timestamped & { failedLookupLocations: string[] }, R>(
+            names: string[],
+            containingFile: string,
+            cache: ts.FileMap<Map<T>>,
+            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
+            getResult: (s: T) => R): R[] {
+
             const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const currentResolutionsInFile = this.resolvedModuleNames.get(path);
+            const currentResolutionsInFile = cache.get(path);
 
-            const newResolutions: Map<TimestampedResolvedModule> = {};
-            const resolvedModules: ResolvedModule[] = [];
-
+            const newResolutions: Map<T> = {};
+            const resolvedModules: R[] = [];
             const compilerOptions = this.getCompilationSettings();
 
-            for (const moduleName of moduleNames) {
+            for (const name of names) {
                 // check if this is a duplicate entry in the list
-                let resolution = lookUp(newResolutions, moduleName);
+                let resolution = lookUp(newResolutions, name);
                 if (!resolution) {
-                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, name);
                     if (moduleResolutionIsValid(existingResolution)) {
-                        // ok, it is safe to use existing module resolution results
+                        // ok, it is safe to use existing name resolution results
                         resolution = existingResolution;
                     }
                     else {
-                        resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
+                        resolution = loader(name, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[moduleName] = resolution;
+                        newResolutions[name] = resolution;
                     }
                 }
 
                 ts.Debug.assert(resolution !== undefined);
 
-                resolvedModules.push(resolution.resolvedModule);
+                resolvedModules.push(getResult(resolution));
             }
 
             // replace old results with a new one
-            this.resolvedModuleNames.set(path, newResolutions);
+            cache.set(path, newResolutions);
             return resolvedModules;
 
-            function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
+            function moduleResolutionIsValid(resolution: T): boolean {
                 if (!resolution) {
                     return false;
                 }
 
-                if (resolution.resolvedModule) {
+                if (getResult(resolution)) {
                     // TODO: consider checking failedLookupLocations
                     // TODO: use lastCheckTime to track expiration for module name resolution
                     return true;
@@ -154,6 +169,14 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
+        }
+
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
+            return this.resolveNamesWithLocalCache(typeDirectiveNames, containingFile, this.resolvedTypeReferenceDirectives, resolveTypeReferenceDirective, m => m.resolvedTypeReferenceDirective);
+        }
+
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
+            return this.resolveNamesWithLocalCache(moduleNames, containingFile, this.resolvedModuleNames, resolveModuleName, m => m.resolvedModule);
         }
 
         getDefaultLibFileName() {
@@ -172,6 +195,7 @@ namespace ts.server {
             this.compilationSettings = opt;
             // conservatively assume that changing compiler options might affect module resolution strategy
             this.resolvedModuleNames.clear();
+            this.resolvedTypeReferenceDirectives.clear();
         }
 
         lineAffectsRefs(filename: string, line: number) {
@@ -192,8 +216,16 @@ namespace ts.server {
             return this.roots.map(root => root.fileName);
         }
 
-        getScriptKind() {
-            return ScriptKind.Unknown;
+        getScriptKind(fileName: string) {
+            const info = this.getScriptInfo(fileName);
+            if (!info) {
+                return undefined;
+            }
+
+            if (!info.scriptKind) {
+                info.scriptKind = getScriptKindFromFileName(fileName);
+            }
+            return info.scriptKind;
         }
 
         getScriptVersion(filename: string) {
@@ -212,6 +244,7 @@ namespace ts.server {
             if (!info.isOpen) {
                 this.filenameToScript.remove(info.path);
                 this.resolvedModuleNames.remove(info.path);
+                this.resolvedTypeReferenceDirectives.remove(info.path);
             }
         }
 
@@ -239,6 +272,7 @@ namespace ts.server {
                 this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
+                this.resolvedTypeReferenceDirectives.remove(info.path);
             }
         }
 
@@ -996,7 +1030,7 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
+        openFile(fileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
@@ -1011,12 +1045,11 @@ namespace ts.server {
                 }
                 if (content !== undefined) {
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.scriptKind = scriptKind;
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
-                        info.fileWatcher = this.host.watchFile(
-                            toPath(fileName, fileName, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-                            _ => { this.watchedFileChanged(fileName); });
+                        info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
                     }
                 }
             }
@@ -1062,9 +1095,9 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string) {
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -1235,9 +1268,7 @@ namespace ts.server {
                     }
                 }
                 project.finishGraph();
-                project.projectFileWatcher = this.host.watchFile(
-                    toPath(configFilename, configFilename, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
-                    _ => this.watchedProjectConfigFileChanged(project));
+                project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
                 this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
                 project.directoryWatcher = this.host.watchDirectory(
                     ts.getDirectoryPath(configFilename),
@@ -1325,6 +1356,7 @@ namespace ts.server {
             else {
                 const defaultOpts = ts.getDefaultCompilerOptions();
                 defaultOpts.allowNonTsExtensions = true;
+                defaultOpts.allowJs = true;
                 this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
@@ -1337,7 +1369,7 @@ namespace ts.server {
         }
 
         isExternalModule(filename: string): boolean {
-            const sourceFile = this.languageService.getSourceFile(filename);
+            const sourceFile = this.languageService.getNonBoundSourceFile(filename);
             return ts.isExternalModule(sourceFile);
         }
 

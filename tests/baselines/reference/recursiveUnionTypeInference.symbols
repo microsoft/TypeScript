@@ -4,7 +4,7 @@ interface Foo<T> {
 >T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
 
     x: T;
->x : Symbol(x, Decl(recursiveUnionTypeInference.ts, 0, 18))
+>x : Symbol(Foo.x, Decl(recursiveUnionTypeInference.ts, 0, 18))
 >T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
 }
 

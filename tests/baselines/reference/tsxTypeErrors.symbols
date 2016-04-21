@@ -34,7 +34,7 @@ class MyClass {
 >MyClass : Symbol(MyClass, Decl(tsxTypeErrors.tsx, 12, 31))
 
   props: {
->props : Symbol(props, Decl(tsxTypeErrors.tsx, 15, 15))
+>props : Symbol(MyClass.props, Decl(tsxTypeErrors.tsx, 15, 15))
 
     pt?: { x: number; y: number; };
 >pt : Symbol(pt, Decl(tsxTypeErrors.tsx, 16, 10))

@@ -53,9 +53,9 @@ var elements = names.map(function (name) {
 var xxx = elements.filter(function (e) {
 >xxx : HTMLElement[]
 >elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
->elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
+>elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any) => HTMLElement[]
 >elements : HTMLElement[]
->filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
+>filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => any, thisArg?: any) => HTMLElement[]
 >function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
 >e : HTMLElement
 
