@@ -7576,7 +7576,7 @@ namespace ts {
                 // only need to evaluate the assigned type if the declared type is a union type.
                 if ((node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) &&
                     reference.kind === SyntaxKind.Identifier &&
-                    getResolvedSymbol(<Identifier>reference) === getSymbolOfNode(node)) {
+                    getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>reference)) === getSymbolOfNode(node)) {
                     return declaredType.flags & TypeFlags.Union ?
                         getAssignmentReducedType(<UnionType>declaredType, getInitialType(<VariableDeclaration | BindingElement>node)) :
                         declaredType;
@@ -7857,7 +7857,7 @@ namespace ts {
                 // symbol, use the location as the reference with respect to which we narrow.
                 if (isExpression(location) && !isAssignmentTarget(location)) {
                     checkExpression(<Expression>location);
-                    if (getNodeLinks(location).resolvedSymbol === symbol) {
+                    if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return getNarrowedTypeOfReference(type, <IdentifierOrPropertyAccess>location);
                     }
                 }
@@ -9745,7 +9745,7 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
-            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & SymbolFlags.Property && !isAssignmentTarget(node) ?
+            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & (SymbolFlags.Variable | SymbolFlags.Property) && !isAssignmentTarget(node) ?
                 getNarrowedTypeOfReference(propType, <PropertyAccessExpression>node) : propType;
         }
 
