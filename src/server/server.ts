@@ -181,6 +181,11 @@ namespace ts.server {
     process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });
-    // Start listening
-    ioSession.listen();
+
+    process.nextTick(() => {
+        // Start listening, but leave potential for extensions
+        ioSession.listen();
+    });
+
+    module.exports = ioSession;
 }
