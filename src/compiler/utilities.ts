@@ -1667,27 +1667,6 @@ namespace ts {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
-    // Some keywords are TypeScript only, so they should not be parsed as considered as
-    // keywords in JavaScript
-    export function isJSKeyword(token: SyntaxKind): boolean {
-        switch (token) {
-            case SyntaxKind.TypeKeyword:
-            case SyntaxKind.AsKeyword:
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.DeclareKeyword:
-            case SyntaxKind.IsKeyword:
-            case SyntaxKind.ReadonlyKeyword:
-            case SyntaxKind.FromKeyword:
-                return false;
-            default:
-                return isKeyword(token);
-        }
-    }
-
-    export function isTSOnlyKeyword(token: SyntaxKind): boolean {
-        return isKeyword(token) && !isJSKeyword(token);
-    }
-
     export function isTrivia(token: SyntaxKind) {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
