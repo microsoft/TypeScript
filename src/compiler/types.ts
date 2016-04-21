@@ -2943,10 +2943,11 @@ namespace ts {
         Indented = 1 << 18,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
 
         // SourceMap Specialization.
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
+        // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 19,
+        SourceMapEmitOpenBraceAsToken = 1 << 19,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 20,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /** Additional context provided to `visitEachChild` */

@@ -448,18 +448,22 @@ namespace ts {
                 //  ${modifiers} class ${name} ${heritageClauses} {
                 //      ${members}
                 //  }
-                addNode(statements,
-                    setOriginalNode(
-                        createClassDeclaration(
-                            visitNodes(node.modifiers, visitor, isModifier),
-                            name,
-                            visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                            transformClassMembers(node, hasExtendsClause),
-                            /*location*/ node
-                        ),
-                        node
-                    )
+                const classDeclaration = createClassDeclaration(
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    name,
+                    visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                    transformClassMembers(node, hasExtendsClause),
+                    /*location*/ node
                 );
+                setOriginalNode(classDeclaration, node);
+
+                // To better align with the old emitter, we should not emit a trailing source map
+                // entry if the class has static properties.
+                if (staticProperties.length > 0) {
+                    setNodeEmitFlags(classDeclaration, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(classDeclaration));
+                }
+
+                statements.push(classDeclaration);
             }
             else {
                 decoratedClassAlias = addClassDeclarationHeadWithDecorators(statements, node, name, hasExtendsClause);

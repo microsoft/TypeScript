@@ -544,18 +544,20 @@ namespace ts {
             //          return C;
             //      }());
 
-            return startOnNewLine(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            getDeclarationName(node, /*allowComments*/ true),
-                            transformClassLikeDeclarationToExpression(node)
-                        )
-                    ]),
-                    node
-                )
+            const statement = createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        getDeclarationName(node, /*allowComments*/ true),
+                        transformClassLikeDeclarationToExpression(node)
+                    )
+                ]),
+                /*location*/ node
             );
+
+            setOriginalNode(statement, node);
+            startOnNewLine(statement);
+            return statement;
         }
 
         /**
@@ -1013,33 +1015,35 @@ namespace ts {
             // for (var _i = restIndex; _i < arguments.length; _i++) {
             //   param[_i - restIndex] = arguments[_i];
             // }
-            statements.push(
-                createFor(
-                    createVariableDeclarationList([
-                        createVariableDeclaration(temp, createLiteral(restIndex))
-                    ], /*location*/ parameter),
-                    createLessThan(
-                        temp,
-                        createPropertyAccess(createIdentifier("arguments"), "length"),
-                        /*location*/ parameter
-                    ),
-                    createPostfixIncrement(temp, /*location*/ parameter),
-                    createBlock([
-                        startOnNewLine(
-                            createStatement(
-                                createAssignment(
-                                    createElementAccess(
-                                        expressionName,
-                                        createSubtract(temp, createLiteral(restIndex))
-                                    ),
-                                    createElementAccess(createIdentifier("arguments"), temp)
+            const forStatement = createFor(
+                createVariableDeclarationList([
+                    createVariableDeclaration(temp, createLiteral(restIndex))
+                ], /*location*/ parameter),
+                createLessThan(
+                    temp,
+                    createPropertyAccess(createIdentifier("arguments"), "length"),
+                    /*location*/ parameter
+                ),
+                createPostfixIncrement(temp, /*location*/ parameter),
+                createBlock([
+                    startOnNewLine(
+                        createStatement(
+                            createAssignment(
+                                createElementAccess(
+                                    expressionName,
+                                    createSubtract(temp, createLiteral(restIndex))
                                 ),
-                                /*location*/ parameter
-                            )
+                                createElementAccess(createIdentifier("arguments"), temp)
+                            ),
+                            /*location*/ parameter
                         )
-                    ])
-                )
+                    )
+                ])
             );
+
+            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop);
+            startOnNewLine(forStatement);
+            statements.push(forStatement);
         }
 
         /**
