@@ -6322,7 +6322,7 @@ namespace ts {
 
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    const name = parseJSDocIdentifier();
+                    const name = parseJSDocIdentifierName();
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
                         return undefined;
@@ -6344,7 +6344,7 @@ namespace ts {
                 function handleTypedefTag(atToken: Node, tagName: Identifier): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    let name = parseJSDocIdentifier();
+                    let name = parseJSDocIdentifierName();
                     if (!name) {
                         let foundNameFromParentNode = false;
                         if (parentNode && parentNode.kind === SyntaxKind.VariableStatement) {
