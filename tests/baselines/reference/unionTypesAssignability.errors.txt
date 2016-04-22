@@ -22,15 +22,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(37,1): error TS2322: Type 'E' is not assignable to type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(69,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
-  Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
-  Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(66,5): error TS2322: Type 'U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(67,5): error TS2322: Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(71,5): error TS2322: Type 'U' is not assignable to type 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts (19 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts (18 errors) ====
     var unionNumberString: number | string;
     class C { }
     class D extends C { foo1() { } }
@@ -133,22 +130,20 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     
     // type parameters
     function foo<T, U>(t: T, u: U) {
-        t = u; // error
-        ~
+        let tt: T;
+        let uu: U;
+        tt = u; // error
+        ~~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-        u = t; // error
-        ~
+        uu = t; // error
+        ~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
         var x : T | U;
         x = t; // ok
         x = u; // ok
-        t = x; // error U not assignable to T
-        ~
-!!! error TS2322: Type 'T | U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'U' is not assignable to type 'T'.
-        u = x; // error T not assignable to U
-        ~
-!!! error TS2322: Type 'T | U' is not assignable to type 'U'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+        tt = x; // error U not assignable to T
+        ~~
+!!! error TS2322: Type 'U' is not assignable to type 'T'.
+        uu = x; // error T not assignable to U
     }
     

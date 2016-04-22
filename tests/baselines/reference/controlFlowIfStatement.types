@@ -1,0 +1,93 @@
+=== tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
+let x: string | number | boolean | RegExp;
+>x : string | number | boolean | RegExp
+>RegExp : RegExp
+
+let cond: boolean;
+>cond : boolean
+
+x = /a/;
+>x = /a/ : RegExp
+>x : string | number | boolean | RegExp
+>/a/ : RegExp
+
+if (x /* RegExp */, (x = true)) {
+>x /* RegExp */, (x = true) : boolean
+>x : RegExp
+>(x = true) : boolean
+>x = true : boolean
+>x : string | number | boolean | RegExp
+>true : boolean
+
+    x; // boolean
+>x : boolean
+
+    x = "";
+>x = "" : string
+>x : string | number | boolean | RegExp
+>"" : string
+}
+else {
+    x; // boolean
+>x : boolean
+
+    x = 42;
+>x = 42 : number
+>x : string | number | boolean | RegExp
+>42 : number
+}
+x; // string | number
+>x : number | string
+
+function a() {
+>a : () => void
+
+    let x: string | number;
+>x : string | number
+
+    if (cond) {
+>cond : boolean
+
+        x = 42;
+>x = 42 : number
+>x : string | number
+>42 : number
+    }
+    else {
+        x = "";
+>x = "" : string
+>x : string | number
+>"" : string
+
+        return;
+    }
+    x; // number
+>x : number
+}
+function b() {
+>b : () => void
+
+    let x: string | number;
+>x : string | number
+
+    if (cond) {
+>cond : boolean
+
+        x = 42;
+>x = 42 : number
+>x : string | number
+>42 : number
+
+        throw "";
+>"" : string
+    }
+    else {
+        x = "";
+>x = "" : string
+>x : string | number
+>"" : string
+    }
+    x; // string
+>x : string
+}
+

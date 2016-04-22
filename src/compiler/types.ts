@@ -444,7 +444,8 @@ namespace ts {
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding
+        parent?: Node;                                  // Parent node (initialized by binding)
+        previous?: FlowMarkerTarget[];                  // Previous occurencies of flowmarkers (initialized by binding)
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
@@ -460,6 +461,16 @@ namespace ts {
         flags: number;
     }
 
+    export type FlowMarkerTarget = Node | BranchFlow;
+    export type BranchFlowNode = IfStatement | WhileStatement | ForStatement | DoStatement | ConditionalExpression | BinaryExpression
+    export interface BranchFlow {
+        id: number;
+        previous: FlowMarkerTarget[];
+        node: BranchFlowNode;
+        expression: Expression;
+        trueBranch: boolean;
+    }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -472,6 +483,13 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
+    /* @internal */
+    export enum NarrowingState {
+        Uninitialized,
+        Narrowing,
+        Done,
+        Failed
+    }
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
@@ -2105,6 +2123,8 @@ namespace ts {
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
         superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
+        narrowingState?: NarrowingState;
+        localType?: Type;
     }
 
     export const enum TypeFlags {

@@ -29,7 +29,7 @@ else if (x !== "bar") {
 >b : "foo" | "bar" | number
 >x || y : "foo" | "bar" | number
 >x : "foo" | "bar" | number
->y : number | "foo" | "bar"
+>y : "bar"
 }
 else {
     let c = x;
@@ -37,25 +37,25 @@ else {
 >x : "foo" | "bar" | number
 
     let d = y;
->d : number | "foo" | "bar"
->y : number | "foo" | "bar"
+>d : "bar"
+>y : "bar"
 
     let e: (typeof x) | (typeof y) = c || d;
 >e : "foo" | "bar" | number
 >x : "foo" | "bar" | number
->y : number | "foo" | "bar"
+>y : "bar"
 >c || d : "foo" | "bar" | number
 >c : "foo" | "bar" | number
->d : number | "foo" | "bar"
+>d : "bar"
 }
 
 x = y;
->x = y : number | "foo" | "bar"
+>x = y : "bar"
 >x : "foo" | "bar" | number
->y : number | "foo" | "bar"
+>y : "bar"
 
 y = x;
->y = x : "foo" | "bar" | number
+>y = x : "bar"
 >y : number | "foo" | "bar"
->x : "foo" | "bar" | number
+>x : "bar"
 

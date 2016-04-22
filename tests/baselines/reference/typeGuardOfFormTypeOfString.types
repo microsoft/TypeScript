@@ -136,7 +136,7 @@ else {
 if (typeof strOrNum !== "string") {
 >typeof strOrNum !== "string" : boolean
 >typeof strOrNum : string
->strOrNum : string | number
+>strOrNum : number | string
 >"string" : string
 
     num === strOrNum; // number
@@ -153,7 +153,7 @@ else {
 if (typeof strOrBool !== "string") {
 >typeof strOrBool !== "string" : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : boolean | string
 >"string" : string
 
     bool = strOrBool; // boolean
@@ -170,7 +170,7 @@ else {
 if (typeof strOrNumOrBool !== "string") {
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : number | boolean | string
 >"string" : string
 
     numOrBool = strOrNumOrBool; // number | boolean
@@ -187,7 +187,7 @@ else {
 if (typeof strOrC !== "string") {
 >typeof strOrC !== "string" : boolean
 >typeof strOrC : string
->strOrC : string | C
+>strOrC : C | string
 >"string" : string
 
     c = strOrC; // C

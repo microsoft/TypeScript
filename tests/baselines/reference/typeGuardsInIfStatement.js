@@ -1,10 +1,9 @@
 //// [typeGuardsInIfStatement.ts]
 // In the true branch statement of an 'if' statement, 
-// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true, 
-// provided the true branch statement contains no assignments to the variable or parameter.
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true.
 // In the false branch statement of an 'if' statement, 
-// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false, 
-// provided the false branch statement contains no assignments to the variable or parameter
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false.
+// An assignment removes this narrowed type, and narrows the type to the type of the assigned value.
 function foo(x: number | string) {
     if (typeof x === "string") {
         return x.length; // string
@@ -14,54 +13,54 @@ function foo(x: number | string) {
     }
 }
 function foo2(x: number | string) {
-    // x is assigned in the if true branch, the type is not narrowed
+    // x is assigned in the if true branch
     if (typeof x === "string") {
         x = 10;
-        return x; // string | number
+        return x; // number
     }
     else {
-        return x; // string | number
+        return x; // number
     }
 }
 function foo3(x: number | string) {
-    // x is assigned in the if true branch, the type is not narrowed
+    // x is assigned in the if true branch
     if (typeof x === "string") {
-        x = "Hello"; // even though assigned using same type as narrowed expression
-        return x; // string | number
+        x = "Hello";
+        return x.length; // string
     }
     else {
-        return x; // string | number
+        return x; // number
     }
 }
 function foo4(x: number | string) {
-    // false branch updates the variable - so here it is not number
+    // false branch updates the variable
     if (typeof x === "string") {
-        return x; // string | number
+        return x.length; // string | number
     }
     else {
-        x = 10; // even though assigned number - this should result in x to be string | number
-        return x; // string | number
+        x = 10;
+        return x; // number
     }
 }
 function foo5(x: number | string) {
-    // false branch updates the variable - so here it is not number
+    // false branch updates the variable
     if (typeof x === "string") {
-        return x; // string | number
+        return x; // string
     }
     else {
         x = "hello";
-        return x; // string | number
+        return x; // string
     }
 }
 function foo6(x: number | string) {
     // Modify in both branches
     if (typeof x === "string") {
         x = 10;
-        return x; // string | number
+        return x; // number
     }
     else {
         x = "hello";
-        return x; // string | number
+        return x.length; // string
     }
 }
 function foo7(x: number | string | boolean) {
@@ -125,11 +124,11 @@ function foo11(x: number | string | boolean) {
         return typeof x === "number"
             ? (
             // change value of x
-            x = 10 && x.toString() // number | boolean | string
+            x = 10 && x.toString() // number
             )
             : (
             // do not change value
-            y = x && x.toString() // number | boolean | string
+            y = x && x.toString() // boolean | string
             );
     }
 }
@@ -137,7 +136,7 @@ function foo12(x: number | string | boolean) {
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     if (typeof x === "string") {
-        return x.toString(); // string | number | boolean - x changed in else branch
+        return x.toString(); // string
     }
     else {
         x = 10;
@@ -150,11 +149,10 @@ function foo12(x: number | string | boolean) {
 
 //// [typeGuardsInIfStatement.js]
 // In the true branch statement of an 'if' statement, 
-// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true, 
-// provided the true branch statement contains no assignments to the variable or parameter.
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true.
 // In the false branch statement of an 'if' statement, 
-// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false, 
-// provided the false branch statement contains no assignments to the variable or parameter
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false.
+// An assignment removes this narrowed type, and narrows the type to the type of the assigned value.
 function foo(x) {
     if (typeof x === "string") {
         return x.length; // string
@@ -164,54 +162,54 @@ function foo(x) {
     }
 }
 function foo2(x) {
-    // x is assigned in the if true branch, the type is not narrowed
+    // x is assigned in the if true branch
     if (typeof x === "string") {
         x = 10;
-        return x; // string | number
+        return x; // number
     }
     else {
-        return x; // string | number
+        return x; // number
     }
 }
 function foo3(x) {
-    // x is assigned in the if true branch, the type is not narrowed
+    // x is assigned in the if true branch
     if (typeof x === "string") {
-        x = "Hello"; // even though assigned using same type as narrowed expression
-        return x; // string | number
+        x = "Hello";
+        return x.length; // string
     }
     else {
-        return x; // string | number
+        return x; // number
     }
 }
 function foo4(x) {
-    // false branch updates the variable - so here it is not number
+    // false branch updates the variable
     if (typeof x === "string") {
-        return x; // string | number
+        return x.length; // string | number
     }
     else {
-        x = 10; // even though assigned number - this should result in x to be string | number
-        return x; // string | number
+        x = 10;
+        return x; // number
     }
 }
 function foo5(x) {
-    // false branch updates the variable - so here it is not number
+    // false branch updates the variable
     if (typeof x === "string") {
-        return x; // string | number
+        return x; // string
     }
     else {
         x = "hello";
-        return x; // string | number
+        return x; // string
     }
 }
 function foo6(x) {
     // Modify in both branches
     if (typeof x === "string") {
         x = 10;
-        return x; // string | number
+        return x; // number
     }
     else {
         x = "hello";
-        return x; // string | number
+        return x.length; // string
     }
 }
 function foo7(x) {
@@ -275,11 +273,11 @@ function foo11(x) {
         return typeof x === "number"
             ? (
             // change value of x
-            x = 10 && x.toString() // number | boolean | string
+            x = 10 && x.toString() // number
             )
             : (
             // do not change value
-            y = x && x.toString() // number | boolean | string
+            y = x && x.toString() // boolean | string
             );
     }
 }
@@ -287,7 +285,7 @@ function foo12(x) {
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     if (typeof x === "string") {
-        return x.toString(); // string | number | boolean - x changed in else branch
+        return x.toString(); // string
     }
     else {
         x = 10;

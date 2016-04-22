@@ -48,7 +48,7 @@ var r3 = typeof x === "string" || typeof x === "string" ? x.substr : x.toFixed;
 >typeof x === "string" || typeof x === "string" : boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"string" : string
 >typeof x === "string" : boolean
 >typeof x : string

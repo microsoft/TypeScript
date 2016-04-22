@@ -21,8 +21,8 @@ function foo(x: number | string | boolean) {
 >f : () => string
 
             var b = x; // number | boolean
->b : number | string | boolean
->x : number | string | boolean
+>b : number | boolean
+>x : number | boolean
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
@@ -66,8 +66,8 @@ function foo2(x: number | string | boolean) {
 >a : number | boolean
 
             var b = x; // new scope - number | boolean
->b : number | string | boolean
->x : number | string | boolean
+>b : number | boolean
+>x : number | boolean
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
@@ -111,8 +111,8 @@ function foo3(x: number | string | boolean) {
 >() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : () => string
 
             var b = x; // new scope - number | boolean
->b : number | string | boolean
->x : number | string | boolean
+>b : number | boolean
+>x : number | boolean
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
@@ -156,8 +156,8 @@ function foo4(x: number | string | boolean) {
 >a : number | boolean
 
             var b = x; // new scope - number | boolean
->b : number | string | boolean
->x : number | string | boolean
+>b : number | boolean
+>x : number | boolean
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
@@ -200,8 +200,8 @@ function foo5(x: number | string | boolean) {
 >foo : () => void
 
             var z = x; // string
->z : number | string | boolean
->x : number | string | boolean
+>z : string
+>x : string
         }
     }
 }

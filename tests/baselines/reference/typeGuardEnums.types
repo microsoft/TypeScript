@@ -17,7 +17,7 @@ if (typeof x === "number") {
 >"number" : string
 
     x; // number|E|V
->x : number | E | V
+>x : number
 }
 else {
     x; // string
@@ -27,7 +27,7 @@ else {
 if (typeof x !== "number") {
 >typeof x !== "number" : boolean
 >typeof x : string
->x : number | string | E | V
+>x : string | number
 >"number" : string
 
     x; // string
@@ -35,6 +35,6 @@ if (typeof x !== "number") {
 }
 else {
     x; // number|E|V
->x : number | E | V
+>x : number
 }
 

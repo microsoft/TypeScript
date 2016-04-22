@@ -15,78 +15,78 @@ let y: T = "foo";
 
 if (x === "") {
 >x === "" : boolean
->x : "" | "foo"
+>x : ""
 >"" : string
 
     let a = x;
->a : "" | "foo"
->x : "" | "foo"
+>a : ""
+>x : ""
 }
 
 if (x !== "") {
 >x !== "" : boolean
->x : "" | "foo"
+>x : ""
 >"" : string
 
     let b = x;
->b : "" | "foo"
->x : "" | "foo"
+>b : ""
+>x : ""
 }
 
 if (x == "") {
 >x == "" : boolean
->x : "" | "foo"
+>x : ""
 >"" : string
 
     let c = x;
->c : "" | "foo"
->x : "" | "foo"
+>c : ""
+>x : ""
 }
 
 if (x != "") {
 >x != "" : boolean
->x : "" | "foo"
+>x : ""
 >"" : string
 
     let d = x;
->d : "" | "foo"
->x : "" | "foo"
+>d : ""
+>x : ""
 }
 
 if (x) {
->x : "" | "foo"
+>x : ""
 
     let e = x;
->e : "" | "foo"
->x : "" | "foo"
+>e : ""
+>x : ""
 }
 
 if (!x) {
 >!x : boolean
->x : "" | "foo"
+>x : ""
 
     let f = x;
->f : "" | "foo"
->x : "" | "foo"
+>f : ""
+>x : ""
 }
 
 if (!!x) {
 >!!x : boolean
 >!x : boolean
->x : "" | "foo"
+>x : ""
 
     let g = x;
->g : "" | "foo"
->x : "" | "foo"
+>g : ""
+>x : ""
 }
 
 if (!!!x) {
 >!!!x : boolean
 >!!x : boolean
 >!x : boolean
->x : "" | "foo"
+>x : ""
 
     let h = x;
->h : "" | "foo"
->x : "" | "foo"
+>h : ""
+>x : ""
 }

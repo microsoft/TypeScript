@@ -100,11 +100,11 @@ if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number"))
 >typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : boolean | string | number
 >"string" : string
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : number | boolean
+>strOrNumOrBool : boolean | number
 >"number" : string
 
     strOrNum = strOrNumOrBool; // string | number
@@ -125,13 +125,13 @@ if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number
 >(typeof strOrNumOrBool === "string") : boolean
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : boolean | string | number
 >"string" : string
 >!(typeof strOrNumOrBool === "number") : boolean
 >(typeof strOrNumOrBool === "number") : boolean
 >typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : number | boolean
+>strOrNumOrBool : boolean | number
 >"number" : string
 
     bool = strOrNumOrBool; // boolean

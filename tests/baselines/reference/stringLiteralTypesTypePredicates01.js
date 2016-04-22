@@ -9,6 +9,9 @@ function kindIs(kind: Kind, is: Kind): boolean {
 }
 
 var x: Kind = "A";
+var y = x;
+
+x = undefined;
 
 if (kindIs(x, "A")) {
     let a = x;
@@ -29,6 +32,8 @@ function kindIs(kind, is) {
     return kind === is;
 }
 var x = "A";
+var y = x;
+x = undefined;
 if (kindIs(x, "A")) {
     var a = x;
 }
@@ -48,3 +53,4 @@ declare type Kind = "A" | "B";
 declare function kindIs(kind: Kind, is: "A"): kind is "A";
 declare function kindIs(kind: Kind, is: "B"): kind is "B";
 declare var x: Kind;
+declare var y: "A";

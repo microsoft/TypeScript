@@ -2742,7 +2742,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
+                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, true);
                 if (!declaration.dotDotDotToken) {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const propName = "" + indexOf(pattern.elements, declaration);
@@ -2830,7 +2830,7 @@ namespace ts {
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
                 // or it may have led to an error inside getElementTypeOfIterable.
-                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
+                return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression, true) || anyType;
             }
 
             if (isBindingPattern(declaration.parent)) {
@@ -7223,7 +7223,11 @@ namespace ts {
             result.resolvedSymbol = symbol;
             result.parent = location;
             result.id = -1;
+            result.previous = [location];
             return result;
+        }
+        function cleanTransientIdentifier() {
+            nodeLinks[-1] = undefined;
         }
 
         function getResolvedSymbol(node: Identifier): Symbol {
@@ -7419,93 +7423,247 @@ namespace ts {
             return false;
         }
 
+        function getPreviousOccurences(reference: Node, where: Node, callback: (node: Node, guards: BranchFlow[], isSameSymbol: boolean) => boolean) {
+            let stop = false;
+            const visited: { [id: number]: boolean } = {};
+            const guards: BranchFlow[] = [];
+            
+            const stack: [FlowMarkerTarget, boolean][] = [[where, true]];
+            while (stack.length !== 0) {
+                const [location, isStart] = stack.pop();
+                if (!isStart) {
+                    if ((<Node>location).kind !== undefined) {
+                        visited[getNodeId(<Node>location)] = false;
+                    }
+                    else {
+                        guards.pop();
+                    }
+                    continue;
+                }
+                
+                let isGuard = false;
+                let nodeId: number;
+                if ((<Node>location).kind !== undefined) {
+                    nodeId = getNodeId(<Node>location);
+                    if (visited[nodeId]) continue;
+
+                    let same = isSameSymbol(reference, <Node>location);
+                    let previousLocation = <Node>location;
+                    if (isLeftHandSideOfAssignment(<Node>location)) {
+                        let node = reference;
+                        while (node.kind === SyntaxKind.PropertyAccessExpression) {
+                            node = (<PropertyAccessExpression>node).expression;
+                            if (isSameSymbol(node, <Node>location)) {
+                                // Reference node was part of an assignment
+                                // Example: a.b.c is reference, a or a.b was assigned
+                                previousLocation = undefined;
+                                same = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (same || isBranchStart(<Node>location)) {
+                        if (callback(previousLocation, guards, same)) {
+                            stop = true;
+                            break;
+                        }
+                        else {
+                            continue;
+                        }
+                    }
+                    visited[nodeId] = true;
+                }
+                else {
+                    if (guards.indexOf(<BranchFlow>location) !== -1) continue;
+                    isGuard = true;
+                    guards.push(<BranchFlow>location);
+                }
+                if (location.previous === undefined) {
+                    // We cannot do analysis in a catch or finally block
+                    if (callback(undefined, guards, true)) {
+                        stop = true;
+                        break;
+                    }
+                    else {
+                        if (!isGuard) visited[nodeId] = false;
+                        continue;
+                    }
+                }
+                stack.push([location, false]);
+                for (let i = location.previous.length - 1; i >= 0; i--) {
+                    const item = location.previous[i];
+                    stack.push([item, true]);
+                }
+            }
+
+            return stop;
+
+            function isSameSymbol(left: Node, right: Node): boolean {
+                if (left === right) return false;
+                if (left.kind !== right.kind) return false;
+                if (left.kind === SyntaxKind.Identifier) {
+                    const leftSymbol = resolveName(<Identifier>left, (<Identifier>left).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
+                    const rightSymbol = resolveName(<Identifier>right, (<Identifier>right).text, SymbolFlags.Value | SymbolFlags.ExportValue, undefined, undefined);
+                    return leftSymbol !== undefined && rightSymbol !== undefined && leftSymbol.id === rightSymbol.id;
+                }
+                if (left.kind === SyntaxKind.ThisKeyword) {
+                    return getThisContainer(left, false) === getThisContainer(right, false);
+                }
+                if (left.kind === SyntaxKind.PropertyAccessExpression) {
+                    if ((<PropertyAccessExpression>left).name.text !== (<PropertyAccessExpression>right).name.text) {
+                        return false;
+                    }
+                    return isSameSymbol((<PropertyAccessExpression>left).expression, (<PropertyAccessExpression>right).expression);
+                }
+                return false;
+            }
+            function isBranchStart(node: Node) {
+                const guard = guards[guards.length - 1];
+                if (!guard) return false;
+                return guard.node === node;
+            }
+        }
+
         // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (!(type.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
-                return type;
+        function getNarrowedTypeOfReference(initialType: Type, reference: Node) { 
+            const isUnion = (initialType.flags & TypeFlags.Union) !== 0;
+            
+            if (!(initialType.flags & (TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) {
+                return initialType;
             }
             const leftmostNode = getLeftmostIdentifierOrThis(reference);
             if (!leftmostNode) {
-                return type;
+                return initialType;
             }
             let top: Node;
+            const isDottedName = leftmostNode !== reference;
+            let thisKeyword: Node;
+            let leftmostSymbol: Symbol;
             if (leftmostNode.kind === SyntaxKind.Identifier) {
-                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
+                leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
                 if (!leftmostSymbol) {
-                    return type;
+                    return initialType;
                 }
                 const declaration = leftmostSymbol.valueDeclaration;
                 if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                    return type;
+                    return initialType;
                 }
                 top = getDeclarationContainer(declaration);
+
+                // Only narrow when symbol is variable of type any or an object, union, or type parameter type
+                if (!(leftmostSymbol.flags & SymbolFlags.Variable)) return initialType;
+
+                if (!leftmostSymbol.declarations) return initialType;
+                for (const declaration of leftmostSymbol.declarations) {
+                    if (getSourceFileOfNode(declaration) !== getSourceFileOfNode(reference)) return initialType;
+                }
             }
-            const originalType = type;
-            const nodeStack: { node: Node, child: Node }[] = [];
-            let node: Node = reference;
-            loop: while (node.parent) {
-                const child = node;
-                node = node.parent;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                    case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.BinaryExpression:
-                        nodeStack.push({node, child});
-                        break;
-                    case SyntaxKind.SourceFile:
-                    case SyntaxKind.ModuleDeclaration:
-                        break loop;
-                    default:
-                        if (node === top || isFunctionLikeKind(node.kind)) {
-                            break loop;
-                        }
-                        break;
+            else {
+                // leftmostNode is `this` keyword
+                if (!isDottedName) {
+                    thisKeyword = reference;
                 }
             }
 
-            let nodes: { node: Node, child: Node };
-            while (nodes = nodeStack.pop()) {
-                const {node, child} = nodes;
-                switch (node.kind) {
-                    case SyntaxKind.IfStatement:
-                        // In a branch of an if statement, narrow based on controlling expression
-                        if (child !== (<IfStatement>node).expression) {
-                            type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
-                        }
-                        break;
-                    case SyntaxKind.ConditionalExpression:
-                        // In a branch of a conditional expression, narrow based on controlling condition
-                        if (child !== (<ConditionalExpression>node).condition) {
-                            type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
-                        }
-                        break;
-                    case SyntaxKind.BinaryExpression:
-                        // In the right operand of an && or ||, narrow based on left operand
-                        if (child === (<BinaryExpression>node).right) {
-                            if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
-                            }
-                            else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
-                            }
-                        }
-                        break;
-                    default:
-                        Debug.fail("Unreachable!");
-                }
+            const symbol = isDottedName ? undefined : leftmostSymbol;
+            const isThisExpression = thisKeyword !== undefined;
+            const isIdentifier = !isDottedName && !isThisExpression;
 
-                // Use original type if construct contains assignments to variable
-                if (type !== originalType && isAnyPartOfReferenceAssignedWithin(reference, node)) {
-                    type = originalType;
-                }
+            if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+
+            if (isLeftHandSideOfAssignment(reference)) {
+                return initialType;
             }
 
-            // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-            if (type === emptyUnionType) {
-                type = originalType;
+            let nodeLinks = getNodeLinks(reference);
+            if (nodeLinks.narrowingState === NarrowingState.Done) return nodeLinks.localType;
+            if (nodeLinks.narrowingState === NarrowingState.Narrowing) {
+                nodeLinks.narrowingState = NarrowingState.Failed;
+                return nodeLinks.localType = initialType;
             }
+            nodeLinks.narrowingState = NarrowingState.Narrowing;
 
-            return type;
+            const visited: FlowMarkerTarget[] = [];
+            const cache: { [nodeId: number]: Type } = {};
+
+            let loop = false;
+            let narrowedType = getType(reference, false, true);
+            if (nodeLinks.narrowingState === NarrowingState.Failed) {
+                // During recursion, the narrowing of this node failed.
+                return initialType;
+            }
+            if (narrowedType === emptyUnionType) narrowedType = initialType;
+            nodeLinks.narrowingState = NarrowingState.Done;
+            return nodeLinks.localType = narrowedType;
+
+            function getType(where: Node, after: boolean, isSameSymbol: boolean) {
+                if (where === undefined) return initialType;
+                const whereId = getNodeId(where);
+                if (after && cache[whereId]) {
+                    return cache[whereId];
+                }
+                if (visited.indexOf(where) !== -1) {
+                    loop = true;
+                    return undefined;
+                }
+                let nodeLinks: NodeLinks;
+                if (isSameSymbol) {
+                    if (after) {
+                        const assignment = getAssignedTypeAtLocation(where);
+                        if (assignment) {
+                            return cache[whereId] = narrowTypeByAssignment(assignment);
+                        }
+                    }
+                    nodeLinks = getNodeLinks(where);
+                    if (nodeLinks.narrowingState === NarrowingState.Done) {
+                        return nodeLinks.localType;
+                    }
+                }
+                let types: Type[] = [];
+                visited.push(where);
+                const fallback = getPreviousOccurences(reference, where, handleGuards);
+                visited.pop();
+                const type = fallback || types.length === 0 ? initialType : getUnionType(types);
+                if (!loop && isSameSymbol && nodeLinks.narrowingState !== NarrowingState.Failed) {
+                    nodeLinks.localType = type;
+                }
+                if (after) {
+                    cache[whereId] = type;
+                }
+                return type;
+
+                function handleGuards(node: Node, guards: BranchFlow[], isSameSymbol: boolean) {
+                    if (!node && guards.length === 0) {
+                        return true;
+                    }
+                    let type = getType(node, true, isSameSymbol);
+                    if (type === undefined) {
+                        return false;
+                    }
+                    for (let i = guards.length - 1; i >= 0; i--) {
+                        const { expression, trueBranch } = guards[i];
+                        const narrowed = narrowType(type, expression, trueBranch);
+                        if (narrowed !== type && isAnyPartOfReferenceAssignedWithin(reference, expression)) {
+                            // A variable could be reassigned in a type guard. Making this work would require some non-trivial
+                            // work. Instead, we fall back to the initial type, since no one would probably write such code.
+                            // Example:
+                            // let x: string | number | boolean;
+                            // if (typeof x === "string" || x = 42) { ... }
+                            type = initialType;
+                        }
+                        else {
+                            type = narrowed;
+                        }
+                    }
+                    if (type === initialType) {
+                        return true;
+                    }
+                    if (type !== emptyUnionType) {
+                        types.push(type);
+                    }
+                    return false;
+                }
+            }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 return strictNullChecks && assumeTrue && isMatchingReference(expr, reference) ? getNonNullableType(type) : type;
@@ -7743,6 +7901,129 @@ namespace ts {
                 }
                 return type;
             }
+            function getAssignedTypeAtLocation(node: Node): Type {
+                if (isThisExpression) return undefined;
+
+                // Only union types can be narrowed by assignments.
+                // Other types will always fall back to their initial type.
+
+                const { parent } = node;
+                if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
+                    if ((<VariableDeclaration>parent).initializer && isUnion) {
+                        if (!(<VariableDeclaration>parent).type) {
+                            // The type of the variable was infered by this initializer.
+                            // Thus, we don't have to check the type of the initializer again.
+                            return unknownType;
+                        }
+                        else {
+                            return checkExpressionCached((<VariableDeclaration>parent).initializer);
+                        }
+                    }
+                    else {
+                        // This catches these constructs:
+                        // - let x: T
+                        // - for (let y in z) {}
+                        // - for (let y of z) {}
+                        // - Other cases where `initialType` is not a union type
+                        return unknownType;
+                    }
+                }
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    // x = y
+                    if (!isUnion) return unknownType;
+                    const type = checkExpressionCached((<BinaryExpression>parent).right);
+                    const parentType = getAssignedTypeAtLocation(parent);
+                    if (parentType) {
+                        // { z: x = y } = q
+                        return getUnionType([type, parentType]);
+                    }
+                    return type;
+                }
+                if (parent.kind === SyntaxKind.ForInStatement && (<ForInStatement>parent).initializer === node) {
+                    // for (x in z) {}
+                    if (!isUnion) return unknownType;
+                    return globalStringType;
+                }
+                if (parent.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>parent).initializer === node) {
+                    // for (x of z) {}
+                    if (!isUnion) return unknownType;
+                    return checkRightHandSideOfForOf((<ForOfStatement>parent).expression, false);
+                }
+                
+                if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
+                    // {z: x} = y;
+                    const type = getAssignedTypeAtLocation(parent.parent);
+                    if (!type) return undefined;
+                    return getPropertyAssignmentType(type, <PropertyAssignment>parent) || unknownType;
+                }
+                if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>parent).name === node) {
+                    // {x} = y;
+                    const type = getAssignedTypeAtLocation(parent.parent);
+                    if (!type) return undefined;
+                    if (!isUnion) return unknownType;
+                    const property = getPropertyAssignmentType(type, <ShorthandPropertyAssignment>parent) || unknownType;
+                    if ((<ShorthandPropertyAssignment>parent).objectAssignmentInitializer) {
+                        const initializer = checkExpressionCached((<ShorthandPropertyAssignment>parent).objectAssignmentInitializer);
+                        return getUnionType([property, initializer]);
+                    }
+                    return property;
+                }
+                
+                if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                    // [x] = y;
+                    const type = getAssignedTypeAtLocation(parent);
+                    if (!type) return undefined;
+                    const index = (<ArrayLiteralExpression>parent).elements.indexOf(<Expression>node);
+                    const property = getPropertyOfType(type, index.toString());
+                    if (property) {
+                        return getTypeOfSymbol(property) || unknownType;
+                    }
+                    const elementType = getElementTypeOfIterable(type, undefined) || checkElementTypeOfArrayOrString(type, undefined);
+                    return elementType || unknownType;
+                }
+                if (parent.kind === SyntaxKind.SpreadElementExpression) {
+                    if (parent.parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                        // [...x] = y;
+                        const type = getAssignedTypeAtLocation(parent.parent);
+                        if (!type) return undefined;
+                        if (!isUnion) return unknownType;
+                        
+                        const elementType = getElementTypeOfIterator(type, undefined) || checkElementTypeOfArrayOrString(type, undefined);
+                        if (!elementType) return unknownType;
+                        return createArrayType(elementType);
+                    }
+                }
+                return undefined;
+            }
+            function getPropertyAssignmentType(parentType: Type, propertyAssignment: PropertyAssignment | ShorthandPropertyAssignment) {
+                if (!isUnion) return unknownType;
+                const name = propertyAssignment.name;
+                if (name.kind === SyntaxKind.Identifier) {
+                    const property = getPropertyOfType(parentType, (<Identifier>name).text);
+                    if (property) return getTypeOfSymbol(property);
+                }
+                return unknownType;
+            }
+            function narrowTypeByAssignment(assignedType: Type) {
+                if (!isUnion) return initialType;
+                if (assignedType === anyType || assignedType === unknownType) return initialType;
+
+                const assignedTypes = (assignedType.flags & TypeFlags.Union) ? (<UnionType> assignedType).types : [assignedType];
+
+                const constituentTypes = (<UnionType> initialType).types;
+                const assignableTypes: Type[] = [];
+                for (const constituentType of constituentTypes) {
+                    for (const type of assignedTypes) {
+                        if (isTypeAssignableTo(type, constituentType)) {
+                            assignableTypes.push(constituentType);
+                        }
+                    }
+                }
+                if (assignableTypes.length === 0) {
+                    return initialType;
+                }
+                return getUnionType(assignableTypes);
+            }
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
@@ -7766,7 +8047,35 @@ namespace ts {
             // a hypothetical question of what type the symbol would have if there was a reference
             // to it at the given location. To answer that question we manufacture a transient
             // identifier at the location and narrow with respect to that identifier.
-            return getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+            const narrowedType = getNarrowedTypeOfReference(type, createTransientIdentifier(symbol, location));
+            cleanTransientIdentifier();
+            return narrowedType;
+        }
+
+        function isLeftHandSideOfAssignment(node: Node): boolean {
+            const parent = node.parent;
+            if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
+                return isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
+            }
+            else if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
+                return hasInitializer(<VariableDeclaration>parent);
+            }
+            else if (parent.kind === SyntaxKind.ShorthandPropertyAssignment && (<ObjectLiteralElement>parent).name === node) {
+                return isLeftHandSideOfAssignment(parent.parent);
+            }
+            else if (parent.kind === SyntaxKind.PropertyAssignment && (<PropertyAssignment>parent).initializer === node) {
+                return isLeftHandSideOfAssignment(parent.parent);
+            }
+            else if (parent.kind === SyntaxKind.ArrayLiteralExpression) {
+                return isLeftHandSideOfAssignment(parent);
+            }
+            else if (parent.kind === SyntaxKind.SpreadElementExpression) {
+                return isLeftHandSideOfAssignment(parent);
+            }
+            else if (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) {
+                return (<ForInStatement | ForOfStatement>parent).initializer === node;
+            }
+            return false;
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {
@@ -8915,7 +9224,7 @@ namespace ts {
             // So the fact that contextualMapper is passed is not important, because the operand of a spread
             // element is not contextually typed.
             const arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, true);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -11902,7 +12211,7 @@ namespace ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, true) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, contextualMapper);
@@ -12169,8 +12478,9 @@ namespace ts {
                         Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant_or_a_read_only_property);
                     // Use default messages
                     if (ok) {
+                        let leftOriginalType = leftType;
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftOriginalType, left, /*headMessage*/ undefined);
                     }
                 }
             }
@@ -14234,7 +14544,7 @@ namespace ts {
             }
             else {
                 const varExpr = <Expression>node.initializer;
-                const iteratedType = checkRightHandSideOfForOf(node.expression);
+                const iteratedType = checkRightHandSideOfForOf(node.expression, true);
 
                 // There may be a destructuring assignment on the left side
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -14317,12 +14627,12 @@ namespace ts {
             }
         }
 
-        function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
+        function checkRightHandSideOfForOf(rhsExpression: Expression, reportError: boolean): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
-            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, reportError);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, reportError: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
@@ -14342,7 +14652,7 @@ namespace ts {
                 }
             }
 
-            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            if (reportError) error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
             return unknownType;
         }
 

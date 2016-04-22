@@ -77,7 +77,7 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : Color | string | string[]
+>x : string | string[] | Color
 >"string" : string
 
         var a = x;
@@ -89,11 +89,11 @@ function f2(x: Color | string | string[]) {
     }
     else {
         var b = x;
->b : Color | string[]
->x : Color | string[]
+>b : string[] | Color
+>x : string[] | Color
 
         var b: Color | string[];
->b : Color | string[]
+>b : string[] | Color
 >Color : Color
     }
 }
