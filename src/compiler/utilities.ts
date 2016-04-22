@@ -1830,12 +1830,16 @@ namespace ts {
         return node;
     }
 
+    export function isSourceTreeNode(node: Node): boolean {
+        return node.original === undefined
+            && (node.parent !== undefined || node.kind === SyntaxKind.SourceFile);
+    }
+
     export function getSourceTreeNode(node: Node): Node {
         node = getOriginalNode(node);
-        if (node) {
-            if (node.parent || node.kind === SyntaxKind.SourceFile) {
-                return node;
-            }
+
+        if (node && (node.parent !== undefined || node.kind === SyntaxKind.SourceFile)) {
+            return node;
         }
 
         return undefined;

@@ -145,6 +145,8 @@ namespace ts {
             hoistVariableDeclaration,
             getNodeEmitFlags,
             setNodeEmitFlags,
+            setCommentRange,
+            setSourceMapRange
         } = context;
 
         const resolver = context.getEmitResolver();
@@ -1055,18 +1057,19 @@ namespace ts {
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
                 enableSubstitutionsForCapturedThis();
-                statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
-                                "_this",
-                                createThis()
-                            )
-                        ]),
-                        /*location*/ node
-                    )
+                const captureThisStatement = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            "_this",
+                            createThis()
+                        )
+                    ])
                 );
+
+                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments);
+                setSourceMapRange(captureThisStatement, node);
+                statements.push(captureThisStatement);
             }
         }
 
@@ -1174,11 +1177,8 @@ namespace ts {
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
-            const target = getSynthesizedClone(receiver);
-            target.pos = firstAccessor.name.pos;
-
-            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
-            propertyName.end = firstAccessor.name.end;
+            const target = getMutableClone(receiver, { flags: NodeEmitFlags.Merge | NodeEmitFlags.NoComments, sourceMapRange: moveRangeEnd(firstAccessor.name, -1) });
+            const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName), { flags: NodeEmitFlags.NoComments, sourceMapRange: moveRangePos(firstAccessor.name, -1) });
 
             let getAccessorExpression: FunctionExpression;
             if (getAccessor) {

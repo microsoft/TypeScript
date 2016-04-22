@@ -7,9 +7,9 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number, contextNode: Node, shouldIgnorePosCallback: (node: Node) => boolean): void;
         emitPos(pos: number): void;
-        emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void;
         emitStart(range: TextRange): void;
-        emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
+        emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void;
         emitEnd(range: TextRange): void;
         /*@deprecated*/ changeEmitSourcePos(): void;
         /*@deprecated*/ stopOverridingSpan(): void;
@@ -36,8 +36,8 @@ namespace ts {
             nullSourceMapWriter = {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void { },
-                emitEnd(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void { },
+                emitStart(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void { },
+                emitEnd(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void { },
                 emitPos(pos: number): void { },
                 changeEmitSourcePos(): void { },
                 stopOverridingSpan(): void { },
@@ -327,26 +327,36 @@ namespace ts {
             return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
         }
 
-        function emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
         function emitStart(range: TextRange): void;
-        function emitStart(range: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean) {
-            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>range))) {
+        function emitStart(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void;
+        function emitStart(nodeOrRange: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange) {
+            let range = <TextRange>nodeOrRange;
+            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>nodeOrRange))) {
+                if (getCustomSourceMapRangeForNode) {
+                    range = getCustomSourceMapRangeForNode(<Node>nodeOrRange) || range;
+                }
+
                 emitPos(getStartPos(range));
             }
 
-            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>range)) {
+            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>nodeOrRange)) {
                 disable();
             }
         }
 
-        function emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean): void;
         function emitEnd(range: TextRange): void;
-        function emitEnd(range: TextRange, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean) {
-            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>range)) {
+        function emitEnd(node: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void;
+        function emitEnd(nodeOrRange: TextRange | Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange) {
+            let range = <TextRange>nodeOrRange;
+            if (shouldIgnoreChildrenCallback && shouldIgnoreChildrenCallback(<Node>nodeOrRange)) {
                 enable();
             }
 
-            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>range))) {
+            if (!(shouldIgnoreNodeCallback && shouldIgnoreNodeCallback(<Node>nodeOrRange))) {
+                if (getCustomSourceMapRangeForNode) {
+                    range = getCustomSourceMapRangeForNode(<Node>nodeOrRange) || range;
+                }
+
                 emitPos(range.end);
             }
 

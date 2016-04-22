@@ -24,8 +24,10 @@ namespace ts {
 
     export function transformTypeScript(context: TransformationContext) {
         const {
-            setNodeEmitFlags,
             getNodeEmitFlags,
+            setNodeEmitFlags,
+            setCommentRange,
+            setSourceMapRange,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -911,16 +913,18 @@ namespace ts {
          */
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
-
+            const name = node.name as Identifier;
+            const propertyName = getMutableClone(name, { flags: NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap });
+            const localName = getMutableClone(name, { flags: NodeEmitFlags.NoComments });
             return startOnNewLine(
                 createStatement(
                     createAssignment(
                         createPropertyAccess(
                             createThis(),
-                            getMutableClone(<Identifier>node.name),
+                            propertyName,
                             /*location*/ node.name
                         ),
-                        getUniqueClone(<Identifier>node.name)
+                        localName
                     ),
                     /*location*/ node
                 )
@@ -1011,8 +1015,13 @@ namespace ts {
         function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, location?: TextRange) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
+            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+            if (!isComputedPropertyName(propertyName)) {
+                setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
+            }
+
             return createAssignment(
-                createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName),
+                memberAccess,
                 initializer,
                 location
             );
@@ -1910,7 +1919,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
             setOriginalNode(method, node);
@@ -1918,7 +1927,8 @@ namespace ts {
             // While we emit the source map for the node after skipping the decorators,
             // we need to emit the comments for the original range.
             if (node.decorators) {
-                context.setNodeCustomCommentRange(method, node);
+                setCommentRange(method, node);
+                setSourceMapRange(method, getUndecoratedRange(node));
             }
 
             return method;
@@ -1952,7 +1962,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
             setOriginalNode(accessor, node);
@@ -1960,7 +1970,8 @@ namespace ts {
             // While we emit the source map for the node after skipping the decorators,
             // we need to emit the comments for the original range.
             if (node.decorators) {
-                context.setNodeCustomCommentRange(accessor, node);
+                setCommentRange(accessor, node);
+                setSourceMapRange(accessor, getUndecoratedRange(node));
             }
 
             return accessor;
@@ -1985,7 +1996,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
             setOriginalNode(accessor, node);
@@ -1993,7 +2004,8 @@ namespace ts {
             // While we emit the source map for the node after skipping the decorators,
             // we need to emit the comments for the original range.
             if (node.decorators) {
-                context.setNodeCustomCommentRange(accessor, node);
+                setCommentRange(accessor, node);
+                setSourceMapRange(accessor, getUndecoratedRange(node));
             }
 
             return accessor;
@@ -2176,21 +2188,27 @@ namespace ts {
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
+            if (node.name && isIdentifier(node.name) && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
                 return undefined;
             }
 
-            const clone = getMutableClone(node);
-            clone.decorators = undefined;
-            clone.modifiers = undefined;
-            clone.questionToken = undefined;
-            clone.type = undefined;
+            const parameter = createParameterWithDotDotDotToken(
+                node.dotDotDotToken,
+                visitNode(node.name, visitor, isBindingName),
+                visitNode(node.initializer, visitor, isExpression),
+                /*location*/ node
+            );
+
+            setOriginalNode(parameter, node);
+
+            // While we emit the source map for the node after skipping the decorators,
+            // we need to emit the comments for the original range.
             if (node.decorators) {
-                setTextRange(clone, getUndecoratedRange(node));
+                setCommentRange(parameter, node);
+                setSourceMapRange(parameter, getUndecoratedRange(node));
             }
 
-            aggregateTransformFlags(clone);
-            return visitEachChild(clone, visitor, context);
+            return parameter;
         }
 
         /**
@@ -3097,7 +3115,7 @@ namespace ts {
                     if (declaration) {
                         const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
                         if (classAlias) {
-                            return getRelocatedClone(classAlias, /*location*/ node);
+                            return getSynthesizedClone(classAlias, { sourceMapRange: node, commentRange: node });
                         }
                     }
                 }

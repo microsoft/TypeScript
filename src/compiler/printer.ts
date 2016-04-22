@@ -172,7 +172,8 @@ const _super = (function (geti, seti) {
             let context: TransformationContext;
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
-            let getNodeCustomCommentRange: (node: Node) => TextRange;
+            let getCommentRange: (node: Node) => TextRange;
+            let getSourceMapRange: (node: Node) => TextRange;
             let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
@@ -233,7 +234,8 @@ const _super = (function (geti, seti) {
 
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
-                getNodeCustomCommentRange = undefined;
+                getCommentRange = undefined;
+                getSourceMapRange = undefined;
                 isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 onSubstituteNode = undefined;
@@ -253,7 +255,8 @@ const _super = (function (geti, seti) {
                 context = _context;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
-                getNodeCustomCommentRange = context.getNodeCustomCommentRange;
+                getCommentRange = context.getCommentRange;
+                getSourceMapRange = context.getSourceMapRange;
                 isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
@@ -337,12 +340,12 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getNodeCustomCommentRange);
-                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getNodeCustomCommentRange);
+                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getCommentRange);
+                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getCommentRange);
                     emitLeadingComments(node, leadingComments);
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitTrailingComments(node, trailingComments);
                 }
             }
@@ -2429,9 +2432,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                 }
             }
 

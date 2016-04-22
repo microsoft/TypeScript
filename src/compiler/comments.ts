@@ -77,10 +77,15 @@ namespace ts {
                 emitTrailingDetachedComments
             };
 
-            function getLeadingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange): CommentRange[];
             function getLeadingComments(range: TextRange): CommentRange[];
-            function getLeadingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange) {
-                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
+            function getLeadingComments(node: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange): CommentRange[];
+            function getLeadingComments(nodeOrRange: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange) {
+                let range = nodeOrRange;
+                if (getCustomCommentRangeForNodeCallback) {
+                    range = getCustomCommentRangeForNodeCallback(<Node>nodeOrRange) || range;
+                }
+
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>nodeOrRange)) {
                     // If the node will not be emitted in JS, remove all the comments (normal,
                     // pinned and `///`) associated with the node, unless it is a triple slash
                     // comment at the top of the file.
@@ -98,10 +103,6 @@ namespace ts {
                     }
 
                     return undefined;
-                }
-
-                if (getCustomCommentRangeForNodeCallback) {
-                    range = getCustomCommentRangeForNodeCallback(<Node>range) || range;
                 }
 
                 return getLeadingCommentsOfPosition(range.pos);
@@ -123,15 +124,16 @@ namespace ts {
                 return false;
             }
 
-            function getTrailingComments(range: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange): CommentRange[];
             function getTrailingComments(range: TextRange): CommentRange[];
-            function getTrailingComments(range: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange) {
-                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>range)) {
+            function getTrailingComments(node: Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange): CommentRange[];
+            function getTrailingComments(nodeOrRange: TextRange | Node, shouldSkipCommentsForNodeCallback?: (node: Node) => boolean, getCustomCommentRangeForNodeCallback?: (node: Node) => TextRange) {
+                let range = <TextRange>nodeOrRange;
+                if (shouldSkipCommentsForNodeCallback && shouldSkipCommentsForNodeCallback(<Node>nodeOrRange)) {
                     return undefined;
                 }
 
                 if (getCustomCommentRangeForNodeCallback) {
-                    range = getCustomCommentRangeForNodeCallback(<Node>range) || range;
+                    range = getCustomCommentRangeForNodeCallback(<Node>nodeOrRange) || range;
                 }
 
                 return getTrailingCommentsOfPosition(range.end);
