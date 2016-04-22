@@ -148,12 +148,10 @@ namespace ts {
         } = context;
 
         const resolver = context.getEmitResolver();
-        const previousIdentifierSubstitution = context.identifierSubstitution;
-        const previousExpressionSubstitution = context.expressionSubstitution;
+        const previousOnSubstituteNode = context.onSubstituteNode;
         const previousOnEmitNode = context.onEmitNode;
         context.onEmitNode = onEmitNode;
-        context.identifierSubstitution = substituteIdentifier;
-        context.expressionSubstitution = substituteExpression;
+        context.onSubstituteNode = onSubstituteNode;
 
         let currentSourceFile: SourceFile;
         let currentText: string;
@@ -2681,7 +2679,7 @@ namespace ts {
         function enableSubstitutionsForBlockScopedBindings() {
             if ((enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) === 0) {
                 enabledSubstitutions |= ES6SubstitutionFlags.BlockScopedBindings;
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
+                context.enableSubstitution(SyntaxKind.Identifier);
             }
         }
 
@@ -2692,7 +2690,7 @@ namespace ts {
         function enableSubstitutionsForCapturedThis() {
             if ((enabledSubstitutions & ES6SubstitutionFlags.CapturedThis) === 0) {
                 enabledSubstitutions |= ES6SubstitutionFlags.CapturedThis;
-                context.enableExpressionSubstitution(SyntaxKind.ThisKeyword);
+                context.enableSubstitution(SyntaxKind.ThisKeyword);
                 context.enableEmitNotification(SyntaxKind.Constructor);
                 context.enableEmitNotification(SyntaxKind.MethodDeclaration);
                 context.enableEmitNotification(SyntaxKind.GetAccessor);
@@ -2704,11 +2702,30 @@ namespace ts {
         }
 
         /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+
+            if (isExpression) {
+                return substituteExpression(node);
+            }
+
+            if (isIdentifier(node)) {
+                return substituteIdentifier(node);
+            }
+
+            return node;
+        }
+
+        /**
          * Hooks substitutions for non-expression identifiers.
          */
         function substituteIdentifier(node: Identifier) {
-            node = previousIdentifierSubstitution(node);
-
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
             if (enabledSubstitutions & ES6SubstitutionFlags.BlockScopedBindings) {
@@ -2746,8 +2763,7 @@ namespace ts {
          *
          * @param node An Expression node.
          */
-        function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
+        function substituteExpression(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);

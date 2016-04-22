@@ -3592,6 +3592,10 @@ namespace ts {
         return node.kind === SyntaxKind.ExportSpecifier;
     }
 
+    export function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration | EnumDeclaration {
+        return node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration;
+    }
+
     function isDeclarationKind(kind: SyntaxKind) {
         return kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.BindingElement

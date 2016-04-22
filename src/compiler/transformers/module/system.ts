@@ -22,19 +22,17 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const previousExpressionSubstitution = context.expressionSubstitution;
-        context.enableExpressionSubstitution(SyntaxKind.Identifier);
-        context.enableExpressionSubstitution(SyntaxKind.BinaryExpression);
-        context.enableExpressionSubstitution(SyntaxKind.PrefixUnaryExpression);
-        context.enableExpressionSubstitution(SyntaxKind.PostfixUnaryExpression);
-        context.expressionSubstitution = substituteExpression;
-
+        const previousOnSubstituteNode = context.onSubstituteNode;
+        const previousOnEmitNode = context.onEmitNode;
+        context.onSubstituteNode = onSubstituteNode;
+        context.onEmitNode = onEmitNode;
+        context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(SyntaxKind.BinaryExpression);
+        context.enableSubstitution(SyntaxKind.PrefixUnaryExpression);
+        context.enableSubstitution(SyntaxKind.PostfixUnaryExpression);
         context.enableEmitNotification(SyntaxKind.SourceFile);
 
         const exportFunctionForFileMap: Identifier[] = [];
-        const previousOnEmitNode = context.onEmitNode;
-        context.onEmitNode = onEmitNode;
-
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
@@ -975,12 +973,27 @@ namespace ts {
         }
 
         /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression>node);
+            }
+
+            return node;
+        }
+
+        /**
          * Substitute the expression, if necessary.
          *
          * @param node The node to substitute.
          */
-        function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
+        function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);

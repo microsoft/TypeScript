@@ -39,7 +39,7 @@ namespace ts {
             //
             // The source map location for the assignment should point to the entire binary
             // expression.
-            value = ensureIdentifier(node.right, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
+            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment, visitor);
         }
         else if (nodeIsSynthesized(node)) {
             // Generally, the source map location for a destructuring assignment is the root
@@ -48,7 +48,7 @@ namespace ts {
             // However, if the root expression is synthesized (as in the case
             // of the initializer when transforming a ForOfStatement), then the source map
             // location should point to the right-hand value of the expression.
-            location = node.right;
+            location = value;
         }
 
         flattenDestructuring(context, node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
@@ -397,16 +397,23 @@ namespace ts {
      *                                   false if it is necessary to always emit an identifier.
      * @param location The location to use for source maps and comments.
      * @param emitTempVariableAssignment A callback used to emit a temporary variable.
+     * @param visitor An optional callback used to visit the value.
      */
     function ensureIdentifier(
         value: Expression,
         reuseIdentifierExpressions: boolean,
         location: TextRange,
-        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier) {
+        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
+        visitor?: (node: Node) => VisitResult<Node>) {
+
         if (isIdentifier(value) && reuseIdentifierExpressions) {
             return value;
         }
         else {
+            if (visitor) {
+                value = visitNode(value, visitor, isExpression);
+            }
+
             return emitTempVariableAssignment(value, location);
         }
     }

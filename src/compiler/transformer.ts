@@ -19,7 +19,7 @@ namespace ts {
     };
 
     const enum SyntaxKindFeatureFlags {
-        ExpressionSubstitution = 1 << 0,
+        Substitution = 1 << 0,
         EmitNotifications = 1 << 1,
     }
 
@@ -62,6 +62,7 @@ namespace ts {
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
         let currentSourceFile: SourceFile;
+        let lexicalEnvironmentDisabled: boolean;
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
@@ -75,13 +76,12 @@ namespace ts {
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            identifierSubstitution: node => node,
-            expressionSubstitution: node => node,
-            enableExpressionSubstitution,
-            isExpressionSubstitutionEnabled,
-            onEmitNode: (node, emit) => emit(node),
+            onSubstituteNode,
+            enableSubstitution,
+            isSubstitutionEnabled,
+            onEmitNode,
             enableEmitNotification,
-            isEmitNotificationEnabled,
+            isEmitNotificationEnabled
         };
 
         // Chain together and initialize each transformer.
@@ -104,12 +104,23 @@ namespace ts {
             return transformation(sourceFile);
         }
 
-        function enableExpressionSubstitution(kind: SyntaxKind) {
-            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.ExpressionSubstitution;
+        function enableSubstitution(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.Substitution;
         }
 
-        function isExpressionSubstitutionEnabled(node: Node) {
-            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.ExpressionSubstitution) !== 0;
+        function isSubstitutionEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0;
+        }
+
+        /**
+         * Default hook for node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            return node;
         }
 
         function enableEmitNotification(kind: SyntaxKind) {
@@ -119,6 +130,25 @@ namespace ts {
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
                 || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
+        }
+
+        /**
+         * Default hook for node emit.
+         *
+         * @param node The node to emit.
+         * @param emit A callback used to emit the node in the printer.
+         */
+        function onEmitNode(node: Node, emit: (node: Node) => void) {
+            // Ensure that lexical environment modifications are disabled during the print phase.
+            if (!lexicalEnvironmentDisabled) {
+                const savedLexicalEnvironmentDisabled = lexicalEnvironmentDisabled;
+                lexicalEnvironmentDisabled = true;
+                emit(node);
+                lexicalEnvironmentDisabled = savedLexicalEnvironmentDisabled;
+                return;
+            }
+
+            emit(node);
         }
 
         /**
@@ -149,6 +179,7 @@ namespace ts {
          * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             const decl = createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [decl];
@@ -162,6 +193,7 @@ namespace ts {
          * Records a hoisted function declaration within a lexical environment.
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             if (!hoistedFunctionDeclarations) {
                 hoistedFunctionDeclarations = [func];
             }
@@ -175,6 +207,8 @@ namespace ts {
          * are pushed onto a stack, and the related storage variables are reset.
          */
         function startLexicalEnvironment(): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot start a lexical environment during the print phase.");
+
             // Save the current lexical environment. Rather than resizing the array we adjust the
             // stack size variable. This allows us to reuse existing array slots we've
             // already allocated between transformations to avoid allocation and GC overhead during
@@ -191,6 +225,8 @@ namespace ts {
          * any hoisted declarations added in this environment are returned.
          */
         function endLexicalEnvironment(): Statement[] {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot end a lexical environment during the print phase.");
+
             let statements: Statement[];
             if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
                 if (hoistedFunctionDeclarations) {

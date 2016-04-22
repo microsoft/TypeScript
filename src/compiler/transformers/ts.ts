@@ -38,11 +38,11 @@ namespace ts {
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
-        const previousExpressionSubstitution = context.expressionSubstitution;
+        const previousOnSubstituteNode = context.onSubstituteNode;
 
         // Set new transformation hooks.
         context.onEmitNode = onEmitNode;
-        context.expressionSubstitution = substituteExpression;
+        context.onSubstituteNode = onSubstituteNode;
 
         // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
@@ -612,7 +612,7 @@ namespace ts {
             // Record an alias to avoid class double-binding.
             let decoratedClassAlias: Identifier;
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
-                enableExpressionSubstitutionForDecoratedClasses();
+                enableSubstitutionForDecoratedClasses();
                 decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                 decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
 
@@ -2099,11 +2099,11 @@ namespace ts {
                 // This step isn't needed if we eventually transform this to ES5.
                 if (languageVersion >= ScriptTarget.ES6) {
                     if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                        enableExpressionSubstitutionForAsyncMethodsWithSuper();
+                        enableSubstitutionForAsyncMethodsWithSuper();
                         setNodeEmitFlags(block, NodeEmitFlags.EmitAdvancedSuperHelper);
                     }
                     else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                        enableExpressionSubstitutionForAsyncMethodsWithSuper();
+                        enableSubstitutionForAsyncMethodsWithSuper();
                         setNodeEmitFlags(block, NodeEmitFlags.EmitSuperHelper);
                     }
                 }
@@ -2480,7 +2480,7 @@ namespace ts {
             }
 
             Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");
-            enableExpressionSubstitutionForNamespaceExports();
+            enableSubstitutionForNamespaceExports();
 
             const statements: Statement[] = [];
 
@@ -2851,6 +2851,61 @@ namespace ts {
                 : getClassPrototype(node);
         }
 
+        function enableSubstitutionForNonQualifiedEnumMembers() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
+                context.enableSubstitution(SyntaxKind.Identifier);
+            }
+        }
+
+        function enableSubstitutionForAsyncMethodsWithSuper() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
+
+                // We need to enable substitutions for call, property access, and element access
+                // if we need to rewrite super calls.
+                context.enableSubstitution(SyntaxKind.CallExpression);
+                context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
+                context.enableSubstitution(SyntaxKind.ElementAccessExpression);
+
+                // We need to be notified when entering and exiting declarations that bind super.
+                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
+                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
+                context.enableEmitNotification(SyntaxKind.GetAccessor);
+                context.enableEmitNotification(SyntaxKind.SetAccessor);
+                context.enableEmitNotification(SyntaxKind.Constructor);
+            }
+        }
+
+        function enableSubstitutionForDecoratedClasses() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
+
+                // We need to enable substitutions for identifiers. This allows us to
+                // substitute class names inside of a class declaration.
+                context.enableSubstitution(SyntaxKind.Identifier);
+                context.enableEmitNotification(SyntaxKind.Identifier);
+
+                // Keep track of class aliases.
+                decoratedClassAliases = {};
+                currentDecoratedClassAliases = {};
+            }
+        }
+
+        function enableSubstitutionForNamespaceExports() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+
+                // We need to enable substitutions for identifiers and shorthand property assignments. This allows us to
+                // substitute the names of exported members of a namespace.
+                context.enableSubstitution(SyntaxKind.Identifier);
+                context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment);
+
+                // We need to be notified when entering and exiting namespaces.
+                context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
+            }
+        }
+
         function isClassWithDecorators(node: Node): node is ClassDeclaration {
             return node.kind === SyntaxKind.ClassDeclaration && node.decorators !== undefined;
         }
@@ -2872,6 +2927,12 @@ namespace ts {
             return getOriginalNode(node).kind === SyntaxKind.EnumDeclaration;
         }
 
+        /**
+         * Hook for node emit.
+         *
+         * @param node The node to emit.
+         * @param emit A callback used to emit the node in the printer.
+         */
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
             const savedApplicableSubstitutions = applicableSubstitutions;
             const savedCurrentSuperContainer = currentSuperContainer;
@@ -2913,9 +2974,43 @@ namespace ts {
             currentSuperContainer = savedCurrentSuperContainer;
         }
 
-        function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
+        /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression>node);
+            }
+            else if (isShorthandPropertyAssignment(node)) {
+                return substituteShorthandPropertyAssignment(node);
+            }
 
+            return node;
+        }
+
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) {
+                const name = node.name;
+                const exportedName = trySubstituteNamespaceExportedName(name);
+                if (exportedName) {
+                    // A shorthand property with an assignment initializer is probably part of a
+                    // destructuring assignment
+                    if (node.objectAssignmentInitializer) {
+                        const initializer = createAssignment(exportedName, node.objectAssignmentInitializer);
+                        return createPropertyAssignment(name, initializer, /*location*/ node);
+                    }
+                    return createPropertyAssignment(name, exportedName, /*location*/ node);
+                }
+            }
+            return node;
+        }
+
+        function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
@@ -2961,17 +3056,12 @@ namespace ts {
         }
 
         function trySubstituteNamespaceExportedName(node: Identifier): Expression {
-            if (enabledSubstitutions & applicableSubstitutions) {
-                // If this is explicitly a local name, do not substitute.
-                if (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) {
-                    return node;
-                }
-
+            // If this is explicitly a local name, do not substitute.
+            if (enabledSubstitutions & applicableSubstitutions && (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) === 0) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
-                const original = getSourceTreeNodeOfType(node, isIdentifier);
-                const container = resolver.getReferencedExportContainer(original, /*prefixLocals*/ false);
-                if (container && original !== container.name) {
+                const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
+                if (container) {
                     const substitute =
                         (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
                         (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
@@ -3032,60 +3122,6 @@ namespace ts {
             }
 
             return node;
-        }
-
-        function enableSubstitutionForNonQualifiedEnumMembers() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
-            }
-        }
-
-        function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
-
-                // We need to enable substitutions for call, property access, and element access
-                // if we need to rewrite super calls.
-                context.enableExpressionSubstitution(SyntaxKind.CallExpression);
-                context.enableExpressionSubstitution(SyntaxKind.PropertyAccessExpression);
-                context.enableExpressionSubstitution(SyntaxKind.ElementAccessExpression);
-
-                // We need to be notified when entering and exiting declarations that bind super.
-                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-                context.enableEmitNotification(SyntaxKind.GetAccessor);
-                context.enableEmitNotification(SyntaxKind.SetAccessor);
-                context.enableEmitNotification(SyntaxKind.Constructor);
-            }
-        }
-
-        function enableExpressionSubstitutionForDecoratedClasses() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
-
-                // We need to enable substitutions for identifiers. This allows us to
-                // substitute class names inside of a class declaration.
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
-                context.enableEmitNotification(SyntaxKind.Identifier);
-
-                // Keep track of class aliases.
-                decoratedClassAliases = {};
-                currentDecoratedClassAliases = {};
-            }
-        }
-
-        function enableExpressionSubstitutionForNamespaceExports() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
-
-                // We need to enable substitutions for identifiers. This allows us to
-                // substitute the names of exported members of a namespace.
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
-
-                // We need to be notified when entering and exiting namespaces.
-                context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
-            }
         }
 
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {

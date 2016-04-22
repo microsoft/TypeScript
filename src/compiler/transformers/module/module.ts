@@ -24,9 +24,10 @@ namespace ts {
         const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const previousExpressionSubstitution = context.expressionSubstitution;
-        context.enableExpressionSubstitution(SyntaxKind.Identifier);
-        context.expressionSubstitution = substituteExpression;
+        const previousOnSubstituteNode = context.onSubstituteNode;
+        context.onSubstituteNode = onSubstituteNode;
+        context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment);
 
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
@@ -775,8 +776,40 @@ namespace ts {
             return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
         }
 
+        /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression>node);
+            }
+            else if (isShorthandPropertyAssignment(node)) {
+                return substituteShorthandPropertyAssignment(node);
+            }
+            return node;
+        }
+
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+            const name = node.name;
+            const exportedOrImportedName = substituteExpressionIdentifier(name);
+            if (exportedOrImportedName !== name) {
+                // A shorthand property with an assignment initializer is probably part of a
+                // destructuring assignment
+                if (node.objectAssignmentInitializer) {
+                    const initializer = createAssignment(exportedOrImportedName, node.objectAssignmentInitializer);
+                    return createPropertyAssignment(name, initializer, /*location*/ node);
+                }
+                return createPropertyAssignment(name, exportedOrImportedName, /*location*/ node);
+            }
+            return node;
+        }
+
         function substituteExpression(node: Expression) {
-            node = previousExpressionSubstitution(node);
             if (isIdentifier(node)) {
                 return substituteExpressionIdentifier(node);
             }
@@ -785,24 +818,34 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            if (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) {
-                return node;
-            }
+            return trySubstituteExportedName(node)
+                || trySubstituteImportedName(node)
+                || node;
+        }
 
-            const container = resolver.getReferencedExportContainer(node, (getNodeEmitFlags(node) & NodeEmitFlags.ExportName) !== 0);
-            if (container) {
-                if (container.kind === SyntaxKind.SourceFile) {
-                    return createPropertyAccess(
-                        createIdentifier("exports"),
-                        getSynthesizedClone(node),
-                        /*location*/ node
-                    );
+        function trySubstituteExportedName(node: Identifier) {
+            const emitFlags = getNodeEmitFlags(node);
+            if ((emitFlags & NodeEmitFlags.LocalName) === 0) {
+                const container = resolver.getReferencedExportContainer(node, (emitFlags & NodeEmitFlags.ExportName) !== 0);
+                if (container) {
+                    if (container.kind === SyntaxKind.SourceFile) {
+                        return createPropertyAccess(
+                            createIdentifier("exports"),
+                            getSynthesizedClone(node),
+                            /*location*/ node
+                        );
+                    }
                 }
             }
-            else {
+
+            return undefined;
+        }
+
+        function trySubstituteImportedName(node: Identifier): Expression {
+            if ((getNodeEmitFlags(node) & NodeEmitFlags.LocalName) === 0) {
                 const declaration = resolver.getReferencedImportDeclaration(node);
                 if (declaration) {
-                    if (declaration.kind === SyntaxKind.ImportClause) {
+                    if (isImportClause(declaration)) {
                         if (languageVersion >= ScriptTarget.ES5) {
                             return createPropertyAccess(
                                 getGeneratedNameForNode(declaration.parent),
@@ -811,6 +854,7 @@ namespace ts {
                             );
                         }
                         else {
+                            // TODO: ES3 transform to handle x.default -> x["default"]
                             return createElementAccess(
                                 getGeneratedNameForNode(declaration.parent),
                                 createLiteral("default"),
@@ -818,10 +862,10 @@ namespace ts {
                             );
                         }
                     }
-                    else if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                        const name = (<ImportSpecifier>declaration).propertyName
-                            || (<ImportSpecifier>declaration).name;
+                    else if (isImportSpecifier(declaration)) {
+                        const name = declaration.propertyName || declaration.name;
                         if (name.originalKeywordKind === SyntaxKind.DefaultKeyword && languageVersion <= ScriptTarget.ES3) {
+                            // TODO: ES3 transform to handle x.default -> x["default"]
                             return createElementAccess(
                                 getGeneratedNameForNode(declaration.parent.parent.parent),
                                 createLiteral(name.text),
@@ -838,8 +882,7 @@ namespace ts {
                     }
                 }
             }
-
-            return node;
+            return undefined;
         }
 
         function getModuleMemberName(name: Identifier) {
