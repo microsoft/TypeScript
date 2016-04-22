@@ -267,7 +267,7 @@ namespace ts {
             if (includeJsDocComment) {
                 const jsDocChildren = ts.filter(current.getChildren(), isJSDocNode);
                 for (const jsDocChild of jsDocChildren) {
-                    let start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
+                    const start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
                     if (start <= position) {
                         let end = jsDocChild.getEnd();
                         if (position < end || (position === end && jsDocChild.kind === SyntaxKind.EndOfFileToken)) {
@@ -500,9 +500,8 @@ namespace ts {
         }
 
         if (node) {
-            let jsDocComments = node.jsDocComments;
-            if (jsDocComments) {
-                for (const jsDocComment of jsDocComments) {
+            if (node.jsDocComments) {
+                for (const jsDocComment of node.jsDocComments) {
                     for (const tag of jsDocComment.tags) {
                         if (tag.pos <= position && position <= tag.end) {
                             return tag;
