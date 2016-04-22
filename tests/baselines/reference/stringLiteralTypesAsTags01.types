@@ -99,8 +99,8 @@ if (hasKind(x, "A")) {
 }
 else {
     let b = x;
->b : {}
->x : {}
+>b : A
+>x : A
 }
 
 if (!hasKind(x, "B")) {
