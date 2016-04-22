@@ -3186,30 +3186,23 @@ namespace ts {
 
         function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
             if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
-                const property = getPropertyOfBaseTypeDeclaration(<ClassLikeDeclaration>declaration.parent, declaration.symbol.name);
-                if (property) {
-                    return getTypeOfSymbol(property);
+                const parent = <ClassLikeDeclaration>declaration.parent;
+                const propertyName = declaration.symbol.name;
+                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
+                if (extendedPropertyType) {
+                    return extendedPropertyType;
+                }
+                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent);
+                if (implementedTypeNodes) {
+                    return getSinglePropertyTypeOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
                 }
             }
 
             return undefined;
         }
 
-        function getPropertyOfBaseTypeDeclaration(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
-            const property = getSinglePropertyOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(declaration))), propertyName);
-            if (property) {
-                return property;
-            }
-            const implementedTypeNodes = getClassImplementsHeritageClauseElements(declaration);
-            if (implementedTypeNodes) {
-                return getSinglePropertyOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
-            }
-
-            return undefined;
-        }
-
-        function getSinglePropertyOfTypes(types: Type[], propertyName: string) {
-            let result: Symbol;
+        function getSinglePropertyTypeOfTypes(types: Type[], propertyName: string) {
+            let result: Type;
             for (const t of types) {
                 if (t !== unknownType) {
                     const property = getPropertyOfType(t, propertyName);
@@ -3217,15 +3210,15 @@ namespace ts {
                         continue;
                     }
                     if (property.name === propertyName) {
-                        if (result) {
+                        const propertyType = getTypeOfSymbol(property);
+                        if (result && result !== propertyType) {
                             // if there's more than one matching property, return undefined
                             return undefined;
                         }
-                        result = property;
+                        result = propertyType;
                     }
                 }
             }
-
             return result;
         }
 

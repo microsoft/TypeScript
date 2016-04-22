@@ -2,15 +2,15 @@ tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextu
 tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(28,9): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(32,9): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(35,9): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(58,7): error TS2420: Class 'Multiple' incorrectly implements interface 'A'.
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(59,7): error TS2420: Class 'Multiple' incorrectly implements interface 'A'.
   Types of property 'r' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(58,7): error TS2420: Class 'Multiple' incorrectly implements interface 'B'.
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(59,7): error TS2420: Class 'Multiple' incorrectly implements interface 'B'.
   Types of property 'r' are incompatible.
     Type 'number' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(59,5): error TS7008: Member 'p' implicitly has an 'any' type.
-tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(60,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
-tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(68,12): error TS2339: Property 'length' does not exist on type 'number'.
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(60,5): error TS7008: Member 'p' implicitly has an 'any' type.
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(61,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts(70,12): error TS2339: Property 'length' does not exist on type 'number'.
 
 
 ==== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts (9 errors) ====
@@ -69,12 +69,13 @@ tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextu
         p: string;
         q(n: string): void;
         r: string;
-    
+        s: string;
     }
     interface B {
         p: number;
-        q(n: string): void;
+        q(n: number): void;
         r: boolean;
+        s: string;
     }
     class C {
         r: number;
@@ -98,10 +99,12 @@ tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextu
             n.toFixed;
         }
         r = null;     // OK, C.r wins over A.r and B.r
+        s = null;     // OK, A.s and B.s match
     }
     let multiple = new Multiple();
     multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
     multiple.r.length;  // error, Multiple.r: number
                ~~~~~~
 !!! error TS2339: Property 'length' does not exist on type 'number'.
+    multiple.s.length;   // OK, A.s and B.s match.
     
