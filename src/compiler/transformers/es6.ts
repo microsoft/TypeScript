@@ -1137,6 +1137,8 @@ namespace ts {
                 /*location*/ member
             );
 
+            setOriginalNode(statement, member);
+
             // The location for the statement is used to emit comments only.
             // No source map should be emitted for this statement to align with the
             // old emitter.
@@ -1203,8 +1205,8 @@ namespace ts {
                     /*preferNewLine*/ true,
                     /*location*/ undefined,
                     /*descriptorLocations*/ {
-                        get: { location: getAccessor, emitFlags: NodeEmitFlags.NoSourceMap },
-                        set: { location: setAccessor, emitFlags: NodeEmitFlags.NoSourceMap }
+                        get: { location: getAccessor, emitFlags: NodeEmitFlags.NoSourceMap, original: getAccessor },
+                        set: { location: setAccessor, emitFlags: NodeEmitFlags.NoSourceMap, original: getAccessor }
                     },
                     context
                 ),

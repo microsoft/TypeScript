@@ -2966,6 +2966,8 @@ namespace ts {
         getEmitHost(): EmitHost;
         getNodeEmitFlags(node: Node): NodeEmitFlags;
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
+        getNodeCustomCommentRange(node: Node): TextRange;
+        setNodeCustomCommentRange(node: Node, range: TextRange): void;
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
         hoistVariableDeclaration(node: Identifier): void;
 

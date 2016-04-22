@@ -58,9 +58,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatemen
 6 >                                            ^^^^^
 7 >                                                 ^
 8 >                                                  ^
-9 >                                                   ^^
-10>                                                     ^
-11>                                                      ^
+9 >                                                   ^^^
+10>                                                      ^
 1->
   >    public 
 2 >        returnA
@@ -71,8 +70,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatemen
 7 >                                                 .
 8 >                                                  a
 9 >                                                   
-10>                                                     this.a
-11>                                                      ;
+10>                                                      ;
 1->Emitted(5, 9) Source(3, 12) + SourceIndex(0)
 2 >Emitted(5, 21) Source(3, 19) + SourceIndex(0)
 3 >Emitted(5, 24) Source(3, 22) + SourceIndex(0)
@@ -81,9 +79,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatemen
 6 >Emitted(5, 50) Source(3, 32) + SourceIndex(0)
 7 >Emitted(5, 51) Source(3, 33) + SourceIndex(0)
 8 >Emitted(5, 52) Source(3, 34) + SourceIndex(0)
-9 >Emitted(5, 54) Source(3, 28) + SourceIndex(0)
-10>Emitted(5, 55) Source(3, 34) + SourceIndex(0)
-11>Emitted(5, 56) Source(3, 35) + SourceIndex(0)
+9 >Emitted(5, 55) Source(3, 34) + SourceIndex(0)
+10>Emitted(5, 56) Source(3, 35) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^

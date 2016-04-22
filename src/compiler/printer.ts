@@ -172,6 +172,7 @@ const _super = (function (geti, seti) {
             let context: TransformationContext;
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
+            let getNodeCustomCommentRange: (node: Node) => TextRange;
             let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
@@ -232,6 +233,7 @@ const _super = (function (geti, seti) {
 
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
+                getNodeCustomCommentRange = undefined;
                 isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 onSubstituteNode = undefined;
@@ -251,6 +253,7 @@ const _super = (function (geti, seti) {
                 context = _context;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
+                getNodeCustomCommentRange = context.getNodeCustomCommentRange;
                 isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
@@ -334,8 +337,8 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode);
-                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode);
+                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getNodeCustomCommentRange);
+                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getNodeCustomCommentRange);
                     emitLeadingComments(node, leadingComments);
                     emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
                     emitWorker(node);

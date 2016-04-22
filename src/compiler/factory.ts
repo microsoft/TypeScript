@@ -867,13 +867,14 @@ namespace ts {
         );
     }
 
-    export function createParamHelper(expression: Expression, parameterOffset: number) {
+    export function createParamHelper(expression: Expression, parameterOffset: number, location?: TextRange) {
         return createCall(
             createIdentifier("__param"),
             [
                 createLiteral(parameterOffset),
                 expression
-            ]
+            ],
+            location
         );
     }
 
@@ -887,7 +888,7 @@ namespace ts {
         );
     }
 
-    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
+    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
         const argumentsArray: Expression[] = [];
         argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
         argumentsArray.push(target);
@@ -898,7 +899,7 @@ namespace ts {
             }
         }
 
-        return createCall(createIdentifier("__decorate"), argumentsArray);
+        return createCall(createIdentifier("__decorate"), argumentsArray, location);
     }
 
     export function createAwaiterHelper(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
@@ -947,6 +948,7 @@ namespace ts {
 
     export interface PropertyDescriptorExtendedOption {
         location?: TextRange;
+        original?: Node;
         emitFlags?: NodeEmitFlags;
         newLine?: boolean;
     }
@@ -986,11 +988,13 @@ namespace ts {
         if (value !== undefined) {
             let options: PropertyDescriptorExtendedOption;
             let location: TextRange;
+            let original: Node;
             let emitFlags: NodeEmitFlags;
             if (descriptorExtendedOptions !== undefined) {
                 options = getProperty(descriptorExtendedOptions, name);
                 if (options !== undefined) {
                     location = options.location;
+                    original = options.original;
                     emitFlags = options.emitFlags;
                     if (options.newLine !== undefined) {
                         preferNewLine = options.newLine;
@@ -1007,6 +1011,10 @@ namespace ts {
             if (emitFlags !== undefined) {
                 Debug.assert(context !== undefined, "TransformationContext must be supplied when emitFlags are provided.");
                 context.setNodeEmitFlags(property, emitFlags);
+            }
+
+            if (original) {
+                property.original = original;
             }
 
             if (preferNewLine) {

@@ -596,6 +596,8 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //
 
+            const location = getUndecoratedRange(node);
+
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
             //  }
@@ -604,7 +606,7 @@ namespace ts {
                     name,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
-                    /*location*/ node
+                    /*location*/ location
                 ),
                 node
             );
@@ -637,7 +639,7 @@ namespace ts {
                 classExpression = createAssignment(
                     decoratedClassAlias,
                     classExpression,
-                    /*location*/ node);
+                    /*location*/ location);
             }
 
             // When emitting as a *default* export, we'll add a subsequent `export default` statement,
@@ -655,10 +657,11 @@ namespace ts {
                         bindingModifiers,
                         createLetDeclarationList([
                             createVariableDeclaration(
-                                name,
+                                getDeclarationName(node, /*allowComments*/ true),
                                 classExpression
                             )
-                        ])
+                        ]),
+                        /*location*/ location
                     ),
                     /*original*/ node
                 )
@@ -1304,12 +1307,16 @@ namespace ts {
                     : createNull()
                 : undefined;
 
-            return createDecorateHelper(
+            const helper = createDecorateHelper(
                 decoratorExpressions,
                 prefix,
                 memberName,
-                descriptor
+                descriptor,
+                getUndecoratedRange(member)
             );
+
+            setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
+            return helper;
         }
 
         /**
@@ -1355,7 +1362,9 @@ namespace ts {
                     )
                 );
 
-                return createAssignment(getDeclarationName(node), expression);
+                const result = createAssignment(getDeclarationName(node), expression, getUndecoratedRange(node));
+                setNodeEmitFlags(result, NodeEmitFlags.NoComments);
+                return result;
             }
             // Emit the call to __decorate. Given the class:
             //
@@ -1368,13 +1377,17 @@ namespace ts {
             //   C = __decorate([dec], C);
             //
             else {
-                return createAssignment(
+                const result = createAssignment(
                     getDeclarationName(node),
                     createDecorateHelper(
                         decoratorExpressions,
                         getDeclarationName(node)
-                    )
+                    ),
+                    getUndecoratedRange(node)
                 );
+
+                setNodeEmitFlags(result, NodeEmitFlags.NoComments);
+                return result;
             }
         }
 
@@ -1398,7 +1411,9 @@ namespace ts {
             if (decorators) {
                 expressions = [];
                 for (const decorator of decorators) {
-                    expressions.push(createParamHelper(transformDecorator(decorator), parameterOffset));
+                    const helper = createParamHelper(transformDecorator(decorator), parameterOffset, /*location*/ decorator.expression);
+                    setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
+                    expressions.push(helper);
                 }
             }
 
@@ -1890,16 +1905,23 @@ namespace ts {
                 return undefined;
             }
 
-            return setOriginalNode(
-                createMethod(
-                    visitNodes(node.modifiers, visitor, isModifier),
-                    visitPropertyNameOfClassElement(node),
-                    visitNodes(node.parameters, visitor, isParameter),
-                    transformFunctionBody(node),
-                    node
-                ),
-                node
+            const method = createMethod(
+                visitNodes(node.modifiers, visitor, isModifier),
+                visitPropertyNameOfClassElement(node),
+                visitNodes(node.parameters, visitor, isParameter),
+                transformFunctionBody(node),
+                /*location*/ getUndecoratedRange(node)
             );
+
+            setOriginalNode(method, node);
+
+            // While we emit the source map for the node after skipping the decorators,
+            // we need to emit the comments for the original range.
+            if (node.decorators) {
+                context.setNodeCustomCommentRange(method, node);
+            }
+
+            return method;
         }
 
         /**
@@ -1926,12 +1948,22 @@ namespace ts {
                 return undefined;
             }
 
-            return createGetAccessor(
+            const accessor = createGetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                node
+                /*location*/ getUndecoratedRange(node)
             );
+
+            setOriginalNode(accessor, node);
+
+            // While we emit the source map for the node after skipping the decorators,
+            // we need to emit the comments for the original range.
+            if (node.decorators) {
+                context.setNodeCustomCommentRange(accessor, node);
+            }
+
+            return accessor;
         }
 
         /**
@@ -1948,13 +1980,23 @@ namespace ts {
                 return undefined;
             }
 
-            return createSetAccessor(
+            const accessor = createSetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                node
+                /*location*/ getUndecoratedRange(node)
             );
+
+            setOriginalNode(accessor, node);
+
+            // While we emit the source map for the node after skipping the decorators,
+            // we need to emit the comments for the original range.
+            if (node.decorators) {
+                context.setNodeCustomCommentRange(accessor, node);
+            }
+
+            return accessor;
         }
 
         /**
@@ -2137,11 +2179,16 @@ namespace ts {
             if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
                 return undefined;
             }
+
             const clone = getMutableClone(node);
             clone.decorators = undefined;
             clone.modifiers = undefined;
             clone.questionToken = undefined;
             clone.type = undefined;
+            if (node.decorators) {
+                setTextRange(clone, getUndecoratedRange(node));
+            }
+
             aggregateTransformFlags(clone);
             return visitEachChild(clone, visitor, context);
         }

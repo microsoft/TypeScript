@@ -3062,6 +3062,15 @@ namespace ts {
     }
 
     /**
+     * Moves the start position of a range past any decorators.
+     */
+    export function getUndecoratedRange(node: Node): TextRange {
+        return node.decorators && node.decorators.length > 0
+            ? moveRangePos(node, node.decorators.end)
+            : node;
+    }
+
+    /**
      * Determines whether a TextRange has the same start and end positions.
      *
      * @param range A TextRange.

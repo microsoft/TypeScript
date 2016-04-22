@@ -55,6 +55,7 @@ namespace ts {
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
         const nodeEmitFlags: NodeEmitFlags[] = [];
+        const nodeCustomCommentRange: TextRange[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
@@ -72,6 +73,8 @@ namespace ts {
             getEmitHost: () => host,
             getNodeEmitFlags,
             setNodeEmitFlags,
+            getNodeCustomCommentRange,
+            setNodeCustomCommentRange,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
@@ -156,8 +159,8 @@ namespace ts {
          */
         function getNodeEmitFlags(node: Node) {
             while (node) {
-                const nodeId = getNodeId(node);
-                if (nodeEmitFlags[nodeId] !== undefined) {
+                const nodeId = node.id;
+                if (nodeId && nodeEmitFlags[nodeId] !== undefined) {
                     return nodeEmitFlags[nodeId];
                 }
 
@@ -173,6 +176,29 @@ namespace ts {
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
             nodeEmitFlags[getNodeId(node)] = flags;
             return node;
+        }
+
+        /**
+         * Gets a custom text range to use when emitting comments.
+         */
+        function getNodeCustomCommentRange(node: Node) {
+            while (node) {
+                const nodeId = node.id;
+                if (nodeId && nodeCustomCommentRange[nodeId] !== undefined) {
+                    return nodeCustomCommentRange[nodeId];
+                }
+
+                node = node.original;
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Sets a custom text range to use when emitting comments.
+         */
+        function setNodeCustomCommentRange(node: Node, range: TextRange) {
+            nodeCustomCommentRange[getNodeId(node)] = range;
         }
 
         /**

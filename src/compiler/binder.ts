@@ -2154,12 +2154,11 @@ namespace ts {
                 transformFlags = TransformFlags.AssertES6;
 
                 // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
-                // generic, or has both a computed property name and a decorator.
+                // generic, or has a decorator.
                 if ((<MethodDeclaration>node).body === undefined
                     || (<MethodDeclaration>node).typeParameters !== undefined
                     || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
-                    || (subtreeFlags & TransformFlags.ContainsDecorators
-                        && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
+                    || subtreeFlags & TransformFlags.ContainsDecorators) {
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 
@@ -2171,11 +2170,10 @@ namespace ts {
                 excludeFlags = TransformFlags.MethodOrAccessorExcludes;
 
                 // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
-                // or has both a computed property name and a decorator.
+                // or has a decorator.
                 if ((<AccessorDeclaration>node).body === undefined
                     || hasModifier(node, ModifierFlags.Abstract)
-                    || (subtreeFlags & TransformFlags.ContainsDecorators
-                        && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
+                    || subtreeFlags & TransformFlags.ContainsDecorators) {
                     transformFlags = TransformFlags.AssertTypeScript;
                 }
 
@@ -2269,7 +2267,8 @@ namespace ts {
         }
 
         // If the parameter's name is 'this', then it is TypeScript syntax.
-        if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
+        if (subtreeFlags & TransformFlags.ContainsDecorators
+            || (node.name && isIdentifier(node.name) && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
