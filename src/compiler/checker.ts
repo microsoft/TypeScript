@@ -2885,11 +2885,7 @@ namespace ts {
         // pattern. Otherwise, it is the type any.
         function getTypeFromBindingElement(element: BindingElement, includePatternInType?: boolean, reportErrors?: boolean): Type {
             if (element.initializer) {
-                const type = checkExpressionCached(element.initializer);
-                if (reportErrors) {
-                    reportErrorsFromWidening(element, type);
-                }
-                return getWidenedType(type);
+                return checkExpressionCached(element.initializer);
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(<BindingPattern>element.name, includePatternInType, reportErrors);
