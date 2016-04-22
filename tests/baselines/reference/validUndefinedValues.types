@@ -4,7 +4,7 @@ var x: typeof undefined;
 >undefined : undefined
 
 x = undefined;
->x = undefined : undefined
+>x = undefined : any
 >x : any
->undefined : undefined
+>undefined : any
 

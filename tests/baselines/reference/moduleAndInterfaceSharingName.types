@@ -16,7 +16,7 @@ var z: X.Y.Z = null;
 >X : any
 >Y : any
 >Z : X.Y.Z
->null : null
+>null : X.Y.Z
 
 var z2: X.Y;
 >z2 : X.Y

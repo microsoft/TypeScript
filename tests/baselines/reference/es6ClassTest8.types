@@ -36,7 +36,7 @@ class Vector {
 >v : Vector
 >Vector : Vector
 >Vector : Vector
->null : null
+>null : Vector
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
 >minus : (v1: Vector, v2: Vector) => Vector
@@ -45,7 +45,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
->null : null
+>null : Vector
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
 >times : (v1: Vector, v2: Vector) => Vector
@@ -54,7 +54,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
->null : null
+>null : Vector
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
 >cross : (v1: Vector, v2: Vector) => Vector
@@ -63,7 +63,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
->null : null
+>null : Vector
 
     constructor(public x: number,
 >x : number
@@ -82,7 +82,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
->null : null
+>null : Vector
 
 }              
 

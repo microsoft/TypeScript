@@ -59,7 +59,7 @@ module A {
 >Point : Point
 
             return null;
->null : null
+>null : Line<Point>
         }
     }
 }

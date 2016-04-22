@@ -92,9 +92,9 @@ null, OBJECT
 
 ANY = null, OBJECT
 >ANY = null, OBJECT : Object
->ANY = null : null
+>ANY = null : any
 >ANY : any
->null : null
+>null : any
 >OBJECT : Object
 
 true, {}
@@ -134,9 +134,9 @@ var resultIsObject7 = (ANY = null, OBJECT);
 >resultIsObject7 : Object
 >(ANY = null, OBJECT) : Object
 >ANY = null, OBJECT : Object
->ANY = null : null
+>ANY = null : any
 >ANY : any
->null : null
+>null : any
 >OBJECT : Object
 
 var resultIsObject8 = (true, {});

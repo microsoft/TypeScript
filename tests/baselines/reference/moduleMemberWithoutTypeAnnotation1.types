@@ -11,7 +11,7 @@ module TypeScript.Parser {
 >SyntaxNode : SyntaxNode
 
             return null;
->null : null
+>null : SyntaxNode
         }
     }
 }
@@ -73,12 +73,12 @@ module TypeScript {
 >this.findTokenInternal : (x: any, y: any, z: any) => any
 >this : this
 >findTokenInternal : (x: any, y: any, z: any) => any
->null : null
+>null : any
 >position : number
 >0 : number
 
             return null;
->null : null
+>null : PositionedToken
         }
         findTokenInternal(x, y, z) {
 >findTokenInternal : (x: any, y: any, z: any) => any

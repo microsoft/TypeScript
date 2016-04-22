@@ -44,7 +44,7 @@ function foo(): typeof foo {
 >foo : () => typeof foo
 
     return null;
->null : null
+>null : () => typeof foo
 }
 var foo1: typeof foo;
 >foo1 : () => typeof foo

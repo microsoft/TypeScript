@@ -16,7 +16,7 @@ paired.reduce(function (a1, a2) {
 >a1.concat : any
 >a1 : any
 >concat : any
->{} : {}
+>{} : any
 
 } , []);
 >[] : undefined[]
@@ -35,7 +35,7 @@ paired.reduce((b1, b2) => {
 >b1.concat : any
 >b1 : any
 >concat : any
->{} : {}
+>{} : any
 
 } , []);
 >[] : undefined[]
@@ -52,7 +52,7 @@ paired.reduce((b3, b4) => b3.concat({}), []);
 >b3.concat : any
 >b3 : any
 >concat : any
->{} : {}
+>{} : any
 >[] : undefined[]
 
 paired.map((c1) => c1.count);

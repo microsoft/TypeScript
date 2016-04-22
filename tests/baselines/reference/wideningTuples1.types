@@ -10,8 +10,8 @@ var y = foo([undefined]);
 >y : [any]
 >foo([undefined]) : [any]
 >foo : <T extends [any]>(x: T) => T
->[undefined] : [undefined]
->undefined : undefined
+>[undefined] : [any]
+>undefined : any
 
 y = [""];
 >y = [""] : [string]

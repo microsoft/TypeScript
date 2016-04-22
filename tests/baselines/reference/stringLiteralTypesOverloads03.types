@@ -68,7 +68,7 @@ function f(...args: any[]): any {
 >args : any[]
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 
 let fResult1 = f(hello);
@@ -114,7 +114,7 @@ function g(...args: any[]): any {
 >args : any[]
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 
 let gResult1 = g(hello);

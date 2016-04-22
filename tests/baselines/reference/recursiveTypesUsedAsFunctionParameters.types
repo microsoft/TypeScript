@@ -133,7 +133,7 @@ function other<T extends List<U>, U>() {
 >foo5 : { <V>(x: T): string; <V>(x: List<V>): number; <V>(x: MyList<V>): boolean; }
 >V : V
 >x : any
->null : null
+>null : any
 
     var list: List<string>;
 >list : List<string>

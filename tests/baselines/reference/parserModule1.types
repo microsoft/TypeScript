@@ -17,7 +17,7 @@
         export var diagnosticWriter: IDiagnosticWriter = null;
 >diagnosticWriter : IDiagnosticWriter
 >IDiagnosticWriter : IDiagnosticWriter
->null : null
+>null : IDiagnosticWriter
 
         export var analysisPass: number = 0;
 >analysisPass : number

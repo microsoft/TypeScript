@@ -15,7 +15,7 @@ function foo1(...stuff: any[]): any {
 >stuff : any[]
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 
 var a = foo1 `${1}`;          // string
@@ -29,7 +29,7 @@ var b = foo1([], 1);          // number
 >b : number
 >foo1([], 1) : number
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
->[] : undefined[]
+>[] : string[]
 >1 : number
 
 function foo2(strs: string[], x: number): number;
@@ -48,7 +48,7 @@ function foo2(...stuff: any[]): any {
 >stuff : any[]
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 
 var c = foo2 `${1}`;          // number
@@ -62,6 +62,6 @@ var d = foo2([], 1);          // number
 >d : number
 >foo2([], 1) : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
->[] : undefined[]
+>[] : string[]
 >1 : number
 

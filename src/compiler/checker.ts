@@ -3184,6 +3184,44 @@ namespace ts {
             return unknownType;
         }
 
+        function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
+            if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
+                const parent = <ClassLikeDeclaration>declaration.parent;
+                const propertyName = declaration.symbol.name;
+                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
+                if (extendedPropertyType) {
+                    return extendedPropertyType;
+                }
+                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent);
+                if (implementedTypeNodes) {
+                    return getSinglePropertyTypeOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
+                }
+            }
+
+            return undefined;
+        }
+
+        function getSinglePropertyTypeOfTypes(types: Type[], propertyName: string) {
+            let result: Type;
+            for (const t of types) {
+                if (t !== unknownType) {
+                    const property = getPropertyOfType(t, propertyName);
+                    if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
+                        continue;
+                    }
+                    if (property.name === propertyName) {
+                        const propertyType = getTypeOfSymbol(property);
+                        if (result && result !== propertyType) {
+                            // if there's more than one matching property, return undefined
+                            return undefined;
+                        }
+                        result = propertyType;
+                    }
+                }
+            }
+            return result;
+        }
+
         function getTargetType(type: ObjectType): Type {
             return type.flags & TypeFlags.Reference ? (<TypeReference>type).target : type;
         }
@@ -5410,7 +5448,7 @@ namespace ts {
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
         function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -7868,7 +7906,7 @@ namespace ts {
             error(reference, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
         }
 
-        function checkIdentifier(node: Identifier): Type {
+        function checkIdentifier(node: Identifier, contextualMapper?: TypeMapper): Type {
             const symbol = getResolvedSymbol(node);
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
@@ -7919,11 +7957,18 @@ namespace ts {
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getTypeOfSymbol(localOrExportSymbol);
+            let type = getTypeOfSymbol(localOrExportSymbol);
             if (strictNullChecks && !isAssignmentTarget(node) && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined)) {
                 checkVariableAssignedBefore(symbol, node);
             }
-            return getNarrowedTypeOfReference(type, node);
+            type = getNarrowedTypeOfReference(type, node);
+            if (symbol.name === "undefined" && !isInferentialContext(contextualMapper) && !isBindingPatternDeclaration(node.parent)) {
+                const contextualType = getContextualType(node);
+                if (contextualType && (!strictNullChecks || contextualType.flags & TypeFlags.Undefined)) {
+                    return contextualType;
+                }
+            }
+            return type;
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -8406,6 +8451,24 @@ namespace ts {
             }
         }
 
+        function isBindingPatternDeclaration(node: Node) {
+            if (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                const declaration = <ParameterDeclaration | VariableDeclaration | BindingElement>node;
+                return declaration.name.kind === SyntaxKind.ArrayBindingPattern || declaration.name.kind === SyntaxKind.ObjectBindingPattern;
+            }
+        }
+
+        function checkNullKeyword(nullNode: Expression, contextualMapper?: TypeMapper) {
+            const contextualType = getContextualType(nullNode);
+            if (contextualType &&
+                !isInferentialContext(contextualMapper) &&
+                !isBindingPatternDeclaration(nullNode.parent) &&
+                (!strictNullChecks || contextualType.flags & TypeFlags.Null)) {
+                return contextualType;
+            }
+            return nullType;
+        }
+
         function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
             if ((isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
                 isContextSensitive(func) &&
@@ -8422,7 +8485,7 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
-            if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
+            if (isFunctionExpressionOrArrowFunction(func) || isMethod(func)) {
                 if (isContextSensitive(func)) {
                     const contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
@@ -8447,9 +8510,9 @@ namespace ts {
         }
 
         // In a variable, parameter or property declaration with a type annotation,
-        //   the contextual type of an initializer expression is the type of the variable, parameter or property. 
-        // Otherwise, in a parameter declaration of a contextually typed function expression, 
-        //   the contextual type of an initializer expression is the contextual type of the parameter. 
+        //   the contextual type of an initializer expression is the type of the variable, parameter or property.
+        // Otherwise, in a parameter declaration of a contextually typed function expression,
+        //   the contextual type of an initializer expression is the contextual type of the parameter.
         // Otherwise, in a variable or parameter declaration with a binding pattern name,
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
@@ -8462,6 +8525,12 @@ namespace ts {
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                    if (type) {
+                        return type;
+                    }
+                }
+                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                    const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
                     if (type) {
                         return type;
                     }
@@ -8798,7 +8867,7 @@ namespace ts {
 
         function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
             // Only function expressions, arrow functions, and object literal methods are contextually typed.
-            return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
+            return isFunctionExpressionOrArrowFunction(node) || isMethod(node)
                 ? getContextualSignature(<FunctionExpression>node)
                 : undefined;
         }
@@ -8809,10 +8878,18 @@ namespace ts {
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            const type = isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(node)
-                : getApparentTypeOfContextualType(node);
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isMethod(node));
+            let type: Type;
+            if (isFunctionExpressionOrArrowFunction(node)) {
+                type = getApparentTypeOfContextualType(node);
+            }
+            else if (isObjectLiteralMethod(node)) {
+                type = getContextualTypeForObjectLiteralMethod(node);
+            }
+            else if (isMethod(node)) {
+                type = getTypeOfBasePropertyDeclaration(node);
+            }
+
             if (!type) {
                 return undefined;
             }
@@ -8926,7 +9003,7 @@ namespace ts {
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
             const elements = node.elements;
             let hasSpreadElement = false;
-            const elementTypes: Type[] = [];
+            let elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             for (const e of elements) {
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElementExpression) {
@@ -8988,7 +9065,14 @@ namespace ts {
                     }
                 }
             }
-            return createArrayType(elementTypes.length ? getUnionType(elementTypes) : emptyArrayElementType);
+            if (!elementTypes.length) {
+                const contextualType = getContextualType(node);
+                if (isInferentialContext(contextualMapper) || !contextualType || !(<TypeReference>contextualType).typeArguments) {
+                    return createArrayType(emptyArrayElementType);
+                }
+                elementTypes = (<TypeReference>contextualType).typeArguments;
+            }
+            return createArrayType(getUnionType(elementTypes));
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -9056,10 +9140,10 @@ namespace ts {
                 }
             }
             const unionType = propTypes.length ? getUnionType(propTypes) : undefinedType;
-            return createIndexInfo(unionType, /*isReadonly*/ false);
+            return createIndexInfo(unionType, /*isReadonly*/false);
         }
 
-        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper: TypeMapper): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
@@ -9073,6 +9157,17 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+
+            // Use the contextual type only for empty object literals if the contextual type has only indexers and optional properties
+            if (!node.properties.length &&
+                contextualType &&
+                contextualType !== voidType &&
+                !isInferentialContext(contextualMapper) &&
+                !getSignaturesOfType(contextualType, SignatureKind.Call).length &&
+                !getSignaturesOfType(contextualType, SignatureKind.Construct).length &&
+                !forEach(getPropertiesOfType(contextualType), prop => !(prop.flags & SymbolFlags.Optional))) {
+                return contextualType;
+            }
 
             for (const memberDecl of node.properties) {
                 let member = memberDecl.symbol;
@@ -12296,7 +12391,7 @@ namespace ts {
             return checkExpression((<PropertyAssignment>node).initializer, contextualMapper);
         }
 
-        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper: TypeMapper): Type {
             // Grammar checking
             checkGrammarMethod(node);
 
@@ -12371,13 +12466,13 @@ namespace ts {
         function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return checkIdentifier(<Identifier>node);
+                    return checkIdentifier(<Identifier>node, contextualMapper);
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:
                     return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
-                    return nullType;
+                    return checkNullKeyword(node, contextualMapper);
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                     return booleanType;

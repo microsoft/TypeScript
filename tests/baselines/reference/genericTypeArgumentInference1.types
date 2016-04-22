@@ -50,7 +50,7 @@ var r = _.all([true, 1, null, 'yes'], _.identity);
 >[true, 1, null, 'yes'] : (boolean | number | string)[]
 >true : boolean
 >1 : number
->null : null
+>null : boolean | number | string
 >'yes' : string
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
@@ -74,7 +74,7 @@ var r3 = _.all([], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[] : undefined[]
+>[] : any[]
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static
 >identity : <T>(value: T) => T

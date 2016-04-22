@@ -82,15 +82,15 @@ for(var anObject: Object = new Object();;){}
 
 for(var anAny: any = null;;){}
 >anAny : any
->null : null
+>null : any
 
 for(var aSecondAny: any = undefined;;){}
 >aSecondAny : any
->undefined : undefined
+>undefined : any
 
 for(var aVoid: void = undefined;;){}
 >aVoid : void
->undefined : undefined
+>undefined : void
 
 for(var anInterface: I = new C();;){}
 >anInterface : I

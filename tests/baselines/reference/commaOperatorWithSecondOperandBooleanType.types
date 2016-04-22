@@ -85,9 +85,9 @@ null, BOOLEAN;
 
 ANY = undefined, BOOLEAN;
 >ANY = undefined, BOOLEAN : boolean
->ANY = undefined : undefined
+>ANY = undefined : any
 >ANY : any
->undefined : undefined
+>undefined : any
 >BOOLEAN : boolean
 
 1, true;
@@ -133,9 +133,9 @@ var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
 >resultIsBoolean7 : boolean
 >(ANY = undefined, BOOLEAN) : boolean
 >ANY = undefined, BOOLEAN : boolean
->ANY = undefined : undefined
+>ANY = undefined : any
 >ANY : any
->undefined : undefined
+>undefined : any
 >BOOLEAN : boolean
 
 var resultIsBoolean8 = (1, true);

@@ -470,7 +470,9 @@ namespace ts {
 
                 currentReachabilityState = Reachability.Reachable;
                 hasExplicitReturn = false;
-                labelStack = labelIndexMap = implicitLabels = undefined;
+                labelStack = undefined;
+                labelIndexMap = undefined;
+                implicitLabels = undefined;
             }
 
             if (isInJavaScriptFile(node) && node.jsDocComment) {

@@ -34,7 +34,7 @@ function fn<T>() {
     var values: ISubject<any>[] = [];
 >values : ISubject<any>[]
 >ISubject : ISubject<T>
->[] : undefined[]
+>[] : ISubject<any>[]
 
     // Hang when using <T>, but not <any>
     combineLatest<T>(values);

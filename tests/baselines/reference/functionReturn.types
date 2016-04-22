@@ -32,5 +32,5 @@ function f5(): string {
 >'' : string
 
     return undefined;
->undefined : undefined
+>undefined : string
 }

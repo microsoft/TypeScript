@@ -26,19 +26,19 @@ interface Transform3D {
 var style: IBookStyle = {
 >style : IBookStyle
 >IBookStyle : IBookStyle
->{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { 'ry': any; }[]; }
+>{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { 'ry': Transform3D; }[]; }
 
     initialLeftPageTransforms: (width: number) => {
->initialLeftPageTransforms : (width: number) => { 'ry': any; }[]
->(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { 'ry': any; }[]
+>initialLeftPageTransforms : (width: number) => { 'ry': Transform3D; }[]
+>(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { 'ry': Transform3D; }[]
 >width : number
 
         return [
->[            {'ry': null }        ] : { 'ry': null; }[]
+>[            {'ry': null }        ] : { 'ry': Transform3D; }[]
 
             {'ry': null }
->{'ry': null } : { 'ry': null; }
->null : null
+>{'ry': null } : { 'ry': Transform3D; }
+>null : Transform3D
 
         ];
     }

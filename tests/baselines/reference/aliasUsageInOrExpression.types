@@ -46,7 +46,7 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->null : null
+>null : { x: IHasVisualizationModel; }
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
 >moduleA : typeof moduleA
@@ -59,11 +59,11 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->null : null
+>null : { x: IHasVisualizationModel; }
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
 >moduleA : typeof moduleA
->null : null
+>null : { x: IHasVisualizationModel; }
 
 === tests/cases/compiler/aliasUsageInOrExpression_backbone.ts ===
 export class Model {

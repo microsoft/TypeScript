@@ -29,75 +29,75 @@ var ae: E;
 
 var b: number = null;
 >b : number
->null : null
+>null : number
 
 var c: string = null;
 >c : string
->null : null
+>null : string
 
 var d: boolean = null;
 >d : boolean
->null : null
+>null : boolean
 
 var e: Date = null;
 >e : Date
 >Date : Date
->null : null
+>null : Date
 
 var f: any = null;
 >f : any
->null : null
+>null : any
 
 var g: void = null;
 >g : void
->null : null
+>null : void
 
 var h: Object = null;
 >h : Object
 >Object : Object
->null : null
+>null : Object
 
 var i: {} = null;
 >i : {}
->null : null
+>null : {}
 
 var j: () => {} = null;
 >j : () => {}
->null : null
+>null : () => {}
 
 var k: Function = null;
 >k : Function
 >Function : Function
->null : null
+>null : Function
 
 var l: (x: number) => string = null;
 >l : (x: number) => string
 >x : number
->null : null
+>null : (x: number) => string
 
 ac = null;
->ac = null : null
+>ac = null : C
 >ac : C
->null : null
+>null : C
 
 ai = null;
->ai = null : null
+>ai = null : I
 >ai : I
->null : null
+>null : I
 
 ae = null;
->ae = null : null
+>ae = null : E
 >ae : E
->null : null
+>null : E
 
 var m: number[] = null;
 >m : number[]
->null : null
+>null : number[]
 
 var n: { foo: string } = null;
 >n : { foo: string; }
 >foo : string
->null : null
+>null : { foo: string; }
 
 var o: <T>(x: T) => T = null;
 >o : <T>(x: T) => T
@@ -105,17 +105,17 @@ var o: <T>(x: T) => T = null;
 >x : T
 >T : T
 >T : T
->null : null
+>null : <T>(x: T) => T
 
 var p: Number = null;
 >p : Number
 >Number : Number
->null : null
+>null : Number
 
 var q: String = null;
 >q : String
 >String : String
->null : null
+>null : String
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
@@ -131,19 +131,19 @@ function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >V : V
 
     x = null;
->x = null : null
+>x = null : T
 >x : T
->null : null
+>null : T
 
     y = null;
->y = null : null
+>y = null : U
 >y : U
->null : null
+>null : U
 
     z = null;
->z = null : null
+>z = null : V
 >z : V
->null : null
+>null : V
 }
 
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {

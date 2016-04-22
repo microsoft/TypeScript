@@ -73,14 +73,14 @@ e = n;
 >n : number
 
 e = null;
->e = null : null
+>e = null : E
 >e : E
->null : null
+>null : E
 
 e = undefined;
->e = undefined : undefined
+>e = undefined : E
 >e : E
->undefined : undefined
+>undefined : E
 
 e = 1;
 >e = 1 : number

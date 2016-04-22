@@ -41,7 +41,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 >a : IHasVisualizationModel
 ><IHasVisualizationModel>null : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
->null : null
+>null : IHasVisualizationModel
 
 === tests/cases/compiler/aliasUsageInGenericFunction_backbone.ts ===
 export class Model {

@@ -61,11 +61,11 @@ t2 = [E1.one, E2.two];
 >two : E2
 
 t3 = [5, undefined];
->t3 = [5, undefined] : [number, undefined]
+>t3 = [5, undefined] : [number, any]
 >t3 : [number, any]
->[5, undefined] : [number, undefined]
+>[5, undefined] : [number, any]
 >5 : number
->undefined : undefined
+>undefined : any
 
 t4 = [E1.one, E2.two, 20];
 >t4 = [E1.one, E2.two, 20] : [E1, E2, number]

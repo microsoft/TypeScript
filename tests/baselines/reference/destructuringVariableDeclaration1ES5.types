@@ -62,16 +62,16 @@ var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >"hello" : string
 
 var [b5 = 3, b6 = true, b7 = temp] = [undefined, undefined, undefined];
->b5 : any
+>b5 : number
 >3 : number
->b6 : any
+>b6 : boolean
 >true : boolean
->b7 : any
+>b7 : { t1: boolean; t2: string; }
 >temp : { t1: boolean; t2: string; }
->[undefined, undefined, undefined] : [undefined, undefined, undefined]
->undefined : undefined
->undefined : undefined
->undefined : undefined
+>[undefined, undefined, undefined] : [number, boolean, { t1: boolean; t2: string; }]
+>undefined : number
+>undefined : boolean
+>undefined : { t1: boolean; t2: string; }
 
 // The type T associated with a binding element is determined as follows:
 //      If the binding element is a rest element, T is an array type with

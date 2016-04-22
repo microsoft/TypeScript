@@ -48,7 +48,7 @@ function f3({ x = 0, y = 0 }) { }
 f3({});
 >f3({}) : void
 >f3 : ({x, y}: { x?: number; y?: number; }) => void
->{} : {}
+>{} : { x?: number; y?: number; }
 
 f3({ x: 1 });
 >f3({ x: 1 }) : void
@@ -143,26 +143,26 @@ f6();
 f6({});
 >f6({}) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
->{} : {}
+>{} : { x?: number; y?: number; }
 
 f6({ x: 1 });
 >f6({ x: 1 }) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
->{ x: 1 } : { x: number; }
+>{ x: 1 } : { x?: number; y?: number; }
 >x : number
 >1 : number
 
 f6({ y: 1 });
 >f6({ y: 1 }) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
->{ y: 1 } : { y: number; }
+>{ y: 1 } : { y?: number; x?: number; }
 >y : number
 >1 : number
 
 f6({ x: 1, y: 1 });
 >f6({ x: 1, y: 1 }) : void
 >f6 : ({x, y}?: { x?: number; y?: number; }) => void
->{ x: 1, y: 1 } : { x: number; y: number; }
+>{ x: 1, y: 1 } : { x?: number; y?: number; }
 >x : number
 >1 : number
 >y : number
@@ -187,34 +187,34 @@ f7();
 f7({ a: {} });
 >f7({ a: {} }) : void
 >f7 : ({a: {x, y}}?: { a: { x?: number; y?: number; }; }) => void
->{ a: {} } : { a: {}; }
->a : {}
->{} : {}
+>{ a: {} } : { a: { x?: number; y?: number; }; }
+>a : { x?: number; y?: number; }
+>{} : { x?: number; y?: number; }
 
 f7({ a: { x: 1 } });
 >f7({ a: { x: 1 } }) : void
 >f7 : ({a: {x, y}}?: { a: { x?: number; y?: number; }; }) => void
->{ a: { x: 1 } } : { a: { x: number; }; }
->a : { x: number; }
->{ x: 1 } : { x: number; }
+>{ a: { x: 1 } } : { a: { x?: number; y?: number; }; }
+>a : { x?: number; y?: number; }
+>{ x: 1 } : { x?: number; y?: number; }
 >x : number
 >1 : number
 
 f7({ a: { y: 1 } });
 >f7({ a: { y: 1 } }) : void
 >f7 : ({a: {x, y}}?: { a: { x?: number; y?: number; }; }) => void
->{ a: { y: 1 } } : { a: { y: number; }; }
->a : { y: number; }
->{ y: 1 } : { y: number; }
+>{ a: { y: 1 } } : { a: { y?: number; x?: number; }; }
+>a : { y?: number; x?: number; }
+>{ y: 1 } : { y?: number; x?: number; }
 >y : number
 >1 : number
 
 f7({ a: { x: 1, y: 1 } });
 >f7({ a: { x: 1, y: 1 } }) : void
 >f7 : ({a: {x, y}}?: { a: { x?: number; y?: number; }; }) => void
->{ a: { x: 1, y: 1 } } : { a: { x: number; y: number; }; }
->a : { x: number; y: number; }
->{ x: 1, y: 1 } : { x: number; y: number; }
+>{ a: { x: 1, y: 1 } } : { a: { x?: number; y?: number; }; }
+>a : { x?: number; y?: number; }
+>{ x: 1, y: 1 } : { x?: number; y?: number; }
 >x : number
 >1 : number
 >y : number

@@ -16,7 +16,7 @@ function Foo<T>(array: T[]): Foo<T> {
 >T : T
 
     return undefined;
->undefined : undefined
+>undefined : Foo<T>
 }
 
 module Foo {

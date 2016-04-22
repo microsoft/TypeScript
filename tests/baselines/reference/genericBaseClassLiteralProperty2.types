@@ -14,11 +14,11 @@ class BaseCollection2<TItem extends CollectionItem2> {
 
     constructor() {
         this._itemsByKey = {};
->this._itemsByKey = {} : {}
+>this._itemsByKey = {} : { [key: string]: TItem; }
 >this._itemsByKey : { [key: string]: TItem; }
 >this : this
 >_itemsByKey : { [key: string]: TItem; }
->{} : {}
+>{} : { [key: string]: TItem; }
     }
 }
 

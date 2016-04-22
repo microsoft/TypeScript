@@ -40,6 +40,6 @@ function foo(name: any): Z {
 >Z : Z
 
     return null;
->null : null
+>null : Z
 }
 

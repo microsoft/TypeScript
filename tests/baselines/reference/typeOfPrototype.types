@@ -11,11 +11,11 @@ class Foo {
 >'' : string
 }
 Foo.prototype.bar = undefined; // Should be OK
->Foo.prototype.bar = undefined : undefined
+>Foo.prototype.bar = undefined : number
 >Foo.prototype.bar : number
 >Foo.prototype : Foo
 >Foo : typeof Foo
 >prototype : Foo
 >bar : number
->undefined : undefined
+>undefined : number
 

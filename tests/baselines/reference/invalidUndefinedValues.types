@@ -27,9 +27,9 @@ x = a;
 >a : void
 
 x = null;
->x = null : null
+>x = null : any
 >x : any
->null : null
+>null : any
 
 class C { foo: string }
 >C : C

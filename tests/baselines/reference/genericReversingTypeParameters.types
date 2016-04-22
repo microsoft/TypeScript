@@ -15,14 +15,14 @@ class BiMap<K, V> {
 >key : K
 >K : K
 >V : V
->null : null
+>null : V
 
     public inverse(): BiMap<V, K> { return null; }
 >inverse : () => BiMap<V, K>
 >BiMap : BiMap<K, V>
 >V : V
 >K : K
->null : null
+>null : BiMap<V, K>
 }
 
 var b = new BiMap<string, number>();

@@ -49,7 +49,7 @@ function each(collection: any, callback: (indexInArray: any, valueOfElement: any
 >valueOfElement : any
 
     return null;
->null : null
+>null : any
 }
 
 function _setBarAndText(): void {

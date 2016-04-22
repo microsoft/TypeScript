@@ -15,7 +15,7 @@ class B<T extends U, U extends Array<number>> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : B<T, U>
 }
 
 class C<T extends U, U extends String> {
@@ -30,7 +30,7 @@ class C<T extends U, U extends String> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : C<T, U>
 }
 
 class D<T extends U, U extends Number> {
@@ -45,7 +45,7 @@ class D<T extends U, U extends Number> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : D<T, U>
 }
 
 interface I<T extends U, U extends Number> {

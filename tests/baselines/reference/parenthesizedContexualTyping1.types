@@ -162,7 +162,7 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >x : number
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
@@ -184,7 +184,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
@@ -206,7 +206,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -234,7 +234,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -267,39 +267,39 @@ type ObjType = { x: (p: number) => string; y: (p: string) => number };
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >obj1 : { x: (p: number) => string; y: (p: string) => number; }
 >ObjType : { x: (p: number) => string; y: (p: string) => number; }
->{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->x : (x: number) => any
->x => (x, undefined) : (x: number) => any
+>{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => string; y: (y: string) => number; }
+>x : (x: number) => string
+>x => (x, undefined) : (x: number) => string
 >x : number
->(x, undefined) : undefined
->x, undefined : undefined
+>(x, undefined) : string
+>x, undefined : string
 >x : number
->undefined : undefined
->y : (y: string) => any
->y => (y, undefined) : (y: string) => any
+>undefined : string
+>y : (y: string) => number
+>y => (y, undefined) : (y: string) => number
 >y : string
->(y, undefined) : undefined
->y, undefined : undefined
+>(y, undefined) : number
+>y, undefined : number
 >y : string
->undefined : undefined
+>undefined : number
 
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >obj2 : { x: (p: number) => string; y: (p: string) => number; }
 >ObjType : { x: (p: number) => string; y: (p: string) => number; }
->({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
->{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->x : (x: number) => any
->x => (x, undefined) : (x: number) => any
+>({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => string; y: (y: string) => number; }
+>{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => string; y: (y: string) => number; }
+>x : (x: number) => string
+>x => (x, undefined) : (x: number) => string
 >x : number
->(x, undefined) : undefined
->x, undefined : undefined
+>(x, undefined) : string
+>x, undefined : string
 >x : number
->undefined : undefined
->y : (y: string) => any
->y => (y, undefined) : (y: string) => any
+>undefined : string
+>y : (y: string) => number
+>y => (y, undefined) : (y: string) => number
 >y : string
->(y, undefined) : undefined
->y, undefined : undefined
+>(y, undefined) : number
+>y, undefined : number
 >y : string
->undefined : undefined
+>undefined : number
 

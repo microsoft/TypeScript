@@ -6,14 +6,14 @@ var as = 43;
 var x = undefined as number;
 >x : number
 >undefined as number : number
->undefined : undefined
+>undefined : number
 
 var y = (null as string).length;
 >y : number
 >(null as string).length : number
 >(null as string) : string
 >null as string : string
->null : null
+>null : string
 >length : number
 
 var z = Date as any as string;

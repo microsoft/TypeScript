@@ -80,7 +80,7 @@ var d = new anyCtor1(undefined);
 >d : any
 >new anyCtor1(undefined) : any
 >anyCtor1 : new (n: any) => any
->undefined : undefined
+>undefined : any
 
 // Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1<T extends { new (): number }>(s: T) {

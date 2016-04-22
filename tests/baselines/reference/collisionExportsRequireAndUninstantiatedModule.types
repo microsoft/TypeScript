@@ -12,7 +12,7 @@ export function foo(): require.I {
 >I : require.I
 
     return null;
->null : null
+>null : require.I
 }
 export module exports { // no error
 >exports : any
@@ -27,5 +27,5 @@ export function foo2(): exports.I {
 >I : exports.I
 
     return null;
->null : null
+>null : exports.I
 }

@@ -27,7 +27,7 @@ function observableArray<T>(): ObservableArray<T> { return null;}
 >T : T
 >ObservableArray : ObservableArray<T>
 >T : T
->null : null
+>null : ObservableArray<T>
 
  
 

@@ -57,7 +57,7 @@ module A {
     var array: I[] = null;
 >array : I[]
 >I : I
->null : null
+>null : I[]
 
     var fn = (s: string) => {
 >fn : (s: string) => string
@@ -145,7 +145,7 @@ module Y {
     export var array: I[] = null;
 >array : I[]
 >I : I
->null : null
+>null : I[]
 
     export var fn = (s: string) => {
 >fn : (s: string) => string

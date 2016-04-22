@@ -79,14 +79,14 @@ import {Cls} from "C";
 >Cls : typeof Cls
 
 A.prototype.getCls = function () { return undefined; }
->A.prototype.getCls = function () { return undefined; } : () => any
+>A.prototype.getCls = function () { return undefined; } : () => Cls
 >A.prototype.getCls : () => Cls
 >A.prototype : A
 >A : typeof A
 >prototype : A
 >getCls : () => Cls
->function () { return undefined; } : () => any
->undefined : undefined
+>function () { return undefined; } : () => Cls
+>undefined : Cls
 
 declare module "./a" {
     interface A {

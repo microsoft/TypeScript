@@ -22,7 +22,7 @@ module Query {
 >T : T
 
         return null;
->null : null
+>null : Iterator<T>
     }
 
     function fromOrderBy() {

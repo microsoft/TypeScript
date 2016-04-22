@@ -49,7 +49,7 @@ class B<T extends U, U extends Two> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : B<T, U>
 }
 
 class C<T extends U, U extends Three> {
@@ -64,7 +64,7 @@ class C<T extends U, U extends Three> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : C<T, U>
 }
 
 class D<T extends U, U extends Four<string>> {
@@ -79,7 +79,7 @@ class D<T extends U, U extends Four<string>> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : D<T, U>
 }
 
 interface I<T extends U, U extends Five<string>> {

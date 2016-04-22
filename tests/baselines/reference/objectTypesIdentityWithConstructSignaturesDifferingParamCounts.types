@@ -7,7 +7,7 @@ class B {
     constructor(x: string, y: string) { return null; }
 >x : string
 >y : string
->null : null
+>null : B
 }
 
 class C<T> {
@@ -19,7 +19,7 @@ class C<T> {
 >T : T
 >y : T
 >T : T
->null : null
+>null : C<T>
 }
 
 interface I {

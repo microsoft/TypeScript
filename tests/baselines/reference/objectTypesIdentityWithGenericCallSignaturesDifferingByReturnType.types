@@ -11,7 +11,7 @@ class A {
 >T : T
 >x : T
 >T : T
->null : null
+>null : string
 }
 
 class B<T> {
@@ -22,7 +22,7 @@ class B<T> {
 >foo : (x: T) => number
 >x : T
 >T : T
->null : null
+>null : number
 }
 
 class C<T> {
@@ -33,7 +33,7 @@ class C<T> {
 >foo : (x: T) => boolean
 >x : T
 >T : T
->null : null
+>null : boolean
 }
 
 interface I<T> {

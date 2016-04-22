@@ -17,12 +17,12 @@ class Employee {
     public manager: Employee = null;
 >manager : Employee
 >Employee : Employee
->null : null
+>null : Employee
 
     public reports: Employee[] = [];
 >reports : Employee[]
 >Employee : Employee
->[] : undefined[]
+>[] : Employee[]
 }
 
 class Employee2 {
@@ -54,18 +54,18 @@ class Employee2 {
 >false : boolean
 
         this.manager = null;
->this.manager = null : null
+>this.manager = null : Employee
 >this.manager : Employee
 >this : this
 >manager : Employee
->null : null
+>null : Employee
 
         this.reports = [];
->this.reports = [] : undefined[]
+>this.reports = [] : Employee[]
 >this.reports : Employee[]
 >this : this
 >reports : Employee[]
->[] : undefined[]
+>[] : Employee[]
     }
 }
 

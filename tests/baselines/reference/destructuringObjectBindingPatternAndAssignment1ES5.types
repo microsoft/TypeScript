@@ -10,7 +10,7 @@ var { a1 }: any = undefined;
 
 var { a2 }: any = {};
 >a2 : any
->{} : {}
+>{} : any
 
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S has an apparent property with the property name specified in

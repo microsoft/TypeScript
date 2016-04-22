@@ -54,7 +54,7 @@ module TypeScript2 {
 >C : C
 
       return undefined;
->undefined : undefined
+>undefined : PullTypeSymbol<A, B, C>
     }
   }
   export class PullTypeSymbol <A,B,C>extends PullSymbol {

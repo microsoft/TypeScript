@@ -14,15 +14,18 @@ t[3] = "";
 var x: typeof undefined = 3;
 x = 3;
 
-var y;
-var u = [3, (y = null)];
-u[3] = "";
-
 var ob: { x: typeof undefined } = { x: "" };
 
 // Highlights the difference between array literals and object literals
-var arr: string[] = [3, null]; // not assignable because null is not widened. BCT is {}
-var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
+// In arrays, null: number, so `strings = numbers` fails
+var numbers = [3, null];
+var strings: string[] = numbers;
+
+// In objects, null widens to any
+var obj1 = { x: "", y: null };
+// y: any is assignable to string
+var obj: { [s: string]: string; } = obj1; // assignable because null is widened, and therefore BCT is any
+
 
 //// [widenedTypes.js]
 null instanceof (function () { });
@@ -34,24 +37,29 @@ var t = [3, (3, null)];
 t[3] = "";
 var x = 3;
 x = 3;
-var y;
-var u = [3, (y = null)];
-u[3] = "";
 var ob = { x: "" };
 // Highlights the difference between array literals and object literals
-var arr = [3, null]; // not assignable because null is not widened. BCT is {}
-var obj = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
+// In arrays, null: number, so `strings = numbers` fails
+var numbers = [3, null];
+var strings = numbers;
+// In objects, null widens to any
+var obj1 = { x: "", y: null };
+// y: any is assignable to string
+var obj = obj1; // assignable because null is widened, and therefore BCT is any
 
 
 //// [widenedTypes.d.ts]
 declare var t: number[];
 declare var x: typeof undefined;
-declare var y: any;
-declare var u: number[];
 declare var ob: {
     x: typeof undefined;
 };
-declare var arr: string[];
+declare var numbers: number[];
+declare var strings: string[];
+declare var obj1: {
+    x: string;
+    y: any;
+};
 declare var obj: {
-    [x: string]: string;
+    [s: string]: string;
 };

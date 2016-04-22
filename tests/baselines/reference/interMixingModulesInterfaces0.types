@@ -10,7 +10,7 @@ module A {
 >B : B
 
             return null;
->null : null
+>null : B
         }
     }
 

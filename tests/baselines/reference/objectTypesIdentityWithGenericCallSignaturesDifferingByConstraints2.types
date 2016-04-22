@@ -16,7 +16,7 @@ class A {
 >T : T
 >y : U
 >U : U
->null : null
+>null : string
 }
 
 class B<T extends U, U extends Array<number>> {
@@ -32,7 +32,7 @@ class B<T extends U, U extends Array<number>> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : string
 }
 
 class C<T extends U, U extends String> {
@@ -48,7 +48,7 @@ class C<T extends U, U extends String> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : string
 }
 
 class D<T extends U, U extends Number> {
@@ -64,7 +64,7 @@ class D<T extends U, U extends Number> {
 >T : T
 >y : U
 >U : U
->null : null
+>null : string
 }
 
 interface I<T extends U, U extends Number> {
