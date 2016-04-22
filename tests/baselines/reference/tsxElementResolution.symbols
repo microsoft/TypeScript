@@ -36,7 +36,7 @@ var a = <foundFirst  x="hello" />;
 
 var b = <string_named />;
 >b : Symbol(b, Decl(tsxElementResolution.tsx, 18, 3))
->string_named : Symbol(JSX.IntrinsicElements.'string_named', Decl(tsxElementResolution.tsx, 3, 28))
+>string_named : Symbol(JSX.IntrinsicElements['string_named'], Decl(tsxElementResolution.tsx, 3, 28))
 
 // TODO: This should not be a parse error (should
 //        parse a property name here, not identifier)

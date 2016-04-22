@@ -135,7 +135,7 @@ export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
 >"123" : string
 
 for ([x] of [[1]]) {}
->[x] : any[]
+>[x] : [any]
 >x : any
 >[[1]] : number[][]
 >[1] : number[]

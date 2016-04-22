@@ -221,6 +221,13 @@ namespace ts {
          */
         getDocCommentTemplateAtPosition(fileName: string, position: number): string;
 
+        /**
+         * Returns JSON-encoded boolean to indicate whether we should support brace location
+         * at the current position.
+         * E.g. we don't want brace completion inside string-literals, comments, etc.
+         */
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string;
+
         getEmitOutput(fileName: string): string;
     }
 
@@ -730,6 +737,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `getBraceMatchingAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getBraceMatchingAtPosition(fileName, position)
+            );
+        }
+
+        public isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): string {
+            return this.forwardJSONCall(
+                `isValidBraceCompletionAtPostion('${fileName}', ${position}, ${openingBrace})`,
+                () => this.languageService.isValidBraceCompletionAtPostion(fileName, position, openingBrace)
             );
         }
 

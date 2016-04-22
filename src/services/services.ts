@@ -13,7 +13,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.4";
+    export const servicesVersion = "0.5";
 
     export interface Node {
         getSourceFile(): SourceFile;
@@ -1134,6 +1134,8 @@ namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
+
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean;
 
         getEmitOutput(fileName: string): EmitOutput;
 
@@ -5694,7 +5696,7 @@ namespace ts {
                         declaration => (declaration.kind === SyntaxKind.ImportSpecifier ||
                             declaration.kind === SyntaxKind.ExportSpecifier) ? declaration : undefined);
                     if (importOrExportSpecifier &&
-                        // export { a } 
+                        // export { a }
                         (!importOrExportSpecifier.propertyName ||
                             // export {a as class } where a is location
                             importOrExportSpecifier.propertyName === location)) {
@@ -5774,7 +5776,7 @@ namespace ts {
                     return undefined;
                 }
 
-                // If symbol is of object binding pattern element without property name we would want to 
+                // If symbol is of object binding pattern element without property name we would want to
                 // look for property too and that could be anywhere
                 if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
                     return undefined;
@@ -6236,7 +6238,7 @@ namespace ts {
                     result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
                 }
 
-                // If this is symbol of binding element without propertyName declaration in Object binding pattern 
+                // If this is symbol of binding element without propertyName declaration in Object binding pattern
                 // Include the property in the search
                 const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol);
                 if (bindingElementPropertySymbol) {
@@ -6290,7 +6292,7 @@ namespace ts {
 
                 if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration) {
+                        if (isClassLike(declaration)) {
                             getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
                             forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
@@ -6307,7 +6309,7 @@ namespace ts {
                         if (type) {
                             const propertySymbol = typeChecker.getPropertyOfType(type, propertyName);
                             if (propertySymbol) {
-                                result.push(propertySymbol);
+                                result.push(...typeChecker.getRootSymbols(propertySymbol));
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
@@ -6352,7 +6354,7 @@ namespace ts {
                     }
                 }
 
-                // If the reference location is the binding element and doesn't have property name 
+                // If the reference location is the binding element and doesn't have property name
                 // then include the binding element in the related symbols
                 //      let { a } : { a };
                 const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol);
@@ -7469,6 +7471,36 @@ namespace ts {
             return { newText: result, caretOffset: preamble.length };
         }
 
+        function isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+
+            // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too 
+            // expensive to do during typing scenarios
+            // i.e. whether we're dealing with:
+            //      var x = new foo<| ( with class foo<T>{} )
+            // or 
+            //      var y = 3 <|
+            if (openingBrace === CharacterCodes.lessThan) {
+                return false;
+            }
+
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+
+            // Check if in a context where we don't want to perform any insertion
+            if (isInString(sourceFile, position) || isInComment(sourceFile, position)) {
+                return false;
+            }
+
+            if (isInsideJsxElementOrAttribute(sourceFile, position)) {
+                return openingBrace === CharacterCodes.openBrace;
+            }
+
+            if (isInTemplateString(sourceFile, position)) {
+                return false;
+            }
+
+            return true;
+        }
+
         function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
             if (isFunctionLike(commentOwner)) {
                 return commentOwner.parameters;
@@ -7763,6 +7795,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
+            isValidBraceCompletionAtPostion,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/controlFlow/controlFlowAssignmentExpression.ts ===
+let x: string | boolean | number;
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+
+let obj: any;
+>obj : Symbol(obj, Decl(controlFlowAssignmentExpression.ts, 1, 3))
+
+x = "";
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+
+x = x.length;
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+x; // number
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+
+x = true;
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+
+(x = "", obj).foo = (x = x.length);
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+>obj : Symbol(obj, Decl(controlFlowAssignmentExpression.ts, 1, 3))
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
+
+x; // number
+>x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
+

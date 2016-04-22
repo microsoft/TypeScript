@@ -2,8 +2,8 @@
 
 type T = string | "foo" | "bar" | "baz";
 
-var x: "foo" | "bar" | "baz" | string = "foo";
-var y: T = "bar";
+var x: "foo" | "bar" | "baz" | string = undefined;
+var y: T = undefined;
 
 if (x === "foo") {
     let a = x;

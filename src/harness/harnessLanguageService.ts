@@ -163,7 +163,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string, content?: string): void {
+        public openFile(fileName: string, content?: string, scriptKindName?: string): void {
         }
 
         /**
@@ -437,6 +437,9 @@ namespace Harness.LanguageService {
         getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPostion(fileName, position, openingBrace));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -525,9 +528,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string, content?: string): void {
-            super.openFile(fileName, content);
-            this.client.openFile(fileName, content);
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
+            super.openFile(fileName, content, scriptKindName);
+            this.client.openFile(fileName, content, scriptKindName);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {

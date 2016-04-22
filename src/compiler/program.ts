@@ -1985,10 +1985,21 @@ namespace ts {
                     if (!hasZeroOrOneAsteriskCharacter(key)) {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
                     }
-                    for (const subst of options.paths[key]) {
-                        if (!hasZeroOrOneAsteriskCharacter(subst)) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_in_pattern_1_in_can_have_at_most_one_Asterisk_character, subst, key));
+                    if (isArray(options.paths[key])) {
+                        for (const subst of options.paths[key]) {
+                            const typeOfSubst = typeof subst;
+                            if (typeOfSubst === "string") {
+                                if (!hasZeroOrOneAsteriskCharacter(subst)) {
+                                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_in_pattern_1_in_can_have_at_most_one_Asterisk_character, subst, key));
+                                }
+                            }
+                            else {
+                                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_for_pattern_1_has_incorrect_type_expected_string_got_2, subst, key, typeOfSubst));
+                            }
                         }
+                    }
+                    else {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_pattern_0_should_be_an_array, key));
                     }
                 }
             }

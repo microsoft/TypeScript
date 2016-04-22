@@ -455,6 +455,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -481,11 +482,6 @@ namespace ts {
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
-    }
-
-    // Transient identifier node (marked by id === -1)
-    export interface TransientIdentifier extends Identifier {
-        resolvedSymbol: Symbol;
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -1551,6 +1547,39 @@ namespace ts {
         isBracketed: boolean;
     }
 
+    export const enum FlowKind {
+        Unreachable,
+        Start,
+        Label,
+        Assignment,
+        Condition
+    }
+
+    export interface FlowNode {
+        kind: FlowKind;  // Node kind
+        id?: number;     // Node id used by flow type cache in checker
+    }
+
+    // FlowLabel represents a junction with multiple possible preceding control flows.
+    export interface FlowLabel extends FlowNode {
+        antecedents: FlowNode[];
+    }
+
+    // FlowAssignment represents a node that assigns a value to a narrowable reference,
+    // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
+    export interface FlowAssignment extends FlowNode {
+        node: Expression | VariableDeclaration | BindingElement;
+        antecedent: FlowNode;
+    }
+
+    // FlowCondition represents a condition that is known to be true or false at the
+    // node's location in the control flow.
+    export interface FlowCondition extends FlowNode {
+        expression: Expression;
+        assumeTrue: boolean;
+        antecedent: FlowNode;
+    }
+
     export interface AmdDependency {
         path: string;
         name: string;
@@ -1852,6 +1881,7 @@ namespace ts {
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
     }
 
     export const enum SymbolFormatFlags {
@@ -2085,8 +2115,6 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
-        firstAssignmentChecked?: boolean;   // True if first assignment node has been computed
-        firstAssignment?: Node;             // First assignment node (undefined if no assignments)
     }
 
     /* @internal */
@@ -2120,18 +2148,13 @@ namespace ts {
     /* @internal */
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
-        resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
-        generatedName?: string;           // Generated name for module, enum, or import declaration
-        generatedNames?: Map<string>;     // Generated names table for source file
-        assignmentMap?: Map<boolean>;     // Cached map of references assigned within this node
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
@@ -2183,6 +2206,7 @@ namespace ts {
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
+        Narrowable = Any | ObjectType | Union | TypeParameter,
         /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */

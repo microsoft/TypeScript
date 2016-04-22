@@ -6,6 +6,8 @@ tests/cases/perf/*
 !tests/cases/webharness/compilerToString.js
 test-args.txt
 ~*.docx
+\#*\#
+.\#*
 tests/baselines/local/*
 tests/services/baselines/local/*
 tests/baselines/prototyping/local/*

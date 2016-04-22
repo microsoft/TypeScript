@@ -455,7 +455,7 @@ namespace ts {
             const { line: startLine } = getLineAndCharacterOfPosition(sourceFile, node.body.pos);
             const { line: endLine } = getLineAndCharacterOfPosition(sourceFile, node.body.end);
             if (startLine < endLine) {
-                // The arrow function spans multiple lines, 
+                // The arrow function spans multiple lines,
                 // make the error span be the first line, inclusive.
                 return createTextSpan(pos, getEndLinePosition(startLine, sourceFile) - pos + 1);
             }
@@ -860,6 +860,15 @@ namespace ts {
         }
     }
 
+    export function getContainingFunctionOrModule(node: Node): Node {
+        while (true) {
+            node = node.parent;
+            if (isFunctionLike(node) || node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile) {
+                return node;
+            }
+        }
+    }
+
     export function getContainingClass(node: Node): ClassLikeDeclaration {
         while (true) {
             node = node.parent;
@@ -1216,6 +1225,10 @@ namespace ts {
         return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
     }
 
+    export function isSingleOrDoubleQuote(charCode: number) {
+        return charCode === CharacterCodes.singleQuote || charCode === CharacterCodes.doubleQuote;
+    }
+
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
@@ -1397,23 +1410,26 @@ namespace ts {
         return isRestParameter(lastOrUndefined(s.parameters));
     }
 
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (node) {
-            if (node.flags & NodeFlags.JavaScriptFile) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
-                    return true;
-                }
+    export function hasDeclaredRestParameter(s: SignatureDeclaration): boolean {
+        return isDeclaredRestParam(lastOrUndefined(s.parameters));
+    }
 
-                const paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
-                }
+    export function isRestParameter(node: ParameterDeclaration) {
+        if (node && (node.flags & NodeFlags.JavaScriptFile)) {
+            if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                return true;
             }
 
-            return node.dotDotDotToken !== undefined;
+            const paramTag = getCorrespondingJSDocParameterTag(node);
+            if (paramTag && paramTag.typeExpression) {
+                return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+            }
         }
+        return isDeclaredRestParam(node);
+    }
 
-        return false;
+    export function isDeclaredRestParam(node: ParameterDeclaration) {
+        return node && node.dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1430,6 +1446,31 @@ namespace ts {
 
     export function isBindingPattern(node: Node): node is BindingPattern {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
+    }
+
+    // A node is an assignment target if it is on the left hand side of an '=' token, if it is parented by a property
+    // assignment in an object literal that is an assignment target, or if it is parented by an array literal that is
+    // an assignment target. Examples include 'a = xxx', '{ p: a } = xxx', '[{ p: a}] = xxx'.
+    export function isAssignmentTarget(node: Node): boolean {
+        while (node.parent.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        while (true) {
+            const parent = node.parent;
+            if (parent.kind === SyntaxKind.ArrayLiteralExpression || parent.kind === SyntaxKind.SpreadElementExpression) {
+                node = parent;
+                continue;
+            }
+            if (parent.kind === SyntaxKind.PropertyAssignment || parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                node = parent.parent;
+                continue;
+            }
+            return parent.kind === SyntaxKind.BinaryExpression &&
+                (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken &&
+                (<BinaryExpression>parent).left === node ||
+                (parent.kind === SyntaxKind.ForInStatement || parent.kind === SyntaxKind.ForOfStatement) &&
+                (<ForInStatement | ForOfStatement>parent).initializer === node;
+        }
     }
 
     export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
@@ -1529,7 +1570,7 @@ namespace ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationName(name: Node): name is Identifier | StringLiteral | LiteralExpression {
+    export function isDeclarationName(name: Node): boolean {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }

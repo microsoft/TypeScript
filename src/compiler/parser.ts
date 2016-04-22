@@ -1825,7 +1825,7 @@ namespace ts {
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             let entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);  // !!!
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -3657,7 +3657,7 @@ namespace ts {
             let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);  // !!!
                 node.left = elementName;
                 node.right = parseIdentifierName();
                 elementName = finishNode(node);
@@ -6141,7 +6141,7 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    const tagName = parseJSDocIdentifier();
+                    const tagName = parseJSDocIdentifierName();
                     if (!tagName) {
                         return;
                     }
@@ -6236,7 +6236,7 @@ namespace ts {
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
                     if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = parseJSDocIdentifier();
+                        name = parseJSDocIdentifierName();
                         isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
@@ -6246,8 +6246,8 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (token === SyntaxKind.Identifier) {
-                        name = parseJSDocIdentifier();
+                    else if (tokenIsIdentifierOrKeyword(token)) {
+                        name = parseJSDocIdentifierName();
                     }
 
                     if (!name) {
@@ -6400,7 +6400,7 @@ namespace ts {
                     typeParameters.pos = scanner.getStartPos();
 
                     while (true) {
-                        const name = parseJSDocIdentifier();
+                        const name = parseJSDocIdentifierName();
                         if (!name) {
                             parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
                             return undefined;
@@ -6433,8 +6433,12 @@ namespace ts {
                     return token = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifier(): Identifier {
-                    if (token !== SyntaxKind.Identifier) {
+                function parseJSDocIdentifierName(): Identifier {
+                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token));
+                }
+
+                function createJSDocIdentifier(isIdentifier: boolean): Identifier {
+                    if (!isIdentifier) {
                         parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                         return undefined;
                     }
