@@ -1919,7 +1919,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                /*location*/ node
+                /*location*/ getUndecoratedRange(node)
             );
 
             setOriginalNode(method, node);
@@ -1962,7 +1962,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ node
+                /*location*/ getUndecoratedRange(node)
             );
 
             setOriginalNode(accessor, node);
@@ -1996,7 +1996,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ node
+                /*location*/ getUndecoratedRange(node)
             );
 
             setOriginalNode(accessor, node);
@@ -2196,7 +2196,7 @@ namespace ts {
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
                 visitNode(node.initializer, visitor, isExpression),
-                /*location*/ node
+                /*location*/ getUndecoratedRange(node)
             );
 
             setOriginalNode(parameter, node);
