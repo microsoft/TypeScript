@@ -1178,7 +1178,7 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
-    export function isInternalModuleImportEqualsDeclaration(node: Node): boolean {
+    export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
