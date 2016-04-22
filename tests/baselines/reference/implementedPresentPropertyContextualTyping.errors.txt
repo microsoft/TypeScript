@@ -1,0 +1,27 @@
+tests/cases/conformance/expressions/contextualTyping/implementedPresentPropertyContextualTyping.ts(4,7): error TS2420: Class 'C' incorrectly implements interface 'X'.
+  Types of property 'n' are incompatible.
+    Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/expressions/contextualTyping/implementedPresentPropertyContextualTyping.ts(7,7): error TS2420: Class 'C2' incorrectly implements interface 'X'.
+  Types of property 'n' are incompatible.
+    Type 'null' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/implementedPresentPropertyContextualTyping.ts (2 errors) ====
+    interface X {
+        n: number
+    }
+    class C implements X { // error, n: undefined isn't assignable to n: number
+          ~
+!!! error TS2420: Class 'C' incorrectly implements interface 'X'.
+!!! error TS2420:   Types of property 'n' are incompatible.
+!!! error TS2420:     Type 'undefined' is not assignable to type 'number'.
+        n = undefined;
+    }
+    class C2 implements X {
+          ~~
+!!! error TS2420: Class 'C2' incorrectly implements interface 'X'.
+!!! error TS2420:   Types of property 'n' are incompatible.
+!!! error TS2420:     Type 'null' is not assignable to type 'number'.
+        n = null;
+    }
+    

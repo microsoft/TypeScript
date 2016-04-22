@@ -1,44 +1,73 @@
 //// [implementedPropertyContextualTyping1.ts]
 interface Event {
-	time: number;
+    time: number;
 }
 interface Base {
-	superHandle: (e: Event) => number;
+    superHandle: (e: Event) => number;
 }
 interface Listener extends Base {
-	handle: (e: Event) => void;
+    handle: (e: Event) => void;
 }
 interface Ringer {
-	ring: (times: number) => void;
+    ring: (times: number) => void;
 }
 interface StringLiteral {
-	literal(): "A";
+    literal(): "A";
+    literals: "A" | "B";
 }
 
 abstract class Watcher {
-	abstract watch(e: Event): number;
+    abstract watch(e: Event): number;
 }
 
 class Alarm extends Watcher implements Listener, Ringer, StringLiteral {
-	str: string;
-	handle = e => {
-		this.str = e.time; // error
-	}
-	superHandle = e => {
-		this.str = e.time; // error
-		return e.time;
-	}
-	ring(times) {
-		this.str = times; // error
-	}
-	watch(e) {
-		this.str = e.time; // error
-		return e.time;
-	}
-	literal() {
-		return "A"; // ok: "A" is assignable to "A"
-	}
+    str: string;
+    handle = e => {
+        this.str = e.time; // error
+    }
+    superHandle = e => {
+        this.str = e.time; // error
+        return e.time;
+    }
+    ring(times) {
+        this.str = times; // error
+    }
+    watch(e) {
+        this.str = e.time; // error
+        return e.time;
+    }
+    literal() {
+        return "A"; // ok: "A" is assignable to "A"
+    }
+    literals = "A"; // ok: "A" is assignable to "A" | "B"
 }
+
+interface A {
+    p: string;
+    q(n: string): void;
+    r: string;
+
+}
+interface B {
+    p: number;
+    q(n: string): void;
+    r: boolean;
+}
+class C {
+    r: number;
+}
+class Multiple extends C implements A, B {
+    p = undefined; // error, Multiple.p is implicitly any because A.p and B.p exist
+    q(n) {         // error, n is implicitly any because A.q and B.q exist
+        n.length;
+        n.toFixed;
+    }
+    r = null;     // OK, C.r wins over A.r and B.r
+}
+let multiple = new Multiple();
+multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
+multiple.r.length;  // error, Multiple.r: number
+
 
 //// [implementedPropertyContextualTyping1.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -63,6 +92,7 @@ var Alarm = (function (_super) {
             _this.str = e.time; // error
             return e.time;
         };
+        this.literals = "A"; // ok: "A" is assignable to "A" | "B"
     }
     Alarm.prototype.ring = function (times) {
         this.str = times; // error
@@ -76,3 +106,24 @@ var Alarm = (function (_super) {
     };
     return Alarm;
 }(Watcher));
+var C = (function () {
+    function C() {
+    }
+    return C;
+}());
+var Multiple = (function (_super) {
+    __extends(Multiple, _super);
+    function Multiple() {
+        _super.apply(this, arguments);
+        this.p = undefined; // error, Multiple.p is implicitly any because A.p and B.p exist
+        this.r = null; // OK, C.r wins over A.r and B.r
+    }
+    Multiple.prototype.q = function (n) {
+        n.length;
+        n.toFixed;
+    };
+    return Multiple;
+}(C));
+var multiple = new Multiple();
+multiple.r.toFixed; // OK, C.r wins so Multiple.r: number
+multiple.r.length; // error, Multiple.r: number

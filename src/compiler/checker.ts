@@ -3196,19 +3196,20 @@ namespace ts {
         }
 
         function getPropertyOfBaseTypeDeclaration(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
-            const property = getFirstPropertyOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(declaration))), propertyName);
+            const property = getSinglePropertyOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(declaration))), propertyName);
             if (property) {
                 return property;
             }
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(declaration);
             if (implementedTypeNodes) {
-                return getFirstPropertyOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
+                return getSinglePropertyOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
             }
 
             return undefined;
         }
 
-        function getFirstPropertyOfTypes(types: Type[], propertyName: string) {
+        function getSinglePropertyOfTypes(types: Type[], propertyName: string) {
+            let result: Symbol;
             for (const t of types) {
                 if (t !== unknownType) {
                     const property = getPropertyOfType(t, propertyName);
@@ -3216,12 +3217,16 @@ namespace ts {
                         continue;
                     }
                     if (property.name === propertyName) {
-                        return property;
+                        if (result) {
+                            // if there's more than one matching property, return undefined
+                            return undefined;
+                        }
+                        result = property;
                     }
                 }
             }
 
-            return undefined;
+            return result;
         }
 
         function getTargetType(type: ObjectType): Type {
@@ -7965,10 +7970,12 @@ namespace ts {
             }
             type = getNarrowedTypeOfReference(type, node);
             if (symbol.name === "undefined" && !isInferentialContext(contextualMapper) && !isBindingPatternDeclaration(node.parent)) {
-                return getContextualType(node) || type;
+                const contextualType = getContextualType(node);
+                if (contextualType && (!strictNullChecks || contextualType.flags & TypeFlags.Undefined)) {
+                    return contextualType;
+                }
             }
             return type;
-
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -8459,10 +8466,14 @@ namespace ts {
         }
 
         function checkNullKeyword(nullNode: Expression, contextualMapper?: TypeMapper) {
-            if (isInferentialContext(contextualMapper) || isBindingPatternDeclaration(nullNode.parent)) {
-                return nullType;
+            const contextualType = getContextualType(nullNode);
+            if (contextualType &&
+                !isInferentialContext(contextualMapper) &&
+                !isBindingPatternDeclaration(nullNode.parent) &&
+                (!strictNullChecks || contextualType.flags & TypeFlags.Null)) {
+                return contextualType;
             }
-            return getContextualType(nullNode) || nullType;
+            return nullType;
         }
 
         function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
@@ -8506,9 +8517,9 @@ namespace ts {
         }
 
         // In a variable, parameter or property declaration with a type annotation,
-        //   the contextual type of an initializer expression is the type of the variable, parameter or property. 
-        // Otherwise, in a parameter declaration of a contextually typed function expression, 
-        //   the contextual type of an initializer expression is the contextual type of the parameter. 
+        //   the contextual type of an initializer expression is the type of the variable, parameter or property.
+        // Otherwise, in a parameter declaration of a contextually typed function expression,
+        //   the contextual type of an initializer expression is the contextual type of the parameter.
         // Otherwise, in a variable or parameter declaration with a binding pattern name,
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
