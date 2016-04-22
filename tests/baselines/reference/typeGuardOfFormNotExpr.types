@@ -73,13 +73,13 @@ if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number
 >(typeof strOrNumOrBool !== "string") : boolean
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : boolean | string | number
 >"string" : string
 >!(typeof strOrNumOrBool !== "number") : boolean
 >(typeof strOrNumOrBool !== "number") : boolean
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : number | boolean
+>strOrNumOrBool : boolean | number
 >"number" : string
 
     strOrNum = strOrNumOrBool; // string | number
@@ -152,19 +152,19 @@ if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
 >(typeof strOrNumOrBool === "string") : boolean
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : boolean | string | number
 >"string" : string
 >numOrBool !== strOrNumOrBool : boolean
 >numOrBool : number | boolean
->strOrNumOrBool : number | boolean
+>strOrNumOrBool : boolean | number
 
     numOrBool = strOrNumOrBool; // number | boolean
->numOrBool = strOrNumOrBool : number | boolean
+>numOrBool = strOrNumOrBool : boolean | number
 >numOrBool : number | boolean
->strOrNumOrBool : number | boolean
+>strOrNumOrBool : boolean | number
 }
 else {
     var r1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >r1 : string | number | boolean
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : string | boolean | number
 }

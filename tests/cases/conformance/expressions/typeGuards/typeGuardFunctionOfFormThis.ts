@@ -34,19 +34,19 @@ else if (b.isFollower()) {
     b.follow();
 }
 
-if (((a.isLeader)())) {
-    a.lead();
-}
-else if (((a).isFollower())) {
-    a.follow();
-}
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
 
-if (((a["isLeader"])())) {
-    a.lead();
-}
-else if (((a)["isFollower"]())) {
-    a.follow();
-}
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 
 var holder2 = {a};
 
