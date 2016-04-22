@@ -3,6 +3,11 @@
 namespace ts {
     export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
     export type DirectoryWatcherCallback = (directoryName: string) => void;
+    export interface WatchedFile {
+        fileName: string;
+        callback: FileWatcherCallback;
+        mtime?: Date;
+    }
 
     export interface System {
         args: string[];
@@ -224,6 +229,91 @@ namespace ts {
             const _os = require("os");
             const _crypto = require("crypto");
 
+            const useNonPollingWatchers = process.env["TSC_NONPOLLING_WATCHER"];
+
+            function createWatchedFileSet() {
+                const dirWatchers: Map<DirectoryWatcher> = {};
+                // One file can have multiple watchers
+                const fileWatcherCallbacks: Map<FileWatcherCallback[]> = {};
+                return { addFile, removeFile };
+
+                function reduceDirWatcherRefCountForFile(fileName: string) {
+                    const dirName = getDirectoryPath(fileName);
+                    if (hasProperty(dirWatchers, dirName)) {
+                        const watcher = dirWatchers[dirName];
+                        watcher.referenceCount -= 1;
+                        if (watcher.referenceCount <= 0) {
+                            watcher.close();
+                            delete dirWatchers[dirName];
+                        }
+                    }
+                }
+
+                function addDirWatcher(dirPath: string): void {
+                    if (hasProperty(dirWatchers, dirPath)) {
+                        const watcher = dirWatchers[dirPath];
+                        watcher.referenceCount += 1;
+                        return;
+                    }
+
+                    const watcher: DirectoryWatcher = _fs.watch(
+                        dirPath,
+                        { persistent: true },
+                        (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
+                    );
+                    watcher.referenceCount = 1;
+                    dirWatchers[dirPath] = watcher;
+                    return;
+                }
+
+                function addFileWatcherCallback(filePath: string, callback: FileWatcherCallback): void {
+                    if (hasProperty(fileWatcherCallbacks, filePath)) {
+                        fileWatcherCallbacks[filePath].push(callback);
+                    }
+                    else {
+                        fileWatcherCallbacks[filePath] = [callback];
+                    }
+                }
+
+                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
+                    addFileWatcherCallback(fileName, callback);
+                    addDirWatcher(getDirectoryPath(fileName));
+
+                    return { fileName, callback };
+                }
+
+                function removeFile(watchedFile: WatchedFile) {
+                    removeFileWatcherCallback(watchedFile.fileName, watchedFile.callback);
+                    reduceDirWatcherRefCountForFile(watchedFile.fileName);
+                }
+
+                function removeFileWatcherCallback(filePath: string, callback: FileWatcherCallback) {
+                    if (hasProperty(fileWatcherCallbacks, filePath)) {
+                        const newCallbacks = copyListRemovingItem(callback, fileWatcherCallbacks[filePath]);
+                        if (newCallbacks.length === 0) {
+                            delete fileWatcherCallbacks[filePath];
+                        }
+                        else {
+                            fileWatcherCallbacks[filePath] = newCallbacks;
+                        }
+                    }
+                }
+
+                function fileEventHandler(eventName: string, relativeFileName: string, baseDirPath: string) {
+                    // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
+                    const fileName = typeof relativeFileName !== "string"
+                        ? undefined
+                        : ts.getNormalizedAbsolutePath(relativeFileName, baseDirPath);
+                    // Some applications save a working file via rename operations
+                    if ((eventName === "change" || eventName === "rename") && hasProperty(fileWatcherCallbacks, fileName)) {
+                        for (const fileCallback of fileWatcherCallbacks[fileName]) {
+                            fileCallback(fileName);
+                        }
+                    }
+                }
+            }
+            const watchedFileSet = createWatchedFileSet();
+
             function isNode4OrLater(): boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
             }
@@ -319,7 +409,7 @@ namespace ts {
                     const files = _fs.readdirSync(path || ".").sort();
                     const directories: string[] = [];
                     for (const current of files) {
-                        // This is necessary because on some file system node fails to exclude 
+                        // This is necessary because on some file system node fails to exclude
                         // "." and "..". See https://github.com/nodejs/node/issues/4002
                         if (current === "." || current === "..") {
                             continue;
@@ -353,7 +443,26 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
-                    return _fs.watchFile(fileName, callback);
+                    if (useNonPollingWatchers) {
+                        const watchedFile = watchedFileSet.addFile(fileName, callback);
+                        return {
+                            close: () => watchedFileSet.removeFile(watchedFile)
+                        };
+                    }
+                    else {
+                        _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
+                        return {
+                            close: () => _fs.unwatchFile(fileName, fileChanged)
+                        };
+                    }
+
+                    function fileChanged(curr: any, prev: any) {
+                        if (+curr.mtime <= +prev.mtime) {
+                            return;
+                        }
+
+                        callback(fileName);
+                    }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows

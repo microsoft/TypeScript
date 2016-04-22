@@ -111,12 +111,6 @@ namespace ts.server {
         detailLevel?: string;
     }
 
-    interface WatchedFile {
-        fileName: string;
-        callback: FileWatcherCallback;
-        mtime?: Date;
-    }
-
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
         const logEnv: LogOptions = {};
         const args = logEnvStr.split(" ");
