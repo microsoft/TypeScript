@@ -2174,10 +2174,6 @@ const _super = (function (geti, seti) {
             }
 
             function tryEmitSubstitute(node: Node, emitNode: (node: Node) => void, isExpression: boolean) {
-                if ((<any>node).text === "localizedDiagnosticMessages" && isExpression) {
-                    debugger;
-                }
-
                 if (isSubstitutionEnabled(node) && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
                     const substitute = onSubstituteNode(node, isExpression);
                     if (substitute !== node) {

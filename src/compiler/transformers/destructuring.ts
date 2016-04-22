@@ -405,6 +405,7 @@ namespace ts {
         location: TextRange,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
         visitor?: (node: Node) => VisitResult<Node>) {
+
         if (isIdentifier(value) && reuseIdentifierExpressions) {
             return value;
         }
