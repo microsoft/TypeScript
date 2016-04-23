@@ -919,6 +919,7 @@ namespace ts.server {
                 configuredProject.updateGraph();
                 if (configuredProject.getSourceFile(info)) {
                     info.defaultProject = configuredProject;
+                    referencingProjects.push(configuredProject);
                 }
             }
             return referencingProjects;
