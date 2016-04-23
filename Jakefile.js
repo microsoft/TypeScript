@@ -195,12 +195,12 @@ var librarySourceMap = [
         { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"], },
-        
+
         // JavaScript library
         { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-        
+
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts"), },
@@ -286,11 +286,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (opts.outDir) {
-            options += " --outDir " + opts.outDir;
+            options += ` --outDir "${opts.outDir}"`;   // support spaces in path
         }
 
         if (!opts.noOutFile) {
-            options += " --out " + outFile;
+            options += ` --out "${outFile}"`;   // support spaces in path
         }
         else {
             options += " --module commonjs"
@@ -303,7 +303,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (useDebugMode) {
             options += " -sourcemap";
             if (!opts.noMapRoot) {
-                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+                options += ` -mapRoot "file:///${path.resolve(path.dirname(outFile))}"`;    // support spaces in path
             }
         }
 
@@ -312,18 +312,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
-        cmd = cmd + sources.join(" ");
+        if (sources) cmd = cmd + `"${sources.join('" "')}"`;   // support spaces in path
         console.log(cmd + "\n");
 
-        var ex = jake.createExec([cmd]);
-        // Add listeners for output and error
-        ex.addListener("stdout", function(output) {
-            process.stdout.write(output);
-        });
-        ex.addListener("stderr", function(error) {
-            process.stderr.write(error);
-        });
-        ex.addListener("cmdEnd", function() {
+        jakeExec(cmd, function() {
             if (!useDebugMode && prefixes && fs.existsSync(outFile)) {
                 for (var i in prefixes) {
                     prependFile(prefixes[i], outFile);
@@ -333,14 +325,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             if (callback) {
                 callback();
             }
-
-            complete();
-        });
-        ex.addListener("error", function() {
+        }, function() {
             fs.unlinkSync(outFile);
             fail("Compilation of " + outFile + " unsuccessful");
         });
-        ex.run();
     }, {async: true});
 }
 
@@ -386,18 +374,8 @@ compileFile(processDiagnosticMessagesJs,
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
     var cmd = host + " " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
+    jakeExec(cmd);
     // Add listeners for output and error
-    ex.addListener("stdout", function(output) {
-        process.stdout.write(output);
-    });
-    ex.addListener("stderr", function(error) {
-        process.stderr.write(error);
-    });
-    ex.addListener("cmdEnd", function() {
-        complete();
-    });
-    ex.run();
 }, {async: true});
 
 file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
@@ -431,14 +409,14 @@ task("setDebugMode", function() {
 task("configure-nightly", [configureNightlyJs], function() {
     var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, { async: true });
 
 desc("Configure, build, test, and publish the nightly release.");
 task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "runtests"], function () {
     var cmd = "npm publish --tag next";
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 });
 
 var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
@@ -447,7 +425,7 @@ file(scriptsTsdJson);
 task("tsd-scripts", [scriptsTsdJson], function () {
     var cmd = "tsd --config " + scriptsTsdJson + " install";
     console.log(cmd)
-    exec(cmd);
+    jakeExec(cmd);
 }, { async: true })
 
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
@@ -458,13 +436,13 @@ file(importDefinitelyTypedTestsTs);
 file(importDefinitelyTypedTestsJs, ["tsd-scripts", importDefinitelyTypedTestsTs], function () {
     var cmd = host + " " + LKGCompiler + " -p " + importDefinitelyTypedTestsDirectory;
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, { async: true });
 
 task("importDefinitelyTypedTests", [importDefinitelyTypedTestsJs], function () {
     var cmd = host + " " + importDefinitelyTypedTestsJs + " ./ ../DefinitelyTyped";
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, { async: true });
 
 // Local target to build the compiler and services
@@ -513,7 +491,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
                 var i = content.lastIndexOf("\n");
                 fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
             });
-    
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -629,8 +607,10 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
 
-function exec(cmd, completeHandler, errorHandler) {
+// Use this function to call jake.createExec([cmd]) as it sets Windows command line interpreter options appropriately. Don't call jake.createExec() directly.
+function jakeExec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
+
     // Add listeners for output and error
     ex.addListener("stdout", function(output) {
         process.stdout.write(output);
@@ -721,7 +701,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        exec(cmd, function () {
+        jakeExec(cmd, function () {
             deleteTemporaryProjectOutput();
             if (i === 0) {
                 var lint = jake.Task['lint'];
@@ -752,7 +732,7 @@ desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, { async: true });
 
 // Browser tests
@@ -763,7 +743,7 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
     var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
-    exec(cmd);
+    jakeExec(cmd);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
@@ -785,7 +765,7 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
     tests = tests ? tests : '';
     var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, {async: true});
 
 function getDiffTool() {
@@ -801,14 +781,14 @@ desc("Diffs the compiler baselines using the diff tool specified by the 'DIFF' e
 task('diff', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refBaseline + ' ' + localBaseline;
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, {async: true});
 
 desc("Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable");
 task('diff-rwc', function () {
     var cmd = '"' +  getDiffTool()  + '" ' + refRwcBaseline + ' ' + localRwcBaseline;
     console.log(cmd);
-    exec(cmd);
+    jakeExec(cmd);
 }, {async: true});
 
 desc("Builds the test sources and automation in debug mode");
@@ -870,13 +850,10 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function() {
     var options = "--outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
     console.log(cmd + "\n");
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
+    jakeExec(cmd, function() {
         fs.renameSync(temp + '/harness/loggedIO.js', loggedIOJsPath);
         jake.rmRf(temp);
-        complete();
     });
-    ex.run();
 }, {async: true});
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
@@ -887,11 +864,7 @@ desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function() {
     var cmd = host + ' ' + instrumenterJsPath + ' record iocapture ' + builtLocalDirectory + compilerFilename;
     console.log(cmd);
-    var ex = jake.createExec([cmd]);
-    ex.addListener("cmdEnd", function() {
-        complete();
-    });
-    ex.run();
+    jakeExec(cmd);
 }, { async: true });
 
 desc("Updates the sublime plugin's tsserver");
