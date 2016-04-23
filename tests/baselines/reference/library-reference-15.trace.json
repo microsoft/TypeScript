@@ -1,0 +1,5 @@
+[
+    "======== Resolving type reference directive 'jquery', containing file not set, root directory not set. ========",
+    "Root directory cannot be determined, skipping primary search paths.",
+    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder."
+]

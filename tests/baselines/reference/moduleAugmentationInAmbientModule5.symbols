@@ -18,7 +18,7 @@ let y = x.getA().x;
 declare module "A" {
     class A { x: number; }
 >A : Symbol(A, Decl(array.d.ts, 1, 20))
->x : Symbol(x, Decl(array.d.ts, 2, 13))
+>x : Symbol(A.x, Decl(array.d.ts, 2, 13))
 }
 
 declare module "array" {
@@ -33,7 +33,7 @@ declare module "array" {
 >T : Symbol(T, Decl(lib.d.ts, --, --), Decl(array.d.ts, 8, 24))
 
             getA(): A;
->getA : Symbol(getA, Decl(array.d.ts, 8, 28))
+>getA : Symbol(Array.getA, Decl(array.d.ts, 8, 28))
 >A : Symbol(A, Decl(array.d.ts, 6, 12))
         }
     }

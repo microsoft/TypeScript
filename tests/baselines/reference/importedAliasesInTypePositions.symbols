@@ -18,7 +18,7 @@ export module ImportingModule {
 >UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 31))
 
         constructor(private referred: ReferredTo) { }
->referred : Symbol(referred, Decl(file2.ts, 5, 20))
+>referred : Symbol(UsesReferredType.referred, Decl(file2.ts, 5, 20))
 >ReferredTo : Symbol(ReferredTo, Decl(file2.ts, 0, 35))
     }
 }
@@ -33,7 +33,7 @@ export module elaborate.nested.mod.name {
 >ReferredTo : Symbol(ReferredTo, Decl(file1.ts, 0, 41))
 
         doSomething(): void {
->doSomething : Symbol(doSomething, Decl(file1.ts, 1, 29))
+>doSomething : Symbol(ReferredTo.doSomething, Decl(file1.ts, 1, 29))
         }
     }
 }

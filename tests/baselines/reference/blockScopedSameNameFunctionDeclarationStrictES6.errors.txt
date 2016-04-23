@@ -1,0 +1,32 @@
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(6,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(11,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(14,5): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts(17,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/compiler/blockScopedSameNameFunctionDeclarationStrictES6.ts (4 errors) ====
+    "use strict";
+    function foo(a: number) {
+        if (a === 10) {
+            function foo() { }
+            foo();
+            foo(10); // not ok
+            ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+        }
+        else {
+            function foo() { } 
+            foo();
+            foo(10); // not ok
+            ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+        }
+        foo(10);
+        foo(); // not ok
+        ~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    }
+    foo(10);
+    foo(); // not ok - needs number
+    ~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.

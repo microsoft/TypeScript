@@ -35,7 +35,7 @@ class Adder {
 >Adder : Symbol(Adder, Decl(Adder.ts, 0, 0))
 
     add(a: number, b: number) {
->add : Symbol(add, Decl(Adder.ts, 0, 13))
+>add : Symbol(Adder.add, Decl(Adder.ts, 0, 13))
 >a : Symbol(a, Decl(Adder.ts, 1, 8))
 >b : Symbol(b, Decl(Adder.ts, 1, 18))
         

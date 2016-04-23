@@ -1,4 +1,5 @@
 /// <reference path="fourslash.ts" />
+// @ModuleResolution: classic
 
 // @Filename: refFile1.ts
 //// class D { }

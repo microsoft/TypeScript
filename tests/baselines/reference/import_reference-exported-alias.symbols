@@ -29,7 +29,7 @@ module App {
 >UserServices : Symbol(UserServices, Decl(file1.ts, 1, 28))
 
             public getUserName(): string {
->getUserName : Symbol(getUserName, Decl(file1.ts, 2, 35))
+>getUserName : Symbol(UserServices.getUserName, Decl(file1.ts, 2, 35))
 
                 return "Bill Gates";
             }

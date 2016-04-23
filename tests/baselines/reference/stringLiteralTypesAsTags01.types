@@ -88,7 +88,7 @@ let x: A = {
 }
 
 if (hasKind(x, "A")) {
->hasKind(x, "A") : entity is A
+>hasKind(x, "A") : boolean
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
 >x : A
 >"A" : "A"
@@ -105,7 +105,7 @@ else {
 
 if (!hasKind(x, "B")) {
 >!hasKind(x, "B") : boolean
->hasKind(x, "B") : entity is B
+>hasKind(x, "B") : boolean
 >hasKind : { (entity: Entity, kind: "A"): entity is A; (entity: Entity, kind: "B"): entity is B; (entity: Entity, kind: "A" | "B"): entity is Entity; }
 >x : A
 >"B" : "B"
@@ -116,6 +116,6 @@ if (!hasKind(x, "B")) {
 }
 else {
     let d = x;
->d : A
->x : A
+>d : {}
+>x : {}
 }

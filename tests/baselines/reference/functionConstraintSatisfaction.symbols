@@ -23,7 +23,7 @@ class C {
 >C : Symbol(C, Decl(functionConstraintSatisfaction.ts, 7, 9))
 
     foo: string;
->foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 9, 9))
+>foo : Symbol(C.foo, Decl(functionConstraintSatisfaction.ts, 9, 9))
 }
 
 var a: { (): string };
@@ -103,7 +103,7 @@ class C2<T> {
 >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 32, 9))
 
     foo: T;
->foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 32, 13))
+>foo : Symbol(C2.foo, Decl(functionConstraintSatisfaction.ts, 32, 13))
 >T : Symbol(T, Decl(functionConstraintSatisfaction.ts, 32, 9))
 }
 
@@ -154,7 +154,7 @@ var r11 = foo(<U extends Date>(x: U) => x);
 >r11 : Symbol(r11, Decl(functionConstraintSatisfaction.ts, 42, 3))
 >foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 0, 0))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
 >U : Symbol(U, Decl(functionConstraintSatisfaction.ts, 42, 15))
 >x : Symbol(x, Decl(functionConstraintSatisfaction.ts, 42, 31))
@@ -193,7 +193,7 @@ var r16 = foo(c2);
 interface F2 extends Function { foo: string; }
 >F2 : Symbol(F2, Decl(functionConstraintSatisfaction.ts, 47, 18))
 >Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->foo : Symbol(foo, Decl(functionConstraintSatisfaction.ts, 49, 31))
+>foo : Symbol(F2.foo, Decl(functionConstraintSatisfaction.ts, 49, 31))
 
 var f2: F2;
 >f2 : Symbol(f2, Decl(functionConstraintSatisfaction.ts, 50, 3))

@@ -3,7 +3,7 @@ class A {
 >A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
 
     x() {
->x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
     }
 }
 
@@ -13,7 +13,7 @@ class B extends A {
 
     // async method with only call/get on 'super' does not require a binding
     async simple() {
->simple : Symbol(simple, Decl(asyncMethodWithSuper_es6.ts, 5, 19))
+>simple : Symbol(B.simple, Decl(asyncMethodWithSuper_es6.ts, 5, 19))
 
         // call with property access
         super.x();
@@ -42,7 +42,7 @@ class B extends A {
 
     // async method with assignment/destructuring on 'super' requires a binding
     async advanced() {
->advanced : Symbol(advanced, Decl(asyncMethodWithSuper_es6.ts, 19, 5))
+>advanced : Symbol(B.advanced, Decl(asyncMethodWithSuper_es6.ts, 19, 5))
 
         const f = () => {};
 >f : Symbol(f, Decl(asyncMethodWithSuper_es6.ts, 23, 13))

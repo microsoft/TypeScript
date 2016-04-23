@@ -67,6 +67,7 @@ function foo<T, U>(t: T, u: U) {
     var x : T | U;
     x = t; // ok
     x = u; // ok
+    x = undefined;
     t = x; // error U not assignable to T
     u = x; // error T not assignable to U
 }
@@ -157,6 +158,7 @@ function foo(t, u) {
     var x;
     x = t; // ok
     x = u; // ok
+    x = undefined;
     t = x; // error U not assignable to T
     u = x; // error T not assignable to U
 }

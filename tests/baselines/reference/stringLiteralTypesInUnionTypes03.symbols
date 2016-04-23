@@ -6,9 +6,10 @@ type T = number | "foo" | "bar";
 var x: "foo" | "bar" | number;
 >x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))
 
-var y: T = "bar";
+var y: T = undefined;
 >y : Symbol(y, Decl(stringLiteralTypesInUnionTypes03.ts, 4, 3))
 >T : Symbol(T, Decl(stringLiteralTypesInUnionTypes03.ts, 0, 0))
+>undefined : Symbol(undefined)
 
 if (x === "foo") {
 >x : Symbol(x, Decl(stringLiteralTypesInUnionTypes03.ts, 3, 3))

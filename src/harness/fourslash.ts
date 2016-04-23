@@ -18,7 +18,7 @@
 /// <reference path="harnessLanguageService.ts" />
 /// <reference path="harness.ts" />
 /// <reference path="fourslashRunner.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace FourSlash {
     ts.disableIncrementalParsing = false;
@@ -221,8 +221,8 @@ namespace FourSlash {
 
             function tryAdd(path: string) {
                 const inputFile = inputFiles[path];
-                if (inputFile && !Harness.isLibraryFile(path)) {
-                    languageServiceAdapterHost.addScript(path, inputFile);
+                if (inputFile && !Harness.isDefaultLibraryFile(path)) {
+                    languageServiceAdapterHost.addScript(path, inputFile, /*isRootFile*/ true);
                     return true;
                 }
             }
@@ -231,13 +231,13 @@ namespace FourSlash {
         private getLanguageServiceAdapter(testType: FourSlashTestType, cancellationToken: TestCancellationToken, compilationOptions: ts.CompilerOptions): Harness.LanguageService.LanguageServiceAdapter {
             switch (testType) {
                 case FourSlashTestType.Native:
-                    return new Harness.LanguageService.NativeLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.NativeLanguageServiceAdapter(cancellationToken, compilationOptions);
                 case FourSlashTestType.Shims:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false, cancellationToken, compilationOptions);
                 case FourSlashTestType.ShimsWithPreprocess:
-                    return new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ true, cancellationToken, compilationOptions);
                 case FourSlashTestType.Server:
-                    return new Harness.LanguageService.ServerLanugageServiceAdapter(cancellationToken, compilationOptions);
+                    return new Harness.LanguageService.ServerLanguageServiceAdapter(cancellationToken, compilationOptions);
                 default:
                     throw new Error("Unknown FourSlash test type: ");
             }
@@ -247,6 +247,10 @@ namespace FourSlash {
             // Create a new Services Adapter
             this.cancellationToken = new TestCancellationToken();
             const compilationOptions = convertGlobalOptionsToCompilerOptions(this.testData.globalOptions);
+            if (compilationOptions.typesRoot) {
+                compilationOptions.typesRoot = ts.getNormalizedAbsolutePath(compilationOptions.typesRoot, this.basePath);
+            }
+
             const languageServiceAdapter = this.getLanguageServiceAdapter(testType, this.cancellationToken, compilationOptions);
             this.languageServiceAdapterHost = languageServiceAdapter.getHost();
             this.languageService = languageServiceAdapter.getLanguageService();
@@ -268,7 +272,7 @@ namespace FourSlash {
 
             if (startResolveFileRef) {
                 // Add the entry-point file itself into the languageServiceShimHost
-                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content);
+                this.languageServiceAdapterHost.addScript(startResolveFileRef.fileName, startResolveFileRef.content, /*isRootFile*/ true);
 
                 const resolvedResult = languageServiceAdapter.getPreProcessedFileInfo(startResolveFileRef.fileName, startResolveFileRef.content);
                 const referencedFiles: ts.FileReference[] = resolvedResult.referencedFiles;
@@ -291,17 +295,19 @@ namespace FourSlash {
 
                 // Check if no-default-lib flag is false and if so add default library
                 if (!resolvedResult.isLibFile) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                        Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
                 }
             }
             else {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 ts.forEachKey(this.inputFiles, fileName => {
-                    if (!Harness.isLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName]);
+                    if (!Harness.isDefaultLibraryFile(fileName)) {
+                        this.languageServiceAdapterHost.addScript(fileName, this.inputFiles[fileName], /*isRootFile*/ true);
                     }
                 });
-                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName, Harness.Compiler.defaultLibSourceFile.text);
+                this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
+                    Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
 
             this.formatCodeOptions = {
@@ -356,14 +362,14 @@ namespace FourSlash {
         }
 
         // Opens a file given its 0-based index or fileName
-        public openFile(index: number, content?: string): void;
-        public openFile(name: string, content?: string): void;
-        public openFile(indexOrName: any, content?: string) {
+        public openFile(index: number, content?: string, scriptKindName?: string): void;
+        public openFile(name: string, content?: string, scriptKindName?: string): void;
+        public openFile(indexOrName: any, content?: string, scriptKindName?: string) {
             const fileToOpen: FourSlashFile = this.findFile(indexOrName);
             fileToOpen.fileName = ts.normalizeSlashes(fileToOpen.fileName);
             this.activeFile = fileToOpen;
             // Let the host know that this file is now open
-            this.languageServiceAdapterHost.openFile(fileToOpen.fileName, content);
+            this.languageServiceAdapterHost.openFile(fileToOpen.fileName, content, scriptKindName);
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {
@@ -649,7 +655,7 @@ namespace FourSlash {
                 this.assertItemInCompletionList(completions.entries, symbol, text, documentation, kind);
             }
             else {
-                this.raiseError(`No completions at position '${ this.currentCaretPosition }' when looking for '${ symbol }'.`);
+                this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${symbol}'.`);
             }
         }
 
@@ -1279,7 +1285,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1370,7 +1376,7 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInletiants();
+                        // this.checkPostEditInvariants();
                     }
                 }
             }
@@ -1414,7 +1420,7 @@ namespace FourSlash {
                 return;
             }
 
-            const incrementalSourceFile = this.languageService.getSourceFile(this.activeFile.fileName);
+            const incrementalSourceFile = this.languageService.getNonBoundSourceFile(this.activeFile.fileName);
             Utils.assertInvariants(incrementalSourceFile, /*parent:*/ undefined);
 
             const incrementalSyntaxDiagnostics = incrementalSourceFile.parseDiagnostics;
@@ -1752,13 +1758,13 @@ namespace FourSlash {
                 const actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
                     this.activeFile.fileName,
                     /* needFileNameList */ true
-                    );
+                );
                 assert.equal(
                     expected.join(","),
-                    actual.fileNames.map( file => {
+                    actual.fileNames.map(file => {
                         return file.replace(this.basePath + "/", "");
-                        }).join(",")
-                    );
+                    }).join(",")
+                );
             }
         }
 
@@ -1842,6 +1848,37 @@ namespace FourSlash {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
                 return "# - " + representation + lineEnding;
             });
+        }
+
+        public verifyBraceCompletionAtPostion(negative: boolean, openingBrace: string) {
+
+            const openBraceMap: ts.Map<ts.CharacterCodes> = {
+                "(": ts.CharacterCodes.openParen,
+                "{": ts.CharacterCodes.openBrace,
+                "[": ts.CharacterCodes.openBracket,
+                "'": ts.CharacterCodes.singleQuote,
+                '"': ts.CharacterCodes.doubleQuote,
+                "`": ts.CharacterCodes.backtick,
+                "<": ts.CharacterCodes.lessThan
+            };
+
+            const charCode = openBraceMap[openingBrace];
+
+            if (!charCode) {
+                this.raiseError(`Invalid openingBrace '${openingBrace}' specified.`);
+            }
+
+            const position = this.currentCaretPosition;
+
+            const validBraceCompletion = this.languageService.isValidBraceCompletionAtPostion(this.activeFile.fileName, position, charCode);
+
+            if (!negative && !validBraceCompletion) {
+                this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
+            }
+
+            if (negative && validBraceCompletion) {
+                this.raiseError(`${position} is a valid brace completion position for ${openingBrace}`);
+            }
         }
 
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
@@ -2233,7 +2270,7 @@ namespace FourSlash {
         };
 
         const host = Harness.Compiler.createCompilerHost(
-            [ fourslashFile, testFile ],
+            [fourslashFile, testFile],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             Harness.IO.useCaseSensitiveFileNames(),
@@ -2258,7 +2295,7 @@ namespace FourSlash {
     function runCode(code: string, state: TestState): void {
         // Compile and execute the test
         const wrappedCode =
-`(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
+            `(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
 ${code}
 })`;
         try {
@@ -2372,7 +2409,7 @@ ${code}
                         }
                     }
                 }
-            // TODO: should be '==='?
+                // TODO: should be '==='?
             }
             else if (line == "" || lineLength === 0) {
                 // Previously blank lines between fourslash content caused it to be considered as 2 files,
@@ -2753,10 +2790,10 @@ namespace FourSlashInterface {
         // Opens a file, given either its index as it
         // appears in the test source, or its filename
         // as specified in the test metadata
-        public file(index: number, content?: string): void;
-        public file(name: string, content?: string): void;
-        public file(indexOrName: any, content?: string): void {
-            this.state.openFile(indexOrName, content);
+        public file(index: number, content?: string, scriptKindName?: string): void;
+        public file(name: string, content?: string, scriptKindName?: string): void;
+        public file(indexOrName: any, content?: string, scriptKindName?: string): void {
+            this.state.openFile(indexOrName, content, scriptKindName);
         }
     }
 
@@ -2771,12 +2808,12 @@ namespace FourSlashInterface {
 
         // Verifies the member list contains the specified symbol. The
         // member list is brought up if necessary
-        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
+        public memberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             if (this.negative) {
                 this.state.verifyMemberListDoesNotContain(symbol);
             }
             else {
-                this.state.verifyMemberListContains(symbol, text, documenation, kind);
+                this.state.verifyMemberListContains(symbol, text, documentation, kind);
             }
         }
 
@@ -2863,6 +2900,10 @@ namespace FourSlashInterface {
 
         public verifyDefinitionsName(name: string, containerName: string) {
             this.state.verifyDefinitionsName(this.negative, name, containerName);
+        }
+
+        public isValidBraceCompletionAtPostion(openingBrace: string) {
+            this.state.verifyBraceCompletionAtPostion(this.negative, openingBrace);
         }
     }
 
@@ -3082,7 +3123,7 @@ namespace FourSlashInterface {
             this.state.getSemanticDiagnostics(expected);
         }
 
-        public ProjectInfo(expected: string []) {
+        public ProjectInfo(expected: string[]) {
             this.state.verifyProjectInfo(expected);
         }
     }

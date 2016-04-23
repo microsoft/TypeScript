@@ -50,7 +50,7 @@ namespace ts.SignatureHelp {
     //            case TypeScript.SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
     //                stack++;
 
-    //            // Intentaion fall through
+    //            // Intentional fall through
     //            case TypeScript.SyntaxKind.GreaterThanToken:
     //                stack++;
     //                break;
@@ -76,7 +76,7 @@ namespace ts.SignatureHelp {
     //                break;
 
     //            case TypeScript.SyntaxKind.EqualsGreaterThanToken:
-    //                // This can be a function type or a constructor type. In either case, we want to skip the function defintion
+    //                // This can be a function type or a constructor type. In either case, we want to skip the function definition
     //                token = previousToken(token, /*includeSkippedTokens*/ true);
 
     //                if (token && token.kind() === TypeScript.SyntaxKind.CloseParenToken) {
@@ -99,7 +99,7 @@ namespace ts.SignatureHelp {
     //                    }
     //                }
     //                else {
-    //                    // This is not a funtion type. exit the main loop
+    //                    // This is not a function type. exit the main loop
     //                    break whileLoop;
     //                }
 
@@ -559,7 +559,7 @@ namespace ts.SignatureHelp {
                     signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     let parameterParts = mapToDisplayParts(writer =>
-                        typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
+                        typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.thisType, candidateSignature.parameters, writer, invocation));
                     addRange(suffixDisplayParts, parameterParts);
                 }
                 else {

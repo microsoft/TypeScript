@@ -50,3 +50,4 @@ declare global  {
 }
 export {};
 //// [f3.d.ts]
+import "./f2";

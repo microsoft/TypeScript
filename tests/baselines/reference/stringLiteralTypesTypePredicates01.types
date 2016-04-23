@@ -30,13 +30,13 @@ function kindIs(kind: Kind, is: Kind): boolean {
 >is : "A" | "B"
 }
 
-var x: Kind = "A";
+var x: Kind = undefined;
 >x : "A" | "B"
 >Kind : "A" | "B"
->"A" : "A"
+>undefined : undefined
 
 if (kindIs(x, "A")) {
->kindIs(x, "A") : kind is "A"
+>kindIs(x, "A") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
 >x : "A" | "B"
 >"A" : "A"
@@ -53,7 +53,7 @@ else {
 
 if (!kindIs(x, "B")) {
 >!kindIs(x, "B") : boolean
->kindIs(x, "B") : kind is "B"
+>kindIs(x, "B") : boolean
 >kindIs : { (kind: "A" | "B", is: "A"): kind is "A"; (kind: "A" | "B", is: "B"): kind is "B"; }
 >x : "A" | "B"
 >"B" : "B"

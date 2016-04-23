@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546_2.ts ===
+"use strict";
+
+export class Logger { 
+>Logger : Symbol(Logger, Decl(parser509546_2.ts, 0, 13))
+
+     public
+>public : Symbol(Logger.public, Decl(parser509546_2.ts, 2, 21))
+}
+

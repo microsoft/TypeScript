@@ -12,7 +12,7 @@ export module TopLevelModule1 {
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
 
                 public AisIn1_1_1() {
->AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 
                     // Try all qualified names of this type
                     var a1: ClassA; a1.AisIn1_1_1();
@@ -99,7 +99,7 @@ export module TopLevelModule1 {
 >ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
 
                 public BisIn1_1_1() {
->BisIn1_1_1 : Symbol(BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
 
                     /** Exactly the same as above in AisIn1_1_1 **/
                     
@@ -195,7 +195,7 @@ export module TopLevelModule1 {
             }
             export interface InterfaceX { XisIn1_1_1(); }
 >InterfaceX : Symbol(InterfaceX, Decl(typeResolution.ts, 45, 13))
->XisIn1_1_1 : Symbol(XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
+>XisIn1_1_1 : Symbol(InterfaceX.XisIn1_1_1, Decl(typeResolution.ts, 46, 41))
 
             class NonExportedClassQ {
 >NonExportedClassQ : Symbol(NonExportedClassQ, Decl(typeResolution.ts, 46, 57))
@@ -302,19 +302,19 @@ export module TopLevelModule1 {
             // No code here since these are the mirror of the above calls
             export class ClassA { public AisIn1_2_2() { } }
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 76, 37))
->AisIn1_2_2 : Symbol(AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
+>AisIn1_2_2 : Symbol(ClassA.AisIn1_2_2, Decl(typeResolution.ts, 78, 33))
 
             export class ClassB { public BisIn1_2_2() { } }
 >ClassB : Symbol(ClassB, Decl(typeResolution.ts, 78, 59))
->BisIn1_2_2 : Symbol(BisIn1_2_2, Decl(typeResolution.ts, 79, 33))
+>BisIn1_2_2 : Symbol(ClassB.BisIn1_2_2, Decl(typeResolution.ts, 79, 33))
 
             export class ClassC { public CisIn1_2_2() { } }
 >ClassC : Symbol(ClassC, Decl(typeResolution.ts, 79, 59))
->CisIn1_2_2 : Symbol(CisIn1_2_2, Decl(typeResolution.ts, 80, 33))
+>CisIn1_2_2 : Symbol(ClassC.CisIn1_2_2, Decl(typeResolution.ts, 80, 33))
 
             export interface InterfaceY { YisIn1_2_2(); }
 >InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 80, 59))
->YisIn1_2_2 : Symbol(YisIn1_2_2, Decl(typeResolution.ts, 81, 41))
+>YisIn1_2_2 : Symbol(InterfaceY.YisIn1_2_2, Decl(typeResolution.ts, 81, 41))
 
             interface NonExportedInterfaceQ { }
 >NonExportedInterfaceQ : Symbol(NonExportedInterfaceQ, Decl(typeResolution.ts, 81, 57))
@@ -322,21 +322,21 @@ export module TopLevelModule1 {
         
         export interface InterfaceY { YisIn1_2(); }
 >InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 83, 9))
->YisIn1_2 : Symbol(YisIn1_2, Decl(typeResolution.ts, 85, 37))
+>YisIn1_2 : Symbol(InterfaceY.YisIn1_2, Decl(typeResolution.ts, 85, 37))
     }
     
     class ClassA {
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 86, 5))
 
         public AisIn1() { }
->AisIn1 : Symbol(AisIn1, Decl(typeResolution.ts, 88, 18))
+>AisIn1 : Symbol(ClassA.AisIn1, Decl(typeResolution.ts, 88, 18))
     }
 
     interface InterfaceY {
 >InterfaceY : Symbol(InterfaceY, Decl(typeResolution.ts, 90, 5))
 
         YisIn1();
->YisIn1 : Symbol(YisIn1, Decl(typeResolution.ts, 92, 26))
+>YisIn1 : Symbol(InterfaceY.YisIn1, Decl(typeResolution.ts, 92, 26))
     }
     
     module NotExportedModule {
@@ -357,7 +357,7 @@ module TopLevelModule2 {
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 102, 30))
 
             public AisIn2_3() { }
->AisIn2_3 : Symbol(AisIn2_3, Decl(typeResolution.ts, 103, 29))
+>AisIn2_3 : Symbol(ClassA.AisIn2_3, Decl(typeResolution.ts, 103, 29))
         }
     }
 }

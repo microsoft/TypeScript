@@ -18,7 +18,7 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var program = ts.createProgram(fileNames, options);
     var emitResult = program.emit();
 
-    var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+    var allDiagnostics = ts.getPreEmitDiagnostics(program);
 
     allDiagnostics.forEach(diagnostic => {
         var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);

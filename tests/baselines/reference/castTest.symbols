@@ -32,19 +32,19 @@ declare class Point
 >Point : Symbol(Point, Decl(castTest.ts, 11, 37))
 {
     x: number;
->x : Symbol(x, Decl(castTest.ts, 14, 1))
+>x : Symbol(Point.x, Decl(castTest.ts, 14, 1))
 
     y: number;
->y : Symbol(y, Decl(castTest.ts, 15, 14))
+>y : Symbol(Point.y, Decl(castTest.ts, 15, 14))
 
     add(dx: number, dy: number): Point;
->add : Symbol(add, Decl(castTest.ts, 16, 14))
+>add : Symbol(Point.add, Decl(castTest.ts, 16, 14))
 >dx : Symbol(dx, Decl(castTest.ts, 17, 8))
 >dy : Symbol(dy, Decl(castTest.ts, 17, 19))
 >Point : Symbol(Point, Decl(castTest.ts, 11, 37))
 
     mult(p: Point): Point;
->mult : Symbol(mult, Decl(castTest.ts, 17, 39))
+>mult : Symbol(Point.mult, Decl(castTest.ts, 17, 39))
 >p : Symbol(p, Decl(castTest.ts, 18, 9))
 >Point : Symbol(Point, Decl(castTest.ts, 11, 37))
 >Point : Symbol(Point, Decl(castTest.ts, 11, 37))

@@ -112,19 +112,18 @@ else {
 >numOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrBool === "number") {
 >typeof strOrBool === "number" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
 >"number" : string
 
-    var y1: string | boolean = strOrBool; // string | boolean
->y1 : string | boolean
->strOrBool : string | boolean
+    let y1: {} = strOrBool; // {}
+>y1 : {}
+>strOrBool : {}
 }
 else {
-    var y2: string | boolean = strOrBool; // string | boolean
+    let y2: string | boolean = strOrBool; // string | boolean
 >y2 : string | boolean
 >strOrBool : string | boolean
 }
@@ -135,7 +134,7 @@ else {
 if (typeof strOrNum !== "number") {
 >typeof strOrNum !== "number" : boolean
 >typeof strOrNum : string
->strOrNum : string | number
+>strOrNum : number | string
 >"number" : string
 
     str === strOrNum; // string
@@ -168,7 +167,7 @@ else {
 if (typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean
+>strOrNumOrBool : number | string | boolean
 >"number" : string
 
     strOrBool = strOrNumOrBool; // string | boolean
@@ -200,20 +199,19 @@ else {
 >numOrC : number
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof strOrBool !== "number") {
 >typeof strOrBool !== "number" : boolean
 >typeof strOrBool : string
 >strOrBool : string | boolean
 >"number" : string
 
-    var y1: string | boolean = strOrBool; // string | boolean
+    let y1: string | boolean = strOrBool; // string | boolean
 >y1 : string | boolean
 >strOrBool : string | boolean
 }
 else {
-    var y2: string | boolean = strOrBool; // string | boolean
->y2 : string | boolean
->strOrBool : string | boolean
+    let y2: {} = strOrBool; // {}
+>y2 : {}
+>strOrBool : {}
 }
 

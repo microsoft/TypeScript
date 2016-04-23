@@ -14,8 +14,8 @@ System.register([], function(exports_1, context_1) {
     return {
         setters:[],
         execute: function() {
-            class default_1 {
-            }
+            default_1 = class {
+            };
             exports_1("default", default_1);
         }
     }

@@ -7,10 +7,16 @@ module ts {
     }
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost  {
-        const directories: Map<string> = {};
-        for (const f in fileMap) {
-            directories[getDirectoryPath(f)] = f;
-        }
+        let existingDirectories: Map<boolean> = {};
+        forEachValue(fileMap, v => {
+            let dir = getDirectoryPath(v.name);
+            let previous: string;
+            do {
+                existingDirectories[dir] = true;
+                previous = dir;
+                dir = getDirectoryPath(dir);
+            } while (dir !== previous);
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
@@ -30,7 +36,7 @@ module ts {
                 return hasProperty(fileMap, path);
             },
             directoryExists: (path: string): boolean => {
-                return hasProperty(directories, path);
+                return hasProperty(existingDirectories, path);
             },
             createDirectory: (path: string) => {
             },
@@ -123,7 +129,7 @@ module ts {
                     }
                     fileExistsIsCalled = true;
                     assert.isTrue(fileName.indexOf('/f2.') !== -1);
-                    return originalFileExists(fileName);
+                    return originalFileExists.call(serverHost, fileName);
                 };
                 let newContent = `import {x} from "f2"`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
@@ -147,7 +153,7 @@ module ts {
                     }                    
                     fileExistsCalled = true;
                     assert.isTrue(fileName.indexOf('/f1.') !== -1);
-                    return originalFileExists(fileName);
+                    return originalFileExists.call(serverHost, fileName);
                 };
                 
                 let newContent = `import {x} from "f1"`;
@@ -192,7 +198,7 @@ module ts {
                     fileExistsCalledForBar = fileName.indexOf("/bar.") !== -1;
                 }
                 
-                return originalFileExists(fileName);
+                return originalFileExists.call(serverHost, fileName);
             };
             
             let { project, rootScriptInfo } = createProject(root.name, serverHost);

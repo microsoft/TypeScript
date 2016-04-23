@@ -7,7 +7,7 @@ declare module WinJS {
 >T : Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 18))
 
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : Symbol(then, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 22))
+>then : Symbol(Promise.then, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 22))
 >U : Symbol(U, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 13))
 >success : Symbol(success, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 16))
 >value : Symbol(value, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 27))
@@ -32,29 +32,29 @@ declare module Data {
 >T : Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 31))
 
         itemIndex: number;
->itemIndex : Symbol(itemIndex, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 35))
+>itemIndex : Symbol(IListItem.itemIndex, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 35))
 
         key: any;
->key : Symbol(key, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 7, 26))
+>key : Symbol(IListItem.key, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 7, 26))
 
         data: T;
->data : Symbol(data, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 8, 17))
+>data : Symbol(IListItem.data, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 8, 17))
 >T : Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 31))
 
         group: any;
->group : Symbol(group, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 9, 16))
+>group : Symbol(IListItem.group, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 9, 16))
 
         isHeader: boolean;
->isHeader : Symbol(isHeader, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 10, 19))
+>isHeader : Symbol(IListItem.isHeader, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 10, 19))
 
         cached: boolean;
->cached : Symbol(cached, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 11, 26))
+>cached : Symbol(IListItem.cached, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 11, 26))
 
         isNonSourceData: boolean;
->isNonSourceData : Symbol(isNonSourceData, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 12, 24))
+>isNonSourceData : Symbol(IListItem.isNonSourceData, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 12, 24))
 
         preventAugmentation: boolean;
->preventAugmentation : Symbol(preventAugmentation, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 13, 33))
+>preventAugmentation : Symbol(IListItem.preventAugmentation, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 13, 33))
     }
     export interface IVirtualList<T> {
 >IVirtualList : Symbol(IVirtualList, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 15, 5))
@@ -62,7 +62,7 @@ declare module Data {
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : Symbol(removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 16, 38))
+>removeIndices : Symbol(IVirtualList.removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 16, 38))
 >indices : Symbol(indices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 18, 22))
 >options : Symbol(options, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 18, 40))
 >WinJS : Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
@@ -78,7 +78,7 @@ declare module Data {
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : Symbol(removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 60))
+>removeIndices : Symbol(VirtualList.removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 60))
 >indices : Symbol(indices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 22, 29))
 >options : Symbol(options, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 22, 47))
 >WinJS : Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
