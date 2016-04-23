@@ -758,9 +758,6 @@ namespace ts.NavigationBar {
                 else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression &&
                          (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                     fnName = (fnExpr.parent as BinaryExpression).left.getText();
-                    if (fnName.length > 20) {
-                        fnName = fnName.substring(0, 17) + "...";
-                    }
                 }
                 // See if it is a property assignment, and if so use the property name
                 else if (fnExpr.parent.kind === SyntaxKind.PropertyAssignment &&
