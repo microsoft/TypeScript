@@ -286,11 +286,11 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (opts.outDir) {
-            options += ` --outDir "${opts.outDir}"`;   // support spaces in path
+            options += ' --outDir "' + opts.outDir + '"';   // support spaces in path
         }
 
         if (!opts.noOutFile) {
-            options += ` --out "${outFile}"`;   // support spaces in path
+            options += ' --out "' + outFile + '"';   // support spaces in path
         }
         else {
             options += " --module commonjs"
@@ -303,7 +303,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (useDebugMode) {
             options += " -sourcemap";
             if (!opts.noMapRoot) {
-                options += ` -mapRoot "file:///${path.resolve(path.dirname(outFile))}"`;    // support spaces in path
+                options += ' -mapRoot "file:///' + path.resolve(path.dirname(outFile)) + '"';    // support spaces in path
             }
         }
 
@@ -312,7 +312,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
-        if (sources) cmd = cmd + `"${sources.join('" "')}"`;   // support spaces in path
+        if (sources) cmd = cmd + '"' + sources.join('" "') + '"';   // support spaces in path
         console.log(cmd + "\n");
 
         jakeExec(cmd, function() {
