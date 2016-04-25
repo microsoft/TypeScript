@@ -1524,6 +1524,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 switch (parent.kind) {
                     case SyntaxKind.ArrayLiteralExpression:
                     case SyntaxKind.AsExpression:
+                    case SyntaxKind.AwaitExpression:
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.CaseClause:
