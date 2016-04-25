@@ -43,7 +43,7 @@ export enum Utensils { // Shouldn't error
 //// [moduleDuplicateIdentifiers.js]
 "use strict";
 exports.Foo = 2;
-exports.Foo = 42;
+exports.Foo = 42; // Should error
 var FooBar;
 (function (FooBar) {
     FooBar.member1 = 2;
@@ -77,4 +77,3 @@ var Utensils = exports.Utensils;
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
 })(exports.Utensils || (exports.Utensils = {}));
-var Utensils = exports.Utensils;
