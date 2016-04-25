@@ -1519,6 +1519,7 @@ namespace ts {
         Unreachable,
         Start,
         Label,
+        LoopLabel,
         Assignment,
         Condition
     }

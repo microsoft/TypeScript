@@ -7592,6 +7592,7 @@ namespace ts {
                         case FlowKind.Condition:
                             return getTypeAtFlowCondition(<FlowCondition>flow);
                         case FlowKind.Label:
+                        case FlowKind.LoopLabel:
                             if ((<FlowLabel>flow).antecedents.length === 1) {
                                 flow = (<FlowLabel>flow).antecedents[0];
                                 continue;
@@ -7639,7 +7640,8 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, flow.assumeTrue);
+                const type = getTypeAtFlowNode(flow.antecedent);
+                return type && narrowType(type, flow.expression, flow.assumeTrue);
             }
 
             function getTypeAtFlowNodeCached(flow: FlowNode) {
@@ -7665,13 +7667,15 @@ namespace ts {
                 flowStackCount--;
                 // Record the result only if the cache is still empty. If checkExpressionCached was called
                 // during processing it is possible we've already recorded a result.
-                return cache[key] || (cache[key] = type);
+                return cache[key] || type && (cache[key] = type);
             }
 
             function getTypeAtFlowLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
-                    const type = getTypeAtFlowNodeCached(antecedent);
+                    const type = flow.kind === FlowKind.LoopLabel ?
+                        getTypeAtFlowNodeCached(antecedent) :
+                        getTypeAtFlowNode(antecedent);
                     if (type) {
                         // If the type at a particular antecedent path is the declared type and the
                         // reference is known to always be assigned (i.e. when declared and initial types
@@ -7685,7 +7689,7 @@ namespace ts {
                         }
                     }
                 }
-                return antecedentTypes.length === 0 ? declaredType :
+                return antecedentTypes.length === 0 ? undefined :
                     antecedentTypes.length === 1 ? antecedentTypes[0] :
                     getUnionType(antecedentTypes);
             }
