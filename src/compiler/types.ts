@@ -2513,14 +2513,14 @@ namespace ts {
         types?: string[];
 
         list?: string[];
-        [option: string]: CompilerOptionsValue;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export interface TypingOptions {
         enableAutoDiscovery?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean;
+        [option: string]: string[] | boolean | undefined;
     }
 
     export interface DiscoverTypingsInfo {
