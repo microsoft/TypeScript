@@ -2126,7 +2126,7 @@ namespace ts {
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
     }
 
     export const enum TypeFlags {
@@ -2507,7 +2507,7 @@ namespace ts {
         // When options come from a config file, its path is recorded here
         configFilePath?: string;
         /* @internal */
-        // Path used to used to compute primary search locations 
+        // Path used to used to compute primary search locations
         typesRoot?: string;
         types?: string[];
 
@@ -2824,7 +2824,7 @@ namespace ts {
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         /**
-         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files 
+         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
     }
