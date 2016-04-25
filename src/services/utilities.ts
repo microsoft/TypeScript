@@ -445,6 +445,10 @@ namespace ts {
             return false;
         }
 
+        if (token.kind === SyntaxKind.JsxText) {
+            return true;
+        }
+
         // <div>Hello |</div>
         if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText) {
             return true;
@@ -455,7 +459,7 @@ namespace ts {
             return true;
         }
 
-        // <div> { 
+        // <div> {
         // |
         // } < /div>
         if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
