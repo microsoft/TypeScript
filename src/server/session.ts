@@ -647,7 +647,7 @@ namespace ts.server {
                             const editorOptions: ts.EditorOptions = {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
-                                NewLineCharacter: "\n",
+                                NewLineCharacter: formatOptions.NewLineCharacter,
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                                 IndentStyle: ts.IndentStyle.Smart,
                             };
