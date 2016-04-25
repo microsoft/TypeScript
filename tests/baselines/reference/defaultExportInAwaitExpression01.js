@@ -13,14 +13,14 @@ import x from './a';
 
 
 //// [a.js]
-(function (factory) {
+(function (dependencies, factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports"], factory);
+        define(dependencies, factory);
     }
-})(function (require, exports) {
+})(["require", "exports"], function (require, exports) {
     "use strict";
     const x = new Promise((resolve, reject) => { resolve({}); });
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -35,16 +35,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-(function (factory) {
+(function (dependencies, factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports", './a'], factory);
+        define(dependencies, factory);
     }
-})(function (require, exports) {
+})(["require", "exports", "./a"], function (require, exports) {
     "use strict";
-    const a_1 = require('./a');
+    const a_1 = require("./a");
     (function () {
         return __awaiter(this, void 0, void 0, function* () {
             const value = yield a_1.default;

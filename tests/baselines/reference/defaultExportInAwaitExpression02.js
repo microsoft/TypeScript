@@ -27,7 +27,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const a_1 = require('./a');
+const a_1 = require("./a");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         const value = yield a_1.default;
