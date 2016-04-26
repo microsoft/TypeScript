@@ -171,6 +171,7 @@ namespace ts {
         StringKeyword,
         SymbolKeyword,
         TypeKeyword,
+        UndefinedKeyword,
         FromKeyword,
         GlobalKeyword,
         OfKeyword, // LastKeyword and LastToken
@@ -240,6 +241,7 @@ namespace ts {
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
+        NonNullExpression,
 
         // Misc
         TemplateSpan,
@@ -403,6 +405,7 @@ namespace ts {
         JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
+        HasJsxSpreadAttribute = 1 << 30,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -447,6 +450,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;            // Associated FlowNode (initialized by binding)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -968,6 +972,8 @@ namespace ts {
         name: Identifier;
     }
 
+    export type IdentifierOrPropertyAccess = Identifier | PropertyAccessExpression;
+
     // @kind(SyntaxKind.ElementAccessExpression)
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
@@ -1011,6 +1017,11 @@ namespace ts {
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
+
+    // @kind(SyntaxKind.NonNullExpression)
+    export interface NonNullExpression extends LeftHandSideExpression {
+        expression: Expression;
+    }
 
     /// A JSX expression of the form <TagName attrs>...</TagName>
     // @kind(SyntaxKind.JsxElement)
@@ -1504,6 +1515,40 @@ namespace ts {
         isBracketed: boolean;
     }
 
+    export const enum FlowKind {
+        Unreachable,
+        Start,
+        Label,
+        LoopLabel,
+        Assignment,
+        Condition
+    }
+
+    export interface FlowNode {
+        kind: FlowKind;  // Node kind
+        id?: number;     // Node id used by flow type cache in checker
+    }
+
+    // FlowLabel represents a junction with multiple possible preceding control flows.
+    export interface FlowLabel extends FlowNode {
+        antecedents: FlowNode[];
+    }
+
+    // FlowAssignment represents a node that assigns a value to a narrowable reference,
+    // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
+    export interface FlowAssignment extends FlowNode {
+        node: Expression | VariableDeclaration | BindingElement;
+        antecedent: FlowNode;
+    }
+
+    // FlowCondition represents a condition that is known to be true or false at the
+    // node's location in the control flow.
+    export interface FlowCondition extends FlowNode {
+        expression: Expression;
+        assumeTrue: boolean;
+        antecedent: FlowNode;
+    }
+
     export interface AmdDependency {
         path: string;
         name: string;
@@ -1522,6 +1567,7 @@ namespace ts {
         amdDependencies: AmdDependency[];
         moduleName: string;
         referencedFiles: FileReference[];
+        typeReferenceDirectives: FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
@@ -1569,6 +1615,7 @@ namespace ts {
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
     }
@@ -1584,7 +1631,7 @@ namespace ts {
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: SourceFile[]): void;
     }
 
     export class OperationCanceledException { }
@@ -1645,6 +1692,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
+        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1695,6 +1743,7 @@ namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: Diagnostic[];
+        emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -1704,6 +1753,7 @@ namespace ts {
 
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
+        getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
     }
 
     export interface TypeChecker {
@@ -1721,6 +1771,7 @@ namespace ts {
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
+        getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
@@ -1764,7 +1815,7 @@ namespace ts {
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypePredicateDisplay(predicate: TypePredicate, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
-        buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildDisplayForParametersAndDelimiters(thisType: Type, parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
     }
@@ -1799,6 +1850,7 @@ namespace ts {
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
     }
 
     export const enum SymbolFormatFlags {
@@ -1911,6 +1963,8 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration): SourceFile;
+        getTypeReferenceDirectivesForEntityName(name: EntityName | PropertyAccessExpression): string[];
+        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[];
     }
 
     export const enum SymbolFlags {
@@ -2029,7 +2083,7 @@ namespace ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // true if module exports some value (not just types)
+        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
     }
 
     /* @internal */
@@ -2063,22 +2117,17 @@ namespace ts {
     /* @internal */
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
-        resolvedAwaitedType?: Type;       // Cached awaited type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
-        generatedName?: string;           // Generated name for module, enum, or import declaration
-        generatedNames?: Map<string>;     // Generated names table for source file
-        assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing 
+        superCall?: ExpressionStatement;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
     }
 
     export const enum TypeFlags {
@@ -2106,7 +2155,7 @@ namespace ts {
         /* @internal */
         FreshObjectLiteral      = 0x00100000,  // Fresh object literal type
         /* @internal */
-        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull = 0x00200000,  // Type is or contains undefined or null type
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
@@ -2116,6 +2165,8 @@ namespace ts {
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
+        Nullable = Undefined | Null,
+        /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
         /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
@@ -2124,6 +2175,7 @@ namespace ts {
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
+        Narrowable = Any | ObjectType | Union | TypeParameter,
         /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
@@ -2262,6 +2314,7 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        thisType?: Type;                    // type of this-type
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -2381,6 +2434,8 @@ namespace ts {
     export type PathSubstitutions = Map<string[]>;
     export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | TsConfigOnlyOptions;
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2395,6 +2450,7 @@ namespace ts {
         jsx?: JsxEmit;
         reactNamespace?: string;
         listFiles?: boolean;
+        typesSearchPaths?: string[];
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -2404,6 +2460,7 @@ namespace ts {
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
+        noImplicitThis?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
@@ -2433,10 +2490,13 @@ namespace ts {
         baseUrl?: string;
         paths?: PathSubstitutions;
         rootDirs?: RootPaths;
-        traceModuleResolution?: boolean;
+        traceResolution?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         noImplicitUseStrict?: boolean;
+        strictNullChecks?: boolean;
+        listEmittedFiles?: boolean;
+        lib?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2444,14 +2504,23 @@ namespace ts {
         // Do not perform validation of output file name in transpile scenarios
         /* @internal */ suppressOutputPathCheck?: boolean;
 
-        [option: string]: string | number | boolean | TsConfigOnlyOptions;
+        /* @internal */
+        // When options come from a config file, its path is recorded here
+        configFilePath?: string;
+        /* @internal */
+        // Path used to used to compute primary search locations
+        typesRoot?: string;
+        types?: string[];
+
+        list?: string[];
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export interface TypingOptions {
         enableAutoDiscovery?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean;
+        [option: string]: string[] | boolean | undefined;
     }
 
     export interface DiscoverTypingsInfo {
@@ -2529,7 +2598,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | Map<number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -2545,8 +2614,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number>;             // an object literal mapping named values to actual values
-        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+        type: Map<number | string>;             // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -2555,7 +2623,13 @@ namespace ts {
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+    export interface CommandLineOptionOfListType extends CommandLineOptionBase {
+        type: "list";
+        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2719,10 +2793,23 @@ namespace ts {
         failedLookupLocations: string[];
     }
 
+    export interface ResolvedTypeReferenceDirective {
+        // True if the type declaration file was found in a primary lookup location
+        primary: boolean;
+        // The location of the .d.ts file we located, or undefined if resolution failed
+        resolvedFileName?: string;
+    }
+
+    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+        resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective;
+        failedLookupLocations: string[];
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
+        getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -2737,6 +2824,10 @@ namespace ts {
          * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        /**
+         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
+         */
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
     }
 
     export interface TextSpan {

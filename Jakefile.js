@@ -150,7 +150,10 @@ var harnessSources = harnessCoreSources.concat([
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
-    "tsconfigParsing.ts"
+    "tsconfigParsing.ts",
+    "commandLineParsing.ts",
+    "convertCompilerOptionsFromJson.ts",
+    "convertTypingOptionsFromJson.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -162,17 +165,46 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
-var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
-        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
-        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+var es2015LibrarySources = [
+    "es2015.core.d.ts",
+    "es2015.collection.d.ts",
+    "es2015.generator.d.ts",
+    "es2015.iterable.d.ts",
+    "es2015.promise.d.ts",
+    "es2015.proxy.d.ts",
+    "es2015.reflect.d.ts",
+    "es2015.symbol.d.ts",
+    "es2015.symbol.wellknown.d.ts",
 ];
+
+var es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
+   return  { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var es2016LibrarySource = [ "es2016.array.include.d.ts" ];
+
+var es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+})
+
+var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
+
+var librarySourceMap = [
+        // Host library
+        { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"], },
+        
+        // JavaScript library
+        { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
+        { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
+        { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+        
+        // JavaScript + all host library
+        { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts"), },
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -212,7 +244,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var host = (process.env.TYPESCRIPT_HOST || process.env.host || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
@@ -871,7 +903,6 @@ task("update-sublime", ["local", serverFile], function() {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
-    "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",

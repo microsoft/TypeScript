@@ -6,7 +6,7 @@ class A<T1, T2> {
 >T2 : Symbol(T2, Decl(superCallParameterContextualTyping1.ts, 1, 11))
 
     constructor(private map: (value: T1) => T2) {
->map : Symbol(map, Decl(superCallParameterContextualTyping1.ts, 2, 16))
+>map : Symbol(A.map, Decl(superCallParameterContextualTyping1.ts, 2, 16))
 >value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 2, 30))
 >T1 : Symbol(T1, Decl(superCallParameterContextualTyping1.ts, 1, 8))
 >T2 : Symbol(T2, Decl(superCallParameterContextualTyping1.ts, 1, 11))
@@ -22,7 +22,7 @@ class B extends A<number, string> {
     constructor() { super(value => String(value.toExponential())); }
 >super : Symbol(A, Decl(superCallParameterContextualTyping1.ts, 0, 0))
 >value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >value.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
 >value : Symbol(value, Decl(superCallParameterContextualTyping1.ts, 9, 26))
 >toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))

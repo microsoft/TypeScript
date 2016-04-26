@@ -93,7 +93,7 @@ let numberA3: number, robotAInfo: (number | string)[], multiRobotAInfo: (string 
 >multiRobotAInfo : (string | [string, string])[]
 
 for ([, nameA] of robots) {
->[, nameA] : string[]
+>[, nameA] : [undefined, string]
 > : undefined
 >nameA : string
 >robots : [number, string, string][]
@@ -106,7 +106,7 @@ for ([, nameA] of robots) {
 >nameA : string
 }
 for ([, nameA] of getRobots()) {
->[, nameA] : string[]
+>[, nameA] : [undefined, string]
 > : undefined
 >nameA : string
 >getRobots() : [number, string, string][]
@@ -120,7 +120,7 @@ for ([, nameA] of getRobots()) {
 >nameA : string
 }
 for ([, nameA] of [robotA, robotB]) {
->[, nameA] : string[]
+>[, nameA] : [undefined, string]
 > : undefined
 >nameA : string
 >[robotA, robotB] : [number, string, string][]
@@ -135,9 +135,9 @@ for ([, nameA] of [robotA, robotB]) {
 >nameA : string
 }
 for ([, [primarySkillA, secondarySkillA]] of multiRobots) {
->[, [primarySkillA, secondarySkillA]] : string[][]
+>[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 > : undefined
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >multiRobots : [string, [string, string]][]
@@ -150,9 +150,9 @@ for ([, [primarySkillA, secondarySkillA]] of multiRobots) {
 >primarySkillA : string
 }
 for ([, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
->[, [primarySkillA, secondarySkillA]] : string[][]
+>[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 > : undefined
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >getMultiRobots() : [string, [string, string]][]
@@ -166,9 +166,9 @@ for ([, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 >primarySkillA : string
 }
 for ([, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
->[, [primarySkillA, secondarySkillA]] : string[][]
+>[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
 > : undefined
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >[multiRobotA, multiRobotB] : [string, [string, string]][]
@@ -184,7 +184,7 @@ for ([, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
 }
 
 for ([numberB] of robots) {
->[numberB] : number[]
+>[numberB] : [number]
 >numberB : number
 >robots : [number, string, string][]
 
@@ -196,7 +196,7 @@ for ([numberB] of robots) {
 >numberB : number
 }
 for ([numberB] of getRobots()) {
->[numberB] : number[]
+>[numberB] : [number]
 >numberB : number
 >getRobots() : [number, string, string][]
 >getRobots : () => [number, string, string][]
@@ -209,7 +209,7 @@ for ([numberB] of getRobots()) {
 >numberB : number
 }
 for ([numberB] of [robotA, robotB]) {
->[numberB] : number[]
+>[numberB] : [number]
 >numberB : number
 >[robotA, robotB] : [number, string, string][]
 >robotA : [number, string, string]
@@ -223,7 +223,7 @@ for ([numberB] of [robotA, robotB]) {
 >numberB : number
 }
 for ([nameB] of multiRobots) {
->[nameB] : string[]
+>[nameB] : [string]
 >nameB : string
 >multiRobots : [string, [string, string]][]
 
@@ -235,7 +235,7 @@ for ([nameB] of multiRobots) {
 >nameB : string
 }
 for ([nameB] of getMultiRobots()) {
->[nameB] : string[]
+>[nameB] : [string]
 >nameB : string
 >getMultiRobots() : [string, [string, string]][]
 >getMultiRobots : () => [string, [string, string]][]
@@ -248,7 +248,7 @@ for ([nameB] of getMultiRobots()) {
 >nameB : string
 }
 for ([nameB] of [multiRobotA, multiRobotB]) {
->[nameB] : string[]
+>[nameB] : [string]
 >nameB : string
 >[multiRobotA, multiRobotB] : [string, [string, string]][]
 >multiRobotA : [string, [string, string]]
@@ -263,7 +263,7 @@ for ([nameB] of [multiRobotA, multiRobotB]) {
 }
 
 for ([numberA2, nameA2, skillA2] of robots) {
->[numberA2, nameA2, skillA2] : (number | string)[]
+>[numberA2, nameA2, skillA2] : [number, string, string]
 >numberA2 : number
 >nameA2 : string
 >skillA2 : string
@@ -277,7 +277,7 @@ for ([numberA2, nameA2, skillA2] of robots) {
 >nameA2 : string
 }
 for ([numberA2, nameA2, skillA2] of getRobots()) {
->[numberA2, nameA2, skillA2] : (number | string)[]
+>[numberA2, nameA2, skillA2] : [number, string, string]
 >numberA2 : number
 >nameA2 : string
 >skillA2 : string
@@ -292,7 +292,7 @@ for ([numberA2, nameA2, skillA2] of getRobots()) {
 >nameA2 : string
 }
 for ([numberA2, nameA2, skillA2] of [robotA, robotB]) {
->[numberA2, nameA2, skillA2] : (number | string)[]
+>[numberA2, nameA2, skillA2] : [number, string, string]
 >numberA2 : number
 >nameA2 : string
 >skillA2 : string
@@ -308,9 +308,9 @@ for ([numberA2, nameA2, skillA2] of [robotA, robotB]) {
 >nameA2 : string
 }
 for ([nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
->[nameMA, [primarySkillA, secondarySkillA]] : (string | string[])[]
+>[nameMA, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 >nameMA : string
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >multiRobots : [string, [string, string]][]
@@ -323,9 +323,9 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
 >nameMA : string
 }
 for ([nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
->[nameMA, [primarySkillA, secondarySkillA]] : (string | string[])[]
+>[nameMA, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 >nameMA : string
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >getMultiRobots() : [string, [string, string]][]
@@ -339,9 +339,9 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 >nameMA : string
 }
 for ([nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
->[nameMA, [primarySkillA, secondarySkillA]] : (string | string[])[]
+>[nameMA, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 >nameMA : string
->[primarySkillA, secondarySkillA] : string[]
+>[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
 >secondarySkillA : string
 >[multiRobotA, multiRobotB] : [string, [string, string]][]

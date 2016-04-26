@@ -9,7 +9,7 @@ declare module JSX {
 >IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
 
 		test1: {x: string};
->test1 : Symbol(test1, Decl(file.tsx, 2, 30))
+>test1 : Symbol(IntrinsicElements.test1, Decl(file.tsx, 2, 30))
 >x : Symbol(x, Decl(file.tsx, 3, 10))
 	}
 }

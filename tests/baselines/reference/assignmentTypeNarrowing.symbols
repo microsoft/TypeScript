@@ -1,0 +1,64 @@
+=== tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
+let x: string | number | boolean | RegExp;
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+x = "";
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+x; // string
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+[x] = [true];
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+x; // boolean
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+[x = ""] = [1];
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+x; // string | number
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+({x} = {x: true});
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 11, 2))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 11, 8))
+
+x; // boolean
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+({y: x} = {y: 1});
+>y : Symbol(y, Decl(assignmentTypeNarrowing.ts, 14, 2))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+>y : Symbol(y, Decl(assignmentTypeNarrowing.ts, 14, 11))
+
+x; // number
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+({x = ""} = {x: true});
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 17, 2))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 17, 13))
+
+x; // string | boolean
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+({y: x = /a/} = {y: 1});
+>y : Symbol(y, Decl(assignmentTypeNarrowing.ts, 20, 2))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+>y : Symbol(y, Decl(assignmentTypeNarrowing.ts, 20, 17))
+
+x; // number | RegExp
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+
+let a: string[];
+>a : Symbol(a, Decl(assignmentTypeNarrowing.ts, 23, 3))
+
+for (x of a) {
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+>a : Symbol(a, Decl(assignmentTypeNarrowing.ts, 23, 3))
+
+    x; // string
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
+}
+

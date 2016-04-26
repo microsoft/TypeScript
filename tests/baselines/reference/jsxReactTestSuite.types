@@ -235,11 +235,14 @@ var x =
 
 <Namespace.Component />;
 ><Namespace.Component /> : any
+>Namespace.Component : any
 >Namespace : any
 >Component : any
 
 <Namespace.DeepNamespace.Component />;
 ><Namespace.DeepNamespace.Component /> : any
+>Namespace.DeepNamespace.Component : any
+>Namespace.DeepNamespace : any
 >Namespace : any
 >DeepNamespace : any
 >Component : any

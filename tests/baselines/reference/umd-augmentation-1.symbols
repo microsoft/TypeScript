@@ -44,10 +44,10 @@ export interface Point {
 >Point : Symbol(Point, Decl(index.d.ts, 1, 27))
 
 	x: number;
->x : Symbol(x, Decl(index.d.ts, 3, 24))
+>x : Symbol(Point.x, Decl(index.d.ts, 3, 24))
 
 	y: number;
->y : Symbol(y, Decl(index.d.ts, 4, 11))
+>y : Symbol(Point.y, Decl(index.d.ts, 4, 11))
 }
 
 export class Vector implements Point {
@@ -55,17 +55,17 @@ export class Vector implements Point {
 >Point : Symbol(Point, Decl(index.d.ts, 1, 27))
 
 	x: number;
->x : Symbol(x, Decl(index.d.ts, 8, 38))
+>x : Symbol(Vector.x, Decl(index.d.ts, 8, 38))
 
 	y: number;
->y : Symbol(y, Decl(index.d.ts, 9, 11))
+>y : Symbol(Vector.y, Decl(index.d.ts, 9, 11))
 
 	constructor(x: number, y: number);
 >x : Symbol(x, Decl(index.d.ts, 11, 13))
 >y : Symbol(y, Decl(index.d.ts, 11, 23))
 
 	translate(dx: number, dy: number): Vector;
->translate : Symbol(translate, Decl(index.d.ts, 11, 35))
+>translate : Symbol(Vector.translate, Decl(index.d.ts, 11, 35))
 >dx : Symbol(dx, Decl(index.d.ts, 13, 11))
 >dy : Symbol(dy, Decl(index.d.ts, 13, 22))
 >Vector : Symbol(Vector, Decl(index.d.ts, 6, 1), Decl(math2d-augment.d.ts, 2, 25))
@@ -87,7 +87,7 @@ declare module 'math2d' {
 >Vector : Symbol(Vector, Decl(index.d.ts, 6, 1), Decl(math2d-augment.d.ts, 2, 25))
 
 		reverse(): Math2d.Point;
->reverse : Symbol(reverse, Decl(math2d-augment.d.ts, 4, 19))
+>reverse : Symbol(Vector.reverse, Decl(math2d-augment.d.ts, 4, 19))
 >Math2d : Symbol(Math2d, Decl(math2d-augment.d.ts, 0, 6))
 >Point : Symbol(Point, Decl(index.d.ts, 1, 27))
 	}

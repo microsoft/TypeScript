@@ -19,7 +19,7 @@ export = Widget1
 
 class Widget1 { name = 'one'; }
 >Widget1 : Symbol(Widget1, Decl(w1.ts, 1, 16))
->name : Symbol(name, Decl(w1.ts, 2, 15))
+>name : Symbol(Widget1.name, Decl(w1.ts, 2, 15))
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');

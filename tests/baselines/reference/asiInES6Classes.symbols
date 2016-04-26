@@ -5,7 +5,7 @@ class Foo {
  
 
     defaults = {
->defaults : Symbol(defaults, Decl(asiInES6Classes.ts, 0, 11))
+>defaults : Symbol(Foo.defaults, Decl(asiInES6Classes.ts, 0, 11))
 
         done: false
 >done : Symbol(done, Decl(asiInES6Classes.ts, 4, 16))
@@ -15,7 +15,7 @@ class Foo {
  
 
     bar() {
->bar : Symbol(bar, Decl(asiInES6Classes.ts, 8, 5))
+>bar : Symbol(Foo.bar, Decl(asiInES6Classes.ts, 8, 5))
 
         return 3;
 

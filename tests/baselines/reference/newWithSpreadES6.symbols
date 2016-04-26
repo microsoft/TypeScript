@@ -16,7 +16,7 @@ interface A {
 >A : Symbol(A, Decl(newWithSpreadES6.ts, 5, 1))
 
     f: {
->f : Symbol(f, Decl(newWithSpreadES6.ts, 7, 13))
+>f : Symbol(A.f, Decl(newWithSpreadES6.ts, 7, 13))
 
         new (x: number, y: number, ...z: string[]);
 >x : Symbol(x, Decl(newWithSpreadES6.ts, 9, 13))
@@ -203,61 +203,61 @@ new B(1, 2, ...a, "string");
 // Property access expression
 new c["a-b"](1, 2, "string");
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 
 new c["a-b"](1, 2, ...a);
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 new c["a-b"](1, 2, ...a, "string");
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 // Parenthesised expression
 new (c["a-b"])(1, 2, "string");
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 
 new (c["a-b"])(1, 2, ...a);
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 new (c["a-b"])(1, 2, ...a, "string");
 >c : Symbol(c, Decl(newWithSpreadES6.ts, 27, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 // Element access expression
 new g[1]["a-b"](1, 2, "string");
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 30, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 
 new g[1]["a-b"](1, 2, ...a);
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 30, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 new g[1]["a-b"](1, 2, ...a, "string");
 >g : Symbol(g, Decl(newWithSpreadES6.ts, 30, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 // Element access expression with a punctuated key
 new h["a-b"]["a-b"](1, 2, "string");
 >h : Symbol(h, Decl(newWithSpreadES6.ts, 31, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 
 new h["a-b"]["a-b"](1, 2, ...a);
 >h : Symbol(h, Decl(newWithSpreadES6.ts, 31, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 new h["a-b"]["a-b"](1, 2, ...a, "string");
 >h : Symbol(h, Decl(newWithSpreadES6.ts, 31, 3))
->"a-b" : Symbol(C."a-b", Decl(newWithSpreadES6.ts, 17, 13))
+>"a-b" : Symbol(C["a-b"], Decl(newWithSpreadES6.ts, 17, 13))
 >a : Symbol(a, Decl(newWithSpreadES6.ts, 25, 3))
 
 // Element access expression with a number

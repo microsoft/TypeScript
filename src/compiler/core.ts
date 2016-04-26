@@ -91,10 +91,10 @@ namespace ts {
         return undefined;
     }
 
-    export function contains<T>(array: T[], value: T): boolean {
+    export function contains<T>(array: T[], value: T, areEqual?: (a: T, b: T) => boolean): boolean {
         if (array) {
             for (const v of array) {
-                if (v === value) {
+                if (areEqual ? areEqual(v, value) : v === value) {
                     return true;
                 }
             }
@@ -156,12 +156,12 @@ namespace ts {
         return array1.concat(array2);
     }
 
-    export function deduplicate<T>(array: T[]): T[] {
+    export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
             for (const item of array) {
-                if (!contains(result, item)) {
+                if (!contains(result, item, areEqual)) {
                     result.push(item);
                 }
             }
@@ -242,8 +242,14 @@ namespace ts {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos++;
+                let result: T | U;
+                if (arguments.length <= 2) {
+                    result = array[pos];
+                    pos++;
+                }
+                else {
+                    result = initial;
+                }
                 while (pos < count) {
                     result = f(<U>result, array[pos]);
                     pos++;
@@ -260,8 +266,14 @@ namespace ts {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result = arguments.length <= 2 ? array[pos] : initial;
-                pos--;
+                let result: T | U;
+                if (arguments.length <= 2) {
+                    result = array[pos];
+                    pos--;
+                }
+                else {
+                    result = initial;
+                }
                 while (pos >= 0) {
                     result = f(<U>result, array[pos]);
                     pos--;

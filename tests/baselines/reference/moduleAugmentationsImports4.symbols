@@ -39,13 +39,13 @@ export class A {}
 === tests/cases/compiler/b.ts ===
 export class B {x: number;}
 >B : Symbol(B, Decl(b.ts, 0, 0))
->x : Symbol(x, Decl(b.ts, 0, 16))
+>x : Symbol(B.x, Decl(b.ts, 0, 16))
 
 === tests/cases/compiler/c.d.ts ===
 declare module "C" {
     class Cls {y: string; }
 >Cls : Symbol(Cls, Decl(c.d.ts, 0, 20))
->y : Symbol(y, Decl(c.d.ts, 1, 15))
+>y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 }
 
 === tests/cases/compiler/d.d.ts ===
@@ -61,7 +61,7 @@ declare module "D" {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.d.ts, 5, 16))
 
             getB(): B;
->getB : Symbol(getB, Decl(d.d.ts, 4, 21))
+>getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
 >B : Symbol(B, Decl(d.d.ts, 2, 12))
         }
     }
@@ -81,7 +81,7 @@ declare module "E" {
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.d.ts, 5, 16))
 
             getCls(): Cls;
->getCls : Symbol(getCls, Decl(e.d.ts, 6, 21))
+>getCls : Symbol(A.getCls, Decl(e.d.ts, 6, 21))
 >Cls : Symbol(Cls, Decl(e.d.ts, 3, 12))
         }
     }
