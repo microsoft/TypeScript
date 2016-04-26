@@ -1,0 +1,8 @@
+=== tests/cases/compiler/ambientNameRestrictions.ts ===
+export declare namespace Foo {
+>Foo : Symbol(Foo, Decl(ambientNameRestrictions.ts, 0, 0))
+
+  export var static: any;
+>static : Symbol(static, Decl(ambientNameRestrictions.ts, 1, 12))
+}
+
