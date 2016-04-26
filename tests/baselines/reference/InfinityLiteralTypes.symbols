@@ -3,7 +3,7 @@ interface PositiveInfinityMember {
 >PositiveInfinityMember : Symbol(PositiveInfinityMember, Decl(InfinityLiteralTypes.ts, 0, 0))
 
     member: Infinity
->member : Symbol(member, Decl(InfinityLiteralTypes.ts, 0, 34))
+>member : Symbol(PositiveInfinityMember.member, Decl(InfinityLiteralTypes.ts, 0, 34))
 >Infinity : Symbol(Infinity)
 }
 
@@ -11,7 +11,7 @@ interface NegativeInfinityMember {
 >NegativeInfinityMember : Symbol(NegativeInfinityMember, Decl(InfinityLiteralTypes.ts, 2, 1))
 
     member: -Infinity
->member : Symbol(member, Decl(InfinityLiteralTypes.ts, 4, 34))
+>member : Symbol(NegativeInfinityMember.member, Decl(InfinityLiteralTypes.ts, 4, 34))
 }
 
 function invertInfinity(x: -Infinity): Infinity;

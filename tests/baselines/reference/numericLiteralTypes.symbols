@@ -3,28 +3,28 @@ interface NumericMember {
 >NumericMember : Symbol(NumericMember, Decl(numericLiteralTypes.ts, 0, 0))
 
     member: 255;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 0, 25))
+>member : Symbol(NumericMember.member, Decl(numericLiteralTypes.ts, 0, 25))
 }
 
 interface HexMember {
 >HexMember : Symbol(HexMember, Decl(numericLiteralTypes.ts, 2, 1))
 
     member: 0xFF;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 4, 21))
+>member : Symbol(HexMember.member, Decl(numericLiteralTypes.ts, 4, 21))
 }
 
 interface OctalMember {
 >OctalMember : Symbol(OctalMember, Decl(numericLiteralTypes.ts, 6, 1))
 
     member: 0o377;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 8, 23))
+>member : Symbol(OctalMember.member, Decl(numericLiteralTypes.ts, 8, 23))
 }
 
 interface NumberMember {
 >NumberMember : Symbol(NumberMember, Decl(numericLiteralTypes.ts, 10, 1))
 
     member: number;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 12, 24))
+>member : Symbol(NumberMember.member, Decl(numericLiteralTypes.ts, 12, 24))
 }
 
 var a: NumericMember;
@@ -65,21 +65,21 @@ interface NegativeNumericMember {
 >NegativeNumericMember : Symbol(NegativeNumericMember, Decl(numericLiteralTypes.ts, 25, 6))
 
     member: -255;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 27, 33))
+>member : Symbol(NegativeNumericMember.member, Decl(numericLiteralTypes.ts, 27, 33))
 }
 
 interface NegativeHexMember {
 >NegativeHexMember : Symbol(NegativeHexMember, Decl(numericLiteralTypes.ts, 29, 1))
 
     member: -0xFF;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 31, 29))
+>member : Symbol(NegativeHexMember.member, Decl(numericLiteralTypes.ts, 31, 29))
 }
 
 interface NegativeOctalMember {
 >NegativeOctalMember : Symbol(NegativeOctalMember, Decl(numericLiteralTypes.ts, 33, 1))
 
     member: -0o377;
->member : Symbol(member, Decl(numericLiteralTypes.ts, 35, 31))
+>member : Symbol(NegativeOctalMember.member, Decl(numericLiteralTypes.ts, 35, 31))
 }
 
 var na: NegativeNumericMember;

@@ -3,7 +3,7 @@ interface NaNMember {
 >NaNMember : Symbol(NaNMember, Decl(NaNLiteralTypes.ts, 0, 0))
 
     member: NaN
->member : Symbol(member, Decl(NaNLiteralTypes.ts, 0, 21))
+>member : Symbol(NaNMember.member, Decl(NaNLiteralTypes.ts, 0, 21))
 >NaN : Symbol(NaN)
 }
 
