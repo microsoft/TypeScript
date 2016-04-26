@@ -423,10 +423,10 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     generatedName,
-                                    createRequireCall(node),
-                                    /*location*/ node
+                                    createRequireCall(node)
                                 )
-                            ])
+                            ]),
+                            /*location*/ node
                         )
                     );
                 }
