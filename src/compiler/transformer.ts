@@ -168,22 +168,12 @@ namespace ts {
             emit(node);
         }
 
-        function getNodeEmitOptions(node: Node, createIfMissing: boolean) {
-            // Keeps track of the nearest set of options
-            let options: NodeEmitOptions;
-            let currentNode = node;
-            while (currentNode) {
-                const currentOptions = currentNode.emitOptions || nodeEmitOptions[getNodeId(currentNode)];
-                if (currentOptions) {
-                    options = currentOptions;
-                    break;
-                }
-
-                currentNode = currentNode.original;
-            }
-
-            if (currentNode !== node && createIfMissing) {
-                options = options ? clone(options) : { };
+        function getEmitOptions(node: Node, create?: boolean) {
+            let options = isSourceTreeNode(node)
+                ? nodeEmitOptions[getNodeId(node)]
+                : node.emitOptions;
+            if (!options && create) {
+                options = { };
                 if (isSourceTreeNode(node)) {
                     nodeEmitOptions[getNodeId(node)] = options;
                 }
@@ -191,22 +181,6 @@ namespace ts {
                     node.emitOptions = options;
                 }
             }
-
-            // Merge with previous options on get.
-            if (options && options.flags & NodeEmitFlags.Merge) {
-                const previousOptions = getNodeEmitOptions(currentNode.original, /*createIfMissing*/ false);
-                if (previousOptions) {
-                    options.flags = (options.flags | previousOptions.flags) & ~NodeEmitFlags.Merge;
-                    if (!options.sourceMapRange && (options.flags & NodeEmitFlags.NoSourceMap) === 0) {
-                        options.sourceMapRange = previousOptions.sourceMapRange;
-                    }
-
-                    if (!options.commentRange && (options.flags & NodeEmitFlags.NoComments) === 0) {
-                        options.commentRange = previousOptions.commentRange;
-                    }
-                }
-            }
-
             return options;
         }
 
@@ -214,15 +188,27 @@ namespace ts {
          * Gets flags that control emit behavior of a node.
          */
         function getNodeEmitFlags(node: Node) {
-            const options = getNodeEmitOptions(node, /*createIfMissing*/ false);
-            return options && options.flags;
+            while (node) {
+                const options = getEmitOptions(node, /*create*/ false);
+                if (options && options.flags !== undefined) {
+                    if (options.flags & NodeEmitFlags.Merge) {
+                        options.flags = (options.flags | getNodeEmitFlags(node.original)) & ~NodeEmitFlags.Merge;
+                    }
+
+                    return options.flags;
+                }
+
+                node = node.original;
+            }
+
+            return undefined;
         }
 
         /**
          * Sets flags that control emit behavior of a node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            getNodeEmitOptions(node, /*createIfMissing*/ true).flags = flags;
+            getEmitOptions(node, /*create*/ true).flags = flags;
             return node;
         }
 
@@ -230,15 +216,24 @@ namespace ts {
          * Gets a custom text range to use when emitting source maps.
          */
         function getSourceMapRange(node: Node) {
-            const options = getNodeEmitOptions(node, /*createIfMissing*/ false);
-            return options && options.sourceMapRange;
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.sourceMapRange !== undefined) {
+                    return options.sourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
         }
 
         /**
          * Sets a custom text range to use when emitting source maps.
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
-            getNodeEmitOptions(node, /*createIfMissing*/ true).sourceMapRange = range;
+            getEmitOptions(node, /*create*/ true).sourceMapRange = range;
             return node;
         }
 
@@ -246,15 +241,24 @@ namespace ts {
          * Gets a custom text range to use when emitting comments.
          */
         function getCommentRange(node: Node) {
-            const options = getNodeEmitOptions(node, /*createIfMissing*/ false);
-            return options && options.commentRange;
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current, /*create*/ false);
+                if (options && options.commentRange !== undefined) {
+                    return options.commentRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
         }
 
         /**
          * Sets a custom text range to use when emitting comments.
          */
         function setCommentRange<T extends Node>(node: T, range: TextRange) {
-            getNodeEmitOptions(node, /*createIfMissing*/ true).commentRange = range;
+            getEmitOptions(node, /*create*/ true).commentRange = range;
             return node;
         }
 

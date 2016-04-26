@@ -205,10 +205,11 @@ namespace ts {
 
     // Type members
 
-    export function createMethod(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createMethod(modifiers: Modifier[], asteriskToken: Node, name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
+        node.asteriskToken = asteriskToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
@@ -227,24 +228,24 @@ namespace ts {
         return node;
     }
 
-    export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, body: Block, location?: TextRange) {
+    export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <GetAccessorDeclaration>createNode(SyntaxKind.GetAccessor, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
-        node.parameters = createNodeArray<ParameterDeclaration>();
+        node.parameters = createNodeArray(parameters);
         node.body = body;
         return node;
     }
 
-    export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameter: ParameterDeclaration, body: Block, location?: TextRange) {
+    export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <SetAccessorDeclaration>createNode(SyntaxKind.SetAccessor, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
-        node.parameters = createNodeArray([parameter]);
+        node.parameters = createNodeArray(parameters);
         node.body = body;
         return node;
     }
@@ -503,8 +504,8 @@ namespace ts {
         return node;
     }
 
-    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
-        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location);
+    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange, emitOptions?: NodeEmitOptions) {
+        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location, /*flags*/ undefined, emitOptions);
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
@@ -923,105 +924,6 @@ namespace ts {
         );
     }
 
-    export interface PropertyDescriptorOptions {
-        [key: string]: boolean | Expression;
-        get?: Expression;
-        set?: Expression;
-        value?: Expression;
-        enumerable?: boolean | Expression;
-        configurable?: boolean | Expression;
-        writable?: boolean | Expression;
-    }
-
-    export interface PropertyDescriptorExtendedOptions {
-        [key: string]: PropertyDescriptorExtendedOption;
-        get?: PropertyDescriptorExtendedOption;
-        set?: PropertyDescriptorExtendedOption;
-        value?: PropertyDescriptorExtendedOption;
-        enumerable?: PropertyDescriptorExtendedOption;
-        configurable?: PropertyDescriptorExtendedOption;
-        writable?: PropertyDescriptorExtendedOption;
-    }
-
-    export interface PropertyDescriptorExtendedOption {
-        location?: TextRange;
-        original?: Node;
-        emitFlags?: NodeEmitFlags;
-        newLine?: boolean;
-    }
-
-    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorOptions?: PropertyDescriptorExtendedOptions, context?: TransformationContext) {
-        return createCall(
-            createPropertyAccess(
-                createIdentifier("Object"),
-                "defineProperty"
-            ),
-            [
-                target,
-                memberName,
-                createObjectLiteral(
-                    createPropertyDescriptorProperties(descriptor, descriptorOptions, preferNewLine, context),
-                    /*location*/ undefined,
-                    /*multiLine*/ preferNewLine
-                )
-            ],
-            location
-        );
-    }
-
-    function createPropertyDescriptorProperties(descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
-        const properties: ObjectLiteralElement[] = [];
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "get", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "set", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "value", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "enumerable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "configurable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "writable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        return properties;
-    }
-
-    function addPropertyDescriptorPropertyAssignmentIfNeeded(properties: ObjectLiteralElement[], name: string, descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
-        const value = getProperty(descriptor, name);
-        if (value !== undefined) {
-            let options: PropertyDescriptorExtendedOption;
-            let location: TextRange;
-            let original: Node;
-            let emitFlags: NodeEmitFlags;
-            if (descriptorExtendedOptions !== undefined) {
-                options = getProperty(descriptorExtendedOptions, name);
-                if (options !== undefined) {
-                    location = options.location;
-                    original = options.original;
-                    emitFlags = options.emitFlags;
-                    if (options.newLine !== undefined) {
-                        preferNewLine = options.newLine;
-                    }
-                }
-            }
-
-            const property = createPropertyAssignment(
-                name,
-                typeof value === "boolean" ? createLiteral(value) : value,
-                location
-            );
-
-            if (emitFlags !== undefined) {
-                Debug.assert(context !== undefined, "TransformationContext must be supplied when emitFlags are provided.");
-                context.setNodeEmitFlags(property, emitFlags);
-            }
-
-            if (original) {
-                property.original = original;
-            }
-
-            if (preferNewLine) {
-                startOnNewLine(property);
-            }
-
-            properties.push(property);
-        }
-    }
-
     function createObjectCreate(prototype: Expression) {
         return createCall(
             createPropertyAccess(createIdentifier("Object"), "create"),
@@ -1078,6 +980,7 @@ namespace ts {
         const getter = createGetAccessor(
             /*modifiers*/ undefined,
             "value",
+            [],
             createBlock([
                 createReturn(
                     createCall(
@@ -1092,7 +995,7 @@ namespace ts {
         const setter = createSetAccessor(
             /*modifiers*/ undefined,
             "value",
-            createParameter("v"),
+            [createParameter("v")],
             createBlock([
                 createStatement(
                     createCall(
@@ -1276,7 +1179,7 @@ namespace ts {
             : getSynthesizedClone(node);
     }
 
-    export function createExpressionForPropertyName(memberName: PropertyName, emitOptions: NodeEmitOptions): Expression {
+    export function createExpressionForPropertyName(memberName: PropertyName, emitOptions?: NodeEmitOptions): Expression {
         if (isIdentifier(memberName)) {
             return createLiteral(memberName, /*location*/ undefined, emitOptions);
         }

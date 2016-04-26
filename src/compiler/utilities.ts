@@ -3026,6 +3026,19 @@ namespace ts {
             else if (kind === SyntaxKind.ObjectLiteralExpression) {
                 return (<ObjectLiteralExpression>node).properties.length === 0;
             }
+            else if (kind === SyntaxKind.CallExpression) {
+                if (!isSimpleExpressionWorker((<CallExpression>node).expression, depth + 1)) {
+                    return false;
+                }
+
+                for (const argument of (<CallExpression>node).arguments) {
+                    if (!isSimpleExpressionWorker(argument, depth + 1)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
 
         return false;
@@ -3046,13 +3059,23 @@ namespace ts {
     }
 
     /**
+     * Creates a new TextRange from the provided pos and end.
+     *
+     * @param pos The start position.
+     * @param end The end position.
+     */
+    export function createRange(pos: number, end: number): TextRange {
+        return { pos, end };
+    }
+
+    /**
      * Creates a new TextRange from a provided range with a new end position.
      *
      * @param range A TextRange.
      * @param end The new end position.
      */
     export function moveRangeEnd(range: TextRange, end: number): TextRange {
-        return { pos: range.pos, end };
+        return createRange(range.pos, end);
     }
 
     /**
@@ -3062,16 +3085,25 @@ namespace ts {
      * @param pos The new Start position.
      */
     export function moveRangePos(range: TextRange, pos: number): TextRange {
-        return { pos, end: range.end };
+        return createRange(pos, range.end);
     }
 
     /**
      * Moves the start position of a range past any decorators.
      */
-    export function getUndecoratedRange(node: Node): TextRange {
+    export function moveRangePastDecorators(node: Node): TextRange {
         return node.decorators && node.decorators.length > 0
             ? moveRangePos(node, node.decorators.end)
             : node;
+    }
+
+    /**
+     * Moves the start position of a range past any decorators or modifiers.
+     */
+    export function moveRangePastModifiers(node: Node): TextRange {
+        return node.modifiers && node.modifiers.length > 0
+            ? moveRangePos(node, node.modifiers.end)
+            : moveRangePastDecorators(node);
     }
 
     /**
@@ -3110,7 +3142,7 @@ namespace ts {
      * @param token The token.
      */
     export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
-        return { pos, end: pos + tokenToString(token).length };
+        return createRange(pos,  pos + tokenToString(token).length);
     }
 
     export function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile) {

@@ -225,7 +225,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
-            if (hasModifier(node, ModifierFlags.Ambient)) {
+            if (hasModifier(node, ModifierFlags.Ambient) && isStatement(node)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
                 return isStatement(node)
@@ -598,7 +598,7 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //
 
-            const location = getUndecoratedRange(node);
+            const location = moveRangePastDecorators(node);
 
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
@@ -914,8 +914,12 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
             const name = node.name as Identifier;
-            const propertyName = getMutableClone(name, { flags: NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap });
-            const localName = getMutableClone(name, { flags: NodeEmitFlags.NoComments });
+            const propertyName = getMutableClone(name);
+            setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap);
+
+            const localName = getMutableClone(name);
+            setNodeEmitFlags(localName, NodeEmitFlags.NoComments);
+
             return startOnNewLine(
                 createStatement(
                     createAssignment(
@@ -926,7 +930,7 @@ namespace ts {
                         ),
                         localName
                     ),
-                    /*location*/ node
+                    /*location*/ moveRangePos(node, -1)
                 )
             );
         }
@@ -980,12 +984,10 @@ namespace ts {
          */
         function addInitializedPropertyStatements(statements: Statement[], node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                statements.push(
-                    createStatement(
-                        transformInitializedProperty(node, property, receiver),
-                        /*location*/ property
-                    )
-                );
+                const statement = createStatement(transformInitializedProperty(node, property, receiver));
+                setSourceMapRange(statement, moveRangePastModifiers(property));
+                setCommentRange(statement, property);
+                statements.push(statement);
             }
         }
 
@@ -999,7 +1001,10 @@ namespace ts {
         function generateInitializedPropertyExpressions(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                expressions.push(transformInitializedProperty(node, property, receiver, /*location*/ property));
+                const expression = transformInitializedProperty(node, property, receiver);
+                setSourceMapRange(expression, moveRangePastModifiers(property));
+                setCommentRange(expression, property);
+                expressions.push(expression);
             }
 
             return expressions;
@@ -1012,7 +1017,7 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, location?: TextRange) {
+        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
@@ -1020,11 +1025,7 @@ namespace ts {
                 setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
             }
 
-            return createAssignment(
-                memberAccess,
-                initializer,
-                location
-            );
+            return createAssignment(memberAccess, initializer);
         }
 
         /**
@@ -1321,7 +1322,7 @@ namespace ts {
                 prefix,
                 memberName,
                 descriptor,
-                getUndecoratedRange(member)
+                moveRangePastDecorators(member)
             );
 
             setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
@@ -1371,7 +1372,7 @@ namespace ts {
                     )
                 );
 
-                const result = createAssignment(getDeclarationName(node), expression, getUndecoratedRange(node));
+                const result = createAssignment(getDeclarationName(node), expression, moveRangePastDecorators(node));
                 setNodeEmitFlags(result, NodeEmitFlags.NoComments);
                 return result;
             }
@@ -1392,7 +1393,7 @@ namespace ts {
                         decoratorExpressions,
                         getDeclarationName(node)
                     ),
-                    getUndecoratedRange(node)
+                    moveRangePastDecorators(node)
                 );
 
                 setNodeEmitFlags(result, NodeEmitFlags.NoComments);
@@ -1903,8 +1904,7 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node is an overload
-         * - The node is marked as abstract
-         * - The node is marked as async
+         * - The node is marked as abstract, async, public, private, protected, or readonly
          * - The node has both a decorator and a computed property name
          *
          * @param node The method node.
@@ -1916,20 +1916,18 @@ namespace ts {
 
             const method = createMethod(
                 visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
-            setOriginalNode(method, node);
-
-            // While we emit the source map for the node after skipping the decorators,
+            // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            if (node.decorators) {
-                setCommentRange(method, node);
-                setSourceMapRange(method, getUndecoratedRange(node));
-            }
+            setCommentRange(method, node);
+            setSourceMapRange(method, moveRangePastDecorators(node));
+            setOriginalNode(method, node);
 
             return method;
         }
@@ -1948,7 +1946,7 @@ namespace ts {
          * Visits a get accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract
+         * - The node is marked as abstract, public, private, or protected
          * - The node has both a decorator and a computed property name
          *
          * @param node The get accessor node.
@@ -1961,18 +1959,16 @@ namespace ts {
             const accessor = createGetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
+                visitNodes(node.parameters, visitor, isParameter),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
-            setOriginalNode(accessor, node);
-
-            // While we emit the source map for the node after skipping the decorators,
+            // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            if (node.decorators) {
-                setCommentRange(accessor, node);
-                setSourceMapRange(accessor, getUndecoratedRange(node));
-            }
+            setCommentRange(accessor, node);
+            setSourceMapRange(accessor, moveRangePastDecorators(node));
+            setOriginalNode(accessor, node);
 
             return accessor;
         }
@@ -1981,7 +1977,7 @@ namespace ts {
          * Visits a set accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract
+         * - The node is marked as abstract, public, private, or protected
          * - The node has both a decorator and a computed property name
          *
          * @param node The set accessor node.
@@ -1994,19 +1990,16 @@ namespace ts {
             const accessor = createSetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
+                visitNodes(node.parameters, visitor, isParameter),
                 node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ node
             );
 
-            setOriginalNode(accessor, node);
-
-            // While we emit the source map for the node after skipping the decorators,
+            // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            if (node.decorators) {
-                setCommentRange(accessor, node);
-                setSourceMapRange(accessor, getUndecoratedRange(node));
-            }
+            setCommentRange(accessor, node);
+            setSourceMapRange(accessor, moveRangePastDecorators(node));
+            setOriginalNode(accessor, node);
 
             return accessor;
         }
@@ -2032,8 +2025,9 @@ namespace ts {
                 node.name,
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                node
+                /*location*/ node
             );
+            setOriginalNode(func, node);
 
             if (isNamespaceExport(node)) {
                 const statements: Statement[] = [func];
@@ -2054,17 +2048,20 @@ namespace ts {
          */
         function visitFunctionExpression(node: FunctionExpression) {
             if (nodeIsMissing(node.body)) {
-                return createNode(SyntaxKind.OmittedExpression);
-                // return createOmittedExpression(/*location*/ node);
+                return createOmittedExpression();
             }
 
-            return createFunctionExpression(
+            const func = createFunctionExpression(
                 node.asteriskToken,
                 node.name,
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                node
+                /*location*/ node
             );
+
+            setOriginalNode(func, node);
+
+            return func;
         }
 
         /**
@@ -2073,11 +2070,15 @@ namespace ts {
          * - The node is marked async
          */
         function visitArrowFunction(node: ArrowFunction) {
-            return createArrowFunction(
+            const func = createArrowFunction(
                 visitNodes(node.parameters, visitor, isParameter),
                 transformConciseBody(node),
-                node
+                /*location*/ node
             );
+
+            setOriginalNode(func, node);
+
+            return func;
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
@@ -2196,17 +2197,15 @@ namespace ts {
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
                 visitNode(node.initializer, visitor, isExpression),
-                /*location*/ getUndecoratedRange(node)
+                /*location*/ moveRangePastModifiers(node)
             );
 
-            setOriginalNode(parameter, node);
-
-            // While we emit the source map for the node after skipping the decorators,
+            // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
-            if (node.decorators) {
-                setCommentRange(parameter, node);
-                setSourceMapRange(parameter, getUndecoratedRange(node));
-            }
+            setCommentRange(parameter, node);
+            setSourceMapRange(parameter, moveRangePastModifiers(node));
+            setNodeEmitFlags(parameter.name, NodeEmitFlags.NoTrailingSourceMap);
+            setOriginalNode(parameter, node);
 
             return parameter;
         }
@@ -2777,9 +2776,9 @@ namespace ts {
                     createAssignment(
                         getExportName(node),
                         getLocalName(node, /*noSourceMaps*/ true),
-                        /*location*/ node
+                        /*location*/ createRange(node.name.pos, node.end)
                     ),
-                    /*location*/ moveRangePos(node, -1)
+                    /*location*/ createRange(-1, node.end)
                 )
             );
         }

@@ -11,11 +11,15 @@ namespace ts {
 
         const {
             getNodeEmitFlags,
+            setNodeEmitFlags,
+            getCommentRange,
+            setCommentRange,
+            getSourceMapRange,
+            setSourceMapRange,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
-            setNodeEmitFlags
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
@@ -661,6 +665,7 @@ namespace ts {
                     recordExportName(name);
                 }
 
+                setOriginalNode(newNode, node);
                 node = newNode;
             }
 

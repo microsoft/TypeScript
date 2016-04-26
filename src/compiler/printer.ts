@@ -291,7 +291,7 @@ const _super = (function (geti, seti) {
                 if (node) {
                     const flagsToAdd = flags & ~getNodeEmitFlags(node);
                     if (flagsToAdd) {
-                        setNodeEmitFlags(node, flagsToAdd);
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) | flagsToAdd);
                         emit(node);
                         setNodeEmitFlags(node, getNodeEmitFlags(node) & ~flagsToAdd);
                         return;
@@ -342,7 +342,7 @@ const _super = (function (geti, seti) {
                 if (node) {
                     const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getCommentRange);
                     const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getCommentRange);
-                    emitLeadingComments(node, leadingComments);
+                    emitLeadingComments(node, leadingComments, getCommentRange);
                     emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
                     emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
@@ -1305,14 +1305,14 @@ const _super = (function (geti, seti) {
 
             function emitBlock(node: Block, format?: ListFormat) {
                 if (isSingleLineEmptyBlock(node)) {
-                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                     write(" ");
-                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
                 else {
-                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                     emitBlockStatements(node);
-                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
             }
 
@@ -1408,7 +1408,7 @@ const _super = (function (geti, seti) {
 
                 const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);
                 emitForBinding(node.initializer);
                 write(";");
                 emitExpressionWithPrefix(" ", node.condition);
@@ -1464,7 +1464,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                writeToken(SyntaxKind.ReturnKeyword, node.pos, node, shouldSkipSourceMapForToken);
+                writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
                 emitExpressionWithPrefix(" ", node.expression);
                 write(";");
             }
@@ -1992,7 +1992,7 @@ const _super = (function (geti, seti) {
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
                 if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
-                    emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)));
+                    emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), getCommentRange);
                 }
                 emitExpression(node.initializer);
             }
@@ -2356,7 +2356,7 @@ const _super = (function (geti, seti) {
                         }
 
                         if (shouldEmitInterveningComments) {
-                            emitLeadingComments(child, getTrailingCommentsOfPosition(child.pos));
+                            emitLeadingComments(child, getTrailingCommentsOfPosition(child.pos), getCommentRange);
                         }
                         else {
                             shouldEmitInterveningComments = true;
@@ -2410,18 +2410,20 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, tokenStartPos: number): number;
-            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreSourceMapForTokenCallback: (contextNode: Node) => boolean): number;
-            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, shouldIgnoreSourceMapForTokenCallback?: (contextNode: Node) => boolean) {
+            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node) {
                 tokenStartPos = skipTrivia(currentText, tokenStartPos);
-                emitPos(tokenStartPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
+                emitPos(tokenStartPos, contextNode, shouldSkipLeadingSourceMapForToken);
                 const tokenEndPos = writeTokenText(token, tokenStartPos);
-                emitPos(tokenEndPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
+                emitPos(tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken);
                 return tokenEndPos;
             }
 
-            function shouldSkipSourceMapForToken(contextNode: Node) {
-                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenSourceMaps) !== 0;
+            function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenLeadingSourceMaps) !== 0;
+            }
+
+            function shouldSkipTrailingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenTrailingSourceMaps) !== 0;
             }
 
             function writeTokenText(token: SyntaxKind, pos?: number) {

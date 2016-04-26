@@ -507,10 +507,15 @@ namespace ts {
                 else {
                     statements.push(
                         createStatement(
-                            createObjectDefineProperty(
-                                createIdentifier("exports"),
-                                createLiteral("__esModule"),
-                                { value: createLiteral(true) }
+                            createCall(
+                                createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                                [
+                                    createIdentifier("exports"),
+                                    createLiteral("__esModule"),
+                                    createObjectLiteral([
+                                        createPropertyAssignment("value", createLiteral(true))
+                                    ])
+                                ]
                             )
                         )
                     );
@@ -651,13 +656,16 @@ namespace ts {
             const name = node.name || getGeneratedNameForNode(node);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
-                    createFunctionDeclaration(
-                        /*modifiers*/ undefined,
-                        /*asteriskToken*/ undefined,
-                        name,
-                        node.parameters,
-                        node.body,
-                        /*location*/ node
+                    setOriginalNode(
+                        createFunctionDeclaration(
+                            /*modifiers*/ undefined,
+                            /*asteriskToken*/ undefined,
+                            name,
+                            node.parameters,
+                            node.body,
+                            /*location*/ node
+                        ),
+                        /*original*/ node
                     )
                 );
 
