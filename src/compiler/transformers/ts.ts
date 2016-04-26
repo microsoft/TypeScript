@@ -2682,7 +2682,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && hasModifier(node, ModifierFlags.Default);
+                && !hasModifier(node, ModifierFlags.Default);
         }
 
         /**
