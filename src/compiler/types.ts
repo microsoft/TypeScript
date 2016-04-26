@@ -2175,7 +2175,13 @@ namespace ts {
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
-        Narrowable = Any | ObjectType | Union | TypeParameter,
+
+        // 'Defaultable' types are types where narrowing reverts to the original type, rather than actually narrow.
+        // This is never really correct - you can _always_ narrow to an intersection with that type, _but_ we keep
+        // Void as the only defaultable type, since it's a non-value type construct (representing a lack of a value)
+        // and, generally speaking, narrowing `void` should fail in some way, as it is nonsensical. (`void` narrowing
+        // to `void & T`, in a structural sense, is just narrowing to T, which we wouldn't allow under normal rules)
+        Defaultable = Void,
         /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
