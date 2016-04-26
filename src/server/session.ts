@@ -101,7 +101,6 @@ namespace ts.server {
         export const Exit = "exit";
         export const Format = "format";
         export const Formatonkey = "formatonkey";
-        export const Geterr = "geterr";
         export const GeterrForProject = "geterrForProject";
         export const NavBar = "navbar";
         export const Navto = "navto";
@@ -793,8 +792,9 @@ namespace ts.server {
                 if (start >= 0) {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
+                    this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
+                    this.getDiagnostics(/*delay*/ 1500, project.getOpenedFileNames());
                 }
-                this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
             }
         }
 
@@ -808,6 +808,7 @@ namespace ts.server {
                 project.compilerService.host.reloadScript(file, tmpfile, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
+                this.getDiagnostics(/*delay*/ 1500, project.getOpenedFileNames());
             }
         }
 
@@ -1060,10 +1061,6 @@ namespace ts.server {
             [CommandNames.SignatureHelp]: (request: protocol.Request) => {
                 const signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
                 return { response: this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file), responseRequired: true };
-            },
-            [CommandNames.Geterr]: (request: protocol.Request) => {
-                const geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
-                return { response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false };
             },
             [CommandNames.GeterrForProject]: (request: protocol.Request) => {
                 const { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;

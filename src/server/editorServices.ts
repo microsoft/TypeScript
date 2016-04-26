@@ -411,6 +411,11 @@ namespace ts.server {
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
+        getOpenedFileNames() {
+            const infos = ts.filter(this.compilerService.host.roots, info => info.isOpen === true);
+            return ts.map(infos, info => info.fileName);
+        }
+
         getSourceFile(info: ScriptInfo) {
             return this.filenameToSourceFile[info.fileName];
         }
