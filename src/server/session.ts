@@ -793,7 +793,7 @@ namespace ts.server {
                     compilerService.host.editScript(file, start, end, insertString);
                     this.changeSeq++;
                     this.updateProjectStructure(this.changeSeq, (n) => n === this.changeSeq);
-                    this.getDiagnostics(/*delay*/ 1500, project.getOpenedFileNames());
+                    this.getDiagnostics(/*delay*/ 0, project.getOpenedFileNames());
                 }
             }
         }
@@ -808,7 +808,7 @@ namespace ts.server {
                 project.compilerService.host.reloadScript(file, tmpfile, () => {
                     this.output(undefined, CommandNames.Reload, reqSeq);
                 });
-                this.getDiagnostics(/*delay*/ 1500, project.getOpenedFileNames());
+                this.getDiagnostics(/*delay*/ 0, project.getOpenedFileNames());
             }
         }
 
