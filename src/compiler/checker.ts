@@ -7972,7 +7972,7 @@ namespace ts {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
-            const defaultsToDeclaredType = !strictNullChecks || !declaration ||
+            const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
                 declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
             if (defaultsToDeclaredType && !(type.flags & TypeFlags.Narrowable)) {
