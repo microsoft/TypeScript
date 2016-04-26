@@ -629,7 +629,7 @@ namespace ts {
                     if (expr.left.kind === SyntaxKind.TypeOfExpression && isNarrowingExpression((<TypeOfExpression>expr.left).expression) && expr.right.kind === SyntaxKind.StringLiteral) {
                         return true;
                     }
-                    return true;
+                    return false;
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowingExpression(expr.left);
                 case SyntaxKind.CommaToken:
