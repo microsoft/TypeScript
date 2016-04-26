@@ -561,7 +561,10 @@ namespace ts.server {
          */
         private openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file, fileContent, scriptKind);
+            const { info, configFileName, configFileErrors } = this.projectService.openClientFile(file, fileContent, scriptKind);
+            if (configFileErrors) {
+                this.event({ triggerFile: fileName, configFile: configFileName, diagnostics: configFileErrors }, "configFileDiag");
+            }
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
