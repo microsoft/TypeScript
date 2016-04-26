@@ -7555,7 +7555,7 @@ namespace ts {
         }
 
         function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (type.flags & TypeFlags.Defaultable || !isNarrowableReference(reference)) {
+            if (type.flags & TypeFlags.NotNarrowable || !isNarrowableReference(reference)) {
                 return type;
             }
             const leftmostNode = getLeftmostIdentifierOrThis(reference);
@@ -7975,7 +7975,7 @@ namespace ts {
             const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
                 declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            if (defaultsToDeclaredType && type.flags & TypeFlags.Defaultable) {
+            if (defaultsToDeclaredType && type.flags & TypeFlags.NotNarrowable) {
                 return type;
             }
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
