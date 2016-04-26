@@ -1377,7 +1377,8 @@ namespace ts {
             if (inStrictMode &&
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node)) {
+                !isIdentifierName(node) &&
+                !isInAmbientContext(node)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
