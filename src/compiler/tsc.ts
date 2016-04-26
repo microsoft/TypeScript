@@ -432,6 +432,16 @@ namespace ts {
                 return sys.exit(compileResult.exitStatus);
             }
 
+            if (!directoryWatcher && sys.watchDirectory && configFileName) {
+                const directory = ts.getDirectoryPath(configFileName);
+                directoryWatcher = sys.watchDirectory(
+                    // When the configFileName is just "tsconfig.json", the watched directory should be
+                    // the current directory; if there is a given "project" parameter, then the configFileName
+                    // is an absolute file name.
+                    directory == "" ? "." : directory,
+                    watchedDirectoryChanged, /*recursive*/ true);
+            }
+
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
