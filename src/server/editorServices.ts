@@ -1096,12 +1096,12 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { info: ScriptInfo, configFileName?: string, configFileErrors?: Diagnostic[] } {
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): { configFileName?: string, configFileErrors?: Diagnostic[] } {
             const { configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName);
             const info = this.openFile(fileName, /*openedByClient*/ true, fileContent, scriptKind);
             this.addOpenFile(info);
             this.printProjects();
-            return { info, configFileName, configFileErrors };
+            return { configFileName, configFileErrors };
         }
 
         /**
