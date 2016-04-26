@@ -7698,6 +7698,103 @@ namespace ts {
                 return isMatchingReference(expr, reference) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
             }
 
+            function narrowTypeByValueExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                assumeTrue = (expr.operatorToken.kind === SyntaxKind.EqualsEqualsEqualsToken || expr.operatorToken.kind === SyntaxKind.EqualsEqualsToken) ? assumeTrue : !assumeTrue;
+                let lhs = expr.left;
+                // selectors is the stack of property names used to select down into a type to get the member being narrowed
+                const selectors: string[] = [];
+                while (lhs.kind !== SyntaxKind.Identifier) {
+                    switch (lhs.kind) {
+                        case SyntaxKind.ParenthesizedExpression:
+                            lhs = (lhs as ParenthesizedExpression).expression;
+                            break;
+                        case SyntaxKind.PropertyAccessExpression:
+                            const name = (lhs as PropertyAccessExpression).name.text;
+                            // If a name doesn't resolve, bail
+                            if (name === undefined) {
+                                return type;
+                            }
+                            selectors.push(name);
+                            lhs = (lhs as PropertyAccessExpression).expression;
+                            break;
+                        case SyntaxKind.Identifier:
+                            break;
+                        default:
+                            // Unhandled control flow construct, don't narrow
+                            return type;
+                    }
+                }
+
+                if (!isMatchingReference(lhs, reference)) {
+                    return type;
+                }
+                const rhsType = checkExpressionCached(expr.right);
+
+                if (assumeTrue) {
+                    return narrowIntrospectively(type);
+                }
+                return type;
+
+                /** 
+                 * Descend into the type using the selectors we accumulated above and narrow any unions along the way
+                 * If assumeTrue, we narrow by removing all types not compatible with the rhs type
+                 * If not, we narrow only if the rhsType is a Value type (ie, StringLiteral) by removing all types compatible with that type (TODO)
+                 */
+                function narrowIntrospectively(type: Type) {
+                    const propName = selectors.pop();
+                    if (propName === undefined) {
+                        // Selected all the way into the object, return the type for the property to be narrowed
+                        if (isTypeSubtypeOf(rhsType, type)) {
+                            return rhsType;
+                        }
+                        else {
+                            return type;
+                        }
+                    }
+                    if (type.flags & TypeFlags.Union) {
+                        const reducedUnion = getUnionType(
+                            filter((type as UnionType).types, t => isMemberSubtype(t, rhsType, [...selectors, propName])),
+                            /*noSubtypeReduction*/ true
+                        );
+
+                        if (reducedUnion !== emptyUnionType) {
+                            return narrowBasedOnMatchingProperty(reducedUnion, propName);
+                        }
+                        else {
+                            return type;
+                        }
+                    }
+
+                    return narrowBasedOnMatchingProperty(type, propName);
+                }
+
+                function isMemberSubtype(type: Type, check: Type, selectors: string[]): boolean {
+                    if (!selectors.length) {
+                        return isTypeSubtypeOf(type, check);
+                    }
+                    const name = selectors.pop();
+                    const childProp = getPropertyOfType(type, name);
+                    const propType = childProp && getTypeOfSymbol(childProp);
+                    return propType && isMemberSubtype(propType, check, selectors);
+                }
+
+                function narrowBasedOnMatchingProperty(type: Type, name: string): Type {
+                    const childProp = getPropertyOfType(type, name);
+                    const propType = childProp && getTypeOfSymbol(childProp);
+                    const narrowedType = propType && narrowIntrospectively(propType);
+
+                    if (narrowedType && !isTypeIdenticalTo(propType, narrowedType)) {
+                        const symbols = cloneSymbolTable(resolveStructuredTypeMembers(type as ObjectType).members);
+                        const temp = createSymbol(childProp.flags, name);
+                        getSymbolLinks(temp).type = narrowedType;
+                        symbols[name] = temp;
+                        return createAnonymousType(createSymbol(type.symbol.flags, type.symbol.name), symbols, getSignaturesOfType(type, SignatureKind.Call),
+                            getSignaturesOfType(type, SignatureKind.Construct), getIndexInfoOfType(type, IndexKind.String), getIndexInfoOfType(type, IndexKind.Number));
+                    }
+                    return type;
+                }
+            }
+
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
@@ -7712,7 +7809,7 @@ namespace ts {
                         if (expr.left.kind === SyntaxKind.TypeOfExpression && expr.right.kind === SyntaxKind.StringLiteral) {
                             return narrowTypeByTypeof(type, expr, assumeTrue);
                         }
-                        break;
+                        return narrowTypeByValueExpression(type, expr, assumeTrue);
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.CommaToken:

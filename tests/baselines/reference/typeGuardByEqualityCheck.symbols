@@ -3,7 +3,7 @@ interface Discriminator {
 >Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
 
 	_discriminator: void;
->_discriminator : Symbol(_discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 25))
+>_discriminator : Symbol(Discriminator._discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 25))
 }
 
 interface FooDiscriminator extends Discriminator {
@@ -11,7 +11,7 @@ interface FooDiscriminator extends Discriminator {
 >Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
 
 	_foo: void;
->_foo : Symbol(_foo, Decl(typeGuardByEqualityCheck.ts, 4, 50))
+>_foo : Symbol(FooDiscriminator._foo, Decl(typeGuardByEqualityCheck.ts, 4, 50))
 }
 
 interface BarDiscriminator extends Discriminator {
@@ -19,14 +19,14 @@ interface BarDiscriminator extends Discriminator {
 >Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
 
 	_bar: void;
->_bar : Symbol(_bar, Decl(typeGuardByEqualityCheck.ts, 8, 50))
+>_bar : Symbol(BarDiscriminator._bar, Decl(typeGuardByEqualityCheck.ts, 8, 50))
 }
 
 interface BaseNode {
 >BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
 
 	kind: Discriminator;
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 12, 20))
+>kind : Symbol(BaseNode.kind, Decl(typeGuardByEqualityCheck.ts, 12, 20))
 >Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
 }
 
@@ -35,11 +35,11 @@ interface FooNode extends BaseNode {
 >BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
 
 	kind: FooDiscriminator;
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36))
+>kind : Symbol(FooNode.kind, Decl(typeGuardByEqualityCheck.ts, 16, 36))
 >FooDiscriminator : Symbol(FooDiscriminator, Decl(typeGuardByEqualityCheck.ts, 2, 1))
 
 	foo: string;
->foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+>foo : Symbol(FooNode.foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
 }
 
 interface BarNode extends BaseNode {
@@ -47,11 +47,11 @@ interface BarNode extends BaseNode {
 >BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
 
 	kind: BarDiscriminator;
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>kind : Symbol(BarNode.kind, Decl(typeGuardByEqualityCheck.ts, 21, 36))
 >BarDiscriminator : Symbol(BarDiscriminator, Decl(typeGuardByEqualityCheck.ts, 6, 1))
 
 	bar: string;
->bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 22, 24))
+>bar : Symbol(BarNode.bar, Decl(typeGuardByEqualityCheck.ts, 22, 24))
 }
 
 let a: FooDiscriminator;
@@ -124,40 +124,40 @@ interface Thing {
 >Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
 
 	kind: string;
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 49, 17))
+>kind : Symbol(Thing.kind, Decl(typeGuardByEqualityCheck.ts, 49, 17))
 }
 interface FooThing extends Thing {
 >FooThing : Symbol(FooThing, Decl(typeGuardByEqualityCheck.ts, 51, 1))
 >Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
 
 	kind: "foo";
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34))
+>kind : Symbol(FooThing.kind, Decl(typeGuardByEqualityCheck.ts, 52, 34))
 
 	foo: string;
->foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 53, 13))
+>foo : Symbol(FooThing.foo, Decl(typeGuardByEqualityCheck.ts, 53, 13))
 }
 interface BarThing extends Thing {
 >BarThing : Symbol(BarThing, Decl(typeGuardByEqualityCheck.ts, 55, 1))
 >Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
 
 	kind: "bar";
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 56, 34))
+>kind : Symbol(BarThing.kind, Decl(typeGuardByEqualityCheck.ts, 56, 34))
 
 	bar: string;
->bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 57, 13))
+>bar : Symbol(BarThing.bar, Decl(typeGuardByEqualityCheck.ts, 57, 13))
 }
 interface FooBarThing extends Thing {
 >FooBarThing : Symbol(FooBarThing, Decl(typeGuardByEqualityCheck.ts, 59, 1))
 >Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
 
 	kind: "foobar";
->kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 60, 37))
+>kind : Symbol(FooBarThing.kind, Decl(typeGuardByEqualityCheck.ts, 60, 37))
 
 	foo: string;
->foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 61, 16))
+>foo : Symbol(FooBarThing.foo, Decl(typeGuardByEqualityCheck.ts, 61, 16))
 
 	bar: string;
->bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 62, 13))
+>bar : Symbol(FooBarThing.bar, Decl(typeGuardByEqualityCheck.ts, 62, 13))
 }
 
 let gg: FooThing | BarThing | FooBarThing;
