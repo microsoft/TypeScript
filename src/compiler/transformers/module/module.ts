@@ -518,10 +518,15 @@ namespace ts {
             }
         }
 
-        function addExportImportAssignments(statements: Statement[], node: Node) {
-            const names = reduceEachChild(node, collectExportMembers, []);
-            for (const name of names) {
-                addExportMemberAssignments(statements, name);
+        function addExportImportAssignments(statements: Statement[], node: ImportEqualsDeclaration | ImportDeclaration) {
+            if (isImportEqualsDeclaration(node)) {
+                addExportMemberAssignments(statements, node.name);
+            }
+            else {
+                const names = reduceEachChild(node, collectExportMembers, []);
+                for (const name of names) {
+                    addExportMemberAssignments(statements, name);
+                }
             }
         }
 
