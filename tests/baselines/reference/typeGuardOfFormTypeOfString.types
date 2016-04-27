@@ -121,7 +121,7 @@ if (typeof numOrBool === "string") {
 
     let x1: {} = numOrBool; // {}
 >x1 : {}
->numOrBool : {}
+>numOrBool : nothing
 }
 else {
     let x2: number | boolean = numOrBool; // number | boolean
@@ -214,6 +214,6 @@ if (typeof numOrBool !== "string") {
 else {
     let x2: {} = numOrBool; // {}
 >x2 : {}
->numOrBool : {}
+>numOrBool : nothing
 }
 

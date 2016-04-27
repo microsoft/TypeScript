@@ -2014,7 +2014,12 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        writeAnonymousType(<ObjectType>type, flags);
+                        if (type === emptyUnionType) {
+                            writer.writeKeyword("nothing");
+                        }
+                        else {
+                            writeAnonymousType(<ObjectType>type, flags);
+                        }
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
@@ -4247,7 +4252,9 @@ namespace ts {
                         propTypes.push(getTypeOfSymbol(prop));
                     }
                 }
-                return getUnionType(propTypes);
+                if (propTypes.length) {
+                    return getUnionType(propTypes);
+                }
             }
             return undefined;
         }
