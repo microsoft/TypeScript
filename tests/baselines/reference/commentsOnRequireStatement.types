@@ -10,14 +10,14 @@ export var subject1 = 10;
 >10 : number
 
 === tests/cases/compiler/2.ts ===
-/* tslint:disable:no-unused-variable */
-// Subject imported before Observable to bypass circular dependency issue since
-// Subject extends Observable and Observable references Subject in it's
-// definition
+/* blah0 */
+// blah 
+// blah 
+// blah 
 export {subject} from './0';
 >subject : number
 
-/* tslint:enable:no-unused-variable */
+/* blah1 */
 export {subject1} from './1';
 >subject1 : number
 
