@@ -7358,12 +7358,6 @@ namespace ts {
             return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
         }
 
-        function isNarrowableReference(expr: Node): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
-        }
-
         function typeMaybeAssignableTo(source: Type, target: Type) {
             if (!(source.flags & TypeFlags.Union)) {
                 return isTypeAssignableTo(source, target);
@@ -7554,30 +7548,12 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (!(type.flags & TypeFlags.Narrowable) || !isNarrowableReference(reference)) {
-                return type;
-            }
-            const leftmostNode = getLeftmostIdentifierOrThis(reference);
-            if (!leftmostNode) {
-                return type;
-            }
-            if (leftmostNode.kind === SyntaxKind.Identifier) {
-                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
-                if (!leftmostSymbol) {
-                    return type;
-                }
-                const declaration = leftmostSymbol.valueDeclaration;
-                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                    return type;
-                }
-            }
-            return getFlowTypeOfReference(reference, type, type);
-        }
-
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
-            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : declaredType;
+            if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
+                return declaredType;
+            }
+            return getTypeAtFlowNode(reference.flowNode);
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
@@ -7885,19 +7861,18 @@ namespace ts {
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
-            // The language service will always care about the narrowed type of a symbol, because that is
-            // the type the language says the symbol should have.
-            const type = getTypeOfSymbol(symbol);
+            // If we have an identifier or a property access at the given location, if the location is
+            // an dotted name expression, and if the location is not an assignment target, obtain the type
+            // of the expression (which will reflect control flow analysis). If the expression indeed
+            // resolved to the given symbol, return the narrowed type.
             if (location.kind === SyntaxKind.Identifier) {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                // If location is an identifier or property access that references the given
-                // symbol, use the location as the reference with respect to which we narrow.
                 if (isExpression(location) && !isAssignmentTarget(location)) {
-                    checkExpression(<Expression>location);
+                    const type = checkExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
-                        return getNarrowedTypeOfReference(type, <IdentifierOrPropertyAccess>location);
+                        return type;
                     }
                 }
             }
@@ -7906,7 +7881,7 @@ namespace ts {
             // to it at the given location. Since we have no control flow information for the
             // hypotherical reference (control flow information is created and attached by the
             // binder), we simply return the declared type of the symbol.
-            return type;
+            return getTypeOfSymbol(symbol);
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {
@@ -7975,9 +7950,6 @@ namespace ts {
             const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
                 declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            if (defaultsToDeclaredType && !(type.flags & TypeFlags.Narrowable)) {
-                return type;
-            }
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
@@ -8220,7 +8192,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getNarrowedTypeOfReference(type, node);
+                return getFlowTypeOfReference(node, type, type);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -9784,8 +9756,24 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
-            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & (SymbolFlags.Variable | SymbolFlags.Property) && !isAssignmentTarget(node) ?
-                getNarrowedTypeOfReference(propType, <PropertyAccessExpression>node) : propType;
+            if (node.kind !== SyntaxKind.PropertyAccessExpression || !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property)) || isAssignmentTarget(node)) {
+                return propType;
+            }
+            const leftmostNode = getLeftmostIdentifierOrThis(node);
+            if (!leftmostNode) {
+                return propType;
+            }
+            if (leftmostNode.kind === SyntaxKind.Identifier) {
+                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
+                if (!leftmostSymbol) {
+                    return propType;
+                }
+                const declaration = leftmostSymbol.valueDeclaration;
+                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
+                    return propType;
+                }
+            }
+            return getFlowTypeOfReference(node, propType, propType);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
