@@ -15,7 +15,7 @@ if (typeof stringOrNumber === "number") {
 >"number" : string
 
         stringOrNumber;
->stringOrNumber : {}
+>stringOrNumber : nothing
     }
 }
 
@@ -31,6 +31,6 @@ if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
 >"number" : string
 
     stringOrNumber;
->stringOrNumber : {}
+>stringOrNumber : nothing
 }
 
