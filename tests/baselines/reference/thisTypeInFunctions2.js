@@ -1,51 +1,91 @@
 //// [thisTypeInFunctions2.ts]
-interface Arguments {
-    init?: (this: void) => void;
+interface IndexedWithThis {
+    // this is a workaround for React
+    init?: (this: this) => void;
     willDestroy?: (this: any) => void;
     [propName: string]: number | string | boolean | symbol | undefined | null | {} | ((this: any, ...args:any[]) => any);
 }
-declare function extend(arguments: Arguments): void;
-class Mixin {
-    stuff: number;
+interface IndexedWithoutThis {
+    // this is what React would like to write (and what they write today)
+    init?: () => void;
+    willDestroy?: () => void;
+    [propName: string]: any;
 }
+interface SimpleInterface {
+    foo(n: string);
+    bar(): number;
+}
+declare function extend1(args: IndexedWithThis): void;
+declare function extend2(args: IndexedWithoutThis): void;
+declare function simple(arg: SimpleInterface): void;
 
-extend({
+extend1({
     init() {
-        this
+        this // this: IndexedWithThis because of contextual typing.
+        // this.mine
+        this.willDestroy
     },
     mine: 12,
-    bar() {
-        this.init();
-    },
     foo() {
-        this.bar;
-        this.url
-        this.handler()
-        this.baz
+        this.url; // this: any because 'foo' matches the string indexer
+        this.willDestroy;
+    }
+});
+extend2({
+    init() {
+        this  // this: any because the contextual signature of init doesn't specify this' type
+        this.mine
         this.willDestroy
+    },
+    mine: 13,
+    foo() {
+        this // this: any because of the string indexer
+        this.mine
+        this.willDestroy
+    }
+});
+
+simple({
+    foo(n) {
+        return n.length + this.bar();
+    },
+    bar() {
+        return 14;
     }
 })
 
 
 //// [thisTypeInFunctions2.js]
-var Mixin = (function () {
-    function Mixin() {
-    }
-    return Mixin;
-}());
-extend({
+extend1({
     init: function () {
-        this;
+        this; // this: IndexedWithThis because of contextual typing.
+        // this.mine
+        this.willDestroy;
     },
     mine: 12,
-    bar: function () {
-        this.init();
-    },
     foo: function () {
-        this.bar;
-        this.url;
-        this.handler();
-        this.baz;
+        this.url; // this: any because 'foo' matches the string indexer
         this.willDestroy;
+    }
+});
+extend2({
+    init: function () {
+        this; // this: any because the contextual signature of init doesn't specify this' type
+        this.mine;
+        this.willDestroy;
+    },
+    mine: 13,
+    foo: function () {
+        this; // this: any because of the string indexer
+        this.mine;
+        this.willDestroy;
+    }
+});
+simple({
+    foo: function (n) {
+        return n.length + this.bar();
+    },
+    bar: function () {
+        return 14;
     }
 });

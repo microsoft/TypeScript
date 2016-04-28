@@ -8453,7 +8453,7 @@ namespace ts {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
-                    return contextualSignature.thisType;
+                    return contextualSignature.thisType || anyType;
                 }
                 else if (getContextualTypeForFunctionLikeDeclaration(func) === anyType) {
                     return anyType;
