@@ -134,7 +134,6 @@ namespace ts {
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
-            debugger;
             const declaration = createVariableDeclaration(name, value, location);
             declaration.original = original;
 

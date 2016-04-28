@@ -1478,15 +1478,7 @@ namespace ts {
                 }
             }
 
-            const visited = visitEachChild(node, visitor, context);
-
-            // if (node.declarationList.transformFlags & TransformFlags.ContainsBindingPattern) {
-            //     // To align with source maps from the old emitter, we do not emit the start pos
-            //     // for the statement if it contains a binding pattern.
-            //     setNodeEmitFlags(visited, NodeEmitFlags.NoLeadingSourceMap);
-            // }
-
-            return visited;
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -1506,23 +1498,14 @@ namespace ts {
             const declarationList = createVariableDeclarationList(declarations, /*location*/ node);
             setOriginalNode(declarationList, node);
 
-            // if (node.transformFlags & TransformFlags.ContainsBindingPattern) {
-            //     const firstOriginalDeclaration = node.declarations[0];
-            //     if (isBindingPattern(firstOriginalDeclaration.name)) {
-            //         // // If the first var declaration is a binding pattern, we need to emit source maps
-            //         // // at var/let/const keyword instead
-            //         // const firstDeclaration = declarations[0];
-            //         // const range = getSourceMapRange(firstDeclaration);
-            //         // if (firstOriginalDeclaration.initializer && isIdentifier(firstOriginalDeclaration.initializer)) {
-            //         //     // setSourceMapRange(declarationList, createRange(-1, node.end));
-            //         //     // setSourceMapRange(declarationList, createRange(range.pos, node.end));
-            //         //     // setSourceMapRange(firstDeclaration, createRange(-1, range.end));
-            //         // }
-            //         // else {
-            //         //     setSourceMapRange(firstDeclaration, createRange(node.pos, range.end));
-            //         // }
-            //     }
-            // }
+            if (node.transformFlags & TransformFlags.ContainsBindingPattern
+                && isBindingPattern(node.declarations[0].name)) {
+                // If the first var declaration is a binding pattern, we need to emit source maps
+                // at var/let/const keyword instead
+                const firstDeclaration = firstOrUndefined(declarations);
+                const lastDeclaration = lastOrUndefined(declarations);
+                setSourceMapRange(node, createRange(firstDeclaration.pos, lastDeclaration.end));
+            }
 
             return declarationList;
         }
@@ -1720,28 +1703,28 @@ namespace ts {
             // Initialize LHS
             // var v = _a[_i];
             if (isVariableDeclarationList(initializer)) {
-                const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
                 if (initializer.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
+
+                const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
                 if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
-                    const declarationList = createVariableDeclarationList(
-                        flattenVariableDestructuring(
-                            context,
-                            firstOriginalDeclaration,
-                            createElementAccess(rhsReference, counter),
-                            visitor
-                        ),
-                        /*location*/ moveRangeEnd(initializer, -1)
+                    const declarations = flattenVariableDestructuring(
+                        context,
+                        firstOriginalDeclaration,
+                        createElementAccess(rhsReference, counter),
+                        visitor
                     );
+
+                    const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
+                    setOriginalNode(declarationList, initializer);
 
                     // Adjust the source map range for the first declaration to align with the old
                     // emitter.
-                    const firstDeclaration = declarationList.declarations[0];
-                    const range = getSourceMapRange(firstDeclaration);
-                    setSourceMapRange(firstDeclaration, createRange(-1, range.end));
+                    const firstDeclaration = declarations[0];
+                    setSourceMapRange(declarationList, firstDeclaration);
 
                     statements.push(
                         createVariableStatement(
