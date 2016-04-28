@@ -8179,6 +8179,21 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
             if (isFunctionLike(container)) {
+                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
+                // of a x.prototype.y = function [name]() { .... }
+                if (container.kind === SyntaxKind.FunctionExpression &&
+                    isInJavaScriptFile(container.parent) &&
+                    getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
+                    const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
+                                        .left as PropertyAccessExpression)       // x.prototype.y
+                                        .expression as PropertyAccessExpression) // x.prototype
+                                        .expression;                             // x
+                    const classSymbol = checkExpression(className).symbol;
+                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                        return getInferredClassType(classSymbol);
+                    }
+                }
                 const type = getContextuallyTypedThisType(container);
                 if (type) {
                     return type;
@@ -8190,9 +8205,13 @@ namespace ts {
                 if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
                     // Note: this works because object literal methods are deferred,
                     // which means that the type of the containing object literal is already known.
-                    const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
-                    if (type) {
-                        return type;
+                    const contextualType = getContextualType(container.parent as ObjectLiteralExpression);
+                    const literalType = checkExpressionCached(<ObjectLiteralExpression>container.parent);
+                    if (contextualType && literalType) {
+                        return getIntersectionType([contextualType, literalType]);
+                    }
+                    else if (contextualType || literalType) {
+                        return contextualType || literalType;
                     }
                 }
             }
@@ -8206,22 +8225,6 @@ namespace ts {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== unknownType) {
                     return type;
-                }
-
-                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
-                // of a x.prototype.y = function [name]() { .... }
-                if (container.kind === SyntaxKind.FunctionExpression) {
-                    if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                        // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
-                        const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
-                            .left as PropertyAccessExpression)       // x.prototype.y
-                            .expression as PropertyAccessExpression) // x.prototype
-                            .expression;                             // x
-                        const classSymbol = checkExpression(className).symbol;
-                        if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                            return getInferredClassType(classSymbol);
-                        }
-                    }
                 }
             }
 
@@ -8450,6 +8453,12 @@ namespace ts {
             if ((isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
                 isContextSensitive(func) &&
                 func.kind !== SyntaxKind.ArrowFunction) {
+                const type = isObjectLiteralMethod(func)
+                    ? getContextualTypeForObjectLiteralMethod(func)
+                    : getApparentTypeOfContextualType(func);
+                if (type === anyType) {
+                    return anyType;
+                }
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     return contextualSignature.thisType;
