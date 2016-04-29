@@ -18,8 +18,8 @@ var messenger = {
 >function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : () => void
 
         var _self = this;
->_self : { message: string; start: () => void; }
->this : { message: string; start: () => void; }
+>_self : any
+>this : any
 
         setTimeout(function() {
 >setTimeout(function() {            _self.message.toString();         }, 3000) : number
@@ -27,12 +27,12 @@ var messenger = {
 >function() {            _self.message.toString();         } : () => void
 
             _self.message.toString(); 
->_self.message.toString() : string
->_self.message.toString : () => string
->_self.message : string
->_self : { message: string; start: () => void; }
->message : string
->toString : () => string
+>_self.message.toString() : any
+>_self.message.toString : any
+>_self.message : any
+>_self : any
+>message : any
+>toString : any
 
         }, 3000); 
 >3000 : number

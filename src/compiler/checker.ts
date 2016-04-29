@@ -8206,15 +8206,6 @@ namespace ts {
                 if (signature.thisType) {
                     return signature.thisType;
                 }
-                const parentObject = container.parent && container.parent.kind === SyntaxKind.PropertyAssignment ? container.parent.parent : container.parent;
-                if (parentObject && parentObject.kind === SyntaxKind.ObjectLiteralExpression) {
-                    // Note: this works because object literal methods are deferred,
-                    // which means that the type of the containing object literal is already known.
-                    const type = checkExpressionCached(<ObjectLiteralExpression>parentObject);
-                    if (type) {
-                        return type;
-                    }
-                }
             }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
@@ -8454,10 +8445,7 @@ namespace ts {
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
-                    return contextualSignature.thisType || anyType;
-                }
-                else if (getContextualTypeForFunctionLikeDeclaration(func) === anyType) {
-                    return anyType;
+                    return contextualSignature.thisType;
                 }
             }
 
