@@ -84,9 +84,9 @@ class A {
 >{        a: function() { return this; },    } : { a: () => any; }
 
         a: function() { return this; },
->a : () => any
->function() { return this; } : () => any
->this : any
+>a : () => { a: any; }
+>function() { return this; } : () => { a: any; }
+>this : { a: () => any; }
 
     };
 
@@ -98,9 +98,9 @@ class A {
 >{            a: function() { return this; },        } : { a: () => any; }
 
             a: function() { return this; },
->a : () => any
->function() { return this; } : () => any
->this : any
+>a : () => { a: any; }
+>function() { return this; } : () => { a: any; }
+>this : { a: () => any; }
 
         };
     };

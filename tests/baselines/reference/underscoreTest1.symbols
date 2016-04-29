@@ -395,10 +395,16 @@ var buttonView = {
     onClick: function () { alert('clicked: ' + this.label); },
 >onClick : Symbol(onClick, Decl(underscoreTest1_underscoreTests.ts, 97, 24))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>this.label : Symbol(label, Decl(underscoreTest1_underscoreTests.ts, 96, 18))
+>this : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 96, 16))
+>label : Symbol(label, Decl(underscoreTest1_underscoreTests.ts, 96, 18))
 
     onHover: function () { alert('hovering: ' + this.label); }
 >onHover : Symbol(onHover, Decl(underscoreTest1_underscoreTests.ts, 98, 62))
 >alert : Symbol(alert, Decl(underscoreTest1_underscoreTests.ts, 2, 14))
+>this.label : Symbol(label, Decl(underscoreTest1_underscoreTests.ts, 96, 18))
+>this : Symbol(, Decl(underscoreTest1_underscoreTests.ts, 96, 16))
+>label : Symbol(label, Decl(underscoreTest1_underscoreTests.ts, 96, 18))
 
 };
 _.bindAll(buttonView);
