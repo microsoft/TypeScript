@@ -827,6 +827,10 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.Identifier;
     }
 
+    export function isMethod(node: Node): node is MethodDeclaration {
+        return node && node.kind === SyntaxKind.MethodDeclaration;
+    }
+
     export function isThisTypePredicate(predicate: TypePredicate): predicate is ThisTypePredicate {
         return predicate && predicate.kind === TypePredicateKind.This;
     }

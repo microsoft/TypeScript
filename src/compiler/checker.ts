@@ -2904,6 +2904,14 @@ namespace ts {
                 return strictNullChecks && declaration.questionToken ? addNullableKind(type, TypeFlags.Undefined) : type;
             }
 
+            // use type from base class' property if present
+            if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
+                if (type) {
+                    return type;
+                }
+            }
+
             if (declaration.kind === SyntaxKind.Parameter) {
                 const func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
@@ -3243,6 +3251,44 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return unknownType;
+        }
+
+        function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
+            if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
+                const parent = <ClassLikeDeclaration>declaration.parent;
+                const propertyName = declaration.symbol.name;
+                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
+                if (extendedPropertyType) {
+                    return extendedPropertyType;
+                }
+                const implementedTypeNodes = getClassImplementsHeritageClauseElements(parent);
+                if (implementedTypeNodes) {
+                    return getSinglePropertyTypeOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
+                }
+            }
+
+            return undefined;
+        }
+
+        function getSinglePropertyTypeOfTypes(types: Type[], propertyName: string) {
+            let result: Type;
+            for (const t of types) {
+                if (t !== unknownType) {
+                    const property = getPropertyOfType(t, propertyName);
+                    if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
+                        continue;
+                    }
+                    if (property.name === propertyName) {
+                        const propertyType = getTypeOfSymbol(property);
+                        if (result && result !== propertyType) {
+                            // if there's more than one matching property, return undefined
+                            return undefined;
+                        }
+                        result = propertyType;
+                    }
+                }
+            }
+            return result;
         }
 
         function getTargetType(type: ObjectType): Type {
@@ -5475,7 +5521,7 @@ namespace ts {
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
         function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElement): boolean {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isMethod(node));
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -5508,8 +5554,8 @@ namespace ts {
             return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
         }
 
-        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | MethodDeclaration {
-            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
+        function isContextSensitiveFunctionOrMethod(func: Node): func is FunctionExpression | MethodDeclaration {
+            return (isFunctionExpressionOrArrowFunction(func) || isMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -8450,7 +8496,7 @@ namespace ts {
         }
 
         function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
+            if (isContextSensitiveFunctionOrMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     return contextualSignature.thisType || anyType;
@@ -8466,7 +8512,7 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+            if (isContextSensitiveFunctionOrMethod(func)) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
@@ -8838,16 +8884,22 @@ namespace ts {
         }
 
         function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
-            // Only function expressions, arrow functions, and object literal methods are contextually typed.
-            return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
+            // Only function expressions, arrow functions, and methods are contextually typed.
+            return isFunctionExpressionOrArrowFunction(node) || isMethod(node)
                 ? getContextualSignature(<FunctionExpression>node)
                 : undefined;
         }
 
         function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | MethodDeclaration) {
-            return isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(node)
-                : getApparentTypeOfContextualType(node);
+            if (isFunctionExpressionOrArrowFunction(node)) {
+                return getApparentTypeOfContextualType(node);
+            }
+            else if (isObjectLiteralMethod(node)) {
+                return getContextualTypeForObjectLiteralMethod(node);
+            }
+            else if (isMethod(node)) {
+                return getTypeOfBasePropertyDeclaration(node);
+            }
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
@@ -8856,7 +8908,7 @@ namespace ts {
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isMethod(node));
             const type = getContextualTypeForFunctionLikeDeclaration(node);
             if (!type) {
                 return undefined;
@@ -12768,7 +12820,7 @@ namespace ts {
             // Grammar checking
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
-            checkVariableLikeDeclaration(node);
+            checkVariableLikeDeclaration(node, /*isPropertyDeclaration*/ true);
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -14095,7 +14147,7 @@ namespace ts {
         }
 
         // Check variable, parameter, or property declaration
-        function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
+        function checkVariableLikeDeclaration(node: VariableLikeDeclaration, isPropertyDeclaration = false) {
             checkDecorators(node);
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
