@@ -7959,7 +7959,7 @@ namespace ts {
             }
             const declaration = localOrExportSymbol.valueDeclaration;
             const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
-                declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
+                getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
