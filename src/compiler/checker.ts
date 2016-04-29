@@ -8206,10 +8206,11 @@ namespace ts {
                 if (signature.thisType) {
                     return signature.thisType;
                 }
-                if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                const parentObject = container.parent && container.parent.kind === SyntaxKind.PropertyAssignment ? container.parent.parent : container.parent;
+                if (parentObject && parentObject.kind === SyntaxKind.ObjectLiteralExpression) {
                     // Note: this works because object literal methods are deferred,
                     // which means that the type of the containing object literal is already known.
-                    const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
+                    const type = checkExpressionCached(<ObjectLiteralExpression>parentObject);
                     if (type) {
                         return type;
                     }

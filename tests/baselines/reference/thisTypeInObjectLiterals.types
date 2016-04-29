@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/thisType/thisTypeInObjectLiterals.ts ===
 let o = {
->o : { d: string; m(): number; }
->{    d: "bar",    m() {        return this.d.length;    }} : { d: string; m(): number; }
+>o : { d: string; m(): number; f: () => number; }
+>{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m(): number; f: () => number; }
 
     d: "bar",
 >d : string
@@ -13,11 +13,24 @@ let o = {
         return this.d.length;
 >this.d.length : number
 >this.d : string
->this : { d: string; m(): number; }
+>this : { d: string; m(): number; f: () => number; }
+>d : string
+>length : number
+
+    },
+    f: function() {
+>f : () => number
+>function() {        return this.d.length;    } : () => number
+
+        return this.d.length;
+>this.d.length : number
+>this.d : string
+>this : { d: string; m(): number; f: () => number; }
 >d : string
 >length : number
     }
 }
+
 let mutuallyRecursive = {
 >mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
 >{    a: 100,    start() {        return this.passthrough(this.a);    },    passthrough(n: number) {        return this.sub1(n);    },    sub1(n: number): number {        if (n > 0) {            return this.passthrough(n - 1);        }        return n;    }} : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }

@@ -234,12 +234,12 @@ var messenger = {
 >setTimeout(() => { this.message.toString(); }, 3000) : number
 >setTimeout : (expression: any, msec?: number, language?: any) => number
 >() => { this.message.toString(); } : () => void
->this.message.toString() : any
->this.message.toString : any
->this.message : any
->this : any
->message : any
->toString : any
+>this.message.toString() : string
+>this.message.toString : () => string
+>this.message : string
+>this : { message: string; start: () => void; }
+>message : string
+>toString : () => string
 >3000 : number
     }
 };

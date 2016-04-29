@@ -827,9 +827,9 @@ var buttonView = {
 >alert : (x: string) => void
 >'clicked: ' + this.label : string
 >'clicked: ' : string
->this.label : any
->this : any
->label : any
+>this.label : string
+>this : { label: string; onClick: () => void; onHover: () => void; }
+>label : string
 
     onHover: function () { alert('hovering: ' + this.label); }
 >onHover : () => void
@@ -838,9 +838,9 @@ var buttonView = {
 >alert : (x: string) => void
 >'hovering: ' + this.label : string
 >'hovering: ' : string
->this.label : any
->this : any
->label : any
+>this.label : string
+>this : { label: string; onClick: () => void; onHover: () => void; }
+>label : string
 
 };
 _.bindAll(buttonView);
