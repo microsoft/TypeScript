@@ -7335,27 +7335,29 @@ namespace ts {
         }
 
         function containsMatchingReference(source: Node, target: Node) {
-            while (true) {
+            while (source.kind === SyntaxKind.PropertyAccessExpression) {
+                source = (<PropertyAccessExpression>source).expression;
                 if (isMatchingReference(source, target)) {
                     return true;
                 }
-                if (source.kind !== SyntaxKind.PropertyAccessExpression) {
-                    return false;
-                }
-                source = (<PropertyAccessExpression>source).expression;
             }
+            return false;
         }
 
-        function hasMatchingArgument(callExpression: CallExpression, target: Node) {
+        function isOrContainsMatchingReference(source: Node, target: Node) {
+            return isMatchingReference(source, target) || containsMatchingReference(source, target);
+        }
+
+        function hasMatchingArgument(callExpression: CallExpression, reference: Node) {
             if (callExpression.arguments) {
                 for (const argument of callExpression.arguments) {
-                    if (isMatchingReference(argument, target)) {
+                    if (isOrContainsMatchingReference(reference, argument)) {
                         return true;
                     }
                 }
             }
             if (callExpression.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                isMatchingReference((<PropertyAccessExpression>callExpression.expression).expression, target)) {
+                isOrContainsMatchingReference(reference, (<PropertyAccessExpression>callExpression.expression).expression)) {
                 return true;
             }
             return false;
@@ -7618,8 +7620,7 @@ namespace ts {
                 // may be an assignment to a left hand part of the reference. For example, for a
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
-                if (reference.kind === SyntaxKind.PropertyAccessExpression &&
-                    containsMatchingReference((<PropertyAccessExpression>reference).expression, node)) {
+                if (containsMatchingReference(reference, node)) {
                     return declaredType;
                 }
                 // Assignment doesn't affect reference
@@ -7682,7 +7683,7 @@ namespace ts {
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
-                return isMatchingReference(expr, reference) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
+                return isMatchingReference(reference, expr) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -7714,7 +7715,7 @@ namespace ts {
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || !isMatchingReference(expr.left, reference)) {
+                if (!strictNullChecks || !isMatchingReference(reference, expr.left)) {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
@@ -7731,7 +7732,12 @@ namespace ts {
                 // and string literal on the right
                 const left = <TypeOfExpression>expr.left;
                 const right = <LiteralExpression>expr.right;
-                if (!isMatchingReference(left.expression, reference)) {
+                if (!isMatchingReference(reference, left.expression)) {
+                    // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, left.expression)) {
+                        return declaredType;
+                    }
                     return type;
                 }
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
@@ -7754,8 +7760,16 @@ namespace ts {
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || !isMatchingReference(expr.left, reference)) {
+                if (!isMatchingReference(reference, expr.left)) {
+                    // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, expr.left)) {
+                        return declaredType;
+                    }
+                    return type;
+                }
+                // We never narrow type any in an instanceof guard
+                if (isTypeAny(type)) {
                     return type;
                 }
 
@@ -7830,17 +7844,25 @@ namespace ts {
                 }
                 if (isIdentifierTypePredicate(predicate)) {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
-                    if (predicateArgument && isMatchingReference(predicateArgument, reference)) {
-                        return getNarrowedType(type, predicate.type, assumeTrue);
+                    if (predicateArgument) {
+                        if (isMatchingReference(reference, predicateArgument)) {
+                            return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
+                        if (containsMatchingReference(reference, predicateArgument)) {
+                            return declaredType;
+                        }
                     }
                 }
                 else {
                     const invokedExpression = skipParenthesizedNodes(callExpression.expression);
                     if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
                         const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
-                        const possibleReference= skipParenthesizedNodes(accessExpression.expression);
-                        if (isMatchingReference(possibleReference, reference)) {
+                        const possibleReference = skipParenthesizedNodes(accessExpression.expression);
+                        if (isMatchingReference(reference, possibleReference)) {
                             return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
+                        if (containsMatchingReference(reference, possibleReference)) {
+                            return declaredType;
                         }
                     }
                 }
