@@ -23,7 +23,7 @@ function f1(x: A | B) {
             x.prop.a;
         }
         else if (x instanceof B) {
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
         }
     }
 }
@@ -34,7 +34,7 @@ function f2(x: A | B) {
             x.prop.a;
         }
         else if (isB(x)) {
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
         }
     }
 }
@@ -64,7 +64,7 @@ function f1(x) {
             x.prop.a;
         }
         else if (x instanceof B) {
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
         }
     }
 }
@@ -74,7 +74,7 @@ function f2(x) {
             x.prop.a;
         }
         else if (isB(x)) {
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
         }
     }
 }

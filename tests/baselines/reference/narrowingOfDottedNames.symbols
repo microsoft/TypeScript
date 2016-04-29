@@ -61,7 +61,7 @@ function f1(x: A | B) {
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
 >B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
 
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
 >x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
 >x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
@@ -93,7 +93,7 @@ function f2(x: A | B) {
 >isB : Symbol(isB, Decl(narrowingOfDottedNames.ts, 12, 1))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
 
-            x.prop.b; // error: property 'b' doesn't exist on type { a: string }
+            x.prop.b;
 >x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
 >x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
