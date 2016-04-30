@@ -70,7 +70,6 @@ class A {
 
         a: function() { return this; },
 >a : Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 33, 13))
->this : Symbol(, Decl(thisInPropertyBoundDeclarations.ts, 33, 11))
 
     };
 
@@ -80,7 +79,6 @@ class A {
         return {
             a: function() { return this; },
 >a : Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 38, 16))
->this : Symbol(, Decl(thisInPropertyBoundDeclarations.ts, 38, 14))
 
         };
     };

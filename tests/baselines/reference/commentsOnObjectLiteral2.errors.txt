@@ -1,8 +1,7 @@
 tests/cases/compiler/commentsOnObjectLiteral2.ts(1,14): error TS2304: Cannot find name 'makeClass'.
-tests/cases/compiler/commentsOnObjectLiteral2.ts(9,17): error TS2339: Property 'name' does not exist on type '{ initialize: (name: any) => void; }'.
 
 
-==== tests/cases/compiler/commentsOnObjectLiteral2.ts (2 errors) ====
+==== tests/cases/compiler/commentsOnObjectLiteral2.ts (1 errors) ====
     var Person = makeClass( 
                  ~~~~~~~~~
 !!! error TS2304: Cannot find name 'makeClass'.
@@ -14,8 +13,6 @@ tests/cases/compiler/commentsOnObjectLiteral2.ts(9,17): error TS2339: Property '
             */ 
            initialize: function(name) { 
                this.name = name; 
-                    ~~~~
-!!! error TS2339: Property 'name' does not exist on type '{ initialize: (name: any) => void; }'.
            } /* trailing comment 1*/, 
        } 
     );

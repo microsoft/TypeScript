@@ -43,16 +43,16 @@ var o = {
 
             this.counter++
 >this.counter++ : number
->this.counter : number
->this : { counter: number; start: () => void; }
->counter : number
+>this.counter : any
+>this : any
+>counter : any
 
             var f = () => this.counter;
->f : () => number
->() => this.counter : () => number
->this.counter : number
->this : { counter: number; start: () => void; }
->counter : number
+>f : () => any
+>() => this.counter : () => any
+>this.counter : any
+>this : any
+>counter : any
 
         }
 
