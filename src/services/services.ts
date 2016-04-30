@@ -6167,10 +6167,10 @@ namespace ts {
 
                 const references: ReferenceEntry[] = [];
 
-                forEach(sourceFiles, sourceFile => {
-                    const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, type.text , sourceFile.getStart(), sourceFile.getEnd());
+                for (const sourceFile of sourceFiles) {
+                    const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, type.text, sourceFile.getStart(), sourceFile.getEnd());
                     getReferencesForStringLiteralInFile(sourceFile, type, possiblePositions, references);
-                });
+                }
 
                 return [{
                     definition: {
@@ -6185,7 +6185,7 @@ namespace ts {
                 }];
 
                 function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchType: Type, possiblePositions: number[], references: ReferenceEntry[]): void {
-                    forEach(possiblePositions, position => {
+                    for (const position of possiblePositions) {
                         cancellationToken.throwIfCancellationRequested();
 
                         const node = getTouchingWord(sourceFile, position);
@@ -6197,7 +6197,7 @@ namespace ts {
                         if (type === searchType) {
                             references.push(getReferenceEntryFromNode(node));
                         }
-                    });
+                    }
                 }
             }
 
@@ -7767,7 +7767,7 @@ namespace ts {
                                     localizedErrorMessage: undefined,
                                     fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
                                     kindModifiers: getSymbolModifiers(symbol),
-                                    triggerSpan: createTriggerSpanForNode(node)
+                                    triggerSpan: createTriggerSpanForNode(node, sourceFile)
                                 };
                             }
                         }
@@ -7787,7 +7787,7 @@ namespace ts {
                                     localizedErrorMessage: undefined,
                                     fullDisplayName: displayName,
                                     kindModifiers: ScriptElementKindModifier.none,
-                                    triggerSpan: createTriggerSpanForNode(node)
+                                    triggerSpan: createTriggerSpanForNode(node, sourceFile)
                                 };
                             }
                         }
@@ -7820,9 +7820,9 @@ namespace ts {
                 return false;
             }
 
-            function createTriggerSpanForNode(node: Node) {
-                let start = node.getStart();
-                let width = node.getWidth();
+            function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {
+                let start = node.getStart(sourceFile);
+                let width = node.getWidth(sourceFile);
                 if (node.kind === SyntaxKind.StringLiteral) {
                     // Exclude the quotes
                     start += 1;
