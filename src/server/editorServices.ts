@@ -1685,7 +1685,12 @@ namespace ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            const content = this.host.readFile(filename);
+            let content = this.host.readFile(filename);
+            // If the file doesn't exist or cannot be read, we should
+            // wipe out its cached content on the server to avoid side effects.
+            if (!content) {
+                content = "";
+            }
             this.reload(content);
             if (cb)
                 cb();

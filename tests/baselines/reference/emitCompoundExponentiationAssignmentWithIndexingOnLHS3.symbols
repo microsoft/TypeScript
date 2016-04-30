@@ -8,18 +8,11 @@ var object = {
 
     get 0() {
         return this._0;
->this._0 : Symbol(_0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 14))
->this : Symbol(, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 12))
->_0 : Symbol(_0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 14))
-
     },
     set 0(x: number) {
 >x : Symbol(x, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 6, 10))
 
         this._0 = x;
->this._0 : Symbol(_0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 14))
->this : Symbol(, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 12))
->_0 : Symbol(_0, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 1, 14))
 >x : Symbol(x, Decl(emitCompoundExponentiationAssignmentWithIndexingOnLHS3.ts, 6, 10))
 
     },
