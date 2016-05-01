@@ -45,6 +45,7 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
+        "start": "node lib/tsc",
         "clean": "jake clean",
         "jake": "jake",
         "lint": "jake lint",
