@@ -6,7 +6,7 @@ interface BoxOfFoo<T extends Foo> {
 >Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 3, 1))
 
     item: T
->item : Symbol(item, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 1, 35))
+>item : Symbol(BoxOfFoo.item, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 1, 35))
 >T : Symbol(T, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 1, 19))
 }
 
@@ -14,7 +14,7 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 3, 1))
 
     self: this;
->self : Symbol(self, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 5, 15))
+>self : Symbol(Foo.self, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 5, 15))
 }
 
 interface Bar extends Foo {
@@ -22,6 +22,6 @@ interface Bar extends Foo {
 >Foo : Symbol(Foo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 3, 1))
 
     other: BoxOfFoo<this>;
->other : Symbol(other, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 9, 27))
+>other : Symbol(Bar.other, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 9, 27))
 >BoxOfFoo : Symbol(BoxOfFoo, Decl(thisTypeInBasePropertyAndDerivedContainerOfBase01.ts, 0, 0))
 }
