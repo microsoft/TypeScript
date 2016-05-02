@@ -3257,7 +3257,7 @@ namespace ts {
             if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
                 const parent = <ClassLikeDeclaration>declaration.parent;
                 const propertyName = declaration.symbol.name;
-                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
+                const extendedPropertyType = getSinglePropertyTypeOfTypes(getBaseTypes(<InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(parent))), propertyName);
                 if (extendedPropertyType) {
                     return extendedPropertyType;
                 }
@@ -8558,6 +8558,12 @@ namespace ts {
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
+                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                    const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
+                    if (type) {
+                        return type;
+                    }
+                }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                     if (type) {
@@ -12831,7 +12837,7 @@ namespace ts {
             // Grammar checking
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarProperty(node) || checkGrammarComputedPropertyName(node.name);
 
-            checkVariableLikeDeclaration(node, /*isPropertyDeclaration*/ true);
+            checkVariableLikeDeclaration(node);
         }
 
         function checkMethodDeclaration(node: MethodDeclaration) {
@@ -14158,7 +14164,7 @@ namespace ts {
         }
 
         // Check variable, parameter, or property declaration
-        function checkVariableLikeDeclaration(node: VariableLikeDeclaration, isPropertyDeclaration = false) {
+        function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
             checkDecorators(node);
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
