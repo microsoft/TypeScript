@@ -736,9 +736,6 @@ namespace ts {
 
                     addExportMemberAssignments(statements, classDecl.name);
 
-                    if (statements.length > 1) {
-                        Debug.assert(!!classDecl.decorators, "Expression statements should only have an export member assignment when decorated.")
-                    }
                     return statements;
                 }
             }
