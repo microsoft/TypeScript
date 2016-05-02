@@ -5912,7 +5912,7 @@ namespace ts {
                     }
 
                     // The constraint may need to be further instantiated with its 'this' type.
-                    constraint = getTypeWithThisArgument(constraint);
+                    constraint = getTypeWithThisArgument(constraint, source);
 
                     // Report constraint errors only if the constraint is not the empty object type
                     const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
