@@ -7664,17 +7664,18 @@ namespace ts {
                     const type = flow.kind === FlowKind.LoopLabel ?
                         getTypeAtFlowNodeCached(antecedent) :
                         getTypeAtFlowNode(antecedent);
-                    if (type) {
-                        // If the type at a particular antecedent path is the declared type and the
-                        // reference is known to always be assigned (i.e. when declared and initial types
-                        // are the same), there is no reason to process more antecedents since the only
-                        // possible outcome is subtypes that will be removed in the final union type anyway.
-                        if (type === declaredType && declaredType === initialType) {
-                            return type;
-                        }
-                        if (!contains(antecedentTypes, type)) {
-                            antecedentTypes.push(type);
-                        }
+                    if (!type) {
+                        break;
+                    }
+                    // If the type at a particular antecedent path is the declared type and the
+                    // reference is known to always be assigned (i.e. when declared and initial types
+                    // are the same), there is no reason to process more antecedents since the only
+                    // possible outcome is subtypes that will be removed in the final union type anyway.
+                    if (type === declaredType && declaredType === initialType) {
+                        return type;
+                    }
+                    if (!contains(antecedentTypes, type)) {
+                        antecedentTypes.push(type);
                     }
                 }
                 return antecedentTypes.length === 0 ? undefined :
