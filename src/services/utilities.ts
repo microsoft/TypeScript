@@ -401,9 +401,27 @@ namespace ts {
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number) {
-        let token = getTokenAtPosition(sourceFile, position);
-        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart(sourceFile);
+    export function isInString(sourceFile: SourceFile, position: number): boolean {
+        const previousToken = findPrecedingToken(position, sourceFile);
+        if (previousToken &&
+            (previousToken.kind === SyntaxKind.StringLiteral || previousToken.kind === SyntaxKind.StringLiteralType)) {
+            const start = previousToken.getStart();
+            const end = previousToken.getEnd();
+
+            // To be "in" one of these literals, the position has to be:
+            //   1. entirely within the token text.
+            //   2. at the end position of an unterminated token.
+            //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
+            if (start < position && position < end) {
+                return true;
+            }
+
+            if (position === end) {
+                return !!(<LiteralExpression>previousToken).isUnterminated;
+            }
+        }
+
+        return false;
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
