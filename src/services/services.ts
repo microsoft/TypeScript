@@ -4061,7 +4061,6 @@ namespace ts {
                     return undefined;
                 }
 
-                isNameOfExternalModuleImportOrDeclaration
                 const argumentInfo = SignatureHelp.getContainingArgumentInfo(node, position, sourceFile);
                 if (argumentInfo) {
                     return getStringLiteralCompletionEntriesFromCallExpression(argumentInfo);
