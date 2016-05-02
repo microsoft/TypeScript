@@ -120,8 +120,8 @@ namespace ts.server {
             return response;
         }
 
-        openFile(fileName: string, content?: string): void {
-            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
+        openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX"  | "JSX"): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content, scriptKindName };
             this.processRequest(CommandNames.Open, args);
         }
 
@@ -568,6 +568,10 @@ namespace ts.server {
             throw new Error("Not Implemented Yet."); 
         }
 
+        isValidBraceCompletionAtPostion(fileName: string, position: number, openingBrace: number): boolean {
+            throw new Error("Not Implemented Yet."); 
+        }
+
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
             var args: protocol.FileLocationRequestArgs = {
@@ -613,7 +617,7 @@ namespace ts.server {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 
-        getSourceFile(fileName: string): SourceFile {
+        getNonBoundSourceFile(fileName: string): SourceFile {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
 

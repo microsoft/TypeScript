@@ -811,6 +811,18 @@
         "category": "Error",
         "code": 1249
     },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+        "category": "Error",
+        "code": 1250
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1251
+    },
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1252
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -830,6 +842,18 @@
     "The body of an 'if' statement cannot be the empty statement.": {
         "category": "Error",
         "code": 1313
+    },
+    "Global module exports may only appear in module files.": {
+        "category": "Error",
+        "code": 1314
+    },
+    "Global module exports may only appear in declaration files.": {
+        "category": "Error",
+        "code": 1315
+    },
+    "Global module exports may only appear at top level.": {
+        "category": "Error",
+        "code": 1316
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1035,7 +1059,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
+    "Type '{0}' cannot be converted to type '{1}'.": {
         "category": "Error",
         "code": 2352
     },
@@ -1090,6 +1114,10 @@
     "Operator '{0}' cannot be applied to types '{1}' and '{2}'.": {
         "category": "Error",
         "code": 2365
+    },
+    "Function lacks ending return statement and return type does not include 'undefined'.": {
+        "category": "Error",
+        "code": 2366
     },
     "Type parameter name cannot be '{0}'": {
         "category": "Error",
@@ -1411,6 +1439,10 @@
         "category": "Error",
         "code": 2453
     },
+    "Variable '{0}' is used before being assigned.": {
+        "category": "Error",
+        "code": 2454
+    },
     "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
         "category": "Error",
         "code": 2455
@@ -1707,6 +1739,18 @@
         "category": "Error",
         "code": 2530
     },
+    "Object is possibly 'null'.": {
+        "category": "Error",
+        "code": 2531
+    },
+    "Object is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 2532
+    },
+    "Object is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 2533
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1783,7 +1827,7 @@
         "category": "Error",
         "code": 2660
     },
-    "Cannot re-export name that is not defined in the module.": {
+    "Cannot export '{0}'. Only local declarations can be exported from a module.": {
         "category": "Error",
         "code": 2661
     },
@@ -1846,6 +1890,42 @@
     "Accessors must both be abstract or non-abstract.": {
         "category": "Error",
         "code": 2676
+    },
+    "A type predicate's type must be assignable to its parameter's type.": {
+        "category": "Error",
+        "code": 2677
+    },
+    "Type '{0}' is not comparable to type '{1}'.": {
+        "category": "Error",
+        "code": 2678
+    },
+    "A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.": {
+        "category": "Error",
+        "code": 2679
+    },
+    "A 'this' parameter must be the first parameter.": {
+        "category": "Error",
+        "code": 2680
+    },
+    "A constructor cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2681
+    },
+    "A setter cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2682
+    },
+    "'this' implicitly has type 'any' because it does not have a type annotation.": {
+        "category": "Error",
+        "code": 2683
+    },
+    "The 'this' context of type '{0}' is not assignable to method's 'this' of type '{1}'.": {
+        "category": "Error",
+        "code": 2684
+    },
+    "The 'this' types of each signature are incompatible.": {
+        "category": "Error",
+        "code": 2685
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2127,6 +2207,11 @@
         "category": "Error",
         "code": 4082
     },
+    "Conflicting library definitions for '{0}' found at '{1}' and '{2}'. Copy the correct file to the 'typings' folder to resolve this conflict.": {
+        "category": "Message",
+        "code": 4090
+    },
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2215,7 +2300,14 @@
         "category": "Error",
         "code": 5062
     },
-
+    "Substututions for pattern '{0}' should be an array.": {
+        "category": "Error",
+        "code": 5063
+    },
+    "Substitution '{0}' for pattern '{1}' has incorrect type, expected 'string', got '{2}'.": {
+        "category": "Error",
+        "code": 5064
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2224,11 +2316,11 @@
         "category": "Message",
         "code": 6002
     },
-    "Specifies the location where debugger should locate map files instead of generated locations.": {
+    "Specify the location where debugger should locate map files instead of generated locations.": {
         "category": "Message",
         "code": 6003
     },
-    "Specifies the location where debugger should locate TypeScript files instead of source locations.": {
+    "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
     },
@@ -2260,7 +2352,7 @@
         "category": "Message",
         "code": 6011
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
         "code": 6015
     },
@@ -2348,13 +2440,9 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'none'.": {
+    "Argument for '{0}' option must be: {1}": {
         "category": "Error",
         "code": 6046
-    },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-        "category": "Error",
-        "code": 6047
     },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
@@ -2392,7 +2480,7 @@
         "category": "Message",
         "code": 6056
     },
-    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+    "Specify the root directory of input files. Use to control the output directory structure with --outDir.": {
         "category": "Message",
         "code": 6058
     },
@@ -2400,21 +2488,13 @@
         "category": "Error",
         "code": 6059
     },
-    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+    "Specify the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
         "code": 6060
     },
     "NEWLINE": {
         "category": "Message",
         "code": 6061
-    },
-    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error",
-        "code": 6062
-    },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
-        "category": "Error",
-        "code": 6063
     },
     "Option '{0}' can only be specified in 'tsconfig.json' file.": {
         "category": "Error",
@@ -2432,7 +2512,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
+    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },
@@ -2472,13 +2552,13 @@
         "category": "Message",
         "code": 6078
     },
+    "Specify library files to be included in the compilation: ": {
+        "category": "Message",
+        "code": 6079
+    },
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
@@ -2488,11 +2568,11 @@
         "category": "Message",
         "code": 6083
     },
-    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+    "Specify the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
-    "Enable tracing of the module resolution process.": {
+    "Enable tracing of the name resolution process.": {
         "category": "Message",
         "code": 6085
     },
@@ -2540,7 +2620,7 @@
         "category": "Message",
         "code": 6096
     },
-    "File '{0}' exist - use it as a module resolution result.": {
+    "File '{0}' exist - use it as a name resolution result.": {
         "category": "Message",
         "code": 6097
     },
@@ -2552,11 +2632,11 @@
         "category": "Message",
         "code": 6099
     },
-    "'package.json' does not have 'typings' field.": {
+    "'package.json' does not have 'types' field.": {
         "category": "Message",
         "code": 6100
     },
-    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
+    "'package.json' has '{0}' field '{1}' that references '{2}'.": {
         "category": "Message",
         "code": 6101
     },
@@ -2572,7 +2652,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
+    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -2604,7 +2684,70 @@
         "category": "Message",
         "code": 6112
     },
-
+    "Enable strict null checks.": {
+        "category": "Message",
+        "code": 6113
+    },
+    "Unknown option 'excludes'. Did you mean 'exclude'?": {
+        "category": "Error",
+        "code": 6114
+    },
+    "Raise error on 'this' expressions with an implied 'any' type.": {
+        "category": "Message",
+        "code": 6115
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
+        "category": "Message",
+        "code": 6116
+    },
+    "Resolving using primary search paths...": {
+        "category": "Message",
+        "code": 6117
+    },
+    "Resolving from node_modules folder...": {
+        "category": "Message",
+        "code": 6118
+    },
+    "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
+        "category": "Message",
+        "code": 6119
+    },
+    "======== Type reference directive '{0}' was not resolved. ========": {
+        "category": "Message",
+        "code": 6120
+    },
+    "Resolving with primary search path '{0}'": {
+        "category": "Message",
+        "code": 6121
+    },
+    "Root directory cannot be determined, skipping primary search paths.": {
+        "category": "Message",
+        "code": 6122
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}', root directory not set. ========": {
+        "category": "Message",
+        "code": 6123
+    },
+    "Type declaration files to be included in compilation.": {
+        "category": "Message",
+        "code": 6124
+    },
+    "Looking up in 'node_modules' folder, initial location '{0}'": {
+        "category": "Message",
+        "code": 6125
+    },
+    "Containing file is not specified and root directory cannot be determined, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6126
+    },
+    "======== Resolving type reference directive '{0}', containing file not set, root directory '{1}'. ========": {
+        "category": "Message",
+        "code": 6127
+    },
+    "======== Resolving type reference directive '{0}', containing file not set, root directory not set. ========": {
+        "category": "Message",
+        "code": 6128
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2692,6 +2835,10 @@
     "Not all code paths return a value.": {
         "category": "Error",
         "code": 7030
+    },
+    "Binding element '{0}' implicitly has an '{1}' type.": {
+        "category": "Error",
+        "code": 7031
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -2804,5 +2951,9 @@
     "'super' must be called before accessing 'this' in the constructor of a derived class.": {
         "category": "Error",
         "code": 17009
+    },
+    "Unknown typing option '{0}'.": {
+        "category": "Error",
+        "code": 17010
     }
 }

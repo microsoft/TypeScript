@@ -10,7 +10,7 @@ declare module E {
 >bar : Symbol(D.bar, Decl(a.ts, 11, 18))
 
         foo();
->foo : Symbol(foo, Decl(b.ts, 2, 32))
+>foo : Symbol(foobar.foo, Decl(b.ts, 2, 32))
     }
 }
 === tests/cases/compiler/a.ts ===

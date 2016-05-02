@@ -4,7 +4,7 @@ interface Field<T> {
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
 
     clean(input: T): T
->clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 0, 20))
+>clean : Symbol(Field.clean, Decl(inferentialTypingUsingApparentType3.ts, 0, 20))
 >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 1, 10))
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 0, 16))
@@ -15,7 +15,7 @@ class CharField implements Field<string> {
 >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
 
     clean(input: string) {
->clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 4, 42))
+>clean : Symbol(CharField.clean, Decl(inferentialTypingUsingApparentType3.ts, 4, 42))
 >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 5, 10))
 
         return "Yup";
@@ -27,7 +27,7 @@ class NumberField implements Field<number> {
 >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
 
     clean(input: number) {
->clean : Symbol(clean, Decl(inferentialTypingUsingApparentType3.ts, 10, 44))
+>clean : Symbol(NumberField.clean, Decl(inferentialTypingUsingApparentType3.ts, 10, 44))
 >input : Symbol(input, Decl(inferentialTypingUsingApparentType3.ts, 11, 10))
 
         return 123;
@@ -42,7 +42,7 @@ class ObjectField<A, T extends { [name: string]: Field<any> }> {
 >Field : Symbol(Field, Decl(inferentialTypingUsingApparentType3.ts, 0, 0))
 
     constructor(public fields: T) { }
->fields : Symbol(fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
+>fields : Symbol(ObjectField.fields, Decl(inferentialTypingUsingApparentType3.ts, 17, 16))
 >T : Symbol(T, Decl(inferentialTypingUsingApparentType3.ts, 16, 20))
 }
 

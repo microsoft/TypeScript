@@ -28,7 +28,7 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 rawr(dinosaur);
 >rawr(dinosaur) : string
 >rawr : (dino: "t-rex" | "raptor") => string
->dinosaur : "t-rex" | "raptor"
+>dinosaur : "t-rex"
 
 function rawr(dino: RexOrRaptor) {
 >rawr : (dino: "t-rex" | "raptor") => string

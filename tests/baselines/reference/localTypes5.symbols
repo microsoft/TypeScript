@@ -7,7 +7,7 @@ function foo<A>() {
 >X : Symbol(X, Decl(localTypes5.ts, 0, 19))
 
         m<B, C>() {
->m : Symbol(m, Decl(localTypes5.ts, 1, 13))
+>m : Symbol(X.m, Decl(localTypes5.ts, 1, 13))
 >B : Symbol(B, Decl(localTypes5.ts, 2, 10))
 >C : Symbol(C, Decl(localTypes5.ts, 2, 12))
 
@@ -22,7 +22,7 @@ function foo<A>() {
 >Y : Symbol(Y, Decl(localTypes5.ts, 3, 36))
 
             })<Date>();
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
         }
     }
     var x = new X();

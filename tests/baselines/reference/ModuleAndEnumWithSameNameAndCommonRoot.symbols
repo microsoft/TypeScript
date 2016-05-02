@@ -6,8 +6,8 @@ module enumdule {
 >Point : Symbol(Point, Decl(ModuleAndEnumWithSameNameAndCommonRoot.ts, 0, 17))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(ModuleAndEnumWithSameNameAndCommonRoot.ts, 3, 20))
->y : Symbol(y, Decl(ModuleAndEnumWithSameNameAndCommonRoot.ts, 3, 37))
+>x : Symbol(Point.x, Decl(ModuleAndEnumWithSameNameAndCommonRoot.ts, 3, 20))
+>y : Symbol(Point.y, Decl(ModuleAndEnumWithSameNameAndCommonRoot.ts, 3, 37))
     }
 }
 

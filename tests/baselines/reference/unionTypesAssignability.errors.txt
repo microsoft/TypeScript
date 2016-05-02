@@ -24,9 +24,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(69,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
   Type 'U' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
   Type 'T' is not assignable to type 'U'.
 
 
@@ -142,6 +142,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         var x : T | U;
         x = t; // ok
         x = u; // ok
+        x = undefined;
         t = x; // error U not assignable to T
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.

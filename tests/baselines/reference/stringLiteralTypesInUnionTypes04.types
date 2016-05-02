@@ -3,15 +3,15 @@
 type T = "" | "foo";
 >T : "" | "foo"
 
-let x: T = "";
+let x: T = undefined;
 >x : "" | "foo"
 >T : "" | "foo"
->"" : ""
+>undefined : undefined
 
-let y: T = "foo";
+let y: T = undefined;
 >y : "" | "foo"
 >T : "" | "foo"
->"foo" : "foo"
+>undefined : undefined
 
 if (x === "") {
 >x === "" : boolean

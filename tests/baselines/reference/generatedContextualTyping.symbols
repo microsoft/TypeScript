@@ -2,22 +2,22 @@
 
 class Base { private p; }
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->p : Symbol(p, Decl(generatedContextualTyping.ts, 1, 12))
+>p : Symbol(Base.p, Decl(generatedContextualTyping.ts, 1, 12))
 
 class Derived1 extends Base { private m; }
 >Derived1 : Symbol(Derived1, Decl(generatedContextualTyping.ts, 1, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->m : Symbol(m, Decl(generatedContextualTyping.ts, 2, 29))
+>m : Symbol(Derived1.m, Decl(generatedContextualTyping.ts, 2, 29))
 
 class Derived2 extends Base { private n; }
 >Derived2 : Symbol(Derived2, Decl(generatedContextualTyping.ts, 2, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
->n : Symbol(n, Decl(generatedContextualTyping.ts, 3, 29))
+>n : Symbol(Derived2.n, Decl(generatedContextualTyping.ts, 3, 29))
 
 interface Genric<T> { func(n: T[]); }
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >T : Symbol(T, Decl(generatedContextualTyping.ts, 4, 17))
->func : Symbol(func, Decl(generatedContextualTyping.ts, 4, 21))
+>func : Symbol(Genric.func, Decl(generatedContextualTyping.ts, 4, 21))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 4, 27))
 >T : Symbol(T, Decl(generatedContextualTyping.ts, 4, 17))
 
@@ -114,21 +114,21 @@ var x12: Genric<Base> = { func: n => { return [d1, d2]; } };
 
 class x13 { member: () => Base[] = () => [d1, d2] }
 >x13 : Symbol(x13, Decl(generatedContextualTyping.ts, 17, 60))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 18, 11))
+>member : Symbol(x13.member, Decl(generatedContextualTyping.ts, 18, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x14 { member: () => Base[] = function() { return [d1, d2] } }
 >x14 : Symbol(x14, Decl(generatedContextualTyping.ts, 18, 51))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 19, 11))
+>member : Symbol(x14.member, Decl(generatedContextualTyping.ts, 19, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x15 { member: () => Base[] = function named() { return [d1, d2] } }
 >x15 : Symbol(x15, Decl(generatedContextualTyping.ts, 19, 67))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 20, 11))
+>member : Symbol(x15.member, Decl(generatedContextualTyping.ts, 20, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 20, 34))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -136,21 +136,21 @@ class x15 { member: () => Base[] = function named() { return [d1, d2] } }
 
 class x16 { member: { (): Base[]; } = () => [d1, d2] }
 >x16 : Symbol(x16, Decl(generatedContextualTyping.ts, 20, 73))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 21, 11))
+>member : Symbol(x16.member, Decl(generatedContextualTyping.ts, 21, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x17 { member: { (): Base[]; } = function() { return [d1, d2] } }
 >x17 : Symbol(x17, Decl(generatedContextualTyping.ts, 21, 54))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 22, 11))
+>member : Symbol(x17.member, Decl(generatedContextualTyping.ts, 22, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x18 { member: { (): Base[]; } = function named() { return [d1, d2] } }
 >x18 : Symbol(x18, Decl(generatedContextualTyping.ts, 22, 70))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 23, 11))
+>member : Symbol(x18.member, Decl(generatedContextualTyping.ts, 23, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 23, 37))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -158,14 +158,14 @@ class x18 { member: { (): Base[]; } = function named() { return [d1, d2] } }
 
 class x19 { member: Base[] = [d1, d2] }
 >x19 : Symbol(x19, Decl(generatedContextualTyping.ts, 23, 76))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 24, 11))
+>member : Symbol(x19.member, Decl(generatedContextualTyping.ts, 24, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x20 { member: Array<Base> = [d1, d2] }
 >x20 : Symbol(x20, Decl(generatedContextualTyping.ts, 24, 39))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 25, 11))
+>member : Symbol(x20.member, Decl(generatedContextualTyping.ts, 25, 11))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -173,7 +173,7 @@ class x20 { member: Array<Base> = [d1, d2] }
 
 class x21 { member: { [n: number]: Base; } = [d1, d2] }
 >x21 : Symbol(x21, Decl(generatedContextualTyping.ts, 25, 44))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 26, 11))
+>member : Symbol(x21.member, Decl(generatedContextualTyping.ts, 26, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 26, 23))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -181,7 +181,7 @@ class x21 { member: { [n: number]: Base; } = [d1, d2] }
 
 class x22 { member: {n: Base[]; }  = { n: [d1, d2] } }
 >x22 : Symbol(x22, Decl(generatedContextualTyping.ts, 26, 55))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 27, 11))
+>member : Symbol(x22.member, Decl(generatedContextualTyping.ts, 27, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 27, 21))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 27, 38))
@@ -190,7 +190,7 @@ class x22 { member: {n: Base[]; }  = { n: [d1, d2] } }
 
 class x23 { member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >x23 : Symbol(x23, Decl(generatedContextualTyping.ts, 27, 54))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 28, 11))
+>member : Symbol(x23.member, Decl(generatedContextualTyping.ts, 28, 11))
 >s : Symbol(s, Decl(generatedContextualTyping.ts, 28, 21))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 28, 40), Decl(generatedContextualTyping.ts, 28, 51))
@@ -199,7 +199,7 @@ class x23 { member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 
 class x24 { member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x24 : Symbol(x24, Decl(generatedContextualTyping.ts, 28, 79))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 29, 11))
+>member : Symbol(x24.member, Decl(generatedContextualTyping.ts, 29, 11))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >func : Symbol(func, Decl(generatedContextualTyping.ts, 29, 36))
@@ -209,21 +209,21 @@ class x24 { member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 
 class x25 { private member: () => Base[] = () => [d1, d2] }
 >x25 : Symbol(x25, Decl(generatedContextualTyping.ts, 29, 72))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 30, 11))
+>member : Symbol(x25.member, Decl(generatedContextualTyping.ts, 30, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x26 { private member: () => Base[] = function() { return [d1, d2] } }
 >x26 : Symbol(x26, Decl(generatedContextualTyping.ts, 30, 59))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 31, 11))
+>member : Symbol(x26.member, Decl(generatedContextualTyping.ts, 31, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x27 { private member: () => Base[] = function named() { return [d1, d2] } }
 >x27 : Symbol(x27, Decl(generatedContextualTyping.ts, 31, 75))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 32, 11))
+>member : Symbol(x27.member, Decl(generatedContextualTyping.ts, 32, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 32, 42))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -231,21 +231,21 @@ class x27 { private member: () => Base[] = function named() { return [d1, d2] } 
 
 class x28 { private member: { (): Base[]; } = () => [d1, d2] }
 >x28 : Symbol(x28, Decl(generatedContextualTyping.ts, 32, 81))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 33, 11))
+>member : Symbol(x28.member, Decl(generatedContextualTyping.ts, 33, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x29 { private member: { (): Base[]; } = function() { return [d1, d2] } }
 >x29 : Symbol(x29, Decl(generatedContextualTyping.ts, 33, 62))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 34, 11))
+>member : Symbol(x29.member, Decl(generatedContextualTyping.ts, 34, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x30 { private member: { (): Base[]; } = function named() { return [d1, d2] } }
 >x30 : Symbol(x30, Decl(generatedContextualTyping.ts, 34, 78))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 35, 11))
+>member : Symbol(x30.member, Decl(generatedContextualTyping.ts, 35, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 35, 45))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -253,14 +253,14 @@ class x30 { private member: { (): Base[]; } = function named() { return [d1, d2]
 
 class x31 { private member: Base[] = [d1, d2] }
 >x31 : Symbol(x31, Decl(generatedContextualTyping.ts, 35, 84))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 36, 11))
+>member : Symbol(x31.member, Decl(generatedContextualTyping.ts, 36, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x32 { private member: Array<Base> = [d1, d2] }
 >x32 : Symbol(x32, Decl(generatedContextualTyping.ts, 36, 47))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 37, 11))
+>member : Symbol(x32.member, Decl(generatedContextualTyping.ts, 37, 11))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -268,7 +268,7 @@ class x32 { private member: Array<Base> = [d1, d2] }
 
 class x33 { private member: { [n: number]: Base; } = [d1, d2] }
 >x33 : Symbol(x33, Decl(generatedContextualTyping.ts, 37, 52))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 38, 11))
+>member : Symbol(x33.member, Decl(generatedContextualTyping.ts, 38, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 38, 31))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -276,7 +276,7 @@ class x33 { private member: { [n: number]: Base; } = [d1, d2] }
 
 class x34 { private member: {n: Base[]; }  = { n: [d1, d2] } }
 >x34 : Symbol(x34, Decl(generatedContextualTyping.ts, 38, 63))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 39, 11))
+>member : Symbol(x34.member, Decl(generatedContextualTyping.ts, 39, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 39, 29))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 39, 46))
@@ -285,7 +285,7 @@ class x34 { private member: {n: Base[]; }  = { n: [d1, d2] } }
 
 class x35 { private member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >x35 : Symbol(x35, Decl(generatedContextualTyping.ts, 39, 62))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 40, 11))
+>member : Symbol(x35.member, Decl(generatedContextualTyping.ts, 40, 11))
 >s : Symbol(s, Decl(generatedContextualTyping.ts, 40, 29))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 40, 48), Decl(generatedContextualTyping.ts, 40, 59))
@@ -294,7 +294,7 @@ class x35 { private member: (s: Base[]) => any = n => { var n: Base[]; return nu
 
 class x36 { private member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x36 : Symbol(x36, Decl(generatedContextualTyping.ts, 40, 87))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 41, 11))
+>member : Symbol(x36.member, Decl(generatedContextualTyping.ts, 41, 11))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >func : Symbol(func, Decl(generatedContextualTyping.ts, 41, 44))
@@ -304,21 +304,21 @@ class x36 { private member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 
 class x37 { public member: () => Base[] = () => [d1, d2] }
 >x37 : Symbol(x37, Decl(generatedContextualTyping.ts, 41, 80))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 42, 11))
+>member : Symbol(x37.member, Decl(generatedContextualTyping.ts, 42, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x38 { public member: () => Base[] = function() { return [d1, d2] } }
 >x38 : Symbol(x38, Decl(generatedContextualTyping.ts, 42, 58))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 43, 11))
+>member : Symbol(x38.member, Decl(generatedContextualTyping.ts, 43, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x39 { public member: () => Base[] = function named() { return [d1, d2] } }
 >x39 : Symbol(x39, Decl(generatedContextualTyping.ts, 43, 74))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 44, 11))
+>member : Symbol(x39.member, Decl(generatedContextualTyping.ts, 44, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 44, 41))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -326,21 +326,21 @@ class x39 { public member: () => Base[] = function named() { return [d1, d2] } }
 
 class x40 { public member: { (): Base[]; } = () => [d1, d2] }
 >x40 : Symbol(x40, Decl(generatedContextualTyping.ts, 44, 80))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 45, 11))
+>member : Symbol(x40.member, Decl(generatedContextualTyping.ts, 45, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x41 { public member: { (): Base[]; } = function() { return [d1, d2] } }
 >x41 : Symbol(x41, Decl(generatedContextualTyping.ts, 45, 61))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 46, 11))
+>member : Symbol(x41.member, Decl(generatedContextualTyping.ts, 46, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x42 { public member: { (): Base[]; } = function named() { return [d1, d2] } }
 >x42 : Symbol(x42, Decl(generatedContextualTyping.ts, 46, 77))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 47, 11))
+>member : Symbol(x42.member, Decl(generatedContextualTyping.ts, 47, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 47, 44))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -348,14 +348,14 @@ class x42 { public member: { (): Base[]; } = function named() { return [d1, d2] 
 
 class x43 { public member: Base[] = [d1, d2] }
 >x43 : Symbol(x43, Decl(generatedContextualTyping.ts, 47, 83))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 48, 11))
+>member : Symbol(x43.member, Decl(generatedContextualTyping.ts, 48, 11))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x44 { public member: Array<Base> = [d1, d2] }
 >x44 : Symbol(x44, Decl(generatedContextualTyping.ts, 48, 46))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 49, 11))
+>member : Symbol(x44.member, Decl(generatedContextualTyping.ts, 49, 11))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -363,7 +363,7 @@ class x44 { public member: Array<Base> = [d1, d2] }
 
 class x45 { public member: { [n: number]: Base; } = [d1, d2] }
 >x45 : Symbol(x45, Decl(generatedContextualTyping.ts, 49, 51))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 50, 11))
+>member : Symbol(x45.member, Decl(generatedContextualTyping.ts, 50, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 50, 30))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -371,7 +371,7 @@ class x45 { public member: { [n: number]: Base; } = [d1, d2] }
 
 class x46 { public member: {n: Base[]; }  = { n: [d1, d2] } }
 >x46 : Symbol(x46, Decl(generatedContextualTyping.ts, 50, 62))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 51, 11))
+>member : Symbol(x46.member, Decl(generatedContextualTyping.ts, 51, 11))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 51, 28))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 51, 45))
@@ -380,7 +380,7 @@ class x46 { public member: {n: Base[]; }  = { n: [d1, d2] } }
 
 class x47 { public member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >x47 : Symbol(x47, Decl(generatedContextualTyping.ts, 51, 61))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 52, 11))
+>member : Symbol(x47.member, Decl(generatedContextualTyping.ts, 52, 11))
 >s : Symbol(s, Decl(generatedContextualTyping.ts, 52, 28))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 52, 47), Decl(generatedContextualTyping.ts, 52, 58))
@@ -389,7 +389,7 @@ class x47 { public member: (s: Base[]) => any = n => { var n: Base[]; return nul
 
 class x48 { public member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >x48 : Symbol(x48, Decl(generatedContextualTyping.ts, 52, 86))
->member : Symbol(member, Decl(generatedContextualTyping.ts, 53, 11))
+>member : Symbol(x48.member, Decl(generatedContextualTyping.ts, 53, 11))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >func : Symbol(func, Decl(generatedContextualTyping.ts, 53, 43))
@@ -779,21 +779,21 @@ class x96 { constructor(parm: Genric<Base> = { func: n => { return [d1, d2]; } }
 
 class x97 { constructor(public parm: () => Base[] = () => [d1, d2]) { } }
 >x97 : Symbol(x97, Decl(generatedContextualTyping.ts, 101, 87))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 102, 24))
+>parm : Symbol(x97.parm, Decl(generatedContextualTyping.ts, 102, 24))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x98 { constructor(public parm: () => Base[] = function() { return [d1, d2] }) { } }
 >x98 : Symbol(x98, Decl(generatedContextualTyping.ts, 102, 73))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 103, 24))
+>parm : Symbol(x98.parm, Decl(generatedContextualTyping.ts, 103, 24))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x99 { constructor(public parm: () => Base[] = function named() { return [d1, d2] }) { } }
 >x99 : Symbol(x99, Decl(generatedContextualTyping.ts, 103, 89))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 104, 24))
+>parm : Symbol(x99.parm, Decl(generatedContextualTyping.ts, 104, 24))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 104, 51))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -801,21 +801,21 @@ class x99 { constructor(public parm: () => Base[] = function named() { return [d
 
 class x100 { constructor(public parm: { (): Base[]; } = () => [d1, d2]) { } }
 >x100 : Symbol(x100, Decl(generatedContextualTyping.ts, 104, 95))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 105, 25))
+>parm : Symbol(x100.parm, Decl(generatedContextualTyping.ts, 105, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x101 { constructor(public parm: { (): Base[]; } = function() { return [d1, d2] }) { } }
 >x101 : Symbol(x101, Decl(generatedContextualTyping.ts, 105, 77))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 106, 25))
+>parm : Symbol(x101.parm, Decl(generatedContextualTyping.ts, 106, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x102 { constructor(public parm: { (): Base[]; } = function named() { return [d1, d2] }) { } }
 >x102 : Symbol(x102, Decl(generatedContextualTyping.ts, 106, 93))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 107, 25))
+>parm : Symbol(x102.parm, Decl(generatedContextualTyping.ts, 107, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 107, 55))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -823,14 +823,14 @@ class x102 { constructor(public parm: { (): Base[]; } = function named() { retur
 
 class x103 { constructor(public parm: Base[] = [d1, d2]) { } }
 >x103 : Symbol(x103, Decl(generatedContextualTyping.ts, 107, 99))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 108, 25))
+>parm : Symbol(x103.parm, Decl(generatedContextualTyping.ts, 108, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x104 { constructor(public parm: Array<Base> = [d1, d2]) { } }
 >x104 : Symbol(x104, Decl(generatedContextualTyping.ts, 108, 62))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 109, 25))
+>parm : Symbol(x104.parm, Decl(generatedContextualTyping.ts, 109, 25))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -838,7 +838,7 @@ class x104 { constructor(public parm: Array<Base> = [d1, d2]) { } }
 
 class x105 { constructor(public parm: { [n: number]: Base; } = [d1, d2]) { } }
 >x105 : Symbol(x105, Decl(generatedContextualTyping.ts, 109, 67))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 110, 25))
+>parm : Symbol(x105.parm, Decl(generatedContextualTyping.ts, 110, 25))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 110, 41))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -846,7 +846,7 @@ class x105 { constructor(public parm: { [n: number]: Base; } = [d1, d2]) { } }
 
 class x106 { constructor(public parm: {n: Base[]; }  = { n: [d1, d2] }) { } }
 >x106 : Symbol(x106, Decl(generatedContextualTyping.ts, 110, 78))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 111, 25))
+>parm : Symbol(x106.parm, Decl(generatedContextualTyping.ts, 111, 25))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 111, 39))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 111, 56))
@@ -855,7 +855,7 @@ class x106 { constructor(public parm: {n: Base[]; }  = { n: [d1, d2] }) { } }
 
 class x107 { constructor(public parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) { } }
 >x107 : Symbol(x107, Decl(generatedContextualTyping.ts, 111, 77))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 112, 25))
+>parm : Symbol(x107.parm, Decl(generatedContextualTyping.ts, 112, 25))
 >s : Symbol(s, Decl(generatedContextualTyping.ts, 112, 39))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 112, 58), Decl(generatedContextualTyping.ts, 112, 69))
@@ -864,7 +864,7 @@ class x107 { constructor(public parm: (s: Base[]) => any = n => { var n: Base[];
 
 class x108 { constructor(public parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
 >x108 : Symbol(x108, Decl(generatedContextualTyping.ts, 112, 102))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 113, 25))
+>parm : Symbol(x108.parm, Decl(generatedContextualTyping.ts, 113, 25))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >func : Symbol(func, Decl(generatedContextualTyping.ts, 113, 54))
@@ -874,21 +874,21 @@ class x108 { constructor(public parm: Genric<Base> = { func: n => { return [d1, 
 
 class x109 { constructor(private parm: () => Base[] = () => [d1, d2]) { } }
 >x109 : Symbol(x109, Decl(generatedContextualTyping.ts, 113, 95))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 114, 25))
+>parm : Symbol(x109.parm, Decl(generatedContextualTyping.ts, 114, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x110 { constructor(private parm: () => Base[] = function() { return [d1, d2] }) { } }
 >x110 : Symbol(x110, Decl(generatedContextualTyping.ts, 114, 75))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 115, 25))
+>parm : Symbol(x110.parm, Decl(generatedContextualTyping.ts, 115, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x111 { constructor(private parm: () => Base[] = function named() { return [d1, d2] }) { } }
 >x111 : Symbol(x111, Decl(generatedContextualTyping.ts, 115, 91))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 116, 25))
+>parm : Symbol(x111.parm, Decl(generatedContextualTyping.ts, 116, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 116, 53))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -896,21 +896,21 @@ class x111 { constructor(private parm: () => Base[] = function named() { return 
 
 class x112 { constructor(private parm: { (): Base[]; } = () => [d1, d2]) { } }
 >x112 : Symbol(x112, Decl(generatedContextualTyping.ts, 116, 97))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 117, 25))
+>parm : Symbol(x112.parm, Decl(generatedContextualTyping.ts, 117, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x113 { constructor(private parm: { (): Base[]; } = function() { return [d1, d2] }) { } }
 >x113 : Symbol(x113, Decl(generatedContextualTyping.ts, 117, 78))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 118, 25))
+>parm : Symbol(x113.parm, Decl(generatedContextualTyping.ts, 118, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x114 { constructor(private parm: { (): Base[]; } = function named() { return [d1, d2] }) { } }
 >x114 : Symbol(x114, Decl(generatedContextualTyping.ts, 118, 94))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 119, 25))
+>parm : Symbol(x114.parm, Decl(generatedContextualTyping.ts, 119, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >named : Symbol(named, Decl(generatedContextualTyping.ts, 119, 56))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -918,14 +918,14 @@ class x114 { constructor(private parm: { (): Base[]; } = function named() { retu
 
 class x115 { constructor(private parm: Base[] = [d1, d2]) { } }
 >x115 : Symbol(x115, Decl(generatedContextualTyping.ts, 119, 100))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 120, 25))
+>parm : Symbol(x115.parm, Decl(generatedContextualTyping.ts, 120, 25))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
 >d2 : Symbol(d2, Decl(generatedContextualTyping.ts, 5, 40))
 
 class x116 { constructor(private parm: Array<Base> = [d1, d2]) { } }
 >x116 : Symbol(x116, Decl(generatedContextualTyping.ts, 120, 63))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 121, 25))
+>parm : Symbol(x116.parm, Decl(generatedContextualTyping.ts, 121, 25))
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -933,7 +933,7 @@ class x116 { constructor(private parm: Array<Base> = [d1, d2]) { } }
 
 class x117 { constructor(private parm: { [n: number]: Base; } = [d1, d2]) { } }
 >x117 : Symbol(x117, Decl(generatedContextualTyping.ts, 121, 68))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 122, 25))
+>parm : Symbol(x117.parm, Decl(generatedContextualTyping.ts, 122, 25))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 122, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >d1 : Symbol(d1, Decl(generatedContextualTyping.ts, 5, 19))
@@ -941,7 +941,7 @@ class x117 { constructor(private parm: { [n: number]: Base; } = [d1, d2]) { } }
 
 class x118 { constructor(private parm: {n: Base[]; }  = { n: [d1, d2] }) { } }
 >x118 : Symbol(x118, Decl(generatedContextualTyping.ts, 122, 79))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 123, 25))
+>parm : Symbol(x118.parm, Decl(generatedContextualTyping.ts, 123, 25))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 123, 40))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 123, 57))
@@ -950,7 +950,7 @@ class x118 { constructor(private parm: {n: Base[]; }  = { n: [d1, d2] }) { } }
 
 class x119 { constructor(private parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) { } }
 >x119 : Symbol(x119, Decl(generatedContextualTyping.ts, 123, 78))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 124, 25))
+>parm : Symbol(x119.parm, Decl(generatedContextualTyping.ts, 124, 25))
 >s : Symbol(s, Decl(generatedContextualTyping.ts, 124, 40))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >n : Symbol(n, Decl(generatedContextualTyping.ts, 124, 59), Decl(generatedContextualTyping.ts, 124, 70))
@@ -959,7 +959,7 @@ class x119 { constructor(private parm: (s: Base[]) => any = n => { var n: Base[]
 
 class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
 >x120 : Symbol(x120, Decl(generatedContextualTyping.ts, 124, 103))
->parm : Symbol(parm, Decl(generatedContextualTyping.ts, 125, 25))
+>parm : Symbol(x120.parm, Decl(generatedContextualTyping.ts, 125, 25))
 >Genric : Symbol(Genric, Decl(generatedContextualTyping.ts, 3, 42))
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >func : Symbol(func, Decl(generatedContextualTyping.ts, 125, 55))

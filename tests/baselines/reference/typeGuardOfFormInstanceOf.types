@@ -60,7 +60,7 @@ num = ctor1 instanceof C2 && ctor1.p2; // C2
 >num : number
 >ctor1 instanceof C2 && ctor1.p2 : number
 >ctor1 instanceof C2 : boolean
->ctor1 : C1 | C2
+>ctor1 : C2 | C1
 >C2 : typeof C2
 >ctor1.p2 : number
 >ctor1 : C2
@@ -109,7 +109,7 @@ num = ctor2 instanceof D1 && ctor2.p3; // D1
 >num : number
 >ctor2 instanceof D1 && ctor2.p3 : number
 >ctor2 instanceof D1 : boolean
->ctor2 : C2 | D1
+>ctor2 : D1 | C2
 >D1 : typeof D1
 >ctor2.p3 : number
 >ctor2 : D1

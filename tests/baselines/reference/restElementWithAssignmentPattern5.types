@@ -7,7 +7,7 @@ var s: string, s2: string;
 >[...[s, s2]] = ["", ""] : string[]
 >[...[s, s2]] : string[]
 >...[s, s2] : string
->[s, s2] : string[]
+>[s, s2] : [string, string]
 >s : string
 >s2 : string
 >["", ""] : string[]

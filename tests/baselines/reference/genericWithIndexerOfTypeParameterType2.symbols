@@ -5,7 +5,7 @@ export class Collection<TItem extends CollectionItem> {
 >CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
 
     _itemsByKey: { [key: string]: TItem; };
->_itemsByKey : Symbol(_itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
+>_itemsByKey : Symbol(Collection._itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
 >key : Symbol(key, Decl(genericWithIndexerOfTypeParameterType2.ts, 1, 20))
 >TItem : Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
 }
@@ -16,7 +16,7 @@ export class List extends Collection<ListItem>{
 >ListItem : Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
 
     Bar() {}
->Bar : Symbol(Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
+>Bar : Symbol(List.Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
 }
 
 export class CollectionItem {}
@@ -27,6 +27,6 @@ export class ListItem extends CollectionItem {
 >CollectionItem : Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
 
     __isNew: boolean;
->__isNew : Symbol(__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
+>__isNew : Symbol(ListItem.__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
 }
 

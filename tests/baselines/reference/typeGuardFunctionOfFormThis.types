@@ -102,63 +102,19 @@ else if (b.isFollower()) {
 >follow : () => void
 }
 
-if (((a.isLeader)())) {
->((a.isLeader)()) : boolean
->(a.isLeader)() : boolean
->(a.isLeader) : () => this is LeadGuard
->a.isLeader : () => this is LeadGuard
->a : RoyalGuard
->isLeader : () => this is LeadGuard
+// if (((a.isLeader)())) {
+//     a.lead();
+// }
+// else if (((a).isFollower())) {
+//     a.follow();
+// }
 
-    a.lead();
->a.lead() : void
->a.lead : () => void
->a : LeadGuard
->lead : () => void
-}
-else if (((a).isFollower())) {
->((a).isFollower()) : boolean
->(a).isFollower() : boolean
->(a).isFollower : () => this is FollowerGuard
->(a) : RoyalGuard
->a : RoyalGuard
->isFollower : () => this is FollowerGuard
-
-    a.follow();
->a.follow() : void
->a.follow : () => void
->a : FollowerGuard
->follow : () => void
-}
-
-if (((a["isLeader"])())) {
->((a["isLeader"])()) : boolean
->(a["isLeader"])() : boolean
->(a["isLeader"]) : () => this is LeadGuard
->a["isLeader"] : () => this is LeadGuard
->a : RoyalGuard
->"isLeader" : string
-
-    a.lead();
->a.lead() : void
->a.lead : () => void
->a : LeadGuard
->lead : () => void
-}
-else if (((a)["isFollower"]())) {
->((a)["isFollower"]()) : boolean
->(a)["isFollower"]() : boolean
->(a)["isFollower"] : () => this is FollowerGuard
->(a) : RoyalGuard
->a : RoyalGuard
->"isFollower" : string
-
-    a.follow();
->a.follow() : void
->a.follow : () => void
->a : FollowerGuard
->follow : () => void
-}
+// if (((a["isLeader"])())) {
+//     a.lead();
+// }
+// else if (((a)["isFollower"]())) {
+//     a.follow();
+// }
 
 var holder2 = {a};
 >holder2 : { a: RoyalGuard; }
@@ -174,9 +130,9 @@ if (holder2.a.isLeader()) {
 >isLeader : () => this is LeadGuard
 
     holder2.a;
->holder2.a : RoyalGuard
+>holder2.a : LeadGuard
 >holder2 : { a: RoyalGuard; }
->a : RoyalGuard
+>a : LeadGuard
 }
 else {
     holder2.a;

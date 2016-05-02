@@ -3,14 +3,14 @@
 type T = "foo" | "bar" | "baz";
 >T : "foo" | "bar" | "baz"
 
-var x: "foo" | "bar" | "baz" = "foo";
+var x: "foo" | "bar" | "baz" = undefined;
 >x : "foo" | "bar" | "baz"
->"foo" : "foo"
+>undefined : undefined
 
-var y: T = "bar";
+var y: T = undefined;
 >y : "foo" | "bar" | "baz"
 >T : "foo" | "bar" | "baz"
->"bar" : "bar"
+>undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean

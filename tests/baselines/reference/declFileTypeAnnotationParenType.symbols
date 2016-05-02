@@ -4,7 +4,7 @@ class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
 
     private p: string;
->p : Symbol(p, Decl(declFileTypeAnnotationParenType.ts, 1, 9))
+>p : Symbol(c.p, Decl(declFileTypeAnnotationParenType.ts, 1, 9))
 }
 
 var x: (() => c)[] = [() => new c()];
