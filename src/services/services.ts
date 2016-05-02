@@ -4891,8 +4891,8 @@ namespace ts {
                     node.kind === SyntaxKind.ThisKeyword ||
                     node.kind === SyntaxKind.ThisType ||
                     node.kind === SyntaxKind.SuperKeyword ||
-                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
-                    isNameOfExternalModuleImportOrDeclaration(node)) {
+                    node.kind === SyntaxKind.StringLiteral ||
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
 
                     const referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false);
                     return convertReferencedSymbols(referencedSymbols);
@@ -5559,8 +5559,8 @@ namespace ts {
                 // TODO (drosen): This should be enabled in a later release - currently breaks rename.
                 // node.kind !== SyntaxKind.ThisKeyword &&
                 // node.kind !== SyntaxKind.SuperKeyword &&
-                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
-                !isNameOfExternalModuleImportOrDeclaration(node)) {
+                node.kind !== SyntaxKind.StringLiteral &&
+                !isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
                 return undefined;
             }
 
@@ -5594,6 +5594,10 @@ namespace ts {
             }
 
             const symbol = typeChecker.getSymbolAtLocation(node);
+
+            if (!symbol && node.kind === SyntaxKind.StringLiteral) {
+                return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles);
+            }
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -6148,6 +6152,52 @@ namespace ts {
                                 break;
                         }
                     });
+                }
+            }
+
+
+            function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: SourceFile[]): ReferencedSymbol[] {
+                const typeChecker = program.getTypeChecker();
+                const type = getStringLiteralTypeForNode(node, typeChecker);
+
+                if (!type) {
+                    // nothing to do here. moving on
+                    return undefined;
+                }
+
+                const references: ReferenceEntry[] = [];
+
+                for (const sourceFile of sourceFiles) {
+                    const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, type.text, sourceFile.getStart(), sourceFile.getEnd());
+                    getReferencesForStringLiteralInFile(sourceFile, type, possiblePositions, references);
+                }
+
+                return [{
+                    definition: {
+                        containerKind: "",
+                        containerName: "",
+                        fileName: node.getSourceFile().fileName,
+                        kind: ScriptElementKind.variableElement,
+                        name: type.text,
+                        textSpan: createTextSpanFromBounds(node.getStart(), node.getEnd())
+                    },
+                    references: references
+                }];
+
+                function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchType: Type, possiblePositions: number[], references: ReferenceEntry[]): void {
+                    for (const position of possiblePositions) {
+                        cancellationToken.throwIfCancellationRequested();
+
+                        const node = getTouchingWord(sourceFile, position);
+                        if (!node || node.kind !== SyntaxKind.StringLiteral) {
+                            return;
+                        }
+
+                        const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
+                        if (type === searchType) {
+                            references.push(getReferenceEntryFromNode(node));
+                        }
+                    }
                 }
             }
 
@@ -7671,6 +7721,14 @@ namespace ts {
             }
         }
 
+        function getStringLiteralTypeForNode(node: StringLiteral | StringLiteralTypeNode, typeChecker: TypeChecker): StringLiteralType {
+            const searchNode = node.parent.kind === SyntaxKind.StringLiteralType ? <StringLiteralTypeNode>node.parent : node;
+            const type = typeChecker.getTypeAtLocation(searchNode);
+            if (type && type.flags & TypeFlags.StringLiteral) {
+                return <StringLiteralType>type;
+            }
+            return undefined;
+        }
 
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
@@ -7678,46 +7736,60 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const typeChecker = program.getTypeChecker();
 
+            const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+            const canonicalDefaultLibName = getCanonicalFileName(ts.normalizePath(defaultLibFileName));
+
             const node = getTouchingWord(sourceFile, position);
 
             // Can only rename an identifier.
-            if (node && node.kind === SyntaxKind.Identifier) {
-                const symbol = typeChecker.getSymbolAtLocation(node);
+            if (node) {
+                if (node.kind === SyntaxKind.Identifier ||
+                    node.kind === SyntaxKind.StringLiteral ||
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node)) {
+                    const symbol = typeChecker.getSymbolAtLocation(node);
 
-                // Only allow a symbol to be renamed if it actually has at least one declaration.
-                if (symbol) {
-                    const declarations = symbol.getDeclarations();
-                    if (declarations && declarations.length > 0) {
-                        // Disallow rename for elements that are defined in the standard TypeScript library.
-                        const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
-                        const canonicalDefaultLibName = getCanonicalFileName(ts.normalizePath(defaultLibFileName));
-                        if (defaultLibFileName) {
-                            for (const current of declarations) {
-                                const sourceFile = current.getSourceFile();
-                                // TODO (drosen): When is there no source file?
-                                if (!sourceFile) {
-                                    continue;
-                                }
+                    // Only allow a symbol to be renamed if it actually has at least one declaration.
+                    if (symbol) {
+                        const declarations = symbol.getDeclarations();
+                        if (declarations && declarations.length > 0) {
+                            // Disallow rename for elements that are defined in the standard TypeScript library.
+                            if (forEach(declarations, isDefinedInLibraryFile)) {
+                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
+                            }
 
-                                const canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
-                                if (canonicalName === canonicalDefaultLibName) {
-                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
-                                }
+                            const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
+                            const kind = getSymbolKind(symbol, node);
+                            if (kind) {
+                                return {
+                                    canRename: true,
+                                    kind,
+                                    displayName,
+                                    localizedErrorMessage: undefined,
+                                    fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
+                                    kindModifiers: getSymbolModifiers(symbol),
+                                    triggerSpan: createTriggerSpanForNode(node, sourceFile)
+                                };
                             }
                         }
-
-                        const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
-                        const kind = getSymbolKind(symbol, node);
-                        if (kind) {
-                            return {
-                                canRename: true,
-                                kind,
-                                displayName,
-                                localizedErrorMessage: undefined,
-                                fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
-                                kindModifiers: getSymbolModifiers(symbol),
-                                triggerSpan: createTextSpan(node.getStart(), node.getWidth())
-                            };
+                    }
+                    else if (node.kind === SyntaxKind.StringLiteral) {
+                        const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
+                        if (type) {
+                            if (isDefinedInLibraryFile(node)) {
+                                return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
+                            }
+                            else {
+                                const displayName = stripQuotes(type.text);
+                                return {
+                                    canRename: true,
+                                    kind: ScriptElementKind.variableElement,
+                                    displayName,
+                                    localizedErrorMessage: undefined,
+                                    fullDisplayName: displayName,
+                                    kindModifiers: ScriptElementKindModifier.none,
+                                    triggerSpan: createTriggerSpanForNode(node, sourceFile)
+                                };
+                            }
                         }
                     }
                 }
@@ -7735,6 +7807,28 @@ namespace ts {
                     kindModifiers: undefined,
                     triggerSpan: undefined
                 };
+            }
+
+            function isDefinedInLibraryFile(declaration: Node) {
+                if (defaultLibFileName) {
+                    const sourceFile = declaration.getSourceFile();
+                    const canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
+                    if (canonicalName === canonicalDefaultLibName) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {
+                let start = node.getStart(sourceFile);
+                let width = node.getWidth(sourceFile);
+                if (node.kind === SyntaxKind.StringLiteral) {
+                    // Exclude the quotes
+                    start += 1;
+                    width -= 2;
+                }
+                return createTextSpan(start, width);
             }
         }
 
