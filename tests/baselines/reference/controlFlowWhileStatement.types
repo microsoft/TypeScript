@@ -307,4 +307,66 @@ function h3() {
     x; // string | number
 >x : string | number
 }
+// Repro for #8418
+function foo(x: number): number { return 1; }
+>foo : (x: number) => number
+>x : number
+>1 : number
+
+function test1() {
+>test1 : () => void
+
+    let x: number | undefined;
+>x : number
+
+    while (cond) {
+>cond : boolean
+
+        while (cond) {
+>cond : boolean
+
+            while (cond) {
+>cond : boolean
+
+                x = foo(x);
+>x = foo(x) : number
+>x : number
+>foo(x) : number
+>foo : (x: number) => number
+>x : number
+            }
+        }
+        x = 1;
+>x = 1 : number
+>x : number
+>1 : number
+    }
+}
+// Repro for #8418
+function test2() {
+>test2 : () => void
+
+    let x: number | undefined;
+>x : number
+
+    x = 1;
+>x = 1 : number
+>x : number
+>1 : number
+
+    while (cond) {
+>cond : boolean
+
+        while (cond) {
+>cond : boolean
+
+            x = foo(x);
+>x = foo(x) : number
+>x : number
+>foo(x) : number
+>foo : (x: number) => number
+>x : number
+        }
+    }
+}
 

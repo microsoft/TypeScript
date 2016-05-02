@@ -254,4 +254,57 @@ function h3() {
     x; // string | number
 >x : Symbol(x, Decl(controlFlowWhileStatement.ts, 98, 7))
 }
+// Repro for #8418
+function foo(x: number): number { return 1; }
+>foo : Symbol(foo, Decl(controlFlowWhileStatement.ts, 105, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 107, 13))
+
+function test1() {
+>test1 : Symbol(test1, Decl(controlFlowWhileStatement.ts, 107, 45))
+
+    let x: number | undefined;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 109, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+                x = foo(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 109, 7))
+>foo : Symbol(foo, Decl(controlFlowWhileStatement.ts, 105, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 109, 7))
+            }
+        }
+        x = 1;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 109, 7))
+    }
+}
+// Repro for #8418
+function test2() {
+>test2 : Symbol(test2, Decl(controlFlowWhileStatement.ts, 118, 1))
+
+    let x: number | undefined;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 121, 7))
+
+    x = 1;
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 121, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+        while (cond) {
+>cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
+
+            x = foo(x);
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 121, 7))
+>foo : Symbol(foo, Decl(controlFlowWhileStatement.ts, 105, 1))
+>x : Symbol(x, Decl(controlFlowWhileStatement.ts, 121, 7))
+        }
+    }
+}
 
