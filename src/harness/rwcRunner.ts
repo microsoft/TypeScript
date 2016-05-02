@@ -2,7 +2,7 @@
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
@@ -95,13 +95,13 @@ namespace RWC {
                             continue;
                         }
 
-                        if (!Harness.isLibraryFile(fileRead.path)) {
+                        if (!Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (inInputList) {
                                 continue;
                             }
                             otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
-                        else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)) {
+                        else if (!opts.options.noLib && Harness.isDefaultLibraryFile(fileRead.path)) {
                             if (!inInputList) {
                                 // If useCustomLibraryFile is true, we will use lib.d.ts from json object
                                 // otherwise use the lib.d.ts from built/local
@@ -190,8 +190,9 @@ namespace RWC {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
-
-                    return Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
+                    // Do not include the library in the baselines to avoid noise
+                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    return Harness.Compiler.getErrorBaseline(baselineFiles, compilerResult.errors);
                 }, false, baselineOpts);
             });
 

@@ -113,19 +113,18 @@ else {
 >strOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool === "string") {
 >typeof numOrBool === "string" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
 >"string" : string
 
-    var x1: number | boolean = numOrBool; // number | boolean
->x1 : number | boolean
->numOrBool : number | boolean
+    let x1: {} = numOrBool; // {}
+>x1 : {}
+>numOrBool : nothing
 }
 else {
-    var x2: number | boolean = numOrBool; // number | boolean
+    let x2: number | boolean = numOrBool; // number | boolean
 >x2 : number | boolean
 >numOrBool : number | boolean
 }
@@ -202,20 +201,19 @@ else {
 >strOrC : string
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool !== "string") {
 >typeof numOrBool !== "string" : boolean
 >typeof numOrBool : string
 >numOrBool : number | boolean
 >"string" : string
 
-    var x1: number | boolean = numOrBool; // number | boolean
+    let x1: number | boolean = numOrBool; // number | boolean
 >x1 : number | boolean
 >numOrBool : number | boolean
 }
 else {
-    var x2: number | boolean = numOrBool; // number | boolean
->x2 : number | boolean
->numOrBool : number | boolean
+    let x2: {} = numOrBool; // {}
+>x2 : {}
+>numOrBool : nothing
 }
 

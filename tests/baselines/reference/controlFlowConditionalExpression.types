@@ -1,0 +1,20 @@
+=== tests/cases/conformance/controlFlow/controlFlowConditionalExpression.ts ===
+let x: string | number | boolean;
+>x : string | number | boolean
+
+let cond: boolean;
+>cond : boolean
+
+cond ? x = "" : x = 3;
+>cond ? x = "" : x = 3 : string | number
+>cond : boolean
+>x = "" : string
+>x : string | number | boolean
+>"" : string
+>x = 3 : number
+>x : string | number | boolean
+>3 : number
+
+x; // string | number
+>x : string | number
+

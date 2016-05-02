@@ -1,6 +1,7 @@
 // @module: commonjs
 // @includebuiltfile: typescript_standalone.d.ts
-// @stripInternal:true
+// @noImplicitAny:true
+// @strictNullChecks:true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found 
@@ -21,7 +22,7 @@ function printError(error: ts.Diagnostic): void {
     console.log(`${error.file && error.file.fileName}: ${error.messageText}`);
 }
 
-export function createProgram(rootFiles: string[], compilerOptionsJson: string): ts.Program {
+export function createProgram(rootFiles: string[], compilerOptionsJson: string): ts.Program | undefined {
     const { config, error } = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson)
     if (error) {
         printError(error);

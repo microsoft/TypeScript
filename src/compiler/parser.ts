@@ -886,7 +886,7 @@ namespace ts {
 
         /** Invokes the provided callback then unconditionally restores the parser to the state it
          * was in immediately prior to invoking the callback.  The result of invoking the callback
-         * is returned from this function. 
+         * is returned from this function.
          */
         function lookAhead<T>(callback: () => T): T {
             return speculationHelper(callback, /*isLookAhead*/ true);
@@ -1811,7 +1811,7 @@ namespace ts {
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             let entity: EntityName = parseIdentifier(diagnosticMessage);
             while (parseOptional(SyntaxKind.DotToken)) {
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, entity.pos);  // !!!
                 node.left = entity;
                 node.right = parseRightSideOfDot(allowReservedWords);
                 entity = finishNode(node);
@@ -2010,7 +2010,7 @@ namespace ts {
         }
 
         function isStartOfParameter(): boolean {
-            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken;
+            return token === SyntaxKind.DotDotDotToken || isIdentifierOrPattern() || isModifierKind(token) || token === SyntaxKind.AtToken || token === SyntaxKind.ThisKeyword;
         }
 
         function setModifiers(node: Node, modifiers: ModifiersArray) {
@@ -2022,15 +2022,19 @@ namespace ts {
 
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+            if (token === SyntaxKind.ThisKeyword) {
+                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.type = parseParameterType();
+                return finishNode(node);
+            }
+
             node.decorators = parseDecorators();
             setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
-
             node.name = parseIdentifierOrPattern();
-
             if (getFullWidth(node.name) === 0 && node.flags === 0 && isModifierKind(token)) {
                 // in cases like
                 // 'use strict'
@@ -2068,11 +2072,11 @@ namespace ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldContext: boolean,
-                awaitContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldContext: boolean,
+            awaitContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
 
             const returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
@@ -2473,7 +2477,7 @@ namespace ts {
                 // Skip modifiers
                 parseModifiers();
             }
-            if (isIdentifier()) {
+            if (isIdentifier() || token === SyntaxKind.ThisKeyword) {
                 nextToken();
                 return true;
             }
@@ -3639,7 +3643,7 @@ namespace ts {
             let elementName: EntityName = parseIdentifierName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 scanJsxIdentifier();
-                const node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                const node: QualifiedName = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);  // !!!
                 node.left = elementName;
                 node.right = parseIdentifierName();
                 elementName = finishNode(node);
@@ -4984,7 +4988,7 @@ namespace ts {
 
                 if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
                     // We need to ensure that any subsequent modifiers appear on the same line
-                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    // so that when 'const' is a standalone declaration, we don't issue an error.
                     if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                         break;
                     }
@@ -5247,7 +5251,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             if (token === SyntaxKind.GlobalKeyword) {
-                // parse 'global' as name of global scope augmentation 
+                // parse 'global' as name of global scope augmentation
                 node.name = parseIdentifier();
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
@@ -5505,6 +5509,7 @@ namespace ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
+            const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
 
@@ -5531,7 +5536,12 @@ namespace ts {
                     sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
                     const diagnosticMessage = referencePathMatchResult.diagnosticMessage;
                     if (fileReference) {
-                        referencedFiles.push(fileReference);
+                        if (referencePathMatchResult.isTypeReferenceDirective) {
+                            typeReferenceDirectives.push(fileReference);
+                        }
+                        else {
+                            referencedFiles.push(fileReference);
+                        }
                     }
                     if (diagnosticMessage) {
                         parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
@@ -5563,6 +5573,7 @@ namespace ts {
             }
 
             sourceFile.referencedFiles = referencedFiles;
+            sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
         }
@@ -6076,7 +6087,7 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    const tagName = parseJSDocIdentifier();
+                    const tagName = parseJSDocIdentifierName();
                     if (!tagName) {
                         return;
                     }
@@ -6139,7 +6150,7 @@ namespace ts {
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
                     if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = parseJSDocIdentifier();
+                        name = parseJSDocIdentifierName();
                         isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
@@ -6149,8 +6160,8 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (token === SyntaxKind.Identifier) {
-                        name = parseJSDocIdentifier();
+                    else if (tokenIsIdentifierOrKeyword(token)) {
+                        name = parseJSDocIdentifierName();
                     }
 
                     if (!name) {
@@ -6214,7 +6225,7 @@ namespace ts {
                     typeParameters.pos = scanner.getStartPos();
 
                     while (true) {
-                        const name = parseJSDocIdentifier();
+                        const name = parseJSDocIdentifierName();
                         if (!name) {
                             parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
                             return undefined;
@@ -6247,8 +6258,12 @@ namespace ts {
                     return token = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifier(): Identifier {
-                    if (token !== SyntaxKind.Identifier) {
+                function parseJSDocIdentifierName(): Identifier {
+                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token));
+                }
+
+                function createJSDocIdentifier(isIdentifier: boolean): Identifier {
+                    if (!isIdentifier) {
                         parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                         return undefined;
                     }
