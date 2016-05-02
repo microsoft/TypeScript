@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+////var y: "string" = "string;
 ////var x = "/*1*/string";
 ////function f(a = "/*2*/initial value") { }
 
