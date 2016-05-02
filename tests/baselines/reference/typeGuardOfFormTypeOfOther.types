@@ -105,7 +105,7 @@ if (typeof strOrNumOrBool === "Object") {
 
     let q1: {} = strOrNumOrBool; // {}
 >q1 : {}
->strOrNumOrBool : {}
+>strOrNumOrBool : nothing
 }
 else {
     let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
@@ -178,6 +178,6 @@ if (typeof strOrNumOrBool !== "Object") {
 else {
     let q2: {} = strOrNumOrBool; // {}
 >q2 : {}
->strOrNumOrBool : {}
+>strOrNumOrBool : nothing
 }
 

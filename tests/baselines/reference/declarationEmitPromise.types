@@ -78,10 +78,10 @@ export async function runSampleWorks<A, B, C, D, E>(
 >T : T
 
         f.apply(this, result);
->f.apply(this, result) : T
->f.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>f.apply(this, result) : any
+>f.apply : (this: Function, thisArg: any, argArray?: any) => any
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
->apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 >this : any
 >result : any
 
@@ -163,10 +163,10 @@ export async function runSampleBreaks<A, B, C, D, E>(
 >T : T
 
         f.apply(this, result);
->f.apply(this, result) : T
->f.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>f.apply(this, result) : any
+>f.apply : (this: Function, thisArg: any, argArray?: any) => any
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
->apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>apply : (this: Function, thisArg: any, argArray?: any) => any
 >this : any
 >result : any
 

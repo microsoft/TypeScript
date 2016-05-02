@@ -1551,6 +1551,7 @@ namespace ts {
         Unreachable,
         Start,
         Label,
+        LoopLabel,
         Assignment,
         Condition
     }
@@ -2539,19 +2540,19 @@ namespace ts {
         // When options come from a config file, its path is recorded here
         configFilePath?: string;
         /* @internal */
-        // Path used to used to compute primary search locations 
+        // Path used to used to compute primary search locations
         typesRoot?: string;
         types?: string[];
 
         list?: string[];
-        [option: string]: CompilerOptionsValue;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export interface TypingOptions {
         enableAutoDiscovery?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean;
+        [option: string]: string[] | boolean | undefined;
     }
 
     export interface DiscoverTypingsInfo {
@@ -2856,7 +2857,7 @@ namespace ts {
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
         /**
-         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files 
+         * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
     }

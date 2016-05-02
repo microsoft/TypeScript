@@ -2014,7 +2014,12 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        writeAnonymousType(<ObjectType>type, flags);
+                        if (type === emptyUnionType) {
+                            writer.writeKeyword("nothing");
+                        }
+                        else {
+                            writeAnonymousType(<ObjectType>type, flags);
+                        }
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
@@ -4251,7 +4256,9 @@ namespace ts {
                         propTypes.push(getTypeOfSymbol(prop));
                     }
                 }
-                return getUnionType(propTypes);
+                if (propTypes.length) {
+                    return getUnionType(propTypes);
+                }
             }
             return undefined;
         }
@@ -5506,6 +5513,10 @@ namespace ts {
             return !node.typeParameters && areAllParametersUntyped && !isNullaryArrow;
         }
 
+        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | MethodDeclaration {
+            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
+        }
+
         function getTypeWithoutSignatures(type: Type): Type {
             if (type.flags & TypeFlags.ObjectType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -5900,9 +5911,14 @@ namespace ts {
 
                 if (source.flags & TypeFlags.TypeParameter) {
                     let constraint = getConstraintOfTypeParameter(<TypeParameter>source);
+
                     if (!constraint || constraint.flags & TypeFlags.Any) {
                         constraint = emptyObjectType;
                     }
+
+                    // The constraint may need to be further instantiated with its 'this' type.
+                    constraint = getTypeWithThisArgument(constraint, source);
+
                     // Report constraint errors only if the constraint is not the empty object type
                     const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
                     if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
@@ -7329,27 +7345,29 @@ namespace ts {
         }
 
         function containsMatchingReference(source: Node, target: Node) {
-            while (true) {
+            while (source.kind === SyntaxKind.PropertyAccessExpression) {
+                source = (<PropertyAccessExpression>source).expression;
                 if (isMatchingReference(source, target)) {
                     return true;
                 }
-                if (source.kind !== SyntaxKind.PropertyAccessExpression) {
-                    return false;
-                }
-                source = (<PropertyAccessExpression>source).expression;
             }
+            return false;
         }
 
-        function hasMatchingArgument(callExpression: CallExpression, target: Node) {
+        function isOrContainsMatchingReference(source: Node, target: Node) {
+            return isMatchingReference(source, target) || containsMatchingReference(source, target);
+        }
+
+        function hasMatchingArgument(callExpression: CallExpression, reference: Node) {
             if (callExpression.arguments) {
                 for (const argument of callExpression.arguments) {
-                    if (isMatchingReference(argument, target)) {
+                    if (isOrContainsMatchingReference(reference, argument)) {
                         return true;
                     }
                 }
             }
             if (callExpression.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                isMatchingReference((<PropertyAccessExpression>callExpression.expression).expression, target)) {
+                isOrContainsMatchingReference(reference, (<PropertyAccessExpression>callExpression.expression).expression)) {
                 return true;
             }
             return false;
@@ -7361,12 +7379,6 @@ namespace ts {
                 nextFlowId++;
             }
             return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
-        }
-
-        function isNarrowableReference(expr: Node): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
         function typeMaybeAssignableTo(source: Type, target: Type) {
@@ -7559,30 +7571,12 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getNarrowedTypeOfReference(type: Type, reference: Node) {
-            if (!(type.flags & TypeFlags.Narrowable) || !isNarrowableReference(reference)) {
-                return type;
-            }
-            const leftmostNode = getLeftmostIdentifierOrThis(reference);
-            if (!leftmostNode) {
-                return type;
-            }
-            if (leftmostNode.kind === SyntaxKind.Identifier) {
-                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
-                if (!leftmostSymbol) {
-                    return type;
-                }
-                const declaration = leftmostSymbol.valueDeclaration;
-                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
-                    return type;
-                }
-            }
-            return getFlowTypeOfReference(reference, type, type);
-        }
-
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
-            return reference.flowNode ? getTypeAtFlowNode(reference.flowNode) : declaredType;
+            if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
+                return declaredType;
+            }
+            return getTypeAtFlowNode(reference.flowNode);
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
@@ -7597,6 +7591,7 @@ namespace ts {
                         case FlowKind.Condition:
                             return getTypeAtFlowCondition(<FlowCondition>flow);
                         case FlowKind.Label:
+                        case FlowKind.LoopLabel:
                             if ((<FlowLabel>flow).antecedents.length === 1) {
                                 flow = (<FlowLabel>flow).antecedents[0];
                                 continue;
@@ -7635,8 +7630,7 @@ namespace ts {
                 // may be an assignment to a left hand part of the reference. For example, for a
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
-                if (reference.kind === SyntaxKind.PropertyAccessExpression &&
-                    containsMatchingReference((<PropertyAccessExpression>reference).expression, node)) {
+                if (containsMatchingReference(reference, node)) {
                     return declaredType;
                 }
                 // Assignment doesn't affect reference
@@ -7644,7 +7638,8 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, flow.assumeTrue);
+                const type = getTypeAtFlowNode(flow.antecedent);
+                return type && narrowType(type, flow.expression, flow.assumeTrue);
             }
 
             function getTypeAtFlowNodeCached(flow: FlowNode) {
@@ -7670,33 +7665,36 @@ namespace ts {
                 flowStackCount--;
                 // Record the result only if the cache is still empty. If checkExpressionCached was called
                 // during processing it is possible we've already recorded a result.
-                return cache[key] || (cache[key] = type);
+                return cache[key] || type && (cache[key] = type);
             }
 
             function getTypeAtFlowLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
-                    const type = getTypeAtFlowNodeCached(antecedent);
-                    if (type) {
-                        // If the type at a particular antecedent path is the declared type and the
-                        // reference is known to always be assigned (i.e. when declared and initial types
-                        // are the same), there is no reason to process more antecedents since the only
-                        // possible outcome is subtypes that will be removed in the final union type anyway.
-                        if (type === declaredType && declaredType === initialType) {
-                            return type;
-                        }
-                        if (!contains(antecedentTypes, type)) {
-                            antecedentTypes.push(type);
-                        }
+                    const type = flow.kind === FlowKind.LoopLabel ?
+                        getTypeAtFlowNodeCached(antecedent) :
+                        getTypeAtFlowNode(antecedent);
+                    if (!type) {
+                        break;
+                    }
+                    // If the type at a particular antecedent path is the declared type and the
+                    // reference is known to always be assigned (i.e. when declared and initial types
+                    // are the same), there is no reason to process more antecedents since the only
+                    // possible outcome is subtypes that will be removed in the final union type anyway.
+                    if (type === declaredType && declaredType === initialType) {
+                        return type;
+                    }
+                    if (!contains(antecedentTypes, type)) {
+                        antecedentTypes.push(type);
                     }
                 }
-                return antecedentTypes.length === 0 ? declaredType :
+                return antecedentTypes.length === 0 ? undefined :
                     antecedentTypes.length === 1 ? antecedentTypes[0] :
                     getUnionType(antecedentTypes);
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
-                return isMatchingReference(expr, reference) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
+                return isMatchingReference(reference, expr) ? getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy) : type;
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -7728,7 +7726,7 @@ namespace ts {
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (!strictNullChecks || !isMatchingReference(expr.left, reference)) {
+                if (!strictNullChecks || !isMatchingReference(reference, expr.left)) {
                     return type;
                 }
                 const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
@@ -7745,7 +7743,12 @@ namespace ts {
                 // and string literal on the right
                 const left = <TypeOfExpression>expr.left;
                 const right = <LiteralExpression>expr.right;
-                if (!isMatchingReference(left.expression, reference)) {
+                if (!isMatchingReference(reference, left.expression)) {
+                    // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, left.expression)) {
+                        return declaredType;
+                    }
                     return type;
                 }
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsToken ||
@@ -7768,8 +7771,16 @@ namespace ts {
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || !isMatchingReference(expr.left, reference)) {
+                if (!isMatchingReference(reference, expr.left)) {
+                    // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, expr.left)) {
+                        return declaredType;
+                    }
+                    return type;
+                }
+                // We never narrow type any in an instanceof guard
+                if (isTypeAny(type)) {
                     return type;
                 }
 
@@ -7844,17 +7855,25 @@ namespace ts {
                 }
                 if (isIdentifierTypePredicate(predicate)) {
                     const predicateArgument = callExpression.arguments[predicate.parameterIndex];
-                    if (predicateArgument && isMatchingReference(predicateArgument, reference)) {
-                        return getNarrowedType(type, predicate.type, assumeTrue);
+                    if (predicateArgument) {
+                        if (isMatchingReference(reference, predicateArgument)) {
+                            return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
+                        if (containsMatchingReference(reference, predicateArgument)) {
+                            return declaredType;
+                        }
                     }
                 }
                 else {
                     const invokedExpression = skipParenthesizedNodes(callExpression.expression);
                     if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
                         const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
-                        const possibleReference= skipParenthesizedNodes(accessExpression.expression);
-                        if (isMatchingReference(possibleReference, reference)) {
+                        const possibleReference = skipParenthesizedNodes(accessExpression.expression);
+                        if (isMatchingReference(reference, possibleReference)) {
                             return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
+                        if (containsMatchingReference(reference, possibleReference)) {
+                            return declaredType;
                         }
                     }
                 }
@@ -7886,19 +7905,18 @@ namespace ts {
         }
 
         function getTypeOfSymbolAtLocation(symbol: Symbol, location: Node) {
-            // The language service will always care about the narrowed type of a symbol, because that is
-            // the type the language says the symbol should have.
-            const type = getTypeOfSymbol(symbol);
+            // If we have an identifier or a property access at the given location, if the location is
+            // an dotted name expression, and if the location is not an assignment target, obtain the type
+            // of the expression (which will reflect control flow analysis). If the expression indeed
+            // resolved to the given symbol, return the narrowed type.
             if (location.kind === SyntaxKind.Identifier) {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                // If location is an identifier or property access that references the given
-                // symbol, use the location as the reference with respect to which we narrow.
                 if (isExpression(location) && !isAssignmentTarget(location)) {
-                    checkExpression(<Expression>location);
+                    const type = checkExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
-                        return getNarrowedTypeOfReference(type, <IdentifierOrPropertyAccess>location);
+                        return type;
                     }
                 }
             }
@@ -7907,7 +7925,7 @@ namespace ts {
             // to it at the given location. Since we have no control flow information for the
             // hypotherical reference (control flow information is created and attached by the
             // binder), we simply return the declared type of the symbol.
-            return type;
+            return getTypeOfSymbol(symbol);
         }
 
         function skipParenthesizedNodes(expression: Expression): Expression {
@@ -7973,12 +7991,9 @@ namespace ts {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
-            const defaultsToDeclaredType = !strictNullChecks || !declaration ||
-                declaration.kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
+            const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
+                getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            if (defaultsToDeclaredType && !(type.flags & TypeFlags.Narrowable)) {
-                return type;
-            }
             const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
@@ -8201,6 +8216,21 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
             if (isFunctionLike(container)) {
+                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
+                // of a x.prototype.y = function [name]() { .... }
+                if (container.kind === SyntaxKind.FunctionExpression &&
+                    isInJavaScriptFile(container.parent) &&
+                    getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
+                    const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
+                                        .left as PropertyAccessExpression)       // x.prototype.y
+                                        .expression as PropertyAccessExpression) // x.prototype
+                                        .expression;                             // x
+                    const classSymbol = checkExpression(className).symbol;
+                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                        return getInferredClassType(classSymbol);
+                    }
+                }
                 const type = getContextuallyTypedThisType(container);
                 if (type) {
                     return type;
@@ -8209,41 +8239,17 @@ namespace ts {
                 if (signature.thisType) {
                     return signature.thisType;
                 }
-                if (container.parent && container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                    // Note: this works because object literal methods are deferred,
-                    // which means that the type of the containing object literal is already known.
-                    const type = checkExpressionCached(<ObjectLiteralExpression>container.parent);
-                    if (type) {
-                        return type;
-                    }
-                }
             }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getNarrowedTypeOfReference(type, node);
+                return getFlowTypeOfReference(node, type, type);
             }
 
             if (isInJavaScriptFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== unknownType) {
                     return type;
-                }
-
-                // If this is a function in a JS file, it might be a class method. Check if it's the RHS
-                // of a x.prototype.y = function [name]() { .... }
-                if (container.kind === SyntaxKind.FunctionExpression) {
-                    if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                        // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
-                        const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
-                            .left as PropertyAccessExpression)       // x.prototype.y
-                            .expression as PropertyAccessExpression) // x.prototype
-                            .expression;                             // x
-                        const classSymbol = checkExpression(className).symbol;
-                        if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                            return getInferredClassType(classSymbol);
-                        }
-                    }
                 }
             }
 
@@ -8469,9 +8475,7 @@ namespace ts {
         }
 
         function getContextuallyTypedThisType(func: FunctionLikeDeclaration): Type {
-            if ((isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
-                isContextSensitive(func) &&
-                func.kind !== SyntaxKind.ArrowFunction) {
+            if (isContextSensitiveFunctionOrObjectLiteralMethod(func) && func.kind !== SyntaxKind.ArrowFunction) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     return contextualSignature.thisType;
@@ -8484,24 +8488,21 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
-            if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
-                if (isContextSensitive(func)) {
-                    const contextualSignature = getContextualSignature(func);
-                    if (contextualSignature) {
+            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                const contextualSignature = getContextualSignature(func);
+                if (contextualSignature) {
+                    const funcHasRestParameters = hasRestParameter(func);
+                    const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
+                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    if (indexOfParameter < len) {
+                        return getTypeAtPosition(contextualSignature, indexOfParameter);
+                    }
 
-                        const funcHasRestParameters = hasRestParameter(func);
-                        const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
-                        const indexOfParameter = indexOf(func.parameters, parameter);
-                        if (indexOfParameter < len) {
-                            return getTypeAtPosition(contextualSignature, indexOfParameter);
-                        }
-
-                        // If last parameter is contextually rest parameter get its type
-                        if (funcHasRestParameters &&
-                            indexOfParameter === (func.parameters.length - 1) &&
-                            isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
-                            return getTypeOfSymbol(lastOrUndefined(contextualSignature.parameters));
-                        }
+                    // If last parameter is contextually rest parameter get its type
+                    if (funcHasRestParameters &&
+                        indexOfParameter === (func.parameters.length - 1) &&
+                        isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
+                        return getTypeOfSymbol(lastOrUndefined(contextualSignature.parameters));
                     }
                 }
             }
@@ -8509,9 +8510,9 @@ namespace ts {
         }
 
         // In a variable, parameter or property declaration with a type annotation,
-        //   the contextual type of an initializer expression is the type of the variable, parameter or property. 
-        // Otherwise, in a parameter declaration of a contextually typed function expression, 
-        //   the contextual type of an initializer expression is the contextual type of the parameter. 
+        //   the contextual type of an initializer expression is the type of the variable, parameter or property.
+        // Otherwise, in a parameter declaration of a contextually typed function expression,
+        //   the contextual type of an initializer expression is the contextual type of the parameter.
         // Otherwise, in a variable or parameter declaration with a binding pattern name,
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
@@ -8865,6 +8866,12 @@ namespace ts {
                 : undefined;
         }
 
+        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | MethodDeclaration) {
+            return isObjectLiteralMethod(node)
+                ? getContextualTypeForObjectLiteralMethod(node)
+                : getApparentTypeOfContextualType(node);
+        }
+
         // Return the contextual signature for a given expression node. A contextual type provides a
         // contextual signature if it has a single call signature and if that call signature is non-generic.
         // If the contextual type is a union type, get the signature from each type possible and if they are
@@ -8872,9 +8879,7 @@ namespace ts {
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            const type = isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(node)
-                : getApparentTypeOfContextualType(node);
+            const type = getContextualTypeForFunctionLikeDeclaration(node);
             if (!type) {
                 return undefined;
             }
@@ -9785,8 +9790,24 @@ namespace ts {
             }
 
             const propType = getTypeOfSymbol(prop);
-            return node.kind === SyntaxKind.PropertyAccessExpression && prop.flags & (SymbolFlags.Variable | SymbolFlags.Property) && !isAssignmentTarget(node) ?
-                getNarrowedTypeOfReference(propType, <PropertyAccessExpression>node) : propType;
+            if (node.kind !== SyntaxKind.PropertyAccessExpression || !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property)) || isAssignmentTarget(node)) {
+                return propType;
+            }
+            const leftmostNode = getLeftmostIdentifierOrThis(node);
+            if (!leftmostNode) {
+                return propType;
+            }
+            if (leftmostNode.kind === SyntaxKind.Identifier) {
+                const leftmostSymbol = getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>leftmostNode));
+                if (!leftmostSymbol) {
+                    return propType;
+                }
+                const declaration = leftmostSymbol.valueDeclaration;
+                if (!declaration || declaration.kind !== SyntaxKind.VariableDeclaration && declaration.kind !== SyntaxKind.Parameter && declaration.kind !== SyntaxKind.BindingElement) {
+                    return propType;
+                }
+            }
+            return getFlowTypeOfReference(node, propType, propType);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {

@@ -15,9 +15,9 @@ function /*1*/makePoint(x: number) {
 >x : number
 >a : number
 >this.b = a : number
->this.b : number
->this : { b: number; x: number; }
->b : number
+>this.b : any
+>this : any
+>b : any
 >a : number
 
     };

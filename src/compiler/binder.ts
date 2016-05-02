@@ -650,6 +650,13 @@ namespace ts {
             };
         }
 
+        function createFlowLoopLabel(): FlowLabel {
+            return {
+                kind: FlowKind.LoopLabel,
+                antecedents: undefined
+            };
+        }
+
         function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
             if (antecedent.kind !== FlowKind.Unreachable && !contains(label.antecedents, antecedent)) {
                 (label.antecedents || (label.antecedents = [])).push(antecedent);
@@ -760,7 +767,7 @@ namespace ts {
         }
 
         function bindWhileStatement(node: WhileStatement): void {
-            const preWhileLabel = createFlowLabel();
+            const preWhileLabel = createFlowLoopLabel();
             const preBodyLabel = createFlowLabel();
             const postWhileLabel = createFlowLabel();
             addAntecedent(preWhileLabel, currentFlow);
@@ -773,7 +780,7 @@ namespace ts {
         }
 
         function bindDoStatement(node: DoStatement): void {
-            const preDoLabel = createFlowLabel();
+            const preDoLabel = createFlowLoopLabel();
             const preConditionLabel = createFlowLabel();
             const postDoLabel = createFlowLabel();
             addAntecedent(preDoLabel, currentFlow);
@@ -786,7 +793,7 @@ namespace ts {
         }
 
         function bindForStatement(node: ForStatement): void {
-            const preLoopLabel = createFlowLabel();
+            const preLoopLabel = createFlowLoopLabel();
             const preBodyLabel = createFlowLabel();
             const postLoopLabel = createFlowLabel();
             bind(node.initializer);
@@ -801,7 +808,7 @@ namespace ts {
         }
 
         function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
-            const preLoopLabel = createFlowLabel();
+            const preLoopLabel = createFlowLoopLabel();
             const postLoopLabel = createFlowLabel();
             addAntecedent(preLoopLabel, currentFlow);
             currentFlow = preLoopLabel;
@@ -948,7 +955,7 @@ namespace ts {
         }
 
         function bindLabeledStatement(node: LabeledStatement): void {
-            const preStatementLabel = createFlowLabel();
+            const preStatementLabel = createFlowLoopLabel();
             const postStatementLabel = createFlowLabel();
             bind(node.label);
             addAntecedent(preStatementLabel, currentFlow);
@@ -1377,7 +1384,8 @@ namespace ts {
             if (inStrictMode &&
                 node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node)) {
+                !isIdentifierName(node) &&
+                !isInAmbientContext(node)) {
 
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
