@@ -138,6 +138,7 @@ namespace ts {
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
+            symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
 
