@@ -259,13 +259,13 @@ namespace ts.BreakpointResolver {
                         if (isArrayLiteralOrObjectLiteralDestructuringPattern(node)) {
                             return spanInArrayLiteralOrObjectLiteralDestructuringPattern(<DestructuringPattern>node);
                         }
-                        
+
                         // Set breakpoint on identifier element of destructuring pattern
                         // a or ...c  or d: x from 
                         // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
-                            node.kind == SyntaxKind.SpreadElementExpression || 
-                            node.kind === SyntaxKind.PropertyAssignment || 
+                            node.kind == SyntaxKind.SpreadElementExpression ||
+                            node.kind === SyntaxKind.PropertyAssignment ||
                             node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
                             isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                             return textSpan(node);
@@ -325,14 +325,14 @@ namespace ts.BreakpointResolver {
                                     break;
                             }
                         }
-                        
+
                         // If this is name of property assignment, set breakpoint in the initializer
                         if (node.parent.kind === SyntaxKind.PropertyAssignment &&
-                            (<PropertyDeclaration>node.parent).name === node && 
+                            (<PropertyDeclaration>node.parent).name === node &&
                             !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
                             return spanInNode((<PropertyDeclaration>node.parent).initializer);
                         }
-                        
+
                         // Breakpoint in type assertion goes to its operand
                         if (node.parent.kind === SyntaxKind.TypeAssertionExpression && (<TypeAssertion>node.parent).type === node) {
                             return spanInNextNode((<TypeAssertion>node.parent).type);
@@ -386,7 +386,7 @@ namespace ts.BreakpointResolver {
                 if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
-                
+
                 // If this is a destructuring pattern set breakpoint in binding pattern
                 if (isBindingPattern(variableDeclaration.name)) {
                     return spanInBindingPattern(<BindingPattern>variableDeclaration.name);
@@ -686,7 +686,7 @@ namespace ts.BreakpointResolver {
             function spanInColonToken(node: Node): TextSpan {
                 // Is this : specifying return annotation of the function declaration
                 if (isFunctionLike(node.parent) ||
-                    node.parent.kind === SyntaxKind.PropertyAssignment || 
+                    node.parent.kind === SyntaxKind.PropertyAssignment ||
                     node.parent.kind === SyntaxKind.Parameter) {
                     return spanInPreviousNode(node);
                 }
@@ -722,5 +722,5 @@ namespace ts.BreakpointResolver {
                 return spanInNode(node.parent);
             }
         }
-   }
+    }
 }
