@@ -2,13 +2,13 @@ built
 doc
 internal
 issue_template.md
-Jakefile.js
 lib/README.md
 pull_request_template.md
 scripts
 src
 tests
 tslint.json
+Jakefile.js
 .editorconfig
 .gitattributes
 .settings/
