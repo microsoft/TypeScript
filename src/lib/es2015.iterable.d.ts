@@ -64,6 +64,22 @@ interface WeakMapConstructor {
     new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
 
+interface Set<T> {
+    entries(): IterableIterator<[T, T]>;
+    keys(): IterableIterator<T>;
+    values(): IterableIterator<T>;
+}
+
+interface SetConstructor {
+    new <T>(iterable: Iterable<T>): Set<T>;
+}
+
+interface WeakSet<T> { }
+
+interface WeakSetConstructor {
+    new <T>(iterable: Iterable<T>): WeakSet<T>;
+}
+
 interface Promise<T> { }
 
 interface PromiseConstructor {
