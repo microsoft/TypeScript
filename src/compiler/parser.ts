@@ -2707,10 +2707,10 @@ namespace ts {
             // From ES6 spec:
             // AsyncArrowFunction[In, Yield, Await]::
             //      async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
-            const unParenthesizedAsyncArrowFunction = tryParseUnParenthesizedAsyncArrowFunctionExpressionWorker();
+            const unparenthensizedAsyncArrowFunction = tryParseUnparenthesizedAsyncArrowFunctionExpressionWorker();
 
-            if (unParenthesizedAsyncArrowFunction) {
-                return unParenthesizedAsyncArrowFunction;
+            if (unparenthensizedAsyncArrowFunction ) {
+                return unparenthensizedAsyncArrowFunction ;
             }
             // Now try to see if we're in production '1', '2' or '3'.  A conditional expression can
             // start with a LogicalOrExpression, while the assignment productions can only start with
@@ -2981,7 +2981,7 @@ namespace ts {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function tryParseUnParenthesizedAsyncArrowFunctionExpressionWorker(): ArrowFunction {
+        function tryParseUnparenthesizedAsyncArrowFunctionExpressionWorker(): ArrowFunction {
             const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
             if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
                 const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
