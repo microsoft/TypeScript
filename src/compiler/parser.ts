@@ -2685,7 +2685,8 @@ namespace ts {
             //      2) LeftHandSideExpression = AssignmentExpression[?in,?yield]
             //      3) LeftHandSideExpression AssignmentOperator AssignmentExpression[?in,?yield]
             //      4) ArrowFunctionExpression[?in,?yield]
-            //      5) [+Yield] YieldExpression[?In]
+            //      5) AsyncArrowFunctionExpression[in,yield,await]
+            //      6) [+Yield] YieldExpression[?In]
             //
             // Note: for ease of implementation we treat productions '2' and '3' as the same thing.
             // (i.e. they're both BinaryExpressions with an assignment operator in it).
@@ -2699,19 +2700,11 @@ namespace ts {
             // parameter list. If we do, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a  LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression();
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression() || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
 
-            // From ES6 spec:
-            // AsyncArrowFunction[In, Yield, Await]::
-            //      async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
-            const unparenthensizedAsyncArrowFunction = tryParseUnparenthesizedAsyncArrowFunctionExpressionWorker();
-
-            if (unparenthensizedAsyncArrowFunction ) {
-                return unparenthensizedAsyncArrowFunction ;
-            }
             // Now try to see if we're in production '1', '2' or '3'.  A conditional expression can
             // start with a LogicalOrExpression, while the assignment productions can only start with
             // LeftHandSideExpressions.
@@ -2799,10 +2792,17 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
+        function parseSimpleArrowFunctionExpression(identifier: Identifier, asyncModifier?: ModifiersArray): ArrowFunction {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
-            const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            let node: ArrowFunction;
+            if (asyncModifier) {
+                node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, asyncModifier.pos);
+                setModifiers(node, asyncModifier);
+            }
+            else {
+                node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            }
 
             const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
@@ -2813,7 +2813,7 @@ namespace ts {
             node.parameters.end = parameter.end;
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
-            node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
+            node.body = parseArrowFunctionExpressionBody(/*isAsync*/ asyncModifier ? true : false);
 
             return finishNode(node);
         }
@@ -2981,24 +2981,12 @@ namespace ts {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function tryParseUnparenthesizedAsyncArrowFunctionExpressionWorker(): ArrowFunction {
+        function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
             const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
             if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
-                const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
-                setModifiers(node, parseModifiersForArrowFunction());
+                const asyncModifier = parseModifiersForArrowFunction();
                 const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
-
-                const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, expr.pos);
-                parameter.name = <Identifier>expr;
-                finishNode(parameter);
-
-                node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
-                node.parameters.pos = parameter.pos;
-                node.parameters.end = parameter.end;
-
-                node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
-                node.body = parseArrowFunctionExpressionBody(/*isAsync*/ true);
-                return finishNode(node);
+                return parseSimpleArrowFunctionExpression(<Identifier>expr, asyncModifier);
             }
             return undefined;
         }
