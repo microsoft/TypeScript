@@ -16,3 +16,12 @@ declare namespace Windows.Foundation {
 async function sample(promise: Windows.Foundation.IPromise<number>) {
     var number = await promise;
 }
+
+
+declare function resolve1<T>(value: T): Promise<T>;
+declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
+
+async function sample2(x?: number) {
+    let x1 = await resolve1(x);
+    let x2 = await resolve2(x);
+}

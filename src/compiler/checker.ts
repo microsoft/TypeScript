@@ -13428,7 +13428,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature));
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
             if (onfulfilledParameterType.flags & TypeFlags.Any) {
                 return undefined;
             }
@@ -13443,7 +13443,7 @@ namespace ts {
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return getTypeWithFacts(getTypeAtPosition(signature, 0), TypeFacts.NEUndefined);
+            return getTypeAtPosition(signature, 0);
         }
 
         /**

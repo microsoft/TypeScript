@@ -17,6 +17,15 @@ async function sample(promise: Windows.Foundation.IPromise<number>) {
 }
 
 
+declare function resolve1<T>(value: T): Promise<T>;
+declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
+
+async function sample2(x?: number) {
+    let x1 = await resolve1(x);
+    let x2 = await resolve2(x);
+}
+
+
 //// [asyncFunctionsAndStrictNullChecks.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -29,5 +38,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function sample(promise) {
     return __awaiter(this, void 0, void 0, function* () {
         var number = yield promise;
+    });
+}
+function sample2(x) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let x1 = yield resolve1(x);
+        let x2 = yield resolve2(x);
     });
 }

@@ -100,3 +100,37 @@ async function sample(promise: Windows.Foundation.IPromise<number>) {
 >promise : Symbol(promise, Decl(asyncFunctionsAndStrictNullChecks.ts, 13, 22))
 }
 
+
+declare function resolve1<T>(value: T): Promise<T>;
+>resolve1 : Symbol(resolve1, Decl(asyncFunctionsAndStrictNullChecks.ts, 15, 1))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 29))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+>Promise : Symbol(Promise, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 26))
+
+declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
+>resolve2 : Symbol(resolve2, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 51))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 19, 26))
+>value : Symbol(value, Decl(asyncFunctionsAndStrictNullChecks.ts, 19, 29))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 19, 26))
+>Windows : Symbol(Windows, Decl(asyncFunctionsAndStrictNullChecks.ts, 0, 0))
+>Foundation : Symbol(Windows.Foundation, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 26))
+>IPromise : Symbol(Windows.Foundation.IPromise, Decl(asyncFunctionsAndStrictNullChecks.ts, 1, 38))
+>T : Symbol(T, Decl(asyncFunctionsAndStrictNullChecks.ts, 19, 26))
+
+async function sample2(x?: number) {
+>sample2 : Symbol(sample2, Decl(asyncFunctionsAndStrictNullChecks.ts, 19, 71))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 21, 23))
+
+    let x1 = await resolve1(x);
+>x1 : Symbol(x1, Decl(asyncFunctionsAndStrictNullChecks.ts, 22, 7))
+>resolve1 : Symbol(resolve1, Decl(asyncFunctionsAndStrictNullChecks.ts, 15, 1))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 21, 23))
+
+    let x2 = await resolve2(x);
+>x2 : Symbol(x2, Decl(asyncFunctionsAndStrictNullChecks.ts, 23, 7))
+>resolve2 : Symbol(resolve2, Decl(asyncFunctionsAndStrictNullChecks.ts, 18, 51))
+>x : Symbol(x, Decl(asyncFunctionsAndStrictNullChecks.ts, 21, 23))
+}
+
