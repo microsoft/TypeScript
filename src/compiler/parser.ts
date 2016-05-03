@@ -2704,6 +2704,14 @@ namespace ts {
                 return arrowExpression;
             }
 
+            // From ES6 spec:
+            // AsyncArrowFunction[In, Yield, Await]::
+            //      async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
+            const unParenthesizedAsyncArrowFunction = tryParseUnParenthesizedAsyncArrowFunctionExpressionWorker();
+
+            if (unParenthesizedAsyncArrowFunction) {
+                return unParenthesizedAsyncArrowFunction;
+            }
             // Now try to see if we're in production '1', '2' or '3'.  A conditional expression can
             // start with a LogicalOrExpression, while the assignment productions can only start with
             // LeftHandSideExpressions.
@@ -2971,6 +2979,44 @@ namespace ts {
 
         function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
             return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
+        }
+
+        function tryParseUnParenthesizedAsyncArrowFunctionExpressionWorker(): ArrowFunction {
+            const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
+            if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
+                const node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
+                setModifiers(node, parseModifiersForArrowFunction());
+                const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
+
+                const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, expr.pos);
+                parameter.name = <Identifier>expr;
+                finishNode(parameter);
+
+                node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
+                node.parameters.pos = parameter.pos;
+                node.parameters.end = parameter.end;
+
+                node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
+                node.body = parseArrowFunctionExpressionBody(/*isAsync*/ true);
+                return finishNode(node);
+            }
+            return undefined;
+        }
+
+        function isUnParenthesizedAsyncArrowFunctionWorker(): Tristate {
+            if (token === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                if (scanner.hasPrecedingLineBreak()) {
+                    return Tristate.False;
+                }
+                // Check for un-parenthesized AsyncArrowFunction
+                const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
+                if (!scanner.hasPrecedingLineBreak() && expr.kind === SyntaxKind.Identifier && token === SyntaxKind.EqualsGreaterThanToken) {
+                    return Tristate.True;
+                }
+            }
+
+            return Tristate.False;
         }
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
