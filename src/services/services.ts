@@ -4088,7 +4088,7 @@ namespace ts {
                 }
 
                 if (entries.length) {
-                    return { isMemberCompletion: false, isNewIdentifierLocation: true, entries: entries };
+                    return { isMemberCompletion: false, isNewIdentifierLocation: true, entries };
                 }
 
                 return undefined;
@@ -4101,7 +4101,7 @@ namespace ts {
                 if (type) {
                     getCompletionEntriesFromSymbols(type.getApparentProperties(), entries, node, /*performCharacterChecks*/false);
                     if (entries.length) {
-                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries: entries };
+                        return { isMemberCompletion: true, isNewIdentifierLocation: true, entries };
                     }
                 }
                 return undefined;
@@ -4114,7 +4114,7 @@ namespace ts {
                     const entries: CompletionEntry[] = [];
                     addStringLiteralCompletionsFromType(type, entries);
                     if (entries.length) {
-                        return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: entries };
+                        return { isMemberCompletion: false, isNewIdentifierLocation: false, entries };
                     }
                 }
                 return undefined;
