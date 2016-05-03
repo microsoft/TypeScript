@@ -13443,7 +13443,7 @@ namespace ts {
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
-            return getTypeAtPosition(signature, 0);
+            return getTypeWithFacts(getTypeAtPosition(signature, 0), TypeFacts.NEUndefined);
         }
 
         /**
