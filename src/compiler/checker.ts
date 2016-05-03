@@ -574,18 +574,28 @@ namespace ts {
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
 
-                if (declaration.parent.parent.kind === SyntaxKind.VariableStatement ||
-                    declaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case,
-                    // use site should not be inside variable declaration (initializer of declaration or binding element)
-                    return isSameScopeDescendentOf(usage, declaration, container);
+                switch (declaration.parent.parent.kind) {
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForOfStatement:
+                        // variable statement/for/for-of statement case,
+                        // use site should not be inside variable declaration (initializer of declaration or binding element)
+                        if (isSameScopeDescendentOf(usage, declaration, container)) {
+                            return true;
+                        }
+                        break;
                 }
-                else if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
-                    declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                    // ForIn/ForOf case - use site should not be used in expression part
-                    const expression = (<ForInStatement | ForOfStatement>declaration.parent.parent).expression;
-                    return isSameScopeDescendentOf(usage, expression, container);
+
+                switch (declaration.parent.parent.kind) {
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                        // ForIn/ForOf case - use site should not be used in expression part
+                        if (isSameScopeDescendentOf(usage, (<ForInStatement | ForOfStatement>declaration.parent.parent).expression, container)) {
+                            return true;
+                        }
                 }
+
+                return false;
             }
 
             function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
@@ -7989,7 +7999,7 @@ namespace ts {
             const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : undefinedType);
+            const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : addNullableKind(type, TypeFlags.Undefined));
             if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
