@@ -38,8 +38,6 @@ interface Set<T> {
     forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     readonly size: number;
-    [Symbol.iterator]():IterableIterator<T>;
-    readonly [Symbol.toStringTag]: "Set";
 }
 
 interface SetConstructor {
@@ -54,7 +52,7 @@ interface WeakSet<T> {
     clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
-    readonly [Symbol.toStringTag]: "WeakSet";
+
 }
 
 interface WeakSetConstructor {

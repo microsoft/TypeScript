@@ -124,6 +124,15 @@ interface WeakMap<K, V>{
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 
+interface Set<T> {
+    [Symbol.iterator]():IterableIterator<T>;
+    readonly [Symbol.toStringTag]: "Set";
+}
+
+interface WeakSet<T> {
+    readonly [Symbol.toStringTag]: "WeakSet";
+}
+
 interface JSON {
     readonly [Symbol.toStringTag]: "JSON";
 }
