@@ -27,7 +27,9 @@ control flow.
 
 ## Checker
 
-The checker makes sure the types are right. 'Nuff said! Actually, it's
+The checker makes sure the types are right. 'Nuff said!
+
+Actually, it's
 20,000 lines long, and does almost everything that's not syntactic.
 Surprisingly, a checker gets created every time the language service
 requests information because it tries to present an immutable
@@ -40,11 +42,36 @@ this list to see what can be moved out to a separate file.
 
 1. `nextSymbolId, nextNodeId, nextMergeId, nextFlowId` and associated
    `get` functions. These are core to the state of the checker, so
-   should not be moved.
+   should not be moved. (Or moved very carefully.)
 2. `createTypeChecker`. This creates a checker. Don't move this!
 3. getEmitResolver and error. Miscellaneous?
-4. createSymbol to mergeSymbolTable. Manage Symbols and SymbolTables.
-
+4. createSymbol to addToSymbolTable. Manage Symbols and SymbolTables.
+5. getSymbolLinks, getNodeLinks. Manage the look-aside tables the
+   checker uses to avoid modifying binder data structures.
+6. isGlobalSourceFile. ???
+7. getSymbol, getSymbolsOfParameterPropertyDeclaration. More SymbolTable -- look up in SymbolTable, but with
+   resolving aliases.
+8. isBlockScopedNameDeclaredBeforeUse. What it says on the tin. Weird
+   placement tho.
+9. resolveName. Resolve a Node to a Symbol. ...and that's 5% done!
+10. checkAndReportErrorForMissingPrefix. Nice error for forgotten
+   'this'.
+11. checkResolvedBlockScopedVariable. error based on isBlockScopedNameDeclaredBeforeUse.
+12. isSameScopeDescendentOf, getAnyImportSyntax, getDeclarationOfAliasSymbol. Misc???
+13. getTargetOfImportEqualsDeclaration to getTargetOfNamespaceImport.
+   Resolve import Nodes to Symbols. Relies mostly on
+   resolveExternalModuleName, which is a bit lower.
+14. combineValueAndTypeSymbols. Merge symbols.
+15. getExportOfModule, getPropertyOfVariable. These don't belong --
+   they are just complex specific helper code on Symbol.
+16. getExternalModuleMember to getTargetOfAliasDeclaration. Goes with
+   other getTarget* functions.
+17. resolveSymbol, resolveAlias. resolve aliases (from modules?) to aliases?
+18. markExportAsReferenced, markAliasSymbolAsReferenced. Out of place.
+   Used way lower, when checking imports.
+19. getSymbolOfPartOfRightHandSideOfImportEquals to (at least)
+   resolveESModuleSymbol. The actual code behind getTarget* code.
+20. Coming up: more module resolution code, but a different section: getExports*
 
 ## Transformer
 
