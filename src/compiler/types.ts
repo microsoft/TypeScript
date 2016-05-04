@@ -1523,6 +1523,8 @@ namespace ts {
         Assignment     = 1 << 4,
         TrueCondition  = 1 << 5,
         FalseCondition = 1 << 6,
+        Referenced     = 1 << 7,
+        Shared         = 1 << 8,
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }

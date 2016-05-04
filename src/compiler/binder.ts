@@ -653,9 +653,14 @@ namespace ts {
             };
         }
 
+        function setFlowNodeReferenced(flow: FlowNode) {
+            flow.flags |= flow.flags & FlowFlags.Referenced ? FlowFlags.Shared : FlowFlags.Referenced;
+        }
+
         function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
             if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedents, antecedent)) {
                 (label.antecedents || (label.antecedents = [])).push(antecedent);
+                setFlowNodeReferenced(antecedent);
             }
         }
 
@@ -673,6 +678,7 @@ namespace ts {
             if (!isNarrowingExpression(expression)) {
                 return antecedent;
             }
+            setFlowNodeReferenced(antecedent);
             return <FlowCondition>{
                 flags,
                 antecedent,
@@ -681,6 +687,7 @@ namespace ts {
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
+            setFlowNodeReferenced(antecedent);
             return <FlowAssignment>{
                 flags: FlowFlags.Assignment,
                 antecedent,

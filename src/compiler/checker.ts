@@ -7378,12 +7378,17 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+        function getFlowNodeId(flow: FlowNode): number {
             if (!flow.id) {
                 flow.id = nextFlowId;
                 nextFlowId++;
             }
-            return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
+            return flow.id;
+        }
+
+        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+            const id = getFlowNodeId(flow);
+            return flowTypeCaches[id] || (flowTypeCaches[id] = {});
         }
 
         function typeMaybeAssignableTo(source: Type, target: Type) {
@@ -7578,6 +7583,7 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
+            let cachedTypes: Type[];
             if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
@@ -7585,31 +7591,41 @@ namespace ts {
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
+                    let type: Type;
+                    let id = flow.flags & FlowFlags.Shared ? getFlowNodeId(flow) : 0;
+                    if (id && cachedTypes && (type = cachedTypes[id])) {
+                        return type;
+                    }
                     if (flow.flags & FlowFlags.Assignment) {
-                        const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
+                        type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
                         }
-                        return type;
                     }
-                    if (flow.flags & FlowFlags.Condition) {
-                        return getTypeAtFlowCondition(<FlowCondition>flow);
+                    else if (flow.flags & FlowFlags.Condition) {
+                        type = getTypeAtFlowCondition(<FlowCondition>flow);
                     }
-                    if (flow.flags & FlowFlags.Label) {
+                    else if (flow.flags & FlowFlags.Label) {
                         if ((<FlowLabel>flow).antecedents.length === 1) {
                             flow = (<FlowLabel>flow).antecedents[0];
                             continue;
                         }
-                        return getTypeAtFlowLabel(<FlowLabel>flow);
+                        type = getTypeAtFlowLabel(<FlowLabel>flow);
                     }
-                    if (flow.flags & FlowFlags.Unreachable) {
+                    else if (flow.flags & FlowFlags.Unreachable) {
                         // Unreachable code errors are reported in the binding phase. Here we
                         // simply return the declared type to reduce follow-on errors.
-                        return declaredType;
+                        type = declaredType;
                     }
-                    // At the top of the flow we have the initial type
-                    return initialType;
+                    else {
+                        // At the top of the flow we have the initial type
+                        type = initialType;
+                    }
+                    if (id) {
+                        (cachedTypes || (cachedTypes = []))[id] = type;
+                    }
+                    return type;
                 }
             }
 
