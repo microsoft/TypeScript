@@ -695,6 +695,23 @@ namespace ts {
             };
         }
 
+        function skipSimpleConditionalFlow(flow: FlowNode) {
+            // We skip over simple conditional flows of the form 'x ? aaa : bbb', where 'aaa' and 'bbb' contain
+            // no constructs that affect control flow type analysis. Such simple flows have no effect on the
+            // code paths that follow and ignoring them means we'll do less work.
+            if (flow.flags & FlowFlags.BranchLabel && (<FlowLabel>flow).antecedents.length === 2) {
+                const a = (<FlowLabel>flow).antecedents[0];
+                const b = (<FlowLabel>flow).antecedents[1];
+                if ((a.flags & FlowFlags.TrueCondition && b.flags & FlowFlags.FalseCondition ||
+                    a.flags & FlowFlags.FalseCondition && b.flags & FlowFlags.TrueCondition) &&
+                    (<FlowCondition>a).antecedent === (<FlowCondition>b).antecedent &&
+                    (<FlowCondition>a).expression === (<FlowCondition>b).expression) {
+                    return (<FlowCondition>a).antecedent;
+                }
+            }
+            return flow;
+        }
+
         function finishFlowLabel(flow: FlowLabel): FlowNode {
             const antecedents = flow.antecedents;
             if (!antecedents) {
@@ -703,7 +720,7 @@ namespace ts {
             if (antecedents.length === 1) {
                 return antecedents[0];
             }
-            return flow;
+            return skipSimpleConditionalFlow(flow);
         }
 
         function isStatementCondition(node: Node) {
