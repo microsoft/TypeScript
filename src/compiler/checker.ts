@@ -7378,12 +7378,17 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+        function getFlowNodeId(flow: FlowNode): number {
             if (!flow.id) {
                 flow.id = nextFlowId;
                 nextFlowId++;
             }
-            return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
+            return flow.id;
+        }
+
+        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+            const id = getFlowNodeId(flow);
+            return flowTypeCaches[id] || (flowTypeCaches[id] = {});
         }
 
         function typeMaybeAssignableTo(source: Type, target: Type) {
@@ -7578,6 +7583,8 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
+            const seenFlowNodes: Map<Type> = {};
+
             if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
@@ -7585,6 +7592,10 @@ namespace ts {
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
+                    const flowNodeKey = getFlowNodeId(flow) + "";
+                    if (hasProperty(seenFlowNodes, flowNodeKey)) {
+                        return seenFlowNodes[flowNodeKey];
+                    }
                     switch (flow.kind) {
                         case FlowKind.Assignment:
                             const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
@@ -7592,16 +7603,16 @@ namespace ts {
                                 flow = (<FlowAssignment>flow).antecedent;
                                 continue;
                             }
-                            return type;
+                            return seenFlowNodes[flowNodeKey] = type;
                         case FlowKind.Condition:
-                            return getTypeAtFlowCondition(<FlowCondition>flow);
+                            return seenFlowNodes[flowNodeKey] = getTypeAtFlowCondition(<FlowCondition>flow);
                         case FlowKind.Label:
                         case FlowKind.LoopLabel:
                             if ((<FlowLabel>flow).antecedents.length === 1) {
                                 flow = (<FlowLabel>flow).antecedents[0];
                                 continue;
                             }
-                            return getTypeAtFlowLabel(<FlowLabel>flow);
+                            return seenFlowNodes[flowNodeKey] = getTypeAtFlowLabel(<FlowLabel>flow);
                         case FlowKind.Unreachable:
                             // Unreachable code errors are reported in the binding phase. Here we
                             // simply return the declared type to reduce follow-on errors.
