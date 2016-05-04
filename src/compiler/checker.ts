@@ -1,4 +1,5 @@
 /// <reference path="binder.ts"/>
+/// <reference path="checker2.ts"/>
 
 /* @internal */
 namespace ts {
@@ -412,16 +413,6 @@ namespace ts {
             }
         }
 
-        function cloneSymbolTable(symbolTable: SymbolTable): SymbolTable {
-            const result: SymbolTable = {};
-            for (const id in symbolTable) {
-                if (hasProperty(symbolTable, id)) {
-                    result[id] = symbolTable[id];
-                }
-            }
-            return result;
-        }
-
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             for (const id in source) {
                 if (hasProperty(source, id)) {
@@ -505,10 +496,6 @@ namespace ts {
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = {});
         }
 
-        function isGlobalSourceFile(node: Node) {
-            return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
-        }
-
         function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
             if (meaning && hasProperty(symbols, name)) {
                 const symbol = symbols[name];
@@ -552,7 +539,7 @@ namespace ts {
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
                 if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
-                    // nodes are in different files and order cannot be determines
+                    // nodes are in different files and order cannot be determined
                     return true;
                 }
 
