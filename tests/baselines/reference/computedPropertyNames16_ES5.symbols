@@ -31,9 +31,12 @@ class C {
 >s : Symbol(s, Decl(computedPropertyNames16_ES5.ts, 0, 3))
 
     static set [""](v) { }
+>"" : Symbol(C[[""]], Decl(computedPropertyNames16_ES5.ts, 8, 28))
 >v : Symbol(v, Decl(computedPropertyNames16_ES5.ts, 9, 20))
 
     get [0]() { return 0; }
+>0 : Symbol(C[[0]], Decl(computedPropertyNames16_ES5.ts, 9, 26))
+
     set [a](v) { }
 >a : Symbol(a, Decl(computedPropertyNames16_ES5.ts, 2, 3))
 >v : Symbol(v, Decl(computedPropertyNames16_ES5.ts, 11, 12))

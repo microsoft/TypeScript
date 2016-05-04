@@ -29,7 +29,11 @@ class C {
 >s : Symbol(s, Decl(computedPropertyNames13_ES5.ts, 0, 3))
 
     static [""]() { }
+>"" : Symbol(C[[""]], Decl(computedPropertyNames13_ES5.ts, 8, 14))
+
     [0]() { }
+>0 : Symbol(C[[0]], Decl(computedPropertyNames13_ES5.ts, 9, 21))
+
     [a]() { }
 >a : Symbol(a, Decl(computedPropertyNames13_ES5.ts, 2, 3))
 

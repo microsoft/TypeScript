@@ -31,9 +31,12 @@ var v = {
 >s : Symbol(s, Decl(computedPropertyNames11_ES6.ts, 0, 3))
 
     set [""](v) { },
+>"" : Symbol([""], Decl(computedPropertyNames11_ES6.ts, 8, 29))
 >v : Symbol(v, Decl(computedPropertyNames11_ES6.ts, 9, 13))
 
     get [0]() { return 0; },
+>0 : Symbol([0], Decl(computedPropertyNames11_ES6.ts, 9, 20))
+
     set [a](v) { },
 >a : Symbol(a, Decl(computedPropertyNames11_ES6.ts, 2, 3))
 >v : Symbol(v, Decl(computedPropertyNames11_ES6.ts, 11, 12))
