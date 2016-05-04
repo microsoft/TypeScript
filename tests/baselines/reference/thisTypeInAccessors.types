@@ -86,6 +86,32 @@ const copiedFromSetter = {
 >n : number
 >n : number
 }
+const copiedFromGetterUnannotated = {
+>copiedFromGetterUnannotated : { n: number; x: number; }
+>{    n: 16,    get x(this: Foo) { return this.n },    set x(this, n) { this.n = n; }} : { n: number; x: number; }
+
+    n: 16,
+>n : number
+>16 : number
+
+    get x(this: Foo) { return this.n },
+>x : number
+>this : Foo
+>Foo : Foo
+>this.n : number
+>this : Foo
+>n : number
+
+    set x(this, n) { this.n = n; }
+>x : number
+>this : Foo
+>n : number
+>this.n = n : number
+>this.n : number
+>this : Foo
+>n : number
+>n : number
+}
 
 class Explicit {
 >Explicit : Explicit

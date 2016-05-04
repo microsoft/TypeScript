@@ -2920,7 +2920,12 @@ namespace ts {
                 if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
                     const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
-                        return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
+                        const signature = getSignatureFromDeclaration(getter);
+                        const thisParameter = getAccessorThisParameter(func as AccessorDeclaration);
+                        if (thisParameter && declaration === thisParameter) {
+                            return signature.thisType;
+                        }
+                        return getReturnTypeOfSignature(signature);
                     }
                 }
                 // Use contextual parameter type if one is available
@@ -3137,12 +3142,11 @@ namespace ts {
         }
 
         function getAnnotatedAccessorThisType(accessor: AccessorDeclaration): Type {
-            if (accessor &&
-                accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
-                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
-                (accessor.parameters[0].name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword &&
-                accessor.parameters[0].type ) {
-                return getTypeFromTypeNode(accessor.parameters[0].type);
+            if (accessor) {
+                const parameter = getAccessorThisParameter(accessor);
+                if (parameter && parameter.type) {
+                    return getTypeFromTypeNode(accessor.parameters[0].type);
+                }
             }
             return undefined;
         }
@@ -4413,7 +4417,7 @@ namespace ts {
                 // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
                 if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
                     !hasDynamicName(declaration) &&
-                    !hasThisParameter) {
+                    (!hasThisParameter || thisType === unknownType)) {
                     const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
                     const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
                     thisType = getAnnotatedAccessorThisType(setter);
@@ -18084,7 +18088,7 @@ namespace ts {
             return false;
         }
 
-        function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
+        function checkGrammarAccessor(accessor: AccessorDeclaration): boolean {
             const kind = accessor.kind;
             if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
@@ -18130,13 +18134,17 @@ namespace ts {
 
             A get accessor has no parameters or a single `this` parameter.
             A set accessor has one parameter or a `this` parameter and one more parameter */
-        function doesAccessorHaveCorrectParameterCount(accessor: MethodDeclaration) {
-            const isGet = accessor.kind === SyntaxKind.GetAccessor;
-            return (accessor.parameters.length === (isGet ? 1 : 2) &&
-                    accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
-                    (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) ||
-                accessor.parameters.length === (isGet ? 0 : 1);
-         }
+        function doesAccessorHaveCorrectParameterCount(accessor: AccessorDeclaration) {
+            return getAccessorThisParameter(accessor) || accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 0 : 1);
+        }
+
+        function getAccessorThisParameter(accessor: AccessorDeclaration) {
+            if (accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
+                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
+                (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
+                return accessor.parameters[0];
+            }
+        }
 
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
             if (isDynamicName(node)) {
