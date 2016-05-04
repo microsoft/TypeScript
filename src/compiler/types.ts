@@ -1516,15 +1516,15 @@ namespace ts {
     }
 
     export const enum FlowFlags {
-        Unreachable    = 1 << 0,
-        Start          = 1 << 1,
-        BranchLabel    = 1 << 2,
-        LoopLabel      = 1 << 3,
-        Assignment     = 1 << 4,
-        TrueCondition  = 1 << 5,
-        FalseCondition = 1 << 6,
-        Referenced     = 1 << 7,
-        Shared         = 1 << 8,
+        Unreachable    = 1 << 0,  // Unreachable code
+        Start          = 1 << 1,  // Start of flow graph
+        BranchLabel    = 1 << 2,  // Non-looping junction
+        LoopLabel      = 1 << 3,  // Looping junction
+        Assignment     = 1 << 4,  // Assignment
+        TrueCondition  = 1 << 5,  // Condition known to be true
+        FalseCondition = 1 << 6,  // Condition known to be false
+        Referenced     = 1 << 7,  // Referenced as antecedent once
+        Shared         = 1 << 8,  // Referenced as antecedent more than once
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }

@@ -183,6 +183,7 @@ namespace ts {
 
         let flowStackStart = 0;
         let flowStackCount = 0;
+        let visitedFlowCount = 0;
 
         const tupleTypes: Map<TupleType> = {};
         const unionTypes: Map<UnionType> = {};
@@ -199,6 +200,8 @@ namespace ts {
         const flowTypeCaches: Map<Type>[] = [];
         const flowStackNodes: FlowNode[] = [];
         const flowStackCacheKeys: string[] = [];
+        const visitedFlowNodes: FlowNode[] = [];
+        const visitedFlowTypes: Type[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
@@ -7378,17 +7381,12 @@ namespace ts {
             return false;
         }
 
-        function getFlowNodeId(flow: FlowNode): number {
+        function getFlowTypeCache(flow: FlowNode): Map<Type> {
             if (!flow.id) {
                 flow.id = nextFlowId;
                 nextFlowId++;
             }
-            return flow.id;
-        }
-
-        function getFlowTypeCache(flow: FlowNode): Map<Type> {
-            const id = getFlowNodeId(flow);
-            return flowTypeCaches[id] || (flowTypeCaches[id] = {});
+            return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
         }
 
         function typeMaybeAssignableTo(source: Type, target: Type) {
@@ -7583,19 +7581,27 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
             let key: string;
-            let cachedTypes: Type[];
             if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            return getTypeAtFlowNode(reference.flowNode);
+            const visitedFlowStart = visitedFlowCount;
+            const result = getTypeAtFlowNode(reference.flowNode);
+            visitedFlowCount = visitedFlowStart;
+            return result;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
-                    let type: Type;
-                    let id = flow.flags & FlowFlags.Shared ? getFlowNodeId(flow) : 0;
-                    if (id && cachedTypes && (type = cachedTypes[id])) {
-                        return type;
+                    if (flow.flags & FlowFlags.Shared) {
+                        // We cache results of flow type resolution for shared nodes that were previously visited in
+                        // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
+                        // antecedent of more than one node.
+                        for (let i = visitedFlowStart; i < visitedFlowCount;  i++) {
+                            if (visitedFlowNodes[i] === flow) {
+                                return visitedFlowTypes[i];
+                            }
+                        }
                     }
+                    let type: Type;
                     if (flow.flags & FlowFlags.Assignment) {
                         type = getTypeAtFlowAssignment(<FlowAssignment>flow);
                         if (!type) {
@@ -7619,11 +7625,14 @@ namespace ts {
                         type = declaredType;
                     }
                     else {
-                        // At the top of the flow we have the initial type
+                        // At the top of the flow we have the initial type.
                         type = initialType;
                     }
-                    if (id) {
-                        (cachedTypes || (cachedTypes = []))[id] = type;
+                    if (flow.flags & FlowFlags.Shared) {
+                        // Record visited node and the associated type in the cache.
+                        visitedFlowNodes[visitedFlowCount] = flow;
+                        visitedFlowTypes[visitedFlowCount] = type;
+                        visitedFlowCount++;
                     }
                     return type;
                 }

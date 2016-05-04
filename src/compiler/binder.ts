@@ -654,6 +654,7 @@ namespace ts {
         }
 
         function setFlowNodeReferenced(flow: FlowNode) {
+            // On first reference we set the Referenced flag, thereafter we set the Shared flag
             flow.flags |= flow.flags & FlowFlags.Referenced ? FlowFlags.Shared : FlowFlags.Referenced;
         }
 
