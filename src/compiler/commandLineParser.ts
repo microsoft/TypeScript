@@ -673,7 +673,7 @@ namespace ts {
         const knownProperties = ["compilerOptions", "typingOptions", "files", "exclude"];
 
         for (const prop in json) {
-            if (knownProperties.indexOf(prop) >= 0) {
+            if (ts.indexOf(knownProperties, prop) >= 0) {
                 continue;
             }
 
