@@ -2592,6 +2592,7 @@ namespace ts {
         options: CompilerOptions;
         typingOptions?: TypingOptions;
         fileNames: string[];
+        other?: any;
         errors: Diagnostic[];
     }
 
