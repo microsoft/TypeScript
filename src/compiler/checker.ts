@@ -13434,7 +13434,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature));
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
             if (onfulfilledParameterType.flags & TypeFlags.Any) {
                 return undefined;
             }

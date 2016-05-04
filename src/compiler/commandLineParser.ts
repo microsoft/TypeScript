@@ -143,7 +143,7 @@ namespace ts {
             name: "out",
             type: "string",
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
-                               // for correct behaviour, please use outFile
+            // for correct behaviour, please use outFile
             paramType: Diagnostics.FILE,
         },
         {
@@ -464,7 +464,7 @@ namespace ts {
 
     /* @internal */
     export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Diagnostic[]) {
-        const key = (value || "").trim().toLowerCase();
+        const key = trimString((value || "")).toLowerCase();
         const map = opt.type;
         if (hasProperty(map, key)) {
             return map[key];
@@ -476,7 +476,7 @@ namespace ts {
 
     /* @internal */
     export function parseListTypeOption(opt: CommandLineOptionOfListType, value: string, errors: Diagnostic[]): (string | number)[] {
-        const values = (value || "").trim().split(",");
+        const values = trimString((value || "")).split(",");
         switch (opt.element.type) {
             case "number":
                 return ts.map(values, parseInt);
@@ -601,7 +601,7 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic } {
         let text = "";
         try {
             text = readFile(fileName);
@@ -775,7 +775,7 @@ namespace ts {
         defaultOptions: CompilerOptions | TypingOptions, diagnosticMessage: DiagnosticMessage, errors: Diagnostic[]) {
 
         if (!jsonOptions) {
-            return ;
+            return;
         }
 
         const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
@@ -828,5 +828,9 @@ namespace ts {
 
     function convertJsonOptionOfListType(option: CommandLineOptionOfListType, values: any[], basePath: string, errors: Diagnostic[]): any[] {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
+    }
+
+    function trimString(s: string) {
+        return typeof s.trim === "function" ? s.trim() : s.replace(/^[\s]+|[\s]+$/g, "");
     }
 }
