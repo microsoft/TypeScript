@@ -157,8 +157,6 @@ let voidThis = new VoidThis();
 class ThisConstructor {
     constructor(this: ThisConstructor, private n: number) {
     }
-    set p(this: void) {
-    }
 }
 interface ThisConstructorInterface {
     new(this: ThisConstructor, n: number);
