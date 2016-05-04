@@ -821,6 +821,10 @@ namespace ts {
         if (isImportOrExportSpecifierName(location)) {
             return location.getText();
         }
+        else if (isStringOrNumericLiteral(location.kind) &&
+            location.parent.kind === SyntaxKind.ComputedPropertyName) {
+            return (<LiteralExpression>location).text;
+        }
 
         // Try to get the local symbol if we're dealing with an 'export default'
         // since that symbol has the "true" name.

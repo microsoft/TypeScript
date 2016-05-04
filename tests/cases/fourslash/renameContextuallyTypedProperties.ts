@@ -34,6 +34,26 @@
 ////    "[|prop1|]": function () { },
 ////    "prop2": function () { }
 ////};
+////
+////var o7: I = {
+////    ["[|prop1|]"]: function () { },
+////    ["prop2"]: function () { }
+////};
+////
+////var o8: I = {
+////    ["[|prop1|]"]() { },
+////    ["prop2"]() { }
+////};
+////
+////var o9: I = {
+////    get ["[|prop1|]"]() { return () => { }; },
+////    get ["prop2"]() { return () => { }; }
+////};
+////
+////var o10: I = {
+////    set ["[|prop1|]"](v) { },
+////    set ["prop2"](v) { }
+////};
 
 let ranges = test.ranges()
 for (let range of ranges) {

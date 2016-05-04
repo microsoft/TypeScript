@@ -2581,19 +2581,33 @@ namespace ts {
             isFunctionLike(node.parent) && (<FunctionLikeDeclaration>node.parent).name === node;
     }
 
-    /** Returns true if node is a name of an object literal property, e.g. "a" in x = { "a": 1 } */
-    function isNameOfPropertyAssignment(node: Node): boolean {
-        if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) {
-            switch (node.parent.kind) {
-                case SyntaxKind.PropertyAssignment:
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return (<PropertyDeclaration>node.parent).name === node;
-            }
+    function isObjectLiteralPropertyDeclaration(node: Node): node is ObjectLiteralElement  {
+        switch (node.kind) {
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
         }
         return false;
+    }
+
+    /** 
+     * Returns the containing object literal property declaration given a possible name node, e.g. "a" in x = { "a": 1 }
+     */
+    function getContainingObjectLiteralElement(node: Node): ObjectLiteralElement {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
+                    return isObjectLiteralPropertyDeclaration(node.parent.parent) ? node.parent.parent : undefined;
+                }
+            // intential fall through
+            case SyntaxKind.Identifier:
+                return isObjectLiteralPropertyDeclaration(node.parent) && node.parent.name === node ? node.parent : undefined;
+        }
+        return undefined;
     }
 
     function isLiteralNameOfPropertyDeclarationOrIndexAccess(node: Node): boolean {
@@ -2611,6 +2625,8 @@ namespace ts {
                     return (<Declaration>node.parent).name === node;
                 case SyntaxKind.ElementAccessExpression:
                     return (<ElementAccessExpression>node.parent).argumentExpression === node;
+                case SyntaxKind.ComputedPropertyName:
+                    return true;
             }
         }
 
@@ -6217,7 +6233,8 @@ namespace ts {
                 // If the location is name of property symbol from object literal destructuring pattern
                 // Search the property symbol
                 //      for ( { property: p2 } of elems) { }
-                if (isNameOfPropertyAssignment(location) && location.parent.kind !== SyntaxKind.ShorthandPropertyAssignment) {
+                const containingObjectLiteralElement = getContainingObjectLiteralElement(location);
+                if (containingObjectLiteralElement && containingObjectLiteralElement.kind !== SyntaxKind.ShorthandPropertyAssignment) {
                     const propertySymbol = getPropertySymbolOfDestructuringAssignment(location);
                     if (propertySymbol) {
                         result.push(propertySymbol);
@@ -6243,8 +6260,8 @@ namespace ts {
                 // If the location is in a context sensitive location (i.e. in an object literal) try
                 // to get a contextual type for it, and add the property symbol from the contextual
                 // type to the search set
-                if (isNameOfPropertyAssignment(location)) {
-                    forEach(getPropertySymbolsFromContextualType(location), contextualSymbol => {
+                if (containingObjectLiteralElement) {
+                    forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement), contextualSymbol => {
                         addRange(result, typeChecker.getRootSymbols(contextualSymbol));
                     });
 
@@ -6371,8 +6388,9 @@ namespace ts {
                 // If the reference location is in an object literal, try to get the contextual type for the
                 // object literal, lookup the property symbol in the contextual type, and use this symbol to
                 // compare to our searchSymbol
-                if (isNameOfPropertyAssignment(referenceLocation)) {
-                    const contextualSymbol = forEach(getPropertySymbolsFromContextualType(referenceLocation), contextualSymbol => {
+                const containingObjectLiteralElement = getContainingObjectLiteralElement(referenceLocation);
+                if (containingObjectLiteralElement) {
+                    const contextualSymbol = forEach(getPropertySymbolsFromContextualType(containingObjectLiteralElement), contextualSymbol => {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
 
@@ -6418,35 +6436,45 @@ namespace ts {
                 });
             }
 
-            function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
-                if (isNameOfPropertyAssignment(node)) {
-                    const objectLiteral = <ObjectLiteralExpression>node.parent.parent;
-                    const contextualType = typeChecker.getContextualType(objectLiteral);
-                    const name = (<Identifier>node).text;
-                    if (contextualType) {
-                        if (contextualType.flags & TypeFlags.Union) {
-                            // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
-                            // if not, search the constituent types for the property
-                            const unionProperty = contextualType.getProperty(name);
-                            if (unionProperty) {
-                                return [unionProperty];
-                            }
-                            else {
-                                const result: Symbol[] = [];
-                                forEach((<UnionType>contextualType).types, t => {
-                                    const symbol = t.getProperty(name);
-                                    if (symbol) {
-                                        result.push(symbol);
-                                    }
-                                });
-                                return result;
-                            }
+            function getNameFromObjectLiteralElement(node: ObjectLiteralElement) {
+                if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    const nameExpression = (<ComputedPropertyName>node.name).expression;
+                    // treat computed property names where expression is string/numeric literal as just string/numeric literal
+                    if (isStringOrNumericLiteral(nameExpression.kind)) {
+                        return (<LiteralExpression>nameExpression).text;
+                    }
+                    return undefined;
+                }
+                return (<Identifier | LiteralExpression>node.name).text;
+            }
+
+            function getPropertySymbolsFromContextualType(node: ObjectLiteralElement): Symbol[] {
+                const objectLiteral = <ObjectLiteralExpression>node.parent;
+                const contextualType = typeChecker.getContextualType(objectLiteral);
+                const name = getNameFromObjectLiteralElement(node);
+                if (name && contextualType) {
+                    if (contextualType.flags & TypeFlags.Union) {
+                        // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
+                        // if not, search the constituent types for the property
+                        const unionProperty = contextualType.getProperty(name);
+                        if (unionProperty) {
+                            return [unionProperty];
                         }
                         else {
-                            const symbol = contextualType.getProperty(name);
-                            if (symbol) {
-                                return [symbol];
-                            }
+                            const result: Symbol[] = [];
+                            forEach((<UnionType>contextualType).types, t => {
+                                const symbol = t.getProperty(name);
+                                if (symbol) {
+                                    result.push(symbol);
+                                }
+                            });
+                            return result;
+                        }
+                    }
+                    else {
+                        const symbol = contextualType.getProperty(name);
+                        if (symbol) {
+                            return [symbol];
                         }
                     }
                 }
@@ -7910,7 +7938,8 @@ namespace ts {
                     // "a['propname']" then we want to store "propname" in the name table.
                     if (isDeclarationName(node) ||
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node)) {
+                        isArgumentOfElementAccessExpression(node) ||
+                        isLiteralComputedPropertyDeclarationName(node)) {
 
                         nameTable[(<LiteralExpression>node).text] = nameTable[(<LiteralExpression>node).text] === undefined ? node.pos : -1;
                     }
