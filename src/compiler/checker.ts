@@ -12053,6 +12053,10 @@ namespace ts {
             return sourceType;
         }
 
+        function isTypeEqualityComparableTo(source: Type, target: Type) {
+            return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
+        }
+
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
         }
@@ -12166,15 +12170,17 @@ namespace ts {
                 case SyntaxKind.GreaterThanToken:
                 case SyntaxKind.LessThanEqualsToken:
                 case SyntaxKind.GreaterThanEqualsToken:
-                    if (!checkForDisallowedESSymbolOperand(operator)) {
-                        return booleanType;
+                    if (checkForDisallowedESSymbolOperand(operator)) {
+                        if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
+                            reportOperatorError();
+                        }
                     }
-                // Fall through
+                    return booleanType;
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
+                    if (!isTypeEqualityComparableTo(leftType, rightType) && !isTypeEqualityComparableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
                     return booleanType;
@@ -13428,7 +13434,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature));
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefined);
             if (onfulfilledParameterType.flags & TypeFlags.Any) {
                 return undefined;
             }
