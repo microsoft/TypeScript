@@ -16795,7 +16795,11 @@ namespace ts {
                 return symbols;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
-                const target = getSymbolLinks(symbol).target;
+                let target: Symbol;
+                let next: Symbol = symbol;
+                while (next = getSymbolLinks(next).target) {
+                   target = next;
+                }
                 if (target) {
                     return [target];
                 }
