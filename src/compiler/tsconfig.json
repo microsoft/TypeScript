@@ -16,6 +16,7 @@
         "utilities.ts",
         "binder.ts",
         "checker.ts",
+        "checker2.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
