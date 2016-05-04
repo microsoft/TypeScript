@@ -1515,17 +1515,20 @@ namespace ts {
         isBracketed: boolean;
     }
 
-    export const enum FlowKind {
-        Unreachable,
-        Start,
-        Label,
-        LoopLabel,
-        Assignment,
-        Condition
+    export const enum FlowFlags {
+        Unreachable    = 1 << 0,
+        Start          = 1 << 1,
+        BranchLabel    = 1 << 2,
+        LoopLabel      = 1 << 3,
+        Assignment     = 1 << 4,
+        TrueCondition  = 1 << 5,
+        FalseCondition = 1 << 6,
+        Label = BranchLabel | LoopLabel,
+        Condition = TrueCondition | FalseCondition
     }
 
     export interface FlowNode {
-        kind: FlowKind;  // Node kind
+        flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
     }
 
@@ -1545,7 +1548,6 @@ namespace ts {
     // node's location in the control flow.
     export interface FlowCondition extends FlowNode {
         expression: Expression;
-        assumeTrue: boolean;
         antecedent: FlowNode;
     }
 

@@ -7585,27 +7585,28 @@ namespace ts {
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
-                    switch (flow.kind) {
-                        case FlowKind.Assignment:
-                            const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
-                            if (!type) {
-                                flow = (<FlowAssignment>flow).antecedent;
-                                continue;
-                            }
-                            return type;
-                        case FlowKind.Condition:
-                            return getTypeAtFlowCondition(<FlowCondition>flow);
-                        case FlowKind.Label:
-                        case FlowKind.LoopLabel:
-                            if ((<FlowLabel>flow).antecedents.length === 1) {
-                                flow = (<FlowLabel>flow).antecedents[0];
-                                continue;
-                            }
-                            return getTypeAtFlowLabel(<FlowLabel>flow);
-                        case FlowKind.Unreachable:
-                            // Unreachable code errors are reported in the binding phase. Here we
-                            // simply return the declared type to reduce follow-on errors.
-                            return declaredType;
+                    if (flow.flags & FlowFlags.Assignment) {
+                        const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
+                        if (!type) {
+                            flow = (<FlowAssignment>flow).antecedent;
+                            continue;
+                        }
+                        return type;
+                    }
+                    if (flow.flags & FlowFlags.Condition) {
+                        return getTypeAtFlowCondition(<FlowCondition>flow);
+                    }
+                    if (flow.flags & FlowFlags.Label) {
+                        if ((<FlowLabel>flow).antecedents.length === 1) {
+                            flow = (<FlowLabel>flow).antecedents[0];
+                            continue;
+                        }
+                        return getTypeAtFlowLabel(<FlowLabel>flow);
+                    }
+                    if (flow.flags & FlowFlags.Unreachable) {
+                        // Unreachable code errors are reported in the binding phase. Here we
+                        // simply return the declared type to reduce follow-on errors.
+                        return declaredType;
                     }
                     // At the top of the flow we have the initial type
                     return initialType;
@@ -7644,7 +7645,7 @@ namespace ts {
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
                 const type = getTypeAtFlowNode(flow.antecedent);
-                return type && narrowType(type, flow.expression, flow.assumeTrue);
+                return type && narrowType(type, flow.expression, (flow.flags & FlowFlags.TrueCondition) !== 0);
             }
 
             function getTypeAtFlowNodeCached(flow: FlowNode) {
@@ -7676,7 +7677,7 @@ namespace ts {
             function getTypeAtFlowLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
-                    const type = flow.kind === FlowKind.LoopLabel ?
+                    const type = flow.flags & FlowFlags.LoopLabel ?
                         getTypeAtFlowNodeCached(antecedent) :
                         getTypeAtFlowNode(antecedent);
                     if (!type) {
