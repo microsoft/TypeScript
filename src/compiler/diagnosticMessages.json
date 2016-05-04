@@ -1911,7 +1911,7 @@
         "category": "Error",
         "code": 2681
     },
-    "A setter cannot have a 'this' parameter.": {
+    "'get' and 'set' accessor must have the same 'this' type.": {
         "category": "Error",
         "code": 2682
     },

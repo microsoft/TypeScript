@@ -3136,6 +3136,17 @@ namespace ts {
             return undefined;
         }
 
+        function getAnnotatedAccessorThisType(accessor: AccessorDeclaration): Type {
+            if (accessor &&
+                accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
+                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
+                (accessor.parameters[0].name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword &&
+                accessor.parameters[0].type ) {
+                return getTypeFromTypeNode(accessor.parameters[0].type);
+            }
+            return undefined;
+        }
+
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
@@ -4357,20 +4368,12 @@ namespace ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                const classType = declaration.kind === SyntaxKind.Constructor ?
-                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
-                    : undefined;
-                const typeParameters = classType ? classType.localTypeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
-                    getTypeParametersFromJSDocTemplate(declaration);
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
                 let thisType: Type = undefined;
                 let hasThisParameter: boolean;
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                let returnType: Type = undefined;
-                let typePredicate: TypePredicate = undefined;
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -4407,46 +4410,66 @@ namespace ts {
                     }
                 }
 
+                // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
+                if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
+                    !hasDynamicName(declaration) &&
+                    !hasThisParameter) {
+                    const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
+                    const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
+                    thisType = getAnnotatedAccessorThisType(setter);
+                }
+
                 if (minArgumentCount < 0) {
                     minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
                 }
-
                 if (isJSConstructSignature) {
                     minArgumentCount--;
-                    returnType = getTypeFromTypeNode(declaration.parameters[0].type);
                 }
-                else if (classType) {
-                    returnType = classType;
-                }
-                else if (declaration.type) {
-                    returnType = getTypeFromTypeNode(declaration.type);
-                    if (declaration.type.kind === SyntaxKind.TypePredicate) {
-                        typePredicate = createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode);
-                    }
-                }
-                else {
-                    if (declaration.flags & NodeFlags.JavaScriptFile) {
-                        const type = getReturnTypeFromJSDocComment(declaration);
-                        if (type && type !== unknownType) {
-                            returnType = type;
-                        }
-                    }
 
-                    // TypeScript 1.0 spec (April 2014):
-                    // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
-                        const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
-                        returnType = getAnnotatedAccessorType(setter);
-                    }
-
-                    if (!returnType && nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
-                        returnType = anyType;
-                    }
-                }
+                const classType = declaration.kind === SyntaxKind.Constructor ?
+                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+                    : undefined;
+                const typeParameters = classType ? classType.localTypeParameters :
+                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
+                    getTypeParametersFromJSDocTemplate(declaration);
+                const returnType = getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
+                const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
+                    createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
+                    undefined;
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
+        }
+
+        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, minArgumentCount: number, isJSConstructSignature: boolean, classType: Type) {
+            if (isJSConstructSignature) {
+                return getTypeFromTypeNode(declaration.parameters[0].type);
+            }
+            else if (classType) {
+                return classType;
+            }
+            else if (declaration.type) {
+                return getTypeFromTypeNode(declaration.type);
+            }
+
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
+                const type = getReturnTypeFromJSDocComment(declaration);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
+            // TypeScript 1.0 spec (April 2014):
+            // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
+            if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
+                const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
+                return getAnnotatedAccessorType(setter);
+            }
+
+            if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
+                return anyType;
+            }
         }
 
         function getSignaturesOfSymbol(symbol: Symbol): Signature[] {
@@ -12571,9 +12594,6 @@ namespace ts {
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
                 }
-                if (func.kind === SyntaxKind.SetAccessor) {
-                    error(node, Diagnostics.A_setter_cannot_have_a_this_parameter);
-                }
             }
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
@@ -12960,15 +12980,10 @@ namespace ts {
                             error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
 
-                        const currentAccessorType = getAnnotatedAccessorType(node);
-                        const otherAccessorType = getAnnotatedAccessorType(otherAccessor);
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
-                        if (currentAccessorType && otherAccessorType) {
-                            if (!isTypeIdenticalTo(currentAccessorType, otherAccessorType)) {
-                                error(node, Diagnostics.get_and_set_accessor_must_have_the_same_type);
-                            }
-                        }
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorThisType, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
                 getTypeOfAccessors(getSymbolOfNode(node));
@@ -12978,6 +12993,14 @@ namespace ts {
             }
             else {
                 checkNodeDeferred(node);
+            }
+        }
+
+        function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
+            const firstType = getAnnotatedType(first);
+            const secondType = getAnnotatedType(second);
+            if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
+                error(first, message);
             }
         }
 
@@ -18075,15 +18098,15 @@ namespace ts {
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
             }
-            else if (kind === SyntaxKind.GetAccessor && accessor.parameters.length) {
-                return grammarErrorOnNode(accessor.name, Diagnostics.A_get_accessor_cannot_have_parameters);
+            else if (!doesAccessorHaveCorrectParameterCount(accessor)) {
+                return grammarErrorOnNode(accessor.name,
+                                          kind === SyntaxKind.GetAccessor ?
+                                          Diagnostics.A_get_accessor_cannot_have_parameters :
+                                          Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
             }
             else if (kind === SyntaxKind.SetAccessor) {
                 if (accessor.type) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
-                }
-                else if (accessor.parameters.length !== 1) {
-                    return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
                 }
                 else {
                     const parameter = accessor.parameters[0];
@@ -18102,6 +18125,18 @@ namespace ts {
                 }
             }
         }
+
+        /** Does the accessor have the right number of parameters?
+
+            A get accessor has no parameters or a single `this` parameter.
+            A set accessor has one parameter or a `this` parameter and one more parameter */
+        function doesAccessorHaveCorrectParameterCount(accessor: MethodDeclaration) {
+            const isGet = accessor.kind === SyntaxKind.GetAccessor;
+            return (accessor.parameters.length === (isGet ? 1 : 2) &&
+                    accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) ||
+                accessor.parameters.length === (isGet ? 0 : 1);
+         }
 
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
             if (isDynamicName(node)) {
