@@ -2999,9 +2999,14 @@ namespace ts {
         }
 
         function isUnParenthesizedAsyncArrowFunctionWorker(): Tristate {
+            // AsyncArrowFunctionExpression:
+            //      1) async[no LineTerminator here]AsyncArrowBindingIdentifier[?Yield][no LineTerminator here]=>AsyncConciseBody[?In]
+            //      2) CoverCallExpressionAndAsyncArrowHead[?Yield, ?Await][no LineTerminator here]=>AsyncConciseBody[?In]
             if (token === SyntaxKind.AsyncKeyword) {
                 nextToken();
-                if (scanner.hasPrecedingLineBreak()) {
+                // If the "async" is followed by "=>" token then it is not a begining of an async arrow-function
+                // but instead a simple arrow-function which will be parsed inside "parseAssignmentExpressionOrHigher"
+                if (scanner.hasPrecedingLineBreak() || token === SyntaxKind.EqualsGreaterThanToken) {
                     return Tristate.False;
                 }
                 // Check for un-parenthesized AsyncArrowFunction
