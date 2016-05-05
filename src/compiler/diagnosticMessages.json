@@ -2748,6 +2748,10 @@
         "category": "Message",
         "code": 6128
     },
+    "The config file '{0}' found doesn't contain any source files.": {
+        "category": "Error",
+        "code": 6129
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

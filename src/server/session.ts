@@ -68,10 +68,18 @@ namespace ts.server {
         }
     }
 
-    function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
+    function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic): protocol.Diagnostic {
         return {
             start: project.compilerService.host.positionToLineOffset(fileName, diag.start),
             end: project.compilerService.host.positionToLineOffset(fileName, diag.start + diag.length),
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+        };
+    }
+
+    function formatConfigFileDiag(diag: ts.Diagnostic): protocol.Diagnostic {
+        return {
+            start: undefined,
+            end: undefined,
             text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
         };
     }
@@ -176,6 +184,21 @@ namespace ts.server {
             }
             this.sendLineToClient("Content-Length: " + (1 + this.byteLength(json, "utf8")) +
                 "\r\n\r\n" + json);
+        }
+
+        public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]) {
+            const bakedDiags = ts.map(diagnostics, formatConfigFileDiag);
+            const ev: protocol.ConfigFileDiagnosticEvent = {
+                seq: 0,
+                type: "event",
+                event: "configFileDiag",
+                body: {
+                    triggerFile,
+                    configFile,
+                    diagnostics: bakedDiags
+                }
+            };
+            this.send(ev);
         }
 
         public event(info: any, eventName: string) {
@@ -561,7 +584,10 @@ namespace ts.server {
          */
         private openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file, fileContent, scriptKind);
+            const { configFileName, configFileErrors } = this.projectService.openClientFile(file, fileContent, scriptKind);
+            if (configFileErrors) {
+                this.configFileDiagnosticEvent(fileName, configFileName, configFileErrors);
+            }
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
