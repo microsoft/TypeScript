@@ -2991,7 +2991,7 @@ namespace ts {
         function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
             // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
             if (token === SyntaxKind.AsyncKeyword) {
-                const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);           
+                const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
                 if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
