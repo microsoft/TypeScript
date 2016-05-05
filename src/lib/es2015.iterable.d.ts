@@ -1,5 +1,13 @@
 /// <reference path="lib.es2015.symbol.d.ts" />
 
+interface SymbolConstructor {
+    /** 
+      * A method that returns the default iterator for an object. Called by the semantics of the 
+      * for-of statement.
+      */
+    readonly iterator: symbol;
+}
+
 interface IteratorResult<T> {
     done: boolean;
     value?: T;

@@ -13,12 +13,6 @@ interface SymbolConstructor {
       */
     readonly isConcatSpreadable: symbol;
 
-    /** 
-      * A method that returns the default iterator for an object. Called by the semantics of the 
-      * for-of statement.
-      */
-    readonly iterator: symbol;
-
     /**
       * A regular expression method that matches the regular expression against a string. Called 
       * by the String.prototype.match method. 
