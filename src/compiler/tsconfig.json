@@ -17,6 +17,7 @@
         "binder.ts",
         "checker2.ts",
         "checker.ts",
+        "shrink/symbols.ts",
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",

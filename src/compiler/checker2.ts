@@ -1,4 +1,5 @@
 /// <reference path="binder.ts" />
+/// <reference path="shrink/symbols.ts" />
 
 // TODO: Does @internal protected the contents from being publically visible?
 /* @internal */

@@ -1,31 +1,13 @@
 /// <reference path="binder.ts"/>
 /// <reference path="checker2.ts"/>
+/// <reference path="shrink/symbols.ts"/>
 
 /* @internal */
 namespace ts {
-    let nextSymbolId = 1;
-    let nextNodeId = 1;
     let nextMergeId = 1;
     let nextFlowId = 1;
 
-    export function getNodeId(node: Node): number {
-        if (!node.id) {
-            node.id = nextNodeId;
-            nextNodeId++;
-        }
-        return node.id;
-    }
-
     export let checkTime = 0;
-
-    export function getSymbolId(symbol: Symbol): number {
-        if (!symbol.id) {
-            symbol.id = nextSymbolId;
-            nextSymbolId++;
-        }
-
-        return symbol.id;
-    }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
@@ -39,12 +21,10 @@ namespace ts {
         // they no longer need the information (for example, if the user started editing again).
         let cancellationToken: CancellationToken;
 
-        const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
 
         let typeCount = 0;
-        let symbolCount = 0;
 
         const emptyArray: any[] = [];
         const emptySymbols: SymbolTable = {};
@@ -57,6 +37,7 @@ namespace ts {
 
         const emitResolver = createResolver();
 
+        const { createSymbol, getSymbolCount } = symbolConstructor();
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
@@ -64,7 +45,7 @@ namespace ts {
         const checker: TypeChecker = {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
+            getSymbolCount: () => getSymbolCount(host),
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
@@ -328,12 +309,6 @@ namespace ts {
                 : createCompilerDiagnostic(message, arg0, arg1, arg2);
             diagnostics.add(diagnostic);
         }
-
-        function createSymbol(flags: SymbolFlags, name: string): Symbol {
-            symbolCount++;
-            return new Symbol(flags, name);
-        }
-
         function getExcludedSymbolFlags(flags: SymbolFlags): SymbolFlags {
             let result: SymbolFlags = 0;
             if (flags & SymbolFlags.BlockScopedVariable) result |= SymbolFlags.BlockScopedVariableExcludes;
@@ -912,39 +887,6 @@ namespace ts {
             if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
-        }
-
-        /* Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
-         * If at any point current node is equal to 'parent' node - return true.
-         * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
-         */
-        function isSameScopeDescendentOf(initial: Node, parent: Node, stopAt: Node): boolean {
-            if (!parent) {
-                return false;
-            }
-            for (let current = initial; current && current !== stopAt && !isFunctionLike(current); current = current.parent) {
-                if (current === parent) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function getAnyImportSyntax(node: Node): AnyImportSyntax {
-            if (isAliasSymbolDeclaration(node)) {
-                if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    return <ImportEqualsDeclaration>node;
-                }
-
-                while (node && node.kind !== SyntaxKind.ImportDeclaration) {
-                    node = node.parent;
-                }
-                return <ImportDeclaration>node;
-            }
-        }
-
-        function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration {
-            return forEach(symbol.declarations, d => isAliasSymbolDeclaration(d) ? d : undefined);
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration): Symbol {
