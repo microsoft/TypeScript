@@ -431,10 +431,14 @@ namespace ts {
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
+        public realpath: (path: string) => string;
 
         constructor(private shimHost: CoreServicesShimHost) {
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
+            }
+            if ("realpath" in this.shimHost) {
+                this.realpath = path => this.shimHost.realpath(path);
             }
         }
 

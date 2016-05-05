@@ -855,13 +855,23 @@ namespace Harness {
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-            const fileMap: ts.FileMap<ts.SourceFile> = ts.createFileMap<ts.SourceFile>();
+            let realPathMap: ts.FileMap<string>;
+            const fileMap: ts.FileMap<() => ts.SourceFile> = ts.createFileMap<() => ts.SourceFile>();
             for (const file of inputFiles) {
                 if (file.content !== undefined) {
                     const fileName = ts.normalizePath(file.unitName);
-                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
                     const path = ts.toPath(file.unitName, currentDirectory, getCanonicalFileName);
-                    fileMap.set(path, sourceFile);
+                    if (file.fileOptions && file.fileOptions["symlink"]) {
+                        const link = file.fileOptions["symlink"];
+                        const linkPath = ts.toPath(link, currentDirectory, getCanonicalFileName);
+                        if (!realPathMap) {
+                            realPathMap = ts.createFileMap<string>();
+                        }
+                        realPathMap.set(linkPath, fileName);
+                        fileMap.set(path, (): ts.SourceFile => { throw new Error("Symlinks should always be resolved to a realpath first"); });
+                    }
+                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
+                    fileMap.set(path, () => sourceFile);
                 }
             }
 
@@ -869,7 +879,7 @@ namespace Harness {
                 fileName = ts.normalizePath(fileName);
                 const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
                 if (fileMap.contains(path)) {
-                    return fileMap.get(path);
+                    return fileMap.get(path)();
                 }
                 else if (fileName === fourslashFileName) {
                     const tsFn = "tests/cases/fourslash/" + fourslashFileName;
@@ -898,11 +908,16 @@ namespace Harness {
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
                 fileExists: fileName => {
-                    return fileMap.contains(ts.toPath(fileName, currentDirectory, getCanonicalFileName));
+                    const path = ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+                    return fileMap.contains(path) || (realPathMap && realPathMap.contains(path));
                 },
                 readFile: (fileName: string): string => {
-                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName)).getText();
-                }
+                    return fileMap.get(ts.toPath(fileName, currentDirectory, getCanonicalFileName))().getText();
+                },
+                realpath: realPathMap && ((f: string) => {
+                    const path = ts.toPath(f, currentDirectory, getCanonicalFileName);
+                    return realPathMap.contains(path) ? realPathMap.get(path) : path;
+                })
             };
         }
 
@@ -923,7 +938,8 @@ namespace Harness {
             { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" },
             { name: "suppressOutputPathCheck", type: "boolean" },
-            { name: "noImplicitReferences", type: "boolean" }
+            { name: "noImplicitReferences", type: "boolean" },
+            { name: "symlink", type: "string" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
@@ -978,6 +994,7 @@ namespace Harness {
         export interface TestFile {
             unitName: string;
             content: string;
+            fileOptions?: any;
         }
 
         export interface CompilationOutput {
@@ -1415,10 +1432,8 @@ namespace Harness {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
                     const metaDataName = testMetaData[1].toLowerCase();
-                    if (metaDataName === "filename") {
-                        currentFileOptions[testMetaData[1]] = testMetaData[2];
-                    }
-                    else {
+                    currentFileOptions[testMetaData[1]] = testMetaData[2];
+                    if (metaDataName !== "filename") {
                         continue;
                     }
 
