@@ -15,6 +15,24 @@
 >cats : string
 >"lol" : string
 
+// Lots of Irritating Superfluous Parentheses
+(function (x) { } ("!"));
+>(function (x) { } ("!")) : void
+>function (x) { } ("!") : void
+>function (x) { } : (x: string) => void
+>x : string
+>"!" : string
+
+((((function (y) { }))))("-");
+>((((function (y) { }))))("-") : void
+>((((function (y) { })))) : (y: string) => void
+>(((function (y) { }))) : (y: string) => void
+>((function (y) { })) : (y: string) => void
+>(function (y) { }) : (y: string) => void
+>function (y) { } : (y: string) => void
+>y : string
+>"-" : string
+
 // multiple arguments
 ((a, b, c) => { })("foo", 101, false);
 >((a, b, c) => { })("foo", 101, false) : void
@@ -26,21 +44,6 @@
 >"foo" : string
 >101 : number
 >false : boolean
-
-// contextually typed parameters.
-(f => f(1))(i => i + 1);
->(f => f(1))(i => i + 1) : any
->(f => f(1)) : (f: (i: any) => any) => any
->f => f(1) : (f: (i: any) => any) => any
->f : (i: any) => any
->f(1) : any
->f : (i: any) => any
->1 : number
->i => i + 1 : (i: any) => any
->i : any
->i + 1 : any
->i : any
->1 : number
 
 // default parameters
 ((m = 10) => m + 1)(12);
@@ -113,6 +116,24 @@
 >5 : number
 >6 : number
 >7 : number
+
+((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
+>((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
+>((...mixed) => mixed.every(n => !!n)) : (...mixed: (number | string)[]) => boolean
+>(...mixed) => mixed.every(n => !!n) : (...mixed: (number | string)[]) => boolean
+>mixed : (number | string)[]
+>mixed.every(n => !!n) : boolean
+>mixed.every : (callbackfn: (value: number | string, index: number, array: (number | string)[]) => boolean, thisArg?: any) => boolean
+>mixed : (number | string)[]
+>every : (callbackfn: (value: number | string, index: number, array: (number | string)[]) => boolean, thisArg?: any) => boolean
+>n => !!n : (n: number | string) => boolean
+>n : number | string
+>!!n : boolean
+>!n : boolean
+>n : number | string
+>5 : number
+>'oops' : string
+>'oh no' : string
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
@@ -198,5 +219,34 @@
 >23 : number
 >u : number
 
+// contextually typed parameters.
+let twelve = (f => f(12))(i => i);
+>twelve : any
+>(f => f(12))(i => i) : any
+>(f => f(12)) : (f: {}) => any
+>f => f(12) : (f: {}) => any
+>f : {}
+>f(12) : any
+>f : {}
+>12 : number
+>i => i : (i: {}) => {}
+>i : {}
+>i : {}
 
+let eleven = (o => o.a(11))({ a: function(n) { return n; } });
+>eleven : any
+>(o => o.a(11))({ a: function(n) { return n; } }) : any
+>(o => o.a(11)) : (o: { a: {}; }) => any
+>o => o.a(11) : (o: { a: {}; }) => any
+>o : { a: {}; }
+>o.a(11) : any
+>o.a : {}
+>o : { a: {}; }
+>a : {}
+>11 : number
+>{ a: function(n) { return n; } } : { a: (n: any) => any; }
+>a : (n: any) => any
+>function(n) { return n; } : (n: any) => any
+>n : any
+>n : any
 

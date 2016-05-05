@@ -8520,15 +8520,14 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
-                if (isIife(func)) {
+                const iife = getImmediatelyInvokedFunctionExpression(func);
+                if (iife) {
                     const indexOfParameter = indexOf(func.parameters, parameter);
-                    const call = func.parent.parent as CallExpression;
-                    if (indexOfParameter < call.arguments.length) {
-                        const type = getTypeOfExpression(call.arguments[indexOfParameter]);
-                        if (type && parameter.dotDotDotToken) {
-                            return createArrayType(type);
+                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                        if (parameter.dotDotDotToken) {
+                            return createArrayType(getUnionType(map(iife.arguments.slice(indexOfParameter), getTypeOfExpression)));
                         }
-                        return type;
+                        return checkExpression(iife.arguments[indexOfParameter], identityMapper);
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
@@ -8551,11 +8550,16 @@ namespace ts {
             return undefined;
         }
 
-        function isIife(func: FunctionExpression | MethodDeclaration) {
-            return (func.kind === SyntaxKind.FunctionExpression || func.kind === SyntaxKind.ArrowFunction) &&
-                func.parent.kind === SyntaxKind.ParenthesizedExpression &&
-                func.parent.parent.kind === SyntaxKind.CallExpression &&
-                (func.parent.parent as CallExpression).expression === func.parent;
+        function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
+            if (isFunctionExpressionOrArrowFunction(func)) {
+                let parent = func.parent;
+                while (parent.kind === SyntaxKind.ParenthesizedExpression) {
+                    parent = parent.parent;
+                }
+                if (parent.kind === SyntaxKind.CallExpression) {
+                    return parent as CallExpression;
+                }
+            }
         }
 
         // In a variable, parameter or property declaration with a type annotation,
