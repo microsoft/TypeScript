@@ -716,7 +716,8 @@ namespace ts {
                         }
 
                         // Skip over any minified JavaScript files (ending in ".min.js")
-                        if (/\.min\.js$/.test(fileName)) {
+                        // Skip over dotted files and folders as well
+                        if (/\.min\.js$/.test(fileName) || /[\\/]\.[\w.]/.test(fileName)) {
                             continue;
                         }
 
