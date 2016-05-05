@@ -65,6 +65,7 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let classifiableNames: Map<string> = {}; 
 
         if (!file.locals) {
             file.locals = {};
@@ -72,6 +73,7 @@ module ts {
             setBlockScopeContainer(file, /*cleanLocals*/ false);
             bind(file);
             file.symbolCount = symbolCount;
+            file.classifiableNames = classifiableNames;
         }
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
@@ -144,6 +146,11 @@ module ts {
             let symbol: Symbol;
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
+
+                if (name && (includes & SymbolFlags.Classifiable)) {
+                    classifiableNames[name] = name;   
+                } 
+
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
