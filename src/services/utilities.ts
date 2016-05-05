@@ -656,4 +656,34 @@ module ts {
     export function isJavaScript(fileName: string) {
         return fileExtensionIs(fileName, ".js");
     }
+
+    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node) {
+        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+        // If so we want to search for whatever is under the cursor.
+        if (isImportOrExportSpecifierName(location)) {
+            return location.getText();
+        }
+
+        // Try to get the local symbol if we're dealing with an 'export default'
+        // since that symbol has the "true" name.
+        let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+
+        let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
+
+        return stripQuotes(name);
+    }
+
+    export function isImportOrExportSpecifierName(location: Node): boolean {
+        return location.parent &&
+            (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
+            (<ImportOrExportSpecifier>location.parent).propertyName === location;
+    }
+
+    export function stripQuotes(name: string) {
+        let length = name.length;
+        if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+            return name.substring(1, length - 1);
+        };
+        return name;
+    }
 }

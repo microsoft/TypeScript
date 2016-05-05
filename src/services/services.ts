@@ -4230,7 +4230,7 @@ module ts {
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
 
-                    let referencedSymbols = getReferencedSymbolsForNodes(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
+                    let referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -4882,10 +4882,10 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNodes(node, program.getSourceFiles(), findInStrings, findInComments);
+            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencedSymbolsForNodes(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             let typeChecker = program.getTypeChecker();
 
             // Labels
@@ -4920,7 +4920,7 @@ module ts {
 
             let declarations = symbol.declarations;
 
-            // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
+            // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
             if (!declarations || !declarations.length) {
                 return undefined;
             }
@@ -4930,8 +4930,8 @@ module ts {
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
-            // Get the text to search for, we need to normalize it as external module names will have quote
-            let declaredName = getDeclaredName(symbol, node);
+            // Get the text to search for, we need to normalize it as external module names will have quotes
+            let declaredName = getDeclaredName(typeChecker, symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -4978,76 +4978,41 @@ module ts {
                 };
             }
 
-            function isImportOrExportSpecifierName(location: Node): boolean {
-                return location.parent &&
-                    (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
-                    (<ImportOrExportSpecifier>location.parent).propertyName === location;
-            }
-
             function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
                 return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
                     return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
                 });
             }
 
-            function getDeclaredName(symbol: Symbol, location: Node) {
-                // Special case for function expressions, whose names are solely local to their bodies.
-                let functionExpression = forEach(symbol.declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
-
-                // When a name gets interned into a SourceFile's 'identifiers' Map,
-                // its name is escaped and stored in the same way its symbol name/identifier
-                // name should be stored. Function expressions, however, are a special case,
-                // because despite sometimes having a name, the binder unconditionally binds them
-                // to a symbol with the name "__function".
-                let name: string;
-                if (functionExpression && functionExpression.name) {
-                    name = functionExpression.name.text;
-                }
-
-                // If this is an export or import specifier it could have been renamed using the as syntax.
-                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
-                // so check for the propertyName.
+            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]) {
+                // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+                // If so we want to search for whatever under the cursor.
                 if (isImportOrExportSpecifierName(location)) {
                     return location.getText();
                 }
 
-                name = typeChecker.symbolToString(symbol);
+                // Try to get the local symbol if we're dealing with an 'export default'
+                // since that symbol has the "true" name.
+                let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+                symbol = localExportDefaultSymbol || symbol;
 
-                return stripQuotes(name);
+                return stripQuotes(symbol.name);
             }
 
-            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
-                // If this is an export or import specifier it could have been renamed using the as syntax.
-                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
-                // so check for the propertyName.
-                if (isImportOrExportSpecifierName(location)) {
-                    return location.getText();
-                }
-
-                // Special case for function expressions, whose names are solely local to their bodies.
-                let functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
-
-                // When a name gets interned into a SourceFile's 'identifiers' Map,
-                // its name is escaped and stored in the same way its symbol name/identifier
-                // name should be stored. Function expressions, however, are a special case,
-                // because despite sometimes having a name, the binder unconditionally binds them
-                // to a symbol with the name "__function".
-                let name = functionExpression && functionExpression.name
-                    ? functionExpression.name.text
-                    : symbol.name;
-
-                return stripQuotes(name);
-            }
-
-            function stripQuotes(name: string) {
-                let length = name.length;
-                if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
-                    return name.substring(1, length - 1);
-                };
-                return name;
-            }
-
+            /**
+             * Determines the smallest scope in which a symbol may have named references.
+             *
+             * Returns undefined if the scope cannot be determined, often implying that
+             * a reference to a symbol can occur anywhere.
+             */
             function getSymbolScope(symbol: Symbol): Node {
+                // If this is the symbol of a function expression, then named references
+                // are limited to its own scope.
+                let valueDeclaration = symbol.valueDeclaration;
+                if (valueDeclaration && valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                    return valueDeclaration;
+                }
+
                 // If this is private property or method, the scope is the containing class
                 if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
                     let privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
@@ -6570,12 +6535,13 @@ module ts {
                             }
                         }
 
+                        let displayName = getDeclaredName(typeChecker, symbol, node);
                         let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
                                 canRename: true,
                                 localizedErrorMessage: undefined,
-                                displayName: symbol.name,
+                                displayName,
                                 fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
                                 kind: kind,
                                 kindModifiers: getSymbolModifiers(symbol),

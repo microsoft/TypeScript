@@ -1458,12 +1458,12 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
-        /* @internal */ 
+        /* @internal */
         FromSignature           = 0x00010000,  // Created for signature assignment check
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
-        /* @internal */ 
+        /* @internal */
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
-        /* @internal */ 
+        /* @internal */
         ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 

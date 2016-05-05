@@ -11613,7 +11613,8 @@ module ts {
 
                     if (languageVersion === ScriptTarget.ES3) {
                         defaultKeyword = "[\"default\"]";
-                    } else {
+                    }
+                    else {
                         defaultKeyword = ".default";
                     }
                     return getGeneratedNameForNode(<ImportDeclaration>node.parent) + defaultKeyword;
