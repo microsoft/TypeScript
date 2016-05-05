@@ -871,7 +871,7 @@ namespace Harness {
                         fileMap.set(path, (): ts.SourceFile => { throw new Error("Symlinks should always be resolved to a realpath first"); });
                     }
                     const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
-                    fileMap.set(path, ts.memoize(() => sourceFile));
+                    fileMap.set(path, () => sourceFile);
                 }
             }
 
