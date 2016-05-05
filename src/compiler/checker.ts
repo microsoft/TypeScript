@@ -15741,13 +15741,6 @@ namespace ts {
                     grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
-                        if (!isGlobalAugmentation) {
-                            error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
-                        }
-                        break;
-                    }
-                    // fallthrough
                 case SyntaxKind.ImportDeclaration:
                     grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                     break;
@@ -15781,9 +15774,6 @@ namespace ts {
                         if (!reportError) {
                             // symbol should not originate in augmentation
                             reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
-                        }
-                        if (reportError) {
-                            error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
                         }
                     }
                     break;
