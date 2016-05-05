@@ -77,6 +77,46 @@ declare module ts.server.protocol {
         body?: any;
     }
 
+    
+    /** 
+      * Arguments for ProjectInfoRequest request.
+      */
+    export interface ProjectInfoRequestArgs extends FileRequestArgs {
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /**
+      * A request to get the project information of the current file
+      */
+    export interface ProjectInfoRequest extends Request {
+        arguments: ProjectInfoRequestArgs
+    }
+
+    /** 
+      * Response message body for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        /**
+          * For configured project, this is the normalized path of the 'tsconfig.json' file
+          * For inferred project, this is undefined
+          */
+        configFileName: string;
+        /**
+          * The list of normalized file name in the project, including 'lib.d.ts'
+          */
+        fileNameList?: string[];
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfoResponse extends Response {
+        body?: ProjectInfo;
+    }
+
     /** 
       * Arguments for FileRequest messages.
       */
@@ -814,6 +854,31 @@ declare module ts.server.protocol {
      */  
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+    
+    /**
+      * Arguments for geterrForProject request.
+      */
+    export interface GeterrForProjectRequestArgs {
+        /**
+          * the file requesting project error list
+          */
+        file: string;
+
+        /**
+          * Delay in milliseconds to wait before starting to compute
+          * errors for the files in the file list
+          */
+        delay: number;
+    }
+
+    /**
+      * GeterrForProjectRequest request; value of command field is 
+      * "geterrForProject". It works similarly with 'Geterr', only 
+      * it request for every file in this project.
+      */
+    export interface GeterrForProjectRequest extends Request {
+        arguments: GeterrForProjectRequestArgs
     }
     
     /**

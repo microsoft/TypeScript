@@ -309,6 +309,11 @@ module ts.server {
             return this.filenameToSourceFile[info.fileName];
         }
 
+        getFileNames() {
+            let sourceFiles = this.program.getSourceFiles();
+            return sourceFiles.map(sourceFile => sourceFile.fileName);
+        }
+
         getSourceFileFromName(filename: string, requireOpen?: boolean) {
             var info = this.projectService.getScriptInfo(filename);
             if (info) {
