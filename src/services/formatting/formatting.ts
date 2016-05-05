@@ -866,11 +866,21 @@ namespace ts.formatting {
             }
             else {
                 let tokenStart = sourceFile.getLineAndCharacterOfPosition(pos);
-                if (indentation !== tokenStart.character) {
-                    let startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
+                let startLinePosition = getStartPositionOfLine(tokenStart.line, sourceFile);
+                if (indentation !== tokenStart.character || indentationIsDifferent(indentationString, startLinePosition)) {
                     recordReplace(startLinePosition, tokenStart.character, indentationString);
                 }
             }
+        }
+
+        function indentationIsDifferent(indentationString: string, startLinePosition: number): boolean {
+            let size = indentationString.length;
+            for (let i = 0; i < size; i++) {
+                if (indentationString.charCodeAt(i) !== sourceFile.text.charCodeAt(startLinePosition + i)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
