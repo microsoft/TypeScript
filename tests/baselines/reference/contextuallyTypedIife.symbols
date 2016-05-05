@@ -1,0 +1,97 @@
+=== tests/cases/conformance/expressions/functions/contextuallyTypedIife.ts ===
+// arrow
+(jake => { })("build");
+>jake : Symbol(jake, Decl(contextuallyTypedIife.ts, 1, 1))
+
+// function expression
+(function (cats) { })("lol");
+>cats : Symbol(cats, Decl(contextuallyTypedIife.ts, 3, 11))
+
+// multiple arguments
+((a, b, c) => { })("foo", 101, false);
+>a : Symbol(a, Decl(contextuallyTypedIife.ts, 5, 2))
+>b : Symbol(b, Decl(contextuallyTypedIife.ts, 5, 4))
+>c : Symbol(c, Decl(contextuallyTypedIife.ts, 5, 7))
+
+// contextually typed parameters.
+(f => f(1))(i => i + 1);
+>f : Symbol(f, Decl(contextuallyTypedIife.ts, 7, 1))
+>f : Symbol(f, Decl(contextuallyTypedIife.ts, 7, 1))
+>i : Symbol(i, Decl(contextuallyTypedIife.ts, 7, 12))
+>i : Symbol(i, Decl(contextuallyTypedIife.ts, 7, 12))
+
+// default parameters
+((m = 10) => m + 1)(12);
+>m : Symbol(m, Decl(contextuallyTypedIife.ts, 9, 2))
+>m : Symbol(m, Decl(contextuallyTypedIife.ts, 9, 2))
+
+((n = 10) => n + 1)();
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 10, 2))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 10, 2))
+
+// optional parameters
+((j?) => j + 1)(12);
+>j : Symbol(j, Decl(contextuallyTypedIife.ts, 12, 2))
+>j : Symbol(j, Decl(contextuallyTypedIife.ts, 12, 2))
+
+((k?) => k + 1)();
+>k : Symbol(k, Decl(contextuallyTypedIife.ts, 13, 2))
+>k : Symbol(k, Decl(contextuallyTypedIife.ts, 13, 2))
+
+((l, o?) => l + o)(12); // o should be any
+>l : Symbol(l, Decl(contextuallyTypedIife.ts, 14, 2))
+>o : Symbol(o, Decl(contextuallyTypedIife.ts, 14, 4))
+>l : Symbol(l, Decl(contextuallyTypedIife.ts, 14, 2))
+>o : Symbol(o, Decl(contextuallyTypedIife.ts, 14, 4))
+
+// rest parameters
+((...numbers) => numbers.every(n => n > 0))(5,6,7);
+>numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 16, 2))
+>numbers.every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>numbers : Symbol(numbers, Decl(contextuallyTypedIife.ts, 16, 2))
+>every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 16, 31))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 16, 31))
+
+((...noNumbers) => noNumbers.some(n => n > 0))();
+>noNumbers : Symbol(noNumbers, Decl(contextuallyTypedIife.ts, 17, 2))
+>noNumbers.some : Symbol(Array.some, Decl(lib.d.ts, --, --))
+>noNumbers : Symbol(noNumbers, Decl(contextuallyTypedIife.ts, 17, 2))
+>some : Symbol(Array.some, Decl(lib.d.ts, --, --))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 34))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 34))
+
+((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
+>first : Symbol(first, Decl(contextuallyTypedIife.ts, 18, 2))
+>rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 18, 8))
+>first : Symbol(first, Decl(contextuallyTypedIife.ts, 18, 2))
+>rest.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 18, 8))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 43))
+>n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 43))
+
+// destructuring parameters (with defaults too!)
+(({ q }) => q)({ q : 13 });
+>q : Symbol(q, Decl(contextuallyTypedIife.ts, 20, 3))
+>q : Symbol(q, Decl(contextuallyTypedIife.ts, 20, 3))
+>q : Symbol(q, Decl(contextuallyTypedIife.ts, 20, 16))
+
+(({ p = 14 }) => p)({ p : 15 });
+>p : Symbol(p, Decl(contextuallyTypedIife.ts, 21, 3))
+>p : Symbol(p, Decl(contextuallyTypedIife.ts, 21, 3))
+>p : Symbol(p, Decl(contextuallyTypedIife.ts, 21, 21))
+
+(({ r = 17 } = { r: 18 }) => r)({r : 19});
+>r : Symbol(r, Decl(contextuallyTypedIife.ts, 22, 3))
+>r : Symbol(r, Decl(contextuallyTypedIife.ts, 22, 16))
+>r : Symbol(r, Decl(contextuallyTypedIife.ts, 22, 3))
+>r : Symbol(r, Decl(contextuallyTypedIife.ts, 22, 33))
+
+(({ u = 22 } = { u: 23 }) => u)();
+>u : Symbol(u, Decl(contextuallyTypedIife.ts, 23, 3))
+>u : Symbol(u, Decl(contextuallyTypedIife.ts, 23, 16))
+>u : Symbol(u, Decl(contextuallyTypedIife.ts, 23, 3))
+
+
+
