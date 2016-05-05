@@ -2989,11 +2989,14 @@ namespace ts {
         }
 
         function tryParseAsyncSimpleArrowFunctionExpression(): ArrowFunction {
-            const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
-            if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
-                const asyncModifier = parseModifiersForArrowFunction();
-                const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
-                return parseSimpleArrowFunctionExpression(<Identifier>expr, asyncModifier);
+            // We do a check here so that we won't be doing unnecessarily call to "lookAhead"
+            if (token === SyntaxKind.AsyncKeyword) {
+                const isUnParenthesizedAsyncArrowFunction = lookAhead(isUnParenthesizedAsyncArrowFunctionWorker);
+                if (isUnParenthesizedAsyncArrowFunction === Tristate.True) {
+                    const asyncModifier = parseModifiersForArrowFunction();
+                    const expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
+                    return parseSimpleArrowFunctionExpression(<Identifier>expr, asyncModifier);
+                }
             }
             return undefined;
         }
