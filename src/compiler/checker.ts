@@ -14174,28 +14174,54 @@ namespace ts {
             const func = getContainingFunction(node);
             visit(node.initializer);
 
-            function visit(n: Node) {
-                if (n.kind === SyntaxKind.Identifier) {
-                    const referencedSymbol = getNodeLinks(n).resolvedSymbol;
+            function visit(n: Node): void {
+                if (isTypeNode(n) || isDeclarationName(n)) {
+                    // do not dive in types
+                    // skip declaration names (i.e. in object literal expressions)
+                    return;
+                }
+                if (n.kind === SyntaxKind.PropertyAccessExpression) {
+                    // skip property names in property access expression
+                    return visit((<PropertyAccessExpression>n).expression);
+                }
+                else if (n.kind === SyntaxKind.Identifier) {
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
-                    // if it contains entry with a specified name and if this entry matches the resolved symbol
-                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
-                        if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
-                            if (referencedSymbol.valueDeclaration === node) {
-                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
-                                return;
-                            }
-                            if (referencedSymbol.valueDeclaration.pos < node.pos) {
-                                // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
-                                return;
-                            }
-                            // fall through to error reporting
-                        }
-                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
+                    // if it contains entry with a specified name
+                    const symbol = getSymbol(func.locals, (<Identifier>n).text, SymbolFlags.Value);
+                    if (!symbol || symbol === unknownSymbol) {
+                        return;
                     }
+                    if (symbol.valueDeclaration === node) {
+                        error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
+                        return;
+                    }
+                    if (symbol.valueDeclaration.kind === SyntaxKind.Parameter) {
+                        // it is ok to reference parameter in initializer if either
+                        // - parameter is located strictly on the left of current parameter declaration
+                        if (symbol.valueDeclaration.pos < node.pos) {
+                            return;
+                        }
+                        // - parameter is wrapped in function-like entity
+                        let current = n;
+                        while (current !== node.initializer) {
+                            if (isFunctionLike(current.parent)) {
+                                return;
+                            }
+                            // computed property names/initializers in instance property declaration of class like entities
+                            // are executed in constructor and thus deferred
+                            if (current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                                !(current.parent.flags & NodeFlags.Static) &&
+                                isClassLike(current.parent.parent)) {
+                                return;
+                            }
+                            current = current.parent;
+                        }
+                        // fall through to report error
+                    }
+                    error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
                 }
                 else {
-                    forEachChild(n, visit);
+                    return forEachChild(n, visit);
                 }
             }
         }
