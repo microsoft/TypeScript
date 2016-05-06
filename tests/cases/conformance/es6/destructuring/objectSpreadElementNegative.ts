@@ -7,9 +7,9 @@ let o3 = { a: 'wrong type?', ...o }
 let o4 = { ...o, ...swap };
 
 // parse errors
-let o5 = { ...1 + 1 };
-let o6 = { ...(1 + 1) };
 let o7 = { ...o? };
 let o8 = { ...*o };
 let o9 = { ...matchMedia() { }};
 let o10 = { ...get x() { return 12; }};
+let o5 = { ...1 + 1 };
+let o6 = { ...(1 + 1) };
