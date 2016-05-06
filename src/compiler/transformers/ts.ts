@@ -444,7 +444,14 @@ namespace ts {
             }
 
             const statements: Statement[] = [];
-            if (!node.decorators) {
+            const allConstructorDecorator = getAllDecoratorsOfConstructor(node);
+            // Check if classDeclaration contains following decorators:
+            //      1) decorators directly on the classDeclaration
+            //      2) decorators on constructor's parameters
+            // If there are these two types of decorators, we need to transform classDeclaration into
+            // variableStatement with classExpression as an initializer.
+            // This is important because depend on what type of node we generate, transformers in the downstream will behave differently
+            if (!allConstructorDecorator) {
                 //  ${modifiers} class ${name} ${heritageClauses} {
                 //      ${members}
                 //  }
@@ -485,7 +492,16 @@ namespace ts {
             if (isNamespaceExport(node)) {
                 addExportMemberAssignment(statements, node);
             }
-            else if (node.decorators) {
+
+            // If classDeclaration contains following decorators:
+            //      1) decorators directly on the classDeclaration
+            //      2) decorators on constructor's parameters
+            // and classDeclaration is exported, we need to emit appropriate exportDeclaration.
+            // This exportDeclaration is used when we transform SystemJS.
+            // For commonjs, below exportDeclaration will be ignore in "visitExportDeclaration and
+            // appropriate export assignment will be added explicitly in "visitExpressionStatement"
+            // (i.e. when we visit decorator assignmentStatement)
+            if (allConstructorDecorator) {
                 if (isDefaultExternalModuleExport(node)) {
                     statements.push(createExportDefault(getLocalName(node)));
                 }
@@ -654,7 +670,8 @@ namespace ts {
                                 name,
                                 classExpression
                             )
-                        ])
+                        ]),
+                        /*location*/ node
                     ),
                     /*original*/ node
                 )
