@@ -1009,7 +1009,7 @@ namespace ts {
                         options: configFile.options,
                         typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
-                        other: configFile.other,
+                        raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
                 });

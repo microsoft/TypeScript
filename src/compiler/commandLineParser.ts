@@ -665,21 +665,6 @@ namespace ts {
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
 
-        // Contains the properties on the json we don't recognize, but the
-        // host might so we return them as a property bag. This allows the host to handle
-        // them, but doesn't have to deal with removing comments from the source json.
-        const other: any = {};
-
-        const knownProperties = ["compilerOptions", "typingOptions", "files", "exclude"];
-
-        for (const prop in json) {
-            if (ts.indexOf(knownProperties, prop) >= 0) {
-                continue;
-            }
-
-            other[prop] = json[prop];
-        }
-
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -688,7 +673,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
-            other,
+            raw: json,
             errors
         };
 
