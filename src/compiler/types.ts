@@ -606,7 +606,7 @@ namespace ts {
 
     export interface DestructuringElement extends ObjectLiteralElement {
         dotDotDotToken: Node;
-        expression: Expression;
+        target: Identifier | BindingPattern;
     }
 
     // SyntaxKind.VariableDeclaration

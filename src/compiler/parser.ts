@@ -4019,12 +4019,9 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             if (dotDotDotToken) {
-                // TODO: Can't be an object literal or array literal unless it can be parsed as an AssignmentPattern
-                // TODO: Can't be *anything else* that isn't IsValidSimpleAssignmentTarget
-                // that is, the set of expressions is actually pretty limited...
                 const destructuringElement = <DestructuringElement>createNode(SyntaxKind.DestructuringElement, fullStart);
                 destructuringElement.dotDotDotToken = dotDotDotToken;
-                destructuringElement.expression = parseExpression();
+                destructuringElement.target = parseIdentifierOrPattern();
                 return addJSDocComment(finishNode(destructuringElement));
             }
             const decorators = parseDecorators();
