@@ -157,6 +157,18 @@ namespace ts {
                 ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
                 ["/apath/test.ts"]
             )
-        })
+        });
+
+        it("allow dotted files and folders when explicitly requested", () => {
+            assertParseFileList(
+                `{
+                    "files": ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
+                }`,
+                "tsconfig.json",
+                "/apath",
+                ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
+                ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
+            )
+        });
     });
 }
