@@ -311,6 +311,8 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
+        DestructuringElement,
+
 
         // Enum
         EnumMember,
@@ -600,6 +602,11 @@ namespace ts {
         // it is grammar error to appear in actual object initializer
         equalsToken?: Node;
         objectAssignmentInitializer?: Expression;
+    }
+
+    export interface DestructuringElement extends ObjectLiteralElement {
+        dotDotDotToken: Node;
+        expression: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
