@@ -71,7 +71,17 @@ this list to see what can be moved out to a separate file.
    Used way lower, when checking imports.
 19. getSymbolOfPartOfRightHandSideOfImportEquals to (at least)
    resolveESModuleSymbol. The actual code behind getTarget* code.
-20. Coming up: more module resolution code, but a different section: getExports*
+20. hasExportAssignmentSymbol to getExportsForModule. Find exports of various symbols, particularly modules.
+21. getMergedSymbol to symbolOfValue. Utilities on Symbol.
+22. findConstructorDeclaration. ooplace, but what it says on the tin.
+23. createType to createObjectType. Create types.
+24. isReservedMemberName, getNamedMembers. An interleaving of utilities to do with symbols again.
+25. setObjectTypeMembers, createAnonymousType. Create/update types.
+26. forEachSymbolTableInScope. Another Symbol/SymbolTable utility.
+27. getQualifiedLeftMeaning to isEntityNameVisible. Figure out symbols in modules.
+28. writeKeyword to getTypeAliasForTypeLiteral, plus getSymbolDisplayBuilder. Display symbols. Lots of code here.
+29. isTopLevelInExternalModuleAugmentation. Sort of detector for module augmentations. Purely
+   syntactic and definitely out of place -- called thousands of lines later.
 
 ## Transformer
 
