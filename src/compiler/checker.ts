@@ -16854,6 +16854,9 @@ namespace ts {
 
         function isValueAliasDeclaration(node: Node): boolean {
             node = getSourceTreeNode(node);
+            if (!node) {
+                return false;
+            }
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ImportClause:
