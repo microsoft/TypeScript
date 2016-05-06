@@ -874,13 +874,7 @@ namespace ts.formatting {
         }
 
         function indentationIsDifferent(indentationString: string, startLinePosition: number): boolean {
-            let size = indentationString.length;
-            for (let i = 0; i < size; i++) {
-                if (indentationString.charCodeAt(i) !== sourceFile.text.charCodeAt(startLinePosition + i)) {
-                    return true;
-                }
-            }
-            return false;
+            return indentationString !== sourceFile.text.substr(startLinePosition , indentationString.length);
         }
 
         function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean) {
