@@ -16587,6 +16587,9 @@ namespace ts {
         }
 
         function getSymbolAtLocation(node: Node) {
+            if (node.kind === SyntaxKind.SourceFile) {
+                return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
+            }
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
