@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor2.ts] ////
+//// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor3.ts] ////
 
 //// [0.ts]
 
@@ -8,6 +8,8 @@ export function foo(target: Object, propertyKey: string | symbol, parameterIndex
 //// [2.ts]
 import {base} from "./0.ts"
 import {foo} from "./0.ts"
+
+/* Comment on the Class Declaration */
 export class C  extends base{
     constructor(@foo prop: any) {
         super();
@@ -42,6 +44,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var _0_ts_1 = require("./0.ts");
 var _0_ts_2 = require("./0.ts");
+/* Comment on the Class Declaration */
 var C = (function (_super) {
     __extends(C, _super);
     function C(prop) {
