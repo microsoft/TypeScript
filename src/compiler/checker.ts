@@ -8539,6 +8539,20 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                const iife = getImmediatelyInvokedFunctionExpression(func);
+                if (iife) {
+                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                        if (parameter.dotDotDotToken) {
+                            const restTypes: Type[] = [];
+                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                            }
+                            return createArrayType(getUnionType(restTypes));
+                        }
+                        return checkExpression(iife.arguments[indexOfParameter]);
+                    }
+                }
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
@@ -8557,6 +8571,20 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
+            if (isFunctionExpressionOrArrowFunction(func)) {
+                let prev: Node = func;
+                let parent: Node = func.parent;
+                while (parent.kind === SyntaxKind.ParenthesizedExpression) {
+                    prev = parent;
+                    parent = parent.parent;
+                }
+                if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
+                    return parent as CallExpression;
+                }
+            }
         }
 
         // In a variable, parameter or property declaration with a type annotation,
@@ -8917,9 +8945,9 @@ namespace ts {
         }
 
         function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | MethodDeclaration) {
-            return isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(node)
-                : getApparentTypeOfContextualType(node);
+            return isObjectLiteralMethod(node) ?
+                getContextualTypeForObjectLiteralMethod(node) :
+                getApparentTypeOfContextualType(node);
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
