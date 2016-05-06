@@ -667,6 +667,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -675,6 +676,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
+            raw: json,
             errors
         };
 
