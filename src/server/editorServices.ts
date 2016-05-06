@@ -1122,8 +1122,13 @@ namespace ts.server {
                         return { configFileName, configFileErrors: configResult.errors };
                     }
                     else {
+                        // even if opening config file was successful, it could still
+                        // contain errors that were tolerated.
                         this.log("Opened configuration file " + configFileName, "Info");
                         this.configuredProjects.push(configResult.project);
+                        if (configResult.errors && configResult.errors.length > 0) {
+                            return { configFileName, configFileErrors: configResult.errors };
+                        }
                     }
                 }
                 else {
@@ -1261,14 +1266,14 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
+                const errors: Diagnostic[] = [];
                 for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
                         const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
                         project.addRoot(info);
                     }
                     else {
-                        const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename);
-                        return { success: false, errors: [error] };
+                        errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                     }
                 }
                 project.finishGraph();
@@ -1279,7 +1284,7 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
-                return { success: true, project: project };
+                return { success: true, project: project, errors };
             }
         }
 
