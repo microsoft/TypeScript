@@ -997,7 +997,7 @@ namespace ts {
                             options: {},
                             typingOptions: {},
                             files: [],
-                            other: {},
+                            raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
