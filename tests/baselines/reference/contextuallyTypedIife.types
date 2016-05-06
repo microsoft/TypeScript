@@ -223,26 +223,26 @@
 let twelve = (f => f(12))(i => i);
 >twelve : any
 >(f => f(12))(i => i) : any
->(f => f(12)) : (f: {}) => any
->f => f(12) : (f: {}) => any
->f : {}
+>(f => f(12)) : (f: (i: any) => any) => any
+>f => f(12) : (f: (i: any) => any) => any
+>f : (i: any) => any
 >f(12) : any
->f : {}
+>f : (i: any) => any
 >12 : number
->i => i : (i: {}) => {}
->i : {}
->i : {}
+>i => i : (i: any) => any
+>i : any
+>i : any
 
 let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >eleven : any
 >(o => o.a(11))({ a: function(n) { return n; } }) : any
->(o => o.a(11)) : (o: { a: {}; }) => any
->o => o.a(11) : (o: { a: {}; }) => any
->o : { a: {}; }
+>(o => o.a(11)) : (o: { a: (n: any) => any; }) => any
+>o => o.a(11) : (o: { a: (n: any) => any; }) => any
+>o : { a: (n: any) => any; }
 >o.a(11) : any
->o.a : {}
->o : { a: {}; }
->a : {}
+>o.a : (n: any) => any
+>o : { a: (n: any) => any; }
+>a : (n: any) => any
 >11 : number
 >{ a: function(n) { return n; } } : { a: (n: any) => any; }
 >a : (n: any) => any

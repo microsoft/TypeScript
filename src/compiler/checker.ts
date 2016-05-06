@@ -8525,9 +8525,13 @@ namespace ts {
                     const indexOfParameter = indexOf(func.parameters, parameter);
                     if (iife.arguments && indexOfParameter < iife.arguments.length) {
                         if (parameter.dotDotDotToken) {
-                            return createArrayType(getUnionType(map(iife.arguments.slice(indexOfParameter), getTypeOfExpression)));
+                            const restTypes: Type[] = [];
+                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                            }
+                            return createArrayType(getUnionType(restTypes));
                         }
-                        return checkExpression(iife.arguments[indexOfParameter], identityMapper);
+                        return checkExpression(iife.arguments[indexOfParameter]);
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
@@ -8552,11 +8556,13 @@ namespace ts {
 
         function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
             if (isFunctionExpressionOrArrowFunction(func)) {
-                let parent = func.parent;
+                let prev: Node = func;
+                let parent: Node = func.parent;
                 while (parent.kind === SyntaxKind.ParenthesizedExpression) {
+                    prev = parent;
                     parent = parent.parent;
                 }
-                if (parent.kind === SyntaxKind.CallExpression) {
+                if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
                     return parent as CallExpression;
                 }
             }
