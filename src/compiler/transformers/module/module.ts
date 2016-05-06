@@ -582,7 +582,8 @@ namespace ts {
                 return setOriginalNode(
                     createVariableStatement(
                         /*modifiers*/ undefined,
-                        node.declarationList
+                        node.declarationList,
+                        /*location*/ node
                     ),
                     node
                 );
@@ -727,13 +728,15 @@ namespace ts {
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
-                    // Avoid emitting a default because a decorated default-exported class will have been rewritten in the TS transformer to
-                    // a decorator assignment (`foo = __decorate(...)`) followed by a separate default export declaration (`export default foo`).
-                    // We will eventually take care of that default export assignment when we transform the generated default export declaration.
-                    if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
-                        addExportMemberAssignment(statements, classDecl)
-                    }
 
+                    // This function will emit appropriate exportAssignment
+                    // as it visit decorator expressionStatement. i.e "C = __decorate(..."
+                    //      1) @dec
+                    //         class C {}
+                    //         export { C }
+                    //      2) @dec
+                    //         export class C {}
+                    // The (2) TypeScript transformer will transform "export class C {}" into exportDeclaration
                     addExportMemberAssignments(statements, classDecl.name);
 
                     return statements;
