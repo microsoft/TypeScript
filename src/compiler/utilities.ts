@@ -1056,6 +1056,7 @@ namespace ts {
 
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
