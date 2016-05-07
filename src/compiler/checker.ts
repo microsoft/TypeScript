@@ -5184,6 +5184,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                     return nullType;
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
@@ -12482,7 +12483,7 @@ namespace ts {
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
         // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
-        // expression is being inferentially typed (section 4.12.2 in spec) and provides the type mapper to use in
+        // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
         // conjunction with the generic contextual type. When contextualMapper is equal to the identityMapper function
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
