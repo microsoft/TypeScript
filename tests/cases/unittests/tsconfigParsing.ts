@@ -13,11 +13,39 @@ namespace ts {
              assert.isTrue(undefined === parsed.config);
              assert.isTrue(undefined !== parsed.error);
         }
-        
+
         function assertParseErrorWithExcludesKeyword(jsonText: string) {
              let parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
              let parsedCommand = ts.parseJsonConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
              assert.isTrue(undefined !== parsedCommand.errors);
+        }
+
+        function assertParseFileList(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedFileList: string[]) {
+            const json = JSON.parse(jsonText);
+            const host: ParseConfigHost = { readDirectory: mockReadDirectory };
+            const parsed = ts.parseJsonConfigFileContent(json, host, basePath, /*existingOptions*/ undefined, configFileName);
+            assert.isTrue(arrayIsEqualTo(parsed.fileNames.sort(), expectedFileList.sort()));
+
+            function mockReadDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
+                const result: string[] = [];
+                const fullExcludeDirectories = ts.map(exclude, directory => combinePaths(rootDir, directory));
+                for (const file of allFileList) {
+                    let shouldExclude = false;
+                    for (const fullExcludeDirectorie of fullExcludeDirectories) {
+                        if (file.indexOf(fullExcludeDirectorie) >= 0) {
+                            shouldExclude = true;
+                            break;
+                        }
+                    }
+                    if (shouldExclude) {
+                        continue;
+                    }
+                    if (fileExtensionIs(file, extension)) {
+                        result.push(file);
+                    }
+                }
+                return result;
+            }
         }
 
         it("returns empty config for file with only whitespaces", () => {
@@ -108,7 +136,7 @@ namespace ts {
                     config: { compilerOptions: { lib: "es5,es6" } }
                 });
         });
-        
+
         it("returns error when tsconfig have excludes", () => {
             assertParseErrorWithExcludesKeyword(
                 `{
@@ -119,6 +147,28 @@ namespace ts {
                         "foge.ts"
                     ]
                 }`);
+        });
+
+        it("ignore dotted files and folders", () => {
+            assertParseFileList(
+                `{}`,
+                "tsconfig.json",
+                "/apath",
+                ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
+                ["/apath/test.ts"]
+            )
+        });
+
+        it("allow dotted files and folders when explicitly requested", () => {
+            assertParseFileList(
+                `{
+                    "files": ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
+                }`,
+                "tsconfig.json",
+                "/apath",
+                ["/apath/test.ts", "/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"],
+                ["/apath/.git/a.ts", "/apath/.b.ts", "/apath/..c.ts"]
+            )
         });
     });
 }

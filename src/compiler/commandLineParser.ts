@@ -652,6 +652,9 @@ namespace ts {
         return output;
     }
 
+    // Skip over any minified JavaScript files (ending in ".min.js")
+    // Skip over dotted files and folders as well
+    const IgnoreFileNamePattern = /(\.min\.js$)|([\\/]\.[\w.])/;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -664,6 +667,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -672,6 +676,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
+            raw: json,
             errors
         };
 
@@ -715,8 +720,7 @@ namespace ts {
                             continue;
                         }
 
-                        // Skip over any minified JavaScript files (ending in ".min.js")
-                        if (/\.min\.js$/.test(fileName)) {
+                        if (IgnoreFileNamePattern.test(fileName)) {
                             continue;
                         }
 

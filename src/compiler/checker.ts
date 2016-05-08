@@ -181,8 +181,9 @@ namespace ts {
 
         let deferredNodes: Node[];
 
-        let flowStackStart = 0;
-        let flowStackCount = 0;
+        let flowLoopStart = 0;
+        let flowLoopCount = 0;
+        let visitedFlowCount = 0;
 
         const tupleTypes: Map<TupleType> = {};
         const unionTypes: Map<UnionType> = {};
@@ -196,9 +197,12 @@ namespace ts {
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
-        const flowTypeCaches: Map<Type>[] = [];
-        const flowStackNodes: FlowNode[] = [];
-        const flowStackCacheKeys: string[] = [];
+        const flowLoopCaches: Map<Type>[] = [];
+        const flowLoopNodes: FlowNode[] = [];
+        const flowLoopKeys: string[] = [];
+        const flowLoopTypes: Type[][] = [];
+        const visitedFlowNodes: FlowNode[] = [];
+        const visitedFlowTypes: Type[] = [];
         const potentialThisCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
@@ -2920,7 +2924,12 @@ namespace ts {
                 if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
                     const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
-                        return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
+                        const signature = getSignatureFromDeclaration(getter);
+                        const thisParameter = getAccessorThisParameter(func as AccessorDeclaration);
+                        if (thisParameter && declaration === thisParameter) {
+                            return signature.thisType;
+                        }
+                        return getReturnTypeOfSignature(signature);
                     }
                 }
                 // Use contextual parameter type if one is available
@@ -3131,6 +3140,16 @@ namespace ts {
                 else {
                     const setterTypeAnnotation = getSetAccessorTypeAnnotationNode(accessor);
                     return setterTypeAnnotation && getTypeFromTypeNode(setterTypeAnnotation);
+                }
+            }
+            return undefined;
+        }
+
+        function getAnnotatedAccessorThisType(accessor: AccessorDeclaration): Type {
+            if (accessor) {
+                const parameter = getAccessorThisParameter(accessor);
+                if (parameter && parameter.type) {
+                    return getTypeFromTypeNode(accessor.parameters[0].type);
                 }
             }
             return undefined;
@@ -4357,20 +4376,12 @@ namespace ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                const classType = declaration.kind === SyntaxKind.Constructor ?
-                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
-                    : undefined;
-                const typeParameters = classType ? classType.localTypeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
-                    getTypeParametersFromJSDocTemplate(declaration);
                 const parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
                 let thisType: Type = undefined;
                 let hasThisParameter: boolean;
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
-                let returnType: Type = undefined;
-                let typePredicate: TypePredicate = undefined;
 
                 // If this is a JSDoc construct signature, then skip the first parameter in the
                 // parameter list.  The first parameter represents the return type of the construct
@@ -4407,46 +4418,66 @@ namespace ts {
                     }
                 }
 
+                // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
+                if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
+                    !hasDynamicName(declaration) &&
+                    (!hasThisParameter || thisType === unknownType)) {
+                    const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
+                    const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
+                    thisType = getAnnotatedAccessorThisType(setter);
+                }
+
                 if (minArgumentCount < 0) {
                     minArgumentCount = declaration.parameters.length - (hasThisParameter ? 1 : 0);
                 }
-
                 if (isJSConstructSignature) {
                     minArgumentCount--;
-                    returnType = getTypeFromTypeNode(declaration.parameters[0].type);
                 }
-                else if (classType) {
-                    returnType = classType;
-                }
-                else if (declaration.type) {
-                    returnType = getTypeFromTypeNode(declaration.type);
-                    if (declaration.type.kind === SyntaxKind.TypePredicate) {
-                        typePredicate = createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode);
-                    }
-                }
-                else {
-                    if (declaration.flags & NodeFlags.JavaScriptFile) {
-                        const type = getReturnTypeFromJSDocComment(declaration);
-                        if (type && type !== unknownType) {
-                            returnType = type;
-                        }
-                    }
 
-                    // TypeScript 1.0 spec (April 2014):
-                    // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
-                        const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
-                        returnType = getAnnotatedAccessorType(setter);
-                    }
-
-                    if (!returnType && nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
-                        returnType = anyType;
-                    }
-                }
+                const classType = declaration.kind === SyntaxKind.Constructor ?
+                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+                    : undefined;
+                const typeParameters = classType ? classType.localTypeParameters :
+                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
+                    getTypeParametersFromJSDocTemplate(declaration);
+                const returnType = getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
+                const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
+                    createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
+                    undefined;
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisType, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
+        }
+
+        function getSignatureReturnTypeFromDeclaration(declaration: SignatureDeclaration, minArgumentCount: number, isJSConstructSignature: boolean, classType: Type) {
+            if (isJSConstructSignature) {
+                return getTypeFromTypeNode(declaration.parameters[0].type);
+            }
+            else if (classType) {
+                return classType;
+            }
+            else if (declaration.type) {
+                return getTypeFromTypeNode(declaration.type);
+            }
+
+            if (declaration.flags & NodeFlags.JavaScriptFile) {
+                const type = getReturnTypeFromJSDocComment(declaration);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
+            // TypeScript 1.0 spec (April 2014):
+            // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
+            if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
+                const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
+                return getAnnotatedAccessorType(setter);
+            }
+
+            if (nodeIsMissing((<FunctionLikeDeclaration>declaration).body)) {
+                return anyType;
+            }
         }
 
         function getSignaturesOfSymbol(symbol: Symbol): Signature[] {
@@ -5180,6 +5211,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                     return nullType;
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
@@ -7378,12 +7410,12 @@ namespace ts {
             return false;
         }
 
-        function getFlowTypeCache(flow: FlowNode): Map<Type> {
+        function getFlowNodeId(flow: FlowNode): number {
             if (!flow.id) {
                 flow.id = nextFlowId;
                 nextFlowId++;
             }
-            return flowTypeCaches[flow.id] || (flowTypeCaches[flow.id] = {});
+            return flow.id;
         }
 
         function typeMaybeAssignableTo(source: Type, target: Type) {
@@ -7581,34 +7613,59 @@ namespace ts {
             if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
-            return getTypeAtFlowNode(reference.flowNode);
+            const visitedFlowStart = visitedFlowCount;
+            const result = getTypeAtFlowNode(reference.flowNode);
+            visitedFlowCount = visitedFlowStart;
+            return result;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
                 while (true) {
-                    switch (flow.kind) {
-                        case FlowKind.Assignment:
-                            const type = getTypeAtFlowAssignment(<FlowAssignment>flow);
-                            if (!type) {
-                                flow = (<FlowAssignment>flow).antecedent;
-                                continue;
+                    if (flow.flags & FlowFlags.Shared) {
+                        // We cache results of flow type resolution for shared nodes that were previously visited in
+                        // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
+                        // antecedent of more than one node.
+                        for (let i = visitedFlowStart; i < visitedFlowCount;  i++) {
+                            if (visitedFlowNodes[i] === flow) {
+                                return visitedFlowTypes[i];
                             }
-                            return type;
-                        case FlowKind.Condition:
-                            return getTypeAtFlowCondition(<FlowCondition>flow);
-                        case FlowKind.Label:
-                        case FlowKind.LoopLabel:
-                            if ((<FlowLabel>flow).antecedents.length === 1) {
-                                flow = (<FlowLabel>flow).antecedents[0];
-                                continue;
-                            }
-                            return getTypeAtFlowLabel(<FlowLabel>flow);
-                        case FlowKind.Unreachable:
-                            // Unreachable code errors are reported in the binding phase. Here we
-                            // simply return the declared type to reduce follow-on errors.
-                            return declaredType;
+                        }
                     }
-                    // At the top of the flow we have the initial type
-                    return initialType;
+                    let type: Type;
+                    if (flow.flags & FlowFlags.Assignment) {
+                        type = getTypeAtFlowAssignment(<FlowAssignment>flow);
+                        if (!type) {
+                            flow = (<FlowAssignment>flow).antecedent;
+                            continue;
+                        }
+                    }
+                    else if (flow.flags & FlowFlags.Condition) {
+                        type = getTypeAtFlowCondition(<FlowCondition>flow);
+                    }
+                    else if (flow.flags & FlowFlags.Label) {
+                        if ((<FlowLabel>flow).antecedents.length === 1) {
+                            flow = (<FlowLabel>flow).antecedents[0];
+                            continue;
+                        }
+                        type = flow.flags & FlowFlags.BranchLabel ?
+                            getTypeAtFlowBranchLabel(<FlowLabel>flow) :
+                            getTypeAtFlowLoopLabel(<FlowLabel>flow);
+                    }
+                    else if (flow.flags & FlowFlags.Unreachable) {
+                        // Unreachable code errors are reported in the binding phase. Here we
+                        // simply return the declared type to reduce follow-on errors.
+                        type = declaredType;
+                    }
+                    else {
+                        // At the top of the flow we have the initial type.
+                        type = initialType;
+                    }
+                    if (flow.flags & FlowFlags.Shared) {
+                        // Record visited node and the associated type in the cache.
+                        visitedFlowNodes[visitedFlowCount] = flow;
+                        visitedFlowTypes[visitedFlowCount] = type;
+                        visitedFlowCount++;
+                    }
+                    return type;
                 }
             }
 
@@ -7643,45 +7700,13 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                const type = getTypeAtFlowNode(flow.antecedent);
-                return type && narrowType(type, flow.expression, flow.assumeTrue);
+                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, (flow.flags & FlowFlags.TrueCondition) !== 0);
             }
 
-            function getTypeAtFlowNodeCached(flow: FlowNode) {
-                const cache = getFlowTypeCache(flow);
-                if (!key) {
-                    key = getFlowCacheKey(reference);
-                }
-                const cached = cache[key];
-                if (cached) {
-                    return cached;
-                }
-                // Return undefined if we're already processing the given node.
-                for (let i = flowStackStart; i < flowStackCount; i++) {
-                    if (flowStackNodes[i] === flow && flowStackCacheKeys[i] === key) {
-                        return undefined;
-                    }
-                }
-                // Record node and key on stack of nodes being processed.
-                flowStackNodes[flowStackCount] = flow;
-                flowStackCacheKeys[flowStackCount] = key;
-                flowStackCount++;
-                const type = getTypeAtFlowNode(flow);
-                flowStackCount--;
-                // Record the result only if the cache is still empty. If checkExpressionCached was called
-                // during processing it is possible we've already recorded a result.
-                return cache[key] || type && (cache[key] = type);
-            }
-
-            function getTypeAtFlowLabel(flow: FlowLabel) {
+            function getTypeAtFlowBranchLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
-                    const type = flow.kind === FlowKind.LoopLabel ?
-                        getTypeAtFlowNodeCached(antecedent) :
-                        getTypeAtFlowNode(antecedent);
-                    if (!type) {
-                        break;
-                    }
+                    const type = getTypeAtFlowNode(antecedent);
                     // If the type at a particular antecedent path is the declared type and the
                     // reference is known to always be assigned (i.e. when declared and initial types
                     // are the same), there is no reason to process more antecedents since the only
@@ -7693,9 +7718,57 @@ namespace ts {
                         antecedentTypes.push(type);
                     }
                 }
-                return antecedentTypes.length === 0 ? undefined :
-                    antecedentTypes.length === 1 ? antecedentTypes[0] :
-                    getUnionType(antecedentTypes);
+                return antecedentTypes.length === 1 ? antecedentTypes[0] : getUnionType(antecedentTypes);
+            }
+
+            function getTypeAtFlowLoopLabel(flow: FlowLabel) {
+                // If we have previously computed the control flow type for the reference at
+                // this flow loop junction, return the cached type.
+                const id = getFlowNodeId(flow);
+                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = {});
+                if (!key) {
+                    key = getFlowCacheKey(reference);
+                }
+                if (cache[key]) {
+                    return cache[key];
+                }
+                // If this flow loop junction and reference are already being processed, return
+                // the union of the types computed for each branch so far. We should never see
+                // an empty array here because the first antecedent of a loop junction is always
+                // the non-looping control flow path that leads to the top.
+                for (let i = flowLoopStart; i < flowLoopCount; i++) {
+                    if (flowLoopNodes[i] === flow && flowLoopKeys[i] === key) {
+                        return getUnionType(flowLoopTypes[i]);
+                    }
+                }
+                // Add the flow loop junction and reference to the in-process stack and analyze
+                // each antecedent code path.
+                const antecedentTypes: Type[] = [];
+                flowLoopNodes[flowLoopCount] = flow;
+                flowLoopKeys[flowLoopCount] = key;
+                flowLoopTypes[flowLoopCount] = antecedentTypes;
+                for (const antecedent of flow.antecedents) {
+                    flowLoopCount++;
+                    const type = getTypeAtFlowNode(antecedent);
+                    flowLoopCount--;
+                    // If we see a value appear in the cache it is a sign that control flow  analysis
+                    // was restarted and completed by checkExpressionCached. We can simply pick up
+                    // the resulting type and bail out.
+                    if (cache[key]) {
+                        return cache[key];
+                    }
+                    // If the type at a particular antecedent path is the declared type and the
+                    // reference is known to always be assigned (i.e. when declared and initial types
+                    // are the same), there is no reason to process more antecedents since the only
+                    // possible outcome is subtypes that will be removed in the final union type anyway.
+                    if (type === declaredType && declaredType === initialType) {
+                        return cache[key] = type;
+                    }
+                    if (!contains(antecedentTypes, type)) {
+                        antecedentTypes.push(type);
+                    }
+                }
+                return cache[key] = antecedentTypes.length === 1 ? antecedentTypes[0] : getUnionType(antecedentTypes);
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
@@ -8494,6 +8567,20 @@ namespace ts {
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
             const func = parameter.parent;
             if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+                const iife = getImmediatelyInvokedFunctionExpression(func);
+                if (iife) {
+                    const indexOfParameter = indexOf(func.parameters, parameter);
+                    if (iife.arguments && indexOfParameter < iife.arguments.length) {
+                        if (parameter.dotDotDotToken) {
+                            const restTypes: Type[] = [];
+                            for (let i = indexOfParameter; i < iife.arguments.length; i++) {
+                                restTypes.push(getTypeOfExpression(iife.arguments[i]));
+                            }
+                            return createArrayType(getUnionType(restTypes));
+                        }
+                        return checkExpression(iife.arguments[indexOfParameter]);
+                    }
+                }
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const funcHasRestParameters = hasRestParameter(func);
@@ -8512,6 +8599,20 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getImmediatelyInvokedFunctionExpression(func: FunctionExpression | MethodDeclaration) {
+            if (isFunctionExpressionOrArrowFunction(func)) {
+                let prev: Node = func;
+                let parent: Node = func.parent;
+                while (parent.kind === SyntaxKind.ParenthesizedExpression) {
+                    prev = parent;
+                    parent = parent.parent;
+                }
+                if (parent.kind === SyntaxKind.CallExpression && (parent as CallExpression).expression === prev) {
+                    return parent as CallExpression;
+                }
+            }
         }
 
         // In a variable, parameter or property declaration with a type annotation,
@@ -8872,9 +8973,9 @@ namespace ts {
         }
 
         function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | MethodDeclaration) {
-            return isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(node)
-                : getApparentTypeOfContextualType(node);
+            return isObjectLiteralMethod(node) ?
+                getContextualTypeForObjectLiteralMethod(node) :
+                getApparentTypeOfContextualType(node);
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
@@ -11197,7 +11298,7 @@ namespace ts {
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
-            links.resolvedSignature = flowStackStart === flowStackCount ? result : cached;
+            links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
             return result;
         }
 
@@ -12354,12 +12455,12 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
-                // analysis because variables may have transient types in indeterminable states. Moving flowStackStart
+                // analysis because variables may have transient types in indeterminable states. Moving flowLoopStart
                 // to the top of the stack ensures all transient types are computed from a known point.
-                const saveFlowStackStart = flowStackStart;
-                flowStackStart = flowStackCount;
+                const saveFlowLoopStart = flowLoopStart;
+                flowLoopStart = flowLoopCount;
                 links.resolvedType = checkExpression(node, contextualMapper);
-                flowStackStart = saveFlowStackStart;
+                flowLoopStart = saveFlowLoopStart;
             }
             return links.resolvedType;
         }
@@ -12409,7 +12510,7 @@ namespace ts {
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
         // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
-        // expression is being inferentially typed (section 4.12.2 in spec) and provides the type mapper to use in
+        // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
         // conjunction with the generic contextual type. When contextualMapper is equal to the identityMapper function
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
@@ -12570,9 +12671,6 @@ namespace ts {
                 }
                 if (func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.ConstructSignature || func.kind === SyntaxKind.ConstructorType) {
                     error(node, Diagnostics.A_constructor_cannot_have_a_this_parameter);
-                }
-                if (func.kind === SyntaxKind.SetAccessor) {
-                    error(node, Diagnostics.A_setter_cannot_have_a_this_parameter);
                 }
             }
 
@@ -12960,15 +13058,10 @@ namespace ts {
                             error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
 
-                        const currentAccessorType = getAnnotatedAccessorType(node);
-                        const otherAccessorType = getAnnotatedAccessorType(otherAccessor);
                         // TypeScript 1.0 spec (April 2014): 4.5
                         // If both accessors include type annotations, the specified types must be identical.
-                        if (currentAccessorType && otherAccessorType) {
-                            if (!isTypeIdenticalTo(currentAccessorType, otherAccessorType)) {
-                                error(node, Diagnostics.get_and_set_accessor_must_have_the_same_type);
-                            }
-                        }
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
+                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorThisType, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
                 getTypeOfAccessors(getSymbolOfNode(node));
@@ -12978,6 +13071,14 @@ namespace ts {
             }
             else {
                 checkNodeDeferred(node);
+            }
+        }
+
+        function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type, message: DiagnosticMessage) {
+            const firstType = getAnnotatedType(first);
+            const secondType = getAnnotatedType(second);
+            if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
+                error(first, message);
             }
         }
 
@@ -14101,28 +14202,54 @@ namespace ts {
             const func = getContainingFunction(node);
             visit(node.initializer);
 
-            function visit(n: Node) {
-                if (n.kind === SyntaxKind.Identifier) {
-                    const referencedSymbol = getNodeLinks(n).resolvedSymbol;
+            function visit(n: Node): void {
+                if (isTypeNode(n) || isDeclarationName(n)) {
+                    // do not dive in types
+                    // skip declaration names (i.e. in object literal expressions)
+                    return;
+                }
+                if (n.kind === SyntaxKind.PropertyAccessExpression) {
+                    // skip property names in property access expression
+                    return visit((<PropertyAccessExpression>n).expression);
+                }
+                else if (n.kind === SyntaxKind.Identifier) {
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
-                    // if it contains entry with a specified name and if this entry matches the resolved symbol
-                    if (referencedSymbol && referencedSymbol !== unknownSymbol && getSymbol(func.locals, referencedSymbol.name, SymbolFlags.Value) === referencedSymbol) {
-                        if (referencedSymbol.valueDeclaration.kind === SyntaxKind.Parameter) {
-                            if (referencedSymbol.valueDeclaration === node) {
-                                error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
-                                return;
-                            }
-                            if (referencedSymbol.valueDeclaration.pos < node.pos) {
-                                // legal case - parameter initializer references some parameter strictly on left of current parameter declaration
-                                return;
-                            }
-                            // fall through to error reporting
-                        }
-                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
+                    // if it contains entry with a specified name
+                    const symbol = getSymbol(func.locals, (<Identifier>n).text, SymbolFlags.Value);
+                    if (!symbol || symbol === unknownSymbol) {
+                        return;
                     }
+                    if (symbol.valueDeclaration === node) {
+                        error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
+                        return;
+                    }
+                    if (symbol.valueDeclaration.kind === SyntaxKind.Parameter) {
+                        // it is ok to reference parameter in initializer if either
+                        // - parameter is located strictly on the left of current parameter declaration
+                        if (symbol.valueDeclaration.pos < node.pos) {
+                            return;
+                        }
+                        // - parameter is wrapped in function-like entity
+                        let current = n;
+                        while (current !== node.initializer) {
+                            if (isFunctionLike(current.parent)) {
+                                return;
+                            }
+                            // computed property names/initializers in instance property declaration of class like entities
+                            // are executed in constructor and thus deferred
+                            if (current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                                !(current.parent.flags & NodeFlags.Static) &&
+                                isClassLike(current.parent.parent)) {
+                                return;
+                            }
+                            current = current.parent;
+                        }
+                        // fall through to report error
+                    }
+                    error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
                 }
                 else {
-                    forEachChild(n, visit);
+                    return forEachChild(n, visit);
                 }
             }
         }
@@ -15696,13 +15823,6 @@ namespace ts {
                     grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
-                        if (!isGlobalAugmentation) {
-                            error((<ImportEqualsDeclaration>node).name, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
-                        }
-                        break;
-                    }
-                    // fallthrough
                 case SyntaxKind.ImportDeclaration:
                     grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                     break;
@@ -15736,9 +15856,6 @@ namespace ts {
                         if (!reportError) {
                             // symbol should not originate in augmentation
                             reportError = isExternalModuleAugmentation(symbol.parent.declarations[0]);
-                        }
-                        if (reportError) {
-                            error(node, Diagnostics.Module_augmentation_cannot_introduce_new_names_in_the_top_level_scope);
                         }
                     }
                     break;
@@ -16552,6 +16669,9 @@ namespace ts {
         }
 
         function getSymbolAtLocation(node: Node) {
+            if (node.kind === SyntaxKind.SourceFile) {
+                return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
+            }
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -18068,7 +18188,7 @@ namespace ts {
             return false;
         }
 
-        function checkGrammarAccessor(accessor: MethodDeclaration): boolean {
+        function checkGrammarAccessor(accessor: AccessorDeclaration): boolean {
             const kind = accessor.kind;
             if (languageVersion < ScriptTarget.ES5) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
@@ -18082,15 +18202,15 @@ namespace ts {
             else if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
             }
-            else if (kind === SyntaxKind.GetAccessor && accessor.parameters.length) {
-                return grammarErrorOnNode(accessor.name, Diagnostics.A_get_accessor_cannot_have_parameters);
+            else if (!doesAccessorHaveCorrectParameterCount(accessor)) {
+                return grammarErrorOnNode(accessor.name,
+                                          kind === SyntaxKind.GetAccessor ?
+                                          Diagnostics.A_get_accessor_cannot_have_parameters :
+                                          Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
             }
             else if (kind === SyntaxKind.SetAccessor) {
                 if (accessor.type) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_cannot_have_a_return_type_annotation);
-                }
-                else if (accessor.parameters.length !== 1) {
-                    return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
                 }
                 else {
                     const parameter = accessor.parameters[0];
@@ -18107,6 +18227,22 @@ namespace ts {
                         return grammarErrorOnNode(accessor.name, Diagnostics.A_set_accessor_parameter_cannot_have_an_initializer);
                     }
                 }
+            }
+        }
+
+        /** Does the accessor have the right number of parameters?
+
+            A get accessor has no parameters or a single `this` parameter.
+            A set accessor has one parameter or a `this` parameter and one more parameter */
+        function doesAccessorHaveCorrectParameterCount(accessor: AccessorDeclaration) {
+            return getAccessorThisParameter(accessor) || accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 0 : 1);
+        }
+
+        function getAccessorThisParameter(accessor: AccessorDeclaration) {
+            if (accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 1 : 2) &&
+                accessor.parameters[0].name.kind === SyntaxKind.Identifier &&
+                (<Identifier>accessor.parameters[0].name).originalKeywordKind === SyntaxKind.ThisKeyword) {
+                return accessor.parameters[0];
             }
         }
 

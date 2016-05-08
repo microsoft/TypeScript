@@ -570,22 +570,29 @@ namespace ts {
         let resolvedFileName = tryLoadModuleUsingOptionalResolutionSettings(moduleName, containingDirectory, nodeLoadModuleByRelativeName,
             failedLookupLocations, supportedExtensions, state);
 
-        if (resolvedFileName) {
-            return createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/false, failedLookupLocations);
+        let isExternalLibraryImport = false;
+        if (!resolvedFileName)  {
+            if (moduleHasNonRelativeName(moduleName)) {
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
+                }
+                resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
+                isExternalLibraryImport = resolvedFileName !== undefined;
+            }
+            else {
+                const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+                resolvedFileName = nodeLoadModuleByRelativeName(candidate, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
+            }
         }
 
-        let isExternalLibraryImport = false;
-        if (moduleHasNonRelativeName(moduleName)) {
+        if (resolvedFileName && host.realpath) {
+            const originalFileName = resolvedFileName;
+            resolvedFileName = normalizePath(host.realpath(resolvedFileName));
             if (traceEnabled) {
-                trace(host, Diagnostics.Loading_module_0_from_node_modules_folder, moduleName);
+                trace(host, Diagnostics.Resolving_real_path_for_0_result_1, originalFileName, resolvedFileName);
             }
-            resolvedFileName = loadModuleFromNodeModules(moduleName, containingDirectory, failedLookupLocations, state);
-            isExternalLibraryImport = resolvedFileName !== undefined;
         }
-        else {
-            const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            resolvedFileName = nodeLoadModuleByRelativeName(candidate, supportedExtensions, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-        }
+
         return createResolvedModule(resolvedFileName, isExternalLibraryImport, failedLookupLocations);
     }
 
@@ -873,6 +880,7 @@ namespace ts {
         }
 
         const newLine = getNewLineCharacter(options);
+        const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
             getSourceFile,
@@ -886,7 +894,8 @@ namespace ts {
             fileExists: fileName => sys.fileExists(fileName),
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
-            directoryExists: directoryName => sys.directoryExists(directoryName)
+            directoryExists: directoryName => sys.directoryExists(directoryName),
+            realpath
         };
     }
 
