@@ -6453,30 +6453,21 @@ namespace ts {
                 const contextualType = typeChecker.getContextualType(objectLiteral);
                 const name = getNameFromObjectLiteralElement(node);
                 if (name && contextualType) {
+                    const result: Symbol[] = [];
+                    const symbol = contextualType.getProperty(name);
+                    if (symbol) {
+                        result.push(symbol);
+                    }
+
                     if (contextualType.flags & TypeFlags.Union) {
-                        // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
-                        // if not, search the constituent types for the property
-                        const unionProperty = contextualType.getProperty(name);
-                        if (unionProperty) {
-                            return [unionProperty];
-                        }
-                        else {
-                            const result: Symbol[] = [];
-                            forEach((<UnionType>contextualType).types, t => {
-                                const symbol = t.getProperty(name);
-                                if (symbol) {
-                                    result.push(symbol);
-                                }
-                            });
-                            return result;
-                        }
+                        forEach((<UnionType>contextualType).types, t => {
+                            const symbol = t.getProperty(name);
+                            if (symbol) {
+                                result.push(symbol);
+                            }
+                        });
                     }
-                    else {
-                        const symbol = contextualType.getProperty(name);
-                        if (symbol) {
-                            return [symbol];
-                        }
-                    }
+                    return result;
                 }
                 return undefined;
             }

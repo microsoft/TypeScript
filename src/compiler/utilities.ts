@@ -1568,7 +1568,6 @@ namespace ts {
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
         return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
-            (<ComputedPropertyName>node.parent).expression === node &&
             isDeclaration(node.parent.parent);
     }
 

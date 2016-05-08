@@ -16916,7 +16916,7 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.Transient) {
                 let target: Symbol;
-                let next: Symbol = symbol;
+                let next = symbol;
                 while (next = getSymbolLinks(next).target) {
                    target = next;
                 }
