@@ -1843,10 +1843,6 @@
         "category": "Error",
         "code": 2664
     },
-    "Module augmentation cannot introduce new names in the top level scope.": {
-        "category": "Error",
-        "code": 2665
-    },
     "Exports and export assignments are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2666
@@ -1911,7 +1907,7 @@
         "category": "Error",
         "code": 2681
     },
-    "A setter cannot have a 'this' parameter.": {
+    "'get' and 'set' accessor must have the same 'this' type.": {
         "category": "Error",
         "code": 2682
     },
@@ -2748,6 +2744,14 @@
         "category": "Message",
         "code": 6128
     },
+    "The config file '{0}' found doesn't contain any source files.": {
+        "category": "Error",
+        "code": 6129
+    },
+    "Resolving real path for '{0}', result '{1}'": {
+        "category": "Message",
+        "code": 6130
+    },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

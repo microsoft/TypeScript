@@ -29,6 +29,7 @@ namespace ts {
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        realpath?(path: string): string;
     }
 
     export interface FileWatcher {
@@ -73,6 +74,7 @@ namespace ts {
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         watchFile?(path: string, callback: FileWatcherCallback): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        realpath(path: string): string;
     };
 
     export var sys: System = (function () {
@@ -527,12 +529,15 @@ namespace ts {
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
+                },
+                realpath(path: string): string {
+                    return _fs.realpathSync(path);
                 }
             };
         }
 
         function getChakraSystem(): System {
-
+            const realpath = ChakraHost.realpath && ((path: string) => ChakraHost.realpath(path));
             return {
                 newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
@@ -558,6 +563,7 @@ namespace ts {
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
+                realpath
             };
         }
 

@@ -277,7 +277,7 @@ var x = 0;`,
         it("Supports backslashes in file name", () => {
             test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "a\\b.ts" }});
         });
-        
+
         it("transpile file as 'tsx' if 'jsx' is specified", () => {
             let input = `var x = <div/>`;
             let output = `"use strict";\nvar x = React.createElement("div", null);\n`;
@@ -286,6 +286,7 @@ var x = 0;`,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
             })
         });
+
         it("transpile .js files", () => {
             const input = "const a = 10;";
             const output = `"use strict";\nvar a = 10;\n`;
@@ -295,5 +296,9 @@ var x = 0;`,
                 expectedDiagnosticCodes: []
             });
         })
+
+        it("Supports urls in file name", () => {
+            test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "http://somewhere/directory//directory2/file.ts" } });
+        });
     });
 }
