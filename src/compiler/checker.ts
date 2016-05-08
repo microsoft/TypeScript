@@ -29,10 +29,6 @@ namespace ts {
 
         const emptyArray: any[] = [];
         const emptySymbols: SymbolTable = {};
-        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const emptyUnionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        emptyGenericType.instantiations = {};
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
@@ -58,6 +54,85 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
+
+         const {
+            typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString
+        } = writerConstructor(
+            { createSymbol, getSymbolCount },
+            { getSymbolOfNode },
+            { compilerOptions, languageVersion },
+            {
+                getTypeParametersOfClassOrInterface, // uncategorised
+                getAccessibleSymbolChain,
+                needsQualification,
+                getQualifiedLeftMeaning,
+                hasExternalModuleSymbol,
+                isTypeAny,
+                getEmptyUnionType: () => emptyUnionType,
+                isReservedMemberName,
+                emptyArray,
+                getGlobalArrayType: () => globalArrayType,
+                getParentSymbolOfTypeParameter,
+                isReadonlySymbol,
+                resolveStructuredTypeMembers,
+                getTypeOfSymbol,
+                getPropertiesOfObjectType,
+                getSignaturesOfType,
+                getTargetSymbol,
+                getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
+                getConstraintOfTypeParameter,
+                isOptionalParameter,
+                getReturnTypeOfSignature,
+                getParentOfSymbol
+            });
+
+        // you need to create the checker *before* calling almost any other function
+        const checker: TypeChecker = {
+            getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => getSymbolCount(host),
+            getTypeCount: () => typeCount,
+            isUndefinedSymbol: symbol => symbol === undefinedSymbol,
+            isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            isUnknownSymbol: symbol => symbol === unknownSymbol,
+            getDiagnostics,
+            getGlobalDiagnostics,
+            getTypeOfSymbolAtLocation,
+            getSymbolsOfParameterPropertyDeclaration,
+            getDeclaredTypeOfSymbol,
+            getPropertiesOfType,
+            getPropertyOfType,
+            getSignaturesOfType,
+            getIndexTypeOfType,
+            getBaseTypes,
+            getReturnTypeOfSignature,
+            getSymbolsInScope,
+            getSymbolAtLocation,
+            getShorthandAssignmentValueSymbol,
+            getExportSpecifierLocalTargetSymbol,
+            getTypeAtLocation: getTypeOfNode,
+            getPropertySymbolOfDestructuringAssignment,
+            typeToString,
+            getSymbolDisplayBuilder,
+            symbolToString,
+            getAugmentedPropertiesOfType,
+            getRootSymbols,
+            getContextualType,
+            getFullyQualifiedName,
+            getResolvedSignature,
+            getConstantValue,
+            isValidPropertyAccess,
+            getSignatureFromDeclaration,
+            isImplementationOfOverload,
+            getAliasedSymbol: resolveAlias,
+            getEmitResolver,
+            getExportsOfModule: getExportsOfModuleAsArray,
+
+            getJsxElementAttributesType,
+            getJsxIntrinsicTagNames,
+            isOptionalParameter
+        };
+
         const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
         const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
@@ -70,8 +145,15 @@ namespace ts {
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined | nullableWideningFlags, "undefined");
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
+
+        // must run after creating checker because it saves a pointer to it
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyUnionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyGenericType.instantiations = {};
+
 
         const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
@@ -90,7 +172,7 @@ namespace ts {
         let getGlobalESSymbolConstructorSymbol: () => Symbol;
 
         let getGlobalPromiseConstructorSymbol: () => Symbol;
-
+        
         // The library files are only loaded when the feature is used.
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
@@ -234,6 +316,8 @@ namespace ts {
         const comparableRelation: Map<RelationComparisonResult> = {};
         const identityRelation: Map<RelationComparisonResult> = {};
 
+        // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
+        let _displayBuilder: SymbolDisplayBuilder;
 
         type TypeSystemEntity = Symbol | Type | Signature;
 
@@ -247,86 +331,7 @@ namespace ts {
         const builtinGlobals: SymbolTable = {
             [undefinedSymbol.name]: undefinedSymbol
         };
-
         initializeTypeChecker();
-        const {
-            typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString
-        } = writerConstructor(
-            { createSymbol, getSymbolCount },
-            { getSymbolOfNode },
-            { compilerOptions, languageVersion },
-            {
-                getTypeParametersOfClassOrInterface, // uncategorised
-                getAccessibleSymbolChain,
-                needsQualification,
-                getQualifiedLeftMeaning,
-                hasExternalModuleSymbol,
-                isTypeAny,
-                emptyUnionType,
-                isReservedMemberName,
-                emptyArray,
-                globalArrayType,
-                getParentSymbolOfTypeParameter,
-                isReadonlySymbol,
-                resolveStructuredTypeMembers,
-                getTypeOfSymbol,
-                getPropertiesOfObjectType,
-                getSignaturesOfType,
-                getTargetSymbol,
-                getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
-                getConstraintOfTypeParameter,
-                isOptionalParameter,
-                getReturnTypeOfSignature,
-                getParentOfSymbol
-            });
-
-        const checker: TypeChecker = {
-            getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => getSymbolCount(host),
-            getTypeCount: () => typeCount,
-            isUndefinedSymbol: symbol => symbol === undefinedSymbol,
-            isArgumentsSymbol: symbol => symbol === argumentsSymbol,
-            isUnknownSymbol: symbol => symbol === unknownSymbol,
-            getDiagnostics,
-            getGlobalDiagnostics,
-            getTypeOfSymbolAtLocation,
-            getSymbolsOfParameterPropertyDeclaration,
-            getDeclaredTypeOfSymbol,
-            getPropertiesOfType,
-            getPropertyOfType,
-            getSignaturesOfType,
-            getIndexTypeOfType,
-            getBaseTypes,
-            getReturnTypeOfSignature,
-            getSymbolsInScope,
-            getSymbolAtLocation,
-            getShorthandAssignmentValueSymbol,
-            getExportSpecifierLocalTargetSymbol,
-            getTypeAtLocation: getTypeOfNode,
-            getPropertySymbolOfDestructuringAssignment,
-            typeToString,
-            getSymbolDisplayBuilder,
-            symbolToString,
-            getAugmentedPropertiesOfType,
-            getRootSymbols,
-            getContextualType,
-            getFullyQualifiedName,
-            getResolvedSignature,
-            getConstantValue,
-            isValidPropertyAccess,
-            getSignatureFromDeclaration,
-            isImplementationOfOverload,
-            getAliasedSymbol: resolveAlias,
-            getEmitResolver,
-            getExportsOfModule: getExportsOfModuleAsArray,
-
-            getJsxElementAttributesType,
-            getJsxIntrinsicTagNames,
-            isOptionalParameter
-        };
-
-
         return checker;
 
         function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -1738,7 +1743,7 @@ namespace ts {
             };
         }
 
-       function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
+        function isTopLevelInExternalModuleAugmentation(node: Node): boolean {
             return node && node.parent &&
                 node.parent.kind === SyntaxKind.ModuleBlock &&
                 isExternalModuleAugmentation(node.parent.parent);

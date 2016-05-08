@@ -21,10 +21,10 @@ namespace ts {
             getQualifiedLeftMeaning,
             hasExternalModuleSymbol,
             isTypeAny,
-            emptyUnionType,
+            getEmptyUnionType,
             isReservedMemberName,
             emptyArray,
-            globalArrayType,
+            getGlobalArrayType,
             getParentSymbolOfTypeParameter,
             isReadonlySymbol,
             resolveStructuredTypeMembers,
@@ -44,10 +44,10 @@ namespace ts {
             getQualifiedLeftMeaning: any,
             hasExternalModuleSymbol: any,
             isTypeAny: any,
-            emptyUnionType: ResolvedType,
+            getEmptyUnionType: () => ResolvedType,
             isReservedMemberName: any,
             emptyArray: any[],
-            globalArrayType: GenericType,
+            getGlobalArrayType: () => GenericType,
             getParentSymbolOfTypeParameter: any,
             isReadonlySymbol: any,
             resolveStructuredTypeMembers: any,
@@ -264,6 +264,8 @@ namespace ts {
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 const globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                const globalArrayType = getGlobalArrayType();
+                const emptyUnionType = getEmptyUnionType();
                 let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
 
@@ -773,7 +775,6 @@ namespace ts {
                 buildReturnTypeDisplay
             });
         }
-
 
         return { typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString };
     }
