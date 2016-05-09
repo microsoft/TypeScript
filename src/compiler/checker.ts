@@ -14215,38 +14215,43 @@ namespace ts {
                 else if (n.kind === SyntaxKind.Identifier) {
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
                     // if it contains entry with a specified name
-                    const symbol = getSymbol(func.locals, (<Identifier>n).text, SymbolFlags.Value);
-                    if (!symbol || symbol === unknownSymbol) {
+                    const symbol = resolveName(n, (<Identifier>n).text, SymbolFlags.Value | SymbolFlags.Alias, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined);
+                    if (!symbol || symbol === unknownSymbol || !symbol.valueDeclaration) {
                         return;
                     }
                     if (symbol.valueDeclaration === node) {
                         error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
                         return;
                     }
-                    if (symbol.valueDeclaration.kind === SyntaxKind.Parameter) {
-                        // it is ok to reference parameter in initializer if either
-                        // - parameter is located strictly on the left of current parameter declaration
-                        if (symbol.valueDeclaration.pos < node.pos) {
-                            return;
-                        }
-                        // - parameter is wrapped in function-like entity
-                        let current = n;
-                        while (current !== node.initializer) {
-                            if (isFunctionLike(current.parent)) {
+                    // locals map for function contain both parameters and function locals
+                    // so we need to do a bit of extra work to check if reference is legal
+                    const enclosingContainer = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
+                    if (enclosingContainer === func) {
+                        if (symbol.valueDeclaration.kind === SyntaxKind.Parameter) {
+                            // it is ok to reference parameter in initializer if either
+                            // - parameter is located strictly on the left of current parameter declaration
+                            if (symbol.valueDeclaration.pos < node.pos) {
                                 return;
                             }
-                            // computed property names/initializers in instance property declaration of class like entities
-                            // are executed in constructor and thus deferred
-                            if (current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                                !(current.parent.flags & NodeFlags.Static) &&
-                                isClassLike(current.parent.parent)) {
-                                return;
+                            // - parameter is wrapped in function-like entity
+                            let current = n;
+                            while (current !== node.initializer) {
+                                if (isFunctionLike(current.parent)) {
+                                    return;
+                                }
+                                // computed property names/initializers in instance property declaration of class like entities
+                                // are executed in constructor and thus deferred
+                                if (current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                                    !(current.parent.flags & NodeFlags.Static) &&
+                                    isClassLike(current.parent.parent)) {
+                                    return;
+                                }
+                                current = current.parent;
                             }
-                            current = current.parent;
+                            // fall through to report error
                         }
-                        // fall through to report error
+                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
                     }
-                    error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
                 }
                 else {
                     return forEachChild(n, visit);
