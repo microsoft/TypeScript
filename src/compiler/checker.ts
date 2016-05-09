@@ -9197,6 +9197,14 @@ namespace ts {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
                         type = checkExpression((<ShorthandPropertyAssignment>memberDecl).name, contextualMapper);
                     }
+
+                    if (hasProperty(propertiesTable, member.name)) {
+                        const existingPropType = getTypeOfSymbol(propertiesTable[member.name]);
+                        if (!isTypeIdenticalTo(existingPropType, type)) {
+                            error(memberDecl.name, Diagnostics.Cannot_change_type_of_property_0_from_1_to_2, member.name, typeToString(existingPropType), typeToString(type));
+                        }
+                    }
+
                     typeFlags |= type.flags;
                     const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
                     if (inDestructuringPattern) {
