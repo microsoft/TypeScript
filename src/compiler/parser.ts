@@ -67,6 +67,11 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+            case SyntaxKind.DestructuringElement:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<DestructuringElement>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<DestructuringElement>node).target);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -1192,7 +1197,7 @@ namespace ts {
                     // which would be a candidate for improved error reporting.
                     return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
-                    return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
+                    return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || token === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
                     return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:

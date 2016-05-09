@@ -2046,6 +2046,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     // Everything until that point can be emitted as part of the initial object literal.
                     let numInitialNonComputedProperties = numProperties;
                     for (let i = 0, n = properties.length; i < n; i++) {
+                        if (properties[i].kind === SyntaxKind.DestructuringElement) {
+                            // TODO: emit an __assign call instead.
+                            continue;
+                        }
                         if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
                             numInitialNonComputedProperties = i;
                             break;

@@ -9234,6 +9234,10 @@ namespace ts {
                     prop.target = member;
                     member = prop;
                 }
+                else if (memberDecl.kind === SyntaxKind.DestructuringElement) {
+                    // push a whole bunch of stuff into propertiesArray
+                    continue;
+                }
                 else {
                     // TypeScript 1.0 spec (April 2014)
                     // A get accessor declaration is processed in the same manner as
@@ -17985,7 +17989,7 @@ namespace ts {
             for (const prop of node.properties) {
                 const name = prop.name;
                 if (prop.kind === SyntaxKind.OmittedExpression ||
-                    name.kind === SyntaxKind.ComputedPropertyName) {
+                    name && name.kind === SyntaxKind.ComputedPropertyName) {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                     continue;
@@ -18029,6 +18033,10 @@ namespace ts {
                 }
                 else if (prop.kind === SyntaxKind.SetAccessor) {
                     currentKind = SetAccessor;
+                }
+                else if (prop.kind === SyntaxKind.DestructuringElement) {
+                    // no name -- do not check
+                    continue;
                 }
                 else {
                     Debug.fail("Unexpected syntax kind:" + prop.kind);
