@@ -1,5 +1,8 @@
 let o = { a: 1, b: 'no' }
-let o2 = { ...o, c: false }
-let o3 = { c: false, ...o }
-let o4 = { b: 'ignored', ...o }
-let o5 = { ...o, b: 'override' }
+let addAfter = { ...o, c: false }
+let addBefore = { c: false, ...o }
+// Note: ignore still changes the order that properties are printed
+let ignore = { b: 'ignored', ...o }
+let override = { ...o, b: 'override' }
+let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+// TODO: Test of own properties (used) versus prototype properties (unused)

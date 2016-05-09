@@ -1,0 +1,58 @@
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(10,16): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(11,15): error TS1003: Identifier expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(11,18): error TS1005: '(' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(12,10): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(12,25): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(12,28): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(12,31): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(13,20): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(14,15): error TS1003: Identifier expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(14,17): error TS1005: ':' expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(15,10): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(15,15): error TS1003: Identifier expected.
+tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts(15,23): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/es6/destructuring/objectSpreadElementNegative.ts (13 errors) ====
+    let o = { a: 1, b: 'no' };
+    let swap = { a: 'yes', b: -1 };
+    
+    // new field's type conflicts with existing field
+    let o2 = { ...o, a: 'wrong type?' }
+    let o3 = { a: 'wrong type?', ...o }
+    let o4 = { ...o, ...swap };
+    
+    // parse errors
+    let o7 = { ...o? };
+                   ~
+!!! error TS1005: ',' expected.
+    let o8 = { ...*o };
+                  ~
+!!! error TS1003: Identifier expected.
+                     ~
+!!! error TS1005: '(' expected.
+    let o9 = { ...matchMedia() { }};
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+                            ~
+!!! error TS1005: ',' expected.
+                               ~
+!!! error TS1005: ',' expected.
+                                  ~
+!!! error TS1128: Declaration or statement expected.
+    let o10 = { ...get x() { return 12; }};
+                       ~
+!!! error TS1005: ',' expected.
+    let o5 = { ...1 + 1 };
+                  ~
+!!! error TS1003: Identifier expected.
+                    ~
+!!! error TS1005: ':' expected.
+    let o6 = { ...(1 + 1) };
+             ~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+                  ~
+!!! error TS1003: Identifier expected.
+                          ~
+!!! error TS1128: Declaration or statement expected.
+    

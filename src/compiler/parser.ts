@@ -4026,7 +4026,7 @@ namespace ts {
             if (dotDotDotToken) {
                 const destructuringElement = <DestructuringElement>createNode(SyntaxKind.DestructuringElement, fullStart);
                 destructuringElement.dotDotDotToken = dotDotDotToken;
-                destructuringElement.target = parseIdentifierOrPattern();
+                destructuringElement.target = parseAssignmentExpressionOrHigher();
                 return addJSDocComment(finishNode(destructuringElement));
             }
             const decorators = parseDecorators();

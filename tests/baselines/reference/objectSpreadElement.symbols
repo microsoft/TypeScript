@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/destructuring/objectSpreadElement.ts ===
+let o = { a: 1, b: 'no' }
+>o : Symbol(o, Decl(objectSpreadElement.ts, 0, 3))
+>a : Symbol(a, Decl(objectSpreadElement.ts, 0, 9))
+>b : Symbol(b, Decl(objectSpreadElement.ts, 0, 15))
+
+let addAfter = { ...o, c: false }
+>addAfter : Symbol(addAfter, Decl(objectSpreadElement.ts, 1, 3))
+>c : Symbol(c, Decl(objectSpreadElement.ts, 1, 22))
+
+let addBefore = { c: false, ...o }
+>addBefore : Symbol(addBefore, Decl(objectSpreadElement.ts, 2, 3))
+>c : Symbol(c, Decl(objectSpreadElement.ts, 2, 17))
+
+// Note: ignore still changes the order that properties are printed
+let ignore = { b: 'ignored', ...o }
+>ignore : Symbol(ignore, Decl(objectSpreadElement.ts, 4, 3))
+>b : Symbol(b, Decl(objectSpreadElement.ts, 4, 14))
+
+let override = { ...o, b: 'override' }
+>override : Symbol(override, Decl(objectSpreadElement.ts, 5, 3))
+>b : Symbol(b, Decl(objectSpreadElement.ts, 5, 22))
+
+let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+>nested : Symbol(nested, Decl(objectSpreadElement.ts, 6, 3))
+>a : Symbol(a, Decl(objectSpreadElement.ts, 6, 19))
+>b : Symbol(b, Decl(objectSpreadElement.ts, 6, 30))
+>c : Symbol(c, Decl(objectSpreadElement.ts, 6, 40))
+>c : Symbol(c, Decl(objectSpreadElement.ts, 6, 60))
+
+// TODO: Test of own properties (used) versus prototype properties (unused)
+

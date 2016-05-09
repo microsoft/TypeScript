@@ -9236,6 +9236,20 @@ namespace ts {
                 }
                 else if (memberDecl.kind === SyntaxKind.DestructuringElement) {
                     // push a whole bunch of stuff into propertiesArray
+                    const des = memberDecl as DestructuringElement;
+                    // TODO: Make sure des.target's type gets set to something besides any
+                    const type = checkExpression(des.target) as ResolvedType;
+                    for (const prop of getPropertiesOfType(type)) {
+                        // TODO: This will break when the properties are themselves destructuringelements
+                        if (!hasProperty(propertiesTable, prop.name)) {
+                            propertiesArray.push(prop);
+                        }
+                        else {
+                            // overwrite (and check existing type)
+                        }
+                        propertiesTable[prop.name] = prop;
+                        // TODO: This will break whenever later property names overwrite previous ones
+                    }
                     continue;
                 }
                 else {
@@ -17987,6 +18001,18 @@ namespace ts {
             const GetOrSetAccessor = GetAccessor | SetAccessor;
 
             for (const prop of node.properties) {
+                if (prop.kind === SyntaxKind.DestructuringElement) {
+                    const target = (prop as DestructuringElement).target;
+                    if (target.kind !== SyntaxKind.Identifier && target.kind !== SyntaxKind.ObjectLiteralExpression) {
+                        grammarErrorOnNode(target, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    }
+
+                    // TODO: Make sure the things you are spreading/resting are identifiers or bindingelements
+                    if (inDestructuring) {
+                        // TODO: Make sure spread operator is last (and therefore can only appear once.)
+                    }
+                    continue;
+                }
                 const name = prop.name;
                 if (prop.kind === SyntaxKind.OmittedExpression ||
                     name && name.kind === SyntaxKind.ComputedPropertyName) {
@@ -18033,10 +18059,6 @@ namespace ts {
                 }
                 else if (prop.kind === SyntaxKind.SetAccessor) {
                     currentKind = SetAccessor;
-                }
-                else if (prop.kind === SyntaxKind.DestructuringElement) {
-                    // no name -- do not check
-                    continue;
                 }
                 else {
                     Debug.fail("Unexpected syntax kind:" + prop.kind);

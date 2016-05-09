@@ -1,0 +1,54 @@
+=== tests/cases/conformance/es6/destructuring/objectSpreadElement.ts ===
+let o = { a: 1, b: 'no' }
+>o : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : number
+>b : string
+>'no' : string
+
+let addAfter = { ...o, c: false }
+>addAfter : { a: number; b: string; c: boolean; }
+>{ ...o, c: false } : { a: number; b: string; c: boolean; }
+>o : any
+>c : boolean
+>false : boolean
+
+let addBefore = { c: false, ...o }
+>addBefore : { c: boolean; a: number; b: string; }
+>{ c: false, ...o } : { c: boolean; a: number; b: string; }
+>c : boolean
+>false : boolean
+>o : any
+
+// Note: ignore still changes the order that properties are printed
+let ignore = { b: 'ignored', ...o }
+>ignore : { b: string; a: number; }
+>{ b: 'ignored', ...o } : { b: string; a: number; }
+>b : string
+>'ignored' : string
+>o : any
+
+let override = { ...o, b: 'override' }
+>override : { a: number; b: string; }
+>{ ...o, b: 'override' } : { a: number; b: string; }
+>o : any
+>b : string
+>'override' : string
+
+let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+>nested : { a: number; b: boolean; c: string; }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: boolean; c: string; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
+>a : number
+>1 : number
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>b : boolean
+>false : boolean
+>c : string
+>'overriden' : string
+>c : string
+>'whatever' : string
+
+// TODO: Test of own properties (used) versus prototype properties (unused)
+
