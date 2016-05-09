@@ -9240,15 +9240,15 @@ namespace ts {
                     // TODO: Make sure des.target's type gets set to something besides any
                     const type = checkExpression(des.target) as ResolvedType;
                     for (const prop of getPropertiesOfType(type)) {
-                        // TODO: This will break when the properties are themselves destructuringelements
-                        if (!hasProperty(propertiesTable, prop.name)) {
-                            propertiesArray.push(prop);
+                        if (hasProperty(propertiesTable, prop.name)) {
+                            const newPropType = getTypeOfSymbol(prop);
+                            const existingPropType = getTypeOfSymbol(propertiesTable[prop.name]);
+                            if (!isTypeIdenticalTo(newPropType, existingPropType)) {
+                                error(des.target, Diagnostics.Cannot_change_type_of_property_0_from_1_to_2, prop.name, typeToString(existingPropType), typeToString(newPropType));
+                            }
                         }
-                        else {
-                            // overwrite (and check existing type)
-                        }
+                        propertiesArray.push(prop);
                         propertiesTable[prop.name] = prop;
-                        // TODO: This will break whenever later property names overwrite previous ones
                     }
                     continue;
                 }

@@ -7,6 +7,14 @@ let o = { a: 1, b: 'no' }
 >b : string
 >'no' : string
 
+let o2 = { b: 'yes', c: true }
+>o2 : { b: string; c: boolean; }
+>{ b: 'yes', c: true } : { b: string; c: boolean; }
+>b : string
+>'yes' : string
+>c : boolean
+>true : boolean
+
 let addAfter = { ...o, c: false }
 >addAfter : { a: number; b: string; c: boolean; }
 >{ ...o, c: false } : { a: number; b: string; c: boolean; }
@@ -50,5 +58,60 @@ let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
 >c : string
 >'whatever' : string
 
+let combined = { ...o, ...o2 }
+>combined : { a: number; b: string; c: boolean; }
+>{ ...o, ...o2 } : { a: number; b: string; c: boolean; }
+>o : any
+>o2 : any
+
+let combinedBefore = { b: 'ok', ...o, ...o2 }
+>combinedBefore : { b: string; a: number; c: boolean; }
+>{ b: 'ok', ...o, ...o2 } : { b: string; a: number; c: boolean; }
+>b : string
+>'ok' : string
+>o : any
+>o2 : any
+
+let combinedMid = { ...o, b: 'ok', ...o2 }
+>combinedMid : { a: number; b: string; c: boolean; }
+>{ ...o, b: 'ok', ...o2 } : { a: number; b: string; c: boolean; }
+>o : any
+>b : string
+>'ok' : string
+>o2 : any
+
+let combinedAfter = { ...o, ...o2, b: 'ok' }
+>combinedAfter : { a: number; b: string; c: boolean; }
+>{ ...o, ...o2, b: 'ok' } : { a: number; b: string; c: boolean; }
+>o : any
+>o2 : any
+>b : string
+>'ok' : string
+
+let combinedNested = {
+>combinedNested : { a: number; b: boolean; c: string; d: string; }
+>{    ...{ a: 1, ...{ b: false, c: 'overriden' } },    d: 'actually new',    ...{ a: 2, d: 'maybe new' },} : { a: number; b: boolean; c: string; d: string; }
+
+    ...{ a: 1, ...{ b: false, c: 'overriden' } },
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
+>a : number
+>1 : number
+>{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>b : boolean
+>false : boolean
+>c : string
+>'overriden' : string
+
+    d: 'actually new',
+>d : string
+>'actually new' : string
+
+    ...{ a: 2, d: 'maybe new' },
+>{ a: 2, d: 'maybe new' } : { a: number; d: string; }
+>a : number
+>2 : number
+>d : string
+>'maybe new' : string
+}
 // TODO: Test of own properties (used) versus prototype properties (unused)
 
