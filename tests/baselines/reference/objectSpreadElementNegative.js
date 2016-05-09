@@ -7,11 +7,7 @@ let o2 = { ...o, a: 'wrong type?' }
 let o3 = { a: 'wrong type?', ...o }
 let o4 = { ...o, ...swap };
 
-// parse errors
-let o7 = { ...o? };
-let o8 = { ...*o };
-let o9 = { ...matchMedia() { }};
-let o10 = { ...get x() { return 12; }};
+// expressions are not allowed
 let o5 = { ...1 + 1 };
 let o6 = { ...(1 + 1) };
 
@@ -23,12 +19,6 @@ var swap = { a: 'yes', b: -1 };
 var o2 = { , a: 'wrong type?' };
 var o3 = { a: 'wrong type?',  };
 var o4 = { ,  };
-// parse errors
-var o7 = {  };
-var o8 = { , o: function () { } };
-var o9 = {  }(), _a = void 0;
-;
-var o10 = { , x: function () { return 12; } };
-var o5 = { , 1: +1 };
-var o6 = {  }(1 + 1);
-;
+// expressions are not allowed
+var o5 = {  };
+var o6 = {  };

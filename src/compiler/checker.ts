@@ -18004,7 +18004,7 @@ namespace ts {
                 if (prop.kind === SyntaxKind.DestructuringElement) {
                     const target = (prop as DestructuringElement).target;
                     if (target.kind !== SyntaxKind.Identifier && target.kind !== SyntaxKind.ObjectLiteralExpression) {
-                        grammarErrorOnNode(target, Diagnostics.An_object_member_cannot_be_declared_optional);
+                        grammarErrorOnNode(target, Diagnostics.Spread_properties_must_be_identifiers_or_object_literals);
                     }
 
                     // TODO: Make sure the things you are spreading/resting are identifiers or bindingelements
