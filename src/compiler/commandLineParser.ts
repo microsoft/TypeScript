@@ -361,7 +361,10 @@ namespace ts {
         },
         {
             name: "listEmittedFiles",
-            type: "boolean"
+            type: {
+                "stdout": EmittedFilesTarget.StdOut,
+                "file": EmittedFilesTarget.JsonFile
+            }
         },
         {
             name: "lib",
