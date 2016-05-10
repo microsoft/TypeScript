@@ -7702,7 +7702,22 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, (flow.flags & FlowFlags.TrueCondition) !== 0);
+                let type = getTypeAtFlowNode(flow.antecedent);
+                if (type !== emptyUnionType) {
+                    // If we have an antecedent type (meaning we're reachable in some way), we first
+                    // attempt to narrow the antecedent type. If that produces the nothing type, then
+                    // we take the type guard as an indication that control could reach here in a
+                    // manner not understood by the control flow analyzer (e.g. a function argument
+                    // has an invalid type, or a nested function has possibly made an assignment to a
+                    // captured variable). We proceed by reverting to the declared type and then
+                    // narrow that.
+                    const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
+                    type = narrowType(type, flow.expression, assumeTrue);
+                    if (type === emptyUnionType) {
+                        type = narrowType(declaredType, flow.expression, assumeTrue);
+                    }
+                }
+                return type;
             }
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel) {
