@@ -735,15 +735,7 @@ namespace ts {
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
-                    // Avoid emitting a default because a decorated default-exported class will have been rewritten in the TS transformer to
-                    // a decorator assignment (`foo = __decorate(...)`) followed by a separate default export declaration (`export default foo`).
-                    // We will eventually take care of that default export assignment when we transform the generated default export declaration.
-                    if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
-                        addExportMemberAssignment(statements, classDecl)
-                    }
-
                     addExportMemberAssignments(statements, classDecl.name);
-
                     return statements;
                 }
             }

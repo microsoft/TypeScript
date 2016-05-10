@@ -421,6 +421,26 @@ namespace ts {
         }
 
         /**
+         * Tests whether we should emit a __decorate call for a class declaration.
+         */
+        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
+            if (node.decorators && node.decorators.length > 0) {
+                return true;
+            }
+
+            const constructor = getFirstConstructorWithBody(node);
+            if (constructor) {
+                for (const parameter of constructor.parameters) {
+                    if (parameter.decorators && parameter.decorators.length > 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
          * Transforms a class declaration with TypeScript syntax into compatible ES6.
          *
          * This function will only be called when one of the following conditions are met:
@@ -434,6 +454,7 @@ namespace ts {
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
+            const isDecoratedClass = shouldEmitDecorateCallForClass(node);
             let decoratedClassAlias: Identifier;
 
             // emit name if
@@ -446,7 +467,7 @@ namespace ts {
             }
 
             const statements: Statement[] = [];
-            if (!node.decorators) {
+            if (!isDecoratedClass) {
                 //  ${modifiers} class ${name} ${heritageClauses} {
                 //      ${members}
                 //  }
@@ -491,7 +512,7 @@ namespace ts {
             if (isNamespaceExport(node)) {
                 addExportMemberAssignment(statements, node);
             }
-            else if (node.decorators) {
+            else if (isDecoratedClass) {
                 if (isDefaultExternalModuleExport(node)) {
                     statements.push(createExportDefault(getLocalName(node)));
                 }
@@ -644,19 +665,11 @@ namespace ts {
                     /*location*/ location);
             }
 
-            // When emitting as a *default* export, we'll add a subsequent `export default` statement,
-            // so we should only be creating a local binding without any modifiers.
-            // Otherwise, we need preserve and visit all the modifiers.
-            const bindingModifiers =
-                isDefaultExternalModuleExport(node)
-                    ? undefined
-                    : visitNodes(node.modifiers, visitor, isModifier);
-
             //  let ${name} = ${classExpression};
             addNode(statements,
                 setOriginalNode(
                     createVariableStatement(
-                        bindingModifiers,
+                        /*modifiers*/ undefined,
                         createLetDeclarationList([
                             createVariableDeclaration(
                                 getDeclarationName(node, /*allowComments*/ true),
