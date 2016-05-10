@@ -144,9 +144,11 @@ class C { m() { } };
 >C : C
 >m : () => void
 
-let c: C;
+let c: C = new C();
 >c : C
 >C : C
+>new C() : C
+>C : typeof C
 
 let spreadC = {...c};
 >spreadC : {}

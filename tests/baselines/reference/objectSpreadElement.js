@@ -27,35 +27,33 @@ let spreadUndefined = { ...undefined }
 
 // methods are not enumerable
 class C { m() { } };
-let c: C;
+let c: C = new C();
 let spreadC = {...c};
 
 
 //// [objectSpreadElement.js]
 var o = { a: 1, b: 'no' };
 var o2 = { b: 'yes', c: true };
-var addAfter = { , c: false };
-var addBefore = { c: false,  };
+var addAfter = __assign({}, o, {c: false});
+var addBefore = __assign({c: false}, o);
 // Note: ignore still changes the order that properties are printed
-var ignore = { b: 'ignored',  };
-var override = { , b: 'override' };
-var nested = { , c: 'whatever' };
-var combined = { ,  };
-var combinedBefore = { b: 'ok', ,  };
-var combinedMid = { , b: 'ok',  };
-var combinedAfter = { , , b: 'ok' };
-var combinedNested = {
-    ,
-    d: 'actually new',
-    ,
-};
+var ignore = __assign({b: 'ignored'}, o);
+var override = __assign({}, o, {b: 'override'});
+var nested = __assign({}, __assign({a: 3}, { b: false, c: 'overriden' }), {c: 'whatever'});
+var combined = __assign({}, o, o2);
+var combinedBefore = __assign({b: 'ok'}, o, o2);
+var combinedMid = __assign({}, o, {b: 'ok'}, o2);
+var combinedAfter = __assign({}, o, o2, {b: 'ok'});
+var combinedNested = __assign({}, __assign({a: 4}, { b: false, c: 'overriden' }), {
+d: 'actually new'
+}, { a: 5, d: 'maybe new' });
 // accessors don't copy the descriptor
 // (which means that readonly getters become read/write)
 var op = { get a() { return 6; } };
-var getter = { , c: 7 };
+var getter = __assign({}, op, {c: 7});
 // null and undefined are just skipped
-var spreadNull = {  };
-var spreadUndefined = {  };
+var spreadNull = __assign({}, null);
+var spreadUndefined = __assign({}, undefined);
 // methods are not enumerable
 var C = (function () {
     function C() {
@@ -64,5 +62,5 @@ var C = (function () {
     return C;
 }());
 ;
-var c;
-var spreadC = {  };
+var c = new C();
+var spreadC = __assign({}, c);

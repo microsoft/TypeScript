@@ -27,5 +27,5 @@ let spreadUndefined = { ...undefined }
 
 // methods are not enumerable
 class C { m() { } };
-let c: C;
+let c: C = new C();
 let spreadC = {...c};

@@ -1312,7 +1312,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             }
                             if (haveOpenedObjectLiteral) write("}");
 
-                            write(")"); // closing paren to React.__spread(
+                            write(")"); // closing paren to __assign(
                         }
                         else {
                             // One object literal with all the attributes in them
@@ -1877,9 +1877,62 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
+            function partialGroup<T>(xs: T[], f: (t: T) => boolean): (T | T[])[] {
+                let chunk: T[];
+                const result: (T | T[])[] = [];
+                for (const x of xs) {
+                    if (f(x)) {
+                        if (chunk) {
+                            result.push(chunk);
+                            chunk = undefined;
+                        }
+                        result.push(x);
+                    }
+                    else {
+                        if (!chunk) {
+                            chunk = [];
+                        }
+                        chunk.push(x);
+                    }
+                }
+                if (chunk) {
+                    result.push(chunk);
+                }
+
+                return result;
+            }
+
             function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number): void {
                 if (numElements === 0) {
                     write("{}");
+                    return;
+                }
+                if (forEach(node.properties, p => p.kind === SyntaxKind.DestructuringElement)) {
+                    // TODO: This might need to be moved up one level
+                    write("__assign(");
+                    let first = true;
+                    const chunks = partialGroup(node.properties, p => p.kind === SyntaxKind.DestructuringElement);
+                    if (chunks.length && !Array.isArray(chunks[0])) {
+                        write("{}");
+                        first = false;
+                    }
+                    for (const chunk of chunks) {
+                        if (!first) {
+                            write(", ");
+                        }
+                        else {
+                            first = false;
+                        }
+                        if (Array.isArray(chunk)) {
+                            write("{");
+                            emitList(chunk, 0, chunk.length, /*multiLine*/ node.multiLine, /*trailingComma*/ false);
+                            write("}");
+                        }
+                        else {
+                            emit((chunk as DestructuringElement).target);
+                        }
+                    }
+                    write(")");
                     return;
                 }
 
@@ -2047,7 +2100,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     let numInitialNonComputedProperties = numProperties;
                     for (let i = 0, n = properties.length; i < n; i++) {
                         if (properties[i].kind === SyntaxKind.DestructuringElement) {
-                            // TODO: emit an __assign call instead.
+                            // TODO: emit an __assign call instead and fix subsequent TODO
                             continue;
                         }
                         if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
@@ -2058,6 +2111,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     const hasComputedProperty = numInitialNonComputedProperties !== properties.length;
                     if (hasComputedProperty) {
+                        // TODO: Fix this
                         emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
                         return;
                     }

@@ -85,8 +85,9 @@ class C { m() { } };
 >C : Symbol(C, Decl(objectSpreadElement.ts, 24, 38))
 >m : Symbol(C.m, Decl(objectSpreadElement.ts, 27, 9))
 
-let c: C;
+let c: C = new C();
 >c : Symbol(c, Decl(objectSpreadElement.ts, 28, 3))
+>C : Symbol(C, Decl(objectSpreadElement.ts, 24, 38))
 >C : Symbol(C, Decl(objectSpreadElement.ts, 24, 38))
 
 let spreadC = {...c};
