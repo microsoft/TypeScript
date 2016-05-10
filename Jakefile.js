@@ -187,6 +187,12 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 })
 
+var es2017LibrarySource = ["es2017.object.d.ts"];
+
+var es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+})
+
 var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
 
 var librarySourceMap = [
@@ -200,11 +206,12 @@ var librarySourceMap = [
         { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+        { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
         
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts"), },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
