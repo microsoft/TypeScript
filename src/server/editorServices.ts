@@ -1266,14 +1266,14 @@ namespace ts.server {
             }
             else {
                 const project = this.createProject(configFilename, projectOptions);
-                const errors: Diagnostic[] = [];
+                let errors: Diagnostic[];
                 for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
                         const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
                         project.addRoot(info);
                     }
                     else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
+                        (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.File_0_not_found, rootFilename));
                     }
                 }
                 project.finishGraph();
@@ -1300,7 +1300,7 @@ namespace ts.server {
                 }
                 else {
                     const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
-                    const newFileNames = projectOptions.files;
+                    const newFileNames = ts.filter(projectOptions.files, sys.fileExists);
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
 
