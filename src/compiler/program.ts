@@ -1895,7 +1895,7 @@ namespace ts {
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
-                    // - module name come from the list fo imports
+                    // - module name comes from the list of imports
                     const shouldAddFile = resolution &&
                         !options.noResolve &&
                         i < file.imports.length;
