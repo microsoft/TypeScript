@@ -44,12 +44,12 @@ let override = { ...o, b: 'override' }
 >b : string
 >'override' : string
 
-let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+let nested = { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
 >nested : { a: number; b: boolean; c: string; }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: boolean; c: string; }
->{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: boolean; c: string; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
 >a : number
->1 : number
+>3 : number
 >{ b: false, c: 'overriden' } : { b: boolean; c: string; }
 >b : boolean
 >false : boolean
@@ -90,12 +90,12 @@ let combinedAfter = { ...o, ...o2, b: 'ok' }
 
 let combinedNested = {
 >combinedNested : { a: number; b: boolean; c: string; d: string; }
->{    ...{ a: 1, ...{ b: false, c: 'overriden' } },    d: 'actually new',    ...{ a: 2, d: 'maybe new' },} : { a: number; b: boolean; c: string; d: string; }
+>{    ...{ a: 4, ...{ b: false, c: 'overriden' } },    d: 'actually new',    ...{ a: 5, d: 'maybe new' },} : { a: number; b: boolean; c: string; d: string; }
 
-    ...{ a: 1, ...{ b: false, c: 'overriden' } },
->{ a: 1, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
+    ...{ a: 4, ...{ b: false, c: 'overriden' } },
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { a: number; b: boolean; c: string; }
 >a : number
->1 : number
+>4 : number
 >{ b: false, c: 'overriden' } : { b: boolean; c: string; }
 >b : boolean
 >false : boolean
@@ -106,12 +106,50 @@ let combinedNested = {
 >d : string
 >'actually new' : string
 
-    ...{ a: 2, d: 'maybe new' },
->{ a: 2, d: 'maybe new' } : { a: number; d: string; }
+    ...{ a: 5, d: 'maybe new' },
+>{ a: 5, d: 'maybe new' } : { a: number; d: string; }
 >a : number
->2 : number
+>5 : number
 >d : string
 >'maybe new' : string
 }
-// TODO: Test of own properties (used) versus prototype properties (unused)
+// accessors don't copy the descriptor
+// (which means that readonly getters become read/write)
+let op = { get a () { return 6 } };
+>op : { readonly a: number; }
+>{ get a () { return 6 } } : { readonly a: number; }
+>a : number
+>6 : number
+
+let getter = { ...op, c: 7 }
+>getter : { a: number; c: number; }
+>{ ...op, c: 7 } : { a: number; c: number; }
+>op : any
+>c : number
+>7 : number
+
+// null and undefined are just skipped
+let spreadNull = { ...null }
+>spreadNull : {}
+>{ ...null } : {}
+>null : null
+
+let spreadUndefined = { ...undefined }
+>spreadUndefined : {}
+>{ ...undefined } : {}
+>undefined : any
+
+// methods are not enumerable
+class C { m() { } };
+>C : C
+>m : () => void
+
+let c: C;
+>c : C
+>C : C
+
+let spreadC = {...c};
+>spreadC : {}
+>{...c} : {}
+>c : any
 

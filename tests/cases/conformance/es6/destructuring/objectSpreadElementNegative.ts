@@ -1,3 +1,4 @@
+// @target: es5
 let o = { a: 1, b: 'no' };
 let swap = { a: 'yes', b: -1 };
 
@@ -15,3 +16,6 @@ let o6 = { ...(1 + 1) };
 
 // repeats are not allowed
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+
+// spreading write-only properties is not allowed
+let setterOnly = { ...{ set b (bad: number) { } } };

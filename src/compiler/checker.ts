@@ -9247,16 +9247,34 @@ namespace ts {
                     const des = memberDecl as DestructuringElement;
                     // TODO: Make sure des.target's type gets set to something besides any
                     const type = checkExpression(des.target) as ResolvedType;
-                    for (const prop of getPropertiesOfType(type)) {
-                        if (hasProperty(propertiesTable, prop.name)) {
-                            const newPropType = getTypeOfSymbol(prop);
-                            const existingPropType = getTypeOfSymbol(propertiesTable[prop.name]);
+                    for (let member of getPropertiesOfType(type)) {
+                        if (member.valueDeclaration.kind === SyntaxKind.MethodDeclaration) {
+                            // methods are not enumerable, so they are not copied by Object.assign
+                            continue;
+                        }
+                        if (hasProperty(propertiesTable, member.name)) {
+                            const newPropType = getTypeOfSymbol(member);
+                            const existingPropType = getTypeOfSymbol(propertiesTable[member.name]);
                             if (!isTypeIdenticalTo(newPropType, existingPropType)) {
-                                error(des.target, Diagnostics.Cannot_change_type_of_property_0_from_1_to_2, prop.name, typeToString(existingPropType), typeToString(newPropType));
+                                error(des.target, Diagnostics.Cannot_change_type_of_property_0_from_1_to_2, member.name, typeToString(existingPropType), typeToString(newPropType));
                             }
                         }
-                        propertiesArray.push(prop);
-                        propertiesTable[prop.name] = prop;
+                        if (member.flags & SymbolFlags.SetAccessor && !(member.flags & SymbolFlags.GetAccessor)) {
+                            error(des.target, Diagnostics.Cannot_spread_property_0_because_it_does_not_have_a_get_accessor, member.name);
+                        }
+                        if (member.flags & SymbolFlags.GetAccessor) {
+                            const prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | (member.flags ^ SymbolFlags.GetAccessor), member.name);
+                            prop.declarations = member.declarations;
+                            prop.parent = member.parent;
+                            if (member.valueDeclaration) {
+                                prop.valueDeclaration = member.valueDeclaration;
+                            }
+                            prop.target = member;
+                            prop.type = getTypeOfSymbol(member);
+                            member = prop;
+                        }
+                        propertiesArray.push(member);
+                        propertiesTable[member.name] = member;
                     }
                     continue;
                 }
@@ -18011,11 +18029,16 @@ namespace ts {
             for (const prop of node.properties) {
                 if (prop.kind === SyntaxKind.DestructuringElement) {
                     const target = (prop as DestructuringElement).target;
-                    if (target.kind !== SyntaxKind.Identifier && target.kind !== SyntaxKind.ObjectLiteralExpression) {
-                        grammarErrorOnNode(target, Diagnostics.Spread_properties_must_be_identifiers_or_object_literals);
+                    switch (target.kind) {
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.PropertyAccessExpression:
+                        case SyntaxKind.ObjectLiteralExpression:
+                        case SyntaxKind.NullKeyword:
+                            break;
+                        default:
+                            grammarErrorOnNode(target, Diagnostics.Spread_properties_must_be_identifiers_property_accesses_or_object_literals);
                     }
 
-                    // TODO: Make sure the things you are spreading/resting are identifiers or bindingelements
                     if (inDestructuring) {
                         // TODO: Make sure spread operator is last (and therefore can only appear once.)
                     }

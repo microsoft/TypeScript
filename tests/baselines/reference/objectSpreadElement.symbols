@@ -26,7 +26,7 @@ let override = { ...o, b: 'override' }
 >override : Symbol(override, Decl(objectSpreadElement.ts, 6, 3))
 >b : Symbol(b, Decl(objectSpreadElement.ts, 6, 22))
 
-let nested = { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
+let nested = { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
 >nested : Symbol(nested, Decl(objectSpreadElement.ts, 7, 3))
 >a : Symbol(a, Decl(objectSpreadElement.ts, 7, 19))
 >b : Symbol(b, Decl(objectSpreadElement.ts, 7, 30))
@@ -51,7 +51,7 @@ let combinedAfter = { ...o, ...o2, b: 'ok' }
 let combinedNested = {
 >combinedNested : Symbol(combinedNested, Decl(objectSpreadElement.ts, 12, 3))
 
-    ...{ a: 1, ...{ b: false, c: 'overriden' } },
+    ...{ a: 4, ...{ b: false, c: 'overriden' } },
 >a : Symbol(a, Decl(objectSpreadElement.ts, 13, 8))
 >b : Symbol(b, Decl(objectSpreadElement.ts, 13, 19))
 >c : Symbol(c, Decl(objectSpreadElement.ts, 13, 29))
@@ -59,9 +59,36 @@ let combinedNested = {
     d: 'actually new',
 >d : Symbol(d, Decl(objectSpreadElement.ts, 13, 49))
 
-    ...{ a: 2, d: 'maybe new' },
+    ...{ a: 5, d: 'maybe new' },
 >a : Symbol(a, Decl(objectSpreadElement.ts, 15, 8))
 >d : Symbol(d, Decl(objectSpreadElement.ts, 15, 14))
 }
-// TODO: Test of own properties (used) versus prototype properties (unused)
+// accessors don't copy the descriptor
+// (which means that readonly getters become read/write)
+let op = { get a () { return 6 } };
+>op : Symbol(op, Decl(objectSpreadElement.ts, 19, 3))
+>a : Symbol(a, Decl(objectSpreadElement.ts, 19, 10))
+
+let getter = { ...op, c: 7 }
+>getter : Symbol(getter, Decl(objectSpreadElement.ts, 20, 3))
+>c : Symbol(c, Decl(objectSpreadElement.ts, 20, 21))
+
+// null and undefined are just skipped
+let spreadNull = { ...null }
+>spreadNull : Symbol(spreadNull, Decl(objectSpreadElement.ts, 23, 3))
+
+let spreadUndefined = { ...undefined }
+>spreadUndefined : Symbol(spreadUndefined, Decl(objectSpreadElement.ts, 24, 3))
+
+// methods are not enumerable
+class C { m() { } };
+>C : Symbol(C, Decl(objectSpreadElement.ts, 24, 38))
+>m : Symbol(C.m, Decl(objectSpreadElement.ts, 27, 9))
+
+let c: C;
+>c : Symbol(c, Decl(objectSpreadElement.ts, 28, 3))
+>C : Symbol(C, Decl(objectSpreadElement.ts, 24, 38))
+
+let spreadC = {...c};
+>spreadC : Symbol(spreadC, Decl(objectSpreadElement.ts, 29, 3))
 

@@ -17,6 +17,9 @@ let o6 = { ...(1 + 1) };
 // repeats are not allowed
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 
+// spreading write-only properties is not allowed
+let setterOnly = { ...{ set b (bad: number) { } } };
+
 
 //// [objectSpreadElementNegative.js]
 var o = { a: 1, b: 'no' };
@@ -34,3 +37,5 @@ var o5 = {  };
 var o6 = {  };
 // repeats are not allowed
 var duplicated = { b: 'bad', , b: 'bad', , b: 'bad' };
+// spreading write-only properties is not allowed
+var setterOnly = {  };
