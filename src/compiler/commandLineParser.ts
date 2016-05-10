@@ -375,6 +375,7 @@ namespace ts {
                     "es2015": "lib.es2015.d.ts",
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
+                    "es2017": "lib.es2017.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
