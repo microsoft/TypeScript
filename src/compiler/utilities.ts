@@ -1565,6 +1565,12 @@ namespace ts {
         return false;
     }
 
+    export function isLiteralComputedPropertyDeclarationName(node: Node) {
+        return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
+            node.parent.kind === SyntaxKind.ComputedPropertyName &&
+            isDeclaration(node.parent.parent);
+    }
+
     // Return true if the given identifier is classified as an IdentifierName
     export function isIdentifierName(node: Identifier): boolean {
         let parent = node.parent;
@@ -1749,6 +1755,9 @@ namespace ts {
             if (isWellKnownSymbolSyntactically(nameExpression)) {
                 const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
+            }
+            else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
+                return (<LiteralExpression>nameExpression).text;
             }
         }
 

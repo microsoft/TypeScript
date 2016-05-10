@@ -3,6 +3,8 @@ var v = {
 >v : Symbol(v, Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 3))
 
     ["hello"]() {
+>"hello" : Symbol(["hello"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 9))
+
         debugger;
     }
 }
