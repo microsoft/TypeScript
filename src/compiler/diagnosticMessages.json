@@ -1471,7 +1471,7 @@
         "category": "Error",
         "code": 2461
     },
-    "A rest element must be last in an array destructuring pattern": {
+    "A rest element must be last in a destructuring pattern": {
         "category": "Error",
         "code": 2462
     },

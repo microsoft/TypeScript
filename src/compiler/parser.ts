@@ -1199,7 +1199,7 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || token === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
-                    return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                    return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
                     // If we see { } then only consume it as an expression if it is followed by , or {
                     // That way we won't consume the body of a class in its heritage clause.
@@ -4728,6 +4728,7 @@ namespace ts {
 
         function parseObjectBindingElement(): BindingElement {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
+            node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             const tokenIsIdentifier = isIdentifier();
             const propertyName = parsePropertyName();
             if (tokenIsIdentifier && token !== SyntaxKind.ColonToken) {
