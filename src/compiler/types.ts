@@ -311,7 +311,7 @@ namespace ts {
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
-        DestructuringElement,
+        SpreadElement,
 
 
         // Enum
@@ -604,7 +604,7 @@ namespace ts {
         objectAssignmentInitializer?: Expression;
     }
 
-    export interface DestructuringElement extends ObjectLiteralElement {
+    export interface SpreadElement extends ObjectLiteralElement {
         dotDotDotToken: Node;
         target: Expression;
     }

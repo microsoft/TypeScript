@@ -9242,9 +9242,9 @@ namespace ts {
                     prop.target = member;
                     member = prop;
                 }
-                else if (memberDecl.kind === SyntaxKind.DestructuringElement) {
+                else if (memberDecl.kind === SyntaxKind.SpreadElement) {
                     // push a whole bunch of stuff into propertiesArray
-                    const des = memberDecl as DestructuringElement;
+                    const des = memberDecl as SpreadElement;
                     // TODO: Make sure des.target's type gets set to something besides any
                     const type = checkExpression(des.target) as ResolvedType;
                     for (let member of getPropertiesOfType(type)) {
@@ -18027,8 +18027,8 @@ namespace ts {
             const GetOrSetAccessor = GetAccessor | SetAccessor;
 
             for (const prop of node.properties) {
-                if (prop.kind === SyntaxKind.DestructuringElement) {
-                    const target = (prop as DestructuringElement).target;
+                if (prop.kind === SyntaxKind.SpreadElement) {
+                    const target = (prop as SpreadElement).target;
                     switch (target.kind) {
                         case SyntaxKind.Identifier:
                         case SyntaxKind.PropertyAccessExpression:

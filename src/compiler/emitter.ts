@@ -1909,7 +1909,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("{}");
                     return;
                 }
-                if (forEach(node.properties, (p, i) => i < numElements && p.kind === SyntaxKind.DestructuringElement)) {
+                if (forEach(node.properties, (p, i) => i < numElements && p.kind === SyntaxKind.SpreadElement)) {
                     // spread elements cause completely different emit.
                     // non-spread elements are chunked together into object literals, and then all are passed to __assign:
                     //     { a, ...o, b } => __assign({a}, o, {b});
@@ -1917,7 +1917,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
                     write("__assign(");
                     let first = true;
-                    const chunks = subgroup(node.properties, p => p.kind === SyntaxKind.DestructuringElement, numElements);
+                    const chunks = subgroup(node.properties, p => p.kind === SyntaxKind.SpreadElement, numElements);
                     if (chunks.length && !Array.isArray(chunks[0])) {
                         write("{}");
                         first = false;
@@ -1935,7 +1935,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                             write("}");
                         }
                         else {
-                            emit((chunk as DestructuringElement).target);
+                            emit((chunk as SpreadElement).target);
                         }
                     }
                     write(")");
@@ -2048,11 +2048,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write("})");
                         emitEnd(property);
                     }
-                    else if (property.kind === SyntaxKind.DestructuringElement) {
+                    else if (property.kind === SyntaxKind.SpreadElement) {
                         write("Object.assign(");
                         emit(tempVar);
                         write(", ");
-                        const target = (property as DestructuringElement).target;
+                        const target = (property as SpreadElement).target;
                         emitStart(target);
                         emit(target);
                         emitEnd(target);

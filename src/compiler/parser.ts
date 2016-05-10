@@ -67,11 +67,11 @@ namespace ts {
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
                     visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
-            case SyntaxKind.DestructuringElement:
+            case SyntaxKind.SpreadElement:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<DestructuringElement>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<DestructuringElement>node).target);
+                    visitNode(cbNode, (<SpreadElement>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<SpreadElement>node).target);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -4024,7 +4024,7 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
             if (dotDotDotToken) {
-                const destructuringElement = <DestructuringElement>createNode(SyntaxKind.DestructuringElement, fullStart);
+                const destructuringElement = <SpreadElement>createNode(SyntaxKind.SpreadElement, fullStart);
                 destructuringElement.dotDotDotToken = dotDotDotToken;
                 destructuringElement.target = parseAssignmentExpressionOrHigher();
                 return addJSDocComment(finishNode(destructuringElement));
