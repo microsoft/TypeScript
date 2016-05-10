@@ -1,8 +1,9 @@
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts(26,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts(27,5): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts(27,5): error TS2687: Cannot change type of property 'foo' from '(x: "hi") => void' to '(x: "a") => void'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts (2 errors) ====
+==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralTypesInImplementationSignatures2.ts (3 errors) ====
     // String literal types are only valid in overload signatures
     
     function foo(x: any);
@@ -34,5 +35,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
         foo(x: 'a') { },
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
+        ~~~
+!!! error TS2687: Cannot change type of property 'foo' from '(x: "hi") => void' to '(x: "a") => void'.
     }
     

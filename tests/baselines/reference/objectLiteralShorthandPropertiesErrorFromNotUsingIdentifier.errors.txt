@@ -10,13 +10,15 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,5): error TS2300: Duplicate identifier 'a'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(15,6): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,5): error TS2687: Cannot change type of property 'a' from 'any' to 'string[]'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(16,6): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,5): error TS2687: Cannot change type of property 'a' from 'string[]' to 'number[]'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(17,6): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(20,17): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (16 errors) ====
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (18 errors) ====
     // errors
     var y = {
         "stringLiteral",
@@ -57,11 +59,15 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
         a["ss"],
         ~
 !!! error TS2300: Duplicate identifier 'a'.
+        ~
+!!! error TS2687: Cannot change type of property 'a' from 'any' to 'string[]'.
          ~
 !!! error TS1005: ':' expected.
         a[1],
         ~
 !!! error TS2300: Duplicate identifier 'a'.
+        ~
+!!! error TS2687: Cannot change type of property 'a' from 'string[]' to 'number[]'.
          ~
 !!! error TS1005: ':' expected.
     };
