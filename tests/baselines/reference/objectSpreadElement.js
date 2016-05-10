@@ -30,6 +30,24 @@ class C { m() { } };
 let c: C = new C();
 let spreadC = {...c};
 
+// computed property
+let computedFirst = {
+    ['before everything']: 12,
+    ...o,
+    b: 'yes'
+}
+let computedMiddle = {
+    ...o,
+    ['in the middle']: 13,
+    b: 'maybe?',
+    ...o2
+}
+let computedAfter = {
+    ...o,
+    b: 'yeah',
+    ['at the end']: 14
+}
+
 
 //// [objectSpreadElement.js]
 var o = { a: 1, b: 'no' };
@@ -64,3 +82,23 @@ var C = (function () {
 ;
 var c = new C();
 var spreadC = __assign({}, c);
+// computed property
+var computedFirst = (_a = {},
+    _a['before everything'] = 12,
+    Object.assign(_a, o),
+    _a.b = 'yes',
+    _a
+);
+var computedMiddle = (_b = __assign({}, o),
+    _b['in the middle'] = 13,
+    _b.b = 'maybe?',
+    Object.assign(_b, o2),
+    _b
+);
+var computedAfter = (_c = __assign({}, o, {
+    b: 'yeah'
+    }),
+    _c['at the end'] = 14,
+    _c
+);
+var _a, _b, _c;

@@ -29,3 +29,21 @@ let spreadUndefined = { ...undefined }
 class C { m() { } };
 let c: C = new C();
 let spreadC = {...c};
+
+// computed property
+let computedFirst = {
+    ['before everything']: 12,
+    ...o,
+    b: 'yes'
+}
+let computedMiddle = {
+    ...o,
+    ['in the middle']: 13,
+    b: 'maybe?',
+    ...o2
+}
+let computedAfter = {
+    ...o,
+    b: 'yeah',
+    ['at the end']: 14
+}

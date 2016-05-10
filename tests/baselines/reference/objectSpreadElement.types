@@ -155,3 +155,53 @@ let spreadC = {...c};
 >{...c} : {}
 >c : any
 
+// computed property
+let computedFirst = {
+>computedFirst : { ['before everything']: number; a: number; b: string; }
+>{    ['before everything']: 12,    ...o,    b: 'yes'} : { ['before everything']: number; a: number; b: string; }
+
+    ['before everything']: 12,
+>'before everything' : string
+>12 : number
+
+    ...o,
+>o : any
+
+    b: 'yes'
+>b : string
+>'yes' : string
+}
+let computedMiddle = {
+>computedMiddle : { a: number; b: string; ['in the middle']: number; c: boolean; }
+>{    ...o,    ['in the middle']: 13,    b: 'maybe?',    ...o2} : { a: number; b: string; ['in the middle']: number; c: boolean; }
+
+    ...o,
+>o : any
+
+    ['in the middle']: 13,
+>'in the middle' : string
+>13 : number
+
+    b: 'maybe?',
+>b : string
+>'maybe?' : string
+
+    ...o2
+>o2 : any
+}
+let computedAfter = {
+>computedAfter : { a: number; b: string; ['at the end']: number; }
+>{    ...o,    b: 'yeah',    ['at the end']: 14} : { a: number; b: string; ['at the end']: number; }
+
+    ...o,
+>o : any
+
+    b: 'yeah',
+>b : string
+>'yeah' : string
+
+    ['at the end']: 14
+>'at the end' : string
+>14 : number
+}
+

@@ -1877,10 +1877,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 }
             }
 
-            function partialGroup<T>(xs: T[], f: (t: T) => boolean): (T | T[])[] {
+            function subgroup<T>(xs: T[], f: (t: T) => boolean, maximum?: number): (T | T[])[] {
                 let chunk: T[];
                 const result: (T | T[])[] = [];
-                for (const x of xs) {
+                maximum = maximum || xs.length;
+                for (let i = 0; i < maximum; i++) {
+                    const x = xs[i];
                     if (f(x)) {
                         if (chunk) {
                             result.push(chunk);
@@ -1907,11 +1909,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write("{}");
                     return;
                 }
-                if (forEach(node.properties, p => p.kind === SyntaxKind.DestructuringElement)) {
-                    // TODO: This might need to be moved up one level
+                if (forEach(node.properties, (p, i) => i < numElements && p.kind === SyntaxKind.DestructuringElement)) {
+                    // spread elements cause completely different emit.
+                    // non-spread elements are chunked together into object literals, and then all are passed to __assign:
+                    //     { a, ...o, b } => __assign({a}, o, {b});
+                    // If the first element is a spread element, then the first argument to __assign is {}:
+                    //     { ...o, a, b, ...o2 } => __assign({}, o, {a, b}, o2)
                     write("__assign(");
                     let first = true;
-                    const chunks = partialGroup(node.properties, p => p.kind === SyntaxKind.DestructuringElement);
+                    const chunks = subgroup(node.properties, p => p.kind === SyntaxKind.DestructuringElement, numElements);
                     if (chunks.length && !Array.isArray(chunks[0])) {
                         write("{}");
                         first = false;
@@ -2042,6 +2048,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         write("})");
                         emitEnd(property);
                     }
+                    else if (property.kind === SyntaxKind.DestructuringElement) {
+                        write("Object.assign(");
+                        emit(tempVar);
+                        write(", ");
+                        const target = (property as DestructuringElement).target;
+                        emitStart(target);
+                        emit(target);
+                        emitEnd(target);
+                        write(")");
+                    }
                     else {
                         emitLeadingComments(property);
                         emitStart(property.name);
@@ -2099,11 +2115,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     // Everything until that point can be emitted as part of the initial object literal.
                     let numInitialNonComputedProperties = numProperties;
                     for (let i = 0, n = properties.length; i < n; i++) {
-                        if (properties[i].kind === SyntaxKind.DestructuringElement) {
-                            // TODO: emit an __assign call instead and fix subsequent TODO
-                            continue;
-                        }
-                        if (properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
+                        if (properties[i].name && properties[i].name.kind === SyntaxKind.ComputedPropertyName) {
                             numInitialNonComputedProperties = i;
                             break;
                         }
@@ -2111,7 +2123,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 
                     const hasComputedProperty = numInitialNonComputedProperties !== properties.length;
                     if (hasComputedProperty) {
-                        // TODO: Fix this
                         emitDownlevelObjectLiteralWithComputedProperties(node, numInitialNonComputedProperties);
                         return;
                     }

@@ -93,3 +93,32 @@ let c: C = new C();
 let spreadC = {...c};
 >spreadC : Symbol(spreadC, Decl(objectSpreadElement.ts, 29, 3))
 
+// computed property
+let computedFirst = {
+>computedFirst : Symbol(computedFirst, Decl(objectSpreadElement.ts, 32, 3))
+
+    ['before everything']: 12,
+    ...o,
+    b: 'yes'
+>b : Symbol(b, Decl(objectSpreadElement.ts, 34, 9))
+}
+let computedMiddle = {
+>computedMiddle : Symbol(computedMiddle, Decl(objectSpreadElement.ts, 37, 3))
+
+    ...o,
+    ['in the middle']: 13,
+    b: 'maybe?',
+>b : Symbol(b, Decl(objectSpreadElement.ts, 39, 26))
+
+    ...o2
+}
+let computedAfter = {
+>computedAfter : Symbol(computedAfter, Decl(objectSpreadElement.ts, 43, 3))
+
+    ...o,
+    b: 'yeah',
+>b : Symbol(b, Decl(objectSpreadElement.ts, 44, 9))
+
+    ['at the end']: 14
+}
+
