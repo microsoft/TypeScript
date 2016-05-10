@@ -423,10 +423,10 @@ namespace ts {
                             createVariableDeclarationList([
                                 createVariableDeclaration(
                                     generatedName,
-                                    createRequireCall(node),
-                                    /*location*/ node
+                                    createRequireCall(node)
                                 )
-                            ])
+                            ]),
+                            /*location*/ node
                         )
                     );
                 }
@@ -523,10 +523,15 @@ namespace ts {
             }
         }
 
-        function addExportImportAssignments(statements: Statement[], node: Node) {
-            const names = reduceEachChild(node, collectExportMembers, []);
-            for (const name of names) {
-                addExportMemberAssignments(statements, name);
+        function addExportImportAssignments(statements: Statement[], node: ImportEqualsDeclaration | ImportDeclaration) {
+            if (isImportEqualsDeclaration(node)) {
+                addExportMemberAssignments(statements, node.name);
+            }
+            else {
+                const names = reduceEachChild(node, collectExportMembers, []);
+                for (const name of names) {
+                    addExportMemberAssignments(statements, name);
+                }
             }
         }
 
@@ -739,9 +744,6 @@ namespace ts {
 
                     addExportMemberAssignments(statements, classDecl.name);
 
-                    if (statements.length > 1) {
-                        Debug.assert(!!classDecl.decorators, "Expression statements should only have an export member assignment when decorated.")
-                    }
                     return statements;
                 }
             }

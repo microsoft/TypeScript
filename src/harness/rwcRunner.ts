@@ -190,8 +190,9 @@ namespace RWC {
                     if (compilerResult.errors.length === 0) {
                         return null;
                     }
-
-                    return Harness.Compiler.getErrorBaseline(inputFiles.concat(otherFiles), compilerResult.errors);
+                    // Do not include the library in the baselines to avoid noise
+                    const baselineFiles = inputFiles.concat(otherFiles).filter(f => !Harness.isDefaultLibraryFile(f.unitName));
+                    return Harness.Compiler.getErrorBaseline(baselineFiles, compilerResult.errors);
                 }, false, baselineOpts);
             });
 
