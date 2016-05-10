@@ -29,3 +29,11 @@ var entries = Object.entries(o);
 >entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
 >o : { a: number; b: number; }
 
+var entries1 = Object.entries(1); // <-- entries: [string, any][]
+>entries1 : [string, any][]
+>Object.entries(1) : [string, any][]
+>Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; }): [string, T][]; (o: any): [string, any][]; }
+>1 : number
+

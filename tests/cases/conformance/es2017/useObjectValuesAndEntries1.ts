@@ -8,3 +8,4 @@ for (var x of Object.values(o)) {
 }
 
 var entries = Object.entries(o);
+var entries1 = Object.entries(1); // <-- entries: [string, any][]
