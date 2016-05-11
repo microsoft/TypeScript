@@ -18225,9 +18225,6 @@ namespace ts {
                     if (parameter.dotDotDotToken) {
                         return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_set_accessor_cannot_have_rest_parameter);
                     }
-                    else if (parameter.flags & NodeFlags.Modifier) {
-                        return grammarErrorOnNode(accessor.name, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
-                    }
                     else if (parameter.questionToken) {
                         return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_set_accessor_cannot_have_an_optional_parameter);
                     }
