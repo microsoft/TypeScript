@@ -1499,9 +1499,10 @@ namespace ts {
             setOriginalNode(declarationList, node);
 
             if (node.transformFlags & TransformFlags.ContainsBindingPattern
-                && isBindingPattern(node.declarations[0].name)) {
-                // If the first var declaration is a binding pattern, we need to emit source maps
-                // at var/let/const keyword instead
+                && (isBindingPattern(node.declarations[0].name)
+                    || isBindingPattern(lastOrUndefined(node.declarations).name))) {
+                // If the first or last declaration is a binding pattern, we need to modify
+                // the source map range for the declaration list.
                 const firstDeclaration = firstOrUndefined(declarations);
                 const lastDeclaration = lastOrUndefined(declarations);
                 setSourceMapRange(node, createRange(firstDeclaration.pos, lastDeclaration.end));
@@ -1724,7 +1725,8 @@ namespace ts {
                     // Adjust the source map range for the first declaration to align with the old
                     // emitter.
                     const firstDeclaration = declarations[0];
-                    setSourceMapRange(declarationList, firstDeclaration);
+                    const lastDeclaration = lastOrUndefined(declarations);
+                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
 
                     statements.push(
                         createVariableStatement(
