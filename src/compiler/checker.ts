@@ -56,13 +56,13 @@ namespace ts {
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
          const {
-            typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString
+             typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString
         } = writerConstructor(
             { createSymbol, getSymbolCount },
             { getSymbolOfNode },
             { compilerOptions, languageVersion },
             {
-                getTypeParametersOfClassOrInterface, // uncategorised
+                getTypeParametersOfClassOrInterface, // should be moved, but references two other functions
                 getAccessibleSymbolChain,
                 needsQualification,
                 getQualifiedLeftMeaning,
@@ -72,7 +72,7 @@ namespace ts {
                 isReservedMemberName,
                 emptyArray,
                 getGlobalArrayType: () => globalArrayType,
-                getParentSymbolOfTypeParameter,
+                getParentSymbolOfTypeParameter, // should be moved, but references two other functions
                 isReadonlySymbol,
                 resolveStructuredTypeMembers,
                 getTypeOfSymbol,
@@ -81,7 +81,7 @@ namespace ts {
                 getTargetSymbol,
                 getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
                 getConstraintOfTypeParameter,
-                isOptionalParameter,
+                isOptionalParameter, // should be moved. it's reexported a number of times, and references 2 or 3 functions
                 getReturnTypeOfSignature,
                 getParentOfSymbol
             });
