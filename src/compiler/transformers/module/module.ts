@@ -230,9 +230,9 @@ namespace ts {
                                     createIdentifier("module"),
                                     "exports"
                                 ),
-                                exportEquals.expression,
-                                /*location*/ exportEquals
-                            )
+                                exportEquals.expression
+                            ),
+                            /*location*/ exportEquals
                         )
                     );
                 }
