@@ -1703,7 +1703,7 @@ namespace ts {
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
-                    if ((<BindingElement>node).dotDotDotToken) {
+                    if ((<BindingElement>node).dotDotDotToken && node.parent.kind === SyntaxKind.ObjectBindingPattern) {
                         hasRestAttribute = true;
                     }
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
