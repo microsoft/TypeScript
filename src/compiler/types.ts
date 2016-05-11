@@ -2964,6 +2964,10 @@ namespace ts {
          */
         sourceMapRange?: TextRange;
         /**
+         * Specifies a custom range to use when emitting tokens of a node.
+         */
+        tokenSourceMapRange?: Map<TextRange>;
+        /**
          * Specifies a custom range to use when emitting comments.
          */
         commentRange?: TextRange;
@@ -3008,6 +3012,16 @@ namespace ts {
          * Sets the TextRange to use for source maps for the node.
          */
         setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
 
         /**
          * Gets the TextRange to use for comments for the node.

@@ -3059,6 +3059,16 @@ namespace ts {
     }
 
     /**
+     * Increases (or decreases) a position by the provided amount.
+     *
+     * @param pos The position.
+     * @param value The delta.
+     */
+    export function movePos(pos: number, value: number) {
+        return positionIsSynthesized(pos) ? -1 : pos + value;
+    }
+
+    /**
      * Creates a new TextRange from the provided pos and end.
      *
      * @param pos The start position.

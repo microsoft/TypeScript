@@ -74,6 +74,8 @@ namespace ts {
             setNodeEmitFlags,
             getSourceMapRange,
             setSourceMapRange,
+            getTokenSourceMapRange,
+            setTokenSourceMapRange,
             getCommentRange,
             setCommentRange,
             hoistVariableDeclaration,
@@ -234,6 +236,47 @@ namespace ts {
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
             getEmitOptions(node, /*create*/ true).sourceMapRange = range;
+            return node;
+        }
+
+        function getTokenSourceMapRanges(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.tokenSourceMapRange) {
+                    return options.tokenSourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+            const ranges = getTokenSourceMapRanges(node);
+            if (ranges) {
+                return ranges[token];
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+            const options = getEmitOptions(node, /*create*/ true);
+            if (!options.tokenSourceMapRange) {
+                const existingRanges = getTokenSourceMapRanges(node);
+                const ranges = existingRanges ? clone(existingRanges) : { };
+                options.tokenSourceMapRange = ranges;
+            }
+
+            options.tokenSourceMapRange[token] = range;
             return node;
         }
 

@@ -155,7 +155,8 @@ const _super = (function (geti, seti) {
             const {
                 emitStart,
                 emitEnd,
-                emitPos
+                emitTokenStart,
+                emitTokenEnd
             } = sourceMap;
 
             const comments = createCommentWriter(host, writer, sourceMap);
@@ -172,8 +173,9 @@ const _super = (function (geti, seti) {
             let context: TransformationContext;
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
-            let getCommentRange: (node: Node) => TextRange;
             let getSourceMapRange: (node: Node) => TextRange;
+            let getTokenSourceMapRange: (node: Node, token: SyntaxKind) => TextRange;
+            let getCommentRange: (node: Node) => TextRange;
             let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
@@ -234,8 +236,9 @@ const _super = (function (geti, seti) {
 
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
-                getCommentRange = undefined;
                 getSourceMapRange = undefined;
+                getTokenSourceMapRange = undefined;
+                getCommentRange = undefined;
                 isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 onSubstituteNode = undefined;
@@ -255,8 +258,9 @@ const _super = (function (geti, seti) {
                 context = _context;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
-                getCommentRange = context.getCommentRange;
                 getSourceMapRange = context.getSourceMapRange;
+                getTokenSourceMapRange = context.getTokenSourceMapRange;
+                getCommentRange = context.getCommentRange;
                 isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
@@ -343,9 +347,9 @@ const _super = (function (geti, seti) {
                     const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getCommentRange);
                     const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getCommentRange);
                     emitLeadingComments(node, leadingComments, getCommentRange);
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitTrailingComments(node, trailingComments);
                 }
             }
@@ -1646,7 +1650,7 @@ const _super = (function (geti, seti) {
 
                 emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
-                writeToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -2410,12 +2414,10 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node) {
-                tokenStartPos = skipTrivia(currentText, tokenStartPos);
-                emitPos(tokenStartPos, contextNode, shouldSkipLeadingSourceMapForToken);
+            function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
+                const tokenStartPos = emitTokenStart(token, pos, contextNode, shouldSkipLeadingSourceMapForToken, getTokenSourceMapRange);
                 const tokenEndPos = writeTokenText(token, tokenStartPos);
-                emitPos(tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken);
-                return tokenEndPos;
+                return emitTokenEnd(token, tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken, getTokenSourceMapRange);
             }
 
             function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
@@ -2434,9 +2436,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                 }
             }
 

@@ -149,6 +149,7 @@ namespace ts {
             setCommentRange,
             getSourceMapRange,
             setSourceMapRange,
+            setTokenSourceMapRange,
         } = context;
 
         const resolver = context.getEmitResolver();
@@ -1313,6 +1314,7 @@ namespace ts {
             let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
             let singleLine = false; // indicates whether the block *may* be emitted as a single line
             let statementsLocation: TextRange;
+            let closeBraceLocation: TextRange;
 
             const statements: Statement[] = [];
             const body = node.body;
@@ -1363,11 +1365,14 @@ namespace ts {
                 }
 
                 const expression = visitNode(body, visitor, isExpression);
-                if (expression) {
-                    const returnStatement = createReturn(expression, /*location*/ statementsLocation);
-                    setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps);
-                    statements.push(returnStatement);
-                }
+                const returnStatement = createReturn(expression);
+                setSourceMapRange(returnStatement, body);
+                setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+                statements.push(returnStatement);
+
+                // To align with the source map emit for the old emitter, we set a custom
+                // source map location for the close brace.
+                closeBraceLocation = body;
             }
 
             const lexicalEnvironment = endLexicalEnvironment();
@@ -1381,6 +1386,10 @@ namespace ts {
             const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
             if (!multiLine && singleLine) {
                 setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
+            }
+
+            if (closeBraceLocation) {
+                setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
             }
 
             setOriginalNode(block, node.body);
