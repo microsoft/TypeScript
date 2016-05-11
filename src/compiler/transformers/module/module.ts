@@ -214,7 +214,13 @@ namespace ts {
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (exportEquals && resolver.isValueAliasDeclaration(exportEquals)) {
                 if (emitAsReturn) {
-                    statements.push(createReturn(exportEquals.expression));
+                    const statement = createReturn(
+                        exportEquals.expression,
+                        /*location*/ exportEquals
+                    );
+
+                    setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps);
+                    statements.push(statement);
                 }
                 else {
                     statements.push(
@@ -224,7 +230,8 @@ namespace ts {
                                     createIdentifier("module"),
                                     "exports"
                                 ),
-                                exportEquals.expression
+                                exportEquals.expression,
+                                /*location*/ exportEquals
                             )
                         )
                     );
