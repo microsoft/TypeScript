@@ -1481,6 +1481,15 @@ namespace ts {
             version: string,
             scriptKind?: ScriptKind): SourceFile;
 
+        acquireDocumentWithKey(
+            fileName: string,
+            path: Path,
+            compilationSettings: CompilerOptions,
+            key: DocumentRegistryBucketKey,
+            scriptSnapshot: IScriptSnapshot,
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
+
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
           * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
@@ -1500,6 +1509,16 @@ namespace ts {
             version: string,
             scriptKind?: ScriptKind): SourceFile;
 
+        updateDocumentWithKey(
+            fileName: string,
+            path: Path,
+            compilationSettings: CompilerOptions,
+            key: DocumentRegistryBucketKey,
+            scriptSnapshot: IScriptSnapshot,
+            version: string,
+            scriptKind?: ScriptKind): SourceFile;
+
+        getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
           *
@@ -1511,8 +1530,12 @@ namespace ts {
           */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
 
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
+
         reportStats(): string;
     }
+
+    export type DocumentRegistryBucketKey = string & { __bucketKey: any };
 
     // TODO: move these to enums
     export namespace ScriptElementKind {
@@ -1783,11 +1806,13 @@ namespace ts {
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
             const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-            if (this.contains(path)) {
-                return this.getEntry(path);
-            }
+            return this.getOrCreateEntryByPath(fileName, path);
+        }
 
-            return this.createEntry(fileName, path);
+        public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
+            return this.contains(path)
+                ? this.getEntry(path)
+                : this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
@@ -2041,12 +2066,11 @@ namespace ts {
         const buckets: Map<FileMap<DocumentRegistryEntry>> = {};
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
-        function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx + +"|" + settings.allowJs;
+        function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
+            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${settings.typesRoot}|${settings.typesSearchPaths}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
         }
 
-        function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            const key = getKeyFromCompilationSettings(settings);
+        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
                 buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
@@ -2075,23 +2099,36 @@ namespace ts {
         }
 
         function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const key = getKeyForCompilationSettings(compilationSettings);
+            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+        }
+
+        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
         }
 
         function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
+            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const key = getKeyForCompilationSettings(compilationSettings);
+            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+        }
+
+        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
         }
 
         function acquireOrUpdateDocument(
             fileName: string,
+            path: Path,
             compilationSettings: CompilerOptions,
+            key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
-            const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
             let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
@@ -2129,10 +2166,14 @@ namespace ts {
         }
 
         function releaseDocument(fileName: string, compilationSettings: CompilerOptions): void {
-            const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/false);
-            Debug.assert(bucket !== undefined);
-
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            const key = getKeyForCompilationSettings(compilationSettings);
+            return releaseDocumentWithKey(path, key);
+        }
+
+        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
+            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/false);
+            Debug.assert(bucket !== undefined);
 
             const entry = bucket.get(path);
             entry.languageServiceRefCount--;
@@ -2145,9 +2186,13 @@ namespace ts {
 
         return {
             acquireDocument,
+            acquireDocumentWithKey,
             updateDocument,
+            updateDocumentWithKey,
             releaseDocument,
-            reportStats
+            releaseDocumentWithKey,
+            reportStats,
+            getKeyForCompilationSettings
         };
     }
 
@@ -2858,6 +2903,7 @@ namespace ts {
             // Now create a new compiler
             const compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
+                getSourceFileByPath: getOrCreateSourceFileByPath,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
@@ -2893,15 +2939,17 @@ namespace ts {
                 };
             }
 
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.
             if (program) {
                 const oldSourceFiles = program.getSourceFiles();
+                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldSettings);
                 for (const oldSourceFile of oldSourceFiles) {
                     if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(oldSourceFile.fileName, oldSettings);
+                        documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
                     }
                 }
             }
@@ -2918,11 +2966,15 @@ namespace ts {
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
+                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName));
+            }
+
+            function getOrCreateSourceFileByPath(fileName: string, path: Path): SourceFile {
                 Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache.getOrCreateEntry(fileName);
+                const hostFileInformation = hostCache.getOrCreateEntryByPath(fileName, path);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -2932,7 +2984,7 @@ namespace ts {
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
                     // Check if the old program had this file already
-                    const oldSourceFile = program && program.getSourceFile(fileName);
+                    const oldSourceFile = program && program.getSourceFileByPath(path);
                     if (oldSourceFile) {
                         // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
@@ -2959,16 +3011,16 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + fileName);
+                        Debug.assert(hostFileInformation.scriptKind === oldSourceFile.scriptKind, "Registered script kind (" + oldSourceFile.scriptKind + ") should match new script kind (" + hostFileInformation.scriptKind + ") for file: " + path);
 
-                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
