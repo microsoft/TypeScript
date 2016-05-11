@@ -1,0 +1,9 @@
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts(2,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts (1 errors) ====
+    declare class C{
+    	constructor(readonly x: number);
+    	            ~~~~~~~~~~~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
+    }

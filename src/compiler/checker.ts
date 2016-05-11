@@ -12658,7 +12658,7 @@ namespace ts {
 
             checkVariableLikeDeclaration(node);
             let func = getContainingFunction(node);
-            if (node.flags & NodeFlags.AccessibilityModifier) {
+            if (node.flags & NodeFlags.ConstructorParameterModifier) {
                 func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
@@ -12994,7 +12994,7 @@ namespace ts {
                     //   or the containing class declares instance member variables with initializers.
                     const superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
+                        forEach(node.parameters, p => p.flags & NodeFlags.ConstructorParameterModifier);
 
                     // Skip past any prologue directives to find the first statement
                     // to ensure that it was a super call.
@@ -17651,7 +17651,8 @@ namespace ts {
                         if (flags & NodeFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "readonly");
                         }
-                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature) {
+                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature &&
+                            !(node.kind == SyntaxKind.Parameter && isParameterPropertyDeclaration(<ParameterDeclaration> node))) {
                             return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                         }
                         flags |= NodeFlags.Readonly;
@@ -17759,7 +17760,7 @@ namespace ts {
             else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
-            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
+            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.ConstructorParameterModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
             if (flags & NodeFlags.Async) {
