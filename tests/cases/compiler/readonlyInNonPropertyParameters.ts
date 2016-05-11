@@ -6,3 +6,5 @@ class X {
 	set x(readonly value: number) {}
 }
 (readonly x) => 0;
+// OK to use `readonly` as a name
+(readonly) => 0;

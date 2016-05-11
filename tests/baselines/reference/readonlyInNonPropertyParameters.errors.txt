@@ -17,3 +17,5 @@ tests/cases/compiler/readonlyInNonPropertyParameters.ts(7,2): error TS2369: A pa
     (readonly x) => 0;
      ~~~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
+    // OK to use `readonly` as a name
+    (readonly) => 0;

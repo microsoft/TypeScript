@@ -6,6 +6,8 @@ class X {
 	set x(readonly value: number) {}
 }
 (readonly x) => 0;
+// OK to use `readonly` as a name
+(readonly) => 0;
 
 //// [readonlyInNonPropertyParameters.js]
 // `readonly` won't work outside of property parameters
@@ -21,3 +23,5 @@ var X = (function () {
     return X;
 }());
 (function (x) { return 0; });
+// OK to use `readonly` as a name
+(function (readonly) { return 0; });
