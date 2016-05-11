@@ -7780,15 +7780,14 @@ namespace ts {
                     if (cache[key]) {
                         return cache[key];
                     }
-                    // If the type at a particular antecedent path is the declared type and the
-                    // reference is known to always be assigned (i.e. when declared and initial types
-                    // are the same), there is no reason to process more antecedents since the only
-                    // possible outcome is subtypes that will be removed in the final union type anyway.
-                    if (type === declaredType && declaredType === initialType) {
-                        return cache[key] = type;
-                    }
                     if (!contains(antecedentTypes, type)) {
                         antecedentTypes.push(type);
+                    }
+                    // If the type at a particular antecedent path is the declared type there is no
+                    // reason to process more antecedents since the only possible outcome is subtypes
+                    // that will be removed in the final union type anyway.
+                    if (type === declaredType) {
+                        break;
                     }
                 }
                 return cache[key] = getUnionType(antecedentTypes);
