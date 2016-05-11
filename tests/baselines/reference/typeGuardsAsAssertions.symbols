@@ -251,3 +251,65 @@ function f5(x: string | number) {
 >x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 95, 12))
 }
 
+function f6() {
+>f6 : Symbol(f6, Decl(typeGuardsAsAssertions.ts, 103, 1))
+
+    let x: string | undefined | null;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = "";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>undefined : Symbol(undefined)
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = null;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = <undefined | null>undefined;
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>undefined : Symbol(undefined)
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = <string | undefined>"";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+
+    x = <string | null>"";
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+
+    x!.slice();
+>x!.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(typeGuardsAsAssertions.ts, 106, 7))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+}
+

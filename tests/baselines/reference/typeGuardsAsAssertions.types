@@ -291,3 +291,95 @@ function f5(x: string | number) {
 >x : number | string
 }
 
+function f6() {
+>f6 : () => void
+
+    let x: string | undefined | null;
+>x : string | null | undefined
+>null : null
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | null | undefined
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = "";
+>x = "" : string
+>x : string | null | undefined
+>"" : string
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = undefined;
+>x = undefined : undefined
+>x : string | null | undefined
+>undefined : undefined
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | null | undefined
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = null;
+>x = null : null
+>x : string | null | undefined
+>null : null
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | null | undefined
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = <undefined | null>undefined;
+>x = <undefined | null>undefined : null | undefined
+>x : string | null | undefined
+><undefined | null>undefined : null | undefined
+>null : null
+>undefined : undefined
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | null | undefined
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = <string | undefined>"";
+>x = <string | undefined>"" : string | undefined
+>x : string | null | undefined
+><string | undefined>"" : string | undefined
+>"" : string
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | undefined
+>slice : (start?: number | undefined, end?: number | undefined) => string
+
+    x = <string | null>"";
+>x = <string | null>"" : string | null
+>x : string | null | undefined
+><string | null>"" : string | null
+>null : null
+>"" : string
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string | null
+>slice : (start?: number | undefined, end?: number | undefined) => string
+}
+
