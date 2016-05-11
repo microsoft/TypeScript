@@ -30,6 +30,25 @@ function test2() {
     }
 }
 
+// Repro from #8511
+
+function mapUntilCant<a, b>(
+    values: a[],
+    canTake: (value: a, index: number) => boolean,
+    mapping: (value: a, index: number) => b
+): b[] {
+    let result: b[] = [];
+    for (let index = 0, length = values.length; index < length; index++) {
+        let value = values[index];
+        if (canTake(value, index)) {
+            result.push(mapping(value, index));
+        } else {
+            return result;
+        }
+    }
+    return result;
+}
+
 
 //// [controlFlowLoopAnalysis.js]
 // Repro from #8418
@@ -55,4 +74,18 @@ function test2() {
             x = foo(x);
         }
     }
+}
+// Repro from #8511
+function mapUntilCant(values, canTake, mapping) {
+    var result = [];
+    for (var index = 0, length = values.length; index < length; index++) {
+        var value = values[index];
+        if (canTake(value, index)) {
+            result.push(mapping(value, index));
+        }
+        else {
+            return result;
+        }
+    }
+    return result;
 }
