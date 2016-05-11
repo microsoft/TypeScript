@@ -12658,7 +12658,7 @@ namespace ts {
 
             checkVariableLikeDeclaration(node);
             let func = getContainingFunction(node);
-            if (node.flags & NodeFlags.ConstructorParameterModifier) {
+            if (node.flags & NodeFlags.ParameterPropertyModifier) {
                 func = getContainingFunction(node);
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
@@ -12994,7 +12994,7 @@ namespace ts {
                     //   or the containing class declares instance member variables with initializers.
                     const superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-                        forEach(node.parameters, p => p.flags & NodeFlags.ConstructorParameterModifier);
+                        forEach(node.parameters, p => p.flags & NodeFlags.ParameterPropertyModifier);
 
                     // Skip past any prologue directives to find the first statement
                     // to ensure that it was a super call.
@@ -17760,7 +17760,7 @@ namespace ts {
             else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
-            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.ConstructorParameterModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
+            else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.ParameterPropertyModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
             if (flags & NodeFlags.Async) {

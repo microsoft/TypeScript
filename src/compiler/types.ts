@@ -410,7 +410,7 @@ namespace ts {
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async | Readonly,
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
-        ConstructorParameterModifier = AccessibilityModifier | Readonly,
+        ParameterPropertyModifier = AccessibilityModifier | Readonly,
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
