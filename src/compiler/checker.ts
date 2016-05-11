@@ -2791,26 +2791,50 @@ namespace ts {
 
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
-                // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
-                const name = declaration.propertyName || <Identifier>declaration.name;
-                if (isComputedNonLiteralName(name)) {
-                    // computed properties with non-literal names are treated as 'any'
-                    return anyType;
+                if (declaration.dotDotDotToken) {
+                    // getaccessiblesymbolchain allocates siblings
+                    // remove their properties from the parentType.properties
+                    const newMembers: SymbolTable = {};
+                    const seenMembers: Map<BindingElement> = {};
+                    for (const element of pattern.elements) {
+                        const name =  getTextOfPropertyName(element.propertyName || (element.name as Identifier));
+                        seenMembers[name] = element;
+                    }
+                    for (const prop of getPropertiesOfType(parentType)) {
+                        if (!hasProperty(seenMembers, prop.name)) {
+                            newMembers[prop.name] = prop;
+                        }
+                    }
+                    // NOTE: Copy signatures and indexers since you can't destructure those anyway
+                    type = createAnonymousType(getSymbolOfNode(declaration),
+                                               newMembers,
+                                               getSignaturesOfType(parentType, SignatureKind.Call),
+                                               getSignaturesOfType(parentType, SignatureKind.Construct),
+                                               getIndexInfoOfType(parentType, IndexKind.String),
+                                               getIndexInfoOfType(parentType, IndexKind.Number));
                 }
-                if (declaration.initializer) {
-                    getContextualType(declaration.initializer);
-                }
+                else {
+                    // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
+                    const name = declaration.propertyName || <Identifier>declaration.name;
+                    if (isComputedNonLiteralName(name)) {
+                        // computed properties with non-literal names are treated as 'any'
+                        return anyType;
+                    }
+                    if (declaration.initializer) {
+                        getContextualType(declaration.initializer);
+                    }
 
-                // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
-                // or otherwise the type of the string index signature.
-                const text = getTextOfPropertyName(name);
+                    // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
+                    // or otherwise the type of the string index signature.
+                    const text = getTextOfPropertyName(name);
 
-                type = getTypeOfPropertyOfType(parentType, text) ||
-                    isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                    getIndexTypeOfType(parentType, IndexKind.String);
-                if (!type) {
-                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
-                    return unknownType;
+                    type = getTypeOfPropertyOfType(parentType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                        getIndexTypeOfType(parentType, IndexKind.String);
+                    if (!type) {
+                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
+                        return unknownType;
+                    }
                 }
             }
             else {
@@ -2818,7 +2842,11 @@ namespace ts {
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
                 const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
-                if (!declaration.dotDotDotToken) {
+                if (declaration.dotDotDotToken) {
+                    // Rest element has an array type with the same element type as the parent type
+                    type = createArrayType(elementType);
+                }
+                else {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const propName = "" + indexOf(pattern.elements, declaration);
                     type = isTupleLikeType(parentType)
@@ -2833,10 +2861,6 @@ namespace ts {
                         }
                         return unknownType;
                     }
-                }
-                else {
-                    // Rest element has an array type with the same element type as the parent type
-                    type = createArrayType(elementType);
                 }
             }
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
@@ -18342,7 +18366,7 @@ namespace ts {
                 }
 
                 if (node.initializer) {
-                    // Error on equals token which immediate precedes the initializer
+                    // Error on equals token which immediately precedes the initializer
                     return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
                 }
             }
