@@ -13,9 +13,21 @@ var { a, ...justB } = o;
 >justB : Symbol(justB, Decl(objectRestElement.ts, 2, 8))
 >o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
 
-var { a, b, ...empty } = o;
+var { a, b: renamed, ...empty } = o;
 >a : Symbol(a, Decl(objectRestElement.ts, 2, 5), Decl(objectRestElement.ts, 3, 5))
->b : Symbol(b, Decl(objectRestElement.ts, 3, 8))
->empty : Symbol(empty, Decl(objectRestElement.ts, 3, 11))
+>b : Symbol(b, Decl(objectRestElement.ts, 0, 15))
+>renamed : Symbol(renamed, Decl(objectRestElement.ts, 3, 8), Decl(objectRestElement.ts, 6, 5))
+>empty : Symbol(empty, Decl(objectRestElement.ts, 3, 20))
 >o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : Symbol(o2, Decl(objectRestElement.ts, 5, 3))
+>c : Symbol(c, Decl(objectRestElement.ts, 5, 10))
+>d : Symbol(d, Decl(objectRestElement.ts, 5, 31))
+
+var { d: renamed, ...d } = o2;
+>d : Symbol(d, Decl(objectRestElement.ts, 5, 31))
+>renamed : Symbol(renamed, Decl(objectRestElement.ts, 3, 8), Decl(objectRestElement.ts, 6, 5))
+>d : Symbol(d, Decl(objectRestElement.ts, 6, 17))
+>o2 : Symbol(o2, Decl(objectRestElement.ts, 5, 3))
 

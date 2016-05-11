@@ -16,9 +16,24 @@ var { a, ...justB } = o;
 >justB : { b: string; }
 >o : { a: number; b: string; }
 
-var { a, b, ...empty } = o;
+var { a, b: renamed, ...empty } = o;
 >a : number
->b : string
+>b : any
+>renamed : string
 >empty : {}
 >o : { a: number; b: string; }
+
+let o2 = { c: 'terrible idea?', d: 'yes' };
+>o2 : { c: string; d: string; }
+>{ c: 'terrible idea?', d: 'yes' } : { c: string; d: string; }
+>c : string
+>'terrible idea?' : string
+>d : string
+>'yes' : string
+
+var { d: renamed, ...d } = o2;
+>d : any
+>renamed : string
+>d : { c: string; }
+>o2 : { c: string; d: string; }
 

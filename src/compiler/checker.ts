@@ -2792,24 +2792,24 @@ namespace ts {
             let type: Type;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    // getaccessiblesymbolchain allocates siblings
-                    // remove their properties from the parentType.properties
                     const newMembers: SymbolTable = {};
                     const seenMembers: Map<BindingElement> = {};
                     for (const element of pattern.elements) {
-                        const name =  getTextOfPropertyName(element.propertyName || (element.name as Identifier));
-                        seenMembers[name] = element;
+                        if (!element.dotDotDotToken) {
+                            const name = element.propertyName || <Identifier>element.name;
+                            seenMembers[getTextOfPropertyName(name)] = element;
+                        }
                     }
                     for (const prop of getPropertiesOfType(parentType)) {
                         if (!hasProperty(seenMembers, prop.name)) {
                             newMembers[prop.name] = prop;
                         }
                     }
-                    // NOTE: Copy signatures and indexers since you can't destructure those anyway
+                    // NOTE: Copy indexers since they are constraints on the type.
                     type = createAnonymousType(getSymbolOfNode(declaration),
                                                newMembers,
-                                               getSignaturesOfType(parentType, SignatureKind.Call),
-                                               getSignaturesOfType(parentType, SignatureKind.Construct),
+                                               emptyArray,
+                                               emptyArray,
                                                getIndexInfoOfType(parentType, IndexKind.String),
                                                getIndexInfoOfType(parentType, IndexKind.Number));
                 }
