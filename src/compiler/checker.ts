@@ -122,7 +122,7 @@ namespace ts {
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const emptyUnionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const nothingType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -2030,7 +2030,7 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        if (type === emptyUnionType) {
+                        if (type === nothingType) {
                             writer.writeKeyword("nothing");
                         }
                         else {
@@ -5006,7 +5006,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
-            else if (type !== emptyUnionType && !contains(typeSet, type)) {
+            else if (type !== nothingType && !contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
@@ -5047,7 +5047,10 @@ namespace ts {
         // a named type that circularly references itself.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
-                return emptyUnionType;
+                return nothingType;
+            }
+            if (types.length === 1) {
+                return types[0];
             }
             const typeSet = [] as TypeSet;
             addTypesToSet(typeSet, types, TypeFlags.Union);
@@ -5064,7 +5067,7 @@ namespace ts {
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? nullType :
                     typeSet.containsUndefined ? undefinedType :
-                    emptyUnionType;
+                    nothingType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -7483,7 +7486,7 @@ namespace ts {
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
             if (!(type.flags & TypeFlags.Union)) {
-                return getTypeFacts(type) & include ? type : emptyUnionType;
+                return getTypeFacts(type) & include ? type : nothingType;
             }
             let firstType: Type;
             let types: Type[];
@@ -7500,7 +7503,7 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : emptyUnionType;
+            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : nothingType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -7618,6 +7621,9 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === nothingType) {
+                return declaredType;
+            }
             return result;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
@@ -7702,7 +7708,22 @@ namespace ts {
             }
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
-                return narrowType(getTypeAtFlowNode(flow.antecedent), flow.expression, (flow.flags & FlowFlags.TrueCondition) !== 0);
+                let type = getTypeAtFlowNode(flow.antecedent);
+                if (type !== nothingType) {
+                    // If we have an antecedent type (meaning we're reachable in some way), we first
+                    // attempt to narrow the antecedent type. If that produces the nothing type, then
+                    // we take the type guard as an indication that control could reach here in a
+                    // manner not understood by the control flow analyzer (e.g. a function argument
+                    // has an invalid type, or a nested function has possibly made an assignment to a
+                    // captured variable). We proceed by reverting to the declared type and then
+                    // narrow that.
+                    const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
+                    type = narrowType(type, flow.expression, assumeTrue);
+                    if (type === nothingType) {
+                        type = narrowType(declaredType, flow.expression, assumeTrue);
+                    }
+                }
+                return type;
             }
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel) {
@@ -7720,7 +7741,7 @@ namespace ts {
                         antecedentTypes.push(type);
                     }
                 }
-                return antecedentTypes.length === 1 ? antecedentTypes[0] : getUnionType(antecedentTypes);
+                return getUnionType(antecedentTypes);
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel) {
@@ -7770,7 +7791,7 @@ namespace ts {
                         antecedentTypes.push(type);
                     }
                 }
-                return cache[key] = antecedentTypes.length === 1 ? antecedentTypes[0] : getUnionType(antecedentTypes);
+                return cache[key] = getUnionType(antecedentTypes);
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
@@ -7921,7 +7942,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    emptyUnionType;
+                    nothingType;
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -14726,7 +14747,7 @@ namespace ts {
                 arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = emptyUnionType;
+                arrayType = nothingType;
             }
             const hasStringConstituent = arrayOrStringType !== arrayType;
             let reportedError = false;
@@ -14738,7 +14759,7 @@ namespace ts {
 
                 // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                 // arrayOrStringType was a string.
-                if (arrayType === emptyUnionType) {
+                if (arrayType === nothingType) {
                     return stringType;
                 }
             }
