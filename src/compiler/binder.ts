@@ -580,6 +580,9 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
+                case SyntaxKind.DeleteExpression:
+                    bindDeleteExpressionFlow(<DeleteExpression>node);
+                    break;
                 case SyntaxKind.ConditionalExpression:
                     bindConditionalExpressionFlow(<ConditionalExpression>node);
                     break;
@@ -1052,6 +1055,13 @@ namespace ts {
                 if (operator === SyntaxKind.EqualsToken && !isAssignmentTarget(node)) {
                     bindAssignmentTargetFlow(node.left);
                 }
+            }
+        }
+
+        function bindDeleteExpressionFlow(node: DeleteExpression) {
+            forEachChild(node, bind);
+            if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                bindAssignmentTargetFlow(node.expression);
             }
         }
 
