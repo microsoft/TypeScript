@@ -2376,8 +2376,9 @@ namespace ts {
                 addVarForEnumOrModuleDeclaration(statements, node);
             }
 
-            const localName = getGeneratedNameForNode(node);
-            const name = getDeclarationNameExpression(node);
+            const innerName = getNamespaceContainerName(node);
+            const paramName = getNamespaceParameterName(node);
+            const exportName = getExportName(node);
 
             //  (function (x) {
             //      x[x["y"] = 0] = "y";
@@ -2389,22 +2390,22 @@ namespace ts {
                         createStatement(
                             createCall(
                                 createFunctionExpression(
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                    [createParameter(localName)],
-                                    transformEnumBody(node, localName)
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    [createParameter(paramName)],
+                                    transformEnumBody(node, innerName)
                                 ),
                                 [createLogicalOr(
-                                    name,
+                                    exportName,
                                     createAssignment(
-                                        name,
+                                        exportName,
                                         createObjectLiteral()
                                     )
                                 )]
                             ),
-                        /*location*/ node
+                            /*location*/ node
                         ),
-                    /*original*/ node
+                        /*original*/ node
                     ),
                     NodeEmitFlags.AdviseOnEmitNode
                 )
@@ -2432,7 +2433,11 @@ namespace ts {
             addNodes(statements, endLexicalEnvironment());
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
-            return createBlock(statements, /*location*/ undefined, /*multiLine*/ true);
+            return createBlock(
+                createNodeArray(statements, /*location*/ node.members),
+                /*location*/ undefined,
+                /*multiLine*/ true
+            );
         }
 
         /**
@@ -2457,9 +2462,10 @@ namespace ts {
                             transformEnumMemberDeclarationValue(member)
                         )
                     ),
-                    name
+                    name,
+                    /*location*/ member
                 ),
-                member
+                /*location*/ member
             );
         }
 
@@ -2518,11 +2524,21 @@ namespace ts {
                 isES6ExportedDeclaration(node)
                     ? visitNodes(node.modifiers, visitor, isModifier)
                     : undefined,
-                [createVariableDeclaration(
-                    getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                )],
-                /*location*/ node
+                [
+                    createVariableDeclaration(
+                        getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                        /*initializer*/ undefined
+                    )
+                ]
             );
+
+            // Adjust the source map emit to match the old emitter.
+            if (node.kind === SyntaxKind.EnumDeclaration) {
+                setSourceMapRange(statement.declarationList, node);
+            }
+            else {
+                setSourceMapRange(statement, node);
+            }
 
             // Trailing comments for module declaration should be emitted after the function closure
             // instead of the variable statement:
@@ -2542,8 +2558,8 @@ namespace ts {
             //         }
             //     })(m1 || (m1 = {})); // trailing comment module
             //
+            setCommentRange(statement, node);
             setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
-
             setOriginalNode(statement, /*original*/ node);
             statements.push(statement);
         }
@@ -2833,8 +2849,8 @@ namespace ts {
          * Gets the declaration name used inside of a namespace or enum.
          */
         function getNamespaceParameterName(node: ModuleDeclaration | EnumDeclaration) {
-            const name = getGeneratedNameForNode(node, node.name);
-            setNodeEmitFlags(name, NodeEmitFlags.NoComments);
+            const name = getGeneratedNameForNode(node);
+            setSourceMapRange(name, node.name);
             return name;
         }
 
