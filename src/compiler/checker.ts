@@ -7621,6 +7621,9 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === nothingType) {
+                return declaredType;
+            }
             return result;
 
             function getTypeAtFlowNode(flow: FlowNode): Type {
