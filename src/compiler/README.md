@@ -81,7 +81,12 @@ this list to see what can be moved out to a separate file.
 27. getQualifiedLeftMeaning to isEntityNameVisible. Figure out symbols in modules.
 28. writeKeyword to getTypeAliasForTypeLiteral, plus getSymbolDisplayBuilder. Display symbols. Lots of code here.
 29. isTopLevelInExternalModuleAugmentation. Sort of detector for module augmentations. Purely
-   syntactic and definitely out of place -- called thousands of lines later.
+syntactic and definitely out of place -- called thousands of lines later.
+30. isDeclarationVisible, collectLinkedAliases plus getDeclarationContainer. More module information.
+31. pushTypeResolution to popTypeResolution. Core type resolution machinery.
+32. getDeclarationContainer. Out of place, see above.
+33. getTypeOfPrototypeProperty to at least getTargetType. Type creators and associated utilities.
+
 
 ## Transformer
 
