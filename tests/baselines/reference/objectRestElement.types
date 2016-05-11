@@ -1,0 +1,24 @@
+=== tests/cases/conformance/es6/destructuring/objectRestElement.ts ===
+let o = { a: 1, b: 'no' };
+>o : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : number
+>b : string
+>'no' : string
+
+var { ...clone } = o;
+>clone : { a: number; b: string; }
+>o : { a: number; b: string; }
+
+var { a, ...justB } = o;
+>a : number
+>justB : { b: string; }
+>o : { a: number; b: string; }
+
+var { a, b, ...empty } = o;
+>a : number
+>b : string
+>empty : {}
+>o : { a: number; b: string; }
+

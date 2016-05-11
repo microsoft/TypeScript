@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/destructuring/objectRestElement.ts ===
+let o = { a: 1, b: 'no' };
+>o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
+>a : Symbol(a, Decl(objectRestElement.ts, 0, 9))
+>b : Symbol(b, Decl(objectRestElement.ts, 0, 15))
+
+var { ...clone } = o;
+>clone : Symbol(clone, Decl(objectRestElement.ts, 1, 5))
+>o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
+
+var { a, ...justB } = o;
+>a : Symbol(a, Decl(objectRestElement.ts, 2, 5), Decl(objectRestElement.ts, 3, 5))
+>justB : Symbol(justB, Decl(objectRestElement.ts, 2, 8))
+>o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
+
+var { a, b, ...empty } = o;
+>a : Symbol(a, Decl(objectRestElement.ts, 2, 5), Decl(objectRestElement.ts, 3, 5))
+>b : Symbol(b, Decl(objectRestElement.ts, 3, 8))
+>empty : Symbol(empty, Decl(objectRestElement.ts, 3, 11))
+>o : Symbol(o, Decl(objectRestElement.ts, 0, 3))
+
