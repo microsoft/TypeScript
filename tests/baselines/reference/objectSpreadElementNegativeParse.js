@@ -6,6 +6,14 @@ let o10 = { ...get x() { return 12; }};
 
 
 //// [objectSpreadElementNegativeParse.js]
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var o7 = __assign({}, o ?  : );
 var o8 = __assign({},  * o);
 var o9 = __assign({}, matchMedia()), _a = void 0;

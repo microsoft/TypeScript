@@ -118,7 +118,8 @@ namespace ts {
         let hasAsyncFunctions: boolean;
         let hasDecorators: boolean;
         let hasParameterDecorators: boolean;
-        let hasJsxSpreadAttribute: boolean;
+        let hasSpreadAttribute: boolean;
+        let hasRestAttribute: boolean;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -167,7 +168,8 @@ namespace ts {
             hasAsyncFunctions = false;
             hasDecorators = false;
             hasParameterDecorators = false;
-            hasJsxSpreadAttribute = false;
+            hasSpreadAttribute = false;
+            hasRestAttribute = false;
         }
 
         return bindSourceFile;
@@ -507,8 +509,11 @@ namespace ts {
                 if (hasAsyncFunctions) {
                     flags |= NodeFlags.HasAsyncFunctions;
                 }
-                if (hasJsxSpreadAttribute) {
-                    flags |= NodeFlags.HasJsxSpreadAttribute;
+                if (hasSpreadAttribute) {
+                    flags |= NodeFlags.HasSpreadAttribute;
+                }
+                if (hasRestAttribute) {
+                    flags |= NodeFlags.HasRestAttribute;
                 }
             }
 
@@ -1698,6 +1703,9 @@ namespace ts {
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
+                    if ((<BindingElement>node).dotDotDotToken) {
+                        hasRestAttribute = true;
+                    }
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -1709,8 +1717,9 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
+                case SyntaxKind.SpreadElement:
                 case SyntaxKind.JsxSpreadAttribute:
-                    hasJsxSpreadAttribute = true;
+                    hasSpreadAttribute = true;
                     return;
 
                 case SyntaxKind.CallSignature:

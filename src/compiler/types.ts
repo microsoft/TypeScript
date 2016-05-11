@@ -407,7 +407,8 @@ namespace ts {
         JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
-        HasJsxSpreadAttribute = 1 << 30,
+        HasSpreadAttribute = 1 << 30,
+        HasRestAttribute = 1 << 31,
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
