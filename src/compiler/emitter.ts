@@ -1671,7 +1671,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                 return false;
             }
 
-            function nameOfClassExpressionInPropertyAccessInStaticPropertyDeclaration(node: Identifier) {
+            function getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node: Identifier) {
                 if (languageVersion >= ScriptTarget.ES6) {
                     let parent = node.parent;
                     if (parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>parent).expression === node) {
@@ -1700,10 +1700,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     write(node.text);
                 }
                 else if (isExpressionIdentifier(node)) {
-                    const classExpression = nameOfClassExpressionInPropertyAccessInStaticPropertyDeclaration(node);
+                    const classExpression = getClassExpressionInPropertyAccessInStaticPropertyDeclaration(node);
                     if (classExpression) {
                         const declaration = resolver.getReferencedValueDeclaration(node);
-                        if (declaration == classExpression) {
+                        if (declaration === classExpression) {
                             write(getGeneratedNameForNode(declaration.name));
                             return;
                         }
