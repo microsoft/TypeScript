@@ -1345,15 +1345,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitIfStatement(node: IfStatement) {
-                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos);
+                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, node);
                 write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
                 emitExpression(node.expression);
-                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
+                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);

@@ -219,22 +219,23 @@ namespace ts {
                         /*location*/ exportEquals
                     );
 
-                    setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps);
+                    setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoComments);
                     statements.push(statement);
                 }
                 else {
-                    statements.push(
-                        createStatement(
-                            createAssignment(
-                                createPropertyAccess(
-                                    createIdentifier("module"),
-                                    "exports"
-                                ),
-                                exportEquals.expression
+                    const statement = createStatement(
+                        createAssignment(
+                            createPropertyAccess(
+                                createIdentifier("module"),
+                                "exports"
                             ),
-                            /*location*/ exportEquals
-                        )
+                            exportEquals.expression
+                        ),
+                        /*location*/ exportEquals
                     );
+
+                    setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+                    statements.push(statement);
                 }
             }
         }

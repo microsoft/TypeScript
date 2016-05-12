@@ -949,28 +949,30 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
-            statements.push(
-                createIf(
-                    createStrictEquality(
-                        getSynthesizedClone(name),
-                        createVoidZero()
-                    ),
-                    setNodeEmitFlags(
-                        createBlock([
-                            createStatement(
-                                createAssignment(
-                                    getSynthesizedClone(name),
-                                    visitNode(initializer, visitor, isExpression)
-                                )
+            const statement = createIf(
+                createStrictEquality(
+                    getSynthesizedClone(name),
+                    createVoidZero()
+                ),
+                setNodeEmitFlags(
+                    createBlock([
+                        createStatement(
+                            createAssignment(
+                                setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
+                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap),
+                                /*location*/ parameter
                             )
-                        ]),
-                        NodeEmitFlags.SingleLine
-                    ),
-                    /*elseStatement*/ undefined,
-                    /*location*/ undefined,
-                    { startOnNewLine: true }
-                )
+                        )
+                    ], /*location*/ parameter),
+                    NodeEmitFlags.SingleLine | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTokenSourceMaps
+                ),
+                /*elseStatement*/ undefined,
+                /*location*/ parameter,
+                { startOnNewLine: true }
             );
+
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+            statements.push(statement);
         }
 
         /**
@@ -1365,9 +1367,8 @@ namespace ts {
                 }
 
                 const expression = visitNode(body, visitor, isExpression);
-                const returnStatement = createReturn(expression);
-                setSourceMapRange(returnStatement, body);
-                setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+                const returnStatement = createReturn(expression, /*location*/ body);
+                setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTrailingComments);
                 statements.push(returnStatement);
 
                 // To align with the source map emit for the old emitter, we set a custom
@@ -2364,7 +2365,7 @@ namespace ts {
             // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
             // Methods with computed property names are handled in visitObjectLiteralExpression.
             Debug.assert(!isComputedPropertyName(node.name));
-            const functionExpression = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            const functionExpression = transformFunctionLikeToExpression(node, /*location*/ moveRangePos(node, -1), /*name*/ undefined);
             setNodeEmitFlags(functionExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(functionExpression));
             return createPropertyAssignment(
                 node.name,
