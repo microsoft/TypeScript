@@ -4189,10 +4189,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     const array = <ArrayLiteralExpression>createSynthesizedNode(SyntaxKind.ArrayLiteralExpression);
                     array.pos = value.pos;
                     array.end = value.end;
-                    array.elements = <NodeArray<LiteralExpression>>createSynthesizedNodeArray()
+                    array.elements = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
                     for (const element of pattern.elements) {
                         if (!element.dotDotDotToken) {
-                            var str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                            const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
                             str.pos = value.pos;
                             str.end = value.end;
                             str.text = getTextOfNode(element.propertyName || <Identifier>element.name);
