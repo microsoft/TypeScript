@@ -7615,11 +7615,12 @@ namespace ts {
                 getInitialTypeOfBindingElement(<BindingElement>node);
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType: Type) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, assumeInitialized: boolean) {
             let key: string;
-            if (!reference.flowNode || declaredType === initialType && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!reference.flowNode || assumeInitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
                 return declaredType;
             }
+            const initialType = assumeInitialized ? declaredType : addNullableKind(declaredType, TypeFlags.Undefined);
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
@@ -8093,11 +8094,11 @@ namespace ts {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
-            const defaultsToDeclaredType = !strictNullChecks || type.flags & TypeFlags.Any || !declaration ||
+            const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || !declaration ||
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
-            const flowType = getFlowTypeOfReference(node, type, defaultsToDeclaredType ? type : addNullableKind(type, TypeFlags.Undefined));
-            if (strictNullChecks && !(type.flags & TypeFlags.Any) && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
+            const flowType = getFlowTypeOfReference(node, type, assumeInitialized);
+            if (!assumeInitialized && !(getNullableKind(type) & TypeFlags.Undefined) && getNullableKind(flowType) & TypeFlags.Undefined) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;
@@ -8345,7 +8346,7 @@ namespace ts {
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
                 const type = container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
-                return getFlowTypeOfReference(node, type, type);
+                return getFlowTypeOfReference(node, type, /*assumeInitialized*/ true);
             }
 
             if (isInJavaScriptFile(node)) {
@@ -9937,7 +9938,7 @@ namespace ts {
                     return propType;
                 }
             }
-            return getFlowTypeOfReference(node, propType, propType);
+            return getFlowTypeOfReference(node, propType, /*assumeInitialized*/ true);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
