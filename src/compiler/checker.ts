@@ -1136,9 +1136,8 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
             if (target) {
-                const markAlias =
-                    (target === unknownSymbol && compilerOptions.isolatedModules) ||
-                    (target !== unknownSymbol && (target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
+                const markAlias = target === unknownSymbol ||
+                    ((target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
                 if (markAlias) {
                     markAliasSymbolAsReferenced(symbol);
@@ -2633,7 +2632,7 @@ namespace ts {
                         const internalModuleReference = <Identifier | QualifiedName>(<ImportEqualsDeclaration>declaration).moduleReference;
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
-                            Diagnostics.Cannot_find_name_0, firstIdentifier);
+                            undefined, undefined);
                         if (importSymbol) {
                             buildVisibleNodeList(importSymbol.declarations);
                         }
@@ -17113,14 +17112,12 @@ namespace ts {
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
             const target = resolveAlias(symbol);
-            if (target === unknownSymbol && compilerOptions.isolatedModules) {
+            if (target === unknownSymbol) {
                 return true;
             }
             // const enums and modules that contain only const enums are not considered values from the emit perspective
             // unless 'preserveConstEnums' option is set to true
-            return target !== unknownSymbol &&
-                target &&
-                target.flags & SymbolFlags.Value &&
+            return target.flags & SymbolFlags.Value &&
                 (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
