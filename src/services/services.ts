@@ -961,8 +961,8 @@ namespace ts {
                         break;
 
                     case SyntaxKind.Parameter:
-                        // Only consider properties defined as constructor parameters
-                        if (!(node.flags & NodeFlags.AccessibilityModifier)) {
+                        // Only consider parameter properties
+                        if (!(node.flags & NodeFlags.ParameterPropertyModifier)) {
                             break;
                         }
                     // fall through
@@ -2795,7 +2795,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.variableElement;
-            case SyntaxKind.Parameter: return (node.flags & NodeFlags.AccessibilityModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.Parameter: return (node.flags & NodeFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportClause:
