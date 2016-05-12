@@ -2256,14 +2256,15 @@ namespace ts {
                     context,
                     node,
                     hoistVariableDeclaration,
-                    getNamespaceMemberName,
+                    getNamespaceMemberNameWithSourceMapsAndWithoutComments,
                     visitor
                 );
             }
             else {
                 return createAssignment(
-                    getNamespaceMemberName(name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
+                    visitNode(node.initializer, visitor, isExpression),
+                    /*location*/ node
                 );
             }
         }
@@ -2726,7 +2727,7 @@ namespace ts {
                 return undefined;
             }
 
-            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
+            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference, { flags: NodeEmitFlags.NoComments });
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
@@ -2734,7 +2735,10 @@ namespace ts {
                     createVariableStatement(
                         visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
-                            createVariableDeclaration(node.name, moduleReference)
+                            createVariableDeclaration(
+                                node.name,
+                                moduleReference
+                            )
                         ]),
                         node
                     ),
@@ -2745,7 +2749,7 @@ namespace ts {
                 // exports.${name} = ${moduleReference};
                 return setOriginalNode(
                     createNamespaceExport(
-                        getSynthesizedClone(node.name),
+                        node.name,
                         moduleReference,
                         node
                     ),
@@ -2843,6 +2847,10 @@ namespace ts {
                 setNodeEmitFlags(qualifiedName, emitFlags);
             }
             return qualifiedName;
+        }
+
+        function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
+            return getNamespaceMemberName(name, /*allowComments*/ false, /*allowSourceMaps*/ true);
         }
 
         /**

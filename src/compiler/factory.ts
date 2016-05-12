@@ -1170,13 +1170,18 @@ namespace ts {
         return reduceLeft(expressions, createComma);
     }
 
-    export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
-        return isQualifiedName(node)
-            ? createPropertyAccess(
-                createExpressionFromEntityName(node.left),
-                getSynthesizedClone(node.right)
-            )
-            : getSynthesizedClone(node);
+    export function createExpressionFromEntityName(node: EntityName | Expression, emitOptions?: NodeEmitOptions): Expression {
+        if (isQualifiedName(node)) {
+            const left = createExpressionFromEntityName(node.left, emitOptions);
+            const right = getMutableClone(node.right, emitOptions && clone(emitOptions));
+            return createPropertyAccess(left, right, /*location*/ node, emitOptions && clone(emitOptions));
+        }
+        else if (isIdentifier(node)) {
+            return getMutableClone(node, emitOptions && clone(emitOptions));
+        }
+        else {
+            return getMutableClone(node, emitOptions && clone(emitOptions));
+        }
     }
 
     export function createExpressionForPropertyName(memberName: PropertyName, emitOptions?: NodeEmitOptions): Expression {
