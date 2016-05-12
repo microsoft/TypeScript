@@ -1051,7 +1051,7 @@ namespace ts {
             function emitParameterProperties(constructorDeclaration: ConstructorDeclaration) {
                 if (constructorDeclaration) {
                     forEach(constructorDeclaration.parameters, param => {
-                        if (param.flags & NodeFlags.AccessibilityModifier) {
+                        if (param.flags & NodeFlags.ParameterPropertyModifier) {
                             emitPropertyDeclaration(param);
                         }
                     });

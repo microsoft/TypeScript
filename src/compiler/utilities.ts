@@ -3040,7 +3040,7 @@ namespace ts {
     }
 
     export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
-        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+        return node.flags & NodeFlags.ParameterPropertyModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 
     export function startsWith(str: string, prefix: string): boolean {

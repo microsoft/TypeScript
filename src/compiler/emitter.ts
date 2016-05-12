@@ -4979,7 +4979,7 @@ const _super = (function (geti, seti) {
 
             function emitParameterPropertyAssignments(node: ConstructorDeclaration) {
                 forEach(node.parameters, param => {
-                    if (param.flags & NodeFlags.AccessibilityModifier) {
+                    if (param.flags & NodeFlags.ParameterPropertyModifier) {
                         writeLine();
                         emitStart(param);
                         emitStart(param.name);

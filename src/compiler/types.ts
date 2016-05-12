@@ -407,8 +407,10 @@ namespace ts {
         HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
         HasJsxSpreadAttribute = 1 << 30,
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async | Readonly,
         AccessibilityModifier = Public | Private | Protected,
+        // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
+        ParameterPropertyModifier = AccessibilityModifier | Readonly,
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
