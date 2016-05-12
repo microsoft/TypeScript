@@ -7,4 +7,9 @@ class C {
 
         debugger;
     }
+    get ["goodbye"]() {
+>"goodbye" : Symbol(C[["goodbye"]], Decl(computedPropertyNamesSourceMap1_ES5.ts, 3, 5))
+
+		return 0;
+    }
 }

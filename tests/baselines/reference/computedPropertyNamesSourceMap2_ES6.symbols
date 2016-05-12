@@ -6,5 +6,10 @@ var v = {
 >"hello" : Symbol(["hello"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 0, 9))
 
         debugger;
-    }
+	},
+	get ["goodbye"]() {
+>"goodbye" : Symbol(["goodbye"], Decl(computedPropertyNamesSourceMap2_ES6.ts, 3, 3))
+
+		return 0;
+	}
 }
