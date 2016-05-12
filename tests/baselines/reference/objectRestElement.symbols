@@ -31,3 +31,10 @@ var { d: renamed, ...d } = o2;
 >d : Symbol(d, Decl(objectRestElement.ts, 6, 17))
 >o2 : Symbol(o2, Decl(objectRestElement.ts, 5, 3))
 
+function cloneAgain({ ...clone }: { a: number, b: string }): void {
+>cloneAgain : Symbol(cloneAgain, Decl(objectRestElement.ts, 6, 30))
+>clone : Symbol(clone, Decl(objectRestElement.ts, 8, 21))
+>a : Symbol(a, Decl(objectRestElement.ts, 8, 35))
+>b : Symbol(b, Decl(objectRestElement.ts, 8, 46))
+}
+

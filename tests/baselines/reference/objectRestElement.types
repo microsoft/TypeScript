@@ -37,3 +37,10 @@ var { d: renamed, ...d } = o2;
 >d : { c: string; }
 >o2 : { c: string; d: string; }
 
+function cloneAgain({ ...clone }: { a: number, b: string }): void {
+>cloneAgain : ({...clone}: { a: number; b: string; }) => void
+>clone : { a: number; b: string; }
+>a : number
+>b : string
+}
+

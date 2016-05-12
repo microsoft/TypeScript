@@ -4187,14 +4187,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     call.arguments = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
                     call.arguments.push(value);
                     const array = <ArrayLiteralExpression>createSynthesizedNode(SyntaxKind.ArrayLiteralExpression);
-                    array.pos = value.pos;
-                    array.end = value.end;
+                    array.pos = pattern.pos;
+                    array.end = pattern.end;
                     array.elements = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
                     for (const element of pattern.elements) {
                         if (!element.dotDotDotToken) {
                             const str = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                            str.pos = value.pos;
-                            str.end = value.end;
+                            str.pos = pattern.pos;
+                            str.end = pattern.end;
                             str.text = getTextOfNode(element.propertyName || <Identifier>element.name);
                             array.elements.push(str);
                         }
