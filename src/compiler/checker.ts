@@ -7563,6 +7563,8 @@ namespace ts {
                     return checkRightHandSideOfForOf((<ForOfStatement>parent).expression) || unknownType;
                 case SyntaxKind.BinaryExpression:
                     return getAssignedTypeOfBinaryExpression(<BinaryExpression>parent);
+                case SyntaxKind.DeleteExpression:
+                    return undefinedType;
                 case SyntaxKind.ArrayLiteralExpression:
                     return getAssignedTypeOfArrayLiteralElement(<ArrayLiteralExpression>parent, node);
                 case SyntaxKind.SpreadElementExpression:
