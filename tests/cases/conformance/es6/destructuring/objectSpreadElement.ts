@@ -26,7 +26,7 @@ let spreadNull = { ...null }
 let spreadUndefined = { ...undefined }
 
 // methods are not enumerable
-class C { m() { } };
+class C { p = 1; m() { } };
 let c: C = new C();
 let spreadC = {...c};
 
@@ -47,3 +47,20 @@ let computedAfter = {
     b: 'yeah',
     ['at the end']: 14
 }
+
+// generics
+function f<T, U>(t: T, u: U) {
+    return { id: 'id', ...t, ...u };
+}
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false });
+let overlap: { id: string, a: number, b: string } =
+    f({ a: 1 }, { a: 2, b: 'extra' });
+let overlapConflict: { id:string, a: number & string } =
+    f({ a: 1 }, { a: 'mismatch' });
+let overwriteId: { id: string, a: number, d: string } =
+    f({ a: 1, id: 'overwritten' }, { c: 1, d: 'no' });
+
+class D { m() { }; q = 2; }
+let classesAreWrong: /*{ id: string, ...C., ...D }*/ =
+    f(new C(), new D());
