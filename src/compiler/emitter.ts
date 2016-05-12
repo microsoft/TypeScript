@@ -1676,7 +1676,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                     let parent = node.parent;
                     if (parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>parent).expression === node) {
                         parent = parent.parent;
-                        while (parent && !isDeclaration(parent)) {
+                        while (parent && parent.kind !== SyntaxKind.PropertyDeclaration) {
                             parent = parent.parent;
                         }
                         return parent && parent.kind === SyntaxKind.PropertyDeclaration && (parent.flags & NodeFlags.Static) !== 0 &&
