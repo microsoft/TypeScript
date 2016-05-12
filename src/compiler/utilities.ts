@@ -1846,7 +1846,7 @@ namespace ts {
             : <T>createSynthesizedNode(node.kind);
 
         for (const key in node) {
-            if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+            if (!node.hasOwnProperty(key)) {
                 continue;
             }
 

@@ -857,7 +857,7 @@ namespace ts {
     }
 
     export interface ObjectAllocator {
-        getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getNodeConstructor(kind: SyntaxKind): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
@@ -877,6 +877,267 @@ namespace ts {
     function Signature(checker: TypeChecker) {
     }
 
+    function Token(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+    }
+
+    function IdentifierOrLiteralLike(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.text = undefined;
+    }
+
+    function ComputedPropertyName(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.expression = undefined;
+    }
+
+    function QualifiedName(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.left = undefined;
+        this.right = undefined;
+    }
+
+    function TemplateExpression(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.head = undefined;
+        this.templateSpans = undefined;
+    }
+
+    function TemplateSpan(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.expression = undefined;
+        this.literal = undefined;
+    }
+
+    function TypeReferenceNode(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.typeName = undefined;
+        this.typeArguments = undefined;
+    }
+
+    function TypePredicate(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.parameterName = undefined;
+        this.type = undefined;
+    }
+
+    function TypeQuery(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.exprName = undefined;
+    }
+
+    function TypeParameter(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.name = undefined;
+        this.constraint = undefined;
+    }
+
+    function Parameter(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.name = undefined;
+        this.initializer = undefined;
+        this.type = undefined;
+        this.propertyName = undefined;
+    }
+
+    function VariableDeclaration(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.name = undefined;
+        this.initializer = undefined;
+        this.type = undefined
+    }
+
+    function UnaryDeclaration(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.operator = undefined;
+        this.operand = SyntaxKind.Unknown; 
+    }
+
+    function JsxElement(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.openingElement = undefined;
+        this.children = undefined;
+        this.closingElement = undefined;
+    }
+
+    function JsxOpeningOrSelfClosingElement(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.tagName = undefined;
+        this.attributes = undefined;
+    }
+
+    function JsxClosingElement(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.tagName = undefined;
+    }
+
+    function JsxAttribute(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.name = undefined;
+        this.initializer = undefined;
+    }
+
+    function ExportAssignment(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.expression = undefined;
+    }
+
+    function PropertyAccessExpression(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.expression = undefined;
+        this.dotToken = undefined;
+        this.name = undefined;
+    }
+    
+    function CallOrConstructSignature(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.name = undefined;
+        this.parameters = undefined
+        this.type = undefined;
+    }
+
+    function VariableDeclarationList(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.declarations = undefined;
+    }
+
+    function PropertySignatureOrDeclaration(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+
+        this.name = undefined;
+        this.initializer = undefined;
+        this.type = undefined
+    }
+
+    function PropertyAssignment(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.name = undefined;
+        this.initializer = undefined;
+    }
+
+    function ShorthandPropertyAssignment(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.name = undefined;
+    }
+
     function Node(kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
@@ -885,13 +1146,88 @@ namespace ts {
         this.parent = undefined;
     }
 
+    function FunctionOrMethodOrAccessorDeclaration(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.parameters = undefined;
+        this.type = undefined;
+        this.body = undefined;
+        this.name = undefined;
+    }
+
+    function Constructor(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.parameters = undefined;
+        this.type = undefined;
+        this.body = undefined;
+        this.name = undefined;
+    }
+
+    function MethodSignature(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+        
+        this.name = undefined;
+        this.parameters = undefined;
+        this.type = undefined;
+    }
+
     export let objectAllocator: ObjectAllocator = {
-        getNodeConstructor: () => <any>Node,
+        getNodeConstructor: kind => {
+            if (kind >= SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken) {
+                return Token;
+            }
+            return constructors[kind] || (constructors[kind] = Node);
+        },
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature
     };
+
+    let constructors: any[] = Array(SyntaxKind.Count);
+    constructors[SyntaxKind.Identifier] = IdentifierOrLiteralLike;
+    constructors[SyntaxKind.StringLiteral] = IdentifierOrLiteralLike;
+    constructors[SyntaxKind.StringLiteralType] = IdentifierOrLiteralLike;
+    constructors[SyntaxKind.RegularExpressionLiteral] = IdentifierOrLiteralLike;
+    constructors[SyntaxKind.CallSignature] = CallOrConstructSignature;
+    constructors[SyntaxKind.ConstructSignature] = CallOrConstructSignature;
+    constructors[SyntaxKind.PropertyAccessExpression] = PropertyAccessExpression;
+    constructors[SyntaxKind.ExportAssignment] = ExportAssignment;
+    constructors[SyntaxKind.PrefixUnaryExpression] = UnaryDeclaration;
+    constructors[SyntaxKind.PostfixUnaryExpression] = UnaryDeclaration;
+    constructors[SyntaxKind.ComputedPropertyName] = ComputedPropertyName;
+    constructors[SyntaxKind.QualifiedName] = QualifiedName;
+    constructors[SyntaxKind.TypeParameter] = TypeParameter;
+    
+    constructors[SyntaxKind.VariableDeclaration] = VariableDeclaration;
+    constructors[SyntaxKind.Parameter] = Parameter;
+    constructors[SyntaxKind.PropertySignature] = PropertySignatureOrDeclaration;
+    constructors[SyntaxKind.PropertyDeclaration] = PropertySignatureOrDeclaration;
+    
+    constructors[SyntaxKind.VariableDeclarationList] = VariableDeclarationList;
+    constructors[SyntaxKind.PropertyAssignment] = PropertyAssignment;
+    constructors[SyntaxKind.ShorthandPropertyAssignment] = ShorthandPropertyAssignment;
+    
+    constructors[SyntaxKind.FunctionDeclaration] = FunctionOrMethodOrAccessorDeclaration;
+    constructors[SyntaxKind.MethodDeclaration] = FunctionOrMethodOrAccessorDeclaration;
+    constructors[SyntaxKind.Constructor] = Constructor;
+    constructors[SyntaxKind.GetAccessor] = FunctionOrMethodOrAccessorDeclaration;
+    constructors[SyntaxKind.SetAccessor] = FunctionOrMethodOrAccessorDeclaration;
+    constructors[SyntaxKind.MethodSignature] = MethodSignature;
+
 
     export const enum AssertionLevel {
         None = 0,

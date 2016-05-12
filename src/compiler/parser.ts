@@ -4,7 +4,8 @@
 namespace ts {
     /* @internal */ export let parseTime = 0;
 
-    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    type NodeConstructor = {new (kind: SyntaxKind, pos: number, end: number) : Node};
+    let NodeConstructors: NodeConstructor[] = Array(SyntaxKind.Count);
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
@@ -12,7 +13,7 @@ namespace ts {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
         }
         else {
-            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
+            return new (NodeConstructors[kind] || (NodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(kind, pos, end);
         }
     }
 
@@ -450,7 +451,6 @@ namespace ts {
         const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
         // capture constructors in 'initializeState' to avoid null checks
-        let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
         let sourceFile: SourceFile;
@@ -560,7 +560,6 @@ namespace ts {
         }
 
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
-            NodeConstructor = objectAllocator.getNodeConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
             sourceText = _sourceText;
@@ -996,8 +995,7 @@ namespace ts {
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-
-            return new NodeConstructor(kind, pos, pos);
+            return new (NodeConstructors[kind] || (NodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(kind, pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
