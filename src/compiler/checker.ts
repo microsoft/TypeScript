@@ -6824,14 +6824,34 @@ namespace ts {
                 getSignaturesOfType(type, SignatureKind.Construct).length === 0;
         }
 
+        function createTransientSymbol(source: Symbol, type: Type) {
+            const symbol = <TransientSymbol>createSymbol(source.flags | SymbolFlags.Transient, source.name);
+            symbol.declarations = source.declarations;
+            symbol.parent = source.parent;
+            symbol.type = type;
+            symbol.target = source;
+            if (source.valueDeclaration) symbol.valueDeclaration = source.valueDeclaration;
+            return symbol;
+        }
+
         function getRegularTypeOfObjectLiteral(type: Type): Type {
             if (type.flags & TypeFlags.FreshObjectLiteral) {
                 let regularType = (<FreshObjectLiteralType>type).regularType;
                 if (!regularType) {
                     regularType = <ResolvedType>createType((<ResolvedType>type).flags & ~TypeFlags.FreshObjectLiteral);
                     regularType.symbol = (<ResolvedType>type).symbol;
-                    regularType.members = (<ResolvedType>type).members;
-                    regularType.properties = (<ResolvedType>type).properties;
+                    const members: SymbolTable = {};
+                    const properties: Symbol[] = [];
+                    for (let p of (<ResolvedType>type).properties) {
+                        const propType = getTypeOfSymbol(p);
+                        if (propType.flags & TypeFlags.FreshObjectLiteral) {
+                            p = createTransientSymbol(p, getRegularTypeOfObjectLiteral(propType));
+                        }
+                        members[p.name] = p;
+                        properties.push(p);
+                    };
+                    regularType.properties = properties;
+                    regularType.members = members;
                     regularType.callSignatures = (<ResolvedType>type).callSignatures;
                     regularType.constructSignatures = (<ResolvedType>type).constructSignatures;
                     regularType.stringIndexInfo = (<ResolvedType>type).stringIndexInfo;
@@ -6850,13 +6870,7 @@ namespace ts {
                 const propType = getTypeOfSymbol(p);
                 const widenedType = getWidenedType(propType);
                 if (propType !== widenedType) {
-                    const symbol = <TransientSymbol>createSymbol(p.flags | SymbolFlags.Transient, p.name);
-                    symbol.declarations = p.declarations;
-                    symbol.parent = p.parent;
-                    symbol.type = widenedType;
-                    symbol.target = p;
-                    if (p.valueDeclaration) symbol.valueDeclaration = p.valueDeclaration;
-                    p = symbol;
+                    p = createTransientSymbol(p, widenedType);
                 }
                 members[p.name] = p;
             });
