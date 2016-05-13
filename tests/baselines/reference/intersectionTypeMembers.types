@@ -114,3 +114,37 @@ var n = f(42);
 >f : ((x: string) => string) & ((x: number) => number)
 >42 : number
 
+interface D {
+>D : D
+
+    nested: {d: string;};
+>nested : { d: string; }
+>d : string
+}
+interface E {
+>E : E
+
+    nested: { e: string; };
+>nested : { e: string; }
+>e : string
+}
+const de: D & E = {
+>de : D & E
+>D : D
+>E : E
+>{    nested: {        d: 'yes',        e: 'no'    }} : { nested: { d: string; e: string; }; }
+
+    nested: {
+>nested : { d: string; e: string; }
+>{        d: 'yes',        e: 'no'    } : { d: string; e: string; }
+
+        d: 'yes',
+>d : string
+>'yes' : string
+
+        e: 'no'
+>e : string
+>'no' : string
+    }
+}
+
