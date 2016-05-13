@@ -1516,9 +1516,10 @@ namespace ts {
         postParameterName?: Identifier;
         isBracketed: boolean;
     }
-    
+
     // @internal
     export namespace Json {
+        // tslint:disable-next-line:no-null-keyword
         export type JsonPrimitives = string | number | boolean | null;
         export interface JsonArray extends Array<JsonValue> {}
         export interface JsonObject extends Map<JsonValue> {}

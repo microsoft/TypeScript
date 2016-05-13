@@ -578,7 +578,7 @@ namespace ts {
                 adaptJsonAstToPlainObject(sourceText, jsonObjectRoot) :
                 undefined;
 
-            return { resultObject, errors: [...parseDiagnostics] }
+            return { resultObject, errors: [...parseDiagnostics] };
         }
 
         function parseTopLevelJsonObjectForFile() {
