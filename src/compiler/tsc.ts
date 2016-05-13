@@ -368,28 +368,28 @@ namespace ts {
                     const error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
                     reportWatchDiagnostic(error);
                     sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    return;
+                    return undefined;
                 }
             }
             if (!cachedConfigFileText) {
                 const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
                 reportDiagnostics([error], /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
+                return undefined;
             }
 
-            const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
-            const configObject = result.config;
+            const result = Parser.parseJsonObjectResiliently(configFileName, cachedConfigFileText);
+            const configObject = result.resultObject;
             if (!configObject) {
-                reportDiagnostics([result.error], /* compilerHost */ undefined);
+                reportDiagnostics(result.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
+                return undefined;
             }
             const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
+                return undefined;
             }
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {

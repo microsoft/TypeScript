@@ -1516,6 +1516,14 @@ namespace ts {
         postParameterName?: Identifier;
         isBracketed: boolean;
     }
+    
+    // @internal
+    export namespace Json {
+        export type JsonPrimitives = string | number | boolean | null;
+        export interface JsonArray extends Array<JsonValue> {}
+        export interface JsonObject extends Map<JsonValue> {}
+        export type JsonValue = JsonPrimitives | JsonArray | JsonObject;
+    }
 
     export const enum FlowFlags {
         Unreachable    = 1 << 0,  // Unreachable code

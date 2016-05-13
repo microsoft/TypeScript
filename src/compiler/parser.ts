@@ -443,7 +443,8 @@ namespace ts {
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    namespace Parser {
+    // @internal
+    export namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -552,6 +553,151 @@ namespace ts {
             clearState();
 
             return result;
+        }
+
+        /**
+         * Returns an object that has been parsed from a JSON file, along with any errors found in parsing.
+         */
+        // @internal
+        export function parseJsonObjectResiliently(fileName: string, _sourceText: string) {
+            initializeState(fileName, _sourceText, ScriptTarget.Latest, /*_syntaxCursor*/ undefined, ScriptKind.JS);
+
+            // Create a dummy source file just to work resiliently.
+            sourceFile = createSourceFile(fileName, ScriptTarget.Latest, ScriptKind.JS);
+            sourceFile.flags = NodeFlags.None;
+
+
+            contextFlags = NodeFlags.None;
+            parseErrorBeforeNextFinishedNode = false;
+
+            // Prime the scanner.
+            nextToken();
+
+            const jsonObjectRoot = parseTopLevelJsonObjectForFile();
+            const resultObject = jsonObjectRoot ?
+                adaptJsonAstToPlainObject(sourceText, jsonObjectRoot) :
+                undefined;
+
+            return { resultObject, errors: [...parseDiagnostics] }
+        }
+
+        function parseTopLevelJsonObjectForFile() {
+            let resultingObject: ObjectLiteralExpression = undefined;
+
+            while (token !== SyntaxKind.EndOfFileToken) {
+                if (token === SyntaxKind.OpenBraceToken && !resultingObject) {
+                    resultingObject = parseObjectLiteralExpression();
+                    continue;
+                }
+
+                parseErrorAtCurrentToken(Diagnostics.Unexpected_token);
+                nextToken();
+            }
+
+            return resultingObject;
+        }
+
+        function jsonParseError(node: Node, message: DiagnosticMessage) {
+            const start = nodeIsPresent(node) && node.kind !== SyntaxKind.JsxText ? skipTrivia(sourceText, node.pos) : node.pos;
+            const length = node.end - start;
+            const diagnostic = createFileDiagnostic(sourceFile, start, length, message);
+            parseDiagnostics.push(diagnostic);
+        }
+
+        function adaptJsonAstToPlainObject(sourceText: string, rootObject: ObjectLiteralExpression) {
+            return adaptObjectLiteral(rootObject);
+
+            function adaptObjectLiteral({ properties }: ObjectLiteralExpression) {
+                if (properties.hasTrailingComma) {
+                    // TODO (drosen): Duplication with 'checkGrammarForDisallowedTrailingComma' in 'checker.ts'.
+                    parseErrorAtPosition(properties.end, ",".length, Diagnostics.Trailing_comma_not_allowed);
+                }
+
+                const result: Json.JsonObject = {};
+
+                for (const property of properties) {
+                    tryAddObjectLiteralElement(result, property);
+                }
+
+                return result;
+            }
+
+            function tryAddObjectLiteralElement(target: Json.JsonObject, node: ObjectLiteralElement): void {
+                if (node.kind === SyntaxKind.PropertyAssignment) {
+                    const name = adaptPropertyAssignmentName((node as PropertyAssignment).name);
+                    const value = adaptJsonValue((node as PropertyAssignment).initializer);
+                    if (name === undefined || value === undefined) {
+                        return;
+                    }
+
+                    target[name] = value;
+                }
+                else {
+                    jsonParseError(node, Diagnostics.This_syntax_is_invalid_in_JSON_files);
+                    return;
+                }
+            }
+
+            function adaptArrayLiteral({ elements }: ArrayLiteralExpression): Json.JsonArray {
+                if (elements.hasTrailingComma) {
+                    // TODO (drosen): Duplication with 'checkGrammarForDisallowedTrailingComma' in 'checker.ts'.
+                    parseErrorAtPosition(elements.end, ",".length, Diagnostics.Trailing_comma_not_allowed);
+                }
+
+                const adapted = map(elements, adaptJsonValue);
+                return filter(adapted, x => x !== undefined);
+            }
+
+            function adaptPropertyAssignmentName(node: PropertyName) {
+                if (node.kind === SyntaxKind.StringLiteral) {
+                    return adaptStringLiteral(node as StringLiteral);
+                }
+
+                jsonParseError(node, Diagnostics.String_literal_expected);
+
+                // Even if it's an error, simply give the user the expected behavior.
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral) {
+                    return (node as Identifier | LiteralExpression).text;
+                }
+
+                return undefined;
+            }
+
+            function adaptStringLiteral(node: StringLiteral) {
+                if (node.isUnterminated) {
+                    return undefined;
+                }
+
+                const quoteChar = sourceText.charCodeAt(node.end - 1);
+                if (quoteChar !== CharacterCodes.doubleQuote) {
+                    jsonParseError(node, Diagnostics.Only_double_quoted_strings_are_allowed_in_a_JSON_file);
+                }
+
+                return node.text;
+            }
+
+            function adaptJsonValue(node: Expression): Json.JsonValue {
+                switch (node.kind) {
+                    case SyntaxKind.StringLiteral:
+                        return adaptStringLiteral(node as StringLiteral);
+                    case SyntaxKind.NumericLiteral:
+                        return +(node as LiteralExpression).text;
+                    case SyntaxKind.TrueKeyword:
+                        return true;
+                    case SyntaxKind.FalseKeyword:
+                        return false;
+                    case SyntaxKind.NullKeyword:
+                        // tslint:disable-next-line:no-null-keyword
+                        return null;
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return adaptObjectLiteral(node as ObjectLiteralExpression);
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return adaptArrayLiteral(node as ArrayLiteralExpression);
+                    default:
+                        jsonParseError(node, Diagnostics.This_syntax_is_invalid_in_JSON_files);
+                        return undefined;
+                }
+            }
         }
 
         function getLanguageVariant(scriptKind: ScriptKind) {

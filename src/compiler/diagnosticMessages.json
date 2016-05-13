@@ -855,6 +855,14 @@
         "category": "Error",
         "code": 1316
     },
+    "Only double-quoted strings are allowed in a JSON file.": {
+        "category": "Error",
+        "code": 1317
+    },
+    "This syntax is invalid in JSON files.": {
+        "category": "Error",
+        "code": 1318
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
