@@ -7,17 +7,23 @@
 ////function D() {}
 ////const E = function F() {}
 ////console.log(function inner() {})
+////String(function fun() { class cls { public prop; } }))
 
+function navExact(name: string, kind: string) {
+	verify.navigationItemsListContains(name, kind, name, "exact");
+}
 
-// Search for properties defined in the constructor, but not other constructor paramters
-var searchValue = "search";
-verify.navigationItemsListContains("A", "class", "A", "exact");
-verify.navigationItemsListContains("B", "const", "B", "exact");
-verify.navigationItemsListContains("C", "class", "C", "exact");
-verify.navigationItemsListContains("x", "property", "x", "exact");
+navExact("A", "class");
+navExact("B", "const");
+navExact("C", "class");
+navExact("x", "property");
 
-verify.navigationItemsListContains("D", "function", "D", "exact");
-verify.navigationItemsListContains("E", "const", "E", "exact");
-verify.navigationItemsListContains("F", "function", "F", "exact")
+navExact("D", "function");
+navExact("E", "const");
+navExact("F", "function")
 
-verify.navigationItemsListContains("inner", "function", "inner", "exact");
+navExact("inner", "function");
+
+navExact("fun", "function");
+navExact("cls", "class");
+navExact("prop", "property");
