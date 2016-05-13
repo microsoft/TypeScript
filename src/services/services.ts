@@ -4645,7 +4645,7 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
-            if (!node) {
+            if (node === sourceFile) {
                 return undefined;
             }
 
