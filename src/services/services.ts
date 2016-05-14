@@ -4541,8 +4541,10 @@ namespace ts {
                         }
 
                         // For properties, variables and local vars: show the type
+                        // Also handle methods that have a union type (i.e. that may be undefined)
                         if (symbolKind === ScriptElementKind.memberVariableElement ||
                             symbolFlags & SymbolFlags.Variable ||
+                            symbolFlags & SymbolFlags.Method && type.flags & TypeFlags.Union ||
                             symbolKind === ScriptElementKind.localVariableElement ||
                             isThisExpression) {
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
