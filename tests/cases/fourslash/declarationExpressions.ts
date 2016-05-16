@@ -6,8 +6,9 @@
 ////};
 ////function D() {}
 ////const E = function F() {}
-////console.log(function inner() {})
-////String(function fun() { class cls { public prop; } }))
+////console.log(function() {}, class {}); // Expression with no name should have no effect.
+////console.log(function inner() {});
+////String(function fun() { class cls { public prop; } }));
 
 function navExact(name: string, kind: string) {
 	verify.navigationItemsListContains(name, kind, name, "exact");
