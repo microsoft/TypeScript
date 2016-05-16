@@ -712,6 +712,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -730,7 +731,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0) {
+            if (lintFlag && i === 0) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -750,7 +751,7 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
     runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', []);
 }, {async: true});
