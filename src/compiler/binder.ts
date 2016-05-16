@@ -2273,7 +2273,7 @@ namespace ts {
 
         // If the parameter's name is 'this', then it is TypeScript syntax.
         if (subtreeFlags & TransformFlags.ContainsDecorators
-            || (node.name && isIdentifier(node.name) && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword)) {
+            || (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2430,7 +2430,7 @@ namespace ts {
         let transformFlags = TransformFlags.None;
 
         // A VariableDeclaration with a binding pattern is ES6 syntax.
-        if (isBindingPattern((<VariableDeclaration>node).name)) {
+        if (isBindingPattern(node.name)) {
             transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
         }
 

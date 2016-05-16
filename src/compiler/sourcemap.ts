@@ -60,14 +60,14 @@ namespace ts {
          *
          * @param range The range to emit.
          * @param contextNode The node for the current range.
-         * @param shouldIgnoreNodeCallback A callback used to determine whether to skip source map
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
          *        emit for the start position of this node.
-         * @param shouldIgnoreChildrenCallback A callback used to determine whether to skip source
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
          *        map emit for all children of this node.
-         * @param getCustomSourceMapRangeForNodeCallback A callback used to get a custom source map
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
          *        range for this node.
          */
-        emitStart(range: TextRange, contextNode: Node, shouldIgnoreNodeCallback: (node: Node) => boolean, shouldIgnoreChildrenCallback: (node: Node) => boolean, getCustomSourceMapRangeForNodeCallback: (node: Node) => TextRange): void;
+        emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
 
         /**
          * Emits a mapping for the end of a range.
@@ -87,14 +87,14 @@ namespace ts {
          *
          * @param range The range to emit.
          * @param contextNode The node for the current range.
-         * @param shouldIgnoreNodeCallback A callback used to determine whether to skip source map
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
          *        emit for the end position of this node.
-         * @param shouldIgnoreChildrenCallback A callback used to determine whether to skip source
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
          *        map emit for all children of this node.
-         * @param getCustomSourceMapRangeForNodeCallback A callback used to get a custom source map
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
          *        range for this node.
          */
-        emitEnd(range: TextRange, contextNode: Node, shouldIgnoreNodeCallback: (node: Node) => boolean, shouldIgnoreChildrenCallback: (node: Node) => boolean, getCustomSourceMapRangeForNodeCallback: (node: Node) => TextRange): void;
+        emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallbackCallback: (node: Node) => TextRange): void;
 
         /**
          * Emits a mapping for the start position of a token.
@@ -119,13 +119,13 @@ namespace ts {
          * @param token The token to emit.
          * @param tokenStartPos The start position of the token.
          * @param contextNode The node containing this token.
-         * @param shouldIgnoreTokenCallback A callback used to determine whether to skip source map
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
          *        emit for the start position of this token.
-         * @param getCustomSourceMapRangeForTokenCallback A callback used to get a custom source
+         * @param getTokenTextRangeCallback A callback used to get a custom source
          *        map range for this node.
          * @returns The start position of the token, following any trivia.
          */
-        emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
 
         /**
          * Emits a mapping for the end position of a token.
@@ -148,13 +148,13 @@ namespace ts {
          * @param token The token to emit.
          * @param tokenEndPos The end position of the token.
          * @param contextNode The node containing this token.
-         * @param shouldIgnoreTokenCallback A callback used to determine whether to skip source map
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
          *        emit for the end position of this token.
-         * @param getCustomSourceMapRangeForTokenCallback A callback used to get a custom source
+         * @param getTokenTextRangeCallback A callback used to get a custom source
          *        map range for this node.
          * @returns The end position of the token.
          */
-        emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, shouldIgnoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
 
         /*@deprecated*/ changeEmitSourcePos(): void;
         /*@deprecated*/ stopOverridingSpan(): void;
@@ -180,10 +180,10 @@ namespace ts {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
                 emitPos(pos: number): void { },
-                emitStart(range: TextRange, contextNode?: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void { },
-                emitEnd(range: TextRange, contextNode?: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange): void { },
-                emitTokenStart(token: SyntaxKind, pos: number, contextNode?: Node, shouldIgnoreTokenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForTokenCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
-                emitTokenEnd(token: SyntaxKind, end: number, contextNode?: Node, shouldIgnoreTokenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForTokenCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
+                emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
+                emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange): void { },
+                emitTokenStart(token: SyntaxKind, pos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
+                emitTokenEnd(token: SyntaxKind, end: number, contextNode?: Node, ignoreTokenCallback?: (node: Node) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind, pos: number) => TextRange): number { return -1; },
                 changeEmitSourcePos(): void { },
                 stopOverridingSpan(): void { },
                 getText(): string { return undefined; },
@@ -517,22 +517,22 @@ namespace ts {
          *
          * @param range The range to emit.
          * @param contextNode The node for the current range.
-         * @param shouldIgnoreNodeCallback A callback used to determine whether to skip source map
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
          *        emit for the start position of this node.
-         * @param shouldIgnoreChildrenCallback A callback used to determine whether to skip source
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
          *        map emit for all children of this node.
-         * @param getCustomSourceMapRangeForNodeCallback A callback used to get a custom source map
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
          *        range for this node.
          */
-        function emitStart(range: TextRange, contextNode: Node, shouldIgnoreNodeCallback: (node: Node) => boolean, shouldIgnoreChildrenCallback: (node: Node) => boolean, getCustomSourceMapRangeForNode: (node: Node) => TextRange): void;
-        function emitStart(range: TextRange, contextNode?: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange) {
+        function emitStart(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
+        function emitStart(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
             if (contextNode) {
-                if (!shouldIgnoreNodeCallback(contextNode)) {
-                    range = getCustomSourceMapRangeForNode(contextNode) || range;
+                if (!ignoreNodeCallback(contextNode)) {
+                    range = getTextRangeCallback(contextNode) || range;
                     emitPos(getStartPosPastDecorators(range));
                 }
 
-                if (shouldIgnoreChildrenCallback(contextNode)) {
+                if (ignoreChildrenCallback(contextNode)) {
                     disable();
                 }
             }
@@ -558,22 +558,22 @@ namespace ts {
          *
          * @param range The range to emit.
          * @param contextNode The node for the current range.
-         * @param shouldIgnoreNodeCallback A callback used to determine whether to skip source map
+         * @param ignoreNodeCallback A callback used to determine whether to skip source map
          *        emit for the end position of this node.
-         * @param shouldIgnoreChildrenCallback A callback used to determine whether to skip source
+         * @param ignoreChildrenCallback A callback used to determine whether to skip source
          *        map emit for all children of this node.
-         * @param getCustomSourceMapRangeForNodeCallback A callback used to get a custom source map
+         * @param getTextRangeCallbackCallback A callback used to get a custom source map
          *        range for this node.
          */
-        function emitEnd(range: TextRange, contextNode: Node, shouldIgnoreNodeCallback: (node: Node) => boolean, shouldIgnoreChildrenCallback: (node: Node) => boolean, getCustomSourceMapRangeForNode: (node: Node) => TextRange): void;
-        function emitEnd(range: TextRange, contextNode?: Node, shouldIgnoreNodeCallback?: (node: Node) => boolean, shouldIgnoreChildrenCallback?: (node: Node) => boolean, getCustomSourceMapRangeForNode?: (node: Node) => TextRange) {
+        function emitEnd(range: TextRange, contextNode: Node, ignoreNodeCallback: (node: Node) => boolean, ignoreChildrenCallback: (node: Node) => boolean, getTextRangeCallback: (node: Node) => TextRange): void;
+        function emitEnd(range: TextRange, contextNode?: Node, ignoreNodeCallback?: (node: Node) => boolean, ignoreChildrenCallback?: (node: Node) => boolean, getTextRangeCallback?: (node: Node) => TextRange) {
             if (contextNode) {
-                if (shouldIgnoreChildrenCallback(contextNode)) {
+                if (ignoreChildrenCallback(contextNode)) {
                     enable();
                 }
 
-                if (!shouldIgnoreNodeCallback(contextNode)) {
-                    range = getCustomSourceMapRangeForNode(contextNode) || range;
+                if (!ignoreNodeCallback(contextNode)) {
+                    range = getTextRangeCallback(contextNode) || range;
                     emitPos(range.end);
                 }
             }
@@ -606,20 +606,20 @@ namespace ts {
          * @param token The token to emit.
          * @param tokenStartPos The start position of the token.
          * @param contextNode The node containing this token.
-         * @param shouldIgnoreTokenCallback A callback used to determine whether to skip source map
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
          *        emit for the start position of this token.
-         * @param getCustomSourceMapRangeForTokenCallback A callback used to get a custom source
+         * @param getTokenTextRangeCallback A callback used to get a custom source
          *        map range for this node.
          * @returns The start position of the token, following any trivia.
          */
-        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback: (node: Node, token: SyntaxKind) => TextRange): number;
-        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, shouldIgnoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        function emitTokenStart(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
             if (contextNode) {
-                if (shouldIgnoreTokenCallback(contextNode, token)) {
+                if (ignoreTokenCallback(contextNode, token)) {
                     return skipTrivia(currentSourceText, tokenStartPos);
                 }
 
-                const range = getCustomSourceMapRangeForTokenCallback(contextNode, token);
+                const range = getTokenTextRangeCallback(contextNode, token);
                 if (range) {
                     tokenStartPos = range.pos;
                 }
@@ -650,20 +650,20 @@ namespace ts {
          * @param token The token to emit.
          * @param tokenEndPos The end position of the token.
          * @param contextNode The node containing this token.
-         * @param shouldIgnoreTokenCallback A callback used to determine whether to skip source map
+         * @param ignoreTokenCallback A callback used to determine whether to skip source map
          *        emit for the end position of this token.
-         * @param getCustomSourceMapRangeForTokenCallback A callback used to get a custom source
+         * @param getTokenTextRangeCallback A callback used to get a custom source
          *        map range for this node.
          * @returns The end position of the token.
          */
-        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, shouldIgnoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback: (node: Node, token: SyntaxKind) => TextRange): number;
-        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, shouldIgnoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getCustomSourceMapRangeForTokenCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
+        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode: Node, ignoreTokenCallback: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback: (node: Node, token: SyntaxKind) => TextRange): number;
+        function emitTokenEnd(token: SyntaxKind, tokenEndPos: number, contextNode?: Node, ignoreTokenCallback?: (node: Node, token: SyntaxKind) => boolean, getTokenTextRangeCallback?: (node: Node, token: SyntaxKind) => TextRange): number {
             if (contextNode) {
-                if (shouldIgnoreTokenCallback(contextNode, token)) {
+                if (ignoreTokenCallback(contextNode, token)) {
                     return tokenEndPos;
                 }
 
-                const range = getCustomSourceMapRangeForTokenCallback(contextNode, token);
+                const range = getTokenTextRangeCallback(contextNode, token);
                 if (range) {
                     tokenEndPos = range.end;
                 }

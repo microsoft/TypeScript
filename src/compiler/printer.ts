@@ -344,9 +344,9 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode, getCommentRange);
-                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode, getCommentRange);
-                    emitLeadingComments(node, leadingComments, getCommentRange);
+                    const leadingComments = getLeadingComments(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingCommentsForNode, getCommentRange);
+                    const trailingComments = getTrailingComments(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingCommentsForNode, getCommentRange);
+                    emitLeadingComments(/*range*/ node, leadingComments, /*contextNode*/ node, getCommentRange);
                     emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
                     emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
@@ -1996,7 +1996,7 @@ const _super = (function (geti, seti) {
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
                 if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
-                    emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), getCommentRange);
+                    emitLeadingComments(/*range*/ node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), /*contextNode*/ node.initializer, getCommentRange);
                 }
                 emitExpression(node.initializer);
             }
@@ -2360,7 +2360,7 @@ const _super = (function (geti, seti) {
                         }
 
                         if (shouldEmitInterveningComments) {
-                            emitLeadingComments(child, getTrailingCommentsOfPosition(child.pos), getCommentRange);
+                            emitLeadingComments(/*node*/ child, getTrailingCommentsOfPosition(child.pos), /*contextNode*/ child, getCommentRange);
                         }
                         else {
                             shouldEmitInterveningComments = true;

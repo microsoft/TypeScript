@@ -2202,7 +2202,7 @@ namespace ts {
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            if (node.name && isIdentifier(node.name) && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
+            if (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword) {
                 return undefined;
             }
 
