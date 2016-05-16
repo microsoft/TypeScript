@@ -4802,6 +4802,26 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
+            /// Triple slash reference comments
+            const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
+            if (comment) {
+                const referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                if (referenceFile) {
+                    return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
+                }
+                return undefined;
+            }
+
+            // Type reference directives
+            const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
+            if (typeReferenceDirective) {
+                const referenceFile = lookUp(program.getResolvedTypeReferenceDirectives(), typeReferenceDirective.fileName);
+                if (referenceFile && referenceFile.resolvedFileName) {
+                    return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
+                }
+                return undefined;
+            }
+
             const node = getTouchingPropertyName(sourceFile, position);
             if (node === sourceFile) {
                 return undefined;
@@ -4812,25 +4832,6 @@ namespace ts {
                 const labelName = (<Identifier>node).text;
                 const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                 return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
-            }
-
-            /// Triple slash reference comments
-            const comment = findReferenceInPosition(sourceFile.referencedFiles, position);
-            if (comment) {
-                const referenceFile = tryResolveScriptReference(program, sourceFile, comment);
-                if (referenceFile) {
-                    return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
-                }
-                return undefined;
-            }
-            // Type reference directives
-            const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
-            if (typeReferenceDirective) {
-                const referenceFile = lookUp(program.getResolvedTypeReferenceDirectives(), typeReferenceDirective.fileName);
-                if (referenceFile && referenceFile.resolvedFileName) {
-                    return [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
-                }
-                return undefined;
             }
 
             const typeChecker = program.getTypeChecker();
