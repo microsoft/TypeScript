@@ -13,7 +13,7 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
     }
     
     class C {
-        x?: number; // error
+        x?: number; // ok
     }
     
     interface I2<T> {
@@ -21,7 +21,7 @@ tests/cases/conformance/types/objectTypeLiteral/methodSignatures/objectTypesWith
     }
     
     class C2<T> {
-        x?: T; // error
+        x?: T; // ok
     }
     
     var b = {
