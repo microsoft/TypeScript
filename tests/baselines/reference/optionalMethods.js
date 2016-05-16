@@ -20,6 +20,8 @@ function test1(x: Foo) {
 class Bar {
     a: number;
     b?: number;
+    c? = 2;
+    constructor(public d?: number, public e = 10) {}
     f() {
         return 1;
     }
@@ -32,6 +34,9 @@ class Bar {
 function test2(x: Bar) {
     x.a;
     x.b;
+    x.c;
+    x.d;
+    x.e;
     x.f;
     x.g;
     let f1 = x.f();
@@ -41,8 +46,23 @@ function test2(x: Bar) {
     let h2 = x.h ? x.h() : 0;
 }
 
+class Base {
+    a?: number;
+    f?(): number;
+}
+
+class Derived extends Base {
+    a = 1;
+    f(): number { return 1; }
+}
+
 
 //// [optionalMethods.js]
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 function test1(x) {
     x.a;
     x.b;
@@ -53,7 +73,11 @@ function test1(x) {
     var g2 = x.g ? x.g() : 0;
 }
 var Bar = (function () {
-    function Bar() {
+    function Bar(d, e) {
+        if (e === void 0) { e = 10; }
+        this.d = d;
+        this.e = e;
+        this.c = 2;
     }
     Bar.prototype.f = function () {
         return 1;
@@ -66,6 +90,9 @@ var Bar = (function () {
 function test2(x) {
     x.a;
     x.b;
+    x.c;
+    x.d;
+    x.e;
     x.f;
     x.g;
     var f1 = x.f();
@@ -73,4 +100,48 @@ function test2(x) {
     var g2 = x.g ? x.g() : 0;
     var h1 = x.h && x.h();
     var h2 = x.h ? x.h() : 0;
+}
+var Base = (function () {
+    function Base() {
+    }
+    return Base;
+}());
+var Derived = (function (_super) {
+    __extends(Derived, _super);
+    function Derived() {
+        _super.apply(this, arguments);
+        this.a = 1;
+    }
+    Derived.prototype.f = function () { return 1; };
+    return Derived;
+}(Base));
+
+
+//// [optionalMethods.d.ts]
+interface Foo {
+    a: number;
+    b?: number;
+    f(): number;
+    g?(): number;
+}
+declare function test1(x: Foo): void;
+declare class Bar {
+    d?: number;
+    e: number;
+    a: number;
+    b?: number;
+    c?: number | undefined;
+    constructor(d?: number, e?: number);
+    f(): number;
+    g?(): number;
+    h?(): number;
+}
+declare function test2(x: Bar): void;
+declare class Base {
+    a?: number;
+    f?(): number;
+}
+declare class Derived extends Base {
+    a: number;
+    f(): number;
 }

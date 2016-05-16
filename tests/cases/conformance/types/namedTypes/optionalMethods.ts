@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @declaration: true
 
 interface Foo {
     a: number;
@@ -20,6 +21,8 @@ function test1(x: Foo) {
 class Bar {
     a: number;
     b?: number;
+    c? = 2;
+    constructor(public d?: number, public e = 10) {}
     f() {
         return 1;
     }
@@ -32,6 +35,9 @@ class Bar {
 function test2(x: Bar) {
     x.a;
     x.b;
+    x.c;
+    x.d;
+    x.e;
     x.f;
     x.g;
     let f1 = x.f();
@@ -39,4 +45,14 @@ function test2(x: Bar) {
     let g2 = x.g ? x.g() : 0;
     let h1 = x.h && x.h();
     let h2 = x.h ? x.h() : 0;
+}
+
+class Base {
+    a?: number;
+    f?(): number;
+}
+
+class Derived extends Base {
+    a = 1;
+    f(): number { return 1; }
 }

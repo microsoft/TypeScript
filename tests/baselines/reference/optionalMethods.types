@@ -81,6 +81,15 @@ class Bar {
     b?: number;
 >b : number | undefined
 
+    c? = 2;
+>c : number | undefined
+>2 : number
+
+    constructor(public d?: number, public e = 10) {}
+>d : number | undefined
+>e : number
+>10 : number
+
     f() {
 >f : () => number
 
@@ -112,6 +121,21 @@ function test2(x: Bar) {
 >x.b : number | undefined
 >x : Bar
 >b : number | undefined
+
+    x.c;
+>x.c : number | undefined
+>x : Bar
+>c : number | undefined
+
+    x.d;
+>x.d : number | undefined
+>x : Bar
+>d : number | undefined
+
+    x.e;
+>x.e : number
+>x : Bar
+>e : number
 
     x.f;
 >x.f : () => number
@@ -175,5 +199,28 @@ function test2(x: Bar) {
 >x : Bar
 >h : () => number
 >0 : number
+}
+
+class Base {
+>Base : Base
+
+    a?: number;
+>a : number | undefined
+
+    f?(): number;
+>f : (() => number) | undefined
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    a = 1;
+>a : number
+>1 : number
+
+    f(): number { return 1; }
+>f : () => number
+>1 : number
 }
 
