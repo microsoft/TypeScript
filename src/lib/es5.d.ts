@@ -864,6 +864,7 @@ declare const RegExp: RegExpConstructor;
 interface Error {
     name: string;
     message: string;
+    stack?: string;
 }
 
 interface ErrorConstructor {
