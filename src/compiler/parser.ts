@@ -440,11 +440,15 @@ namespace ts {
         return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
     }
 
+    /* @internal */
+    export function parseJsonObjectFile(fileName: string, content: string) {
+        return Parser.parseJsonObjectResiliently(fileName, content);
+    }
+
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    // @internal
-    export namespace Parser {
+    namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -558,8 +562,7 @@ namespace ts {
         /**
          * Returns an object that has been parsed from a JSON file, along with any errors found in parsing.
          */
-        // @internal
-        export function parseJsonObjectResiliently(fileName: string, _sourceText: string) {
+        export function parseJsonObjectResiliently(fileName: string, _sourceText: string): { resultObject?: Json.JsonObject, errors: Diagnostic[] } {
             initializeState(fileName, _sourceText, ScriptTarget.Latest, /*_syntaxCursor*/ undefined, ScriptKind.JS);
 
             // Create a dummy source file just to work resiliently.

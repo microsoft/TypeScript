@@ -378,7 +378,7 @@ namespace ts {
                 return undefined;
             }
 
-            const result = Parser.parseJsonObjectResiliently(configFileName, cachedConfigFileText);
+            const result = parseJsonObjectFile(configFileName, cachedConfigFileText);
             const configObject = result.resultObject;
             if (!configObject) {
                 reportDiagnostics(result.errors, /* compilerHost */ undefined);
