@@ -3,7 +3,7 @@
 //// {| "itemName": "c", "kind": "const", "parentName": "" |}const c = 0;
 
 test.markers().forEach(marker => {
-    verify.getScriptLexicalStructureListContains(
+    verify.navigationBarContains(
         marker.data.itemName,
         marker.data.kind,
         marker.fileName,

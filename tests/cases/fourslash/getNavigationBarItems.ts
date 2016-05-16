@@ -5,7 +5,7 @@
 ////    ["bar"]: string;
 ////}
 
-verify.navigationBarCount(1);
-verify.navigationBarItem("C", "class");
+verify.navigationBarCount(3);
+verify.navigationBarContains("C", "class");
 verify.navigationBarChildItem("C", "[\"bar\"]", "property");
 verify.navigationBarChildItem("C", "foo", "property");

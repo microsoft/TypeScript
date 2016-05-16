@@ -1912,47 +1912,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyNavigationBarCount(count: number) {
-            const actual = this.navigationBarItems().length;
-            if (actual !== count) {
-                this.raiseError(`Expected ${count} items in navigation bar, got ${actual}`);
-            }
-        }
-
-        public verifyNavigationBarItem(text: string, kind: string) {
-            this.verifyNavigationBarItemExists(this.navigationBarItems(), text, kind);
-        }
-
-        public verifyNavigationBarChildItem(parent: string, text: string, kind: string) {
-            const items = this.navigationBarItems();
-
-            // TODO: ts.find?
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.text === parent) {
-                    this.verifyNavigationBarItemExists(item.childItems, text, kind);
-                    return;
-                }
-            }
-
-            this.raiseError(`Could not find any parent named ${parent} in: ${JSON.stringify(items, undefined, 2)}`);
-        }
-
-        private navigationBarItems() {
-            return this.languageService.getNavigationBarItems(this.activeFile.fileName);
-        }
-
-        private verifyNavigationBarItemExists(items: ts.NavigationBarItem[], text: string, kind: string) {
-           for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                if (item.text === text && item.kind === kind) {
-                    return;
-                }
-            }
-
-            this.raiseError(`Could not find ${JSON.stringify({text, kind}, undefined, 2)} in the navigation bar: ${JSON.stringify(items, undefined, 2)}`);
-        }
-
         /*
             Check number of navigationItems which match both searchValue and matchKind.
             Report an error if expected value and actual value do not match.
@@ -2009,12 +1968,12 @@ namespace FourSlash {
             }
         }
 
-        public verifyGetScriptLexicalStructureListCount(expected: number) {
+        public verifyNavigationBarCount(expected: number) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             const actual = this.getNavigationBarItemsCount(items);
 
             if (expected !== actual) {
-                this.raiseError(`verifyGetScriptLexicalStructureListCount failed - found: ${actual} navigation items, expected: ${expected}.`);
+                this.raiseError(`verifyNavigationBarCount failed - found: ${actual} navigation items, expected: ${expected}.`);
             }
         }
 
@@ -2030,19 +1989,19 @@ namespace FourSlash {
             return result;
         }
 
-        public verifyGetScriptLexicalStructureListContains(name: string, kind: string) {
+        public verifyNavigationBarContains(name: string, kind: string) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
 
             if (!items || items.length === 0) {
-                this.raiseError("verifyGetScriptLexicalStructureListContains failed - found 0 navigation items, expected at least one.");
+                this.raiseError("verifyNavigationBarContains failed - found 0 navigation items, expected at least one.");
             }
 
             if (this.navigationBarItemsContains(items, name, kind)) {
                 return;
             }
 
-            const missingItem = { name: name, kind: kind };
-            this.raiseError(`verifyGetScriptLexicalStructureListContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
+            const missingItem = { name, kind };
+            this.raiseError(`verifyNavigationBarContains failed - could not find the item: ${JSON.stringify(missingItem, undefined, 2)} in the returned list: (${JSON.stringify(items, undefined, 2)})`);
         }
 
         private navigationBarItemsContains(items: ts.NavigationBarItem[], name: string, kind: string) {
@@ -2062,6 +2021,20 @@ namespace FourSlash {
             return false;
         }
 
+        public verifyNavigationBarChildItem(parent: string, name: string, kind: string) {
+            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.text === parent) {
+                    if (this.navigationBarItemsContains(item.childItems, name, kind))
+                        return;
+                    const missingItem = { name, kind };
+                    this.raiseError(`verifyNavigationBarChildItem failed - could not find the item: ${JSON.stringify(missingItem)} in the children list: (${JSON.stringify(item.childItems, undefined, 2)})`);
+                }
+            }
+        }
+
         public printNavigationItems(searchValue: string) {
             const items = this.languageService.getNavigateToItems(searchValue);
             const length = items && items.length;
@@ -2074,7 +2047,7 @@ namespace FourSlash {
             }
         }
 
-        public printScriptLexicalStructureItems() {
+        public printNavigationBar() {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             const length = items && items.length;
 
@@ -3070,31 +3043,23 @@ namespace FourSlashInterface {
             this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
         }
 
-        public getScriptLexicalStructureListCount(count: number) {
-            this.state.verifyGetScriptLexicalStructureListCount(count);
+        public navigationBarCount(count: number) {
+            this.state.verifyNavigationBarCount(count);
         }
 
         // TODO: figure out what to do with the unused arguments.
-        public getScriptLexicalStructureListContains(
+        public navigationBarContains(
             name: string,
             kind: string,
             fileName?: string,
             parentName?: string,
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
-            this.state.verifyGetScriptLexicalStructureListContains(name, kind);
+            this.state.verifyNavigationBarContains(name, kind);
         }
 
-        public navigationBarCount(count: number) {
-            this.state.verifyNavigationBarCount(count);
-        }
-
-        public navigationBarItem(text: string, kind: string) {
-            this.state.verifyNavigationBarItem(text, kind);
-        }
-
-        public navigationBarChildItem(parent: string, text: string, kind: string) {
-            this.state.verifyNavigationBarChildItem(parent, text, kind);
+        public navigationBarChildItem(parent: string, name: string, kind: string) {
+            this.state.verifyNavigationBarChildItem(parent, name, kind);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
@@ -3287,8 +3252,8 @@ namespace FourSlashInterface {
             this.state.printNavigationItems(searchValue);
         }
 
-        public printScriptLexicalStructureItems() {
-            this.state.printScriptLexicalStructureItems();
+        public printNavigationBar() {
+            this.state.printNavigationBar();
         }
 
         public printReferences() {

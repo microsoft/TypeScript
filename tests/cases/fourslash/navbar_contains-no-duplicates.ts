@@ -29,7 +29,7 @@
 
 test.markers().forEach(marker => {
     if (marker.data) {
-        verify.getScriptLexicalStructureListContains(
+        verify.navigationBarContains(
             marker.data.itemName,
             marker.data.kind,
             marker.fileName,
@@ -38,4 +38,4 @@ test.markers().forEach(marker => {
             marker.position);
     }
 });
-verify.getScriptLexicalStructureListCount(12);
+verify.navigationBarCount(12);
