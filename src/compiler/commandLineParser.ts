@@ -3,6 +3,7 @@
 /// <reference path="core.ts"/>
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 /// <reference path="scanner.ts"/>
+/// <reference path="parser.ts"/>
 
 namespace ts {
     /* @internal */
@@ -620,38 +621,10 @@ namespace ts {
       * @param jsonText The text of the config file
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
-        try {
-            const jsonTextWithoutComments = removeComments(jsonText);
-            return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
-        }
-        catch (e) {
-            return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
-        }
-    }
-
-    /**
-     * Remove the comments from a json like text.
-     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
-     *
-     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
-     */
-    function removeComments(jsonText: string): string {
-        let output = "";
-        const scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
-        let token: SyntaxKind;
-        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
-            switch (token) {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    // replace comments with whitespace to preserve original character positions
-                    output += scanner.getTokenText().replace(/\S/g, " ");
-                    break;
-                default:
-                    output += scanner.getTokenText();
-                    break;
-            }
-        }
-        return output;
+        const result = parseJsonObjectFile(fileName, jsonText);
+        const config = result.resultObject || {};
+        const error = result.errors.length ? result.errors[0] : undefined;
+        return { config, error };
     }
 
     // Skip over any minified JavaScript files (ending in ".min.js")
