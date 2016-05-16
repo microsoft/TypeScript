@@ -959,7 +959,7 @@ namespace ts {
                         createStatement(
                             createAssignment(
                                 setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
-                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap),
+                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap | NodeEmitFlags.Merge),
                                 /*location*/ parameter
                             )
                         )

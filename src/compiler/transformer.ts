@@ -210,7 +210,12 @@ namespace ts {
          * Sets flags that control emit behavior of a node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            getEmitOptions(node, /*create*/ true).flags = flags;
+            const options = getEmitOptions(node, /*create*/ true);
+            if (flags & NodeEmitFlags.Merge) {
+                flags = options.flags | (flags & ~NodeEmitFlags.Merge);
+            }
+
+            options.flags = flags;
             return node;
         }
 
