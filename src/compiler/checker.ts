@@ -2886,6 +2886,10 @@ namespace ts {
             return undefined;
         }
 
+        function addOptionality(type: Type, optional: boolean): Type {
+            return strictNullChecks && optional ? addNullableKind(type, TypeFlags.Undefined) : type;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -2917,8 +2921,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                const type = getTypeFromTypeNode(declaration.type);
-                return strictNullChecks && declaration.questionToken ? addNullableKind(type, TypeFlags.Undefined) : type;
+                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ !!declaration.questionToken);
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -2940,13 +2943,13 @@ namespace ts {
                     ? getContextuallyTypedThisType(func)
                     : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
-                    return strictNullChecks && declaration.questionToken ? addNullableKind(type, TypeFlags.Undefined) : type;
+                    return addOptionality(type, /*optional*/ !!declaration.questionToken);
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                return checkExpressionCached(declaration.initializer);
+                return addOptionality(checkExpressionCached(declaration.initializer), /*optional*/ !!declaration.questionToken);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
