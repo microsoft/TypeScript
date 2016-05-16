@@ -28,15 +28,19 @@ var s = f("hello");
 var n = f(42);
 
 interface D {
-    nested: {d: string;};
+    nested: { doublyNested: { d: string; }, different: { e: number } };
 }
 interface E {
-    nested: { e: string; };
+    nested: { doublyNested: { f: string; }, other: {g: number } };
 }
 const de: D & E = {
     nested: {
-        d: 'yes',
-        e: 'no'
+        doublyNested: {
+            d: 'yes',
+            f: 'no'
+        },
+        different: { e: 12 },
+        other: { g: 101 }
     }
 }
 
@@ -57,7 +61,11 @@ var s = f("hello");
 var n = f(42);
 var de = {
     nested: {
-        d: 'yes',
-        e: 'no'
+        doublyNested: {
+            d: 'yes',
+            f: 'no'
+        },
+        different: { e: 12 },
+        other: { g: 101 }
     }
 };

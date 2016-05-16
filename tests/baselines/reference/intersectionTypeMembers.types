@@ -117,34 +117,57 @@ var n = f(42);
 interface D {
 >D : D
 
-    nested: {d: string;};
->nested : { d: string; }
+    nested: { doublyNested: { d: string; }, different: { e: number } };
+>nested : { doublyNested: { d: string; }; different: { e: number; }; }
+>doublyNested : { d: string; }
 >d : string
+>different : { e: number; }
+>e : number
 }
 interface E {
 >E : E
 
-    nested: { e: string; };
->nested : { e: string; }
->e : string
+    nested: { doublyNested: { f: string; }, other: {g: number } };
+>nested : { doublyNested: { f: string; }; other: { g: number; }; }
+>doublyNested : { f: string; }
+>f : string
+>other : { g: number; }
+>g : number
 }
 const de: D & E = {
 >de : D & E
 >D : D
 >E : E
->{    nested: {        d: 'yes',        e: 'no'    }} : { nested: { d: string; e: string; }; }
+>{    nested: {        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    }} : { nested: { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }; }
 
     nested: {
->nested : { d: string; e: string; }
->{        d: 'yes',        e: 'no'    } : { d: string; e: string; }
+>nested : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
+>{        doublyNested: {            d: 'yes',            f: 'no'        },        different: { e: 12 },        other: { g: 101 }    } : { doublyNested: { d: string; f: string; }; different: { e: number; }; other: { g: number; }; }
 
-        d: 'yes',
+        doublyNested: {
+>doublyNested : { d: string; f: string; }
+>{            d: 'yes',            f: 'no'        } : { d: string; f: string; }
+
+            d: 'yes',
 >d : string
 >'yes' : string
 
-        e: 'no'
->e : string
+            f: 'no'
+>f : string
 >'no' : string
+
+        },
+        different: { e: 12 },
+>different : { e: number; }
+>{ e: 12 } : { e: number; }
+>e : number
+>12 : number
+
+        other: { g: 101 }
+>other : { g: number; }
+>{ g: 101 } : { g: number; }
+>g : number
+>101 : number
     }
 }
 
