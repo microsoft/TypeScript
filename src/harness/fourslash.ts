@@ -1912,6 +1912,47 @@ namespace FourSlash {
             }
         }
 
+        public verifyNavigationBarCount(count: number) {
+            const actual = this.navigationBarItems().length;
+            if (actual !== count) {
+                this.raiseError(`Expected ${count} items in navigation bar, got ${actual}`);
+            }
+        }
+
+        public verifyNavigationBarItem(text: string, kind: string) {
+            this.verifyNavigationBarItemExists(this.navigationBarItems(), text, kind);
+        }
+
+        public verifyNavigationBarChildItem(parent: string, text: string, kind: string) {
+            const items = this.navigationBarItems();
+
+            // TODO: ts.find?
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.text === parent) {
+                    this.verifyNavigationBarItemExists(item.childItems, text, kind);
+                    return;
+                }
+            }
+
+            this.raiseError(`Could not find any parent named ${parent} in: ${JSON.stringify(items, undefined, 2)}`);
+        }
+
+        private navigationBarItems() {
+            return this.languageService.getNavigationBarItems(this.activeFile.fileName);
+        }
+
+        private verifyNavigationBarItemExists(items: ts.NavigationBarItem[], text: string, kind: string) {
+           for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                if (item.text === text && item.kind === kind) {
+                    return;
+                }
+            }
+
+            this.raiseError(`Could not find ${JSON.stringify({text, kind}, undefined, 2)} in the navigation bar: ${JSON.stringify(items, undefined, 2)}`);
+        }
+
         /*
             Check number of navigationItems which match both searchValue and matchKind.
             Report an error if expected value and actual value do not match.
@@ -3042,6 +3083,18 @@ namespace FourSlashInterface {
             isAdditionalSpan?: boolean,
             markerPosition?: number) {
             this.state.verifyGetScriptLexicalStructureListContains(name, kind);
+        }
+
+        public navigationBarCount(count: number) {
+            this.state.verifyNavigationBarCount(count);
+        }
+
+        public navigationBarItem(text: string, kind: string) {
+            this.state.verifyNavigationBarItem(text, kind);
+        }
+
+        public navigationBarChildItem(parent: string, text: string, kind: string) {
+            this.state.verifyNavigationBarChildItem(parent, text, kind);
         }
 
         public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
