@@ -6,4 +6,7 @@
 
 goTo.marker();
 verify.quickInfoIs("");
-
+verify.verifyDefinitionsName("", "");
+verify.typeDefinitionCountIs(0);
+verify.referencesCountIs(0);
+verify.nameOrDottedNameSpanTextIs(undefined);
