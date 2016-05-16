@@ -1,0 +1,160 @@
+=== tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(optionalMethods.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(optionalMethods.ts, 1, 15))
+
+    b?: number;
+>b : Symbol(Foo.b, Decl(optionalMethods.ts, 2, 14))
+
+    f(): number;
+>f : Symbol(Foo.f, Decl(optionalMethods.ts, 3, 15))
+
+    g?(): number;
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+}
+
+function test1(x: Foo) {
+>test1 : Symbol(test1, Decl(optionalMethods.ts, 6, 1))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>Foo : Symbol(Foo, Decl(optionalMethods.ts, 0, 0))
+
+    x.a;
+>x.a : Symbol(Foo.a, Decl(optionalMethods.ts, 1, 15))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>a : Symbol(Foo.a, Decl(optionalMethods.ts, 1, 15))
+
+    x.b;
+>x.b : Symbol(Foo.b, Decl(optionalMethods.ts, 2, 14))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>b : Symbol(Foo.b, Decl(optionalMethods.ts, 2, 14))
+
+    x.f;
+>x.f : Symbol(Foo.f, Decl(optionalMethods.ts, 3, 15))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>f : Symbol(Foo.f, Decl(optionalMethods.ts, 3, 15))
+
+    x.g;
+>x.g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+
+    let f1 = x.f();
+>f1 : Symbol(f1, Decl(optionalMethods.ts, 13, 7))
+>x.f : Symbol(Foo.f, Decl(optionalMethods.ts, 3, 15))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>f : Symbol(Foo.f, Decl(optionalMethods.ts, 3, 15))
+
+    let g1 = x.g && x.g();
+>g1 : Symbol(g1, Decl(optionalMethods.ts, 14, 7))
+>x.g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x.g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+
+    let g2 = x.g ? x.g() : 0;
+>g2 : Symbol(g2, Decl(optionalMethods.ts, 15, 7))
+>x.g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x.g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+>x : Symbol(x, Decl(optionalMethods.ts, 8, 15))
+>g : Symbol(Foo.g, Decl(optionalMethods.ts, 4, 16))
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(optionalMethods.ts, 16, 1))
+
+    a: number;
+>a : Symbol(Bar.a, Decl(optionalMethods.ts, 18, 11))
+
+    b?: number;
+>b : Symbol(Bar.b, Decl(optionalMethods.ts, 19, 14))
+
+    f() {
+>f : Symbol(Bar.f, Decl(optionalMethods.ts, 20, 15))
+
+        return 1;
+    }
+    g?(): number;  // Body of optional method can be omitted
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+
+    h?() {
+>h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+
+        return 2;
+    }
+}
+
+function test2(x: Bar) {
+>test2 : Symbol(test2, Decl(optionalMethods.ts, 28, 1))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>Bar : Symbol(Bar, Decl(optionalMethods.ts, 16, 1))
+
+    x.a;
+>x.a : Symbol(Bar.a, Decl(optionalMethods.ts, 18, 11))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>a : Symbol(Bar.a, Decl(optionalMethods.ts, 18, 11))
+
+    x.b;
+>x.b : Symbol(Bar.b, Decl(optionalMethods.ts, 19, 14))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>b : Symbol(Bar.b, Decl(optionalMethods.ts, 19, 14))
+
+    x.f;
+>x.f : Symbol(Bar.f, Decl(optionalMethods.ts, 20, 15))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>f : Symbol(Bar.f, Decl(optionalMethods.ts, 20, 15))
+
+    x.g;
+>x.g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+
+    let f1 = x.f();
+>f1 : Symbol(f1, Decl(optionalMethods.ts, 35, 7))
+>x.f : Symbol(Bar.f, Decl(optionalMethods.ts, 20, 15))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>f : Symbol(Bar.f, Decl(optionalMethods.ts, 20, 15))
+
+    let g1 = x.g && x.g();
+>g1 : Symbol(g1, Decl(optionalMethods.ts, 36, 7))
+>x.g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x.g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+
+    let g2 = x.g ? x.g() : 0;
+>g2 : Symbol(g2, Decl(optionalMethods.ts, 37, 7))
+>x.g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x.g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>g : Symbol(Bar.g, Decl(optionalMethods.ts, 23, 5))
+
+    let h1 = x.h && x.h();
+>h1 : Symbol(h1, Decl(optionalMethods.ts, 38, 7))
+>x.h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x.h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+
+    let h2 = x.h ? x.h() : 0;
+>h2 : Symbol(h2, Decl(optionalMethods.ts, 39, 7))
+>x.h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x.h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+>x : Symbol(x, Decl(optionalMethods.ts, 30, 15))
+>h : Symbol(Bar.h, Decl(optionalMethods.ts, 24, 17))
+}
+
