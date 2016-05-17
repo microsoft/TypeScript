@@ -40,15 +40,13 @@ sourceFile:ternaryExpressionSourceMap.ts
 7 >              ^^^^^^^^^^^^^^
 8 >                            ^^^^^^^
 9 >                                   ^
-10>                                    ^^
-11>                                      ^
-12>                                       ^^^
-13>                                          ^^^^^^^^^^^^^^
-14>                                                        ^^^^^^^
-15>                                                               ^
-16>                                                                ^^
-17>                                                                  ^
-18>                                                                   ^
+10>                                    ^^^
+11>                                       ^^^
+12>                                          ^^^^^^^^^^^^^^
+13>                                                        ^^^^^^^
+14>                                                               ^
+15>                                                                ^^^
+16>                                                                   ^
 1->
   >
 2 >var 
@@ -60,14 +58,12 @@ sourceFile:ternaryExpressionSourceMap.ts
 8 >                            
 9 >                                   0
 10>                                    
-11>                                      0
-12>                                        : 
-13>                                          () => 
-14>                                                        
-15>                                                               0
-16>                                                                
-17>                                                                  0
-18>                                                                   ;
+11>                                        : 
+12>                                          () => 
+13>                                                        
+14>                                                               0
+15>                                                                
+16>                                                                   ;
 1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(3, 5) + SourceIndex(0)
 3 >Emitted(2, 8) Source(3, 8) + SourceIndex(0)
@@ -77,14 +73,12 @@ sourceFile:ternaryExpressionSourceMap.ts
 7 >Emitted(2, 29) Source(3, 21) + SourceIndex(0)
 8 >Emitted(2, 36) Source(3, 21) + SourceIndex(0)
 9 >Emitted(2, 37) Source(3, 22) + SourceIndex(0)
-10>Emitted(2, 39) Source(3, 21) + SourceIndex(0)
-11>Emitted(2, 40) Source(3, 22) + SourceIndex(0)
-12>Emitted(2, 43) Source(3, 25) + SourceIndex(0)
-13>Emitted(2, 57) Source(3, 31) + SourceIndex(0)
-14>Emitted(2, 64) Source(3, 31) + SourceIndex(0)
-15>Emitted(2, 65) Source(3, 32) + SourceIndex(0)
-16>Emitted(2, 67) Source(3, 31) + SourceIndex(0)
-17>Emitted(2, 68) Source(3, 32) + SourceIndex(0)
-18>Emitted(2, 69) Source(3, 33) + SourceIndex(0)
+10>Emitted(2, 40) Source(3, 22) + SourceIndex(0)
+11>Emitted(2, 43) Source(3, 25) + SourceIndex(0)
+12>Emitted(2, 57) Source(3, 31) + SourceIndex(0)
+13>Emitted(2, 64) Source(3, 31) + SourceIndex(0)
+14>Emitted(2, 65) Source(3, 32) + SourceIndex(0)
+15>Emitted(2, 68) Source(3, 32) + SourceIndex(0)
+16>Emitted(2, 69) Source(3, 33) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ternaryExpressionSourceMap.js.map
