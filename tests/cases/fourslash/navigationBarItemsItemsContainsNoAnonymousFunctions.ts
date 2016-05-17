@@ -30,15 +30,15 @@
 ////}
 
 goTo.marker("file1");
-verify.getScriptLexicalStructureListCount(0);
+verify.navigationBarCount(0);
 
 goTo.marker("file2");
-verify.getScriptLexicalStructureListContains("<global>", "module");
-verify.getScriptLexicalStructureListContains("x", "var");
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBarContains("<global>", "module");
+verify.navigationBarContains("x", "var");
+verify.navigationBarCount(2);
 
 goTo.marker("file3");
-verify.getScriptLexicalStructureListContains("<global>", "module");
-verify.getScriptLexicalStructureListContains("foo", "function");
-verify.getScriptLexicalStructureListContains("bar", "function");
-verify.getScriptLexicalStructureListCount(5);
+verify.navigationBarContains("<global>", "module");
+verify.navigationBarContains("foo", "function");
+verify.navigationBarContains("bar", "function");
+verify.navigationBarCount(5);

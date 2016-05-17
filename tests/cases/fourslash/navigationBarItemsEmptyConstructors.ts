@@ -5,8 +5,8 @@
 ////    }
 ////}
 
-verify.getScriptLexicalStructureListContains("Test", "class");
-verify.getScriptLexicalStructureListContains("constructor", "constructor");
+verify.navigationBarContains("Test", "class");
+verify.navigationBarContains("constructor", "constructor");
 
 // no other items
-verify.getScriptLexicalStructureListCount(2);
+verify.navigationBarCount(2);
