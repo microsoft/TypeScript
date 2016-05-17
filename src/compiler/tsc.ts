@@ -378,14 +378,15 @@ namespace ts {
                 return undefined;
             }
 
+            // Parse the JSON file and try to get a plain object back.
             const result = parseJsonObjectFile(configFileName, cachedConfigFileText);
-            const configObject = result.resultObject;
-            if (!configObject) {
+            if (result.errors) {
                 reportDiagnostics(result.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return undefined;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
+
+            const configParseResult = parseJsonConfigFileContent(result.resultObject, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), sys.getCurrentDirectory()), commandLine.options, configFileName);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
