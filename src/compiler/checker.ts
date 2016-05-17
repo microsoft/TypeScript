@@ -73,7 +73,7 @@ namespace ts {
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         const {typeToString, getSymbolDisplayBuilder, symbolToString, signatureToString, typePredicateToString, visibilityToString} =
-            createWriter(
+            createWriter({
                 createSymbol,
                 getSymbolOfNode,
                 compilerOptions,
@@ -84,10 +84,10 @@ namespace ts {
                 getQualifiedLeftMeaning,
                 hasExternalModuleSymbol,
                 isTypeAny,
-                () => nothingType,
+                getNothingType: () => nothingType,
                 isReservedMemberName,
                 emptyArray,
-                () => globalArrayType,
+                getGlobalArrayType: () => globalArrayType,
                 getParentSymbolOfTypeParameter,
                 isReadonlySymbol,
                 resolveStructuredTypeMembers,
@@ -99,7 +99,7 @@ namespace ts {
                 getConstraintOfTypeParameter,
                 isOptionalParameter,
                 getReturnTypeOfSignature,
-                getParentOfSymbol);
+                getParentOfSymbol});
 
         const checker: TypeChecker = {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),

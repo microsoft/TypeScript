@@ -2,7 +2,34 @@
 
 /* @internal */
 namespace ts {
-    export function createWriter(
+    export function createWriter({
+        createSymbol,
+        getSymbolOfNode,
+        compilerOptions,
+        languageVersion,
+        getTypeParametersOfClassOrInterface,
+        getAccessibleSymbolChain,
+        needsQualification,
+        getQualifiedLeftMeaning,
+        hasExternalModuleSymbol,
+        isTypeAny,
+        getNothingType,
+        isReservedMemberName,
+        emptyArray,
+        getGlobalArrayType,
+        getParentSymbolOfTypeParameter,
+        isReadonlySymbol,
+        resolveStructuredTypeMembers,
+        getTypeOfSymbol,
+        getPropertiesOfObjectType,
+        getSignaturesOfType,
+        getTargetSymbol,
+        getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
+        getConstraintOfTypeParameter,
+        isOptionalParameter,
+        getReturnTypeOfSignature,
+        getParentOfSymbol
+    } : {
         createSymbol: (flags: SymbolFlags, name: string) => Symbol,
         getSymbolOfNode: (node: Node) => Symbol,
         compilerOptions: CompilerOptions,
@@ -29,7 +56,7 @@ namespace ts {
         isOptionalParameter: (node: ParameterDeclaration) => boolean,
         getReturnTypeOfSignature: (signature: Signature) => Type,
         getParentOfSymbol: (symbol: Symbol) => Symbol
-    ) {
+    }) {
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         let _displayBuilder: SymbolDisplayBuilder;
 
