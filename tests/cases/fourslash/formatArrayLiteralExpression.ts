@@ -18,9 +18,9 @@
 ////}/*6*/,
 ////    {
 ////        Salad: 'salad', /*7*/
-////        Burrito: 'burrito',
+////        Burrito: ['burrito', 'carne asada', 'tinga de res', 'tinga de pollo'], /*8*/
 ////        Pie: 'pie'
-////    }];/*8*/
+////    }];/*9*/
 
 format.document();
 
@@ -40,4 +40,6 @@ verify.currentLineContentIs("    },");
 goTo.marker("7");
 verify.currentLineContentIs("        Salad: 'salad',");
 goTo.marker("8");
+verify.currentLineContentIs("        Burrito: ['burrito', 'carne asada', 'tinga de res', 'tinga de pollo'],");
+goTo.marker("9");
 verify.currentLineContentIs("    }];");
