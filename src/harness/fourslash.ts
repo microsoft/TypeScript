@@ -2051,7 +2051,7 @@ namespace FourSlash {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             const length = items && items.length;
 
-            Harness.IO.log(`NavigationItems list (${length} items)`);
+            Harness.IO.log(`Navigation bar (${length} items)`);
 
             for (let i = 0; i < length; i++) {
                 const item = items[i];
