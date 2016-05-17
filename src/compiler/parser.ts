@@ -597,6 +597,10 @@ namespace ts {
                 nextToken();
             }
 
+            if (!resultingObject) {
+                parseErrorAtCurrentToken(Diagnostics.Unexpected_end_of_text);
+            }
+
             return resultingObject;
         }
 
