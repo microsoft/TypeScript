@@ -15179,6 +15179,12 @@ namespace ts {
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                         Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
 
+                    if (baseType.symbol.valueDeclaration && !(baseType.symbol.valueDeclaration.flags & NodeFlags.Ambient)) {
+                        if (!isBlockScopedNameDeclaredBeforeUse(baseType.symbol.valueDeclaration, node)) {
+                            error(baseTypeNode, Diagnostics.A_class_must_be_declared_after_its_base_class);
+                        }
+                    }
+
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class)) {
                         // When the static base type is a "class-like" constructor function (but not actually a class), we verify
                         // that all instantiated base constructor signatures return the same type. We can simply compare the type

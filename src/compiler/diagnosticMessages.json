@@ -1923,6 +1923,10 @@
         "category": "Error",
         "code": 2685
     },
+    "A class must be declared after its base class.": {
+        "category": "Error",
+        "code": 2686
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
