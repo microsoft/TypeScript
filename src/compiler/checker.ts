@@ -122,7 +122,7 @@ namespace ts {
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const nothingType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const neverType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -2029,8 +2029,8 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        if (type === nothingType) {
-                            writer.writeKeyword("nothing");
+                        if (type === neverType) {
+                            writer.writeKeyword("never");
                         }
                         else {
                             writeAnonymousType(<ObjectType>type, flags);
@@ -3670,6 +3670,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.StringLiteralType:
                     return true;
                 case SyntaxKind.ArrayType:
@@ -5005,7 +5006,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
-            else if (type !== nothingType && !contains(typeSet, type)) {
+            else if (type !== neverType && !contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
@@ -5046,7 +5047,7 @@ namespace ts {
         // a named type that circularly references itself.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
-                return nothingType;
+                return neverType;
             }
             if (types.length === 1) {
                 return types[0];
@@ -5066,7 +5067,7 @@ namespace ts {
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? nullType :
                     typeSet.containsUndefined ? undefinedType :
-                    nothingType;
+                    neverType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -5214,6 +5215,8 @@ namespace ts {
                     return undefinedType;
                 case SyntaxKind.NullKeyword:
                     return nullType;
+                case SyntaxKind.NeverKeyword:
+                    return neverType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
@@ -7485,7 +7488,7 @@ namespace ts {
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
             if (!(type.flags & TypeFlags.Union)) {
-                return getTypeFacts(type) & include ? type : nothingType;
+                return getTypeFacts(type) & include ? type : neverType;
             }
             let firstType: Type;
             let types: Type[];
@@ -7502,7 +7505,7 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : nothingType;
+            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : neverType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -7622,7 +7625,7 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === nothingType) {
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === neverType) {
                 return declaredType;
             }
             return result;
@@ -7710,7 +7713,7 @@ namespace ts {
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
                 let type = getTypeAtFlowNode(flow.antecedent);
-                if (type !== nothingType) {
+                if (type !== neverType) {
                     // If we have an antecedent type (meaning we're reachable in some way), we first
                     // attempt to narrow the antecedent type. If that produces the nothing type, then
                     // we take the type guard as an indication that control could reach here in a
@@ -7720,7 +7723,7 @@ namespace ts {
                     // narrow that.
                     const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                     type = narrowType(type, flow.expression, assumeTrue);
-                    if (type === nothingType) {
+                    if (type === neverType) {
                         type = narrowType(declaredType, flow.expression, assumeTrue);
                     }
                 }
@@ -7942,7 +7945,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    nothingType;
+                    neverType;
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -11559,7 +11562,7 @@ namespace ts {
                             return promiseType;
                         }
                         else {
-                            return voidType;
+                            return hasImplicitReturn ? voidType : neverType;
                         }
                     }
                 }
@@ -14747,7 +14750,7 @@ namespace ts {
                 arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = nothingType;
+                arrayType = neverType;
             }
             const hasStringConstituent = arrayOrStringType !== arrayType;
             let reportedError = false;
@@ -14759,7 +14762,7 @@ namespace ts {
 
                 // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                 // arrayOrStringType was a string.
-                if (arrayType === nothingType) {
+                if (arrayType === neverType) {
                     return stringType;
                 }
             }

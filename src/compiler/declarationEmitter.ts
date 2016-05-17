@@ -395,6 +395,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.StringLiteralType:
                     return writeTextOfNode(currentText, type);
