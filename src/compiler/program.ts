@@ -18,6 +18,8 @@ namespace ts {
         "node_modules/@types/",
     ];
 
+    const autoImportedTypePaths = ["types", "node_modules/@types"];
+
     export const version = "1.9.0";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
@@ -196,8 +198,8 @@ namespace ts {
             traceEnabled
         };
 
-        // use typesRoot and fallback to directory that contains tsconfig if typesRoot is not set
-        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : undefined);
+        // use typesRoot and fallback to directory that contains tsconfig or current directory if typesRoot is not set
+        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : (host.getCurrentDirectory && host.getCurrentDirectory()));
 
         if (traceEnabled) {
             if (containingFile === undefined) {
@@ -875,6 +877,19 @@ namespace ts {
             }
         }
 
+        function getDefaultTypeDirectiveNames(rootPath: string): string[] {
+            const localTypes = combinePaths(rootPath, 'types');
+            const npmTypes = combinePaths(rootPath, 'node_modules/@types');
+            let result: string[] = [];
+            if (sys.directoryExists(localTypes)) {
+                result = result.concat(sys.getDirectories(localTypes));
+            }
+            if (sys.directoryExists(npmTypes)) {
+                result = result.concat(sys.getDirectories(npmTypes));
+            }
+            return result;
+        }
+
         function getDefaultLibLocation(): string {
             return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
         }
@@ -883,6 +898,7 @@ namespace ts {
         const realpath = sys.realpath && ((path: string) => sys.realpath(path));
 
         return {
+            getDefaultTypeDirectiveNames,
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -1006,10 +1022,21 @@ namespace ts {
 
         if (!tryReuseStructureFromOldProgram()) {
             // load type declarations specified via 'types' argument
-            if (options.types && options.types.length) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(options.types, /*containingFile*/ undefined);
-                for (let i = 0; i < options.types.length; i++) {
-                    processTypeReferenceDirective(options.types[i], resolutions[i]);
+            let typeReferences: string[];
+            if (options.types) {
+                typeReferences = options.types;
+            }
+            else {
+                // or load all types from the automatic type import fields
+                if (host.getDefaultTypeDirectiveNames) {
+                    typeReferences = host.getDefaultTypeDirectiveNames(getCommonSourceDirectory());;
+                }
+            }
+
+            if (typeReferences) {
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, /*containingFile*/ undefined);
+                for (let i = 0; i < typeReferences.length; i++) {
+                    processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
             }
 
@@ -1914,20 +1941,7 @@ namespace ts {
                         i < file.imports.length;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
-
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
-                            // this check is ok. Otherwise this would be never true for javascript file
-                            if (!isExternalModule(importedFile) && importedFile.statements.length) {
-                                const start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-                            }
-                            else if (importedFile.referencedFiles.length) {
-                                const firstRef = importedFile.referencedFiles[0];
-                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
-                        }
+                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
                     }
                 }
             }
