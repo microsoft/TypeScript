@@ -360,7 +360,7 @@ namespace ts {
         performCompilation();
 
         function parseConfigFile(): ParsedCommandLine {
-            if (!cachedConfigFileText) {
+            if (cachedConfigFileText === undefined) {
                 try {
                     cachedConfigFileText = sys.readFile(configFileName);
                 }
@@ -371,7 +371,7 @@ namespace ts {
                     return undefined;
                 }
             }
-            if (!cachedConfigFileText) {
+            if (cachedConfigFileText === undefined) {
                 const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
                 reportDiagnostics([error], /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
