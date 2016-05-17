@@ -159,6 +159,7 @@ namespace ts.NavigationBar {
 
             for (const node of nodes) {
                 switch (node.kind) {
+                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ClassDeclaration:
                         topLevelNodes.push(node);
                         for (const member of (<ClassDeclaration>node).members) {
@@ -193,6 +194,11 @@ namespace ts.NavigationBar {
                             addTopLevelNodes((<Block>functionDeclaration.body).statements, topLevelNodes);
                         }
                         break;
+
+                    default:
+                        const childrens: Node[] = [];
+                        forEachChild(node, child => { childrens.push(child) });
+                        addTopLevelNodes(childrens, topLevelNodes);
                 }
             }
         }
@@ -405,6 +411,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.SourceFile:
                     return createSourceFileItem(<SourceFile>node);
 
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return createClassItem(<ClassDeclaration>node);
 
