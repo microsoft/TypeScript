@@ -5138,12 +5138,13 @@ namespace ts {
         }
 
         function getStringLiteralTypeForText(text: string): StringLiteralType {
-            if (hasProperty(stringLiteralTypes, text)) {
-                return stringLiteralTypes[text];
+            const unescaped = unescapeIdentifier(text);
+            if (hasProperty(stringLiteralTypes, unescaped)) {
+                return stringLiteralTypes[unescaped];
             }
 
-            const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = text;
+            const type = stringLiteralTypes[unescaped] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            type.text = unescaped;
             return type;
         }
 
