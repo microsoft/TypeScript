@@ -5138,20 +5138,19 @@ namespace ts {
         }
 
         function getStringLiteralTypeForText(text: string): StringLiteralType {
-            const unescaped = unescapeIdentifier(text);
-            if (hasProperty(stringLiteralTypes, unescaped)) {
-                return stringLiteralTypes[unescaped];
+            if (hasProperty(stringLiteralTypes, text)) {
+                return stringLiteralTypes[text];
             }
 
-            const type = stringLiteralTypes[unescaped] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = unescaped;
+            const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            type.text = text;
             return type;
         }
 
         function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getStringLiteralTypeForText(node.text);
+                links.resolvedType = getStringLiteralTypeForText(unescapeIdentifier(node.text));
             }
             return links.resolvedType;
         }
