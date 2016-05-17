@@ -176,6 +176,7 @@ namespace ts.NavigationBar {
                         break;
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         topLevelNodes.push(node);
                         break;
 
@@ -422,6 +423,9 @@ namespace ts.NavigationBar {
 
                 case SyntaxKind.FunctionDeclaration:
                     return createFunctionItem(<FunctionDeclaration>node);
+
+                case SyntaxKind.TypeAliasDeclaration:
+                    return createTypeAliasItem(<TypeAliasDeclaration>node);
             }
 
             return undefined;
@@ -472,6 +476,15 @@ namespace ts.NavigationBar {
                 }
 
                 return undefined;
+            }
+
+            function createTypeAliasItem(node: TypeAliasDeclaration): ts.NavigationBarItem {
+                return getNavigationBarItem(node.name.text,
+                    ts.ScriptElementKind.typeElement,
+                    getNodeModifiers(node),
+                    [getNodeSpan(node)],
+                    [],
+                    getIndent(node));
             }
 
             function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration): ts.NavigationBarItem  {
