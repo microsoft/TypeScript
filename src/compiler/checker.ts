@@ -11550,6 +11550,9 @@ namespace ts {
                 else {
                     const hasImplicitReturn = !!(func.flags & NodeFlags.HasImplicitReturn);
                     types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync, hasImplicitReturn);
+                    if (!types) {
+                        return neverType;
+                    }
                     if (types.length === 0) {
                         if (isAsync) {
                             // For an async function, the return type will not be void, but rather a Promise for void.
@@ -11558,12 +11561,9 @@ namespace ts {
                                 error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                                 return unknownType;
                             }
-
                             return promiseType;
                         }
-                        else {
-                            return hasImplicitReturn ? voidType : neverType;
-                        }
+                        return voidType;
                     }
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
@@ -11643,7 +11643,7 @@ namespace ts {
                         // the native Promise<T> type by the caller.
                         type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
-                    if (!contains(aggregatedTypes, type)) {
+                    if (type !== neverType && !contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
                 }
@@ -11651,6 +11651,9 @@ namespace ts {
                     hasOmittedExpressions = true;
                 }
             });
+            if (aggregatedTypes.length === 0 && !hasOmittedExpressions && !hasImplicitReturn) {
+                return undefined;
+            }
             if (strictNullChecks && aggregatedTypes.length && (hasOmittedExpressions || hasImplicitReturn)) {
                 if (!contains(aggregatedTypes, undefinedType)) {
                     aggregatedTypes.push(undefinedType);
