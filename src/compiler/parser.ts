@@ -578,7 +578,7 @@ namespace ts {
 
             const jsonObjectRoot = parseTopLevelJsonObjectForFile();
             const resultObject = jsonObjectRoot ?
-                adaptJsonAstToPlainObject(sourceText, jsonObjectRoot) :
+                convertJsonAstToPlainObject(sourceText, jsonObjectRoot) :
                 undefined;
 
             return { resultObject, errors: [...parseDiagnostics] };
@@ -611,10 +611,10 @@ namespace ts {
             parseDiagnostics.push(diagnostic);
         }
 
-        function adaptJsonAstToPlainObject(sourceText: string, rootObject: ObjectLiteralExpression) {
-            return adaptObjectLiteral(rootObject);
+        function convertJsonAstToPlainObject(sourceText: string, rootObject: ObjectLiteralExpression) {
+            return convertObjectLiteral(rootObject);
 
-            function adaptObjectLiteral({ properties }: ObjectLiteralExpression) {
+            function convertObjectLiteral({ properties }: ObjectLiteralExpression) {
                 if (properties.hasTrailingComma) {
                     // TODO (drosen): Duplication with 'checkGrammarForDisallowedTrailingComma' in 'checker.ts'.
                     parseErrorAtPosition(properties.end, ",".length, Diagnostics.Trailing_comma_not_allowed);
@@ -631,8 +631,8 @@ namespace ts {
 
             function tryAddObjectLiteralElement(target: Json.JsonObject, node: ObjectLiteralElement): void {
                 if (node.kind === SyntaxKind.PropertyAssignment) {
-                    const name = adaptPropertyAssignmentName((node as PropertyAssignment).name);
-                    const value = adaptJsonValue((node as PropertyAssignment).initializer);
+                    const name = convertPropertyAssignmentName((node as PropertyAssignment).name);
+                    const value = convertJsonValue((node as PropertyAssignment).initializer);
                     if (name === undefined || value === undefined) {
                         return;
                     }
@@ -645,19 +645,19 @@ namespace ts {
                 }
             }
 
-            function adaptArrayLiteral({ elements }: ArrayLiteralExpression): Json.JsonArray {
+            function convertArrayLiteral({ elements }: ArrayLiteralExpression): Json.JsonArray {
                 if (elements.hasTrailingComma) {
                     // TODO (drosen): Duplication with 'checkGrammarForDisallowedTrailingComma' in 'checker.ts'.
                     parseErrorAtPosition(elements.end, ",".length, Diagnostics.Trailing_comma_not_allowed);
                 }
 
-                const adapted = map(elements, adaptJsonValue);
-                return filter(adapted, x => x !== undefined);
+                const converted = map(elements, convertJsonValue);
+                return filter(converted, x => x !== undefined);
             }
 
-            function adaptPropertyAssignmentName(node: PropertyName) {
+            function convertPropertyAssignmentName(node: PropertyName) {
                 if (node.kind === SyntaxKind.StringLiteral) {
-                    return adaptStringLiteral(node as StringLiteral);
+                    return convertStringLiteral(node as StringLiteral);
                 }
 
                 jsonParseError(node, Diagnostics.String_literal_expected);
@@ -670,7 +670,7 @@ namespace ts {
                 return undefined;
             }
 
-            function adaptStringLiteral(node: StringLiteral) {
+            function convertStringLiteral(node: StringLiteral) {
                 if (node.isUnterminated) {
                     return undefined;
                 }
@@ -683,10 +683,10 @@ namespace ts {
                 return node.text;
             }
 
-            function adaptJsonValue(node: Expression): Json.JsonValue {
+            function convertJsonValue(node: Expression): Json.JsonValue {
                 switch (node.kind) {
                     case SyntaxKind.StringLiteral:
-                        return adaptStringLiteral(node as StringLiteral);
+                        return convertStringLiteral(node as StringLiteral);
                     case SyntaxKind.NumericLiteral:
                         return +(node as LiteralExpression).text;
                     case SyntaxKind.TrueKeyword:
@@ -697,9 +697,9 @@ namespace ts {
                         // tslint:disable-next-line:no-null-keyword
                         return null;
                     case SyntaxKind.ObjectLiteralExpression:
-                        return adaptObjectLiteral(node as ObjectLiteralExpression);
+                        return convertObjectLiteral(node as ObjectLiteralExpression);
                     case SyntaxKind.ArrayLiteralExpression:
-                        return adaptArrayLiteral(node as ArrayLiteralExpression);
+                        return convertArrayLiteral(node as ArrayLiteralExpression);
                     default:
                         jsonParseError(node, Diagnostics.This_syntax_is_invalid_in_JSON_files);
                         return undefined;
