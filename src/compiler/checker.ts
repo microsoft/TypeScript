@@ -120,9 +120,9 @@ namespace ts {
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        const neverType = createIntrinsicType(TypeFlags.Never, "never");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const neverType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -2029,12 +2029,7 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        if (type === neverType) {
-                            writer.writeKeyword("never");
-                        }
-                        else {
-                            writeAnonymousType(<ObjectType>type, flags);
-                        }
+                        writeAnonymousType(<ObjectType>type, flags);
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
@@ -5862,28 +5857,28 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (target.flags & TypeFlags.Any) return Ternary.True;
-                if (source.flags & TypeFlags.Undefined) {
-                    if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
-                }
-                if (source.flags & TypeFlags.Null) {
-                    if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
-                }
-                if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
-                if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
-                    if (result = enumRelatedTo(source, target, reportErrors)) {
-                        return result;
+                if (!(target.flags & TypeFlags.Never)) {
+                    if (target.flags & TypeFlags.Any) return Ternary.True;
+                    if (source.flags & TypeFlags.Undefined) {
+                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
                     }
-                }
-                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
-
-                if (relation === assignableRelation || relation === comparableRelation) {
-                    if (isTypeAny(source)) return Ternary.True;
-                    if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
-                }
-
-                if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
-                    return Ternary.True;
+                    if (source.flags & TypeFlags.Null) {
+                        if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
+                    }
+                    if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                    if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
+                        if (result = enumRelatedTo(source, target, reportErrors)) {
+                            return result;
+                        }
+                    }
+                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
+                    if (relation === assignableRelation || relation === comparableRelation) {
+                        if (source.flags & (TypeFlags.Any | TypeFlags.Never)) return Ternary.True;
+                        if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
+                    }
+                    if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
+                        return Ternary.True;
+                    }
                 }
 
                 if (source.flags & TypeFlags.FreshObjectLiteral) {
