@@ -138,7 +138,13 @@ namespace ts.NavigationBar {
         }
 
         function sortNodes(nodes: Node[]): Node[] {
-            return nodes.slice(0).sort((n1: Declaration, n2: Declaration) => {
+            const sortedCopy = nodes.slice(0);
+            doSortNodes(sortedCopy);
+            return sortedCopy;
+        }
+
+        function doSortNodes(nodes: Node[]): void {
+            nodes.sort((n1: Declaration, n2: Declaration) => {
                 if (n1.name && n2.name) {
                     return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
                 }
@@ -154,52 +160,63 @@ namespace ts.NavigationBar {
             });
         }
 
-        function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
-            nodes = sortNodes(nodes);
-
+        // Add nodes in a single "level" of top-level nodes (as in, methods in a class.)
+        // Nodes in a single "level" are sorted together.
+        function addTopLevelNodes(nodes: Node[], higherLevel: Node[]): void {
+            const thisLevel: Node[] = [];
             for (const node of nodes) {
-                switch (node.kind) {
-                    case SyntaxKind.ClassExpression:
-                    case SyntaxKind.ClassDeclaration:
-                        topLevelNodes.push(node);
-                        for (const member of (<ClassDeclaration>node).members) {
-                            if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.Constructor) {
-                                type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
-                                if ((<FunctionLikeMember>member).body) {
-                                    // We do not include methods that does not have child functions in it, because of duplications.
-                                    if (hasNamedFunctionDeclarations((<Block>(<FunctionLikeMember>member).body).statements)) {
-                                        topLevelNodes.push(member);
-                                    }
-                                    addTopLevelNodes((<Block>(<MethodDeclaration>member).body).statements, topLevelNodes);
+                addTopLevelNode(node, thisLevel);
+            }
+            doSortNodes(thisLevel);
+
+            for (const node of thisLevel) {
+                higherLevel.push(node);
+            }
+        }
+
+        function addTopLevelNode(node: Node, thisLevel: Node[]): void {
+            switch (node.kind) {
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.ClassDeclaration:
+                    thisLevel.push(node);
+                    for (const member of (<ClassDeclaration>node).members) {
+                        if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.Constructor) {
+                            type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
+                            if ((<FunctionLikeMember>member).body) {
+                                // We do not include methods that does not have child functions in it, because of duplications.
+                                if (hasNamedFunctionDeclarations((<Block>(<FunctionLikeMember>member).body).statements)) {
+                                    thisLevel.push(member);
                                 }
+                                addTopLevelNodes((<Block>(<MethodDeclaration>member).body).statements, thisLevel);
                             }
                         }
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeAliasDeclaration:
-                        topLevelNodes.push(node);
-                        break;
+                    }
+                    break;
 
-                    case SyntaxKind.ModuleDeclaration:
-                        let moduleDeclaration = <ModuleDeclaration>node;
-                        topLevelNodes.push(node);
-                        addTopLevelNodes((<Block>getInnermostModule(moduleDeclaration).body).statements, topLevelNodes);
-                        break;
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    thisLevel.push(node);
+                    break;
 
-                    case SyntaxKind.FunctionDeclaration:
-                        let functionDeclaration = <FunctionLikeDeclaration>node;
-                        if (isTopLevelFunctionDeclaration(functionDeclaration)) {
-                            topLevelNodes.push(node);
-                            addTopLevelNodes((<Block>functionDeclaration.body).statements, topLevelNodes);
-                        }
-                        break;
+                case SyntaxKind.ModuleDeclaration:
+                    let moduleDeclaration = <ModuleDeclaration>node;
+                    thisLevel.push(node);
+                    addTopLevelNodes((<Block>getInnermostModule(moduleDeclaration).body).statements, thisLevel);
+                    break;
 
-                    default:
-                        const childrens: Node[] = [];
-                        forEachChild(node, child => { childrens.push(child) });
-                        addTopLevelNodes(childrens, topLevelNodes);
-                }
+                case SyntaxKind.FunctionDeclaration:
+                    let functionDeclaration = <FunctionLikeDeclaration>node;
+                    if (isTopLevelFunctionDeclaration(functionDeclaration)) {
+                        thisLevel.push(node);
+                        addTopLevelNodes((<Block>functionDeclaration.body).statements, thisLevel);
+                    }
+                    break;
+
+                default:
+                    // Nodes within nested expressions are still sorted as if they were top-level,
+                    // so in this case we recurse with `addTopLevelNode` rather than calling `addTopLevelNodes`.
+                    forEachChild(node, child => addTopLevelNode(child, thisLevel));
             }
         }
 

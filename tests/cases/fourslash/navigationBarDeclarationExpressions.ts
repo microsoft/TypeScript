@@ -1,8 +1,14 @@
 /// <reference path="fourslash.ts" />
 
-////console.log(class A { b() {} });
+////console.log(console.log(class Y {}, class X {}), console.log(class B {}, class A {}));
+////console.log(class Cls { meth() {} });
 
-debug.printNavigationBar();
-verify.navigationBarCount(2);
-verify.navigationBarContains("A", "class");
-verify.navigationBarChildItem("A", "b", "method");
+verify.navigationBarCount(6);
+verify.navigationBarIndex("A", 0);
+verify.navigationBarIndex("B", 1);
+verify.navigationBarIndex("Cls", 2);
+verify.navigationBarIndex("X", 3);
+verify.navigationBarIndex("Y", 4);
+
+verify.navigationBarContains("Cls", "class");
+verify.navigationBarChildItem("Cls", "meth", "method");

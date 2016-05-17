@@ -1989,6 +1989,17 @@ namespace FourSlash {
             return result;
         }
 
+        public verifyNavigationBarIndex(name: string, index: number) {
+            const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
+            if (!items[index]) {
+                this.raiseError(`verifyNavigationBarIndex failed - No item at index ${index}`);
+            }
+            const actual = items[index].text;
+            if (actual !== name) {
+                this.raiseError(`verifyNavigationBarIndex failed - Item at index ${index} is named ${actual} instead of ${name}.`);
+            }
+        }
+
         public verifyNavigationBarContains(name: string, kind: string) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
 
@@ -3045,6 +3056,10 @@ namespace FourSlashInterface {
 
         public navigationBarCount(count: number) {
             this.state.verifyNavigationBarCount(count);
+        }
+
+        public navigationBarIndex(name: string, index: number) {
+            this.state.verifyNavigationBarIndex(name, index);
         }
 
         // TODO: figure out what to do with the unused arguments.
