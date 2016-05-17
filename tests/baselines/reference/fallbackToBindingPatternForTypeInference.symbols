@@ -26,3 +26,9 @@ trans(([{g},{h}]) => 'foo');
 >g : Symbol(g, Decl(fallbackToBindingPatternForTypeInference.ts, 4, 9))
 >h : Symbol(h, Decl(fallbackToBindingPatternForTypeInference.ts, 4, 13))
 
+trans(({a, b = 10}) => a);
+>trans : Symbol(trans, Decl(fallbackToBindingPatternForTypeInference.ts, 0, 0))
+>a : Symbol(a, Decl(fallbackToBindingPatternForTypeInference.ts, 5, 8))
+>b : Symbol(b, Decl(fallbackToBindingPatternForTypeInference.ts, 5, 10))
+>a : Symbol(a, Decl(fallbackToBindingPatternForTypeInference.ts, 5, 8))
+
