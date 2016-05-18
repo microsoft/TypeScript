@@ -5150,7 +5150,7 @@ namespace ts {
         function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getStringLiteralTypeForText(node.text);
+                links.resolvedType = getStringLiteralTypeForText(unescapeIdentifier(node.text));
             }
             return links.resolvedType;
         }
