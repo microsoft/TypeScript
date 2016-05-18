@@ -91,6 +91,7 @@ namespace ts {
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
         "namespace": SyntaxKind.NamespaceKeyword,
+        "never": SyntaxKind.NeverKeyword,
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,

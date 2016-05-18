@@ -175,8 +175,9 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
 
-        getScriptLexicalStructureListCount(count: number): void;
-        getScriptLexicalStructureListContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
+        navigationBarCount(count: number): void;
+        navigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
+        navigationBarChildItem(parent: string, text: string, kind: string): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
@@ -236,6 +237,7 @@ declare namespace FourSlashInterface {
         printBreakpointAtCurrentLocation(): void;
         printNameOrDottedNameSpans(pos: number): void;
         printErrorList(): void;
+        printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
         printReferences(): void;

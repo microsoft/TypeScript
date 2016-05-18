@@ -14,7 +14,7 @@
 
 test.markers().forEach(marker => {
     goTo.file(marker.fileName);
-    verify.getScriptLexicalStructureListContains(
+    verify.navigationBarContains(
         marker.data.itemName,
         marker.data.kind,
         marker.fileName,

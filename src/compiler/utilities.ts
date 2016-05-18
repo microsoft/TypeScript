@@ -613,6 +613,7 @@ namespace ts {
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.UndefinedKeyword:
+            case SyntaxKind.NeverKeyword:
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;

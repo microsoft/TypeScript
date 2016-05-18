@@ -962,6 +962,7 @@ function lintFileAsync(options, path, cb) {
 
 var servicesLintTargets = [
     "navigateTo.ts",
+    "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
     "services.ts",
