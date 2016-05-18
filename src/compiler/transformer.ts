@@ -54,7 +54,9 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const nodeEmitOptions: NodeEmitOptions[] = [];
+        const nodeEmitFlags: Map<NodeEmitFlags> = {};
+        const sourceMapRanges: Map<TextRange> = {};
+        const commentRanges: Map<TextRange> = {};
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
@@ -170,34 +172,14 @@ namespace ts {
             emit(node);
         }
 
-        function getEmitOptions(node: Node, create?: boolean) {
-            let options = isSourceTreeNode(node)
-                ? nodeEmitOptions[getNodeId(node)]
-                : node.emitOptions;
-            if (!options && create) {
-                options = { };
-                if (isSourceTreeNode(node)) {
-                    nodeEmitOptions[getNodeId(node)] = options;
-                }
-                else {
-                    node.emitOptions = options;
-                }
-            }
-            return options;
-        }
-
         /**
          * Gets flags that control emit behavior of a node.
          */
         function getNodeEmitFlags(node: Node) {
             while (node) {
-                const options = getEmitOptions(node, /*create*/ false);
-                if (options && options.flags !== undefined) {
-                    if (options.flags & NodeEmitFlags.Merge) {
-                        options.flags = (options.flags | getNodeEmitFlags(node.original)) & ~NodeEmitFlags.Merge;
-                    }
-
-                    return options.flags;
+                let flags = nodeEmitFlags[getNodeId(node)];
+                if (flags !== undefined) {
+                    return flags;
                 }
 
                 node = node.original;
@@ -210,12 +192,11 @@ namespace ts {
          * Sets flags that control emit behavior of a node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            const options = getEmitOptions(node, /*create*/ true);
             if (flags & NodeEmitFlags.Merge) {
-                flags = options.flags | (flags & ~NodeEmitFlags.Merge);
+                flags = getNodeEmitFlags(node) | (flags & ~NodeEmitFlags.Merge);
             }
 
-            options.flags = flags;
+            nodeEmitFlags[getNodeId(node)] = flags;
             return node;
         }
 
@@ -225,9 +206,9 @@ namespace ts {
         function getSourceMapRange(node: Node) {
             let current = node;
             while (current) {
-                const options = getEmitOptions(current);
-                if (options && options.sourceMapRange !== undefined) {
-                    return options.sourceMapRange;
+                const sourceMapRange = sourceMapRanges[getNodeId(current)];
+                if (sourceMapRange !== undefined) {
+                    return sourceMapRange;
                 }
 
                 current = current.original;
@@ -240,16 +221,19 @@ namespace ts {
          * Sets a custom text range to use when emitting source maps.
          */
         function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
-            getEmitOptions(node, /*create*/ true).sourceMapRange = range;
+            sourceMapRanges[getNodeId(node)] = range;
             return node;
         }
 
-        function getTokenSourceMapRanges(node: Node) {
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
             let current = node;
             while (current) {
-                const options = getEmitOptions(current);
-                if (options && options.tokenSourceMapRange) {
-                    return options.tokenSourceMapRange;
+                const tokenSourceMapRange = sourceMapRanges[getNodeId(node) + "-" + token];
+                if (tokenSourceMapRange !== undefined) {
+                    return tokenSourceMapRange;
                 }
 
                 current = current.original;
@@ -259,29 +243,10 @@ namespace ts {
         }
 
         /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         */
-        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
-            const ranges = getTokenSourceMapRanges(node);
-            if (ranges) {
-                return ranges[token];
-            }
-
-            return undefined;
-        }
-
-        /**
          * Sets the TextRange to use for source maps for a token of a node.
          */
         function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
-            const options = getEmitOptions(node, /*create*/ true);
-            if (!options.tokenSourceMapRange) {
-                const existingRanges = getTokenSourceMapRanges(node);
-                const ranges = existingRanges ? clone(existingRanges) : { };
-                options.tokenSourceMapRange = ranges;
-            }
-
-            options.tokenSourceMapRange[token] = range;
+            sourceMapRanges[getNodeId(node) + "-" + token] = range;
             return node;
         }
 
@@ -291,9 +256,9 @@ namespace ts {
         function getCommentRange(node: Node) {
             let current = node;
             while (current) {
-                const options = getEmitOptions(current, /*create*/ false);
-                if (options && options.commentRange !== undefined) {
-                    return options.commentRange;
+                const commentRange = commentRanges[getNodeId(current)];
+                if (commentRange !== undefined) {
+                    return commentRange;
                 }
 
                 current = current.original;
@@ -306,7 +271,7 @@ namespace ts {
          * Sets a custom text range to use when emitting comments.
          */
         function setCommentRange<T extends Node>(node: T, range: TextRange) {
-            getEmitOptions(node, /*create*/ true).commentRange = range;
+            commentRanges[getNodeId(node)] = range;
             return node;
         }
 

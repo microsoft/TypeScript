@@ -164,7 +164,7 @@ namespace ts {
         let currentNode: Node;
         let enclosingBlockScopeContainer: Node;
         let enclosingBlockScopeContainerParent: Node;
-        let containingNonArrowFunction: FunctionLikeDeclaration;
+        let containingNonArrowFunction: FunctionLikeDeclaration | ClassElement;
 
         /**
          * Used to track if we are emitting body of the converted loop
@@ -1150,6 +1150,7 @@ namespace ts {
                     createMemberAccessForPropertyName(
                         receiver,
                         visitNode(member.name, visitor, isPropertyName),
+                        setNodeEmitFlags,
                         /*location*/ member.name
                     ),
                     func
@@ -2311,7 +2312,8 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName)
+                    visitNode(property.name, visitor, isPropertyName),
+                    setNodeEmitFlags
                 ),
                 visitNode(property.initializer, visitor, isExpression),
                 /*location*/ property
@@ -2329,7 +2331,8 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(property.name, visitor, isPropertyName)
+                    visitNode(property.name, visitor, isPropertyName),
+                    setNodeEmitFlags
                 ),
                 getSynthesizedClone(property.name),
                 /*location*/ property
@@ -2347,7 +2350,8 @@ namespace ts {
             return createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
-                    visitNode(method.name, visitor, isPropertyName)
+                    visitNode(method.name, visitor, isPropertyName),
+                    setNodeEmitFlags
                 ),
                 transformFunctionLikeToExpression(method, /*location*/ method, /*name*/ undefined),
                 /*location*/ method

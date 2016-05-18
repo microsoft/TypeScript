@@ -469,7 +469,6 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ emitOptions?: NodeEmitOptions;  // Options used to control node emit (used by transforms, should never be set directly on a source tree node)
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -502,6 +501,7 @@ namespace ts {
         text: string;                                   // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;               // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind;   // Specifies whether to auto-generate the text for an identifier.
+        /*@internal*/ autoGenerateId?: number;          // Ensures unique generated identifiers get unique names, but clones get the same name.
     }
 
     // Transient identifier node (marked by id === -1)
@@ -2955,26 +2955,6 @@ namespace ts {
         //                 align with the old emitter.
         SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
         SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
-    }
-
-    /* @internal */
-    export interface NodeEmitOptions {
-        /**
-         * Specifies a custom range to use when emitting source maps.
-         */
-        sourceMapRange?: TextRange;
-        /**
-         * Specifies a custom range to use when emitting tokens of a node.
-         */
-        tokenSourceMapRange?: Map<TextRange>;
-        /**
-         * Specifies a custom range to use when emitting comments.
-         */
-        commentRange?: TextRange;
-        /**
-         * Specifies flags to use to customize emit.
-         */
-        flags?: NodeEmitFlags;
     }
 
     /** Additional context provided to `visitEachChild` */

@@ -100,7 +100,7 @@ namespace ts {
             exportFunctionForFile = createUniqueName("exports");
             contextObjectForFile = createUniqueName("context");
 
-            exportFunctionForFileMap[getNodeId(node)] = exportFunctionForFile;
+            exportFunctionForFileMap[getOriginalNodeId(node)] = exportFunctionForFile;
 
             const dependencyGroups = collectDependencyGroups(externalImports);
 
@@ -968,7 +968,7 @@ namespace ts {
 
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
-                exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
+                exportFunctionForFile = exportFunctionForFileMap[getOriginalNodeId(node)];
                 previousOnEmitNode(node, emit);
                 exportFunctionForFile = undefined;
             }

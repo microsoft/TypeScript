@@ -927,10 +927,10 @@ namespace ts {
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
             const name = node.name as Identifier;
-            const propertyName = getMutableClone(name);
+            const propertyName = getUniqueClone(name);
             setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap);
 
-            const localName = getMutableClone(name);
+            const localName = getUniqueClone(name);
             setNodeEmitFlags(localName, NodeEmitFlags.NoComments);
 
             return startOnNewLine(
@@ -1033,7 +1033,7 @@ namespace ts {
         function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
-            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, setNodeEmitFlags, /*location*/ propertyName);
             if (!isComputedPropertyName(propertyName)) {
                 setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
             }
@@ -2713,6 +2713,11 @@ namespace ts {
                     && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
 
+        function disableCommentsRecursive(node: Node) {
+            setNodeEmitFlags(node, NodeEmitFlags.NoComments | NodeEmitFlags.Merge);
+            forEachChild(node, disableCommentsRecursive);
+        }
+
         /**
          * Visits an import equals declaration.
          *
@@ -2727,7 +2732,8 @@ namespace ts {
                 return undefined;
             }
 
-            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference, { flags: NodeEmitFlags.NoComments });
+            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
+            disableCommentsRecursive(moduleReference);
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
@@ -3149,9 +3155,12 @@ namespace ts {
                     // behavior of class names in ES6.
                     const declaration = resolver.getReferencedValueDeclaration(node);
                     if (declaration) {
-                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                        const classAlias = currentDecoratedClassAliases[getOriginalNodeId(declaration)];
                         if (classAlias) {
-                            return getSynthesizedClone(classAlias, { sourceMapRange: node, commentRange: node });
+                            const clone = getSynthesizedClone(classAlias);
+                            setSourceMapRange(clone, node);
+                            setCommentRange(clone, node);
+                            return clone;
                         }
                     }
                 }

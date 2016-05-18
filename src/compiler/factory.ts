@@ -8,7 +8,7 @@ namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags, emitOptions?: NodeEmitOptions): Node {
+    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
         const ConstructorForKind = kind === SyntaxKind.SourceFile
             ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
             : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
@@ -19,10 +19,6 @@ namespace ts {
 
         if (flags) {
             node.flags = flags;
-        }
-
-        if (emitOptions) {
-            node.emitOptions = emitOptions;
         }
 
         return node;
@@ -68,11 +64,11 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node with no source map location.
      */
-    export function getSynthesizedClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
+    export function getSynthesizedClone<T extends Node>(node: T): T {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createNode(node.kind, /*location*/ undefined, /*flags*/ undefined, emitOptions);
+        const clone = <T>createNode(node.kind, /*location*/ undefined, /*flags*/ undefined);
         clone.flags = node.flags;
         clone.original = node;
 
@@ -90,8 +86,8 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node for mutation.
      */
-    export function getMutableClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
-        const clone = getSynthesizedClone(node, emitOptions);
+    export function getMutableClone<T extends Node>(node: T): T {
+        const clone = getSynthesizedClone(node);
         clone.pos = node.pos;
         clone.end = node.end;
         clone.parent = node.parent;
@@ -101,35 +97,35 @@ namespace ts {
     /**
      * Gets a clone of a node with a unique node ID.
      */
-    export function getUniqueClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
-        const clone = getMutableClone(node, emitOptions);
-        clone.id = undefined;
+    export function getUniqueClone<T extends Node>(node: T): T {
+        const clone = getMutableClone(node);
+        clone.id = 0;
         getNodeId(clone);
         return clone;
     }
 
     // Literals
 
-    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
-    export function createLiteral(value: string, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
-    export function createLiteral(value: number, location?: TextRange, emitOptions?: NodeEmitOptions): LiteralExpression;
-    export function createLiteral(value: string | number | boolean, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression {
+    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
+    export function createLiteral(value: string, location?: TextRange): StringLiteral;
+    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
+    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined, emitOptions);
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location, /*flags*/ undefined, emitOptions);
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location, /*flags*/ undefined);
         }
         else if (typeof value === "string") {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined, emitOptions);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined);
             node.text = value;
             return node;
         }
         else {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined, emitOptions);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined);
             node.textSourceNode = value;
             node.text = value.text;
             return node;
@@ -138,17 +134,23 @@ namespace ts {
 
     // Identifiers
 
+    let nextAutoGenerateId = 0;
+
     export function createIdentifier(text: string, location?: TextRange): Identifier {
         const node = <Identifier>createNode(SyntaxKind.Identifier, location);
         node.text = escapeIdentifier(text);
         node.originalKeywordKind = stringToToken(text);
+        node.autoGenerateKind = GeneratedIdentifierKind.None;
+        node.autoGenerateId = 0;
         return node;
     }
 
     export function createTempVariable(recordTempVariable: (node: Identifier) => void, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.text = "";
+        name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Auto;
-        getNodeId(name);
+        name.autoGenerateId = nextAutoGenerateId++;
         if (recordTempVariable) {
             recordTempVariable(name);
         }
@@ -157,24 +159,29 @@ namespace ts {
 
     export function createLoopVariable(location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
+        name.text = "";
+        name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Loop;
-        getNodeId(name);
+        name.autoGenerateId = nextAutoGenerateId++;
         return name;
     }
 
     export function createUniqueName(text: string, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
         name.text = text;
+        name.originalKeywordKind = SyntaxKind.Unknown;
         name.autoGenerateKind = GeneratedIdentifierKind.Unique;
-        getNodeId(name);
+        name.autoGenerateId = nextAutoGenerateId++;
         return name;
     }
 
     export function getGeneratedNameForNode(node: Node, location?: TextRange): Identifier {
         const name = <Identifier>createNode(SyntaxKind.Identifier, location);
-        name.autoGenerateKind = GeneratedIdentifierKind.Node;
         name.original = node;
-        getNodeId(name);
+        name.text = "";
+        name.originalKeywordKind = SyntaxKind.Unknown;
+        name.autoGenerateKind = GeneratedIdentifierKind.Node;
+        name.autoGenerateId = nextAutoGenerateId++;
         return name;
     }
 
@@ -286,8 +293,8 @@ namespace ts {
         return node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions) {
-        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, /*flags*/ undefined, emitOptions);
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
+        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, /*flags*/ undefined);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
         node.name = typeof name === "string" ? createIdentifier(name) : name;
@@ -504,8 +511,8 @@ namespace ts {
         return node;
     }
 
-    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange, emitOptions?: NodeEmitOptions) {
-        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location, /*flags*/ undefined, emitOptions);
+    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
+        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location, /*flags*/ undefined);
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
@@ -735,9 +742,11 @@ namespace ts {
         return node;
     }
 
-    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+    export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void, location?: TextRange): MemberExpression {
         if (isIdentifier(memberName)) {
-            return createPropertyAccess(target, memberName, location, { flags: NodeEmitFlags.NoNestedSourceMaps | NodeEmitFlags.Merge });
+            const expression = createPropertyAccess(target, memberName, location);
+            setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+            return expression;
         }
         else if (isComputedPropertyName(memberName)) {
             return createElementAccess(target, memberName.expression, location);
@@ -1170,29 +1179,29 @@ namespace ts {
         return reduceLeft(expressions, createComma);
     }
 
-    export function createExpressionFromEntityName(node: EntityName | Expression, emitOptions?: NodeEmitOptions): Expression {
+    export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
         if (isQualifiedName(node)) {
-            const left = createExpressionFromEntityName(node.left, emitOptions);
-            const right = getMutableClone(node.right, emitOptions && clone(emitOptions));
-            return createPropertyAccess(left, right, /*location*/ node, emitOptions && clone(emitOptions));
+            const left = createExpressionFromEntityName(node.left);
+            const right = getMutableClone(node.right);
+            return createPropertyAccess(left, right, /*location*/ node);
         }
         else if (isIdentifier(node)) {
-            return getMutableClone(node, emitOptions && clone(emitOptions));
+            return getMutableClone(node);
         }
         else {
-            return getMutableClone(node, emitOptions && clone(emitOptions));
+            return getMutableClone(node);
         }
     }
 
-    export function createExpressionForPropertyName(memberName: PropertyName, emitOptions?: NodeEmitOptions): Expression {
+    export function createExpressionForPropertyName(memberName: PropertyName): Expression {
         if (isIdentifier(memberName)) {
-            return createLiteral(memberName, /*location*/ undefined, emitOptions);
+            return createLiteral(memberName, /*location*/ undefined);
         }
         else if (isComputedPropertyName(memberName)) {
-            return getMutableClone(memberName.expression, emitOptions);
+            return getMutableClone(memberName.expression);
         }
         else {
-            return getMutableClone(memberName, emitOptions);
+            return getMutableClone(memberName);
         }
     }
 

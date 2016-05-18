@@ -1049,6 +1049,7 @@ namespace ts {
     }
 
     function Node(kind: SyntaxKind, pos: number, end: number) {
+        this.id = 0;
         this.kind = kind;
         this.pos = pos;
         this.end = end;
