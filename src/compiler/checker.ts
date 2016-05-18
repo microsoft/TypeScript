@@ -9500,6 +9500,34 @@ namespace ts {
         }
 
         /**
+         * Given a type, resolve its constructor signatures.
+         * If no construct signatures, call signatures are resolved.
+         * If the type is a union type, recursively resolve the signatures using
+         * the same method.
+         * Return collected construct/call signature.
+         */
+        function getConstructOrCallSignature(type: Type): Signature[] {
+            if (type.flags & TypeFlags.Union) {
+                let signatures: Signature[] = [];
+                forEach((<UnionOrIntersectionType> type).types, (childType) => {
+                    let childSignatures = getConstructOrCallSignature(childType);
+                    forEach(childSignatures, (signature) => {
+                        signatures.push(signature);
+                    })
+                })
+                return signatures;
+            } else {
+                let signatures = getSignaturesOfType(type, SignatureKind.Construct);
+                if (signatures.length === 0) {
+                    // No construct signatures, try call signatures
+                    return getSignaturesOfType(type, SignatureKind.Call);
+                } else {
+                    return signatures;
+                }
+            }
+        }
+
+        /**
          * Given a JSX element that is a class element, finds the Element Instance Type. If the
          * element is not a class element, or the class element type cannot be determined, returns 'undefined'.
          * For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
@@ -9512,17 +9540,12 @@ namespace ts {
                 return anyType;
             }
 
-            // Resolve the signatures, preferring constructors
-            let signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
+            // Resolve the signatures
+            let signatures = getConstructOrCallSignature(valueType);
             if (signatures.length === 0) {
-                // No construct signatures, try call signatures
-                signatures = getSignaturesOfType(valueType, SignatureKind.Call);
-
-                if (signatures.length === 0) {
-                    // We found no signatures at all, which is an error
-                    error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
-                    return unknownType;
-                }
+                // We found no signatures at all, which is an error
+                error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
+                return unknownType;
             }
 
             return getUnionType(signatures.map(getReturnTypeOfSignature));
