@@ -121,9 +121,9 @@ namespace ts {
         const nullType = createIntrinsicType(TypeFlags.Null | nullableWideningFlags, "null");
         const emptyArrayElementType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        const neverType = createIntrinsicType(TypeFlags.Never, "never");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const nothingType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -2030,12 +2030,7 @@ namespace ts {
                         writeUnionOrIntersectionType(<UnionOrIntersectionType>type, flags);
                     }
                     else if (type.flags & TypeFlags.Anonymous) {
-                        if (type === nothingType) {
-                            writer.writeKeyword("nothing");
-                        }
-                        else {
-                            writeAnonymousType(<ObjectType>type, flags);
-                        }
+                        writeAnonymousType(<ObjectType>type, flags);
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
@@ -3676,6 +3671,7 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NeverKeyword:
                 case SyntaxKind.StringLiteralType:
                     return true;
                 case SyntaxKind.ArrayType:
@@ -5011,7 +5007,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Undefined) typeSet.containsUndefined = true;
                 if (type.flags & TypeFlags.Null) typeSet.containsNull = true;
             }
-            else if (type !== nothingType && !contains(typeSet, type)) {
+            else if (type !== neverType && !contains(typeSet, type)) {
                 typeSet.push(type);
             }
         }
@@ -5052,7 +5048,7 @@ namespace ts {
         // a named type that circularly references itself.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
-                return nothingType;
+                return neverType;
             }
             if (types.length === 1) {
                 return types[0];
@@ -5072,7 +5068,7 @@ namespace ts {
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? nullType :
                     typeSet.containsUndefined ? undefinedType :
-                    nothingType;
+                    neverType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -5220,6 +5216,8 @@ namespace ts {
                     return undefinedType;
                 case SyntaxKind.NullKeyword:
                     return nullType;
+                case SyntaxKind.NeverKeyword:
+                    return neverType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
@@ -5865,28 +5863,28 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (target.flags & TypeFlags.Any) return Ternary.True;
-                if (source.flags & TypeFlags.Undefined) {
-                    if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
-                }
-                if (source.flags & TypeFlags.Null) {
-                    if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
-                }
-                if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
-                if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
-                    if (result = enumRelatedTo(source, target, reportErrors)) {
-                        return result;
+                if (!(target.flags & TypeFlags.Never)) {
+                    if (target.flags & TypeFlags.Any) return Ternary.True;
+                    if (source.flags & TypeFlags.Undefined) {
+                        if (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void) || source === emptyArrayElementType) return Ternary.True;
                     }
-                }
-                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
-
-                if (relation === assignableRelation || relation === comparableRelation) {
-                    if (isTypeAny(source)) return Ternary.True;
-                    if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
-                }
-
-                if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
-                    return Ternary.True;
+                    if (source.flags & TypeFlags.Null) {
+                        if (!strictNullChecks || target.flags & TypeFlags.Null) return Ternary.True;
+                    }
+                    if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                    if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
+                        if (result = enumRelatedTo(source, target, reportErrors)) {
+                            return result;
+                        }
+                    }
+                    if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
+                    if (relation === assignableRelation || relation === comparableRelation) {
+                        if (source.flags & (TypeFlags.Any | TypeFlags.Never)) return Ternary.True;
+                        if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
+                    }
+                    if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
+                        return Ternary.True;
+                    }
                 }
 
                 if (source.flags & TypeFlags.FreshObjectLiteral) {
@@ -7491,7 +7489,7 @@ namespace ts {
 
         function getTypeWithFacts(type: Type, include: TypeFacts) {
             if (!(type.flags & TypeFlags.Union)) {
-                return getTypeFacts(type) & include ? type : nothingType;
+                return getTypeFacts(type) & include ? type : neverType;
             }
             let firstType: Type;
             let types: Type[];
@@ -7508,7 +7506,7 @@ namespace ts {
                     }
                 }
             }
-            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : nothingType;
+            return firstType ? types ? getUnionType(types, /*noSubtypeReduction*/ true) : firstType : neverType;
         }
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -7629,7 +7627,7 @@ namespace ts {
             const visitedFlowStart = visitedFlowCount;
             const result = getTypeAtFlowNode(reference.flowNode);
             visitedFlowCount = visitedFlowStart;
-            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === nothingType) {
+            if (reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(result, TypeFacts.NEUndefinedOrNull) === neverType) {
                 return declaredType;
             }
             return result;
@@ -7717,7 +7715,7 @@ namespace ts {
 
             function getTypeAtFlowCondition(flow: FlowCondition) {
                 let type = getTypeAtFlowNode(flow.antecedent);
-                if (type !== nothingType) {
+                if (type !== neverType) {
                     // If we have an antecedent type (meaning we're reachable in some way), we first
                     // attempt to narrow the antecedent type. If that produces the nothing type, then
                     // we take the type guard as an indication that control could reach here in a
@@ -7727,7 +7725,7 @@ namespace ts {
                     // narrow that.
                     const assumeTrue = (flow.flags & FlowFlags.TrueCondition) !== 0;
                     type = narrowType(type, flow.expression, assumeTrue);
-                    if (type === nothingType) {
+                    if (type === neverType) {
                         type = narrowType(declaredType, flow.expression, assumeTrue);
                     }
                 }
@@ -7949,7 +7947,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    nothingType;
+                    neverType;
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -11561,6 +11559,9 @@ namespace ts {
                 else {
                     const hasImplicitReturn = !!(func.flags & NodeFlags.HasImplicitReturn);
                     types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper, isAsync, hasImplicitReturn);
+                    if (!types) {
+                        return neverType;
+                    }
                     if (types.length === 0) {
                         if (isAsync) {
                             // For an async function, the return type will not be void, but rather a Promise for void.
@@ -11569,12 +11570,9 @@ namespace ts {
                                 error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
                                 return unknownType;
                             }
-
                             return promiseType;
                         }
-                        else {
-                            return voidType;
-                        }
+                        return voidType;
                     }
                 }
                 // When yield/return statements are contextually typed we allow the return type to be a union type.
@@ -11654,7 +11652,7 @@ namespace ts {
                         // the native Promise<T> type by the caller.
                         type = checkAwaitedType(type, body.parent, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
                     }
-                    if (!contains(aggregatedTypes, type)) {
+                    if (type !== neverType && !contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
                 }
@@ -11662,6 +11660,9 @@ namespace ts {
                     hasOmittedExpressions = true;
                 }
             });
+            if (aggregatedTypes.length === 0 && !hasOmittedExpressions && !hasImplicitReturn) {
+                return undefined;
+            }
             if (strictNullChecks && aggregatedTypes.length && (hasOmittedExpressions || hasImplicitReturn)) {
                 if (!contains(aggregatedTypes, undefinedType)) {
                     aggregatedTypes.push(undefinedType);
@@ -11697,7 +11698,10 @@ namespace ts {
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
 
-            if (returnType && !hasExplicitReturn) {
+            if (returnType === neverType) {
+                error(func.type, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+            }
+            else if (returnType && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
                 // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
@@ -14761,7 +14765,7 @@ namespace ts {
                 arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = nothingType;
+                arrayType = neverType;
             }
             const hasStringConstituent = arrayOrStringType !== arrayType;
             let reportedError = false;
@@ -14773,7 +14777,7 @@ namespace ts {
 
                 // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                 // arrayOrStringType was a string.
-                if (arrayType === nothingType) {
+                if (arrayType === neverType) {
                     return stringType;
                 }
             }
@@ -14834,7 +14838,7 @@ namespace ts {
             if (func) {
                 const signature = getSignatureFromDeclaration(func);
                 const returnType = getReturnTypeOfSignature(signature);
-                if (strictNullChecks || node.expression) {
+                if (strictNullChecks || node.expression || returnType === neverType) {
                     const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
 
                     if (func.asteriskToken) {

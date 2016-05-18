@@ -120,7 +120,7 @@ if (typeof strOrBool === "number") {
 
     let y1: {} = strOrBool; // {}
 >y1 : {}
->strOrBool : nothing
+>strOrBool : never
 }
 else {
     let y2: string | boolean = strOrBool; // string | boolean
@@ -212,6 +212,6 @@ if (typeof strOrBool !== "number") {
 else {
     let y2: {} = strOrBool; // {}
 >y2 : {}
->strOrBool : nothing
+>strOrBool : never
 }
 

@@ -116,6 +116,6 @@ if (!hasKind(x, "B")) {
 }
 else {
     let d = x;
->d : nothing
->x : nothing
+>d : never
+>x : never
 }
