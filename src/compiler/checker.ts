@@ -9525,10 +9525,11 @@ namespace ts {
                         const childSignatures = getConstructOrCallSignature(childType);
                         forEach(childSignatures, (signature) => {
                             signatures.push(signature);
-                        })
-                    })
+                        });
+                    });
                     return signatures;
-                } else {
+                }
+                else {
                     const constructSignatures = getSignaturesOfType(type, SignatureKind.Construct);
                     if (constructSignatures.length === 0) {
                         // No construct signatures, try call signatures
@@ -9537,17 +9538,19 @@ namespace ts {
                             // We found no signatures at all, which is an error
                             error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));
                             return [];
-                        } else {
+                        }
+                        else {
                             return callSignatures;
                         }
-                    } else {
+                    }
+                    else {
                         return constructSignatures;
                     }
                 }
             }
 
             // Resolve the signatures
-            let signatures = getConstructOrCallSignature(valueType);
+            const signatures = getConstructOrCallSignature(valueType);
             if (signatures.length === 0) {
                 return unknownType;
             }
