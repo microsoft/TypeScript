@@ -1,4 +1,4 @@
-/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is provided with a valid module type.
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
 ==== /mod2.ts (0 errors) ====
@@ -16,7 +16,7 @@
 ==== /main.ts (1 errors) ====
     export class Cls {
                  ~~~
-!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is provided with a valid module type.
+!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
         x
     }
     
