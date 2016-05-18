@@ -953,6 +953,7 @@ namespace Harness {
             { name: "noErrorTruncation", type: "boolean" },
             { name: "suppressOutputPathCheck", type: "boolean" },
             { name: "noImplicitReferences", type: "boolean" },
+            { name: "currentDirectory", type: "string" },
             { name: "symlink", type: "string" }
         ];
 
