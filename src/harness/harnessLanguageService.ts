@@ -600,6 +600,10 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
+        getDirectories(path: string): string[] {
+            return [];
+        }
+
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }

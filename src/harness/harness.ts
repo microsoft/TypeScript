@@ -127,7 +127,7 @@ namespace Utils {
     export function memoize<T extends Function>(f: T): T {
         const cache: { [idx: string]: any } = {};
 
-        return <any>(function () {
+        return <any>(function() {
             const key = Array.prototype.join.call(arguments);
             const cachedResult = cache[key];
             if (cachedResult) {
@@ -609,7 +609,7 @@ namespace Harness {
             export const getCurrentDirectory = () => "";
             export const args = () => <string[]>[];
             export const getExecutingFilePath = () => "";
-            export const exit = (exitCode: number) => {};
+            export const exit = (exitCode: number) => { };
 
             export let log = (s: string) => console.log(s);
 
@@ -826,7 +826,7 @@ namespace Harness {
             }
 
             if (!libFileNameSourceFileMap[fileName]) {
-                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName,  IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
+                libFileNameSourceFileMap[fileName] = createSourceFileAndAssertInvariants(fileName, IO.readFile(libFolder + fileName), ts.ScriptTarget.Latest);
             }
             return libFileNameSourceFileMap[fileName];
         }
@@ -900,6 +900,20 @@ namespace Harness {
 
 
             return {
+                getDefaultTypeDirectiveNames: (path: string) => {
+                    const results: string[] = [];
+                    fileMap.forEachValue((key, value) => {
+                        const rx = /node_modules\/@types\/(\w+)/;
+                        const typeNameResult = rx.exec(key);
+                        if(typeNameResult) {
+                            const typeName = typeNameResult[1];
+                            if (results.indexOf(typeName) < 0) {
+                                results.push(typeName);
+                            }
+                        }
+                    });
+                    return results;
+                },
                 getCurrentDirectory: () => currentDirectory,
                 getSourceFile,
                 getDefaultLibFileName,
@@ -1441,12 +1455,12 @@ namespace Harness {
                     if (currentFileName) {
                         // Store result file
                         const newTestFile = {
-                                content: currentFileContent,
-                                name: currentFileName,
-                                fileOptions: currentFileOptions,
-                                originalFilePath: fileName,
-                                references: refs
-                            };
+                            content: currentFileContent,
+                            name: currentFileName,
+                            fileOptions: currentFileOptions,
+                            originalFilePath: fileName,
+                            references: refs
+                        };
                         testUnitData.push(newTestFile);
 
                         // Reset local data
@@ -1544,10 +1558,10 @@ namespace Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedRoot + baselineFolder + "/" +  subfolder + "/" + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + subfolder + "/" + type + "/" + fileName;
             }
             else {
-                return Harness.userSpecifiedRoot + baselineFolder + "/"  + type + "/" + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + "/" + type + "/" + fileName;
             }
         }
 
@@ -1616,7 +1630,7 @@ namespace Harness {
         }
 
         function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, descriptionForDescribe: string) {
-            const encoded_actual =  Utils.encodeString(actual);
+            const encoded_actual = Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
                 const errMsg = "The baseline file " + relativeFileName + " has changed.";
