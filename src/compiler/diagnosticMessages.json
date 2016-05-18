@@ -447,7 +447,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot use 'import', 'export' or module augmentation when compiling with '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
