@@ -544,12 +544,7 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        ioReadTime = 0;
-        ioWriteTime = 0;
-        programTime = 0;
-        bindTime = 0;
-        checkTime = 0;
-        emitTime = 0;
+        Performance.reset();
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -561,6 +556,13 @@ namespace ts {
         }
 
         if (compilerOptions.diagnostics) {
+            const ioReadTime = reduceLeft(Performance.getMeasures("ioReadTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const ioWriteTime = reduceLeft(Performance.getMeasures("ioWriteTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const programTime = reduceLeft(Performance.getMeasures("programTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const bindTime = reduceLeft(Performance.getMeasures("bindTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const checkTime = reduceLeft(Performance.getMeasures("checkTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const emitTime = reduceLeft(Performance.getMeasures("emitTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
             reportCountStatistic("Lines", countLines(program));

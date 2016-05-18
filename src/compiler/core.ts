@@ -1134,4 +1134,139 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /*@internal*/
+    export namespace Performance {
+        interface MarkData {
+            markName: string;
+            timestamp: number;
+        }
+
+        interface MeasureData {
+            measureName: string;
+            startMarkName: string;
+            endMarkName: string;
+            timestamp: number;
+            marksOffset: number;
+        }
+
+        export interface Measure {
+            name: string;
+            startTime: number;
+            duration: number;
+        }
+
+        const marks: MarkData[] = [];
+        const measures: MeasureData[] = [];
+
+        let start = now();
+
+        /** Gets the current timer for performance measurements. */
+        export function now() {
+            // TODO(rbuckton): Determine if there is a higher-resolution timer we can use.
+            return Date.now();
+        }
+
+        /**
+         * Adds a performance mark with the specified name.
+         *
+         * @param markName The name of the performance mark.
+         */
+        export function mark(markName: string) {
+            marks.push({ markName, timestamp: now() });
+        }
+
+        /**
+         * Adds a performance measurement with the specified name.
+         *
+         * @param measureName The name of the performance measurement.
+         * @param startMarkName The name of the starting mark.
+         *          If provided, the most recent time value of the start mark is used.
+         *          If not specified, the value is the time that the performance service was
+         *          initialized or the last time it was reset.
+         * @param endMarkName The name of the ending mark.
+         *          If provided, the most recent time value of the end mark is used.
+         *          If not specified, the current time is used.
+         */
+        export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
+            measures.push({
+                measureName,
+                startMarkName,
+                endMarkName,
+                timestamp: now(),
+                marksOffset: marks.length
+            });
+        }
+
+        /**
+         * Gets an array of performance measures.
+         *
+         * @param measureName The name of the measure.
+         *          If provided, only measures with the provided name are returned.
+         *          If not specified, all measures are returned since the last time the
+         *          performance service was reset.
+         */
+        export function getMeasures(measureName?: string) {
+            const result: Measure[] = [];
+            for (const measure of measures) {
+                if (measureName !== undefined && measureName !== measure.measureName) {
+                    continue;
+                }
+
+                let startOffset = 0;
+                let startTime = start;
+                if (measure.startMarkName) {
+                    const startMarkIndex = getMarkOffset(measure.startMarkName, 0, measure.marksOffset);
+                    if (startMarkIndex >= 0) {
+                        startOffset = startMarkIndex;
+                        startTime = marks[startMarkIndex].timestamp;
+                    }
+                }
+
+                let endTime = measure.timestamp;
+                if (measure.endMarkName) {
+                    const endMarkIndex = getMarkOffset(measure.endMarkName, startOffset, measure.marksOffset);
+                    if (endMarkIndex >= 0) {
+                        endTime = marks[endMarkIndex].timestamp;
+                    }
+                }
+
+                const duration = endTime - startTime;
+                result.push({
+                    name: measure.measureName,
+                    startTime,
+                    duration
+                });
+            }
+
+            return result;
+        }
+
+        function getMarkOffset(markName: string, markStart: number, markEnd: number) {
+            if (markName === undefined) {
+                return -1;
+            }
+
+            if (markStart < 0) {
+                markStart = 0;
+            }
+
+            for (let i = markEnd - 1; i >= markStart; i--) {
+                const mark = marks[i];
+                if (mark.markName === markName) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /**
+         * Resets all marks and measurements in the performance service.
+         */
+        export function reset() {
+            marks.length = 0;
+            measures.length = 0;
+            start = now();
+        }
+    }
 }
