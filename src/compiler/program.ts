@@ -1019,6 +1019,8 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (!tryReuseStructureFromOldProgram()) {
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+
             // load type declarations specified via 'types' argument
             let typeReferences: string[];
             if (options.types) {
@@ -1027,7 +1029,10 @@ namespace ts {
             else {
                 // or load all types from the automatic type import fields
                 if (host.getDefaultTypeDirectiveNames) {
-                    typeReferences = host.getDefaultTypeDirectiveNames(getCommonSourceDirectory());
+                    const commonRoot = getCommonSourceDirectory();
+                    if (commonRoot) {
+                        typeReferences = host.getDefaultTypeDirectiveNames(commonRoot);
+                    }
                 }
             }
 
@@ -1038,7 +1043,6 @@ namespace ts {
                 }
             }
 
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
