@@ -156,7 +156,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
                         const record = result.getSourceMapRecord();
-                        if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
+                        if ((options.noEmitOnError && result.errors.length !== 0) || record === undefined) {
                             // Because of the noEmitOnError option no files are created. We need to return null because baselining isn"t required.
                             return null;
                         }
@@ -232,7 +232,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     }
 
                     Harness.Baseline.runBaseline("Correct Sourcemap output for " + fileName, justName.replace(/\.tsx?/, ".js.map"), () => {
-                        if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
+                        if ((options.noEmitOnError && result.errors.length !== 0) || result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
                             // Baselining isn't required here because there is no output.
                             return null;
