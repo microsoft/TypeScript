@@ -1,7 +1,7 @@
 /// <reference path="node.d.ts" />
 /// <reference path="session.ts" />
 // used in fs.writeSync
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 namespace ts.server {
     const readline: NodeJS.ReadLine = require("readline");

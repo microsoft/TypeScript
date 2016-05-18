@@ -1,9 +1,9 @@
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts(15,1): error TS2322: Type '(x: "bar") => number' is not assignable to type '(x: "foo") => number'.
   Types of parameters 'x' and 'x' are incompatible.
-    Type '"bar"' is not assignable to type '"foo"'.
+    Type '"foo"' is not assignable to type '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts(16,1): error TS2322: Type '(x: "foo") => number' is not assignable to type '(x: "bar") => number'.
   Types of parameters 'x' and 'x' are incompatible.
-    Type '"foo"' is not assignable to type '"bar"'.
+    Type '"bar"' is not assignable to type '"foo"'.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability01.ts (2 errors) ====
@@ -25,9 +25,9 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignabil
     ~
 !!! error TS2322: Type '(x: "bar") => number' is not assignable to type '(x: "foo") => number'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type '"bar"' is not assignable to type '"foo"'.
+!!! error TS2322:     Type '"foo"' is not assignable to type '"bar"'.
     b = a;
     ~
 !!! error TS2322: Type '(x: "foo") => number' is not assignable to type '(x: "bar") => number'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type '"foo"' is not assignable to type '"bar"'.
+!!! error TS2322:     Type '"bar"' is not assignable to type '"foo"'.

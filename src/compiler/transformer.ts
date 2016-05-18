@@ -20,7 +20,7 @@ namespace ts {
     };
 
     const enum SyntaxKindFeatureFlags {
-        ExpressionSubstitution = 1 << 0,
+        Substitution = 1 << 0,
         EmitNotifications = 1 << 1,
     }
 
@@ -56,7 +56,7 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const nodeEmitFlags: NodeEmitFlags[] = [];
+        const nodeEmitOptions: NodeEmitOptions[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
@@ -64,25 +64,32 @@ namespace ts {
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
         let currentSourceFile: SourceFile;
+        let lexicalEnvironmentDisabled: boolean;
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
             getCompilerOptions: () => host.getCompilerOptions(),
             getEmitResolver: () => resolver,
+            getEmitHost: () => host,
             getNodeEmitFlags,
             setNodeEmitFlags,
+            getSourceMapRange,
+            setSourceMapRange,
+            getTokenSourceMapRange,
+            setTokenSourceMapRange,
+            getCommentRange,
+            setCommentRange,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
             endLexicalEnvironment,
-            identifierSubstitution: node => node,
-            expressionSubstitution: node => node,
-            enableExpressionSubstitution,
-            isExpressionSubstitutionEnabled,
-            onEmitNode: (node, emit) => emit(node),
+            onSubstituteNode,
+            enableSubstitution,
+            isSubstitutionEnabled,
+            onEmitNode,
             enableEmitNotification,
-            isEmitNotificationEnabled,
+            isEmitNotificationEnabled
         };
 
         // Chain together and initialize each transformer.
@@ -105,21 +112,80 @@ namespace ts {
             return transformation(sourceFile);
         }
 
-        function enableExpressionSubstitution(kind: SyntaxKind) {
-            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.ExpressionSubstitution;
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
+        function enableSubstitution(kind: SyntaxKind) {
+            enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.Substitution;
         }
 
-        function isExpressionSubstitutionEnabled(node: Node) {
-            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.ExpressionSubstitution) !== 0;
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
+        function isSubstitutionEnabled(node: Node) {
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0;
         }
 
+        /**
+         * Default hook for node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            return node;
+        }
+
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided SyntaxKind.
+         */
         function enableEmitNotification(kind: SyntaxKind) {
             enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
         }
 
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
                 || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
+        }
+
+        /**
+         * Default hook for node emit.
+         *
+         * @param node The node to emit.
+         * @param emit A callback used to emit the node in the printer.
+         */
+        function onEmitNode(node: Node, emit: (node: Node) => void) {
+            // Ensure that lexical environment modifications are disabled during the print phase.
+            if (!lexicalEnvironmentDisabled) {
+                const savedLexicalEnvironmentDisabled = lexicalEnvironmentDisabled;
+                lexicalEnvironmentDisabled = true;
+                emit(node);
+                lexicalEnvironmentDisabled = savedLexicalEnvironmentDisabled;
+                return;
+            }
+
+            emit(node);
+        }
+
+        function getEmitOptions(node: Node, create?: boolean) {
+            let options = isSourceTreeNode(node)
+                ? nodeEmitOptions[getNodeId(node)]
+                : node.emitOptions;
+            if (!options && create) {
+                options = { };
+                if (isSourceTreeNode(node)) {
+                    nodeEmitOptions[getNodeId(node)] = options;
+                }
+                else {
+                    node.emitOptions = options;
+                }
+            }
+            return options;
         }
 
         /**
@@ -127,9 +193,13 @@ namespace ts {
          */
         function getNodeEmitFlags(node: Node) {
             while (node) {
-                const nodeId = getNodeId(node);
-                if (nodeEmitFlags[nodeId] !== undefined) {
-                    return nodeEmitFlags[nodeId];
+                const options = getEmitOptions(node, /*create*/ false);
+                if (options && options.flags !== undefined) {
+                    if (options.flags & NodeEmitFlags.Merge) {
+                        options.flags = (options.flags | getNodeEmitFlags(node.original)) & ~NodeEmitFlags.Merge;
+                    }
+
+                    return options.flags;
                 }
 
                 node = node.original;
@@ -142,7 +212,103 @@ namespace ts {
          * Sets flags that control emit behavior of a node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            nodeEmitFlags[getNodeId(node)] = flags;
+            const options = getEmitOptions(node, /*create*/ true);
+            if (flags & NodeEmitFlags.Merge) {
+                flags = options.flags | (flags & ~NodeEmitFlags.Merge);
+            }
+
+            options.flags = flags;
+            return node;
+        }
+
+        /**
+         * Gets a custom text range to use when emitting source maps.
+         */
+        function getSourceMapRange(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.sourceMapRange !== undefined) {
+                    return options.sourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
+        }
+
+        /**
+         * Sets a custom text range to use when emitting source maps.
+         */
+        function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+            getEmitOptions(node, /*create*/ true).sourceMapRange = range;
+            return node;
+        }
+
+        function getTokenSourceMapRanges(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.tokenSourceMapRange) {
+                    return options.tokenSourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+            const ranges = getTokenSourceMapRanges(node);
+            if (ranges) {
+                return ranges[token];
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+            const options = getEmitOptions(node, /*create*/ true);
+            if (!options.tokenSourceMapRange) {
+                const existingRanges = getTokenSourceMapRanges(node);
+                const ranges = existingRanges ? clone(existingRanges) : { };
+                options.tokenSourceMapRange = ranges;
+            }
+
+            options.tokenSourceMapRange[token] = range;
+            return node;
+        }
+
+        /**
+         * Gets a custom text range to use when emitting comments.
+         */
+        function getCommentRange(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current, /*create*/ false);
+                if (options && options.commentRange !== undefined) {
+                    return options.commentRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
+        }
+
+        /**
+         * Sets a custom text range to use when emitting comments.
+         */
+        function setCommentRange<T extends Node>(node: T, range: TextRange) {
+            getEmitOptions(node, /*create*/ true).commentRange = range;
             return node;
         }
 
@@ -150,6 +316,7 @@ namespace ts {
          * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             const decl = createVariableDeclaration(name);
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [decl];
@@ -163,6 +330,7 @@ namespace ts {
          * Records a hoisted function declaration within a lexical environment.
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
             if (!hoistedFunctionDeclarations) {
                 hoistedFunctionDeclarations = [func];
             }
@@ -176,6 +344,8 @@ namespace ts {
          * are pushed onto a stack, and the related storage variables are reset.
          */
         function startLexicalEnvironment(): void {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot start a lexical environment during the print phase.");
+
             // Save the current lexical environment. Rather than resizing the array we adjust the
             // stack size variable. This allows us to reuse existing array slots we've
             // already allocated between transformations to avoid allocation and GC overhead during
@@ -192,6 +362,8 @@ namespace ts {
          * any hoisted declarations added in this environment are returned.
          */
         function endLexicalEnvironment(): Statement[] {
+            Debug.assert(!lexicalEnvironmentDisabled, "Cannot end a lexical environment during the print phase.");
+
             let statements: Statement[];
             if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
                 if (hoistedFunctionDeclarations) {

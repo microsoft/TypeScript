@@ -11,11 +11,11 @@
 //// export var V = "123"
 
 // @Filename: main.js
-//// import ref1 = require("refFile1");
-//// var ref2 = require("refFile2");
+//// import ref1 = require("./refFile1");
+//// var ref2 = require("./refFile2");
 //// ref1.V./*1*/;
 //// ref2.V./*2*/;
-//// var v = { x: require("refFile3") };
+//// var v = { x: require("./refFile3") };
 //// v.x./*3*/;
 //// v.x.V./*4*/;
 

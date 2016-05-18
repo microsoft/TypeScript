@@ -1,6 +1,6 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = "internal/cases/test262";

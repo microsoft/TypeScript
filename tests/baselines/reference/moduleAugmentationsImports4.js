@@ -87,4 +87,6 @@ declare module "b" {
     }
 }
 declare module "main" {
+    import "D";
+    import "E";
 }

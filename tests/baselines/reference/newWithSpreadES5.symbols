@@ -15,7 +15,7 @@ interface A {
 >A : Symbol(A, Decl(newWithSpreadES5.ts, 4, 30))
 
     f: {
->f : Symbol(f, Decl(newWithSpreadES5.ts, 6, 13))
+>f : Symbol(A.f, Decl(newWithSpreadES5.ts, 6, 13))
 
         new (x: number, y: number, ...z: string[]);
 >x : Symbol(x, Decl(newWithSpreadES5.ts, 8, 13))

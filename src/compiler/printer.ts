@@ -6,9 +6,6 @@
 
 /* @internal */
 namespace ts {
-    const delimiters = createDelimiterMap();
-    const brackets = createBracketsMap();
-
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
@@ -18,12 +15,28 @@ namespace ts {
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function printFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+        const delimiters = createDelimiterMap();
+        const brackets = createBracketsMap();
+
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};`;
+
+        // Emit output for the __assign helper function.
+        // This is typically used for JSX spread attributes,
+        // and can be used for object literal spread properties.
+        const assignHelper = `
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
 };`;
 
         // emit output for the __decorate helper function
@@ -247,6 +260,7 @@ const _super = (function (geti, seti) {
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
 
         let emitSkipped = false;
@@ -257,6 +271,7 @@ const _super = (function (geti, seti) {
         return {
             emitSkipped,
             diagnostics: emitterDiagnostics.getDiagnostics(),
+            emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList
         };
 
@@ -271,6 +286,16 @@ const _super = (function (geti, seti) {
 
             if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+            }
+
+            if (!emitSkipped && emittedFilesList) {
+                emittedFilesList.push(jsFilePath);
+                if (sourceMapFilePath) {
+                    emittedFilesList.push(sourceMapFilePath);
+                }
+                if (declarationFilePath) {
+                    emittedFilesList.push(declarationFilePath);
+                }
             }
         }
 
@@ -289,7 +314,8 @@ const _super = (function (geti, seti) {
             const {
                 emitStart,
                 emitEnd,
-                emitPos
+                emitTokenStart,
+                emitTokenEnd
             } = sourceMap;
 
             const comments = createCommentWriter(host, writer, sourceMap);
@@ -299,18 +325,19 @@ const _super = (function (geti, seti) {
                 getTrailingCommentsOfPosition,
                 emitLeadingComments,
                 emitTrailingComments,
-                emitDetachedComments
+                emitLeadingDetachedComments,
+                emitTrailingDetachedComments
             } = comments;
 
             let context: TransformationContext;
-            let startLexicalEnvironment: () => void;
-            let endLexicalEnvironment: () => Statement[];
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
-            let isExpressionSubstitutionEnabled: (node: Node) => boolean;
+            let getSourceMapRange: (node: Node) => TextRange;
+            let getTokenSourceMapRange: (node: Node, token: SyntaxKind) => TextRange;
+            let getCommentRange: (node: Node) => TextRange;
+            let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
-            let expressionSubstitution: (node: Expression) => Expression;
-            let identifierSubstitution: (node: Identifier) => Identifier;
+            let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
             let onEmitNode: (node: Node, emit: (node: Node) => void) => void;
             let nodeToGeneratedName: string[];
             let generatedNameSet: Map<string>;
@@ -319,6 +346,7 @@ const _super = (function (geti, seti) {
             let currentText: string;
             let currentFileIdentifiers: Map<string>;
             let extendsEmitted: boolean;
+            let assignEmitted: boolean;
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
             let awaiterEmitted: boolean;
@@ -365,19 +393,20 @@ const _super = (function (geti, seti) {
                 comments.reset();
                 writer.reset();
 
-                startLexicalEnvironment = undefined;
-                endLexicalEnvironment = undefined;
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
-                isExpressionSubstitutionEnabled = undefined;
+                getSourceMapRange = undefined;
+                getTokenSourceMapRange = undefined;
+                getCommentRange = undefined;
+                isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
-                expressionSubstitution = undefined;
-                identifierSubstitution = undefined;
+                onSubstituteNode = undefined;
                 onEmitNode = undefined;
                 tempFlags = TempFlags.Auto;
                 currentSourceFile = undefined;
                 currentText = undefined;
                 extendsEmitted = false;
+                assignEmitted = false;
                 decorateEmitted = false;
                 paramEmitted = false;
                 awaiterEmitted = false;
@@ -386,14 +415,14 @@ const _super = (function (geti, seti) {
 
             function initializePrinter(_context: TransformationContext) {
                 context = _context;
-                startLexicalEnvironment = context.startLexicalEnvironment;
-                endLexicalEnvironment = context.endLexicalEnvironment;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
-                isExpressionSubstitutionEnabled = context.isExpressionSubstitutionEnabled;
+                getSourceMapRange = context.getSourceMapRange;
+                getTokenSourceMapRange = context.getTokenSourceMapRange;
+                getCommentRange = context.getCommentRange;
+                isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
-                expressionSubstitution = context.expressionSubstitution;
-                identifierSubstitution = context.identifierSubstitution;
+                onSubstituteNode = context.onSubstituteNode;
                 onEmitNode = context.onEmitNode;
                 return printSourceFile;
             }
@@ -404,7 +433,7 @@ const _super = (function (geti, seti) {
                 currentFileIdentifiers = node.identifiers;
                 sourceMap.setSourceFile(node);
                 comments.setSourceFile(node);
-                emitWorker(node);
+                emitNodeWithNotificationOption(node, emitWorker);
                 return node;
             }
 
@@ -413,6 +442,26 @@ const _super = (function (geti, seti) {
              */
             function emit(node: Node) {
                 emitNodeWithNotificationOption(node, emitWithoutNotificationOption);
+            }
+
+            /**
+             * Emits a node with specialized emit flags.
+             */
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecialized(node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    const flagsToAdd = flags & ~getNodeEmitFlags(node);
+                    if (flagsToAdd) {
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) | flagsToAdd);
+                        emit(node);
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) & ~flagsToAdd);
+                        return;
+                    }
+
+                    emit(node);
+                }
             }
 
             /**
@@ -454,17 +503,83 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, getNotEmittedParent);
-                    const trailingComments = getTrailingComments(node, getNotEmittedParent);
-                    emitLeadingComments(node, leadingComments);
-                    emitStart(node);
+                    const leadingComments = getLeadingComments(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingCommentsForNode, getCommentRange);
+                    const trailingComments = getTrailingComments(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingCommentsForNode, getCommentRange);
+                    emitLeadingComments(/*range*/ node, leadingComments, /*contextNode*/ node, getCommentRange);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
-                    emitEnd(node);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitTrailingComments(node, trailingComments);
                 }
             }
 
+            /**
+             * Determines whether to skip leading comment emit for a node.
+             *
+             * We do not emit comments for NotEmittedStatement nodes or any node that has
+             * NodeEmitFlags.NoLeadingComments.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipLeadingCommentsForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingComments) !== 0;
+            }
+
+            /**
+             * Determines whether to skip trailing comment emit for a node.
+             *
+             * We do not emit comments for NotEmittedStatement nodes or any node that has
+             * NodeEmitFlags.NoTrailingComments.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipTrailingCommentsForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingComments) !== 0;
+            }
+
+            /**
+             * Determines whether to skip source map emit for the start position of a node.
+             *
+             * We do not emit source maps for NotEmittedStatement nodes or any node that
+             * has NodeEmitFlags.NoLeadingSourceMap.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipLeadingSourceMapForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoLeadingSourceMap) !== 0;
+            }
+
+
+            /**
+             * Determines whether to skip source map emit for the end position of a node.
+             *
+             * We do not emit source maps for NotEmittedStatement nodes or any node that
+             * has NodeEmitFlags.NoTrailingSourceMap.
+             *
+             * @param node A Node.
+             */
+            function shouldSkipTrailingSourceMapForNode(node: Node) {
+                return isNotEmittedStatement(node)
+                    || (getNodeEmitFlags(node) & NodeEmitFlags.NoTrailingSourceMap) !== 0;
+            }
+
+            /**
+             * Determines whether to skip source map emit for a node and its children.
+             *
+             * We do not emit source maps for a node that has NodeEmitFlags.NoNestedSourceMaps.
+             */
+            function shouldSkipSourceMapForChildren(node: Node) {
+                return (getNodeEmitFlags(node) & NodeEmitFlags.NoNestedSourceMaps) !== 0;
+            }
+
             function emitWorker(node: Node): void {
+                if (tryEmitSubstitute(node, emitWorker, /*isExpression*/ false)) {
+                    return;
+                }
+
                 const kind = node.kind;
                 switch (kind) {
                     // Pseudo-literals
@@ -475,10 +590,6 @@ const _super = (function (geti, seti) {
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        if (tryEmitSubstitute(node, identifierSubstitution)) {
-                            return;
-                        }
-
                         return emitIdentifier(<Identifier>node);
 
                     // Reserved words
@@ -678,12 +789,16 @@ const _super = (function (geti, seti) {
                     // JSX (non-expression)
                     case SyntaxKind.JsxText:
                         return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxOpeningElement:
+                        return emitJsxOpeningElement(<JsxOpeningElement>node);
                     case SyntaxKind.JsxClosingElement:
                         return emitJsxClosingElement(<JsxClosingElement>node);
                     case SyntaxKind.JsxAttribute:
                         return emitJsxAttribute(<JsxAttribute>node);
                     case SyntaxKind.JsxSpreadAttribute:
                         return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
 
                     // Clauses
                     case SyntaxKind.CaseClause:
@@ -710,6 +825,8 @@ const _super = (function (geti, seti) {
                         return emitSourceFile(<SourceFile>node);
 
                     // JSDoc nodes (ignored)
+
+                    // Transformation nodes (ignored)
                 }
 
                 if (isExpression(node)) {
@@ -718,11 +835,11 @@ const _super = (function (geti, seti) {
             }
 
             function emitExpressionWorker(node: Node) {
-                const kind = node.kind;
-                if (isExpressionSubstitutionEnabled(node) && tryEmitSubstitute(node, expressionSubstitution)) {
+                if (tryEmitSubstitute(node, emitExpressionWorker, /*isExpression*/ true)) {
                     return;
                 }
 
+                const kind = node.kind;
                 switch (kind) {
                     // Literals
                     case SyntaxKind.NumericLiteral:
@@ -794,16 +911,18 @@ const _super = (function (geti, seti) {
                         return;
                     case SyntaxKind.AsExpression:
                         return emitAsExpression(<AsExpression>node);
+                    case SyntaxKind.NonNullExpression:
+                        return emitNonNullExpression(<NonNullExpression>node);
 
                     // JSX
                     case SyntaxKind.JsxElement:
                         return emitJsxElement(<JsxElement>node);
                     case SyntaxKind.JsxSelfClosingElement:
                         return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-                    case SyntaxKind.JsxOpeningElement:
-                        return emitJsxOpeningElement(<JsxOpeningElement>node);
-                    case SyntaxKind.JsxExpression:
-                        return emitJsxExpression(<JsxExpression>node);
+
+                    // Transformation nodes
+                    case SyntaxKind.PartiallyEmittedExpression:
+                        return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
                 }
             }
 
@@ -819,7 +938,7 @@ const _super = (function (geti, seti) {
             // SyntaxKind.TemplateMiddle
             // SyntaxKind.TemplateTail
             function emitLiteral(node: LiteralLikeNode) {
-                const text = getLiteralText(node, currentSourceFile, languageVersion);
+                const text = getLiteralTextOfNode(node);
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap)
                     && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
@@ -1110,9 +1229,18 @@ const _super = (function (geti, seti) {
                     write("{}");
                 }
                 else {
+                    const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                    if (indentedFlag) {
+                        increaseIndent();
+                    }
+
                     const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
                     const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
                     emitList(node, properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
+
+                    if (indentedFlag) {
+                        decreaseIndent();
+                    }
                 }
             }
 
@@ -1138,7 +1266,7 @@ const _super = (function (geti, seti) {
             function needsDotDotForPropertyAccess(expression: Expression) {
                 if (expression.kind === SyntaxKind.NumericLiteral) {
                     // check if numeric literal was originally written with a dot
-                    const text = getLiteralText(<LiteralExpression>expression, currentSourceFile, languageVersion);
+                    const text = getLiteralTextOfNode(<LiteralExpression>expression);
                     return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
                 }
                 else {
@@ -1168,13 +1296,12 @@ const _super = (function (geti, seti) {
             function emitNewExpression(node: NewExpression) {
                 write("new ");
                 emitExpression(node.expression);
-                if (node.arguments) {
-                    emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
-                }
+                emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
                 emitExpression(node.tag);
+                write(" ");
                 emitExpression(node.template);
             }
 
@@ -1202,7 +1329,6 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 emitSignatureAndBody(node, emitArrowFunctionHead);
-
             }
 
             function emitArrowFunctionHead(node: ArrowFunction) {
@@ -1233,7 +1359,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                writeToken(node.operator);
+                writeTokenText(node.operator);
                 if (shouldEmitWhitespaceBeforeOperand(node)) {
                     write(" ");
                 }
@@ -1261,7 +1387,7 @@ const _super = (function (geti, seti) {
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
                 emitExpression(node.operand);
-                writeToken(node.operator);
+                writeTokenText(node.operator);
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
@@ -1271,7 +1397,7 @@ const _super = (function (geti, seti) {
 
                 emitExpression(node.left);
                 increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-                writeTokenNode(node.operatorToken);
+                writeTokenText(node.operatorToken.kind);
                 increaseIndentIf(indentAfterOperator, " ");
                 emitExpression(node.right);
                 decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1317,10 +1443,8 @@ const _super = (function (geti, seti) {
             }
 
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                emitStart(node);
                 emitExpression(node.expression);
                 emitTypeArguments(node, node.typeArguments);
-                emitEnd(node);
             }
 
             function emitAsExpression(node: AsExpression) {
@@ -1329,6 +1453,11 @@ const _super = (function (geti, seti) {
                     write(" as ");
                     emit(node.type);
                 }
+            }
+
+            function emitNonNullExpression(node: NonNullExpression) {
+                emitExpression(node.expression);
+                write("!");
             }
 
             //
@@ -1346,12 +1475,14 @@ const _super = (function (geti, seti) {
 
             function emitBlock(node: Block, format?: ListFormat) {
                 if (isSingleLineEmptyBlock(node)) {
-                    write("{ }");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
+                    write(" ");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
                 else {
-                    write("{");
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                     emitBlockStatements(node);
-                    write("}");
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
             }
 
@@ -1380,13 +1511,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitIfStatement(node: IfStatement) {
-                write("if (");
+                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, node);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    write("else");
+                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -1420,7 +1553,32 @@ const _super = (function (geti, seti) {
             }
 
             function emitForStatement(node: ForStatement) {
-                write("for (");
+                if (getNodeEmitFlags(node) & NodeEmitFlags.SourceMapAdjustRestParameterLoop) {
+                    // TODO(rbuckton): This should be removed once source maps are aligned with the old
+                    //                 emitter and new baselines are taken. This exists solely to
+                    //                 align with the old emitter.
+                    const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                    write(" ");
+                    writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                    setNodeEmitFlags(node.initializer, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(node.initializer));
+                    emitForBinding(node.initializer);
+                    write(";");
+                    emitEnd(node.initializer);
+                    setNodeEmitFlags(node.condition, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(node.condition));
+                    write(" ");
+                    emitExpression(node.condition);
+                    write(";");
+                    emitEnd(node.condition);
+                    write(" ");
+                    emitExpression(node.incrementor);
+                    write(")");
+                    emitEmbeddedStatement(node.statement);
+                    return;
+                }
+
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);
                 emitForBinding(node.initializer);
                 write(";");
                 emitExpressionWithPrefix(" ", node.condition);
@@ -1431,20 +1589,24 @@ const _super = (function (geti, seti) {
             }
 
             function emitForInStatement(node: ForInStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" in ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
             function emitForOfStatement(node: ForOfStatement) {
-                write("for (");
+                const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitForBinding(node.initializer);
                 write(" of ");
                 emitExpression(node.expression);
-                write(")");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
                 emitEmbeddedStatement(node.statement);
             }
 
@@ -1460,19 +1622,19 @@ const _super = (function (geti, seti) {
             }
 
             function emitContinueStatement(node: ContinueStatement) {
-                write("continue");
+                writeToken(SyntaxKind.ContinueKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
 
             function emitBreakStatement(node: BreakStatement) {
-                write("break");
+                writeToken(SyntaxKind.BreakKeyword, node.pos);
                 emitWithPrefix(" ", node.label);
                 write(";");
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                write("return");
+                writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
                 emitExpressionWithPrefix(" ", node.expression);
                 write(";");
             }
@@ -1485,9 +1647,12 @@ const _super = (function (geti, seti) {
             }
 
             function emitSwitchStatement(node: SwitchStatement) {
-                write("switch (");
+                const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emitExpression(node.expression);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
+                write(" ");
                 emit(node.caseBlock);
             }
 
@@ -1515,7 +1680,8 @@ const _super = (function (geti, seti) {
             }
 
             function emitDebuggerStatement(node: DebuggerStatement) {
-                write("debugger;");
+                writeToken(SyntaxKind.DebuggerKeyword, node.pos);
+                write(";");
             }
 
             //
@@ -1540,7 +1706,7 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write(node.asteriskToken ? "function* " : "function ");
-                emit(node.name);
+                emitSpecialized(node.name, NodeEmitFlags.NoSourceMap);
                 emitSignatureAndBody(node, emitSignatureHead);
             }
 
@@ -1548,13 +1714,19 @@ const _super = (function (geti, seti) {
                 const body = node.body;
                 if (body) {
                     if (isBlock(body)) {
+                        const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                        if (indentedFlag) {
+                            increaseIndent();
+                        }
+
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
-                        startLexicalEnvironment();
                         emitSignatureHead(node);
-                        write(" {");
                         emitBlockFunctionBody(node, body);
-                        write("}");
+                        if (indentedFlag) {
+                            decreaseIndent();
+                        }
+
                         tempFlags = savedTempFlags;
                     }
                     else {
@@ -1577,32 +1749,57 @@ const _super = (function (geti, seti) {
             }
 
             function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
-                const originalNode = getOriginalNode(parentNode);
-                if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode)) {
-                    const body = originalNode.body;
-                    if (isBlock(body)) {
-                        if (rangeEndIsOnSameLineAsRangeStart(body, body)) {
-                            for (const statement of body.statements) {
-                                if (synthesizedNodeStartsOnNewLine(statement)) {
-                                    return false;
-                                }
-                            }
+                // We must emit a function body as a single-line body in the following case:
+                // * The body has NodeEmitFlags.SingleLine specified.
 
-                            return true;
-                        }
-                    }
-                    else {
-                        return rangeEndIsOnSameLineAsRangeStart((<ArrowFunction>originalNode).equalsGreaterThanToken, originalNode.body);
-                    }
+                // We must emit a function body as a multi-line body in the following cases:
+                // * The body is explicitly marked as multi-line.
+                // * A non-synthesized body's start and end position are on different lines.
+                // * Any statement in the body starts on a new line.
+
+                if (getNodeEmitFlags(body) & NodeEmitFlags.SingleLine) {
+                    return true;
                 }
 
-                return false;
+                if (body.multiLine) {
+                    return false;
+                }
+
+                if (!nodeIsSynthesized(body) && !rangeIsOnSingleLine(body, currentSourceFile)) {
+                    return false;
+                }
+
+                if (shouldWriteLeadingLineTerminator(body, body.statements, ListFormat.PreserveLines)
+                    || shouldWriteClosingLineTerminator(body, body.statements, ListFormat.PreserveLines)) {
+                    return false;
+                }
+
+                let previousStatement: Statement;
+                for (const statement of body.statements) {
+                    if (shouldWriteSeparatingLineTerminator(previousStatement, statement, ListFormat.PreserveLines)) {
+                        return false;
+                    }
+
+                    previousStatement = statement;
+                }
+
+                return true;
             }
 
             function emitBlockFunctionBody(parentNode: Node, body: Block) {
-                const startingLine = writer.getLine();
+                // TODO(rbuckton): This should be removed once source maps are aligned with the old
+                //                 emitter and new baselines are taken. This exists solely to
+                //                 align with the old emitter.
+                if (getNodeEmitFlags(body) & NodeEmitFlags.SourceMapEmitOpenBraceAsToken) {
+                    write(" ");
+                    writeToken(SyntaxKind.OpenBraceToken, body.pos);
+                }
+                else {
+                    write(" {");
+                }
+
                 increaseIndent();
-                emitDetachedComments(body.statements);
+                emitLeadingDetachedComments(body.statements, body, shouldSkipLeadingCommentsForNode);
 
                 // Emit all the prologue directives (like "use strict").
                 const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
@@ -1617,10 +1814,9 @@ const _super = (function (geti, seti) {
                     emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, statementOffset);
                 }
 
-                const endingLine = writer.getLine();
-                emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
-                emitLeadingComments(collapseTextRange(body.statements, TextRangeCollapse.CollapseToEnd));
+                emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
+                writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -1631,7 +1827,13 @@ const _super = (function (geti, seti) {
                 emitDecorators(node, node.decorators);
                 emitModifiers(node, node.modifiers);
                 write("class");
-                emitWithPrefix(" ", node.name);
+                emitSpecializedWithPrefix(" ", node.name, NodeEmitFlags.NoSourceMap);
+
+                const indentedFlag = getNodeEmitFlags(node) & NodeEmitFlags.Indented;
+                if (indentedFlag) {
+                    increaseIndent();
+                }
+
                 emitTypeParameters(node, node.typeParameters);
                 emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
 
@@ -1642,6 +1844,10 @@ const _super = (function (geti, seti) {
                 emitList(node, node.members, ListFormat.ClassMembers);
                 write("}");
 
+                if (indentedFlag) {
+                    decreaseIndent();
+                }
+
                 tempFlags = savedTempFlags;
             }
 
@@ -1651,7 +1857,7 @@ const _super = (function (geti, seti) {
                 write("interface ");
                 emit(node.name);
                 emitTypeParameters(node, node.typeParameters);
-                emitList(node, node.heritageClauses, ListFormat.SingleLine);
+                emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
                 write(" {");
                 emitList(node, node.members, ListFormat.InterfaceMembers);
                 write("}");
@@ -1705,24 +1911,18 @@ const _super = (function (geti, seti) {
                 else {
                     const savedTempFlags = tempFlags;
                     tempFlags = 0;
-                    startLexicalEnvironment();
                     write("{");
                     increaseIndent();
-
-                    const startingLine = writer.getLine();
                     emitBlockStatements(node);
-
-                    const endingLine = writer.getLine();
-                    emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ startingLine !== endingLine);
                     write("}");
                     tempFlags = savedTempFlags;
                 }
             }
 
             function emitCaseBlock(node: CaseBlock) {
-                write("{");
+                writeToken(SyntaxKind.OpenBraceToken, node.pos);
                 emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-                write("}");
+                writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
             }
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -1746,27 +1946,25 @@ const _super = (function (geti, seti) {
             function emitImportDeclaration(node: ImportDeclaration) {
                 emitModifiers(node, node.modifiers);
                 write("import ");
-                emit(node.importClause);
+                if (node.importClause) {
+                    emit(node.importClause);
+                    write(" from ");
+                }
                 emitExpression(node.moduleSpecifier);
                 write(";");
             }
 
             function emitImportClause(node: ImportClause) {
-                emitStart(node);
                 emit(node.name);
                 if (node.name && node.namedBindings) {
                     write(", ");
                 }
                 emit(node.namedBindings);
-                emitEnd(node);
-                write(" from ");
             }
 
             function emitNamespaceImport(node: NamespaceImport) {
-                emitStart(node);
                 write("* as ");
                 emit(node.name);
-                emitEnd(node);
             }
 
             function emitNamedImports(node: NamedImports) {
@@ -1787,12 +1985,14 @@ const _super = (function (geti, seti) {
                 write("export ");
                 if (node.exportClause) {
                     emit(node.exportClause);
-                    write(" from ");
                 }
                 else {
-                    write("* from ");
+                    write("*");
                 }
-                emitExpression(node.moduleSpecifier);
+                if (node.moduleSpecifier) {
+                    write(" from ");
+                    emitExpression(node.moduleSpecifier);
+                }
                 write(";");
             }
 
@@ -1841,7 +2041,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
                 write("<");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 write(" ");
                 emitList(node, node.attributes, ListFormat.JsxElementAttributes);
                 write("/>");
@@ -1849,7 +2049,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxOpeningElement(node: JsxOpeningElement) {
                 write("<");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 writeIfAny(node.attributes, " ");
                 emitList(node, node.attributes, ListFormat.JsxElementAttributes);
                 write(">");
@@ -1861,7 +2061,7 @@ const _super = (function (geti, seti) {
 
             function emitJsxClosingElement(node: JsxClosingElement) {
                 write("</");
-                emit(node.tagName);
+                emitJsxTagName(node.tagName);
                 write(">");
             }
 
@@ -1877,9 +2077,20 @@ const _super = (function (geti, seti) {
             }
 
             function emitJsxExpression(node: JsxExpression) {
-                write("{");
-                emitExpression(node.expression);
-                write("}");
+                if (node.expression) {
+                    write("{");
+                    emitExpression(node.expression);
+                    write("}");
+                }
+            }
+
+            function emitJsxTagName(node: EntityName) {
+                if (node.kind === SyntaxKind.Identifier) {
+                    emitExpression(<Identifier>node);
+                }
+                else {
+                    emit(node);
+                }
             }
 
             //
@@ -1900,7 +2111,16 @@ const _super = (function (geti, seti) {
             }
 
             function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
-                if (statements.length === 1 && shouldEmitCaseOrDefaultClauseStatementOnSameLine(parentNode, statements[0])) {
+                const emitAsSingleStatement =
+                    statements.length === 1 &&
+                    (
+                        // treat synthesized nodes as located on the same line for emit purposes
+                        nodeIsSynthesized(parentNode) ||
+                        nodeIsSynthesized(statements[0]) ||
+                        rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
+                    );
+
+                if (emitAsSingleStatement) {
                     write(" ");
                     emit(statements[0]);
                 }
@@ -1918,19 +2138,20 @@ const _super = (function (geti, seti) {
             }
 
             function emitHeritageClause(node: HeritageClause) {
-                emitStart(node);
                 write(" ");
-                writeToken(node.token);
+                writeTokenText(node.token);
                 write(" ");
                 emitList(node, node.types, ListFormat.HeritageClauseTypes);
-                emitEnd(node);
             }
 
             function emitCatchClause(node: CatchClause) {
                 writeLine();
-                write("catch (");
+                const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
+                write(" ");
+                writeToken(SyntaxKind.OpenParenToken, openParenPos);
                 emit(node.variableDeclaration);
-                write(") ");
+                writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
+                write(" ");
                 emit(node.block);
             }
 
@@ -1948,12 +2169,18 @@ const _super = (function (geti, seti) {
                 //          }
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
-                emitLeadingComments(node.initializer, getTrailingComments(collapseTextRange(node.initializer, TextRangeCollapse.CollapseToStart)));
+                if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
+                    emitLeadingComments(/*range*/ node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), /*contextNode*/ node.initializer, getCommentRange);
+                }
                 emitExpression(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 emit(node.name);
+                if (node.objectAssignmentInitializer) {
+                    write(" = ");
+                    emitExpression(node.objectAssignmentInitializer);
+                }
             }
 
             //
@@ -1972,7 +2199,7 @@ const _super = (function (geti, seti) {
             function emitSourceFile(node: SourceFile) {
                 writeLine();
                 emitShebang();
-                emitDetachedComments(node);
+                emitLeadingDetachedComments(node);
 
                 const statements = node.statements;
                 const statementOffset = emitPrologueDirectives(statements);
@@ -1983,36 +2210,18 @@ const _super = (function (geti, seti) {
                 else {
                     const savedTempFlags = tempFlags;
                     tempFlags = 0;
-                    startLexicalEnvironment();
                     emitHelpers(node);
                     emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                    emitLexicalEnvironment(endLexicalEnvironment(), /*newLine*/ true);
                     tempFlags = savedTempFlags;
                 }
 
-                emitLeadingComments(node.endOfFileToken);
+                emitTrailingDetachedComments(node.statements);
             }
 
-            function emitLexicalEnvironment(declarations: Statement[], newLine: boolean) {
-                if (declarations && declarations.length > 0) {
-                    for (const node of declarations) {
-                        if (newLine) {
-                            writeLine();
-                        }
-                        else {
-                            write(" ");
-                        }
+            // Transformation nodes
 
-                        emit(node);
-                    }
-
-                    if (newLine) {
-                        writeLine();
-                    }
-                    else {
-                        write(" ");
-                    }
-                }
+            function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
+                emitExpression(node.expression);
             }
 
             /**
@@ -2074,6 +2283,11 @@ const _super = (function (geti, seti) {
                         helpersEmitted = true;
                     }
 
+                    if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttribute)) {
+                        writeLines(assignHelper);
+                        assignEmitted = true;
+                    }
+
                     if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
                         writeLines(decorateHelper);
                         if (compilerOptions.emitDecoratorMetadata) {
@@ -2125,18 +2339,29 @@ const _super = (function (geti, seti) {
                 const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
+                    writeLine();
                 }
             }
 
-            function emitModifiers(node: Node, modifiers: ModifiersArray) {
+            function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
                 if (modifiers && modifiers.length) {
-                    emitList(node, modifiers, ListFormat.SingleLine);
+                    emitList(node, modifiers, ListFormat.Modifiers);
                     write(" ");
                 }
             }
 
             function emitWithPrefix(prefix: string, node: Node) {
                 emitNodeWithPrefix(prefix, node, emit);
+            }
+
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            function emitSpecializedWithPrefix(prefix: string, node: Node, flags: NodeEmitFlags) {
+                if (node) {
+                    write(prefix);
+                    emitSpecialized(node, flags);
+                }
             }
 
             function emitExpressionWithPrefix(prefix: string, node: Node) {
@@ -2157,12 +2382,12 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function tryEmitSubstitute(node: Node, substitution: (node: Node) => Node) {
-                if (substitution && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
-                    const substitute = substitution(node);
+            function tryEmitSubstitute(node: Node, emitNode: (node: Node) => void, isExpression: boolean) {
+                if (isSubstitutionEnabled(node) && (getNodeEmitFlags(node) & NodeEmitFlags.NoSubstitution) === 0) {
+                    const substitute = onSubstituteNode(node, isExpression);
                     if (substitute !== node) {
-                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution);
-                        emitWorker(substitute);
+                        setNodeEmitFlags(substitute, NodeEmitFlags.NoSubstitution | getNodeEmitFlags(substitute));
+                        emitNode(substitute);
                         return true;
                     }
                 }
@@ -2282,6 +2507,7 @@ const _super = (function (geti, seti) {
 
                     // Emit each child.
                     let previousSibling: Node;
+                    let shouldDecreaseIndentAfterEmit: boolean;
                     const delimiter = getDelimiter(format);
                     for (let i = 0; i < count; i++) {
                         const child = children[start + i];
@@ -2292,16 +2518,23 @@ const _super = (function (geti, seti) {
 
                             // Write either a line terminator or whitespace to separate the elements.
                             if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
+                                // If a synthesized node in a single-line list starts on a new
+                                // line, we should increase the indent.
+                                if ((format & (ListFormat.LinesMask | ListFormat.Indented)) === ListFormat.SingleLine) {
+                                    increaseIndent();
+                                    shouldDecreaseIndentAfterEmit = true;
+                                }
+
                                 writeLine();
                                 shouldEmitInterveningComments = false;
                             }
-                            else if (previousSibling) {
+                            else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
                                 write(" ");
                             }
                         }
 
                         if (shouldEmitInterveningComments) {
-                            emitLeadingComments(child, getTrailingCommentsOfPosition(child.pos));
+                            emitLeadingComments(/*node*/ child, getTrailingCommentsOfPosition(child.pos), /*contextNode*/ child, getCommentRange);
                         }
                         else {
                             shouldEmitInterveningComments = true;
@@ -2309,6 +2542,11 @@ const _super = (function (geti, seti) {
 
                         // Emit this child.
                         emit(child);
+
+                        if (shouldDecreaseIndentAfterEmit) {
+                            decreaseIndent();
+                            shouldDecreaseIndentAfterEmit = false;
+                        }
 
                         previousSibling = child;
                     }
@@ -2350,12 +2588,18 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, pos?: number) {
-                const tokenStartPos = skipTrivia(currentText, pos);
-                emitPos(tokenStartPos);
-                const tokenEndPos = writeTokenText(token, pos);
-                emitPos(tokenEndPos);
-                return tokenEndPos;
+            function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
+                const tokenStartPos = emitTokenStart(token, pos, contextNode, shouldSkipLeadingSourceMapForToken, getTokenSourceMapRange);
+                const tokenEndPos = writeTokenText(token, tokenStartPos);
+                return emitTokenEnd(token, tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken, getTokenSourceMapRange);
+            }
+
+            function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenLeadingSourceMaps) !== 0;
+            }
+
+            function shouldSkipTrailingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenTrailingSourceMaps) !== 0;
             }
 
             function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -2366,9 +2610,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     writeTokenText(node.kind);
-                    emitEnd(node);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                 }
             }
 
@@ -2399,20 +2643,21 @@ const _super = (function (geti, seti) {
                 if (format & ListFormat.MultiLine) {
                     return true;
                 }
-                else if (format & ListFormat.PreserveLines) {
+
+                if (format & ListFormat.PreserveLines) {
                     if (format & ListFormat.PreferNewLine) {
                         return true;
                     }
 
                     const firstChild = children[0];
                     if (firstChild === undefined) {
-                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                        return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                     }
                     else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
                         return synthesizedNodeStartsOnNewLine(firstChild, format);
                     }
                     else {
-                        return !rangeStartPositionsAreOnSameLine(parentNode, firstChild);
+                        return !rangeStartPositionsAreOnSameLine(parentNode, firstChild, currentSourceFile);
                     }
                 }
                 else {
@@ -2432,11 +2677,11 @@ const _super = (function (geti, seti) {
                         return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
                     }
                     else {
-                        return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode);
+                        return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile);
                     }
                 }
                 else {
-                    return false;
+                    return nextNode.startsOnNewLine;
                 }
             }
 
@@ -2451,13 +2696,13 @@ const _super = (function (geti, seti) {
 
                     const lastChild = lastOrUndefined(children);
                     if (lastChild === undefined) {
-                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                        return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                     }
                     else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
                         return synthesizedNodeStartsOnNewLine(lastChild, format);
                     }
                     else {
-                        return !rangeEndPositionsAreOnSameLine(parentNode, lastChild);
+                        return !rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile);
                     }
                 }
                 else {
@@ -2474,28 +2719,8 @@ const _super = (function (geti, seti) {
 
                     return startsOnNewLine;
                 }
+
                 return (format & ListFormat.PreferNewLine) !== 0;
-            }
-
-            function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(getStartPos(range1), getStartPos(range2));
-            }
-
-            function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(range1.end, range2.end);
-            }
-
-            function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(range1.end, getStartPos(range2));
-            }
-
-            function positionsAreOnSameLine(pos1: number, pos2: number) {
-                return pos1 === pos2 ||
-                    getLineOfLocalPosition(currentSourceFile, pos1) === getLineOfLocalPosition(currentSourceFile, pos2);
-            }
-
-            function getStartPos(range: TextRange) {
-                return range.pos === -1 ? -1 : skipTrivia(currentText, range.pos);
             }
 
             function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
@@ -2511,7 +2736,7 @@ const _super = (function (geti, seti) {
                 return !nodeIsSynthesized(parent)
                     && !nodeIsSynthesized(node1)
                     && !nodeIsSynthesized(node2)
-                    && !rangeEndIsOnSameLineAsRangeStart(node1, node2);
+                    && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile);
             }
 
             function skipSynthesizedParentheses(node: Node) {
@@ -2522,20 +2747,35 @@ const _super = (function (geti, seti) {
                 return node;
             }
 
-            function getTextOfNode(node: Node, includeTrivia?: boolean) {
-                if (isIdentifier(node)) {
-                    if (node.autoGenerateKind) {
-                        return getGeneratedIdentifier(node);
-                    }
-                    else if (nodeIsSynthesized(node) || !node.parent) {
-                        return node.text;
-                    }
+            function getTextOfNode(node: Node, includeTrivia?: boolean): string {
+                if (isGeneratedIdentifier(node)) {
+                    return getGeneratedIdentifier(node);
+                }
+                else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
+                    return unescapeIdentifier(node.text);
+                }
+                else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
                 }
                 else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                     return node.text;
                 }
 
                 return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
+            }
+
+            function getLiteralTextOfNode(node: LiteralLikeNode): string {
+                if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
+                    const textSourceNode = (<StringLiteral>node).textSourceNode;
+                    if (isIdentifier(textSourceNode)) {
+                        return "\"" + escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode))) + "\"";
+                    }
+                    else {
+                        return getLiteralTextOfNode(textSourceNode);
+                    }
+                }
+
+                return getLiteralText(node, currentSourceFile, languageVersion);
             }
 
             function tryGetConstEnumValue(node: Node): number {
@@ -2551,18 +2791,7 @@ const _super = (function (geti, seti) {
             function isSingleLineEmptyBlock(block: Block) {
                 return !block.multiLine
                     && block.statements.length === 0
-                    && rangeEndIsOnSameLineAsRangeStart(block, block);
-            }
-
-            function getNotEmittedParent(node: Node): Node {
-                if (getNodeEmitFlags(node) & NodeEmitFlags.EmitCommentsOfNotEmittedParent) {
-                    const parent = getOriginalNode(node).parent;
-                    if (getNodeEmitFlags(parent) & NodeEmitFlags.IsNotEmittedNode) {
-                        return parent;
-                    }
-                }
-
-                return undefined;
+                    && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
             }
 
             function isUniqueName(name: string): boolean {
@@ -2631,7 +2860,7 @@ const _super = (function (geti, seti) {
             }
 
             function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                const name = node.name.text;
+                const name = getTextOfNode(node.name);
                 // Use module/enum name itself if it is unique, otherwise make a unique variation
                 return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
             }
@@ -2651,10 +2880,10 @@ const _super = (function (geti, seti) {
                 return makeUniqueName("class");
             }
 
-            function generateNameForNode(node: Node) {
+            function generateNameForNode(node: Node): string {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return makeUniqueName((<Identifier>node).text);
+                        return makeUniqueName(getTextOfNode(node));
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.EnumDeclaration:
                         return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -2681,73 +2910,102 @@ const _super = (function (geti, seti) {
                     case GeneratedIdentifierKind.Unique:
                         return makeUniqueName(node.text);
                     case GeneratedIdentifierKind.Node:
-                        return generateNameForNode(getOriginalNode(node));
+                        return generateNameForNode(getSourceNodeForGeneratedName(node));
                 }
             }
 
             function getGeneratedIdentifier(node: Identifier) {
-                const id = getOriginalNodeId(node);
+                const id = getNodeIdForGeneratedIdentifier(node);
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateIdentifier(node)));
             }
+
+            function getSourceNodeForGeneratedName(name: Identifier) {
+                let node: Node = name;
+                while (node.original !== undefined) {
+                    const nodeId = node.id;
+                    node = node.original;
+                    // If "node" is not the exact clone of "original" identifier, use "original" identifier to generate the name
+                    if (isIdentifier(node) && node.autoGenerateKind === GeneratedIdentifierKind.Node && node.id !== nodeId) {
+                        break;
+                    }
+                }
+
+                return node;
+            }
+
+            function getNodeIdForGeneratedIdentifier(node: Identifier) {
+                switch (node.autoGenerateKind) {
+                    case GeneratedIdentifierKind.Auto:
+                    case GeneratedIdentifierKind.Loop:
+                    case GeneratedIdentifierKind.Unique:
+                        return getNodeId(node);
+                    case GeneratedIdentifierKind.Node:
+                        return getNodeId(getSourceNodeForGeneratedName(node));
+                }
+            }
         }
-    }
 
-    function createDelimiterMap() {
-        const delimiters: string[] = [];
-        delimiters[ListFormat.None] = "";
-        delimiters[ListFormat.CommaDelimited] = ",";
-        delimiters[ListFormat.BarDelimited] = " |";
-        delimiters[ListFormat.AmpersandDelimited] = " &";
-        return delimiters;
-    }
+        function createDelimiterMap() {
+            const delimiters: string[] = [];
+            delimiters[ListFormat.None] = "";
+            delimiters[ListFormat.CommaDelimited] = ",";
+            delimiters[ListFormat.BarDelimited] = " |";
+            delimiters[ListFormat.AmpersandDelimited] = " &";
+            return delimiters;
+        }
 
-    function getDelimiter(format: ListFormat) {
-        return delimiters[format & ListFormat.DelimitersMask];
-    }
+        function getDelimiter(format: ListFormat) {
+            return delimiters[format & ListFormat.DelimitersMask];
+        }
 
-    function createBracketsMap() {
-        const brackets: string[][] = [];
-        brackets[ListFormat.Braces] = ["{", "}"];
-        brackets[ListFormat.Parenthesis] = ["(", ")"];
-        brackets[ListFormat.AngleBrackets] = ["<", ">"];
-        brackets[ListFormat.SquareBrackets] = ["[", "]"];
-        return brackets;
-    }
+        function createBracketsMap() {
+            const brackets: string[][] = [];
+            brackets[ListFormat.Braces] = ["{", "}"];
+            brackets[ListFormat.Parenthesis] = ["(", ")"];
+            brackets[ListFormat.AngleBrackets] = ["<", ">"];
+            brackets[ListFormat.SquareBrackets] = ["[", "]"];
+            return brackets;
+        }
 
-    function getOpeningBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][0];
-    }
+        function getOpeningBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][0];
+        }
 
-    function getClosingBracket(format: ListFormat) {
-        return brackets[format & ListFormat.BracketsMask][1];
+        function getClosingBracket(format: ListFormat) {
+            return brackets[format & ListFormat.BracketsMask][1];
+        }
     }
 
     const enum ListFormat {
         None = 0,
 
         // Line separators
-        SingleLine = 1 << 0,            // Prints the list on a single line (default).
-        MultiLine = 1 << 1,             // Prints the list on multiple lines.
-        PreserveLines = 1 << 2,         // Prints the list using line preservation if possible.
+        SingleLine = 0,                 // Prints the list on a single line (default).
+        MultiLine = 1 << 0,             // Prints the list on multiple lines.
+        PreserveLines = 1 << 1,         // Prints the list using line preservation if possible.
+        LinesMask = SingleLine | MultiLine | PreserveLines,
 
         // Delimiters
         NotDelimited = 0,               // There is no delimiter between list items (default).
-        BarDelimited = 1 << 3,          // Each list item is space-and-bar (" |") delimited.
-        AmpersandDelimited = 1 << 4,    // Each list item is space-and-ampersand (" &") delimited.
-        CommaDelimited = 1 << 5,        // Each list item is comma (",") delimited.
-        AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.
+        BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
+        AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
+        CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
         DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
 
+        AllowTrailingComma = 1 << 5,    // Write a trailing comma (",") if present.
+
         // Whitespace
-        Indented = 1 << 7,              // The list should be indented.
-        SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
+        Indented = 1 << 6,              // The list should be indented.
+        SpaceBetweenBraces = 1 << 7,    // Inserts a space after the opening brace and before the closing brace.
+        SpaceBetweenSiblings = 1 << 8,  // Inserts a space between each sibling node.
 
         // Brackets/Braces
-        Braces = 1 << 9,                // The list is surrounded by "{" and "}".
+        Braces = 1 << 9,                 // The list is surrounded by "{" and "}".
         Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
         AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
         SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
         BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
+
         OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
         OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
         Optional = OptionalIfUndefined | OptionalIfEmpty,
@@ -2757,37 +3015,39 @@ const _super = (function (geti, seti) {
         NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
 
         // Precomputed Formats
+        Modifiers = SingleLine | SpaceBetweenSiblings,
+        HeritageClauses = SingleLine | SpaceBetweenSiblings,
         TypeLiteralMembers = MultiLine | Indented,
-        TupleTypeElements = CommaDelimited | SingleLine | Indented,
-        UnionTypeConstituents = BarDelimited | SingleLine,
-        IntersectionTypeConstituents = AmpersandDelimited | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces,
-        ArrayBindingPatternElements = SingleLine | AllowTrailingComma,
-        ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenBraces | Indented | Braces,
-        ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | AllowTrailingComma | Indented | SquareBrackets,
-        CallExpressionArguments = CommaDelimited | SingleLine | Parenthesis,
-        NewExpressionArguments = CommaDelimited | SingleLine | Parenthesis | OptionalIfUndefined,
+        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
+        UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
+        IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
+        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
+        ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
+        CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
+        NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,
         TemplateExpressionSpans = SingleLine,
-        SingleLineBlockStatements = SpaceBetweenBraces | SingleLine,
+        SingleLineBlockStatements = SpaceBetweenBraces | SpaceBetweenSiblings | SingleLine,
         MultiLineBlockStatements = Indented | MultiLine,
-        VariableDeclarationList = CommaDelimited | SingleLine,
-        SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenBraces,
+        VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenSiblings | SpaceBetweenBraces,
         MultiLineFunctionBodyStatements = MultiLine,
-        ClassHeritageClauses = SingleLine,
+        ClassHeritageClauses = SingleLine | SpaceBetweenSiblings,
         ClassMembers = Indented | MultiLine,
         InterfaceMembers = Indented | MultiLine,
         EnumMembers = CommaDelimited | Indented | MultiLine,
         CaseBlockClauses = Indented | MultiLine,
-        NamedImportsOrExportsElements = CommaDelimited | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
+        NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
         JsxElementChildren = SingleLine,
-        JsxElementAttributes = SingleLine,
+        JsxElementAttributes = SingleLine | SpaceBetweenSiblings,
         CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
-        HeritageClauseTypes = CommaDelimited | SingleLine,
+        HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         SourceFileStatements = MultiLine | NoTrailingNewLine,
         Decorators = MultiLine | Optional,
-        TypeArguments = CommaDelimited | SingleLine | Indented | AngleBrackets | Optional,
-        TypeParameters = CommaDelimited | SingleLine | Indented | AngleBrackets | Optional,
-        Parameters = CommaDelimited | SingleLine | Indented | Parenthesis,
-        IndexSignatureParameters = CommaDelimited | SingleLine | Indented | SquareBrackets,
+        TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
+        TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
+        Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | Parenthesis,
+        IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
     }
 }

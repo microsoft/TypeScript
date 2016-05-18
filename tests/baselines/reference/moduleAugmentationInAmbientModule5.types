@@ -29,7 +29,7 @@ declare module "array" {
 >A : typeof A
 
     global {
->global : typeof 
+>global : any
 
         interface Array<T> {
 >Array : T[]

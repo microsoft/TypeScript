@@ -72,12 +72,20 @@ namespace ts.formatting {
         if (line === 0) {
             return [];
         }
-        // get the span for the previous\current line
+        // After the enter key, the cursor is now at a new line. The new line may or may not contain non-whitespace characters.
+        // If the new line has only whitespaces, we won't want to format this line, because that would remove the indentation as
+        // trailing whitespaces. So the end of the formatting span should be the later one between:
+        //  1. the end of the previous line
+        //  2. the last non-whitespace character in the current line
+        let endOfFormatSpan = getEndLinePosition(line, sourceFile);
+        while (isWhiteSpace(sourceFile.text.charCodeAt(endOfFormatSpan)) && !isLineBreak(sourceFile.text.charCodeAt(endOfFormatSpan))) {
+            endOfFormatSpan--;
+        }
         let span = {
             // get start position for the previous line
             pos: getStartPositionOfLine(line - 1, sourceFile),
-            // get end position for the current line (end value is exclusive so add 1 to the result)
-            end: getEndLinePosition(line, sourceFile) + 1
+            // end value is exclusive so add 1 to the result
+            end: endOfFormatSpan + 1
         }
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnEnter);
     }
@@ -256,7 +264,7 @@ namespace ts.formatting {
             return enclosingNode.pos;
         }
 
-        // preceding token ends after the start of original range (i.e when originaRange.pos falls in the middle of literal)
+        // preceding token ends after the start of original range (i.e when originalRange.pos falls in the middle of literal)
         // start from the beginning of enclosingNode to handle the entire 'originalRange'
         if (precedingToken.end >= originalRange.pos) {
             return enclosingNode.pos;

@@ -4,7 +4,7 @@ interface X {
 >X : Symbol(X, Decl(callWithSpreadES6.ts, 0, 0))
 
     foo(x: number, y: number, ...z: string[]);
->foo : Symbol(foo, Decl(callWithSpreadES6.ts, 1, 13))
+>foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 1, 13))
 >x : Symbol(x, Decl(callWithSpreadES6.ts, 2, 8))
 >y : Symbol(y, Decl(callWithSpreadES6.ts, 2, 18))
 >z : Symbol(z, Decl(callWithSpreadES6.ts, 2, 29))
@@ -94,7 +94,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >xa[1].foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 1, 13))
 >xa : Symbol(xa, Decl(callWithSpreadES6.ts, 11, 3))
 >foo : Symbol(X.foo, Decl(callWithSpreadES6.ts, 1, 13))
@@ -108,22 +108,22 @@ class C {
 >z : Symbol(z, Decl(callWithSpreadES6.ts, 32, 37))
 
         this.foo(x, y);
->this.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 35, 5))
+>this.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))
 >this : Symbol(C, Decl(callWithSpreadES6.ts, 29, 40))
->foo : Symbol(foo, Decl(callWithSpreadES6.ts, 35, 5))
+>foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))
 >x : Symbol(x, Decl(callWithSpreadES6.ts, 32, 16))
 >y : Symbol(y, Decl(callWithSpreadES6.ts, 32, 26))
 
         this.foo(x, y, ...z);
->this.foo : Symbol(foo, Decl(callWithSpreadES6.ts, 35, 5))
+>this.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))
 >this : Symbol(C, Decl(callWithSpreadES6.ts, 29, 40))
->foo : Symbol(foo, Decl(callWithSpreadES6.ts, 35, 5))
+>foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))
 >x : Symbol(x, Decl(callWithSpreadES6.ts, 32, 16))
 >y : Symbol(y, Decl(callWithSpreadES6.ts, 32, 26))
 >z : Symbol(z, Decl(callWithSpreadES6.ts, 32, 37))
     }
     foo(x: number, y: number, ...z: string[]) {
->foo : Symbol(foo, Decl(callWithSpreadES6.ts, 35, 5))
+>foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))
 >x : Symbol(x, Decl(callWithSpreadES6.ts, 36, 8))
 >y : Symbol(y, Decl(callWithSpreadES6.ts, 36, 18))
 >z : Symbol(z, Decl(callWithSpreadES6.ts, 36, 29))
@@ -143,7 +143,7 @@ class D extends C {
 >a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
     }
     foo() {
->foo : Symbol(foo, Decl(callWithSpreadES6.ts, 44, 5))
+>foo : Symbol(D.foo, Decl(callWithSpreadES6.ts, 44, 5))
 
         super.foo(1, 2);
 >super.foo : Symbol(C.foo, Decl(callWithSpreadES6.ts, 35, 5))

@@ -4,7 +4,7 @@ interface ContextualType<T> {
 >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
 
     method(parameter: T): void;
->method : Symbol(method, Decl(superCallParameterContextualTyping3.ts, 0, 29))
+>method : Symbol(ContextualType.method, Decl(superCallParameterContextualTyping3.ts, 0, 29))
 >parameter : Symbol(parameter, Decl(superCallParameterContextualTyping3.ts, 1, 11))
 >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
 }
@@ -20,7 +20,7 @@ class CBase<T>  {
     }
 
     foo(param: ContextualType<T>) {
->foo : Symbol(foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+>foo : Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
 >param : Symbol(param, Decl(superCallParameterContextualTyping3.ts, 8, 8))
 >ContextualType : Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
 >T : Symbol(T, Decl(superCallParameterContextualTyping3.ts, 4, 12))

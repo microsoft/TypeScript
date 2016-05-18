@@ -35,7 +35,7 @@ var db = (function () {
 exports.db = db;
 //// [service.js]
 "use strict";
-var db = require('./db');
+var db = require("./db");
 function someDecorator(target) {
     return target;
 }
@@ -47,7 +47,7 @@ var MyClass = (function () {
     return MyClass;
 }());
 MyClass = __decorate([
-    someDecorator, 
-    __metadata('design:paramtypes', [db.db])
+    someDecorator,
+    __metadata("design:paramtypes", [db.db])
 ], MyClass);
 exports.MyClass = MyClass;

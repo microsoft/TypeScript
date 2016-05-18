@@ -4,19 +4,19 @@ class C {
 
     [x: number]: Date;
 >x : Symbol(x, Decl(indexersInClassType.ts, 1, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Object;
 >x : Symbol(x, Decl(indexersInClassType.ts, 2, 5))
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     1: Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     'a': {}
 
     fn() {
->fn : Symbol(fn, Decl(indexersInClassType.ts, 4, 11))
+>fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
 
         return this;
 >this : Symbol(C, Decl(indexersInClassType.ts, 0, 0))

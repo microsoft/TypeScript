@@ -19,7 +19,7 @@ var numOrBool: number | boolean;
 
 class C { private p; }
 >C : Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
->p : Symbol(p, Decl(typeGuardOfFormExpr1AndExpr2.ts, 6, 9))
+>p : Symbol(C.p, Decl(typeGuardOfFormExpr1AndExpr2.ts, 6, 9))
 
 var c: C;
 >c : Symbol(c, Decl(typeGuardOfFormExpr1AndExpr2.ts, 7, 3))

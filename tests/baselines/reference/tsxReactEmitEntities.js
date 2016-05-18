@@ -12,5 +12,5 @@ declare var React: any;
 
 
 //// [file.js]
-React.createElement("div", null, "Dot goes here: · &notAnEntity; ");
+React.createElement("div", null, "Dot goes here: \u00B7 &notAnEntity; ");
 React.createElement("div", null, "Be careful of \"-ed strings!");

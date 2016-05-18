@@ -3,7 +3,7 @@ class Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
 
     public a: string;
->a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 12))
+>a : Symbol(Base.a, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 12))
 }
 
 class Derived extends Base {
@@ -11,7 +11,7 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 0, 0))
 
     public b: string;
->b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 4, 28))
+>b : Symbol(Derived.b, Decl(comparisonOperatorWithSubtypeObjectOnConstructorSignature.ts, 4, 28))
 }
 
 var a1: { new (): Base };

@@ -4,7 +4,7 @@
 ////export var test = "test String"
 
 // @Filename: b.ts
-////import test from "a"
+////import test from "./a"
 
 // @Filename: c.ts
 /////// <reference path="a.ts"/>

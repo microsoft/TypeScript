@@ -12,7 +12,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.ES7) {
                 return visitorWorker(node);
             }
@@ -24,13 +24,15 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node) {
+        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);
-            }
 
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
+            }
         }
 
         function visitBinaryExpression(node: BinaryExpression): Expression {
@@ -42,11 +44,9 @@ namespace ts {
                 let value: Expression;
                 if (isElementAccessExpression(left)) {
                     // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
-                    const expressionTemp = createTempVariable();
-                    hoistVariableDeclaration(expressionTemp);
+                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
 
-                    const argumentExpressionTemp = createTempVariable();
-                    hoistVariableDeclaration(argumentExpressionTemp);
+                    const argumentExpressionTemp = createTempVariable(hoistVariableDeclaration);
 
                     target = createElementAccess(
                         createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
@@ -62,8 +62,7 @@ namespace ts {
                 }
                 else if (isPropertyAccessExpression(left)) {
                     // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-                    const expressionTemp = createTempVariable();
-                    hoistVariableDeclaration(expressionTemp);
+                    const expressionTemp = createTempVariable(hoistVariableDeclaration);
 
                     target = createPropertyAccess(
                         createAssignment(expressionTemp, left.expression, /*location*/ left.expression),
@@ -90,7 +89,8 @@ namespace ts {
                 return createMathPow(left, right, /*location*/ node);
             }
             else {
-                Debug.fail(`Unexpected operator kind: ${formatSyntaxKind(node.operatorToken.kind)}.`);
+                Debug.failBadSyntaxKind(node);
+                return visitEachChild(node, visitor, context);
             }
         }
     }

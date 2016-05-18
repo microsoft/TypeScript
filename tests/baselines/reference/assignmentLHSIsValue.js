@@ -113,7 +113,7 @@ false = value;
 }
 value;
 // array literals
-'' = value[0], '' = value[1];
+"" = value[0], "" = value[1];
 // super
 var Derived = (function (_super) {
     __extends(Derived, _super);

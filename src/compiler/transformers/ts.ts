@@ -6,6 +6,11 @@
 namespace ts {
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
+    /**
+     * Indicates whether to emit type metadata in the new format.
+     */
+    const USE_NEW_TYPE_METADATA_FORMAT = false;
+
     const enum TypeScriptSubstitutionFlags {
         /** Enables substitutions for decorated classes. */
         DecoratedClasses = 1 << 0,
@@ -13,11 +18,16 @@ namespace ts {
         NamespaceExports = 1 << 1,
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 2,
+        /* Enables substitutions for unqualified enum members */
+        NonQualifiedEnumMembers = 1 << 3
     }
 
     export function transformTypeScript(context: TransformationContext) {
         const {
+            getNodeEmitFlags,
             setNodeEmitFlags,
+            setCommentRange,
+            setSourceMapRange,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
@@ -26,22 +36,21 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
+        const moduleKind = getEmitModuleKind(compilerOptions);
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
-        const previousExpressionSubstitution = context.expressionSubstitution;
+        const previousOnSubstituteNode = context.onSubstituteNode;
 
         // Set new transformation hooks.
         context.onEmitNode = onEmitNode;
-        context.expressionSubstitution = substituteExpression;
+        context.onSubstituteNode = onSubstituteNode;
 
         // These variables contain state that changes as we descend into the tree.
         let currentSourceFile: SourceFile;
         let currentNamespace: ModuleDeclaration;
-        let currentNamespaceLocalName: Identifier;
+        let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentParent: Node;
-        let currentNode: Node;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -65,7 +74,7 @@ namespace ts {
          * Keeps track of whether  we are within any containing namespaces when performing
          * just-in-time substitution while printing an expression identifier.
          */
-        let isEnclosedInNamespace: boolean;
+        let applicableSubstitutions: TypeScriptSubstitutionFlags;
 
         /**
          * This keeps track of containers where `super` is valid, for use with
@@ -82,9 +91,10 @@ namespace ts {
          */
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
-            node = visitEachChild(node, visitor, context);
-            setNodeEmitFlags(node, NodeEmitFlags.EmitEmitHelpers);
-            return node;
+            currentScope = node;
+            const visited = visitEachChild(node, visitor, context);
+            setNodeEmitFlags(visited, NodeEmitFlags.EmitEmitHelpers | getNodeEmitFlags(node));
+            return visited;
         }
 
         /**
@@ -92,25 +102,19 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitWithStack(node: Node, visitor: (node: Node) => Node): Node {
+        function saveStateAndInvoke<T>(node: Node, f: (node: Node) => T): T {
             // Save state
-            const savedCurrentNamespace = currentNamespace;
             const savedCurrentScope = currentScope;
-            const savedCurrentParent = currentParent;
-            const savedCurrentNode = currentNode;
 
             // Handle state changes before visiting a node.
             onBeforeVisitNode(node);
 
-            node = visitor(node);
+            const visited = f(node);
 
             // Restore state
-            currentNamespace = savedCurrentNamespace;
             currentScope = savedCurrentScope;
-            currentParent = savedCurrentParent;
-            currentNode = savedCurrentNode;
 
-            return node;
+            return visited;
         }
 
         /**
@@ -118,8 +122,8 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitor(node: Node): Node {
-            return visitWithStack(node, visitorWorker);
+        function visitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, visitorWorker);
         }
 
         /**
@@ -127,14 +131,14 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -145,8 +149,8 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitor(node: Node): Node {
-            return visitWithStack(node, namespaceElementVisitorWorker);
+        function namespaceElementVisitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, namespaceElementVisitorWorker);
         }
 
         /**
@@ -154,15 +158,23 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function namespaceElementVisitorWorker(node: Node): Node {
-            if (node.transformFlags & TransformFlags.TypeScript || isExported(node)) {
+        function namespaceElementVisitorWorker(node: Node): VisitResult<Node> {
+            if (node.kind === SyntaxKind.ExportDeclaration ||
+                node.kind === SyntaxKind.ImportDeclaration ||
+                node.kind === SyntaxKind.ImportClause ||
+                (node.kind === SyntaxKind.ImportEqualsDeclaration &&
+                 (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
+                // do not emit ES6 imports and exports since they are illegal inside a namespace
+                return undefined;
+           }
+           else if (node.transformFlags & TransformFlags.TypeScript || hasModifier(node, ModifierFlags.Export)) {
                 // This node is explicitly marked as TypeScript, or is exported at the namespace
                 // level, so we should transform the node.
-                node = visitTypeScript(node);
+                return visitTypeScript(node);
             }
             else if (node.transformFlags & TransformFlags.ContainsTypeScript) {
                 // This node contains TypeScript, so we should visit its children.
-                node = visitEachChild(node, visitor, context);
+                return visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -173,8 +185,8 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitor(node: Node) {
-            return visitWithStack(node, classElementVisitorWorker);
+        function classElementVisitor(node: Node): VisitResult<Node> {
+            return saveStateAndInvoke(node, classElementVisitorWorker);
         }
 
         /**
@@ -182,10 +194,10 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function classElementVisitorWorker(node: Node) {
+        function classElementVisitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `transformClassDeclaration`.
+                    // TypeScript constructors are transformed in `visitClassDeclaration`.
                     // We elide them here as `visitorWorker` checks transform flags, which could
                     // erronously include an ES6 constructor without TypeScript syntax.
                     return undefined;
@@ -198,9 +210,12 @@ namespace ts {
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 
+                case SyntaxKind.SemicolonClassElement:
+                    return node;
+
                 default:
-                    Debug.fail("Unexpected node.");
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
         }
 
@@ -209,10 +224,13 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function visitTypeScript(node: Node): Node {
-            if (node.flags & NodeFlags.Ambient) {
-                // TypeScript ambient declarations are elided.
-                return undefined;
+        function visitTypeScript(node: Node): VisitResult<Node> {
+            if (hasModifier(node, ModifierFlags.Ambient) && isStatement(node)) {
+                // TypeScript ambient declarations are elided, but some comments may be preserved.
+                // See the implementation of `getLeadingComments` in comments.ts for more details.
+                return isStatement(node)
+                    ? createNotEmittedStatement(node)
+                    : undefined;
             }
 
             switch (node.kind) {
@@ -240,32 +258,38 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
-                case SyntaxKind.StringLiteralType:
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
+                case SyntaxKind.StringLiteralType:
                     // TypeScript type nodes are elided.
 
                 case SyntaxKind.IndexSignature:
                     // TypeScript index signatures are elided.
 
                 case SyntaxKind.Decorator:
-                    // TypeScript decorators are elided. They will be emitted as part of transformClassDeclaration.
+                    // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
 
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    // TypeScript type-only declarations are elided
+                    // TypeScript type-only declarations are elided.
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided.
 
                 case SyntaxKind.Constructor:
-                    // TypeScript constructors are transformed in `transformClassDeclaration`.
+                    // TypeScript constructors are transformed in `visitClassDeclaration`.
                     return undefined;
+
+                case SyntaxKind.InterfaceDeclaration:
+                    // TypeScript interfaces are elided, but some comments may be preserved.
+                    // See the implementation of `getLeadingComments` in comments.ts for more details.
+                    return createNotEmittedStatement(node);
 
                 case SyntaxKind.ClassDeclaration:
                     // This is a class declaration with TypeScript syntax extensions.
@@ -337,6 +361,7 @@ namespace ts {
                     // - accessibility modifiers
                     // - the question mark (?) token for optional parameters
                     // - type annotations
+                    // - this parameters
                     return visitParameter(<ParameterDeclaration>node);
 
                 case SyntaxKind.ParenthesizedExpression:
@@ -348,6 +373,10 @@ namespace ts {
                 case SyntaxKind.AsExpression:
                     // TypeScript type assertions are removed, but their subtrees are preserved.
                     return visitAssertionExpression(<AssertionExpression>node);
+
+                case SyntaxKind.NonNullExpression:
+                    // TypeScript non-null expressions are removed, but their subtrees are preserved.
+                    return visitNonNullExpression(<NonNullExpression>node);
 
                 case SyntaxKind.EnumDeclaration:
                     // TypeScript enum declarations do not exist in ES6 and must be rewritten.
@@ -370,8 +399,8 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
-                    break;
+                    Debug.failBadSyntaxKind(node);
+                    return visitEachChild(node, visitor, context);
             }
         }
 
@@ -381,9 +410,6 @@ namespace ts {
          * @param node The node to visit.
          */
         function onBeforeVisitNode(node: Node) {
-            currentParent = currentNode;
-            currentNode = node;
-
             switch (node.kind) {
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.CaseBlock:
@@ -392,6 +418,26 @@ namespace ts {
                     currentScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
                     break;
             }
+        }
+
+        /**
+         * Tests whether we should emit a __decorate call for a class declaration.
+         */
+        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
+            if (node.decorators && node.decorators.length > 0) {
+                return true;
+            }
+
+            const constructor = getFirstConstructorWithBody(node);
+            if (constructor) {
+                for (const parameter of constructor.parameters) {
+                    if (parameter.decorators && parameter.decorators.length > 0) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         /**
@@ -405,9 +451,11 @@ namespace ts {
          *
          * @param node The node to transform.
          */
-        function visitClassDeclaration(node: ClassDeclaration): NodeArrayNode<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
+            const isDecoratedClass = shouldEmitDecorateCallForClass(node);
+            let decoratedClassAlias: Identifier;
 
             // emit name if
             // - node has a name
@@ -418,24 +466,27 @@ namespace ts {
                 name = getGeneratedNameForNode(node);
             }
 
-            let decoratedClassAlias: Identifier;
             const statements: Statement[] = [];
-            if (!node.decorators) {
+            if (!isDecoratedClass) {
                 //  ${modifiers} class ${name} ${heritageClauses} {
                 //      ${members}
                 //  }
-                addNode(statements,
-                    setOriginalNode(
-                        createClassDeclaration(
-                            visitNodes(node.modifiers, visitor, isModifier),
-                            name,
-                            visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                            transformClassMembers(node, hasExtendsClause),
-                            /*location*/ node
-                        ),
-                        node
-                    )
+                const classDeclaration = createClassDeclaration(
+                    visitNodes(node.modifiers, visitor, isModifier),
+                    name,
+                    visitNodes(node.heritageClauses, visitor, isHeritageClause),
+                    transformClassMembers(node, hasExtendsClause),
+                    /*location*/ node
                 );
+                setOriginalNode(classDeclaration, node);
+
+                // To better align with the old emitter, we should not emit a trailing source map
+                // entry if the class has static properties.
+                if (staticProperties.length > 0) {
+                    setNodeEmitFlags(classDeclaration, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(classDeclaration));
+                }
+
+                statements.push(classDeclaration);
             }
             else {
                 decoratedClassAlias = addClassDeclarationHeadWithDecorators(statements, node, name, hasExtendsClause);
@@ -446,29 +497,31 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            addNodes(statements, generateInitializedPropertyStatements(node, staticProperties, name));
+            if (staticProperties.length) {
+                addInitializedPropertyStatements(statements, node, staticProperties, getLocalName(node, /*noSourceMaps*/ true));
+            }
 
             // Write any decorators of the node.
-            addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ false));
-            addNodes(statements, generateClassElementDecorationStatements(node, /*isStatic*/ true));
-            addNode(statements, generateConstructorDecorationStatement(node, decoratedClassAlias));
+            addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
+            addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
+            addConstructorDecorationStatement(statements, node, decoratedClassAlias);
 
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
             // declaration or export default for the class.
             if (isNamespaceExport(node)) {
-                addNode(statements, createNamespaceExport(name, name));
+                addExportMemberAssignment(statements, node);
             }
-            else if (node.decorators) {
+            else if (isDecoratedClass) {
                 if (isDefaultExternalModuleExport(node)) {
-                    addNode(statements, createExportDefault(name));
+                    statements.push(createExportDefault(getLocalName(node)));
                 }
                 else if (isNamedExternalModuleExport(node)) {
-                    addNode(statements, createExternalModuleExport(name));
+                    statements.push(createExternalModuleExport(name));
                 }
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -566,6 +619,8 @@ namespace ts {
             //  ---------------------------------------------------------------------
             //
 
+            const location = moveRangePastDecorators(node);
+
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
             //  }
@@ -574,15 +629,19 @@ namespace ts {
                     name,
                     visitNodes(node.heritageClauses, visitor, isHeritageClause),
                     transformClassMembers(node, hasExtendsClause),
-                    /*location*/ node
+                    /*location*/ location
                 ),
                 node
             );
 
+            if (!name) {
+                name = getGeneratedNameForNode(node);
+            }
+
             // Record an alias to avoid class double-binding.
             let decoratedClassAlias: Identifier;
-            if (resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.DecoratedClassWithSelfReference) {
-                enableExpressionSubstitutionForDecoratedClasses();
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.DecoratedClassWithSelfReference) {
+                enableSubstitutionForDecoratedClasses();
                 decoratedClassAlias = createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? node.name.text : "default");
                 decoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAlias;
 
@@ -593,11 +652,9 @@ namespace ts {
                 addNode(statements,
                     createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList([
+                        createLetDeclarationList([
                             createVariableDeclaration(decoratedClassAlias)
-                        ],
-                        /*location*/ undefined,
-                        NodeFlags.Let)
+                        ])
                     )
                 );
 
@@ -605,21 +662,23 @@ namespace ts {
                 classExpression = createAssignment(
                     decoratedClassAlias,
                     classExpression,
-                    /*location*/ node);
+                    /*location*/ location);
             }
 
             //  let ${name} = ${classExpression};
             addNode(statements,
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            name,
-                            classExpression
-                        )
-                    ],
-                    /*location*/ undefined,
-                    NodeFlags.Let)
+                setOriginalNode(
+                    createVariableStatement(
+                        /*modifiers*/ undefined,
+                        createLetDeclarationList([
+                            createVariableDeclaration(
+                                getDeclarationName(node, /*allowComments*/ true),
+                                classExpression
+                            )
+                        ]),
+                        /*location*/ location
+                    ),
+                    /*original*/ node
                 )
             );
 
@@ -640,18 +699,9 @@ namespace ts {
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, heritageClauses !== undefined);
 
-            // emit name if
-            // - node has a name
-            // - node has static initializers
-            //
-            let name = node.name;
-            if (!name && staticProperties.length > 0) {
-                name = getGeneratedNameForNode(node);
-            }
-
             const classExpression = setOriginalNode(
                 createClassExpression(
-                    name,
+                    node.name,
                     heritageClauses,
                     members,
                     /*location*/ node
@@ -661,11 +711,14 @@ namespace ts {
 
             if (staticProperties.length > 0) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable();
-                hoistVariableDeclaration(temp);
-                addNode(expressions, createAssignment(temp, classExpression));
-                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp));
-                addNode(expressions, temp);
+                const temp = createTempVariable(hoistVariableDeclaration);
+
+                // To preserve the behavior of the old emitter, we explicitly indent
+                // the body of a class with static initializers.
+                setNodeEmitFlags(classExpression, NodeEmitFlags.Indented | getNodeEmitFlags(classExpression));
+                addNode(expressions, createAssignment(temp, classExpression), true);
+                addNodes(expressions, generateInitializedPropertyExpressions(node, staticProperties, temp), true);
+                addNode(expressions, temp, true);
                 return inlineExpressions(expressions);
             }
 
@@ -716,7 +769,7 @@ namespace ts {
                     createConstructor(
                         parameters,
                         body,
-                        /*location*/ constructor
+                        /*location*/ constructor || node
                     ),
                     constructor
                 )
@@ -733,7 +786,7 @@ namespace ts {
         function transformConstructorParameters(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
             return constructor
                 ? visitNodes(constructor.parameters, visitor, isParameter)
-                : hasExtendsClause ? [createRestParameter(createUniqueName("args"))] : [];
+                : hasExtendsClause ? [createRestParameter("args")] : [];
         }
 
         /**
@@ -746,19 +799,14 @@ namespace ts {
          * @param parameters The transformed parameters for the constructor.
          */
         function transformConstructorBody(node: ClassExpression | ClassDeclaration, constructor: ConstructorDeclaration, hasExtendsClause: boolean, parameters: ParameterDeclaration[]) {
-            let hasSuperCall = false;
             const statements: Statement[] = [];
+            let indexOfFirstStatement = 0;
 
             // The body of a constructor is a new lexical environment
             startLexicalEnvironment();
 
             if (constructor) {
-                const superCall = visitNode(findInitialSuperCall(constructor), visitor, isStatement);
-                if (superCall) {
-                    // Adds the existing super call as the first line of the constructor.
-                    addNode(statements, superCall);
-                    hasSuperCall = true;
-                }
+                indexOfFirstStatement = addPrologueDirectivesAndInitialSuperCall(constructor, statements);
 
                 // Add parameters with property assignments. Transforms this:
                 //
@@ -803,41 +851,53 @@ namespace ts {
             //  }
             //
             const properties = getInitializedProperties(node, /*isStatic*/ false);
-            addNodes(statements, generateInitializedPropertyStatements(node, properties, createThis()));
+            addInitializedPropertyStatements(statements, node, properties, createThis());
 
             if (constructor) {
                 // The class already had a constructor, so we should add the existing statements, skipping the initial super call.
-                addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, hasSuperCall ? 1 : 0));
+                addNodes(statements, visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatement));
             }
 
             // End the lexical environment.
             addNodes(statements, endLexicalEnvironment());
             return setMultiLine(
-                createBlock(statements, constructor ? constructor.body : undefined),
+                createBlock(
+                    createNodeArray(
+                        statements,
+                        /*location*/ constructor ? constructor.body.statements : node.members
+                    ),
+                    /*location*/ constructor ? constructor.body : undefined
+                ),
                 true
             );
         }
 
         /**
-         * Finds the initial super-call for a constructor.
+         * Adds super call and preceding prologue directives into the list of statements.
          *
          * @param ctor The constructor node.
+         * @returns index of the statement that follows super call
          */
-        function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
+        function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[]): number {
             if (ctor.body) {
                 const statements = ctor.body.statements;
-                const statement = firstOrUndefined(statements);
-                if (statement && statement.kind === SyntaxKind.ExpressionStatement) {
-                    const expression = (<ExpressionStatement>statement).expression;
-                    if (expression.kind === SyntaxKind.CallExpression) {
-                        if ((<CallExpression>expression).expression.kind === SyntaxKind.SuperKeyword) {
-                            return <ExpressionStatement>statement;
-                        }
-                    }
+                // add prologue directives to the list (if any)
+                const index = addPrologueDirectives(result, statements);
+                if (index === statements.length) {
+                    // list contains nothing but prologue directives (or empty) - exit
+                    return index;
                 }
+
+                const statement = statements[index];
+                if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                    result.push(visitNode(statement, visitor, isStatement));
+                    return index + 1;
+                }
+
+                return index;
             }
 
-            return undefined;
+            return 0;
         }
 
         /**
@@ -855,7 +915,7 @@ namespace ts {
          * @param parameter The parameter node.
          */
         function isParameterWithPropertyAssignment(parameter: ParameterDeclaration) {
-            return parameter.flags & NodeFlags.AccessibilityModifier
+            return hasModifier(parameter, ModifierFlags.AccessibilityModifier)
                 && isIdentifier(parameter.name);
         }
 
@@ -866,14 +926,24 @@ namespace ts {
          */
         function transformParameterWithPropertyAssignment(node: ParameterDeclaration) {
             Debug.assert(isIdentifier(node.name));
+            const name = node.name as Identifier;
+            const propertyName = getMutableClone(name);
+            setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoSourceMap);
 
-            const name = cloneNode(<Identifier>node.name);
+            const localName = getMutableClone(name);
+            setNodeEmitFlags(localName, NodeEmitFlags.NoComments);
+
             return startOnNewLine(
                 createStatement(
                     createAssignment(
-                        createPropertyAccess(createThis(), name),
-                        name
-                    )
+                        createPropertyAccess(
+                            createThis(),
+                            propertyName,
+                            /*location*/ node.name
+                        ),
+                        localName
+                    ),
+                    /*location*/ moveRangePos(node, -1)
                 )
             );
         }
@@ -914,7 +984,7 @@ namespace ts {
          */
         function isInitializedProperty(member: ClassElement, isStatic: boolean) {
             return member.kind === SyntaxKind.PropertyDeclaration
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0)
+                && isStatic === hasModifier(member, ModifierFlags.Static)
                 && (<PropertyDeclaration>member).initializer !== undefined;
         }
 
@@ -925,18 +995,13 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyStatements(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
-            const statements: Statement[] = [];
+        function addInitializedPropertyStatements(statements: Statement[], node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                statements.push(
-                    createStatement(
-                        transformInitializedProperty(node, property, receiver),
-                        /*location*/ property
-                    )
-                );
+                const statement = createStatement(transformInitializedProperty(node, property, receiver));
+                setSourceMapRange(statement, moveRangePastModifiers(property));
+                setCommentRange(statement, property);
+                statements.push(statement);
             }
-
-            return statements;
         }
 
         /**
@@ -949,7 +1014,10 @@ namespace ts {
         function generateInitializedPropertyExpressions(node: ClassExpression | ClassDeclaration, properties: PropertyDeclaration[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                expressions.push(transformInitializedProperty(node, property, receiver, /*location*/ property));
+                const expression = transformInitializedProperty(node, property, receiver);
+                setSourceMapRange(expression, moveRangePastModifiers(property));
+                setCommentRange(expression, property);
+                expressions.push(expression);
             }
 
             return expressions;
@@ -962,14 +1030,15 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, location?: TextRange) {
+        function transformInitializedProperty(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             const propertyName = visitPropertyNameOfClassElement(property);
             const initializer = visitNode(property.initializer, visitor, isExpression);
-            return createAssignment(
-                createMemberAccessForPropertyName(receiver, propertyName),
-                initializer,
-                location
-            );
+            const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
+            if (!isComputedPropertyName(propertyName)) {
+                setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
+            }
+
+            return createAssignment(memberAccess, initializer);
         }
 
         /**
@@ -1012,7 +1081,7 @@ namespace ts {
          */
         function isDecoratedClassElement(member: ClassElement, isStatic: boolean) {
             return nodeOrChildIsDecorated(member)
-                && isStatic === ((member.flags & NodeFlags.Static) !== 0);
+                && isStatic === hasModifier(member, ModifierFlags.Static);
         }
 
         /**
@@ -1175,8 +1244,8 @@ namespace ts {
          * @param isStatic A value indicating whether to generate statements for static or
          *                 instance members.
          */
-        function generateClassElementDecorationStatements(node: ClassDeclaration, isStatic: boolean) {
-            return map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement);
+        function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
+            addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement));
         }
 
         /**
@@ -1249,7 +1318,7 @@ namespace ts {
             //
 
             const prefix = getClassMemberPrefix(node, member);
-            const memberName = getExpressionForPropertyName(member);
+            const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ true);
             const descriptor = languageVersion > ScriptTarget.ES3
                 ? member.kind === SyntaxKind.PropertyDeclaration
                     // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
@@ -1261,12 +1330,16 @@ namespace ts {
                     : createNull()
                 : undefined;
 
-            return createDecorateHelper(
+            const helper = createDecorateHelper(
                 decoratorExpressions,
                 prefix,
                 memberName,
-                descriptor
+                descriptor,
+                moveRangePastDecorators(member)
             );
+
+            setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
+            return helper;
         }
 
         /**
@@ -1274,9 +1347,11 @@ namespace ts {
          *
          * @param node The class node.
          */
-        function generateConstructorDecorationStatement(node: ClassDeclaration, decoratedClassAlias: Identifier) {
+        function addConstructorDecorationStatement(statements: Statement[], node: ClassDeclaration, decoratedClassAlias: Identifier) {
             const expression = generateConstructorDecorationExpression(node, decoratedClassAlias);
-            return expression ? createStatement(expression) : undefined;
+            if (expression) {
+                statements.push(setOriginalNode(createStatement(expression), node));
+            }
         }
 
         /**
@@ -1299,20 +1374,44 @@ namespace ts {
             //
             // The emit for the class is:
             //
+            //   C = C_1 = __decorate([dec], C);
+            //
+            if (decoratedClassAlias) {
+                const expression = createAssignment(
+                    decoratedClassAlias,
+                    createDecorateHelper(
+                        decoratorExpressions,
+                        getDeclarationName(node)
+                    )
+                );
+
+                const result = createAssignment(getDeclarationName(node), expression, moveRangePastDecorators(node));
+                setNodeEmitFlags(result, NodeEmitFlags.NoComments);
+                return result;
+            }
+            // Emit the call to __decorate. Given the class:
+            //
+            //   @dec
+            //   export declare class C {
+            //   }
+            //
+            // The emit for the class is:
+            //
             //   C = __decorate([dec], C);
             //
+            else {
+                const result = createAssignment(
+                    getDeclarationName(node),
+                    createDecorateHelper(
+                        decoratorExpressions,
+                        getDeclarationName(node)
+                    ),
+                    moveRangePastDecorators(node)
+                );
 
-            const expression = createAssignment(
-                getDeclarationName(node),
-                createDecorateHelper(
-                    decoratorExpressions,
-                    getDeclarationName(node)
-                )
-            );
-
-            return decoratedClassAlias
-                ? createAssignment(decoratedClassAlias, expression)
-                : expression;
+                setNodeEmitFlags(result, NodeEmitFlags.NoComments);
+                return result;
+            }
         }
 
         /**
@@ -1335,7 +1434,9 @@ namespace ts {
             if (decorators) {
                 expressions = [];
                 for (const decorator of decorators) {
-                    expressions.push(createParamHelper(transformDecorator(decorator), parameterOffset));
+                    const helper = createParamHelper(transformDecorator(decorator), parameterOffset, /*location*/ decorator.expression);
+                    setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
+                    expressions.push(helper);
                 }
             }
 
@@ -1349,15 +1450,42 @@ namespace ts {
          * @param decoratorExpressions The destination array to which to add new decorator expressions.
          */
         function addTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+            if (USE_NEW_TYPE_METADATA_FORMAT) {
+                addNewTypeMetadata(node, decoratorExpressions);
+            }
+            else {
+                addOldTypeMetadata(node, decoratorExpressions);
+            }
+        }
+
+        function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node), /*defer*/ true));
+                    decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node), /*defer*/ true));
+                    decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node), /*defer*/ true));
+                    decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node)));
+                }
+            }
+        }
+
+        function addNewTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
+            if (compilerOptions.emitDecoratorMetadata) {
+                let properties: ObjectLiteralElement[];
+                if (shouldAddTypeMetadata(node)) {
+                    (properties || (properties = [])).push(createPropertyAssignment("type", createArrowFunction([], serializeTypeOfNode(node))));
+                }
+                if (shouldAddParamTypesMetadata(node)) {
+                    (properties || (properties = [])).push(createPropertyAssignment("paramTypes", createArrowFunction([], serializeParameterTypesOfNode(node))));
+                }
+                if (shouldAddReturnTypeMetadata(node)) {
+                    (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction([], serializeReturnTypeOfNode(node))));
+                }
+                if (properties) {
+                    decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
@@ -1478,11 +1606,11 @@ namespace ts {
          * @param node The node that should have its return type serialized.
          */
         function serializeReturnTypeOfNode(node: Node): Expression {
-            if (isFunctionLike(node)) {
+            if (isFunctionLike(node) && node.type) {
                 return serializeTypeNode(node.type);
             }
 
-            return undefined;
+            return createVoidZero();
         }
 
         /**
@@ -1528,7 +1656,7 @@ namespace ts {
                     return createIdentifier("Boolean");
 
                 case SyntaxKind.StringKeyword:
-                case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                     return createIdentifier("String");
 
                 case SyntaxKind.NumberKeyword:
@@ -1547,10 +1675,11 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.ThisType:
                     break;
 
                 default:
-                    Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                    Debug.failBadSyntaxKind(node);
                     break;
             }
 
@@ -1564,13 +1693,10 @@ namespace ts {
          * @param node The type reference node.
          */
         function serializeTypeReferenceNode(node: TypeReferenceNode) {
-            // Clone the type name and parent it to a location outside of the current declaration.
-            const typeName = cloneEntityName(node.typeName, currentScope);
-            switch (resolver.getTypeReferenceSerializationKind(typeName)) {
+            switch (resolver.getTypeReferenceSerializationKind(node.typeName, currentScope)) {
                 case TypeReferenceSerializationKind.Unknown:
-                    const serialized = serializeEntityNameAsExpression(typeName, /*useFallback*/ true);
-                    const temp = createTempVariable();
-                    hoistVariableDeclaration(temp);
+                    const serialized = serializeEntityNameAsExpression(node.typeName, /*useFallback*/ true);
+                    const temp = createTempVariable(hoistVariableDeclaration);
                     return createLogicalOr(
                         createLogicalAnd(
                             createStrictEquality(
@@ -1585,7 +1711,7 @@ namespace ts {
                     );
 
                 case TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue:
-                    return serializeEntityNameAsExpression(typeName, /*useFallback*/ false);
+                    return serializeEntityNameAsExpression(node.typeName, /*useFallback*/ false);
 
                 case TypeReferenceSerializationKind.VoidType:
                     return createVoidZero();
@@ -1626,17 +1752,20 @@ namespace ts {
         function serializeEntityNameAsExpression(node: EntityName, useFallback: boolean): Expression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
+                    const name = getMutableClone(<Identifier>node);
+                    name.original = undefined;
+                    name.parent = currentScope;
                     if (useFallback) {
                         return createLogicalAnd(
                             createStrictInequality(
-                                createTypeOf(<Identifier>node),
+                                createTypeOf(name),
                                 createLiteral("undefined")
                             ),
-                            <Identifier>node
+                            name
                         );
                     }
 
-                    return <Identifier>node;
+                    return name;
 
                 case SyntaxKind.QualifiedName:
                     return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
@@ -1656,8 +1785,7 @@ namespace ts {
                 left = serializeEntityNameAsExpression(node.left, useFallback);
             }
             else if (useFallback) {
-                const temp = createTempVariable();
-                hoistVariableDeclaration(temp);
+                const temp = createTempVariable(hoistVariableDeclaration);
                 left = createLogicalAnd(
                     createAssignment(
                         temp,
@@ -1694,10 +1822,12 @@ namespace ts {
          *
          * @param member The member whose name should be converted into an expression.
          */
-        function getExpressionForPropertyName(member: ClassElement | EnumMember): Expression {
+        function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return getGeneratedNameForNode(name);
+                return generateNameForComputedPropertyName
+                    ? getGeneratedNameForNode(name)
+                    : (<ComputedPropertyName>name).expression;
             }
             else if (isIdentifier(name)) {
                 return createLiteral(name.text);
@@ -1730,10 +1860,7 @@ namespace ts {
                 );
             }
             else {
-                return setOriginalNode(
-                    cloneNode(name),
-                    name
-                );
+                return name;
             }
         }
 
@@ -1776,73 +1903,118 @@ namespace ts {
         }
 
         /**
+         * Determines whether to emit a function-like declaration. We should not emit the
+         * declaration if it does not have a body.
+         *
+         * @param node The declaration node.
+         */
+        function shouldEmitFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+            return !nodeIsMissing(node.body);
+        }
+
+        /**
          * Visits a method declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
          * - The node is an overload
-         * - The node is marked as abstract
-         * - The node is marked as async
+         * - The node is marked as abstract, async, public, private, protected, or readonly
          * - The node has both a decorator and a computed property name
          *
          * @param node The method node.
          */
         function visitMethodDeclaration(node: MethodDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
             }
 
-            return createMethod(
+            const method = createMethod(
                 visitNodes(node.modifiers, visitor, isModifier),
+                node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                node
+                /*location*/ node
             );
+
+            // While we emit the source map for the node after skipping decorators and modifiers,
+            // we need to emit the comments for the original range.
+            setCommentRange(method, node);
+            setSourceMapRange(method, moveRangePastDecorators(node));
+            setOriginalNode(method, node);
+
+            return method;
+        }
+
+        /**
+         * Determines whether to emit an accessor declaration. We should not emit the
+         * declaration if it does not have a body and is abstract.
+         *
+         * @param node The declaration node.
+         */
+        function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
+            return !(nodeIsMissing(node.body) && hasModifier(node, ModifierFlags.Abstract));
         }
 
         /**
          * Visits a get accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract
+         * - The node is marked as abstract, public, private, or protected
          * - The node has both a decorator and a computed property name
          *
          * @param node The get accessor node.
          */
         function visitGetAccessor(node: GetAccessorDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
 
-            return createGetAccessor(
+            const accessor = createGetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitEachChild(node.body, visitor, context),
-                node
+                visitNodes(node.parameters, visitor, isParameter),
+                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
+                /*location*/ node
             );
+
+            // While we emit the source map for the node after skipping decorators and modifiers,
+            // we need to emit the comments for the original range.
+            setCommentRange(accessor, node);
+            setSourceMapRange(accessor, moveRangePastDecorators(node));
+            setOriginalNode(accessor, node);
+
+            return accessor;
         }
 
         /**
          * Visits a set accessor declaration of a class.
          *
          * This function will be called when one of the following conditions are met:
-         * - The node is marked as abstract
+         * - The node is marked as abstract, public, private, or protected
          * - The node has both a decorator and a computed property name
          *
          * @param node The set accessor node.
          */
         function visitSetAccessor(node: SetAccessorDeclaration) {
-            if (shouldElideFunctionLikeDeclaration(node)) {
+            if (!shouldEmitAccessorDeclaration(node)) {
                 return undefined;
             }
 
-            return createSetAccessor(
+            const accessor = createSetAccessor(
                 visitNodes(node.modifiers, visitor, isModifier),
                 visitPropertyNameOfClassElement(node),
-                visitNode(firstOrUndefined(node.parameters), visitor, isParameter),
-                visitEachChild(node.body, visitor, context),
-                node
+                visitNodes(node.parameters, visitor, isParameter),
+                node.body ? visitEachChild(node.body, visitor, context) : createBlock([]),
+                /*location*/ node
             );
+
+            // While we emit the source map for the node after skipping decorators and modifiers,
+            // we need to emit the comments for the original range.
+            setCommentRange(accessor, node);
+            setSourceMapRange(accessor, moveRangePastDecorators(node));
+            setOriginalNode(accessor, node);
+
+            return accessor;
         }
 
         /**
@@ -1855,9 +2027,9 @@ namespace ts {
          *
          * @param node The function node.
          */
-        function visitFunctionDeclaration(node: FunctionDeclaration): OneOrMany<Statement> {
-            if (shouldElideFunctionLikeDeclaration(node)) {
-                return undefined;
+        function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
+            if (!shouldEmitFunctionLikeDeclaration(node)) {
+                return createNotEmittedStatement(node);
             }
 
             const func = createFunctionDeclaration(
@@ -1866,14 +2038,14 @@ namespace ts {
                 node.name,
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                node
+                /*location*/ node
             );
+            setOriginalNode(func, node);
 
             if (isNamespaceExport(node)) {
-                return createNodeArrayNode([
-                    func,
-                    createNamespaceExport(getSynthesizedClone(node.name), getSynthesizedClone(node.name))
-                ]);
+                const statements: Statement[] = [func];
+                addExportMemberAssignment(statements, node);
+                return statements;
             }
 
             return func;
@@ -1888,24 +2060,21 @@ namespace ts {
          * @param node The function expression node.
          */
         function visitFunctionExpression(node: FunctionExpression) {
-            return createFunctionExpression(
+            if (nodeIsMissing(node.body)) {
+                return createOmittedExpression();
+            }
+
+            const func = createFunctionExpression(
                 node.asteriskToken,
                 node.name,
                 visitNodes(node.parameters, visitor, isParameter),
                 transformFunctionBody(node),
-                node
+                /*location*/ node
             );
-        }
 
-        /**
-         * Determines whether a function-like declaration should be elided. A declaration should
-         * be elided if it is an overload, is abstract, or is an ambient declaration.
-         *
-         * @param node The declaration node.
-         */
-        function shouldElideFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
-            return node.body === undefined
-                || node.flags & (NodeFlags.Abstract | NodeFlags.Ambient);
+            setOriginalNode(func, node);
+
+            return func;
         }
 
         /**
@@ -1914,11 +2083,15 @@ namespace ts {
          * - The node is marked async
          */
         function visitArrowFunction(node: ArrowFunction) {
-            return createArrowFunction(
+            const func = createArrowFunction(
                 visitNodes(node.parameters, visitor, isParameter),
                 transformConciseBody(node),
-                node
+                /*location*/ node
             );
+
+            setOriginalNode(func, node);
+
+            return func;
         }
 
         function transformFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
@@ -1968,7 +2141,7 @@ namespace ts {
         }
 
         function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody | FunctionBody {
-            const promiseConstructor = getEntityNameFromTypeNode(node.type);
+            const promiseConstructor = languageVersion < ScriptTarget.ES6 ? getEntityNameFromTypeNode(node.type) : undefined;
             const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
             const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
 
@@ -1977,77 +2150,12 @@ namespace ts {
             // `this` and `arguments` objects to `__awaiter`. The generator function
             // passed to `__awaiter` is executed inside of the callback to the
             // promise constructor.
-            //
-            // The emit for an async arrow without a lexical `arguments` binding might be:
-            //
-            //  // input
-            //  let a = async (b) => { await b; }
-            //
-            //  // output
-            //  let a = (b) => __awaiter(this, void 0, void 0, function* () {
-            //      yield b;
-            //  });
-            //
-            // The emit for an async arrow with a lexical `arguments` binding might be:
-            //
-            //  // input
-            //  let a = async (b) => { await arguments[0]; }
-            //
-            //  // output
-            //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
-            //      yield arguments[0];
-            //  });
-            //
-            // The emit for an async function expression without a lexical `arguments` binding
-            // might be:
-            //
-            //  // input
-            //  let a = async function (b) {
-            //      await b;
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, void 0, void 0, function* () {
-            //          yield b;
-            //      });
-            //  }
-            //
-            // The emit for an async function expression with a lexical `arguments` binding
-            // might be:
-            //
-            //  // input
-            //  let a = async function (b) {
-            //      await arguments[0];
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, arguments, void 0, function* (_arguments) {
-            //          yield _arguments[0];
-            //      });
-            //  }
-            //
-            // The emit for an async function expression with a lexical `arguments` binding
-            // and a return type annotation might be:
-            //
-            //  // input
-            //  let a = async function (b): MyPromise<any> {
-            //      await arguments[0];
-            //  }
-            //
-            //  // output
-            //  let a = function (b) {
-            //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
-            //          yield _arguments[0];
-            //      });
-            //  }
-            //
+
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
 
-                addNode(statements,
+                statements.push(
                     createReturn(
                         createAwaiterHelper(
                             hasLexicalArguments,
@@ -2057,17 +2165,17 @@ namespace ts {
                     )
                 );
 
-                const block = createBlock(statements, /*location*/ node.body);
+                const block = createBlock(statements, /*location*/ node.body, /*multiLine*/ true);
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
                 if (languageVersion >= ScriptTarget.ES6) {
                     if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                        enableExpressionSubstitutionForAsyncMethodsWithSuper();
+                        enableSubstitutionForAsyncMethodsWithSuper();
                         setNodeEmitFlags(block, NodeEmitFlags.EmitAdvancedSuperHelper);
                     }
                     else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                        enableExpressionSubstitutionForAsyncMethodsWithSuper();
+                        enableSubstitutionForAsyncMethodsWithSuper();
                         setNodeEmitFlags(block, NodeEmitFlags.EmitSuperHelper);
                     }
                 }
@@ -2088,15 +2196,31 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node has an accessibility modifier.
+         * - The node has a questionToken.
+         * - The node's kind is ThisKeyword.
          *
          * @param node The parameter declaration node.
          */
         function visitParameter(node: ParameterDeclaration) {
-            Debug.assert(!node.dotDotDotToken);
-            return createParameter(
+            if (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword) {
+                return undefined;
+            }
+
+            const parameter = createParameterWithDotDotDotToken(
+                node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
-                visitNode(node.initializer, visitor, isExpression)
+                visitNode(node.initializer, visitor, isExpression),
+                /*location*/ moveRangePastModifiers(node)
             );
+
+            // While we emit the source map for the node after skipping decorators and modifiers,
+            // we need to emit the comments for the original range.
+            setCommentRange(parameter, node);
+            setSourceMapRange(parameter, moveRangePastModifiers(node));
+            setNodeEmitFlags(parameter.name, NodeEmitFlags.NoTrailingSourceMap);
+            setOriginalNode(parameter, node);
+
+            return parameter;
         }
 
         /**
@@ -2105,181 +2229,44 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is exported from a TypeScript namespace.
          */
-        function visitVariableStatement(node: VariableStatement) {
-            Debug.assert(isNamespaceExport(node));
+        function visitVariableStatement(node: VariableStatement): Statement {
+            if (isNamespaceExport(node)) {
+                const variables = getInitializedVariables(node.declarationList);
+                if (variables.length === 0) {
+                    // elide statement if there are no initialized variables.
+                    return undefined;
+                }
 
-            const variables = getInitializedVariables(node.declarationList);
-            if (variables.length === 0) {
-                // elide statement if there are no initialized variables.
-                return undefined;
+                return createStatement(
+                    inlineExpressions(
+                        map(variables, transformInitializedVariable)
+                    ),
+                    /*location*/ node
+                );
             }
-
-            return createStatement(
-                inlineExpressions(
-                    map(variables, transformInitializedVariable)
-                ),
-                /*location*/ node
-            );
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             const name = node.name;
             if (isBindingPattern(name)) {
                 return flattenVariableDestructuringToExpression(
+                    context,
                     node,
                     hoistVariableDeclaration,
-                    getNamespaceMemberName,
+                    getNamespaceMemberNameWithSourceMapsAndWithoutComments,
                     visitor
                 );
             }
             else {
                 return createAssignment(
-                    getNamespaceMemberName(name),
-                    visitNode(node.initializer, visitor, isExpression)
+                    getNamespaceMemberNameWithSourceMapsAndWithoutComments(name),
+                    visitNode(node.initializer, visitor, isExpression),
+                    /*location*/ node
                 );
             }
-        }
-
-        /**
-         * Visits an enum declaration.
-         *
-         * This function will be called any time a TypeScript enum is encountered.
-         *
-         * @param node The enum declaration node.
-         */
-        function visitEnumDeclaration(node: EnumDeclaration) {
-            if (shouldElideEnumDeclaration(node)) {
-                return undefined;
-            }
-
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const statements: Statement[] = [];
-
-            let location: TextRange = node;
-            if (!isExported(node) || (isExternalModuleExport(node) && isFirstDeclarationOfKind(node, SyntaxKind.EnumDeclaration))) {
-                // Emit a VariableStatement if the enum is not exported, or is the first enum
-                // with the same name exported from an external module.
-                addNode(statements,
-                    createVariableStatement(
-                        visitNodes(node.modifiers, visitor, isModifier),
-                        createVariableDeclarationList([
-                            createVariableDeclaration(node.name)
-                        ]),
-                        location
-                    )
-                );
-                location = undefined;
-            }
-
-            const name = isNamespaceExport(node)
-                ? getNamespaceMemberName(node.name)
-                : getSynthesizedClone(node.name);
-
-            currentNamespaceLocalName = getGeneratedNameForNode(node);
-            addNode(statements,
-                 createStatement(
-                     createCall(
-                        createParen(
-                            createFunctionExpression(
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                [createParameter(currentNamespaceLocalName)],
-                                transformEnumBody(node)
-                            )
-                        ),
-                        [createLogicalOr(
-                            name,
-                            createAssignment(
-                                name,
-                                createObjectLiteral()
-                            )
-                        )]
-                     ),
-                    location
-                )
-            );
-
-            if (isNamespaceExport(node)) {
-                addNode(statements,
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(node.name, name)
-                        ]),
-                        location
-                    )
-                );
-            }
-
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
-        }
-
-        /**
-         * Transforms the body of an enum declaration.
-         *
-         * @param node The enum declaration node.
-         */
-        function transformEnumBody(node: EnumDeclaration): Block {
-            const statements: Statement[] = [];
-            startLexicalEnvironment();
-            addNodes(statements, map(node.members, transformEnumMember));
-            addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements);
-        }
-
-        /**
-         * Transforms an enum member into a statement.
-         *
-         * @param member The enum member node.
-         */
-        function transformEnumMember(member: EnumMember): Statement {
-            const name = getExpressionForPropertyName(member);
-            return createStatement(
-                createAssignment(
-                    createElementAccess(
-                        currentNamespaceLocalName,
-                        createAssignment(
-                            createElementAccess(
-                                currentNamespaceLocalName,
-                                name
-                            ),
-                            transformEnumMemberDeclarationValue(member)
-                        )
-                    ),
-                    name
-                ),
-                member
-            );
-        }
-
-        /**
-         * Transforms the value of an enum member.
-         *
-         * @param member The enum member node.
-         */
-        function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-            const value = resolver.getConstantValue(member);
-            if (value !== undefined) {
-                return createLiteral(value);
-            }
-            else if (member.initializer) {
-                return visitNode(member.initializer, visitor, isExpression);
-            }
-            else {
-                return createVoidZero();
-            }
-        }
-
-        /**
-         * Determines whether to elide an enum declaration.
-         *
-         * @param node The enum declaration node.
-         */
-        function shouldElideEnumDeclaration(node: EnumDeclaration) {
-            return isConst(node)
-                && !compilerOptions.preserveConstEnums
-                && !compilerOptions.isolatedModules;
         }
 
         /**
@@ -2306,50 +2293,276 @@ namespace ts {
          * @param node The parenthesized expression node.
          */
         function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-            // Make sure we consider all nested cast expressions, e.g.:
-            // (<any><number><any>-A).x;
-            const expression = visitNode(node.expression, visitor, isExpression);
-            if (currentParent.kind !== SyntaxKind.ArrowFunction) {
-                // We have an expression of the form: (<Type>SubExpr)
-                // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
-                // Omitting the parentheses, however, could cause change in the semantics of the generated
-                // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
-                //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
-                //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
-                //      new (<any>A()) should be emitted as new (A()) and not new A()
-                //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                if (expression.kind !== SyntaxKind.PrefixUnaryExpression &&
-                    expression.kind !== SyntaxKind.VoidExpression &&
-                    expression.kind !== SyntaxKind.TypeOfExpression &&
-                    expression.kind !== SyntaxKind.DeleteExpression &&
-                    expression.kind !== SyntaxKind.PostfixUnaryExpression &&
-                    expression.kind !== SyntaxKind.NewExpression &&
-                    !(expression.kind === SyntaxKind.CallExpression && currentParent.kind === SyntaxKind.NewExpression) &&
-                    !(expression.kind === SyntaxKind.FunctionExpression && currentParent.kind === SyntaxKind.CallExpression) &&
-                    !(expression.kind === SyntaxKind.NumericLiteral && currentParent.kind === SyntaxKind.PropertyAccessExpression)) {
-                    return trackChildOfNotEmittedNode(node, expression, node.expression);
-                }
+            const innerExpression = skipOuterExpressions(node.expression, ~OuterExpressionKinds.Assertions);
+            if (isAssertionExpression(innerExpression)) {
+                // Make sure we consider all nested cast expressions, e.g.:
+                // (<any><number><any>-A).x;
+                const expression = visitNode(node.expression, visitor, isExpression);
+
+                // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
+                // is really not desirable. We would like to emit the subexpression as-is. Omitting
+                // the parentheses, however, could cause change in the semantics of the generated
+                // code if the casted expression has a lower precedence than the rest of the
+                // expression.
+                //
+                // Due to the auto-parenthesization rules used by the visitor and factory functions
+                // we can safely elide the parentheses here, as a new synthetic
+                // ParenthesizedExpression will be inserted if we remove parentheses too
+                // aggressively.
+                //
+                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
+                // preserve the position information of the original expression.
+                return createPartiallyEmittedExpression(expression, node);
             }
 
-            return setOriginalNode(
-                createParen(expression, node),
-                node
-            );
+            return visitEachChild(node, visitor, context);
         }
 
         function visitAssertionExpression(node: AssertionExpression): Expression {
-            const expression = visitNode((<TypeAssertion | AsExpression>node).expression, visitor, isExpression);
-            return trackChildOfNotEmittedNode(node, expression, node.expression);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return createPartiallyEmittedExpression(expression, node);
         }
 
-        function trackChildOfNotEmittedNode<T extends Node>(parent: Node, child: T, original: T) {
-            if (!child.parent && !child.original) {
-                child = cloneNode(child, child, child.flags, child.parent, original);
+        function visitNonNullExpression(node: NonNullExpression): Expression {
+            const expression = visitNode(node.expression, visitor, isLeftHandSideExpression);
+            return createPartiallyEmittedExpression(expression, node);
+        }
+
+        /**
+         * Determines whether to emit an enum declaration.
+         *
+         * @param node The enum declaration node.
+         */
+        function shouldEmitEnumDeclaration(node: EnumDeclaration) {
+            return !isConst(node)
+                || compilerOptions.preserveConstEnums
+                || compilerOptions.isolatedModules;
+        }
+
+        function shouldEmitVarForEnumDeclaration(node: EnumDeclaration | ModuleDeclaration) {
+            return !hasModifier(node, ModifierFlags.Export)
+                || (isES6ExportedDeclaration(node) && isFirstDeclarationOfKind(node, node.kind));
+        }
+
+        /*
+         * Adds a trailing VariableStatement for an enum or module declaration.
+         */
+        function addVarForEnumExportedFromNamespace(statements: Statement[], node: EnumDeclaration | ModuleDeclaration) {
+            statements.push(
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    [createVariableDeclaration(
+                        getDeclarationName(node),
+                        getExportName(node)
+                    )],
+                    /*location*/ node
+                )
+            );
+        }
+
+        /**
+         * Visits an enum declaration.
+         *
+         * This function will be called any time a TypeScript enum is encountered.
+         *
+         * @param node The enum declaration node.
+         */
+        function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
+            if (!shouldEmitEnumDeclaration(node)) {
+                return undefined;
             }
 
-            setNodeEmitFlags(parent, NodeEmitFlags.IsNotEmittedNode);
-            setNodeEmitFlags(child, NodeEmitFlags.EmitCommentsOfNotEmittedParent);
-            return child;
+            const statements: Statement[] = [];
+            if (shouldEmitVarForEnumDeclaration(node)) {
+                addVarForEnumOrModuleDeclaration(statements, node);
+            }
+
+            const innerName = getNamespaceContainerName(node);
+            const paramName = getNamespaceParameterName(node);
+            const exportName = getExportName(node);
+
+            //  (function (x) {
+            //      x[x["y"] = 0] = "y";
+            //      ...
+            //  })(x || (x = {}));
+            statements.push(
+                setNodeEmitFlags(
+                    setOriginalNode(
+                        createStatement(
+                            createCall(
+                                createFunctionExpression(
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    [createParameter(paramName)],
+                                    transformEnumBody(node, innerName)
+                                ),
+                                [createLogicalOr(
+                                    exportName,
+                                    createAssignment(
+                                        exportName,
+                                        createObjectLiteral()
+                                    )
+                                )]
+                            ),
+                            /*location*/ node
+                        ),
+                        /*original*/ node
+                    ),
+                    NodeEmitFlags.AdviseOnEmitNode
+                )
+            );
+
+            if (isNamespaceExport(node)) {
+                addVarForEnumExportedFromNamespace(statements, node);
+            }
+
+            return statements;
+        }
+
+        /**
+         * Transforms the body of an enum declaration.
+         *
+         * @param node The enum declaration node.
+         */
+        function transformEnumBody(node: EnumDeclaration, localName: Identifier): Block {
+            const savedCurrentNamespaceLocalName = currentNamespaceContainerName;
+            currentNamespaceContainerName = localName;
+
+            const statements: Statement[] = [];
+            startLexicalEnvironment();
+            addNodes(statements, map(node.members, transformEnumMember));
+            addNodes(statements, endLexicalEnvironment());
+
+            currentNamespaceContainerName = savedCurrentNamespaceLocalName;
+            return createBlock(
+                createNodeArray(statements, /*location*/ node.members),
+                /*location*/ undefined,
+                /*multiLine*/ true
+            );
+        }
+
+        /**
+         * Transforms an enum member into a statement.
+         *
+         * @param member The enum member node.
+         */
+        function transformEnumMember(member: EnumMember): Statement {
+            // enums don't support computed properties
+            // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
+            // old emitter always generate 'expression' part of the name as-is.
+            const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
+            return createStatement(
+                createAssignment(
+                    createElementAccess(
+                        currentNamespaceContainerName,
+                        createAssignment(
+                            createElementAccess(
+                                currentNamespaceContainerName,
+                                name
+                            ),
+                            transformEnumMemberDeclarationValue(member)
+                        )
+                    ),
+                    name,
+                    /*location*/ member
+                ),
+                /*location*/ member
+            );
+        }
+
+        /**
+         * Transforms the value of an enum member.
+         *
+         * @param member The enum member node.
+         */
+        function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
+            const value = resolver.getConstantValue(member);
+            if (value !== undefined) {
+                return createLiteral(value);
+            }
+            else {
+                enableSubstitutionForNonQualifiedEnumMembers();
+                if (member.initializer) {
+                    return visitNode(member.initializer, visitor, isExpression);
+                }
+                else {
+                    return createVoidZero();
+                }
+            }
+        }
+
+        /**
+         * Determines whether to elide a module declaration.
+         *
+         * @param node The module declaration node.
+         */
+        function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
+            return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+        }
+
+        function isModuleMergedWithES6Class(node: ModuleDeclaration) {
+            return languageVersion === ScriptTarget.ES6
+                && isMergedWithClass(node);
+        }
+
+        function isES6ExportedDeclaration(node: Node) {
+            return isExternalModuleExport(node)
+                && moduleKind === ModuleKind.ES6;
+        }
+
+        function shouldEmitVarForModuleDeclaration(node: ModuleDeclaration) {
+            return !isModuleMergedWithES6Class(node)
+                && (!isES6ExportedDeclaration(node)
+                    || isFirstDeclarationOfKind(node, node.kind));
+        }
+
+        /**
+         * Adds a leading VariableStatement for a enum or module declaration.
+         */
+        function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
+            // Emit a variable statement for the module.
+            const statement = createVariableStatement(
+                isES6ExportedDeclaration(node)
+                    ? visitNodes(node.modifiers, visitor, isModifier)
+                    : undefined,
+                [
+                    createVariableDeclaration(
+                        getDeclarationName(node, /*allowComments*/ false, /*allowSourceMaps*/ true),
+                        /*initializer*/ undefined
+                    )
+                ]
+            );
+
+            // Adjust the source map emit to match the old emitter.
+            if (node.kind === SyntaxKind.EnumDeclaration) {
+                setSourceMapRange(statement.declarationList, node);
+            }
+            else {
+                setSourceMapRange(statement, node);
+            }
+
+            // Trailing comments for module declaration should be emitted after the function closure
+            // instead of the variable statement:
+            //
+            //     /** Module comment*/
+            //     module m1 {
+            //         function foo4Export() {
+            //         }
+            //     } // trailing comment module
+            //
+            // Should emit:
+            //
+            //     /** Module comment*/
+            //     var m1;
+            //     (function (m1) {
+            //         function foo4Export() {
+            //         }
+            //     })(m1 || (m1 = {})); // trailing comment module
+            //
+            setCommentRange(statement, node);
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTrailingComments);
+            setOriginalNode(statement, /*original*/ node);
+            statements.push(statement);
         }
 
         /**
@@ -2359,52 +2572,47 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function visitModuleDeclaration(node: ModuleDeclaration) {
-            if (shouldElideModuleDeclaration(node)) {
-                return undefined;
+        function visitModuleDeclaration(node: ModuleDeclaration): VisitResult<Statement> {
+            if (!shouldEmitModuleDeclaration(node)) {
+                return createNotEmittedStatement(node);
             }
 
-            Debug.assert(isIdentifier(node.name));
+            Debug.assert(isIdentifier(node.name), "TypeScript module should have an Identifier name.");
+            enableSubstitutionForNamespaceExports();
 
-            enableExpressionSubstitutionForNamespaceExports();
-
-            const savedCurrentNamespaceLocalName = currentNamespaceLocalName;
-            const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const statements: Statement[] = [];
 
-            let location = node;
-            if (!isModuleMergedWithClass(node)) {
-                // var x;
-                statements.push(
-                    createVariableStatement(
-                        modifiers,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(<Identifier>node.name)
-                        ]),
-                        location
+            if (shouldEmitVarForModuleDeclaration(node)) {
+                addVarForEnumOrModuleDeclaration(statements, node);
+            }
+
+            // `parameterName` is the declaration name used inside of the namespace.
+            const parameterName = getNamespaceParameterName(node);
+
+            // `containerName` is the expression used inside of the namespace for exports.
+            const containerName = getNamespaceContainerName(node);
+
+            // `exportName` is the expression used within this node's container for any exported references.
+            const exportName = getExportName(node);
+
+            //  x || (x = {})
+            //  exports.x || (exports.x = {})
+            let moduleArg =
+                createLogicalOr(
+                    exportName,
+                    createAssignment(
+                        exportName,
+                        createObjectLiteral()
                     )
                 );
-                location = undefined;
+
+            if (hasModifier(node, ModifierFlags.Export) && !isES6ExportedDeclaration(node)) {
+                // `localName` is the expression used within this node's containing scope for any local references.
+                const localName = getLocalName(node);
+
+                //  x = (exports.x || (exports.x = {}))
+                moduleArg = createAssignment(localName, moduleArg);
             }
-
-            const name = isNamespaceExport(node)
-                ? getNamespaceMemberName(node.name)
-                : getSynthesizedClone(node.name);
-
-            let moduleParam: Expression = createLogicalOr(
-                name,
-                createAssignment(
-                    name,
-                    createObjectLiteral([])
-                )
-            );
-
-            if (isNamespaceExport(node)) {
-                moduleParam = createAssignment(cloneNode(node.name), moduleParam);
-            }
-
-            currentNamespaceLocalName = getGeneratedNameForNode(node);
-            currentNamespace = node;
 
             //  (function (x_1) {
             //      x_1.y = ...;
@@ -2414,25 +2622,23 @@ namespace ts {
                     setOriginalNode(
                         createStatement(
                             createCall(
-                                createParen(
-                                    createFunctionExpression(
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        [createParameter(currentNamespaceLocalName)],
-                                        transformModuleBody(node)
-                                    )
+                                createFunctionExpression(
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    [createParameter(parameterName)],
+                                    transformModuleBody(node, containerName)
                                 ),
-                                [moduleParam]
-                            )
+                                [moduleArg]
+                            ),
+                            /*location*/ node
                         ),
-                        node
+                        /*original*/ node
                     ),
                     NodeEmitFlags.AdviseOnEmitNode
                 )
             );
 
-            currentNamespaceLocalName = savedCurrentNamespaceLocalName;
-            return createNodeArrayNode(statements);
+            return statements;
         }
 
         /**
@@ -2440,37 +2646,71 @@ namespace ts {
          *
          * @param node The module declaration node.
          */
-        function transformModuleBody(node: ModuleDeclaration): Block {
+        function transformModuleBody(node: ModuleDeclaration, namespaceLocalName: Identifier): Block {
+            const savedCurrentNamespaceContainerName = currentNamespaceContainerName;
+            const savedCurrentNamespace = currentNamespace;
+            currentNamespaceContainerName = namespaceLocalName;
+            currentNamespace = node;
+
             const statements: Statement[] = [];
             startLexicalEnvironment();
+
+            let statementsLocation: TextRange;
+            let blockLocation: TextRange;
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 addNodes(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement));
+                statementsLocation = (<ModuleBlock>body).statements;
+                blockLocation = body;
             }
             else {
                 addNode(statements, visitModuleDeclaration(<ModuleDeclaration>body));
+                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
+                statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
             addNodes(statements, endLexicalEnvironment());
-            return createBlock(statements);
+
+            currentNamespaceContainerName = savedCurrentNamespaceContainerName;
+            currentNamespace = savedCurrentNamespace;
+            const block = createBlock(
+                createNodeArray(
+                    statements,
+                    /*location*/ statementsLocation
+                ),
+                /*location*/ blockLocation,
+                /*multiLine*/ true
+            );
+
+            // TODO(rbuckton): This should be removed once source maps are aligned with the old
+            //                 emitter and new baselines are taken. This exists solely to
+            //                 align with the old emitter.
+            if (body.kind === SyntaxKind.ModuleBlock) {
+                setNodeEmitFlags(block, NodeEmitFlags.SourceMapEmitOpenBraceAsToken);
+            }
+
+            return block;
+        }
+
+        function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration {
+            if (moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
+                const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
+                return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
+            }
         }
 
         /**
-         * Determines whether to elide a module declaration.
+         * Determines whether to emit an import equals declaration.
          *
-         * @param node The module declaration node.
+         * @param node The import equals declaration node.
          */
-        function shouldElideModuleDeclaration(node: ModuleDeclaration) {
-            return !isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
-        }
-
-        /**
-         * Determines whether a module declaration has a name that merges with a class declaration.
-         *
-         * @param node The module declaration node.
-         */
-        function isModuleMergedWithClass(node: ModuleDeclaration) {
-            return !!(resolver.getNodeCheckFlags(getOriginalNode(node)) & NodeCheckFlags.LexicalModuleMergesWithClass);
+        function shouldEmitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
+            // - current file is not external module
+            // - import declaration is top level and target is value imported by entity name
+            return resolver.isReferencedAliasDeclaration(node)
+                || (!isExternalModule(currentSourceFile)
+                    && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
 
         /**
@@ -2478,13 +2718,16 @@ namespace ts {
          *
          * @param node The import equals declaration node.
          */
-        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): OneOrMany<Statement> {
-            Debug.assert(!isExternalModuleImportEqualsDeclaration(node));
-            if (shouldElideImportEqualsDeclaration(node)) {
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+            if (isExternalModuleImportEqualsDeclaration(node)) {
+                return visitEachChild(node, visitor, context);
+            }
+
+            if (!shouldEmitImportEqualsDeclaration(node)) {
                 return undefined;
             }
 
-            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
+            const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference, { flags: NodeEmitFlags.NoComments });
             if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
@@ -2492,7 +2735,10 @@ namespace ts {
                     createVariableStatement(
                         visitNodes(node.modifiers, visitor, isModifier),
                         createVariableDeclarationList([
-                            createVariableDeclaration(node.name, moduleReference)
+                            createVariableDeclaration(
+                                node.name,
+                                moduleReference
+                            )
                         ]),
                         node
                     ),
@@ -2503,7 +2749,7 @@ namespace ts {
                 // exports.${name} = ${moduleReference};
                 return setOriginalNode(
                     createNamespaceExport(
-                        getSynthesizedClone(node.name),
+                        node.name,
                         moduleReference,
                         node
                     ),
@@ -2513,34 +2759,12 @@ namespace ts {
         }
 
         /**
-         * Determines whether to elide an import equals declaration.
-         *
-         * @param node The import equals declaration node.
-         */
-        function shouldElideImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
-            // - current file is not external module
-            // - import declaration is top level and target is value imported by entity name
-            return !resolver.isReferencedAliasDeclaration(node)
-                && (isExternalModule(currentSourceFile) || !resolver.isTopLevelValueImportEqualsWithEntityName(node));
-        }
-
-        /**
-         * Gets a value indicating whether the node is exported.
-         *
-         * @param node The node to test.
-         */
-        function isExported(node: Node) {
-            return (node.flags & NodeFlags.Export) !== 0;
-        }
-
-        /**
          * Gets a value indicating whether the node is exported from a namespace.
          *
          * @param node The node to test.
          */
         function isNamespaceExport(node: Node) {
-            return currentNamespace !== undefined && isExported(node);
+            return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2549,7 +2773,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined && isExported(node);
+            return currentNamespace === undefined && hasModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -2559,7 +2783,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) === 0;
+                && !hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2569,18 +2793,7 @@ namespace ts {
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && (node.flags & NodeFlags.Default) !== 0;
-        }
-
-        /**
-         * Gets a value indicating whether a node is the first declaration of its kind.
-         *
-         * @param node A Declaration node.
-         * @param kind The SyntaxKind to find among related declarations.
-         */
-        function isFirstDeclarationOfKind(node: Declaration, kind: SyntaxKind) {
-            const original = getOriginalNode(node);
-            return original.symbol && getDeclarationOfKind(original.symbol, kind) === original;
+                && hasModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -2590,10 +2803,23 @@ namespace ts {
             return createStatement(expression, /*location*/ undefined);
         }
 
+        function addExportMemberAssignment(statements: Statement[], node: DeclarationStatement) {
+            statements.push(
+                createStatement(
+                    createAssignment(
+                        getExportName(node),
+                        getLocalName(node, /*noSourceMaps*/ true),
+                        /*location*/ createRange(node.name.pos, node.end)
+                    ),
+                    /*location*/ createRange(-1, node.end)
+                )
+            );
+        }
+
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
             return createStatement(
                 createAssignment(
-                    getNamespaceMemberName(exportName),
+                    getNamespaceMemberName(exportName, /*allowComments*/ false, /*allowSourceMaps*/ true),
                     exportValue
                 ),
                 location
@@ -2608,12 +2834,116 @@ namespace ts {
             );
         }
 
-        function getNamespaceMemberName(name: Identifier): Expression {
-            return createPropertyAccess(currentNamespaceLocalName, getSynthesizedClone(name));
+        function getNamespaceMemberName(name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): Expression {
+            const qualifiedName = createPropertyAccess(currentNamespaceContainerName, getSynthesizedClone(name), /*location*/ name);
+            let emitFlags: NodeEmitFlags;
+            if (!allowComments) {
+                emitFlags |= NodeEmitFlags.NoComments;
+            }
+            if (!allowSourceMaps) {
+                emitFlags |= NodeEmitFlags.NoSourceMap;
+            }
+            if (emitFlags) {
+                setNodeEmitFlags(qualifiedName, emitFlags);
+            }
+            return qualifiedName;
         }
 
-        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration | EnumDeclaration) {
-            return node.name ? getSynthesizedClone(node.name) : getGeneratedNameForNode(node);
+        function getNamespaceMemberNameWithSourceMapsAndWithoutComments(name: Identifier) {
+            return getNamespaceMemberName(name, /*allowComments*/ false, /*allowSourceMaps*/ true);
+        }
+
+        /**
+         * Gets the declaration name used inside of a namespace or enum.
+         */
+        function getNamespaceParameterName(node: ModuleDeclaration | EnumDeclaration) {
+            const name = getGeneratedNameForNode(node);
+            setSourceMapRange(name, node.name);
+            return name;
+        }
+
+        /**
+         * Gets the expression used to refer to a namespace or enum within the body
+         * of its declaration.
+         */
+        function getNamespaceContainerName(node: ModuleDeclaration | EnumDeclaration) {
+            return getGeneratedNameForNode(node);
+        }
+
+        /**
+         * Gets the local name for a declaration for use in expressions.
+         *
+         * A local name will *never* be prefixed with an module or namespace export modifier like
+         * "exports.".
+         *
+         * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         */
+        function getLocalName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.LocalName);
+        }
+
+        /**
+         * Gets the export name for a declaration for use in expressions.
+         *
+         * An export name will *always* be prefixed with an module or namespace export modifier
+         * like "exports." if one is required.
+         *
+         * @param node The declaration.
+         * @param noSourceMaps A value indicating whether source maps may not be emitted for the name.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         */
+        function getExportName(node: DeclarationStatement | ClassExpression, noSourceMaps?: boolean, allowComments?: boolean) {
+            if (isNamespaceExport(node)) {
+                return getNamespaceMemberName(getDeclarationName(node), allowComments, !noSourceMaps);
+            }
+
+            return getDeclarationName(node, allowComments, !noSourceMaps, NodeEmitFlags.ExportName);
+        }
+
+        /**
+         * Gets the name for a declaration for use in declarations.
+         *
+         * @param node The declaration.
+         * @param allowComments A value indicating whether comments may be emitted for the name.
+         * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+         * @param emitFlags Additional NodeEmitFlags to specify for the name.
+         */
+        function getDeclarationName(node: DeclarationStatement | ClassExpression, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: NodeEmitFlags) {
+            if (node.name) {
+                const name = getUniqueClone(node.name);
+                emitFlags |= getNodeEmitFlags(node.name);
+                if (!allowSourceMaps) {
+                    emitFlags |= NodeEmitFlags.NoSourceMap;
+                }
+
+                if (!allowComments) {
+                    emitFlags |= NodeEmitFlags.NoComments;
+                }
+
+                if (emitFlags) {
+                    setNodeEmitFlags(name, emitFlags);
+                }
+
+                return name;
+            }
+            else {
+                return getGeneratedNameForNode(node);
+            }
+        }
+
+        function getDeclarationNameExpression(node: DeclarationStatement) {
+            const name = getDeclarationName(node);
+            if (isNamespaceExport(node)) {
+                return getNamespaceMemberName(name);
+            }
+            else {
+                // We set the "ExportName" flag to indicate to any module transformer
+                // downstream that any `exports.` prefix should be added.
+                setNodeEmitFlags(name, getNodeEmitFlags(name) | NodeEmitFlags.ExportName);
+                return name;
+            }
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {
@@ -2621,9 +2951,64 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return member.flags & NodeFlags.Static
+            return hasModifier(member, ModifierFlags.Static)
                 ? getDeclarationName(node)
                 : getClassPrototype(node);
+        }
+
+        function enableSubstitutionForNonQualifiedEnumMembers() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
+                context.enableSubstitution(SyntaxKind.Identifier);
+            }
+        }
+
+        function enableSubstitutionForAsyncMethodsWithSuper() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
+
+                // We need to enable substitutions for call, property access, and element access
+                // if we need to rewrite super calls.
+                context.enableSubstitution(SyntaxKind.CallExpression);
+                context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
+                context.enableSubstitution(SyntaxKind.ElementAccessExpression);
+
+                // We need to be notified when entering and exiting declarations that bind super.
+                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
+                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
+                context.enableEmitNotification(SyntaxKind.GetAccessor);
+                context.enableEmitNotification(SyntaxKind.SetAccessor);
+                context.enableEmitNotification(SyntaxKind.Constructor);
+            }
+        }
+
+        function enableSubstitutionForDecoratedClasses() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
+
+                // We need to enable substitutions for identifiers. This allows us to
+                // substitute class names inside of a class declaration.
+                context.enableSubstitution(SyntaxKind.Identifier);
+                context.enableEmitNotification(SyntaxKind.Identifier);
+
+                // Keep track of class aliases.
+                decoratedClassAliases = {};
+                currentDecoratedClassAliases = {};
+            }
+        }
+
+        function enableSubstitutionForNamespaceExports() {
+            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
+                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+
+                // We need to enable substitutions for identifiers and shorthand property assignments. This allows us to
+                // substitute the names of exported members of a namespace.
+                context.enableSubstitution(SyntaxKind.Identifier);
+                context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment);
+
+                // We need to be notified when entering and exiting namespaces.
+                context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
+            }
         }
 
         function isClassWithDecorators(node: Node): node is ClassDeclaration {
@@ -2643,14 +3028,32 @@ namespace ts {
             return getOriginalNode(node).kind === SyntaxKind.ModuleDeclaration;
         }
 
+        function isTransformedEnumDeclaration(node: Node): boolean {
+            return getOriginalNode(node).kind === SyntaxKind.EnumDeclaration;
+        }
+
+        /**
+         * Hook for node emit.
+         *
+         * @param node The node to emit.
+         * @param emit A callback used to emit the node in the printer.
+         */
         function onEmitNode(node: Node, emit: (node: Node) => void): void {
-            const savedIsEnclosedInNamespace = isEnclosedInNamespace;
+            const savedApplicableSubstitutions = applicableSubstitutions;
             const savedCurrentSuperContainer = currentSuperContainer;
 
             // If we need support substitutions for aliases for decorated classes,
             // we should enable it here.
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses && isClassWithDecorators(node)) {
-                currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
+                if (isClassWithDecorators(node)) {
+                    currentDecoratedClassAliases[getOriginalNodeId(node)] = decoratedClassAliases[getOriginalNodeId(node)];
+                }
+                else if (node.kind === SyntaxKind.Identifier) {
+                    const declaration = resolver.getReferencedValueDeclaration(<Identifier>node)
+                    if (declaration && isClassWithDecorators(declaration)) {
+                        currentDecoratedClassAliases[getOriginalNodeId(declaration)] = decoratedClassAliases[getOriginalNodeId(declaration)];
+                    }
+                }
             }
 
             // If we need to support substitutions for `super` in an async method,
@@ -2660,7 +3063,10 @@ namespace ts {
             }
 
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isTransformedModuleDeclaration(node)) {
-                isEnclosedInNamespace = true;
+                applicableSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
+            }
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && isTransformedEnumDeclaration(node)) {
+                applicableSubstitutions |= TypeScriptSubstitutionFlags.NonQualifiedEnumMembers;
             }
 
             previousOnEmitNode(node, emit);
@@ -2669,13 +3075,47 @@ namespace ts {
                 currentDecoratedClassAliases[getOriginalNodeId(node)] = undefined;
             }
 
-            isEnclosedInNamespace = savedIsEnclosedInNamespace;
+            applicableSubstitutions = savedApplicableSubstitutions;
             currentSuperContainer = savedCurrentSuperContainer;
         }
 
-        function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
+        /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression>node);
+            }
+            else if (isShorthandPropertyAssignment(node)) {
+                return substituteShorthandPropertyAssignment(node);
+            }
 
+            return node;
+        }
+
+        function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElement {
+            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) {
+                const name = node.name;
+                const exportedName = trySubstituteNamespaceExportedName(name);
+                if (exportedName) {
+                    // A shorthand property with an assignment initializer is probably part of a
+                    // destructuring assignment
+                    if (node.objectAssignmentInitializer) {
+                        const initializer = createAssignment(exportedName, node.objectAssignmentInitializer);
+                        return createPropertyAssignment(name, initializer, /*location*/ node);
+                    }
+                    return createPropertyAssignment(name, exportedName, /*location*/ node);
+                }
+            }
+            return node;
+        }
+
+        function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
@@ -2696,37 +3136,47 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
+            return trySubstituteDecoratedClassName(node)
+                || trySubstituteNamespaceExportedName(node)
+                || node;
+        }
+
+        function trySubstituteDecoratedClassName(node: Identifier): Expression {
             if (enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) {
-                const original = getOriginalNode(node);
-                if (isIdentifier(original)) {
-                    if (resolver.getNodeCheckFlags(original) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
-                        // Due to the emit for class decorators, any reference to the class from inside of the class body
-                        // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
-                        // behavior of class names in ES6.
-                        const declaration = resolver.getReferencedValueDeclaration(original);
-                        if (declaration) {
-                            const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
-                            if (classAlias) {
-                                return cloneNode(classAlias);
-                            }
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.SelfReferenceInDecoratedClass) {
+                    // Due to the emit for class decorators, any reference to the class from inside of the class body
+                    // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
+                    // behavior of class names in ES6.
+                    const declaration = resolver.getReferencedValueDeclaration(node);
+                    if (declaration) {
+                        const classAlias = currentDecoratedClassAliases[getNodeId(declaration)];
+                        if (classAlias) {
+                            return getSynthesizedClone(classAlias, { sourceMapRange: node, commentRange: node });
                         }
                     }
                 }
             }
 
-            if (enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && isEnclosedInNamespace) {
+            return undefined;
+        }
+
+        function trySubstituteNamespaceExportedName(node: Identifier): Expression {
+            // If this is explicitly a local name, do not substitute.
+            if (enabledSubstitutions & applicableSubstitutions && (getNodeEmitFlags(node) & NodeEmitFlags.LocalName) === 0) {
                 // If we are nested within a namespace declaration, we may need to qualifiy
                 // an identifier that is exported from a merged namespace.
-                const original = getOriginalNode(node);
-                if (isIdentifier(original) && original.parent) {
-                    const container = resolver.getReferencedExportContainer(original);
-                    if (container && container.kind === SyntaxKind.ModuleDeclaration) {
+                const container = resolver.getReferencedExportContainer(node, /*prefixLocals*/ false);
+                if (container) {
+                    const substitute =
+                        (applicableSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports && container.kind === SyntaxKind.ModuleDeclaration) ||
+                        (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
+                    if (substitute) {
                         return createPropertyAccess(getGeneratedNameForNode(container), node, /*location*/ node);
                     }
                 }
             }
 
-            return node;
+            return undefined;
         }
 
         function substituteCallExpression(node: CallExpression): Expression {
@@ -2779,52 +3229,6 @@ namespace ts {
             return node;
         }
 
-        function enableExpressionSubstitutionForAsyncMethodsWithSuper() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.AsyncMethodsWithSuper) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.AsyncMethodsWithSuper;
-
-                // We need to enable substitutions for call, property access, and element access
-                // if we need to rewrite super calls.
-                context.enableExpressionSubstitution(SyntaxKind.CallExpression);
-                context.enableExpressionSubstitution(SyntaxKind.PropertyAccessExpression);
-                context.enableExpressionSubstitution(SyntaxKind.ElementAccessExpression);
-
-                // We need to be notified when entering and exiting declarations that bind super.
-                context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-                context.enableEmitNotification(SyntaxKind.GetAccessor);
-                context.enableEmitNotification(SyntaxKind.SetAccessor);
-                context.enableEmitNotification(SyntaxKind.Constructor);
-            }
-        }
-
-        function enableExpressionSubstitutionForDecoratedClasses() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.DecoratedClasses) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.DecoratedClasses;
-
-                // We need to enable substitutions for identifiers. This allows us to
-                // substitute class names inside of a class declaration.
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
-
-                // Keep track of class aliases.
-                decoratedClassAliases = {};
-                currentDecoratedClassAliases = {};
-            }
-        }
-
-        function enableExpressionSubstitutionForNamespaceExports() {
-            if ((enabledSubstitutions & TypeScriptSubstitutionFlags.NamespaceExports) === 0) {
-                enabledSubstitutions |= TypeScriptSubstitutionFlags.NamespaceExports;
-
-                // We need to enable substitutions for identifiers. This allows us to
-                // substitute the names of exported members of a namespace.
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
-
-                // We need to be notified when entering and exiting namespaces.
-                context.enableEmitNotification(SyntaxKind.ModuleDeclaration);
-            }
-        }
-
         function createSuperAccessInAsyncMethod(argumentExpression: Expression, flags: NodeCheckFlags, location: TextRange): LeftHandSideExpression {
             if (flags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return createPropertyAccess(
@@ -2847,7 +3251,7 @@ namespace ts {
 
         function getSuperContainerAsyncMethodFlags() {
             return currentSuperContainer !== undefined
-                && resolver.getNodeCheckFlags(getOriginalNode(currentSuperContainer)) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
+                && resolver.getNodeCheckFlags(currentSuperContainer) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding);
         }
     }
 }

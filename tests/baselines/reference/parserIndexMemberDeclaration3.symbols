@@ -6,5 +6,5 @@ class C {
 >a : Symbol(a, Decl(parserIndexMemberDeclaration3.ts, 1, 4))
 
    public v: number
->v : Symbol(v, Decl(parserIndexMemberDeclaration3.ts, 1, 23))
+>v : Symbol(C.v, Decl(parserIndexMemberDeclaration3.ts, 1, 23))
 }

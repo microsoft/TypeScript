@@ -1,5 +1,6 @@
 tests/cases/compiler/numericIndexerConstraint2.ts(4,1): error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: Foo; }'.
-  Index signature is missing in type '{ one: number; }'.
+  Property 'one' is incompatible with index signature.
+    Type 'number' is not assignable to type 'Foo'.
 
 
 ==== tests/cases/compiler/numericIndexerConstraint2.ts (1 errors) ====
@@ -9,4 +10,5 @@ tests/cases/compiler/numericIndexerConstraint2.ts(4,1): error TS2322: Type '{ on
     x = a;
     ~
 !!! error TS2322: Type '{ one: number; }' is not assignable to type '{ [index: string]: Foo; }'.
-!!! error TS2322:   Index signature is missing in type '{ one: number; }'.
+!!! error TS2322:   Property 'one' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'Foo'.

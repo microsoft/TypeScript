@@ -48,7 +48,7 @@ module ts {
                     return hasProperty(directories, path); 
                 },
                 fileExists: path => {
-                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), "'fileExists' request in non-existing directory");
+                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return hasProperty(map, path);
                 }
             }
@@ -204,6 +204,13 @@ module ts {
                     "/a/b/c/d/node_modules/foo/index.ts",
                     "/a/b/c/d/node_modules/foo/index.tsx",
                     "/a/b/c/d/node_modules/foo/index.d.ts",
+                    "/a/b/c/d/node_modules/@types/foo.ts",
+                    "/a/b/c/d/node_modules/@types/foo.tsx",
+                    "/a/b/c/d/node_modules/@types/foo.d.ts",
+                    "/a/b/c/d/node_modules/@types/foo/package.json",
+                    "/a/b/c/d/node_modules/@types/foo/index.ts",
+                    "/a/b/c/d/node_modules/@types/foo/index.tsx",
+                    "/a/b/c/d/node_modules/@types/foo/index.d.ts",
                     "/a/b/c/node_modules/foo.ts",
                     "/a/b/c/node_modules/foo.tsx",
                     "/a/b/c/node_modules/foo.d.ts",
@@ -211,6 +218,13 @@ module ts {
                     "/a/b/c/node_modules/foo/index.ts",
                     "/a/b/c/node_modules/foo/index.tsx",
                     "/a/b/c/node_modules/foo/index.d.ts",
+                    "/a/b/c/node_modules/@types/foo.ts",
+                    "/a/b/c/node_modules/@types/foo.tsx",
+                    "/a/b/c/node_modules/@types/foo.d.ts",
+                    "/a/b/c/node_modules/@types/foo/package.json",
+                    "/a/b/c/node_modules/@types/foo/index.ts",
+                    "/a/b/c/node_modules/@types/foo/index.tsx",
+                    "/a/b/c/node_modules/@types/foo/index.d.ts",
                 ])
             }
         });
@@ -246,6 +260,13 @@ module ts {
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.tsx",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo.d.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/package.json",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.tsx",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/@types/foo/index.d.ts",
                     "/a/node_modules/b/c/node_modules/foo.ts",
                     "/a/node_modules/b/c/node_modules/foo.tsx",
                     "/a/node_modules/b/c/node_modules/foo.d.ts",
@@ -253,6 +274,13 @@ module ts {
                     "/a/node_modules/b/c/node_modules/foo/index.ts",
                     "/a/node_modules/b/c/node_modules/foo/index.tsx",
                     "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                    "/a/node_modules/b/c/node_modules/@types/foo.ts",
+                    "/a/node_modules/b/c/node_modules/@types/foo.tsx",
+                    "/a/node_modules/b/c/node_modules/@types/foo.d.ts",
+                    "/a/node_modules/b/c/node_modules/@types/foo/package.json",
+                    "/a/node_modules/b/c/node_modules/@types/foo/index.ts",
+                    "/a/node_modules/b/c/node_modules/@types/foo/index.tsx",
+                    "/a/node_modules/b/c/node_modules/@types/foo/index.d.ts",
                     "/a/node_modules/b/node_modules/foo.ts",
                     "/a/node_modules/b/node_modules/foo.tsx",
                     "/a/node_modules/b/node_modules/foo.d.ts",
@@ -260,6 +288,13 @@ module ts {
                     "/a/node_modules/b/node_modules/foo/index.ts",
                     "/a/node_modules/b/node_modules/foo/index.tsx",
                     "/a/node_modules/b/node_modules/foo/index.d.ts",
+                    "/a/node_modules/b/node_modules/@types/foo.ts",
+                    "/a/node_modules/b/node_modules/@types/foo.tsx",
+                    "/a/node_modules/b/node_modules/@types/foo.d.ts",
+                    "/a/node_modules/b/node_modules/@types/foo/package.json",
+                    "/a/node_modules/b/node_modules/@types/foo/index.ts",
+                    "/a/node_modules/b/node_modules/@types/foo/index.tsx",
+                    "/a/node_modules/b/node_modules/@types/foo/index.d.ts",
                     "/a/node_modules/foo.ts",
                     "/a/node_modules/foo.tsx",
                     "/a/node_modules/foo.d.ts",
@@ -267,7 +302,6 @@ module ts {
                     "/a/node_modules/foo/index.ts",
                     "/a/node_modules/foo/index.tsx"
                 ]);
-
             }
         });
     });
@@ -664,6 +698,13 @@ import b = require("./moduleB.ts");
                     "/root/folder1/node_modules/file6/index.ts",
                     "/root/folder1/node_modules/file6/index.tsx",
                     "/root/folder1/node_modules/file6/index.d.ts",
+                    "/root/folder1/node_modules/@types/file6.ts",
+                    "/root/folder1/node_modules/@types/file6.tsx",
+                    "/root/folder1/node_modules/@types/file6.d.ts",
+                    "/root/folder1/node_modules/@types/file6/package.json",
+                    "/root/folder1/node_modules/@types/file6/index.ts",
+                    "/root/folder1/node_modules/@types/file6/index.tsx",
+                    "/root/folder1/node_modules/@types/file6/index.d.ts"
                     // success on /root/node_modules/file6.ts
                 ]);
 
@@ -814,7 +855,6 @@ import b = require("./moduleB.ts");
 
         it ("classic + rootDirs", () => {
             test(/*hasDirectoryExists*/ false);
-            test(/*hasDirectoryExists*/ true);
 
             function test(hasDirectoryExists: boolean) {
                 let file1: File = { name: "/root/folder1/file1.ts" };
@@ -844,24 +884,20 @@ import b = require("./moduleB.ts");
                     "/root/generated/folder1/file1.d.ts",
                     // then try alternative rootDir entry
                 ]);
-                check("../folder1/file1_1", file3, file4, [
-                    // load from initial location
+                check("folder1/file1_1", file3, file4, [
+                    // current location
+                    "/root/generated/folder2/folder1/file1_1.ts",
+                    "/root/generated/folder2/folder1/file1_1.tsx",
+                    "/root/generated/folder2/folder1/file1_1.d.ts",
+                    // other entry in rootDirs
                     "/root/generated/folder1/file1_1.ts",
                     "/root/generated/folder1/file1_1.tsx",
                     "/root/generated/folder1/file1_1.d.ts",
-                    // load from alternative rootDir entry
+                    // fallback
                     "/root/folder1/file1_1.ts",
                     "/root/folder1/file1_1.tsx",
                     "/root/folder1/file1_1.d.ts",
-                    // fallback to classic
-                    // step1: initial location 
-                    "/root/generated/folder1/file1_1.ts",
-                    "/root/generated/folder1/file1_1.tsx",
-                    "/root/generated/folder1/file1_1.d.ts",
-                    // step2: walk 1 level up
-                    "/root/folder1/file1_1.ts",
-                    "/root/folder1/file1_1.tsx",
-                    "/root/folder1/file1_1.d.ts",
+                    // found one
                 ]);
 
                 function check(name: string, container: File, expected: File, expectedFailedLookups: string[]) {
@@ -917,5 +953,120 @@ import b = require("./moduleB.ts");
             const result = resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ModuleResolutionKind.NodeJs }, host);
             assert(!result.resolvedModule);
         });
+    });
+
+    describe("Type reference directive resolution: ", () => {
+        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            const host = createModuleResolutionHost(false, ...[initialFile, targetFile].concat(...otherFiles));
+            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, {typesRoot}, host);
+            assert(result.resolvedTypeReferenceDirective.resolvedFileName !== undefined, "expected type directive to be resolved");
+            assert.equal(result.resolvedTypeReferenceDirective.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
+            assert.equal(result.resolvedTypeReferenceDirective.primary, primary, "unexpected 'primary' value");
+        }
+
+        it("Can be resolved from primary location", () => {
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/types/lib/index.d.ts" }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
+                const package = { name: "/root/src/types/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/node_modules/lib/index.d.ts" }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/node_modules/lib/typings/lib.d.ts" };
+                const package = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/node_modules/@types/lib/index.d.ts" }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/src/node_modules/@types/lib/typings/lib.d.ts" };
+                const package = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({types: "typings/lib.d.ts"}) }; 
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+            }
+        });
+        it("Can be resolved from secondary location", () => {
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/node_modules/lib.d.ts" };
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/node_modules/lib/index.d.ts" };
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/node_modules/lib/typings/lib.d.ts" };
+                const package = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({typings: "typings/lib.d.ts"}) };
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/node_modules/@types/lib/index.d.ts" };
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" }
+                const f2 = { name: "/root/node_modules/@types/lib/typings/lib.d.ts" };
+                const package = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({typings: "typings/lib.d.ts"}) };
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+            }
+        });
+        it("Primary resolution overrides secondary resolutions", () => {
+            {
+                const f1 = { name: "/root/src/a/b/c/app.ts" };
+                const f2 = { name: "/root/src/types/lib/index.d.ts" };
+                const f3 = { name: "/root/src/a/b/node_modules/lib.d.ts" }
+                test(/*typesRoot*/"/root/src", /* typeDirective */"lib", /*primary*/ true, f1, f2, f3);
+            }
+        })
+        it("Reused program keeps errors", () => {
+            const f1 = { name: "/root/src/a/b/c/d/e/app.ts", content: `/// <reference types="lib"/>` };
+            const f2 = { name: "/root/src/a/b/c/d/node_modules/lib/index.d.ts", content: `declare var x: number;` };
+            const f3 = { name: "/root/src/a/b/c/d/f/g/app.ts", content: `/// <reference types="lib"/>` };
+            const f4 = { name: "/root/src/a/b/c/d/f/node_modules/lib/index.d.ts", content: `declare var x: number;` };
+            const files = [f1, f2, f3, f4];
+            
+            const names = map(files, f => f.name);
+            const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES6)), f => f.fileName);
+            const compilerHost: CompilerHost = {
+                fileExists : fileName => hasProperty(sourceFiles, fileName),
+                getSourceFile: fileName => sourceFiles[fileName],
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile(file, text) {
+                    throw new Error("NYI");
+                },
+                getCurrentDirectory: () => "/",
+                getCanonicalFileName: f => f.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                readFile: fileName => hasProperty(sourceFiles, fileName) ? sourceFiles[fileName].text : undefined
+            };
+            const program1 = createProgram(names, {}, compilerHost);
+            const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
+            assert.equal(diagnostics1.length, 1, "expected one diagnostic");
+
+            const program2 = createProgram(names, {}, compilerHost, program1);
+            assert.isTrue(program1.structureIsReused);
+            const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
+            assert.equal(diagnostics2.length, 1, "expected one diagnostic");
+            assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
+        })
     });
 }

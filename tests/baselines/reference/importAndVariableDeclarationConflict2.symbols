@@ -15,7 +15,7 @@ class C {
 >C : Symbol(C, Decl(importAndVariableDeclarationConflict2.ts, 4, 15))
 
   public foo() {
->foo : Symbol(foo, Decl(importAndVariableDeclarationConflict2.ts, 6, 9))
+>foo : Symbol(C.foo, Decl(importAndVariableDeclarationConflict2.ts, 6, 9))
 
     var x = '';
 >x : Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 8, 7))

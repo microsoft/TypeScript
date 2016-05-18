@@ -99,7 +99,7 @@ function a0() {
     }
 }
 function a1() {
-    var _loop_1 = function(x) {
+    var _loop_1 = function (x) {
         x = x + 1;
         (function () { return x; });
     };
@@ -116,16 +116,19 @@ function a2() {
         var x = _a[_i];
         x = x + 1;
     }
-    var _loop_2 = function(x) {
+    var _loop_2 = function (x) {
         x = x + 2;
         (function () { return x; });
+        out_x_1 = x;
     };
+    var out_x_1;
     for (var x = void 0;;) {
         _loop_2(x);
+        x = out_x_1;
     }
 }
 function a3() {
-    var _loop_3 = function(x) {
+    var _loop_3 = function (x) {
         x = x + 1;
         (function () { return x; });
     };
@@ -133,16 +136,19 @@ function a3() {
         var x = _a[_i];
         _loop_3(x);
     }
-    var _loop_4 = function(x) {
+    var _loop_4 = function (x) {
         x = x + 2;
         (function () { return x; });
+        out_x_2 = x;
     };
+    var out_x_2;
     for (var x = void 0;;) {
         _loop_4(x);
+        x = out_x_2;
     }
 }
 function a4() {
-    var _loop_5 = function(x) {
+    var _loop_5 = function (x) {
         x = x + 1;
         (function () { return x; });
     };
@@ -180,7 +186,7 @@ function a6() {
     }
 }
 function a7() {
-    var _loop_6 = function(x) {
+    var _loop_6 = function (x) {
         x = x + 1;
         (function () { return x; });
     };

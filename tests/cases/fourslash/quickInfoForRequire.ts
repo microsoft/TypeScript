@@ -4,7 +4,7 @@
 ////export class a{}
 
 //@Filename: quickInfoForRequire_input.ts
-////import a = require("AA/B/*1*/B");
+////import a = require("./AA/B/*1*/B");
 
 goTo.marker('1');
 verify.quickInfoIs('module a');

@@ -9,7 +9,7 @@ interface IHasVisualizationModel {
 >IHasVisualizationModel : Symbol(IHasVisualizationModel, Decl(aliasUsageInVarAssignment_main.ts, 1, 64))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : Symbol(VisualizationModel, Decl(aliasUsageInVarAssignment_main.ts, 2, 34))
+>VisualizationModel : Symbol(IHasVisualizationModel.VisualizationModel, Decl(aliasUsageInVarAssignment_main.ts, 2, 34))
 >Backbone.Model : Symbol(Backbone.Model, Decl(aliasUsageInVarAssignment_backbone.ts, 0, 0))
 >Backbone : Symbol(Backbone, Decl(aliasUsageInVarAssignment_main.ts, 0, 0))
 >Model : Symbol(Backbone.Model, Decl(aliasUsageInVarAssignment_backbone.ts, 0, 0))
@@ -28,7 +28,7 @@ export class Model {
 >Model : Symbol(Model, Decl(aliasUsageInVarAssignment_backbone.ts, 0, 0))
 
     public someData: string;
->someData : Symbol(someData, Decl(aliasUsageInVarAssignment_backbone.ts, 0, 20))
+>someData : Symbol(Model.someData, Decl(aliasUsageInVarAssignment_backbone.ts, 0, 20))
 }
 
 === tests/cases/compiler/aliasUsageInVarAssignment_moduleA.ts ===

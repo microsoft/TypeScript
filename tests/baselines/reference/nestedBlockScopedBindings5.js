@@ -90,7 +90,7 @@ function a0() {
     }
 }
 function a1() {
-    var _loop_1 = function(x) {
+    var _loop_1 = function (x) {
         x = x + 1;
         (function () { return x; });
     };
@@ -105,28 +105,34 @@ function a2() {
     for (var x in []) {
         x = x + 1;
     }
-    var _loop_2 = function(x) {
+    var _loop_2 = function (x) {
         x = x + 2;
         (function () { return x; });
+        out_x_1 = x;
     };
+    var out_x_1;
     for (var x = void 0;;) {
         _loop_2(x);
+        x = out_x_1;
     }
 }
 function a3() {
-    var _loop_3 = function(x) {
+    var _loop_3 = function (x) {
         x = x + 1;
         (function () { return x; });
     };
     for (var x in []) {
         _loop_3(x);
     }
-    var _loop_4 = function(x) {
+    var _loop_4 = function (x) {
         x = x + 2;
         (function () { return x; });
+        out_x_2 = x;
     };
+    var out_x_2;
     for (var x = void 0; false;) {
         _loop_4(x);
+        x = out_x_2;
     }
     switch (1) {
         case 1:
@@ -154,12 +160,15 @@ function a5() {
     for (var x in []) {
         x = x + 1;
     }
-    var _loop_5 = function(x) {
+    var _loop_5 = function (x) {
         x = x + 2;
         (function () { return x; });
+        out_x_3 = x;
     };
+    var out_x_3;
     for (var x = void 0; false;) {
         _loop_5(x);
+        x = out_x_3;
     }
     switch (1) {
         case 1:

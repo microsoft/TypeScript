@@ -20,7 +20,7 @@
 /// <reference path="rwcRunner.ts" />
 /// <reference path="harness.ts" />
 
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 let runners: RunnerBase[] = [];
 let iterations = 1;
@@ -40,14 +40,27 @@ let testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : "");
 
+type TestConfig = {
+    tests?: string[];
+    stackTraceLimit?: number | "full";
+    light?: boolean;
+};
+
 if (testConfigFile !== "") {
-    const testConfig = JSON.parse(testConfigFile);
+    const testConfig = <TestConfig>JSON.parse(testConfigFile);
     if (testConfig.light) {
         Harness.lightMode = true;
     }
 
-    if (testConfig.test && testConfig.test.length > 0) {
-        for (const option of testConfig.test) {
+    if (testConfig.stackTraceLimit === "full") {
+        (<any>Error).stackTraceLimit = Infinity;
+    }
+    else if ((+testConfig.stackTraceLimit | 0) > 0) {
+        (<any>Error).stackTraceLimit = testConfig.stackTraceLimit;
+    }
+
+    if (testConfig.tests && testConfig.tests.length > 0) {
+        for (const option of testConfig.tests) {
             if (!option) {
                 continue;
             }

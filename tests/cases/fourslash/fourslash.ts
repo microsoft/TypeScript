@@ -136,6 +136,7 @@ declare namespace FourSlashInterface {
         typeDefinitionCountIs(expectedCount: number): void;
         definitionLocationExists(): void;
         verifyDefinitionsName(name: string, containerName: string): void;
+        isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: FourSlash.Range[]): void;
@@ -173,6 +174,7 @@ declare namespace FourSlashInterface {
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
+
         getScriptLexicalStructureListCount(count: number): void;
         getScriptLexicalStructureListContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;

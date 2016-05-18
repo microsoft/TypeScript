@@ -335,7 +335,6 @@ sourceFile:sourceMap-FileWithComments.ts
 9 >                                0
 10>                                 )
 11>                                  ;
-  >                                      }
 1->Emitted(16, 5) Source(19, 16) + SourceIndex(0)
 2 >Emitted(16, 17) Source(19, 22) + SourceIndex(0)
 3 >Emitted(16, 20) Source(19, 25) + SourceIndex(0)
@@ -346,7 +345,7 @@ sourceFile:sourceMap-FileWithComments.ts
 8 >Emitted(16, 33) Source(19, 38) + SourceIndex(0)
 9 >Emitted(16, 34) Source(19, 39) + SourceIndex(0)
 10>Emitted(16, 35) Source(19, 40) + SourceIndex(0)
-11>Emitted(16, 36) Source(20, 6) + SourceIndex(0)
+11>Emitted(16, 36) Source(19, 41) + SourceIndex(0)
 ---
 >>>    Shapes.Point = Point;
 1 >^^^^

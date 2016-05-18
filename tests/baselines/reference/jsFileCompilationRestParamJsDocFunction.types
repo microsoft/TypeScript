@@ -1,0 +1,89 @@
+=== tests/cases/compiler/_apply.js ===
+
+/**
+ * A faster alternative to `Function#apply`, this function invokes `func`
+ * with the `this` binding of `thisArg` and the arguments of `args`.
+ *
+ * @private
+ * @param {Function} func The function to invoke.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {...*} args The arguments to invoke `func` with.
+ * @returns {*} Returns the result of `func`.
+ */
+function apply(func, thisArg, args) {
+>apply : (func: Function, thisArg: any, ...args: any[]) => any
+>func : Function
+>thisArg : any
+>args : any[]
+
+    var length = args.length;
+>length : number
+>args.length : number
+>args : any[]
+>length : number
+
+    switch (length) {
+>length : number
+
+        case 0: return func.call(thisArg);
+>0 : number
+>func.call(thisArg) : any
+>func.call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>func : Function
+>call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>thisArg : any
+
+        case 1: return func.call(thisArg, args[0]);
+>1 : number
+>func.call(thisArg, args[0]) : any
+>func.call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>func : Function
+>call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>thisArg : any
+>args[0] : any
+>args : any[]
+>0 : number
+
+        case 2: return func.call(thisArg, args[0], args[1]);
+>2 : number
+>func.call(thisArg, args[0], args[1]) : any
+>func.call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>func : Function
+>call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>thisArg : any
+>args[0] : any
+>args : any[]
+>0 : number
+>args[1] : any
+>args : any[]
+>1 : number
+
+        case 3: return func.call(thisArg, args[0], args[1], args[2]);
+>3 : number
+>func.call(thisArg, args[0], args[1], args[2]) : any
+>func.call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>func : Function
+>call : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, ...argArray: any[]): U; (this: Function, thisArg: any, ...argArray: any[]): any; }
+>thisArg : any
+>args[0] : any
+>args : any[]
+>0 : number
+>args[1] : any
+>args : any[]
+>1 : number
+>args[2] : any
+>args : any[]
+>2 : number
+    }
+    return func.apply(thisArg, args);
+>func.apply(thisArg, args) : any
+>func.apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>func : Function
+>apply : { <T, U>(this: (this: T, ...argArray: any[]) => U, thisArg: T, argArray?: any): U; (this: Function, thisArg: any, argArray?: any): any; }
+>thisArg : any
+>args : any[]
+}
+
+export default apply;
+>apply : (func: Function, thisArg: any, ...args: any[]) => any
+

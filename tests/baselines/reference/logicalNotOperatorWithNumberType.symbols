@@ -13,7 +13,7 @@ class A {
 >A : Symbol(A, Decl(logicalNotOperatorWithNumberType.ts, 4, 36))
 
     public a: number;
->a : Symbol(a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
+>a : Symbol(A.a, Decl(logicalNotOperatorWithNumberType.ts, 6, 9))
 
     static foo() { return 1; }
 >foo : Symbol(A.foo, Decl(logicalNotOperatorWithNumberType.ts, 7, 21))

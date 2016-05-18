@@ -5,51 +5,68 @@
 namespace ts {
     export function transformSystemModule(context: TransformationContext) {
         interface DependencyGroup {
-            name: Identifier;
+            name: StringLiteral;
             externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         }
 
         const {
+            getNodeEmitFlags,
+            setNodeEmitFlags,
+            getCommentRange,
+            setCommentRange,
+            getSourceMapRange,
+            setSourceMapRange,
             startLexicalEnvironment,
             endLexicalEnvironment,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
-            setNodeEmitFlags
         } = context;
 
         const compilerOptions = context.getCompilerOptions();
         const resolver = context.getEmitResolver();
+        const host = context.getEmitHost();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const previousExpressionSubstitution = context.expressionSubstitution;
-        context.enableExpressionSubstitution(SyntaxKind.Identifier);
-        context.enableExpressionSubstitution(SyntaxKind.BinaryExpression);
-        context.enableExpressionSubstitution(SyntaxKind.PostfixUnaryExpression);
-        context.expressionSubstitution = substituteExpression;
+        const previousOnSubstituteNode = context.onSubstituteNode;
+        const previousOnEmitNode = context.onEmitNode;
+        context.onSubstituteNode = onSubstituteNode;
+        context.onEmitNode = onEmitNode;
+        context.enableSubstitution(SyntaxKind.Identifier);
+        context.enableSubstitution(SyntaxKind.BinaryExpression);
+        context.enableSubstitution(SyntaxKind.PrefixUnaryExpression);
+        context.enableSubstitution(SyntaxKind.PostfixUnaryExpression);
+        context.enableEmitNotification(SyntaxKind.SourceFile);
 
+        const exportFunctionForFileMap: Identifier[] = [];
         let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
-        let hasExportStars: boolean;
+        let hasExportStarsToExportValues: boolean;
         let exportFunctionForFile: Identifier;
         let contextObjectForFile: Identifier;
         let exportedLocalNames: Identifier[];
         let exportedFunctionDeclarations: ExpressionStatement[];
+
+        let enclosingBlockScopedContainer: Node;
+        let currentParent: Node;
+        let currentNode: Node;
 
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
                 currentSourceFile = node;
+                currentNode = node;
 
                 // Perform the transformation.
                 const updated = transformSystemModuleWorker(node);
+                aggregateTransformFlags(updated);
 
                 currentSourceFile = undefined;
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 exportFunctionForFile = undefined;
                 contextObjectForFile = undefined;
                 exportedLocalNames = undefined;
@@ -76,66 +93,50 @@ namespace ts {
             Debug.assert(!exportFunctionForFile);
 
             // Collect information about the external module and dependency groups.
-            ({ externalImports, exportSpecifiers, exportEquals, hasExportStars } = collectExternalModuleInfo(node, resolver));
+            ({ externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues } = collectExternalModuleInfo(node, resolver));
 
             // Make sure that the name of the 'exports' function does not conflict with
             // existing identifiers.
             exportFunctionForFile = createUniqueName("exports");
             contextObjectForFile = createUniqueName("context");
 
+            exportFunctionForFileMap[getNodeId(node)] = exportFunctionForFile;
+
             const dependencyGroups = collectDependencyGroups(externalImports);
 
             const statements: Statement[] = [];
 
-            // Add any prologue directives.
-            const statementOffset = copyPrologueDirectives(node.statements, statements);
+            // Add the body of the module.
+            addSystemModuleBody(statements, node, dependencyGroups);
 
-            // var __moduleName = context_1 && context_1.id;
-            addNode(statements,
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            "__moduleName",
-                            createLogicalAnd(
-                                contextObjectForFile,
-                                createPropertyAccess(contextObjectForFile, "id")
-                            )
-                        )
-                    ])
+            const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
+            const dependencies = createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup));
+            const body = createFunctionExpression(
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                [
+                    createParameter(exportFunctionForFile),
+                    createParameter(contextObjectForFile)
+                ],
+                setNodeEmitFlags(
+                    createBlock(statements, /*location*/ undefined, /*multiLine*/ true),
+                    NodeEmitFlags.EmitEmitHelpers
                 )
             );
 
-            // Add the body of the module.
-            addSystemModuleBody(statements, node, dependencyGroups, statementOffset);
-
             // Write the call to `System.register`
+            // Clear the emit-helpers flag for later passes since we'll have already used it in the module body
+            // So the helper will be emit at the correct position instead of at the top of the source-file
             return updateSourceFile(node, [
                 createStatement(
                     createCall(
                         createPropertyAccess(createIdentifier("System"), "register"),
-                        [
-                            node.moduleName ? createLiteral(node.moduleName) : undefined,
-                            createArrayLiteral(map(dependencyGroups, getNameOfDependencyGroup)),
-                            createFunctionExpression(
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                [
-                                    createParameter(exportFunctionForFile),
-                                    createParameter(contextObjectForFile)
-                                ],
-                                setNodeEmitFlags(
-                                    setMultiLine(
-                                        createBlock(statements),
-                                        /*multiLine*/ true
-                                    ),
-                                    NodeEmitFlags.EmitEmitHelpers
-                                )
-                            )
-                        ]
+                        moduleName
+                            ? [moduleName, dependencies, body]
+                            : [dependencies, body]
                     )
                 )
-            ]);
+            ], /*nodeEmitFlags*/ ~NodeEmitFlags.EmitEmitHelpers & getNodeEmitFlags(node));
         }
 
         /**
@@ -145,7 +146,7 @@ namespace ts {
          * @param node The source file for the module.
          * @param statementOffset The offset at which to begin visiting the statements of the SourceFile.
          */
-        function addSystemModuleBody(statements: Statement[], node: SourceFile, dependencyGroups: DependencyGroup[], statementOffset: number) {
+        function addSystemModuleBody(statements: Statement[], node: SourceFile, dependencyGroups: DependencyGroup[]) {
             // Shape of the body in system modules:
             //
             //  function (exports) {
@@ -193,6 +194,25 @@ namespace ts {
             // only in the outer module body and not in the inner one.
             startLexicalEnvironment();
 
+            // Add any prologue directives.
+            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict);
+
+            // var __moduleName = context_1 && context_1.id;
+            addNode(statements,
+                createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            "__moduleName",
+                            createLogicalAnd(
+                                contextObjectForFile,
+                                createPropertyAccess(contextObjectForFile, "id")
+                            )
+                        )
+                    ])
+                )
+            );
+
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
             // as we both emit transformations as well as aggregate some data used when creating
@@ -222,11 +242,13 @@ namespace ts {
                             ),
                             createPropertyAssignment("execute",
                                 createFunctionExpression(
-                                    /*asteriskToken*/ node,
+                                    /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     [],
                                     createBlock(
-                                        executeStatements
+                                        executeStatements,
+                                        /*location*/ undefined,
+                                        /*multiLine*/ true
                                     )
                                 )
                             )
@@ -238,6 +260,9 @@ namespace ts {
         }
 
         function addExportStarIfNeeded(statements: Statement[]) {
+            if (!hasExportStarsToExportValues) {
+                return;
+            }
             // when resolving exports local exported entries/indirect exported entries in the module
             // should always win over entries with similar names that were added via star exports
             // to support this we store names of local/indirect exported entries in a set.
@@ -303,7 +328,7 @@ namespace ts {
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             exportedNamesStorageRef,
-                            createObjectLiteral(exportedNames)
+                            createObjectLiteral(exportedNames, /*location*/ undefined, /*multiline*/ true)
                         )
                     ])
                 )
@@ -320,10 +345,11 @@ namespace ts {
             const setters: Expression[] = [];
             for (const group of dependencyGroups) {
                 // derive a unique name for parameter from the first named entry in the group
-                const parameterName = createUniqueName(forEach(group.externalImports, getLocalNameTextForExternalImport) || "");
+                const localName = forEach(group.externalImports, i => getLocalNameForExternalImport(i, currentSourceFile));
+                const parameterName = localName ? getGeneratedNameForNode(localName) : createUniqueName("");
                 const statements: Statement[] = [];
                 for (const entry of group.externalImports) {
-                    const importVariableName = getLocalNameForExternalImport(entry);
+                    const importVariableName = getLocalNameForExternalImport(entry, currentSourceFile);
                     switch (entry.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!(<ImportDeclaration>entry).importClause) {
@@ -371,7 +397,7 @@ namespace ts {
                                     createStatement(
                                         createCall(
                                             exportFunctionForFile,
-                                            [createObjectLiteral(properties)]
+                                            [createObjectLiteral(properties, /*location*/ undefined, /*multiline*/ true)]
                                         )
                                     )
                                 );
@@ -400,15 +426,15 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         [createParameter(parameterName)],
-                        createBlock(statements)
+                        createBlock(statements, /*location*/ undefined, /*multiLine*/ true)
                     )
                 );
             }
 
-            return createArrayLiteral(setters);
+            return createArrayLiteral(setters, /*location*/ undefined, /*multiLine*/ true);
         }
 
-        function visitSourceElement(node: Node): Node {
+        function visitSourceElement(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
                     return visitImportDeclaration(<ImportDeclaration>node);
@@ -427,7 +453,29 @@ namespace ts {
             }
         }
 
-        function visitNestedNode(node: Node): Node {
+        function visitNestedNode(node: Node): VisitResult<Node> {
+            const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
+            const savedCurrentParent = currentParent;
+            const savedCurrentNode = currentNode;
+
+            const currentGrandparent = currentParent;
+            currentParent = currentNode;
+            currentNode = node;
+
+            if (currentParent && isBlockScope(currentParent, currentGrandparent)) {
+                enclosingBlockScopedContainer = currentParent;
+            }
+
+            const result = visitNestedNodeWorker(node);
+
+            enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
+            currentParent = savedCurrentParent;
+            currentNode = savedCurrentNode;
+
+            return result;
+        }
+
+        function visitNestedNodeWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(<VariableStatement>node);
@@ -480,6 +528,9 @@ namespace ts {
                 case SyntaxKind.Block:
                     return visitBlock(<Block>node);
 
+                case SyntaxKind.ExpressionStatement:
+                    return visitExpressionStatement(<ExpressionStatement>node);
+
                 default:
                     return node;
             }
@@ -487,7 +538,7 @@ namespace ts {
 
         function visitImportDeclaration(node: ImportDeclaration): Node {
             if (node.importClause && contains(externalImports, node)) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node));
+                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
             }
 
             return undefined;
@@ -495,18 +546,18 @@ namespace ts {
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): Node {
             if (contains(externalImports, node)) {
-                hoistVariableDeclaration(getLocalNameForExternalImport(node));
+                hoistVariableDeclaration(getLocalNameForExternalImport(node, currentSourceFile));
             }
 
             // NOTE(rbuckton): Do we support export import = require('') in System?
             return undefined;
         }
 
-        function visitExportDeclaration(node: ExportDeclaration): OneOrMany<Statement> {
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.moduleSpecifier) {
                 const statements: Statement[] = [];
                 addNodes(statements, map(node.exportClause.elements, visitExportSpecifier));
-                return createNodeArrayNode(statements);
+                return statements;
             }
 
             return undefined;
@@ -525,11 +576,13 @@ namespace ts {
         }
 
         function visitExportAssignment(node: ExportAssignment): Statement {
-            if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                return createExportStatement(
-                    createLiteral("default"),
-                    node.expression
-                );
+            if (!node.isExportEquals) {
+                if (nodeIsSynthesized(node) || resolver.isValueAliasDeclaration(node)) {
+                    return createExportStatement(
+                        createLiteral("default"),
+                        node.expression
+                    );
+                }
             }
 
             return undefined;
@@ -541,15 +594,22 @@ namespace ts {
          *
          * @param node The variable statement to visit.
          */
-        function visitVariableStatement(node: VariableStatement): OneOrMany<Statement> {
-            const isExported = (node.flags & NodeFlags.Export) !== 0;
+        function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
+            // hoist only non-block scoped declarations or block scoped declarations parented by source file
+            const shouldHoist =
+                ((getCombinedNodeFlags(getOriginalNode(node.declarationList)) & NodeFlags.BlockScoped) == 0) ||
+                enclosingBlockScopedContainer.kind === SyntaxKind.SourceFile;
+            if (!shouldHoist) {
+                return node;
+            }
+            const isExported = hasModifier(node, ModifierFlags.Export);
             const expressions: Expression[] = [];
             for (const variable of node.declarationList.declarations) {
-                addNode(expressions, transformVariable(variable, isExported));
+                addNode(expressions, <Expression>transformVariable(variable, isExported));
             }
 
             if (expressions.length) {
-                return createStatement(inlineExpressions(expressions));
+                return createStatement(inlineExpressions(expressions), node);
             }
 
             return undefined;
@@ -561,7 +621,7 @@ namespace ts {
          * @param node The VariableDeclaration to transform.
          * @param isExported A value used to indicate whether the containing statement was exported.
          */
-        function transformVariable(node: VariableDeclaration, isExported: boolean): Expression {
+        function transformVariable(node: VariableDeclaration, isExported: boolean): VariableDeclaration | Expression {
             // Hoist any bound names within the declaration.
             hoistBindingElement(node, isExported);
 
@@ -577,7 +637,7 @@ namespace ts {
             }
             else {
                 // If the variable has a BindingPattern, flatten the variable into multiple assignment expressions.
-                return flattenVariableDestructuringToExpression(node, hoistVariableDeclaration);
+                return flattenVariableDestructuringToExpression(context, node, hoistVariableDeclaration);
             }
         }
 
@@ -587,10 +647,10 @@ namespace ts {
          * @param node The function declaration to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): Node {
-            if (node.flags & NodeFlags.Export) {
+            if (hasModifier(node, ModifierFlags.Export)) {
                 // If the function is exported, ensure it has a name and rewrite the function without any export flags.
                 const name = node.name || getGeneratedNameForNode(node);
-                node = createFunctionDeclaration(
+                const newNode = createFunctionDeclaration(
                     /*modifiers*/ undefined,
                     node.asteriskToken,
                     name,
@@ -601,9 +661,12 @@ namespace ts {
                 // Record a declaration export in the outer module body function.
                 recordExportedFunctionDeclaration(node);
 
-                if ((node.flags & NodeFlags.Default) === 0) {
+                if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
+
+                setOriginalNode(newNode, node);
+                node = newNode;
             }
 
             // Hoist the function declaration to the outer module body function.
@@ -611,12 +674,30 @@ namespace ts {
             return undefined;
         }
 
+        function visitExpressionStatement(node: ExpressionStatement): VisitResult<Statement> {
+            const originalNode = getOriginalNode(node);
+            if ((originalNode.kind === SyntaxKind.ModuleDeclaration || originalNode.kind === SyntaxKind.EnumDeclaration) && hasModifier(originalNode, ModifierFlags.Export)) {
+                const name = getDeclarationName(<ModuleDeclaration | EnumDeclaration>originalNode);
+                // We only need to hoistVariableDeclaration for EnumDeclaration
+                // as ModuleDeclaration is already hoisted when the transformer call visitVariableStatement
+                // which then call transformsVariable for each declaration in declarationList
+                if (originalNode.kind === SyntaxKind.EnumDeclaration) {
+                    hoistVariableDeclaration(name);
+                }
+                return [
+                    node,
+                    createExportStatement(name, name)
+                ];
+            }
+            return node;
+        }
+
         /**
          * Visits a ClassDeclaration, hoisting its name to the outer module body function.
          *
          * @param node The class declaration to visit.
          */
-        function visitClassDeclaration(node: ClassDeclaration): OneOrMany<Statement> {
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             // Hoist the name of the class declaration to the outer module body function.
             const name = getDeclarationName(node);
             hoistVariableDeclaration(name);
@@ -640,15 +721,19 @@ namespace ts {
             );
 
             // If the class was exported, write a declaration export to the inner module body function.
-            if (node.flags & NodeFlags.Export) {
-                if ((node.flags & NodeFlags.Default) === 0) {
+            if (hasModifier(node, ModifierFlags.Export)) {
+                if (!hasModifier(node, ModifierFlags.Default)) {
                     recordExportName(name);
                 }
 
                 addNode(statements, createDeclarationExport(node));
             }
 
-            return createNodeArrayNode(statements);
+            return statements;
+        }
+
+        function shouldHoistLoopInitializer(node: VariableDeclarationList | Expression) {
+            return isVariableDeclarationList(node) && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0;
         }
 
         /**
@@ -658,10 +743,10 @@ namespace ts {
          */
         function visitForStatement(node: ForStatement): ForStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const expressions: Expression[] = [];
-                for (const variable of initializer.declarations) {
-                    addNode(expressions, transformVariable(variable, /*isExported*/ false));
+                for (const variable of (<VariableDeclarationList>initializer).declarations) {
+                    addNode(expressions, <Expression>transformVariable(variable, /*isExported*/ false));
                 };
 
                 return createFor(
@@ -691,7 +776,7 @@ namespace ts {
             const name = firstDeclaration.name;
             return isIdentifier(name)
                 ? name
-                : flattenVariableDestructuringToExpression(firstDeclaration, hoistVariableDeclaration);
+                : flattenVariableDestructuringToExpression(context, firstDeclaration, hoistVariableDeclaration);
         }
 
         /**
@@ -701,9 +786,9 @@ namespace ts {
          */
         function visitForInStatement(node: ForInStatement): ForInStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(initializer);
+                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
             }
@@ -719,9 +804,9 @@ namespace ts {
          */
         function visitForOfStatement(node: ForOfStatement): ForOfStatement {
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (shouldHoistLoopInitializer(initializer)) {
                 const updated = getMutableClone(node);
-                updated.initializer = transformForBinding(initializer);
+                updated.initializer = transformForBinding(<VariableDeclarationList>initializer);
                 updated.statement = visitNode(node.statement, visitNestedNode, isStatement, /*optional*/ false, liftToBlock);
                 return updated;
             }
@@ -881,20 +966,47 @@ namespace ts {
         // Substitutions
         //
 
+        function onEmitNode(node: Node, emit: (node: Node) => void): void {
+            if (node.kind === SyntaxKind.SourceFile) {
+                exportFunctionForFile = exportFunctionForFileMap[getNodeId(node)];
+                previousOnEmitNode(node, emit);
+                exportFunctionForFile = undefined;
+            }
+            else {
+                previousOnEmitNode(node, emit);
+            }
+        }
+
+        /**
+         * Hooks node substitutions.
+         *
+         * @param node The node to substitute.
+         * @param isExpression A value indicating whether the node is to be used in an expression
+         *                     position.
+         */
+        function onSubstituteNode(node: Node, isExpression: boolean) {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression>node);
+            }
+
+            return node;
+        }
+
         /**
          * Substitute the expression, if necessary.
          *
          * @param node The node to substitute.
          */
-        function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
+        function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     return substituteBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    return substitutePostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
             return node;
         }
@@ -905,7 +1017,10 @@ namespace ts {
         function substituteExpressionIdentifier(node: Identifier): Expression {
             const importDeclaration = resolver.getReferencedImportDeclaration(node);
             if (importDeclaration) {
-                return createImportBinding(importDeclaration);
+                const importBinding = createImportBinding(importDeclaration);
+                if (importBinding) {
+                    return importBinding;
+                }
             }
 
             return node;
@@ -1026,65 +1141,39 @@ namespace ts {
         }
 
         function substituteDestructuring(node: BinaryExpression) {
-            return flattenDestructuringAssignment(node, /*needsValue*/ true, hoistVariableDeclaration);
+            return flattenDestructuringAssignment(context, node, /*needsValue*/ true, hoistVariableDeclaration);
         }
 
-        function substitutePostfixUnaryExpression(node: PostfixUnaryExpression): Expression {
+        function substituteUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Expression {
             const operand = node.operand;
-            if (isIdentifier(operand)) {
-                const exportDeclaration = resolver.getReferencedExportContainer(operand);
-                if (exportDeclaration) {
-                    const exportCall = createExportExpression(
-                        operand,
-                        createPrefix(node.operator, operand, node)
-                    );
+            const operator = node.operator;
+            const substitute =
+                isIdentifier(operand) &&
+                (
+                    node.kind === SyntaxKind.PostfixUnaryExpression ||
+                    (node.kind === SyntaxKind.PrefixUnaryExpression && (operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken))
+                );
 
-                    return node.operator === SyntaxKind.PlusPlusToken
-                        ? createSubtract(exportCall, createLiteral(1))
-                        : createAdd(exportCall, createLiteral(1));
+            if (substitute) {
+                const exportDeclaration = resolver.getReferencedExportContainer(<Identifier>operand);
+                if (exportDeclaration) {
+                    const expr = createPrefix(node.operator, operand, node);
+                    setNodeEmitFlags(expr, NodeEmitFlags.NoSubstitution);
+                    const call = createExportExpression(<Identifier>operand, expr);
+                    if (node.kind === SyntaxKind.PrefixUnaryExpression) {
+                        return call;
+                    }
+                    else {
+                        // export function returns the value that was passes as the second argument
+                        // however for postfix unary expressions result value should be the value before modification.
+                        // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
+                        return operator === SyntaxKind.PlusPlusToken
+                            ? createSubtract(call, createLiteral(1))
+                            : createAdd(call, createLiteral(1));
+                    }
                 }
             }
             return node;
-        }
-
-        function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-            const moduleName = getExternalModuleName(importNode);
-            if (moduleName.kind === SyntaxKind.StringLiteral) {
-                return tryRenameExternalModule(<StringLiteral>moduleName)
-                    || getSynthesizedClone(<StringLiteral>moduleName);
-            }
-
-            return undefined;
-        }
-
-        /**
-         * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
-         * Here we check if alternative name was provided for a given moduleName and return it if possible.
-         */
-        function tryRenameExternalModule(moduleName: LiteralExpression) {
-            if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                return createLiteral(currentSourceFile.renamedDependencies[moduleName.text]);
-            }
-
-            return undefined;
-        }
-
-        function getLocalNameTextForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
-            const name = getLocalNameForExternalImport(node);
-            return name ? name.text : undefined;
-        }
-
-        function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): Identifier {
-            const namespaceDeclaration = getNamespaceDeclarationNode(node);
-            if (namespaceDeclaration && !isDefaultImport(node)) {
-                return createIdentifier(getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name));
-            }
-            if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
-                return getGeneratedNameForNode(node);
-            }
-            if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
-                return getGeneratedNameForNode(node);
-            }
         }
 
         /**
@@ -1130,14 +1219,17 @@ namespace ts {
                             ]),
                             m,
                             createBlock([
-                                createIf(
-                                    condition,
-                                    createStatement(
-                                        createAssignment(
-                                            createElementAccess(exports, n),
-                                            createElementAccess(m, n)
+                                setNodeEmitFlags(
+                                    createIf(
+                                        condition,
+                                        createStatement(
+                                            createAssignment(
+                                                createElementAccess(exports, n),
+                                                createElementAccess(m, n)
+                                            )
                                         )
-                                    )
+                                    ),
+                                    NodeEmitFlags.SingleLine
                                 )
                             ])
                         ),
@@ -1147,7 +1239,9 @@ namespace ts {
                                 [exports]
                             )
                         )
-                    ])
+                    ],
+                    /*location*/ undefined,
+                    /*multiline*/ true)
                 )
             );
 
@@ -1179,7 +1273,7 @@ namespace ts {
          */
         function createDeclarationExport(node: DeclarationStatement) {
             const declarationName = getDeclarationName(node);
-            const exportName = node.flags & NodeFlags.Default ? createLiteral("default") : declarationName;
+            const exportName = hasModifier(node, ModifierFlags.Default) ? createLiteral("default") : declarationName;
             return createExportStatement(exportName, declarationName);
         }
 
@@ -1189,11 +1283,13 @@ namespace ts {
             if (isImportClause(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent);
                 name = createIdentifier("default");
-                name.originalKeywordKind = SyntaxKind.DefaultKeyword;
             }
             else if (isImportSpecifier(importDeclaration)) {
                 importAlias = getGeneratedNameForNode(importDeclaration.parent.parent.parent);
                 name = importDeclaration.propertyName || importDeclaration.name;
+            }
+            else {
+                return undefined;
             }
 
             if (name.originalKeywordKind && languageVersion === ScriptTarget.ES3) {
@@ -1209,7 +1305,7 @@ namespace ts {
             const dependencyGroups: DependencyGroup[] = [];
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
-                const externalModuleName = getExternalModuleNameLiteral(externalImport);
+                const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
                 const text = externalModuleName.text;
                 if (hasProperty(groupIndices, text)) {
                     // deduplicate/group entries in dependency list by the dependency name
@@ -1249,7 +1345,7 @@ namespace ts {
             exportedFunctionDeclarations.push(createDeclarationExport(node));
         }
 
-        function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean) {
+        function hoistBindingElement(node: VariableDeclaration | BindingElement, isExported: boolean): void {
             const name = node.name;
             if (isIdentifier(name)) {
                 hoistVariableDeclaration(getSynthesizedClone(name));
@@ -1270,9 +1366,10 @@ namespace ts {
             hoistBindingElement(node, /*isExported*/ false);
         }
 
-        function updateSourceFile(node: SourceFile, statements: Statement[]) {
-            const updated = cloneNode(node, node, node.flags, /*parent*/ undefined, node);
+        function updateSourceFile(node: SourceFile, statements: Statement[], nodeEmitFlags: NodeEmitFlags) {
+            const updated = getMutableClone(node);
             updated.statements = createNodeArray(statements, node.statements);
+            setNodeEmitFlags(updated, nodeEmitFlags);
             return updated;
         }
     }

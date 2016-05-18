@@ -98,4 +98,6 @@ declare module "e" {
     }
 }
 declare module "main" {
+    import "D";
+    import "e";
 }

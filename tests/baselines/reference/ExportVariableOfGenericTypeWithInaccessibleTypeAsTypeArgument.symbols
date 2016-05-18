@@ -6,7 +6,7 @@ module A {
 >B : Symbol(B, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 0, 10))
 
         id: number;
->id : Symbol(id, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 1, 13))
+>id : Symbol(B.id, Decl(ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.ts, 1, 13))
     }
 
     export var beez: Array<B>;

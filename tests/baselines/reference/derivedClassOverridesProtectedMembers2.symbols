@@ -12,25 +12,25 @@ class Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 36))
 
     protected a: typeof x;
->a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 3, 12))
+>a : Symbol(Base.a, Decl(derivedClassOverridesProtectedMembers2.ts, 3, 12))
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected b(a: typeof x) { }
->b : Symbol(b, Decl(derivedClassOverridesProtectedMembers2.ts, 4, 26))
+>b : Symbol(Base.b, Decl(derivedClassOverridesProtectedMembers2.ts, 4, 26))
 >a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 16))
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected get c() { return x; }
->c : Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
+>c : Symbol(Base.c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected set c(v: typeof x) { }
->c : Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
+>c : Symbol(Base.c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
 >v : Symbol(v, Decl(derivedClassOverridesProtectedMembers2.ts, 7, 20))
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected d: (a: typeof x) => void ;
->d : Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 7, 36))
+>d : Symbol(Base.d, Decl(derivedClassOverridesProtectedMembers2.ts, 7, 36))
 >a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 8, 18))
 >x : Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
@@ -68,25 +68,25 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 36))
 
     a: typeof y;
->a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 20, 28))
+>a : Symbol(Derived.a, Decl(derivedClassOverridesProtectedMembers2.ts, 20, 28))
 >y : Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     b(a: typeof y) { }
->b : Symbol(b, Decl(derivedClassOverridesProtectedMembers2.ts, 21, 16))
+>b : Symbol(Derived.b, Decl(derivedClassOverridesProtectedMembers2.ts, 21, 16))
 >a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 6))
 >y : Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     get c() { return y; }
->c : Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>c : Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
 >y : Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     set c(v: typeof y) { }
->c : Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>c : Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
 >v : Symbol(v, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 10))
 >y : Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     d: (a: typeof y) => void;
->d : Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 26))
+>d : Symbol(Derived.d, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 26))
 >a : Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 25, 8))
 >y : Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 

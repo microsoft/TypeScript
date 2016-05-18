@@ -5,7 +5,7 @@ class A<T extends Object>{
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
       list: T ;
->list : Symbol(list, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 26))
+>list : Symbol(A.list, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 26))
 >T : Symbol(T, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 8))
 }
 var a = new A();

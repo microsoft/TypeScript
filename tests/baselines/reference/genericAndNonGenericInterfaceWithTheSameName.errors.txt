@@ -1,6 +1,6 @@
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(7,11): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(16,15): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declarations of an interface must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(7,11): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(16,15): error TS2428: All declarations of 'A' must have identical type parameters.
+tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts(40,22): error TS2428: All declarations of 'A' must have identical type parameters.
 
 
 ==== tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts (3 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterf
     
     interface A<T> { // error
               ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
         bar: T;
     }
     
@@ -23,7 +23,7 @@ tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterf
     
         interface A { // error
                   ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
             foo: string;
         }
     }
@@ -49,7 +49,7 @@ tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterf
     module M3 {
         export interface A<T> { // error
                          ~
-!!! error TS2428: All declarations of an interface must have identical type parameters.
+!!! error TS2428: All declarations of 'A' must have identical type parameters.
             bar: T;
         }
     }

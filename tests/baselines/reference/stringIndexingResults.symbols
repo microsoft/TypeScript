@@ -6,7 +6,7 @@ class C {
 >x : Symbol(x, Decl(stringIndexingResults.ts, 1, 5))
 
     y = '';
->y : Symbol(y, Decl(stringIndexingResults.ts, 1, 24))
+>y : Symbol(C.y, Decl(stringIndexingResults.ts, 1, 24))
 }
 
 var c: C;
@@ -33,7 +33,7 @@ interface I {
 >x : Symbol(x, Decl(stringIndexingResults.ts, 11, 5))
 
     y: string;
->y : Symbol(y, Decl(stringIndexingResults.ts, 11, 24))
+>y : Symbol(I.y, Decl(stringIndexingResults.ts, 11, 24))
 }
 
 var i: I

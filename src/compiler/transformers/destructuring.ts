@@ -13,13 +13,20 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenDestructuringAssignment(
+        context: TransformationContext,
         node: BinaryExpression,
         needsValue: boolean,
         recordTempVariable: (node: Identifier) => void,
-        visitor?: (node: Node) => Node) {
+        visitor?: (node: Node) => VisitResult<Node>): Expression {
 
         if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
-            return node.right;
+            const right = node.right;
+            if (isDestructuringAssignment(right)) {
+                return flattenDestructuringAssignment(context, right, needsValue, recordTempVariable, visitor);
+            }
+            else {
+                return node.right;
+            }
         }
 
         let location: TextRange = node;
@@ -32,7 +39,7 @@ namespace ts {
             //
             // The source map location for the assignment should point to the entire binary
             // expression.
-            value = ensureIdentifier(node.right, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment);
+            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, location, emitTempVariableAssignment, visitor);
         }
         else if (nodeIsSynthesized(node)) {
             // Generally, the source map location for a destructuring assignment is the root
@@ -41,10 +48,10 @@ namespace ts {
             // However, if the root expression is synthesized (as in the case
             // of the initializer when transforming a ForOfStatement), then the source map
             // location should point to the right-hand value of the expression.
-            location = node.right;
+            location = value;
         }
 
-        flattenDestructuring(node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, location, emitAssignment, emitTempVariableAssignment, visitor);
 
         if (needsValue) {
             expressions.push(value);
@@ -56,17 +63,17 @@ namespace ts {
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const expression = createAssignment(name, value, location);
-            if (isSimpleExpression(value)) {
-                expression.disableSourceMap = true;
-            }
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
-            recordTempVariable(name);
+            const name = createTempVariable(recordTempVariable);
             emitAssignment(name, value, location);
             return name;
         }
@@ -79,25 +86,30 @@ namespace ts {
      * @param value The rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenParameterDestructuring(node: ParameterDeclaration, value: Expression, visitor?: (node: Node) => Node) {
+    export function flattenParameterDestructuring(
+        context: TransformationContext,
+        node: ParameterDeclaration,
+        value: Expression,
+        visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const declaration = createVariableDeclaration(name, value, location);
-            if (isSimpleExpression(value)) {
-                declaration.disableSourceMap = true;
-            }
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
             emitAssignment(name, value, location);
             return name;
         }
@@ -110,30 +122,31 @@ namespace ts {
      * @param value An optional rhs value for the binding pattern.
      * @param visitor An optional visitor to use to visit expressions.
      */
-    export function flattenVariableDestructuring(node: VariableDeclaration, value?: Expression, visitor?: (node: Node) => Node) {
+    export function flattenVariableDestructuring(
+        context: TransformationContext,
+        node: VariableDeclaration,
+        value?: Expression,
+        visitor?: (node: Node) => VisitResult<Node>) {
         const declarations: VariableDeclaration[] = [];
 
-        flattenDestructuring(node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
+        flattenDestructuring(context, node, value, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         return declarations;
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
             const declaration = createVariableDeclaration(name, value, location);
-            if (declarations.length === 0) {
-                declaration.pos = -1;
-            }
-
-            if (isSimpleExpression(value)) {
-                declaration.disableSourceMap = true;
-            }
-
             declaration.original = original;
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
+            const name = createTempVariable(/*recordTempVariable*/ undefined);
             emitAssignment(name, value, location, /*original*/ undefined);
             return name;
         }
@@ -148,14 +161,15 @@ namespace ts {
      * @param visitor An optional visitor to use to visit expressions.
      */
     export function flattenVariableDestructuringToExpression(
+        context: TransformationContext,
         node: VariableDeclaration,
         recordTempVariable: (name: Identifier) => void,
         nameSubstitution?: (name: Identifier) => Expression,
-        visitor?: (node: Node) => Node) {
+        visitor?: (node: Node) => VisitResult<Node>) {
 
         const pendingAssignments: Expression[] = [];
 
-        flattenDestructuring(node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment);
+        flattenDestructuring(context, node, /*value*/ undefined, node, emitAssignment, emitTempVariableAssignment, visitor);
 
         const expression = inlineExpressions(pendingAssignments);
         aggregateTransformFlags(expression);
@@ -167,31 +181,32 @@ namespace ts {
         }
 
         function emitTempVariableAssignment(value: Expression, location: TextRange) {
-            const name = createTempVariable();
-            recordTempVariable(name);
+            const name = createTempVariable(recordTempVariable);
             emitPendingAssignment(name, value, location, /*original*/ undefined);
             return name;
         }
 
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignment(name, value, location);
-            if (isSimpleExpression(value)) {
-                expression.disableSourceMap = true;
-            }
-
             expression.original = original;
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+
             pendingAssignments.push(expression);
             return expression;
         }
     }
 
     function flattenDestructuring(
+        context: TransformationContext,
         root: BindingElement | BinaryExpression,
         value: Expression,
         location: TextRange,
         emitAssignment: (name: Identifier, value: Expression, location: TextRange, original: Node) => void,
         emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
-        visitor?: (node: Node) => Node) {
+        visitor?: (node: Node) => VisitResult<Node>) {
         if (value && visitor) {
             value = visitNode(value, visitor, isExpression);
         }
@@ -236,7 +251,7 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = cloneNode(<Identifier>target, /*location*/ target, /*flags*/ undefined, /*parent*/ undefined, /*original*/ target);
+                const name = getSynthesizedClone(<Identifier>target, { sourceMapRange: target, commentRange: target });
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }
@@ -326,8 +341,7 @@ namespace ts {
                 }
             }
             else {
-                const clonedName = cloneNode(name, /*location*/ undefined, /*flags*/ undefined, /*parent*/ undefined, /*original*/ name);
-                emitAssignment(clonedName, value, target, target);
+                emitAssignment(name, value, target, target);
             }
         }
 
@@ -354,19 +368,20 @@ namespace ts {
                     ensureIdentifier(propertyName.expression, /*reuseIdentifierExpressions*/ false, /*location*/ propertyName, emitTempVariableAssignment)
                 );
             }
-            else if (isIdentifier(propertyName)) {
-                return createPropertyAccess(
-                    expression,
-                    propertyName.text
-                );
+            else if (isLiteralExpression(propertyName)) {
+                const clone = getSynthesizedClone(propertyName);
+                clone.text = unescapeIdentifier(clone.text);
+                return createElementAccess(expression, clone);
             }
             else {
-                // We create a synthetic copy of the identifier in order to avoid the rewriting that might
-                // otherwise occur when the identifier is emitted.
-                return createElementAccess(
-                    expression,
-                    cloneNode(propertyName)
-                );
+                if (isGeneratedIdentifier(propertyName)) {
+                    const clone = getSynthesizedClone(propertyName);
+                    clone.text = unescapeIdentifier(clone.text);
+                    return createPropertyAccess(expression, clone);
+                }
+                else {
+                    return createPropertyAccess(expression, createIdentifier(unescapeIdentifier(propertyName.text)));
+                }
             }
         }
     }
@@ -381,16 +396,23 @@ namespace ts {
      *                                   false if it is necessary to always emit an identifier.
      * @param location The location to use for source maps and comments.
      * @param emitTempVariableAssignment A callback used to emit a temporary variable.
+     * @param visitor An optional callback used to visit the value.
      */
     function ensureIdentifier(
         value: Expression,
         reuseIdentifierExpressions: boolean,
         location: TextRange,
-        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier) {
+        emitTempVariableAssignment: (value: Expression, location: TextRange) => Identifier,
+        visitor?: (node: Node) => VisitResult<Node>) {
+
         if (isIdentifier(value) && reuseIdentifierExpressions) {
             return value;
         }
         else {
+            if (visitor) {
+                value = visitNode(value, visitor, isExpression);
+            }
+
             return emitTempVariableAssignment(value, location);
         }
     }

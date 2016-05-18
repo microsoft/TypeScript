@@ -5,7 +5,7 @@ tests/cases/compiler/fuzzy.ts(21,20): error TS2322: Type '{ anything: number; on
     Type 'this' is not assignable to type 'I'.
       Type 'C' is not assignable to type 'I'.
         Property 'alsoWorks' is missing in type 'C'.
-tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Neither type '{ oneI: this; }' nor type 'R' is assignable to the other.
+tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Type '{ oneI: this; }' cannot be converted to type 'R'.
   Property 'anything' is missing in type '{ oneI: this; }'.
 
 
@@ -45,7 +45,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Neither type '{ oneI: this; 
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '{ oneI: this; }' nor type 'R' is assignable to the other.
+!!! error TS2352: Type '{ oneI: this; }' cannot be converted to type 'R'.
 !!! error TS2352:   Property 'anything' is missing in type '{ oneI: this; }'.
             }
         }

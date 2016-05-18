@@ -11,7 +11,7 @@
 //// var y = 10;
 
 // @Filename: consumer.js
-//// var x = require('myMod');
+//// var x = require('./myMod');
 //// /**/;
 
 goTo.file('consumer.js');

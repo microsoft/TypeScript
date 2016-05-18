@@ -61,16 +61,16 @@ class C<T> {
 >T : Symbol(T, Decl(throwInEnclosingStatements.ts, 29, 8))
 
     private value: T;
->value : Symbol(value, Decl(throwInEnclosingStatements.ts, 29, 12))
+>value : Symbol(C.value, Decl(throwInEnclosingStatements.ts, 29, 12))
 >T : Symbol(T, Decl(throwInEnclosingStatements.ts, 29, 8))
 
     biz() {
->biz : Symbol(biz, Decl(throwInEnclosingStatements.ts, 30, 21))
+>biz : Symbol(C.biz, Decl(throwInEnclosingStatements.ts, 30, 21))
 
         throw this.value;
->this.value : Symbol(value, Decl(throwInEnclosingStatements.ts, 29, 12))
+>this.value : Symbol(C.value, Decl(throwInEnclosingStatements.ts, 29, 12))
 >this : Symbol(C, Decl(throwInEnclosingStatements.ts, 27, 26))
->value : Symbol(value, Decl(throwInEnclosingStatements.ts, 29, 12))
+>value : Symbol(C.value, Decl(throwInEnclosingStatements.ts, 29, 12))
     }
 
     constructor() {
@@ -89,6 +89,7 @@ var aa = {
 >biz : Symbol(biz, Decl(throwInEnclosingStatements.ts, 41, 10))
 
         throw this;
+>this : Symbol(, Decl(throwInEnclosingStatements.ts, 40, 8))
     }
 }
 

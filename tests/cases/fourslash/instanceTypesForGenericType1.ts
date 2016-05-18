@@ -11,4 +11,4 @@ goTo.marker('1');
 verify.quickInfoIs('(property) G<T>.self: G<T>');
 
 goTo.marker('2');
-verify.quickInfoIs('class G<T>');
+verify.quickInfoIs('this: this');

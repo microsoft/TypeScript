@@ -15,18 +15,18 @@ class a {
     }
 
     public pgF() { }
->pgF : Symbol(pgF, Decl(classdecl.ts, 6, 5))
+>pgF : Symbol(a.pgF, Decl(classdecl.ts, 6, 5))
 
     public pv;
->pv : Symbol(pv, Decl(classdecl.ts, 8, 20))
+>pv : Symbol(a.pv, Decl(classdecl.ts, 8, 20))
 
     public get d() {
->d : Symbol(d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
+>d : Symbol(a.d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
 
         return 30;
     }
     public set d(a: number) {
->d : Symbol(d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
+>d : Symbol(a.d, Decl(classdecl.ts, 10, 14), Decl(classdecl.ts, 13, 5))
 >a : Symbol(a, Decl(classdecl.ts, 14, 17))
     }
 
@@ -47,18 +47,18 @@ class a {
         return "string";
     }
     private pv3;
->pv3 : Symbol(pv3, Decl(classdecl.ts, 25, 5))
+>pv3 : Symbol(a.pv3, Decl(classdecl.ts, 25, 5))
 
     private foo(n: number): string;
->foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+>foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
 >n : Symbol(n, Decl(classdecl.ts, 28, 16))
 
     private foo(s: string): string;
->foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+>foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
 >s : Symbol(s, Decl(classdecl.ts, 29, 16))
 
     private foo(ns: any) {
->foo : Symbol(foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
+>foo : Symbol(a.foo, Decl(classdecl.ts, 26, 16), Decl(classdecl.ts, 28, 35), Decl(classdecl.ts, 29, 35))
 >ns : Symbol(ns, Decl(classdecl.ts, 30, 16))
 
         return ns.toString();
@@ -130,13 +130,13 @@ declare class aAmbient {
 >s : Symbol(s, Decl(classdecl.ts, 67, 17))
 
     public pgF(): void;
->pgF : Symbol(pgF, Decl(classdecl.ts, 67, 28))
+>pgF : Symbol(aAmbient.pgF, Decl(classdecl.ts, 67, 28))
 
     public pv;
->pv : Symbol(pv, Decl(classdecl.ts, 68, 23))
+>pv : Symbol(aAmbient.pv, Decl(classdecl.ts, 68, 23))
 
     public d : number;
->d : Symbol(d, Decl(classdecl.ts, 69, 14))
+>d : Symbol(aAmbient.d, Decl(classdecl.ts, 69, 14))
 
     static p2 : { x: number; y: number; };
 >p2 : Symbol(aAmbient.p2, Decl(classdecl.ts, 70, 22))
@@ -150,10 +150,10 @@ declare class aAmbient {
 >p3 : Symbol(aAmbient.p3, Decl(classdecl.ts, 72, 16))
 
     private pv3;
->pv3 : Symbol(pv3, Decl(classdecl.ts, 73, 14))
+>pv3 : Symbol(aAmbient.pv3, Decl(classdecl.ts, 73, 14))
 
     private foo(s);
->foo : Symbol(foo, Decl(classdecl.ts, 74, 16))
+>foo : Symbol(aAmbient.foo, Decl(classdecl.ts, 74, 16))
 >s : Symbol(s, Decl(classdecl.ts, 75, 16))
 }
 
@@ -161,15 +161,15 @@ class d {
 >d : Symbol(d, Decl(classdecl.ts, 76, 1))
 
     private foo(n: number): string;
->foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+>foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
 >n : Symbol(n, Decl(classdecl.ts, 79, 16))
 
     private foo(s: string): string;
->foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+>foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
 >s : Symbol(s, Decl(classdecl.ts, 80, 16))
 
     private foo(ns: any) {
->foo : Symbol(foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
+>foo : Symbol(d.foo, Decl(classdecl.ts, 78, 9), Decl(classdecl.ts, 79, 35), Decl(classdecl.ts, 80, 35))
 >ns : Symbol(ns, Decl(classdecl.ts, 81, 16))
 
         return ns.toString();
@@ -181,15 +181,15 @@ class e {
 >e : Symbol(e, Decl(classdecl.ts, 84, 1))
 
     private foo(s: string): string;
->foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+>foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
 >s : Symbol(s, Decl(classdecl.ts, 87, 16))
 
     private foo(n: number): string;
->foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+>foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
 >n : Symbol(n, Decl(classdecl.ts, 88, 16))
 
     private foo(ns: any) {
->foo : Symbol(foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
+>foo : Symbol(e.foo, Decl(classdecl.ts, 86, 9), Decl(classdecl.ts, 87, 35), Decl(classdecl.ts, 88, 35))
 >ns : Symbol(ns, Decl(classdecl.ts, 89, 16))
 
         return ns.toString();

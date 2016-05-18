@@ -18,7 +18,7 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Node): Node {
+        function visitor(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.Jsx) {
                 return visitorWorker(node);
             }
@@ -30,16 +30,21 @@ namespace ts {
             }
         }
 
-        function visitorWorker(node: Node): Node {
+        function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
-                    return visitJsxElement(<JsxElement>node);
+                    return visitJsxElement(<JsxElement>node, /*isChild*/ false);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-            }
+                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ false);
 
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
+                case SyntaxKind.JsxExpression:
+                    return visitJsxExpression(<JsxExpression>node);
+
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
+            }
         }
 
         function transformJsxChildToExpression(node: JsxChild): Expression {
@@ -51,24 +56,26 @@ namespace ts {
                     return visitJsxExpression(<JsxExpression>node);
 
                 case SyntaxKind.JsxElement:
-                    return visitJsxElement(<JsxElement>node);
+                    return visitJsxElement(<JsxElement>node, /*isChild*/ true);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ true);
+
+                default:
+                    Debug.failBadSyntaxKind(node);
+                    return undefined;
             }
-
-            Debug.fail(`Unexpected node kind: ${formatSyntaxKind(node.kind)}.`);
         }
 
-        function visitJsxElement(node: JsxElement) {
-            return visitJsxOpeningLikeElement(node.openingElement, node.children);
+        function visitJsxElement(node: JsxElement, isChild: boolean) {
+            return visitJsxOpeningLikeElement(node.openingElement, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
-            return visitJsxOpeningLikeElement(node, /*children*/ undefined);
+        function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
+            return visitJsxOpeningLikeElement(node, /*children*/ undefined, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[]) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: JsxChild[], isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
             let objectProperties: Expression;
             const attrs = node.attributes;
@@ -93,17 +100,25 @@ namespace ts {
                 }
 
                 // Either emit one big object literal (no spread attribs), or
-                // a call to React.__spread
+                // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createJsxSpread(compilerOptions.reactNamespace, segments);
+                    || createAssignHelper(segments);
             }
 
-            return createJsxCreateElement(
+            const element = createReactCreateElement(
                 compilerOptions.reactNamespace,
                 tagName,
                 objectProperties,
-                filter(map(children, transformJsxChildToExpression), isDefined)
+                filter(map(children, transformJsxChildToExpression), isDefined),
+                node,
+                location
             );
+
+            if (isChild) {
+                startOnNewLine(element);
+            }
+
+            return element;
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
@@ -112,10 +127,23 @@ namespace ts {
 
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
-            const expression = node.initializer
-                ? visitNode(node.initializer, visitor, isExpression)
-                : createLiteral(true);
+            const expression = transformJsxAttributeInitializer(node.initializer);
             return createPropertyAssignment(name, expression);
+        }
+
+        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
+            if (node === undefined) {
+                return createLiteral(true);
+            }
+            else if (node.kind === SyntaxKind.StringLiteral) {
+                return node;
+            }
+            else if (node.kind === SyntaxKind.JsxExpression) {
+                return visitJsxExpression(<JsxExpression>node);
+            }
+            else {
+                Debug.failBadSyntaxKind(node);
+            }
         }
 
         function visitJsxText(node: JsxText) {
@@ -214,10 +242,10 @@ namespace ts {
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
             if (/^[A-Za-z_]\w*$/.test(name.text)) {
-                return createLiteral(name.text);
+                return name;
             }
             else {
-                return name;
+                return createLiteral(name.text);
             }
         }
 

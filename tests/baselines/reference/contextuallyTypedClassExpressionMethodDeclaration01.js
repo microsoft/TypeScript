@@ -61,7 +61,7 @@ function getFoo1() {
     }());
 }
 function getFoo2() {
-    return (_a = (function () {
+    return _a = (function () {
             function class_2() {
             }
             return class_2;
@@ -72,11 +72,11 @@ function getFoo2() {
         _a.method2 = function (arg) {
             arg.strProp = "hello";
         },
-        _a);
+        _a;
     var _a;
 }
 function getFoo3() {
-    return (_a = (function () {
+    return _a = (function () {
             function class_3() {
             }
             return class_3;
@@ -87,6 +87,6 @@ function getFoo3() {
         _a.method2 = function (arg) {
             arg.strProp = "hello";
         },
-        _a);
+        _a;
     var _a;
 }

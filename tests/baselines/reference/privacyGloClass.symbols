@@ -14,7 +14,7 @@ module m1 {
 >m1_c_public : Symbol(m1_c_public, Decl(privacyGloClass.ts, 5, 5))
 
         private f1() {
->f1 : Symbol(f1, Decl(privacyGloClass.ts, 7, 30))
+>f1 : Symbol(m1_c_public.f1, Decl(privacyGloClass.ts, 7, 30))
         }
     }
 
@@ -90,7 +90,7 @@ class glo_c_public {
 >glo_c_public : Symbol(glo_c_public, Decl(privacyGloClass.ts, 44, 1))
 
     private f1() {
->f1 : Symbol(f1, Decl(privacyGloClass.ts, 46, 20))
+>f1 : Symbol(glo_c_public.f1, Decl(privacyGloClass.ts, 46, 20))
     }
 }
 

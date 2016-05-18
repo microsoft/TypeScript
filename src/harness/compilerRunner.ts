@@ -1,7 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
-/* tslint:disable:no-null */
+/* tslint:disable:no-null-keyword */
 
 const enum CompilerTestType {
     Conformance,
@@ -88,7 +88,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = [];
                 otherFiles = [];
 
-                if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
+                if (testCaseContent.settings["noImplicitReferences"] || /require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
                     toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
@@ -100,6 +100,10 @@ class CompilerBaselineRunner extends RunnerBase {
                     toBeCompiled = units.map(unit => {
                         return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
                     });
+                }
+
+                if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
+                    tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
                 }
 
                 const output = Harness.Compiler.compileFiles(
@@ -140,7 +144,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it (`Correct module resolution tracing for ${fileName}`, () => {
-                if (options.traceModuleResolution) {
+                if (options.traceResolution) {
                     Harness.Baseline.runBaseline("Correct sourcemap content for " + fileName, justName.replace(/\.tsx?$/, ".trace.json"), () => {
                         return JSON.stringify(result.traceResults || [], undefined, 4);
                     });
@@ -252,125 +256,128 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 // NEWTODO: Type baselines
-                if (result.errors.length === 0) {
-                    // The full walker simulates the types that you would get from doing a full
-                    // compile.  The pull walker simulates the types you get when you just do
-                    // a type query for a random node (like how the LS would do it).  Most of the
-                    // time, these will be the same.  However, occasionally, they can be different.
-                    // Specifically, when the compiler internally depends on symbol IDs to order
-                    // things, then we may see different results because symbols can be created in a
-                    // different order with 'pull' operations, and thus can produce slightly differing
-                    // output.
-                    //
-                    // For example, with a full type check, we may see a type outputed as: number | string
-                    // But with a pull type check, we may see it as:                       string | number
-                    //
-                    // These types are equivalent, but depend on what order the compiler observed
-                    // certain parts of the program.
-
-                    const program = result.program;
-                    const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
-
-                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
-
-                    const fullResults: ts.Map<TypeWriterResult[]> = {};
-                    const pullResults: ts.Map<TypeWriterResult[]> = {};
-
-                    for (const sourceFile of allFiles) {
-                        fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
-                        pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
-                    }
-
-                    // Produce baselines.  The first gives the types for all expressions.
-                    // The second gives symbols for all identifiers.
-                    let e1: Error, e2: Error;
-                    try {
-                        checkBaseLines(/*isSymbolBaseLine*/ false);
-                    }
-                    catch (e) {
-                        e1 = e;
-                    }
-
-                    try {
-                        checkBaseLines(/*isSymbolBaseLine*/ true);
-                    }
-                    catch (e) {
-                        e2 = e;
-                    }
-
-                    if (e1 || e2) {
-                        throw e1 || e2;
-                    }
-
+                if (result.errors.length !== 0) {
                     return;
+                }
 
-                    function checkBaseLines(isSymbolBaseLine: boolean) {
-                        const fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
-                        const pullBaseLine = generateBaseLine(pullResults, isSymbolBaseLine);
+                // The full walker simulates the types that you would get from doing a full
+                // compile.  The pull walker simulates the types you get when you just do
+                // a type query for a random node (like how the LS would do it).  Most of the
+                // time, these will be the same.  However, occasionally, they can be different.
+                // Specifically, when the compiler internally depends on symbol IDs to order
+                // things, then we may see different results because symbols can be created in a
+                // different order with 'pull' operations, and thus can produce slightly differing
+                // output.
+                //
+                // For example, with a full type check, we may see a type displayed as: number | string
+                // But with a pull type check, we may see it as:                        string | number
+                //
+                // These types are equivalent, but depend on what order the compiler observed
+                // certain parts of the program.
 
-                        const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
-                        const pullExtension = isSymbolBaseLine ? ".symbols.pull" : ".types.pull";
+                const program = result.program;
+                const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
-                        if (fullBaseLine !== pullBaseLine) {
-                            Harness.Baseline.runBaseline("Correct full information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
-                            Harness.Baseline.runBaseline("Correct pull information for " + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
-                        }
-                        else {
-                            Harness.Baseline.runBaseline("Correct information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
-                        }
+                const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
+
+                const fullResults: ts.Map<TypeWriterResult[]> = {};
+                const pullResults: ts.Map<TypeWriterResult[]> = {};
+
+                for (const sourceFile of allFiles) {
+                    fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                    pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                }
+
+                // Produce baselines.  The first gives the types for all expressions.
+                // The second gives symbols for all identifiers.
+                let e1: Error, e2: Error;
+                try {
+                    checkBaseLines(/*isSymbolBaseLine*/ false);
+                }
+                catch (e) {
+                    e1 = e;
+                }
+
+                try {
+                    checkBaseLines(/*isSymbolBaseLine*/ true);
+                }
+                catch (e) {
+                    e2 = e;
+                }
+
+                if (e1 || e2) {
+                    throw e1 || e2;
+                }
+
+                return;
+
+                function checkBaseLines(isSymbolBaseLine: boolean) {
+                    const fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+                    const pullBaseLine = generateBaseLine(pullResults, isSymbolBaseLine);
+
+                    const fullExtension = isSymbolBaseLine ? ".symbols" : ".types";
+                    const pullExtension = isSymbolBaseLine ? ".symbols.pull" : ".types.pull";
+
+                    if (fullBaseLine !== pullBaseLine) {
+                        Harness.Baseline.runBaseline("Correct full information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
+                        Harness.Baseline.runBaseline("Correct pull information for " + fileName, justName.replace(/\.tsx?/, pullExtension), () => pullBaseLine);
                     }
-
-                    function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
-                        const typeLines: string[] = [];
-                        const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
-
-                        allFiles.forEach(file => {
-                            const codeLines = file.content.split("\n");
-                            typeWriterResults[file.unitName].forEach(result => {
-                                if (isSymbolBaseline && !result.symbol) {
-                                    return;
-                                }
-
-                                const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
-                                const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
-                                if (!typeMap[file.unitName]) {
-                                    typeMap[file.unitName] = {};
-                                }
-
-                                let typeInfo = [formattedLine];
-                                const existingTypeInfo = typeMap[file.unitName][result.line];
-                                if (existingTypeInfo) {
-                                    typeInfo = existingTypeInfo.concat(typeInfo);
-                                }
-                                typeMap[file.unitName][result.line] = typeInfo;
-                            });
-
-                            typeLines.push("=== " + file.unitName + " ===\r\n");
-                            for (let i = 0; i < codeLines.length; i++) {
-                                const currentCodeLine = codeLines[i];
-                                typeLines.push(currentCodeLine + "\r\n");
-                                if (typeMap[file.unitName]) {
-                                    const typeInfo = typeMap[file.unitName][i];
-                                    if (typeInfo) {
-                                        typeInfo.forEach(ty => {
-                                            typeLines.push(">" + ty + "\r\n");
-                                        });
-                                        if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === "")) {
-                                        }
-                                        else {
-                                            typeLines.push("\r\n");
-                                        }
-                                    }
-                                }
-                                else {
-                                    typeLines.push("No type information for this code.");
-                                }
-                            }
-                        });
-
-                        return typeLines.join("");
+                    else {
+                        Harness.Baseline.runBaseline("Correct information for " + fileName, justName.replace(/\.tsx?/, fullExtension), () => fullBaseLine);
                     }
                 }
+
+                function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                    const typeLines: string[] = [];
+                    const typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+
+                    allFiles.forEach(file => {
+                        const codeLines = file.content.split("\n");
+                        typeWriterResults[file.unitName].forEach(result => {
+                            if (isSymbolBaseline && !result.symbol) {
+                                return;
+                            }
+
+                            const typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
+                            const formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
+                            if (!typeMap[file.unitName]) {
+                                typeMap[file.unitName] = {};
+                            }
+
+                            let typeInfo = [formattedLine];
+                            const existingTypeInfo = typeMap[file.unitName][result.line];
+                            if (existingTypeInfo) {
+                                typeInfo = existingTypeInfo.concat(typeInfo);
+                            }
+                            typeMap[file.unitName][result.line] = typeInfo;
+                        });
+
+                        typeLines.push("=== " + file.unitName + " ===\r\n");
+                        for (let i = 0; i < codeLines.length; i++) {
+                            const currentCodeLine = codeLines[i];
+                            typeLines.push(currentCodeLine + "\r\n");
+                            if (typeMap[file.unitName]) {
+                                const typeInfo = typeMap[file.unitName][i];
+                                if (typeInfo) {
+                                    typeInfo.forEach(ty => {
+                                        typeLines.push(">" + ty + "\r\n");
+                                    });
+                                    if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === "")) {
+                                    }
+                                    else {
+                                        typeLines.push("\r\n");
+                                    }
+                                }
+                            }
+                            else {
+                                typeLines.push("No type information for this code.");
+                            }
+                        }
+                    });
+
+                    return typeLines.join("");
+                }
+
             });
         });
     }

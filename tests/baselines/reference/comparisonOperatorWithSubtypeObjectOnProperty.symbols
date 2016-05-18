@@ -3,7 +3,7 @@ class Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 0))
 
     public a: string;
->a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 12))
+>a : Symbol(Base.a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 12))
 }
 
 class Derived extends Base {
@@ -11,18 +11,18 @@ class Derived extends Base {
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 0))
 
     public b: string;
->b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 4, 28))
+>b : Symbol(Derived.b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 4, 28))
 }
 
 class A1 {
 >A1 : Symbol(A1, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 6, 1))
 
     public a: Base;
->a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 8, 10))
+>a : Symbol(A1.a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 8, 10))
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 0))
 
     public b: Base;
->b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 9, 19))
+>b : Symbol(A1.b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 9, 19))
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 0))
 }
 
@@ -30,11 +30,11 @@ class B1 {
 >B1 : Symbol(B1, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 11, 1))
 
     public a: Base;
->a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 13, 10))
+>a : Symbol(B1.a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 13, 10))
 >Base : Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 0, 0))
 
     public b: Derived;
->b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 14, 19))
+>b : Symbol(B1.b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 14, 19))
 >Derived : Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 2, 1))
 }
 
@@ -42,7 +42,7 @@ class A2 {
 >A2 : Symbol(A2, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 16, 1))
 
     private a;
->a : Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 18, 10))
+>a : Symbol(A2.a, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 18, 10))
 }
 
 class B2 extends A2 {
@@ -50,7 +50,7 @@ class B2 extends A2 {
 >A2 : Symbol(A2, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 16, 1))
 
     private b;
->b : Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 22, 21))
+>b : Symbol(B2.b, Decl(comparisonOperatorWithSubtypeObjectOnProperty.ts, 22, 21))
 }
 
 var a1: A1;

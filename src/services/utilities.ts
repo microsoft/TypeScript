@@ -6,32 +6,6 @@ namespace ts {
         list: Node;
     }
 
-    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
-        Debug.assert(line >= 0);
-        let lineStarts = sourceFile.getLineStarts();
-
-        let lineIndex = line;
-        if (lineIndex + 1 === lineStarts.length) {
-            // last line - return EOF
-            return sourceFile.text.length - 1;
-        }
-        else {
-            // current line start
-            let start = lineStarts[lineIndex];
-            // take the start position of the next line -1 = it should be some line break
-            let pos = lineStarts[lineIndex + 1] - 1;
-            Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
-            // walk backwards skipping line breaks, stop the the beginning of current line.
-            // i.e:
-            // <some text>
-            // $ <- end of line for this position should match the start position
-            while (start <= pos && isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                pos--;
-            }
-            return pos;
-        }
-    }
-
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
         let lineStarts = sourceFile.getLineStarts();
         let line = sourceFile.getLineAndCharacterOfPosition(position).line;
@@ -147,7 +121,7 @@ namespace ts {
 
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
-                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicitly always consider them non-completed
+                // there is no such thing as terminator token for CaseClause/DefaultClause so for simplicity always consider them non-completed
                 return false;
 
             case SyntaxKind.ForStatement:
@@ -265,7 +239,7 @@ namespace ts {
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
-     * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
+     * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
@@ -429,11 +403,51 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart();
+        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart(sourceFile);
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
         return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
+    }
+
+    /**
+     * returns true if the position is in between the open and close elements of an JSX expression.
+     */
+    export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (!token) {
+            return false;
+        }
+
+        // <div>Hello |</div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxText) {
+            return true;
+        }
+
+        // <div> { | </div> or <div a={| </div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxExpression) {
+            return true;
+        }
+
+        // <div> { 
+        // |
+        // } < /div>
+        if (token && token.kind === SyntaxKind.CloseBraceToken && token.parent.kind === SyntaxKind.JsxExpression) {
+            return true;
+        }
+
+        // <div>|</div>
+        if (token.kind === SyntaxKind.LessThanToken && token.parent.kind === SyntaxKind.JsxClosingElement) {
+            return true;
+        }
+
+        return false;
+    }
+
+    export function isInTemplateString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
     /**
@@ -443,7 +457,7 @@ namespace ts {
     export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
         let token = getTokenAtPosition(sourceFile, position);
 
-        if (token && position <= token.getStart()) {
+        if (token && position <= token.getStart(sourceFile)) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
             // The end marker of a single-line comment does not include the newline character.
@@ -521,15 +535,15 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        let flags = getCombinedNodeFlags(node);
+        let flags = getCombinedModifierFlags(node);
         let result: string[] = [];
 
-        if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
-        if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
-        if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
-        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
-        if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
+        if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
+        if (flags & ModifierFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
+        if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
+        if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
         return result.length > 0 ? result.join(',') : ScriptElementKindModifier.none;
@@ -615,7 +629,7 @@ namespace ts {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
             if (node.parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>node.parent).left === node && 
+                (<BinaryExpression>node.parent).left === node &&
                 (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
@@ -629,7 +643,7 @@ namespace ts {
 
             // [a, b, c] of
             // [x, [a, b, c] ] = someExpression
-            // or 
+            // or
             // {x, a: {a, b, c} } = someExpression
             if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;
@@ -836,5 +850,20 @@ namespace ts {
             return name.substring(1, length - 1);
         };
         return name;
+    }
+
+    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
+        const scriptKind = getScriptKind(fileName, host);
+        return forEach(scriptKinds, k => k === scriptKind);
+    }
+
+    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+        // First check to see if the script kind can be determined from the file name
+        var scriptKind = getScriptKindFromFileName(fileName);
+        if (scriptKind === ScriptKind.Unknown && host && host.getScriptKind) {
+            // Next check to see if the host can resolve the script kind
+            scriptKind = host.getScriptKind(fileName);
+        }
+        return ensureScriptKind(fileName, scriptKind);
     }
 }

@@ -15,6 +15,6 @@ class C {
 
     @dec set accessor(value: number) { }
 >dec : Symbol(dec, Decl(decoratorOnClassAccessor4.ts, 0, 0))
->accessor : Symbol(accessor, Decl(decoratorOnClassAccessor4.ts, 2, 9))
+>accessor : Symbol(C.accessor, Decl(decoratorOnClassAccessor4.ts, 2, 9))
 >value : Symbol(value, Decl(decoratorOnClassAccessor4.ts, 3, 22))
 }

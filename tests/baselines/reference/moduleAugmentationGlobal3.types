@@ -10,7 +10,7 @@ import {A} from "./f1";
 >A : typeof A
 
 declare global {
->global : typeof 
+>global : any
 
     interface Array<T> {
 >Array : T[]

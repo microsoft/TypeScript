@@ -1,7 +1,8 @@
 tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(7,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type '{ x: this; y: number; }', but here has type '{ x: MyClass; y: number; }'.
+tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(14,21): error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
 
 
-==== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts (1 errors) ====
+==== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts (2 errors) ====
     class MyClass {
         t: number;
     
@@ -14,10 +15,12 @@ tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts(7,13): e
         }
     }
     
-    //type of 'this' in an object literal property of a function type is Any
+    //type of 'this' in an object literal method is the type of the object literal
     var obj = {
         f() {
             return this.spaaace;
+                        ~~~~~~~
+!!! error TS2339: Property 'spaaace' does not exist on type '{ f(): any; }'.
         }
     };
     var obj: { f: () => any; };

@@ -66,11 +66,11 @@ module E {
 
     export interface I { id: number }
 >I : Symbol(I, Decl(exportCodeGen.ts, 35, 28))
->id : Symbol(id, Decl(exportCodeGen.ts, 36, 24))
+>id : Symbol(I.id, Decl(exportCodeGen.ts, 36, 24))
 
     export class C { name: string }
 >C : Symbol(C, Decl(exportCodeGen.ts, 36, 37))
->name : Symbol(name, Decl(exportCodeGen.ts, 37, 20))
+>name : Symbol(C.name, Decl(exportCodeGen.ts, 37, 20))
 
     export module M {
 >M : Symbol(M, Decl(exportCodeGen.ts, 37, 35))
@@ -94,11 +94,11 @@ module F {
 
     interface I { id: number }
 >I : Symbol(I, Decl(exportCodeGen.ts, 47, 21))
->id : Symbol(id, Decl(exportCodeGen.ts, 48, 17))
+>id : Symbol(I.id, Decl(exportCodeGen.ts, 48, 17))
 
     class C { name: string }
 >C : Symbol(C, Decl(exportCodeGen.ts, 48, 30))
->name : Symbol(name, Decl(exportCodeGen.ts, 49, 13))
+>name : Symbol(C.name, Decl(exportCodeGen.ts, 49, 13))
 
     module M {
 >M : Symbol(M, Decl(exportCodeGen.ts, 49, 28))

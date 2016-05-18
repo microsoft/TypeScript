@@ -45,7 +45,7 @@ let a: RoyalGuard = new FollowerGuard();
 >FollowerGuard : typeof FollowerGuard
 
 if (a.isLeader()) {
->a.isLeader() : this is LeadGuard
+>a.isLeader() : boolean
 >a.isLeader : () => this is LeadGuard
 >a : RoyalGuard
 >isLeader : () => this is LeadGuard
@@ -57,7 +57,7 @@ if (a.isLeader()) {
 >lead : () => void
 }
 else if (a.isFollower()) {
->a.isFollower() : this is FollowerGuard
+>a.isFollower() : boolean
 >a.isFollower : () => this is FollowerGuard
 >a : RoyalGuard
 >isFollower : () => this is FollowerGuard
@@ -78,7 +78,7 @@ let b: GuardInterface;
 >GuardInterface : GuardInterface
 
 if (b.isLeader()) {
->b.isLeader() : this is LeadGuard
+>b.isLeader() : boolean
 >b.isLeader : () => this is LeadGuard
 >b : GuardInterface
 >isLeader : () => this is LeadGuard
@@ -90,7 +90,7 @@ if (b.isLeader()) {
 >lead : () => void
 }
 else if (b.isFollower()) {
->b.isFollower() : this is FollowerGuard
+>b.isFollower() : boolean
 >b.isFollower : () => this is FollowerGuard
 >b : GuardInterface
 >isFollower : () => this is FollowerGuard
@@ -103,8 +103,8 @@ else if (b.isFollower()) {
 }
 
 if (((a.isLeader)())) {
->((a.isLeader)()) : this is LeadGuard
->(a.isLeader)() : this is LeadGuard
+>((a.isLeader)()) : boolean
+>(a.isLeader)() : boolean
 >(a.isLeader) : () => this is LeadGuard
 >a.isLeader : () => this is LeadGuard
 >a : RoyalGuard
@@ -117,8 +117,8 @@ if (((a.isLeader)())) {
 >lead : () => void
 }
 else if (((a).isFollower())) {
->((a).isFollower()) : this is FollowerGuard
->(a).isFollower() : this is FollowerGuard
+>((a).isFollower()) : boolean
+>(a).isFollower() : boolean
 >(a).isFollower : () => this is FollowerGuard
 >(a) : RoyalGuard
 >a : RoyalGuard
@@ -132,8 +132,8 @@ else if (((a).isFollower())) {
 }
 
 if (((a["isLeader"])())) {
->((a["isLeader"])()) : this is LeadGuard
->(a["isLeader"])() : this is LeadGuard
+>((a["isLeader"])()) : boolean
+>(a["isLeader"])() : boolean
 >(a["isLeader"]) : () => this is LeadGuard
 >a["isLeader"] : () => this is LeadGuard
 >a : RoyalGuard
@@ -146,8 +146,8 @@ if (((a["isLeader"])())) {
 >lead : () => void
 }
 else if (((a)["isFollower"]())) {
->((a)["isFollower"]()) : this is FollowerGuard
->(a)["isFollower"]() : this is FollowerGuard
+>((a)["isFollower"]()) : boolean
+>(a)["isFollower"]() : boolean
 >(a)["isFollower"] : () => this is FollowerGuard
 >(a) : RoyalGuard
 >a : RoyalGuard
@@ -166,7 +166,7 @@ var holder2 = {a};
 >a : RoyalGuard
 
 if (holder2.a.isLeader()) {
->holder2.a.isLeader() : this is LeadGuard
+>holder2.a.isLeader() : boolean
 >holder2.a.isLeader : () => this is LeadGuard
 >holder2.a : RoyalGuard
 >holder2 : { a: RoyalGuard; }
@@ -174,9 +174,9 @@ if (holder2.a.isLeader()) {
 >isLeader : () => this is LeadGuard
 
     holder2.a;
->holder2.a : RoyalGuard
+>holder2.a : LeadGuard
 >holder2 : { a: RoyalGuard; }
->a : RoyalGuard
+>a : LeadGuard
 }
 else {
     holder2.a;
@@ -232,7 +232,7 @@ let guard = new ArrowGuard();
 >ArrowGuard : typeof ArrowGuard
 
 if (guard.isElite()) {
->guard.isElite() : this is ArrowElite
+>guard.isElite() : boolean
 >guard.isElite : () => this is ArrowElite
 >guard : ArrowGuard
 >isElite : () => this is ArrowElite
@@ -244,7 +244,7 @@ if (guard.isElite()) {
 >defend : () => void
 }
 else if (guard.isMedic()) {
->guard.isMedic() : this is ArrowMedic
+>guard.isMedic() : boolean
 >guard.isMedic : () => this is ArrowMedic
 >guard : ArrowGuard
 >isMedic : () => this is ArrowMedic
@@ -297,7 +297,7 @@ let crate: Crate<{}>;
 >Crate : Crate<T>
 
 if (crate.isSundries()) {
->crate.isSundries() : this is Crate<Sundries>
+>crate.isSundries() : boolean
 >crate.isSundries : () => this is Crate<Sundries>
 >crate : Crate<{}>
 >isSundries : () => this is Crate<Sundries>
@@ -312,7 +312,7 @@ if (crate.isSundries()) {
 >true : boolean
 }
 else if (crate.isSupplies()) {
->crate.isSupplies() : this is Crate<Supplies>
+>crate.isSupplies() : boolean
 >crate.isSupplies : () => this is Crate<Supplies>
 >crate : Crate<{}>
 >isSupplies : () => this is Crate<Supplies>
@@ -405,7 +405,7 @@ a.isFollower = mimic.isFollower;
 >isFollower : () => this is MimicFollower
 
 if (mimic.isFollower()) {
->mimic.isFollower() : this is MimicFollower
+>mimic.isFollower() : boolean
 >mimic.isFollower : () => this is MimicFollower
 >mimic : MimicGuard
 >isFollower : () => this is MimicFollower

@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var readline = require("readline");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -178,29 +179,72 @@ var harnessSources = harnessCoreSources.concat([
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
-    "tsconfigParsing.ts"
+    "tsconfigParsing.ts",
+    "commandLineParsing.ts",
+    "convertCompilerOptionsFromJson.ts",
+    "convertTypingOptionsFromJson.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
     "protocol.d.ts",
     "session.ts",
     "client.ts",
-    "editorServices.ts",
+    "editorServices.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 }));
 
 var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
-        { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
-        { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
-        { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
-        { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"]},
-        { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+    { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
+    { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"] },
+    { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"] },
+    { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"] },
+    { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+    { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"] },
+    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+    { target: "lib.core.es7.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts", "es7.d.ts"] },
+    { target: "lib.es7.d.ts", sources: ["header.d.ts", "es6.d.ts", "es7.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
+var es2015LibrarySources = [
+    "es2015.core.d.ts",
+    "es2015.collection.d.ts",
+    "es2015.generator.d.ts",
+    "es2015.iterable.d.ts",
+    "es2015.promise.d.ts",
+    "es2015.proxy.d.ts",
+    "es2015.reflect.d.ts",
+    "es2015.symbol.d.ts",
+    "es2015.symbol.wellknown.d.ts",
+];
+
+var es2015LibrarySourceMap = es2015LibrarySources.map(function(source) {
+   return  { target: "lib." + source, sources: ["header.d.ts", source] };
+});
+
+var es2016LibrarySource = [ "es2016.array.include.d.ts" ];
+
+var es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+})
+
+var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
+
+var librarySourceMap = [
+        // Host library
+        { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"], },
+        { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"], },
+        { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"], },
+        { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"], },
+        
+        // JavaScript library
+        { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
+        { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
+        { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+        
+        // JavaScript + all host library
+        { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources), },
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -240,8 +284,7 @@ function concatenateFiles(destinationFile, sourceFiles) {
 }
 
 var useDebugMode = true;
-var useTransforms = process.env.USE_TRANSFORMS || false;
-var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
+var host = (process.env.TYPESCRIPT_HOST || process.env.host || "node");
 var compilerFilename = "tsc.js";
 var LKGCompiler = path.join(LKGDirectory, compilerFilename);
 var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
@@ -252,56 +295,64 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param prereqs: prerequisite tasks to compiling the file
     * @param prefixes: a list of files to prepend to the target file
     * @param useBuiltCompiler: true to use the built compiler, false to use the LKG
-    * @param noOutFile: true to compile without using --out
-    * @param generateDeclarations: true to compile using --declaration
-    * @param outDir: true to compile using --outDir
-    * @param keepComments: false to compile using --removeComments
+    * @parap {Object}  opts - property bag containing auxiliary options
+    * @param {boolean} opts.noOutFile: true to compile without using --out
+    * @param {boolean} opts.generateDeclarations: true to compile using --declaration
+    * @param {string}  opts.outDir: value for '--outDir' command line option
+    * @param {boolean} opts.keepComments: false to compile using --removeComments
+    * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
+    * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
+    * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
+    * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--noImplicitAny --noEmitOnError --pretty";
-
+        opts = opts || {};
         // Keep comments when specifically requested
         // or when in debug mode.
-        if (!(keepComments || useDebugMode)) {
+        if (!(opts.keepComments || useDebugMode)) {
             options += " --removeComments";
         }
 
-        if (generateDeclarations) {
+        if (opts.generateDeclarations) {
             options += " --declaration";
         }
 
-        if (preserveConstEnums || useDebugMode) {
+        if (opts.preserveConstEnums || useDebugMode) {
             options += " --preserveConstEnums";
         }
 
-        if (outDir) {
-            options += " --outDir " + outDir;
+        if (opts.outDir) {
+            options += " --outDir " + opts.outDir;
         }
 
-        if (!noOutFile) {
+        if (!opts.noOutFile) {
             options += " --out " + outFile;
         }
         else {
-            options += " --module commonjs"
+            options += " --module commonjs";
         }
 
-        if(noResolve) {
+        if(opts.noResolve) {
             options += " --noResolve";
         }
 
         if (useDebugMode) {
-            options += " -sourcemap -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            options += " -sourcemap";
+            if (!opts.noMapRoot) {
+                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            }
         }
 
-        if (stripInternal) {
-            options += " --stripInternal"
+        if (opts.stripInternal) {
+            options += " --stripInternal";
         }
 
-        if (useBuiltCompiler && useTransforms) {
-            options += " --experimentalTransforms"
+        if (useBuiltCompiler && !environmentVariableIsDisabled("USE_TRANSFORMS")) {
+            console.warn("\u001b[93mwarning: 'USE_TRANSFORMS' environment variable is not set to 'false'. Experimental transforms will be enabled by default.\u001b[0m");
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -415,20 +466,10 @@ compileFile(/*outfile*/configureNightlyJs,
             /*prereqs*/ [configureNightlyTs],
             /*prefixes*/ [],
             /*useBuiltCompiler*/ false,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ false,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ undefined,
-            /*keepComments*/ false,
-            /*noResolve*/ false,
-            /*stripInternal*/ false);
+            { noOutFile: false, generateDeclarations: false, keepComments: false, noResolve: false, stripInternal: false });
 
 task("setDebugMode", function() {
     useDebugMode = true;
-});
-
-task("setTransforms", function() {
-    useTransforms = true;
 });
 
 task("configure-nightly", [configureNightlyJs], function() {
@@ -449,9 +490,9 @@ file(scriptsTsdJson);
 
 task("tsd-scripts", [scriptsTsdJson], function () {
     var cmd = "tsd --config " + scriptsTsdJson + " install";
-    console.log(cmd)
+    console.log(cmd);
     exec(cmd);
-}, { async: true })
+}, { async: true });
 
 var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
 var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
@@ -475,6 +516,7 @@ var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
+var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
 var nodePackageFile = path.join(builtLocalDirectory, "typescript.js");
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
@@ -483,13 +525,7 @@ var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_s
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ true,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ true,
-            /*keepComments*/ true,
-            /*noResolve*/ false,
-            /*stripInternal*/ true,
+            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true },
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -512,6 +548,16 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
+compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
+            /*prefixes*/ [copyright],
+            /*useBuiltCompiler*/ true,
+            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true, noMapRoot: true },
+            /*callback*/ function () {
+                var content = fs.readFileSync(servicesFileInBrowserTest).toString();
+                var i = content.lastIndexOf("\n");
+                fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
+            });
+
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -523,8 +569,7 @@ compileFile(
     [builtLocalDirectory, copyright].concat(languageServiceLibrarySources),
     /*prefixes*/ [copyright],
     /*useBuiltCompiler*/ true,
-    /*noOutFile*/ false,
-    /*generateDeclarations*/ true);
+    { noOutFile: false, generateDeclarations: true });
 
 // Local target to build the language service server library
 desc("Builds language service server library");
@@ -614,7 +659,7 @@ directory(builtLocalDirectory);
 var run = path.join(builtLocalDirectory, "run.js");
 compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
 
-var internalTests = "internal/"
+var internalTests = "internal/";
 
 var localBaseline = "tests/baselines/local/";
 var refBaseline = "tests/baselines/reference/";
@@ -671,10 +716,25 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
-    console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
-    fs.writeFileSync('test.config', testConfigContents);
+function writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit) {
+    var testConfig;
+    if (tests) {
+        console.log('Running test(s): ' + tests);
+        (testConfig || (testConfig = {})).tests = [tests];
+    }
+
+    if (light) {
+        (testConfig || (testConfig = {})).light = light;
+    }
+
+    if (/^(\d+|full)$/.test(stackTraceLimit)) {
+        (testConfig || (testConfig = {})).stackTraceLimit = stackTraceLimit;
+    }
+
+    if (testConfig) {
+        var testConfigContents = JSON.stringify(testConfig);
+        fs.writeFileSync(testConfigFile, testConfigContents);
+    }
 }
 
 function deleteTemporaryProjectOutput() {
@@ -683,25 +743,154 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
+function runTestsAndWriteOutput(file) {
     cleanTestDirs();
+    var tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
+    var testConfigFile = 'test.config';
+    if (fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+
+    writeTestConfigFile(testConfigFile, tests, light, 10);
+
+    if (tests && tests.toLocaleLowerCase() === "rwc") {
+        testTimeout = 100000;
+    }
+
+    var args = [];
+    args.push("-R", "tap");
+    args.push("--no-colors");
+    args.push("-t", testTimeout);
+    if (tests) {
+        args.push("-g", '"' + tests + '"');
+    }
+    args.push(run);
+
+    var cmd = "mocha " + args.join(" ");
+    console.log(cmd);
+    var p = child_process.spawn(
+        process.platform === "win32" ? "cmd" : "/bin/sh",
+        process.platform === "win32" ? ["/c", cmd] : ["-c", cmd], {
+            windowsVerbatimArguments: true
+        });
+
+    var out = fs.createWriteStream(file);
+    var tapRange = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
+    var tapOk = /^ok\s/;
+    var tapNotOk = /^not\sok\s/;
+    var tapComment = /^#/;
+    var typeError = /^\s+TypeError:/;
+    var debugError = /^\s+Error:\sDebug\sFailure\./;
+    var progress = new ProgressBar("Running tests...");
+    var expectedTestCount = 0;
+    var testCount = 0;
+    var failureCount = 0;
+    var successCount = 0;
+    var comments = [];
+    var typeErrorCount = 0;
+    var debugErrorCount = 0;
+
+    var rl = readline.createInterface({
+        input: p.stdout,
+        terminal: false
+    });
+
+    function updateProgress(percentComplete) {
+        progress.update(percentComplete,
+            /*foregroundColor*/ failureCount > 0
+                ? "red"
+                : successCount === expectedTestCount
+                    ? "green"
+                    : "cyan",
+            /*backgroundColor*/ "gray"
+        );
+    }
+
+    rl.on("line", function (line) {
+        var m = tapRange.exec(line);
+        if (m) {
+            expectedTestCount = parseInt(m[2]);
+            return;
+        }
+
+        if (tapOk.test(line)) {
+            out.write(line.replace(/^ok\s+\d+\s+/, "ok ") + os.EOL);
+            successCount++;
+        }
+        else if (tapNotOk.test(line)) {
+            out.write(line.replace(/^not\s+ok\s+\d+\s+/, "not ok ") + os.EOL);
+            failureCount++;
+        }
+        else {
+            out.write(line + os.EOL);
+            if (tapComment.test(line)) {
+                comments.push(line);
+            }
+            else if (typeError.test(line)) {
+                typeErrorCount++;
+            }
+            else if (debugError.test(line)) {
+                debugErrorCount++;
+            }
+            return;
+        }
+
+        testCount++;
+
+        var percentComplete = testCount * 100 / expectedTestCount;
+        updateProgress(percentComplete);
+    });
+
+    p.on("exit", function (status) {
+        if (progress.visible) {
+            updateProgress(100);
+            process.stdout.write("done." + os.EOL);
+        }
+
+        console.log(comments.join(os.EOL));
+
+        if (typeErrorCount) {
+            console.log("# type errors: %s", typeErrorCount);
+        }
+
+        if (debugErrorCount) {
+            console.log("# debug errors: %s", debugErrorCount);
+        }
+
+        deleteTemporaryProjectOutput();
+        if (status) {
+            fail("Process exited with code " + status);
+        }
+        else {
+            complete();
+        }
+    });
+}
+
+function runConsoleTests(defaultReporter, defaultSubsets, dirty) {
+    if (!dirty) {
+        cleanTestDirs();
+    }
+
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
+    var stackTraceLimit = process.env.stackTraceLimit || 1;
     var testConfigFile = 'test.config';
-    if(fs.existsSync(testConfigFile)) {
+    if (fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
 
     if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(testConfigFile, tests, light, stackTraceLimit);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 100000;
     }
 
-    colors = process.env.colors || process.env.color
+    colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
 
@@ -709,20 +898,20 @@ function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var subsetRegexes;
     if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests]
+        subsetRegexes = [tests];
     }
     else {
         var subsets = tests ? tests.split("|") : defaultSubsets;
         subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
         subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
     }
-    subsetRegexes.forEach(function (subsetRegex) {
+    subsetRegexes.forEach(function (subsetRegex, i) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (postLint) {
+            if (i === 0 && !dirty) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -744,8 +933,15 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
+    runConsoleTests('mocha-fivemat-progress-reporter', []);
 }, {async: true});
+
+task("runtests-file", ["build-rules", "tests", builtLocalDirectory], function () {
+    runTestsAndWriteOutput("tests/baselines/local/testresults.tap");
+}, { async: true });
+task("runtests-dirty", ["build-rules", "tests", builtLocalDirectory], function () {
+    runConsoleTests("mocha-fivemat-progress-reporter", [], /*dirty*/ true);
+}, { async: true });
 
 desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
@@ -755,20 +951,20 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 }, { async: true });
 
 // Browser tests
-var nodeServerOutFile = 'tests/webTestServer.js'
-var nodeServerInFile = 'tests/webTestServer.ts'
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, /*noOutFile*/ true);
+var nodeServerOutFile = 'tests/webTestServer.js';
+var nodeServerInFile = 'tests/webTestServer.ts';
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    var cmd = 'browserify built/local/run.js -t ./scripts/browserify-optional -o built/local/bundle.js';
     exec(cmd);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], port=, browser=[chrome|IE]");
-task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function() {
+task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFileInBrowserTest], function() {
     cleanTestDirs();
-    host = "node"
+    host = "node";
     port = process.env.port || process.env.p || '8888';
     browser = process.env.browser || process.env.b || "IE";
     tests = process.env.test || process.env.tests || process.env.t;
@@ -778,17 +974,17 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory], function(
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(testConfigFile, tests, light);
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests
+    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests;
     console.log(cmd);
     exec(cmd);
 }, {async: true});
 
 function getDiffTool() {
-    var program = process.env['DIFF']
+    var program = process.env['DIFF'];
     if (!program) {
         fail("Add the 'DIFF' environment variable to the path of the program you want to use.");
     }
@@ -817,11 +1013,11 @@ task("tests-debug", ["setDebugMode", "tests"]);
 // Makes the test results the new baseline
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function(hardOrSoft) {
-    if (!hardOrSoft || hardOrSoft == "hard") {
+    if (!hardOrSoft || hardOrSoft === "hard") {
         jake.rmRf(refBaseline);
         fs.renameSync(localBaseline, refBaseline);
     }
-    else if (hardOrSoft == "soft") {
+    else if (hardOrSoft === "soft") {
         var files = jake.readdirR(localBaseline);
         for (var i in files) {
             jake.cpR(files[i], refBaseline);
@@ -900,15 +1096,14 @@ task("update-sublime", ["local", serverFile], function() {
 });
 
 var tslintRuleDir = "scripts/tslint";
-var tslintRules = ([
+var tslintRules = [
     "nextLineRule",
-    "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
     "noInOperatorRule",
     "noIncrementDecrementRule"
-]);
+];
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
 });
@@ -918,7 +1113,8 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false,
+    { noOutFile: true, generateDeclarations: false, outDir: path.join(builtLocalDirectory, "tslint")});
 });
 
 function getLinterOptions() {
@@ -932,7 +1128,7 @@ function getLinterOptions() {
 
 function lintFileContents(options, path, contents) {
     var ll = new Linter(path, contents, options);
-    console.log("Linting '" + path + "'.")
+    console.log("Linting '" + path + "'.");
     return ll.lint();
 }
 
@@ -957,6 +1153,7 @@ var servicesLintTargets = [
     "patternMatcher.ts",
     "services.ts",
     "shims.ts",
+    "jsTyping.ts"
 ].map(function (s) {
     return path.join(servicesDirectory, s);
 });
@@ -1027,3 +1224,93 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
+
+function ProgressBar(title) {
+    this.title = title;
+}
+ProgressBar.prototype = {
+    progressChars: ["\u0020", "\u2591", "\u2592", "\u2593", "\u2588"],
+    colors: {
+        foreground: {
+            black: "\u001b[90m",
+            red: "\u001b[91m",
+            green: "\u001b[92m",
+            yellow: "\u001b[93m",
+            blue: "\u001b[94m",
+            magenta: "\u001b[95m",
+            cyan: "\u001b[96m",
+            white: "\u001b[97m",
+            gray: "\u001b[37m"
+        },
+        background: {
+            black: "\u001b[40m",
+            red: "\u001b[41m",
+            green: "\u001b[42m",
+            yellow: "\u001b[43m",
+            blue: "\u001b[44m",
+            magenta: "\u001b[45m",
+            cyan: "\u001b[46m",
+            white: "\u001b[47m",
+            gray: "\u001b[100m"
+        },
+        reset: "\u001b[0m"
+    },
+    update: function (percentComplete, foregroundColor, backgroundColor) {
+        var progress = "";
+        for (var i = 0; i < 100; i += 4) {
+            progress += this.progressChars[Math.floor(Math.max(0, Math.min(4, percentComplete - i)))];
+        }
+
+        foregroundColor = foregroundColor && this.colors.foreground[foregroundColor];
+        backgroundColor = backgroundColor && this.colors.background[backgroundColor];
+        if (foregroundColor || backgroundColor) {
+            if (foregroundColor) {
+                progress = foregroundColor + progress;
+            }
+            if (backgroundColor) {
+                progress = backgroundColor + progress;
+            }
+
+            progress += this.colors.reset;
+        }
+
+        if (this._lastProgress !== progress || !this.visible) {
+            this._print(progress);
+        }
+    },
+    hide: function () {
+        if (this.visible) {
+            this._savedProgress = this._lastProgress;
+            this.clear();
+        }
+    },
+    show: function () {
+        if (this._savedProgress && !this.visible) {
+            this._print(this._savedProgress);
+            this._savedProgress = undefined;
+        }
+    },
+    clear: function () {
+        if (this._lastProgress) {
+            readline.moveCursor(process.stdout, -process.stdout.columns, 0);
+            readline.clearLine(process.stdout, 1);
+            this._lastProgress = undefined;
+            this.visible = false;
+        }
+    },
+    _print: function (progress) {
+        readline.moveCursor(process.stdout, -process.stdout.columns, 0);
+        process.stdout.write(this.title ? progress + " " + this.title : progress);
+        readline.clearLine(process.stdout, 1);
+        this._lastProgress = progress;
+        this.visible = true;
+    }
+};
+
+function environmentVariableIsEnabled(name) {
+    return /^(y(es)?|t(rue)?|on|enabled?|1|\+)$/.test(process.env[name]);
+}
+
+function environmentVariableIsDisabled(name) {
+    return /^(no?|f(alse)?|off|disabled?|0|-)$/.test(process.env[name]);
+}

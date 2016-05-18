@@ -9,7 +9,7 @@ declare module A.B.Base {
 >W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 1, 25))
 
         id: number;
->id : Symbol(id, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 2, 20))
+>id : Symbol(W.id, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 2, 20))
     }
 }
 module X.Y.base {
@@ -28,7 +28,7 @@ module X.Y.base {
 >W : Symbol(A.B.Base.W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 1, 25))
 
         name: string;
->name : Symbol(name, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 8, 39))
+>name : Symbol(W.name, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 8, 39))
     }
 }
 
@@ -50,7 +50,7 @@ module X.Y.base.Z {
 >W : Symbol(W, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 6, 17))
 
         value: boolean;
->value : Symbol(value, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 15, 47))
+>value : Symbol(W.value, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 15, 47))
     }
 }
 
