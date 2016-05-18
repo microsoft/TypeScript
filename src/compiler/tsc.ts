@@ -544,7 +544,10 @@ namespace ts {
     }
 
     function compile(fileNames: string[], compilerOptions: CompilerOptions, compilerHost: CompilerHost) {
-        Performance.reset();
+        if (compilerOptions.diagnostics) {
+            performance.enable();
+            performance.reset();
+        }
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
         const exitStatus = compileProgram();
@@ -556,12 +559,14 @@ namespace ts {
         }
 
         if (compilerOptions.diagnostics) {
-            const ioReadTime = reduceLeft(Performance.getMeasures("ioReadTime"), (aggregate, measure) => aggregate + measure.duration, 0);
-            const ioWriteTime = reduceLeft(Performance.getMeasures("ioWriteTime"), (aggregate, measure) => aggregate + measure.duration, 0);
-            const programTime = reduceLeft(Performance.getMeasures("programTime"), (aggregate, measure) => aggregate + measure.duration, 0);
-            const bindTime = reduceLeft(Performance.getMeasures("bindTime"), (aggregate, measure) => aggregate + measure.duration, 0);
-            const checkTime = reduceLeft(Performance.getMeasures("checkTime"), (aggregate, measure) => aggregate + measure.duration, 0);
-            const emitTime = reduceLeft(Performance.getMeasures("emitTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const ioReadTime = reduceLeft(performance.getMeasures("ioReadTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const ioWriteTime = reduceLeft(performance.getMeasures("ioWriteTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const programTime = reduceLeft(performance.getMeasures("programTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const bindTime = reduceLeft(performance.getMeasures("bindTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const checkTime = reduceLeft(performance.getMeasures("checkTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            const emitTime = reduceLeft(performance.getMeasures("emitTime"), (aggregate, measure) => aggregate + measure.duration, 0);
+            performance.disable();
+            performance.reset();
 
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);

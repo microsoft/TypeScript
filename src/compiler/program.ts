@@ -776,10 +776,10 @@ namespace ts {
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
-                Performance.mark("ioReadStart");
+                performance.mark("ioReadStart");
                 text = sys.readFile(fileName, options.charset);
-                Performance.mark("ioReadEnd");
-                Performance.measure("ioReadTime", "ioReadStart", "ioReadEnd");
+                performance.mark("ioReadEnd");
+                performance.measure("ioReadTime", "ioReadStart", "ioReadEnd");
             }
             catch (e) {
                 if (onError) {
@@ -846,7 +846,7 @@ namespace ts {
 
         function writeFile(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
-                Performance.mark("ioWriteStart");
+                performance.mark("ioWriteStart");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
                 if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
@@ -856,8 +856,8 @@ namespace ts {
                     sys.writeFile(fileName, data, writeByteOrderMark);
                 }
 
-                Performance.mark("ioWriteEnd");
-                Performance.measure("ioWriteTime", "ioWriteStart", "ioWriteEnd");
+                performance.mark("ioWriteEnd");
+                performance.measure("ioWriteTime", "ioWriteStart", "ioWriteEnd");
             }
             catch (e) {
                 if (onError) {
@@ -959,7 +959,7 @@ namespace ts {
         let resolvedTypeReferenceDirectives: Map<ResolvedTypeReferenceDirective> = {};
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        Performance.mark("programStart");
+        performance.mark("programStart");
 
         host = host || createCompilerHost(options);
 
@@ -1052,8 +1052,8 @@ namespace ts {
 
         verifyCompilerOptions();
 
-        Performance.mark("programEnd");
-        Performance.measure("programTime", "programStart", "programEnd");
+        performance.mark("programEnd");
+        performance.measure("programTime", "programStart", "programEnd");
 
         return program;
 
@@ -1286,7 +1286,7 @@ namespace ts {
             // checked is to not pass the file to getEmitResolver.
             const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
 
-            Performance.mark("emitStart");
+            performance.mark("emitStart");
 
             // TODO(rbuckton): remove USE_TRANSFORMS condition when we switch to transforms permanently.
             let useLegacyEmitter = options.useLegacyEmitter;
@@ -1300,8 +1300,8 @@ namespace ts {
                 getEmitHost(writeFileCallback),
                 sourceFile);
 
-            Performance.mark("emitEnd");
-            Performance.measure("emitTime", "emitStart", "emitEnd");
+            performance.mark("emitEnd");
+            performance.measure("emitTime", "emitStart", "emitEnd");
 
             return emitResult;
         }

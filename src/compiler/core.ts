@@ -1134,8 +1134,9 @@ namespace ts {
             : ((fileName) => fileName.toLowerCase());
     }
 
+    /** Performance measurements for the compiler. */
     /*@internal*/
-    export namespace Performance {
+    export namespace performance {
         interface MarkData {
             markName: string;
             timestamp: number;
@@ -1159,6 +1160,7 @@ namespace ts {
         const measures: MeasureData[] = [];
 
         let start = now();
+        let enabled = false;
 
         /** Gets the current timer for performance measurements. */
         export function now() {
@@ -1172,7 +1174,9 @@ namespace ts {
          * @param markName The name of the performance mark.
          */
         export function mark(markName: string) {
-            marks.push({ markName, timestamp: now() });
+            if (enabled) {
+                marks.push({ markName, timestamp: now() });
+            }
         }
 
         /**
@@ -1188,13 +1192,15 @@ namespace ts {
          *          If not specified, the current time is used.
          */
         export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
-            measures.push({
-                measureName,
-                startMarkName,
-                endMarkName,
-                timestamp: now(),
-                marksOffset: marks.length
-            });
+            if (enabled) {
+                measures.push({
+                    measureName,
+                    startMarkName,
+                    endMarkName,
+                    timestamp: now(),
+                    marksOffset: marks.length
+                });
+            }
         }
 
         /**
@@ -1267,6 +1273,16 @@ namespace ts {
             marks.length = 0;
             measures.length = 0;
             start = now();
+        }
+
+        /** Enables performance measurements for the compiler. */
+        export function enable() {
+            enabled = true;
+        }
+
+        /** Disables performance measurements for the compiler. */
+        export function disable() {
+            enabled = false;
         }
     }
 }
