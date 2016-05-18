@@ -592,7 +592,7 @@ class ListWrapper {
 
     var maxValue = -Infinity;
 >maxValue : Symbol(maxValue, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 120, 7))
->Infinity : Symbol(Infinity, Decl(lib.d.ts, --, --))
+>Infinity : Symbol(Infinity)
 
     for (var index = 0; index < list.length; index++) {
 >index : Symbol(index, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 121, 12))

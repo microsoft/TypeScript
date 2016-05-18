@@ -112,6 +112,8 @@ namespace ts {
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypeUnaryPrefix:
+                return visitNode(cbNode, (<TypeUnaryPrefix>node).operand);
             case SyntaxKind.TypePredicate:
                 return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
                     visitNode(cbNode, (<TypePredicateNode>node).type);
@@ -1903,11 +1905,23 @@ namespace ts {
             return <TemplateLiteralFragment>parseLiteralLikeNode(token, /*internName*/ false);
         }
 
+        function parseNumericLiteralTypeNode(): NumericLiteralTypeNode {
+            const node = createNode(SyntaxKind.NumericLiteralType) as NumericLiteralTypeNode;
+            // Get token text for node text rather than value, this way number formatting is preserved
+            node.text = scanner.getTokenText();
+            // But store the number on the node because we need it for comparisons later
+            node.number = +(scanner.getTokenValue());
+            return finishLiteralLikeNode(node);
+        }
+
         function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
+            return finishLiteralLikeNode(node);
+        }
 
+        function finishLiteralLikeNode<T extends LiteralLikeNode>(node: T) {
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
             }
@@ -1926,7 +1940,7 @@ namespace ts {
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
+            if ((node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.NumericLiteralType)
                 && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
                 && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
 
@@ -2360,6 +2374,19 @@ namespace ts {
             return token === SyntaxKind.DotToken ? undefined : node;
         }
 
+        // We can't just add a `-` to the text of the literal, as this breaks on hex and octal literals (and returns NaN)
+        function parseSignedNumericLiteral(): TypeUnaryPrefix {
+            const node = createNode(SyntaxKind.TypeUnaryPrefix) as TypeUnaryPrefix;
+            node.operator = token;
+            nextToken();
+            // Since we don't allow reference types after a `-` or `+` (other than Infinity), we special case it here
+            if (!(token == SyntaxKind.Identifier && scanner.getTokenText() === (Infinity).toString())) {
+                parseExpected(SyntaxKind.NumericLiteral, Diagnostics.Numeric_literal_expected, /*shouldAdvance*/false);
+            }
+            node.operand = parseNumericLiteralTypeNode();
+            return finishNode(node);
+        }
+
         function parseNonArrayType(): TypeNode {
             switch (token) {
                 case SyntaxKind.AnyKeyword:
@@ -2373,6 +2400,8 @@ namespace ts {
                     return node || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                     return parseStringLiteralTypeNode();
+                case SyntaxKind.NumericLiteral:
+                    return parseNumericLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.NullKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2393,6 +2422,9 @@ namespace ts {
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                    return parseSignedNumericLiteral();
                 default:
                     return parseTypeReference();
             }

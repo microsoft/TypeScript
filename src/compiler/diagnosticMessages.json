@@ -1751,6 +1751,10 @@
         "category": "Error",
         "code": 2533
     },
+    "Numeric literal expected.": {
+        "category": "Error",
+        "code": 2540
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

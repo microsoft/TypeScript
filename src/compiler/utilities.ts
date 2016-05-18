@@ -58,6 +58,7 @@ namespace ts {
                 writePunctuation: writeText,
                 writeSpace: writeText,
                 writeStringLiteral: writeText,
+                writeNumericLiteral: writeText,
                 writeParameter: writeText,
                 writeSymbol: writeText,
 

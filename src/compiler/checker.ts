@@ -58,6 +58,10 @@ namespace ts {
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
         undefinedSymbol.declarations = [];
+        const NaNSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.TypeAlias | SymbolFlags.Transient, (NaN).toString());
+        NaNSymbol.declarations = [];
+        const InfinitySymbol = createSymbol(SymbolFlags.Property | SymbolFlags.TypeAlias | SymbolFlags.Transient, (Infinity).toString());
+        InfinitySymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         const checker: TypeChecker = {
@@ -189,6 +193,9 @@ namespace ts {
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
         const stringLiteralTypes: Map<StringLiteralType> = {};
+        const numericLiteralTypes: Map<NumericLiteralType> = {};
+        const NaNLiteralType = getNumericLiteralTypeForNumber(NaN);
+        const InfinityLiteralType = getNumericLiteralTypeForNumber(Infinity);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -311,7 +318,9 @@ namespace ts {
         }
 
         const builtinGlobals: SymbolTable = {
-            [undefinedSymbol.name]: undefinedSymbol
+            [undefinedSymbol.name]: undefinedSymbol,
+            [NaNSymbol.name]: NaNSymbol,
+            [InfinitySymbol.name]: InfinitySymbol,
         };
 
         initializeTypeChecker();
@@ -2038,6 +2047,9 @@ namespace ts {
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
                         writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
+                    }
+                    else if (type.flags & TypeFlags.NumericLiteral) {
+                        writer.writeNumericLiteral((type as NumericLiteralType).text);
                     }
                     else {
                         // Should never get here
@@ -5147,10 +5159,60 @@ namespace ts {
             return type;
         }
 
+        function getNumericLiteralTypeForText(text: string): NumericLiteralType {
+            // Use +(string) rather than Number(string) to be consistient with what we use in the parser
+            const num = +(text);
+            return getNumericLiteralTypeForNumber(num, text);
+        }
+
+        function getNumericLiteralTypeForNumber(num: number, text: string = num.toString()): NumericLiteralType {
+            if (hasProperty(numericLiteralTypes, text)) {
+                return numericLiteralTypes[text];
+            }
+
+            const type = numericLiteralTypes[text] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+            type.number = num;
+            type.text = text;
+            return type;
+        }
+
         function getTypeFromStringLiteralTypeNode(node: StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getStringLiteralTypeForText(unescapeIdentifier(node.text));
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromNumericLiteralTypeNode(node: NumericLiteralTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getNumericLiteralTypeForNumber(node.number, node.text);
+            }
+            return links.resolvedType;
+        }
+
+        function getTypeFromTypeUnaryPrefixNode(node: TypeUnaryPrefix): NumericLiteralType {
+            const type = getTypeFromNumericLiteralTypeNode(node.operand) as NumericLiteralType;
+            if (node.operator === SyntaxKind.MinusToken) {
+                const text = "-" + type.text;
+                if (hasProperty(numericLiteralTypes, text)) {
+                    return numericLiteralTypes[text];
+                }
+
+                const newType = numericLiteralTypes[text] = createType(TypeFlags.NumericLiteral) as NumericLiteralType;
+                newType.number = -type.number;
+                newType.text = text;
+
+                return newType;
+            }
+            return type;
+        }
+
+        function getTypeFromTypeUnaryPrefix(node: TypeUnaryPrefix): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getTypeFromTypeUnaryPrefixNode(node);
             }
             return links.resolvedType;
         }
@@ -5219,6 +5281,10 @@ namespace ts {
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
+                case SyntaxKind.NumericLiteralType:
+                    return getTypeFromNumericLiteralTypeNode(node as NumericLiteralTypeNode);
+                case SyntaxKind.TypeUnaryPrefix:
+                    return getTypeFromTypeUnaryPrefix(node as TypeUnaryPrefix);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
@@ -5872,8 +5938,16 @@ namespace ts {
                         return result;
                     }
                 }
-                if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
 
+                if (isStringLiteralType(source) && target === stringType) return Ternary.True;
+
+                if (isNumericLiteralType(source)) {
+                    if (isNumericLiteralType(target)) return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
+                    if (target === numberType) return Ternary.True;
+                    if (target.flags & TypeFlags.Enum) {
+                        // TODO (weswig): If enum numeric value = numeric literal value, then true, else false
+                    }
+                }
                 if (relation === assignableRelation || relation === comparableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
@@ -6015,7 +6089,14 @@ namespace ts {
                         }
                     }
                 }
+                if (isNumericLiteralType(source) && isNumericLiteralType(target)) {
+                    return isNumericLiteralEquivalentTo(source as NumericLiteralType, target as NumericLiteralType);
+                }
                 return Ternary.False;
+            }
+
+            function isNumericLiteralEquivalentTo(source: NumericLiteralType, target: NumericLiteralType) {
+                return source.number === target.number ? Ternary.True : Ternary.False;
             }
 
             // Check if a property with the given name is known anywhere in the given type. In an object type, a property
@@ -6776,6 +6857,10 @@ namespace ts {
 
         function isStringLiteralType(type: Type) {
             return type.flags & TypeFlags.StringLiteral;
+        }
+
+        function isNumericLiteralType(type: Type) {
+            return type.flags & TypeFlags.NumericLiteral;
         }
 
         /**
@@ -8819,6 +8904,10 @@ namespace ts {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
+        function contextualTypeIsNumericLiteralType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isNumericLiteralType) : isNumericLiteralType(type));
+        }
+
         // Return true if the given contextual type is a tuple-like type
         function contextualTypeIsTupleLikeType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isTupleLikeType) : isTupleLikeType(type));
@@ -8968,6 +9057,10 @@ namespace ts {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
+                case SyntaxKind.PrefixUnaryExpression:
+                    if ((parent as PrefixUnaryExpression).operator === SyntaxKind.MinusToken) {
+                        return getContextualType(parent as PrefixUnaryExpression);
+                    }
             }
             return undefined;
         }
@@ -11935,8 +12028,21 @@ namespace ts {
             const operandType = checkExpression(node.operand);
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
+                    if (operandType.flags & TypeFlags.NumericLiteral) {
+                        return operandType;
+                    }
                 case SyntaxKind.MinusToken:
+                    if (operandType.flags & TypeFlags.NumericLiteral) {
+                        const litType = operandType as NumericLiteralType;
+                        const newNumber = -litType.number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                 case SyntaxKind.TildeToken:
+                    if (operandType.flags & TypeFlags.NumericLiteral) {
+                        const litType = operandType as NumericLiteralType;
+                        const newNumber = ~litType.number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                     if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
@@ -11944,7 +12050,18 @@ namespace ts {
                 case SyntaxKind.ExclamationToken:
                     return booleanType;
                 case SyntaxKind.PlusPlusToken:
+                    if (operandType.flags & TypeFlags.NumericLiteral) {
+                        const litType = operandType as NumericLiteralType;
+                        const newNumber = litType.number + 1;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
+                    // Intentional fallthrough
                 case SyntaxKind.MinusMinusToken:
+                    if (operandType.flags & TypeFlags.NumericLiteral) {
+                        const litType = operandType as NumericLiteralType;
+                        const newNumber = litType.number - 1;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                     const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
                         Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
                     if (ok) {
@@ -11960,6 +12077,9 @@ namespace ts {
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
+            if (operandType.flags & TypeFlags.NumericLiteral) {
+                return operandType;
+            }
             const ok = checkArithmeticOperandType(node.operand, getNonNullableType(operandType),
                 Diagnostics.An_arithmetic_operand_must_be_of_type_any_number_or_an_enum_type);
             if (ok) {
@@ -12200,27 +12320,59 @@ namespace ts {
             let rightType = checkExpression(right, contextualMapper);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
-                case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.AsteriskEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number * (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
+                case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number ** (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number / (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                 case SyntaxKind.PercentToken:
                 case SyntaxKind.PercentEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number % (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.MinusEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number - (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
+                case SyntaxKind.BarToken:
+                case SyntaxKind.BarEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number | (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
+                case SyntaxKind.CaretToken:
+                case SyntaxKind.CaretEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number ^ (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
+                case SyntaxKind.AmpersandToken:
+                case SyntaxKind.AmpersandEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        const newNumber = (leftType as NumericLiteralType).number & (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.LessThanLessThanEqualsToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanEqualsToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                 case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
-                case SyntaxKind.BarToken:
-                case SyntaxKind.BarEqualsToken:
-                case SyntaxKind.CaretToken:
-                case SyntaxKind.CaretEqualsToken:
-                case SyntaxKind.AmpersandToken:
-                case SyntaxKind.AmpersandEqualsToken:
                     // TypeScript 1.0 spec (April 2014): 4.19.1
                     // These operators require their operands to be of type Any, the Number primitive type,
                     // or an enum type. Operands of an enum type are treated
@@ -12253,6 +12405,11 @@ namespace ts {
                     return numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
+                    if (leftType.flags & rightType.flags & TypeFlags.NumericLiteral) {
+                        // TODO (weswig): add case for when 1 side is a string literal type and the other is a numeric literal, then cast as appropriate
+                        const newNumber = (leftType as NumericLiteralType).number + (rightType as NumericLiteralType).number;
+                        return getNumericLiteralTypeForNumber(newNumber);
+                    }
                     // TypeScript 1.0 spec (April 2014): 4.19.2
                     // The binary + operator requires both operands to be of the Number primitive type or an enum type,
                     // or at least one of the operands to be of type Any or the String primitive type.
@@ -12574,6 +12731,10 @@ namespace ts {
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
             checkGrammarNumericLiteral(node);
+            const contextualType = getContextualType(node);
+            if (contextualType && contextualTypeIsNumericLiteralType(contextualType)) {
+                return getNumericLiteralTypeForText(node.text);
+            }
             return numberType;
         }
 
@@ -17456,6 +17617,10 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedType;
+            getSymbolLinks(NaNSymbol).type = numberType;
+            getSymbolLinks(NaNSymbol).declaredType = NaNLiteralType;
+            getSymbolLinks(InfinitySymbol).type = numberType;
+            getSymbolLinks(InfinitySymbol).declaredType = InfinityLiteralType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
 
