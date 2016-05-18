@@ -19,6 +19,7 @@
         "emitter.ts",
         "program.ts",
         "commandLineParser.ts",
-        "tsc.ts"
+        "tsc.ts",
+        "check/writer.ts"
     ]
 }
