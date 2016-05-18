@@ -905,7 +905,7 @@ namespace Harness {
                     fileMap.forEachValue((key, value) => {
                         const rx = /node_modules\/@types\/(\w+)/;
                         const typeNameResult = rx.exec(key);
-                        if(typeNameResult) {
+                        if (typeNameResult) {
                             const typeName = typeNameResult[1];
                             if (results.indexOf(typeName) < 0) {
                                 results.push(typeName);

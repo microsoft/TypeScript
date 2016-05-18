@@ -18,8 +18,6 @@ namespace ts {
         "node_modules/@types/",
     ];
 
-    const autoImportedTypePaths = ["types", "node_modules/@types"];
-
     export const version = "1.9.0";
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
@@ -878,8 +876,8 @@ namespace ts {
         }
 
         function getDefaultTypeDirectiveNames(rootPath: string): string[] {
-            const localTypes = combinePaths(rootPath, 'types');
-            const npmTypes = combinePaths(rootPath, 'node_modules/@types');
+            const localTypes = combinePaths(rootPath, "types");
+            const npmTypes = combinePaths(rootPath, "node_modules/@types");
             let result: string[] = [];
             if (sys.directoryExists(localTypes)) {
                 result = result.concat(sys.getDirectories(localTypes));
@@ -1029,7 +1027,7 @@ namespace ts {
             else {
                 // or load all types from the automatic type import fields
                 if (host.getDefaultTypeDirectiveNames) {
-                    typeReferences = host.getDefaultTypeDirectiveNames(getCommonSourceDirectory());;
+                    typeReferences = host.getDefaultTypeDirectiveNames(getCommonSourceDirectory());
                 }
             }
 
