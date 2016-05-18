@@ -315,10 +315,6 @@
         "category": "Error",
         "code": 1110
     },
-    "A class member cannot be declared optional.": {
-        "category": "Error",
-        "code": 1112
-    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
