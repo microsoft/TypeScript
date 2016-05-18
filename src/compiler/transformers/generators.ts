@@ -235,11 +235,13 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
+            setSourceMapRange,
+            setCommentRange
         } = context;
 
         const resolver = context.getEmitResolver();
-        const previousExpressionSubstitution = context.expressionSubstitution;
-        context.expressionSubstitution = substituteExpression;
+        const previousOnSubstituteNode = context.onSubstituteNode;
+        context.onSubstituteNode = onSubstituteNode;
 
         let renamedCatchVariables: Map<boolean>;
         let renamedCatchVariableDeclarations: Map<Identifier>;
@@ -994,7 +996,7 @@ namespace ts {
                 //  .mark resumeLabel
                 //      _b.apply(_a, _c.concat([%sent%, 2]));
 
-                const { target, thisArg } = createCallBinding(node.expression);
+                const { target, thisArg } = createCallBinding(node.expression, hoistVariableDeclaration);
                 return setOriginalNode(
                     createFunctionApply(
                         cacheExpression(visitNode(target, visitor, isLeftHandSideExpression)),
@@ -1022,7 +1024,7 @@ namespace ts {
                 //  .mark resumeLabel
                 //      new (_b.apply(_a, _c.concat([%sent%, 2])));
 
-                const { target, thisArg } = createCallBinding(createPropertyAccess(node.expression, "bind"));
+                const { target, thisArg } = createCallBinding(createPropertyAccess(node.expression, "bind"), hoistVariableDeclaration);
                 return setOriginalNode(
                     createNew(
                         createFunctionApply(
@@ -1807,8 +1809,15 @@ namespace ts {
             return -1;
         }
 
+        function onSubstituteNode(node: Node, isExpression: boolean): Node {
+            node = previousOnSubstituteNode(node, isExpression);
+            if (isExpression) {
+                return substituteExpression(<Expression> node);
+            }
+            return node;
+        }
+
         function substituteExpression(node: Expression): Expression {
-            node = previousExpressionSubstitution(node);
             if (isIdentifier(node)) {
                 return substituteExpressionIdentifier(node);
             }
@@ -1823,7 +1832,10 @@ namespace ts {
                     if (declaration) {
                         const name = getProperty(renamedCatchVariableDeclarations, String(getOriginalNodeId(declaration)));
                         if (name) {
-                            return getRelocatedClone(name, /*location*/ node);
+                            const clone = getMutableClone(name);
+                            setSourceMapRange(clone, node);
+                            setCommentRange(clone, node);
+                            return clone;
                         }
                     }
                 }
@@ -1842,7 +1854,7 @@ namespace ts {
                 temp = createUniqueName(node.text);
             }
             else {
-                temp = createTempVariable();
+                temp = createTempVariable(hoistVariableDeclaration);
             }
 
             emitAssignment(temp, node, /*location*/ node);
@@ -1852,7 +1864,7 @@ namespace ts {
         function declareLocal(name?: string): Identifier {
             const temp = name
                 ? createUniqueName(name)
-                : createTempVariable();
+                : createTempVariable(hoistVariableDeclaration);
             hoistVariableDeclaration(temp);
             return temp;
         }
@@ -1991,7 +2003,7 @@ namespace ts {
             if (!renamedCatchVariables) {
                 renamedCatchVariables = {};
                 renamedCatchVariableDeclarations = {};
-                context.enableExpressionSubstitution(SyntaxKind.Identifier);
+                context.enableSubstitution(SyntaxKind.Identifier);
             }
 
             renamedCatchVariables[text] = true;
@@ -2300,7 +2312,9 @@ namespace ts {
          * Creates a numeric literal for the provided instruction.
          */
         function createInstruction(instruction: Instruction): NumericLiteral {
-            return createLiteral(instruction, /*location*/ undefined, instructionNames[instruction]);
+            const literal = createLiteral(instruction);
+            literal.trailingComment = instructionNames[instruction];
+            return literal;
         }
 
         /**

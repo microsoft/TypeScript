@@ -112,7 +112,7 @@ namespace ts {
 
     export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
     export function createLiteral(value: string, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
-    export function createLiteral(value: number, location?: TextRange, emitOptions?: NodeEmitOptions): LiteralExpression;
+    export function createLiteral(value: number, location?: TextRange, emitOptions?: NodeEmitOptions): NumericLiteral;
     export function createLiteral(value: string | number | boolean, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression;
     export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression {
         if (typeof value === "number") {
@@ -505,7 +505,7 @@ namespace ts {
         return node;
     }
 
-    export function createCaseBlock(clauses: CaseClause[], location?: TextRange): CaseBlock {
+    export function createCaseBlock(clauses: CaseOrDefaultClause[], location?: TextRange): CaseBlock {
         const node = <CaseBlock>createNode(SyntaxKind.CaseBlock, location);
         node.clauses = createNodeArray(clauses);
         return node;
@@ -570,13 +570,6 @@ namespace ts {
         return node;
     }
 
-    export function createSwitch(expression: Expression, caseBlock: CaseBlock, location?: TextRange): ReturnStatement {
-        const node = <SwitchStatement>createNode(SyntaxKind.SwitchStatement, location);
-        node.expression = expression;
-        node.caseBlock = caseBlock;
-        return node;
-    }
-
     export function createThrow(expression: Expression, location?: TextRange): ReturnStatement {
         const node = <ThrowStatement>createNode(SyntaxKind.ThrowStatement, location);
         node.expression = expression;
@@ -623,12 +616,6 @@ namespace ts {
         node.typeParameters = undefined;
         node.heritageClauses = createNodeArray(heritageClauses);
         node.members = createNodeArray(members);
-        return node;
-    }
-
-    export function createCaseBlock(clauses: CaseOrDefaultClause[], location?: TextRange) {
-        const node = <CaseBlock>createNode(SyntaxKind.CaseBlock, location);
-        node.clauses = createNodeArray(clauses);
         return node;
     }
 
@@ -1262,34 +1249,47 @@ namespace ts {
     function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
-            return aggregateTransformFlags(
-                createObjectDefineProperty(
+            const properties: ObjectLiteralElement[] = [];
+            if (getAccessor) {
+                const getterFunction = createFunctionExpression(
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    getAccessor.parameters,
+                    getAccessor.body,
+                    /*location*/ getAccessor,
+                    /*original*/ getAccessor
+                );
+                const getter = createPropertyAssignment("get", getterFunction);
+                properties.push(getter);
+            }
+
+            if (setAccessor) {
+                const setterFunction = createFunctionExpression(
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    setAccessor.parameters,
+                    setAccessor.body,
+                    /*location*/ setAccessor,
+                    /*original*/ setAccessor
+                );
+                const setter = createPropertyAssignment("set", setterFunction);
+                properties.push(setter);
+            }
+
+            properties.push(createPropertyAssignment("enumerable", createLiteral(true)));
+            properties.push(createPropertyAssignment("configurable", createLiteral(true)));
+
+            const expression = createCall(
+                createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                [
                     receiver,
-                    createExpressionForPropertyName(property.name, /*location*/ property.name),
-                    {
-                        get: getAccessor && createFunctionExpression(
-                            /*asteriskToken*/ undefined,
-                            /*name*/ undefined,
-                            getAccessor.parameters,
-                            getAccessor.body,
-                            /*location*/ getAccessor,
-                            /*original*/ getAccessor
-                        ),
-                        set: setAccessor && createFunctionExpression(
-                            /*asteriskToken*/ undefined,
-                            /*name*/ undefined,
-                            setAccessor.parameters,
-                            setAccessor.body,
-                            /*location*/ setAccessor,
-                            /*original*/ setAccessor
-                        ),
-                        enumerable: true,
-                        configurable: true
-                    },
-                    multiLine,
-                    /*location*/ firstAccessor
-                )
+                    createExpressionForPropertyName(property.name),
+                    createObjectLiteral(properties, /*location*/ undefined, multiLine)
+                ],
+                /*location*/ firstAccessor
             );
+
+            return aggregateTransformFlags(expression);
         }
 
         return undefined;

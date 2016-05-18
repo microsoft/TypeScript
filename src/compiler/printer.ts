@@ -2129,14 +2129,6 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function shouldEmitCaseOrDefaultClauseStatementOnSameLine(parentNode: Node, statement: Statement) {
-                if (statement.startsOnNewLine || nodeIsSynthesized(parentNode)) {
-                    return false;
-                }
-
-                return nodeIsSynthesized(statement) || rangeStartPositionsAreOnSameLine(parentNode, statement);
-            }
-
             function emitHeritageClause(node: HeritageClause) {
                 write(" ");
                 writeTokenText(node.token);
