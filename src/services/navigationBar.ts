@@ -139,19 +139,21 @@ namespace ts.NavigationBar {
 
         function sortNodes(nodes: Node[]): Node[] {
             const sortedCopy = nodes.slice(0);
-            doSortNodes(sortedCopy);
+            sortNodesInPlace(sortedCopy);
             return sortedCopy;
         }
 
-        function doSortNodes(nodes: Node[]): void {
-            nodes.sort((n1: Declaration, n2: Declaration) => {
-                if (n1.name && n2.name) {
-                    return getPropertyNameForPropertyNameNode(n1.name).localeCompare(getPropertyNameForPropertyNameNode(n2.name));
+        function sortNodesInPlace(nodes: Node[]): void {
+            nodes.sort((n1, n2) => {
+                // Get the name if it exists. OK if node is not a declaration.
+                const name1 = (<Declaration> n1).name, name2 = (<Declaration> n2).name;
+                if (name1 && name2) {
+                    return getPropertyNameForPropertyNameNode(name1).localeCompare(getPropertyNameForPropertyNameNode(name2));
                 }
-                else if (n1.name) {
+                else if (name1) {
                     return 1;
                 }
-                else if (n2.name) {
+                else if (name2) {
                     return -1;
                 }
                 else {
@@ -160,14 +162,14 @@ namespace ts.NavigationBar {
             });
         }
 
-        // Add nodes in a single "level" of top-level nodes (as in, methods in a class.)
+        // Add nodes in a single "level" of top-level nodes (e.g. methods in a class.)
         // Nodes in a single "level" are sorted together.
         function addTopLevelNodes(nodes: Node[], higherLevel: Node[]): void {
             const thisLevel: Node[] = [];
             for (const node of nodes) {
                 addTopLevelNode(node, thisLevel);
             }
-            doSortNodes(thisLevel);
+            sortNodesInPlace(thisLevel);
 
             for (const node of thisLevel) {
                 higherLevel.push(node);
@@ -183,7 +185,7 @@ namespace ts.NavigationBar {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.Constructor) {
                             type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
                             if ((<FunctionLikeMember>member).body) {
-                                // We do not include methods that does not have child functions in it, because of duplications.
+                                // We do not include methods that do not have child functions in them, because of duplications.
                                 if (hasNamedFunctionDeclarations((<Block>(<FunctionLikeMember>member).body).statements)) {
                                     thisLevel.push(member);
                                 }
