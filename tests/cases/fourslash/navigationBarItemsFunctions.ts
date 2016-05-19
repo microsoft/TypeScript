@@ -20,4 +20,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(8); // 4 functions + global.  Note: there are 8 because of the functions show up at the top level and as child items.
+verify.navigationBarCount(11); // Includes many nested functions, with duplications as they appear both at top-level and as childItems

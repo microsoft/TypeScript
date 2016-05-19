@@ -32,9 +32,12 @@ namespace ts.NavigationBar {
                         while (current.kind === SyntaxKind.ModuleDeclaration);
 
                         // fall through
+                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
                         indent++;
                 }
@@ -96,16 +99,22 @@ namespace ts.NavigationBar {
                             break;
                         }
                         // Fall through
+                    case SyntaxKind.ClassExpression:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
                         childNodes.push(node);
                         break;
+
+                    default:
+                        forEachChild(node, visit);
                 }
             }
 
@@ -164,32 +173,62 @@ namespace ts.NavigationBar {
 
         // Add nodes in a single "level" of top-level nodes (e.g. methods in a class.)
         // Nodes in a single "level" are sorted together.
-        function addTopLevelNodes(nodes: Node[], higherLevel: Node[]): void {
-            const thisLevel: Node[] = [];
-            for (const node of nodes) {
-                addTopLevelNode(node, thisLevel);
-            }
-            sortNodesInPlace(thisLevel);
-
-            for (const node of thisLevel) {
-                higherLevel.push(node);
+        // Returns whether any nodes were added.
+        function addTopLevelNodes(nodes: Node | Node[], topLevelNodes: Node[]) {
+            const decls = getNextLevelOfDeclarations(nodes);
+            // Sort each level of declarations together
+            sortNodesInPlace(decls);
+            for (const decl of decls) {
+                addTopLevelNode(decl, topLevelNodes);
             }
         }
 
-        function addTopLevelNode(node: Node, thisLevel: Node[]): void {
+        // Gets all declarations contained within `nodes` and their sub-expressions,
+        // but not declarations within declarations.
+        function getNextLevelOfDeclarations(nodes: Node | Node[]): Node[] {
+            const result: Node[] = [];
+            function recur(node: Node): void {
+                switch (node.kind) {
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                        result.push(node);
+                        // Its children are handled by addTopLevelNode later.
+                        break;
+                    default:
+                        forEachChild(node, recur);
+                }
+            }
+            if (nodes instanceof Array) {
+                for (const node of nodes) {
+                    recur(node);
+                }
+            }
+            else {
+                recur(nodes);
+            }
+            return result;
+        }
+
+        function addTopLevelNode(node: Node, topLevelNodes: Node[]) {
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
-                    thisLevel.push(node);
+                    topLevelNodes.push(node);
                     for (const member of (<ClassDeclaration>node).members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.Constructor) {
                             type FunctionLikeMember = MethodDeclaration | ConstructorDeclaration;
-                            if ((<FunctionLikeMember>member).body) {
-                                // We do not include methods that do not have child functions in them, because of duplications.
-                                if (hasNamedFunctionDeclarations((<Block>(<FunctionLikeMember>member).body).statements)) {
-                                    thisLevel.push(member);
-                                }
-                                addTopLevelNodes((<Block>(<MethodDeclaration>member).body).statements, thisLevel);
+                            const decl = <FunctionLikeMember>member;
+                            if (decl.body) {
+                                // Add node, but it will not become an item unless it has children later.
+                                topLevelNodes.push(member);
+                                addTopLevelNodes(decl.body.statements, topLevelNodes);
                             }
                         }
                     }
@@ -198,68 +237,29 @@ namespace ts.NavigationBar {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                    thisLevel.push(node);
+                    topLevelNodes.push(node);
                     break;
 
                 case SyntaxKind.ModuleDeclaration:
                     let moduleDeclaration = <ModuleDeclaration>node;
-                    thisLevel.push(node);
-                    addTopLevelNodes((<Block>getInnermostModule(moduleDeclaration).body).statements, thisLevel);
+                    topLevelNodes.push(node);
+                    addTopLevelNodes((<Block>getInnermostModule(moduleDeclaration).body).statements, topLevelNodes);
                     break;
 
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
-                    let functionDeclaration = <FunctionLikeDeclaration>node;
-                    if (isTopLevelFunctionDeclaration(functionDeclaration)) {
-                        thisLevel.push(node);
-                        addTopLevelNodes((<Block>functionDeclaration.body).statements, thisLevel);
+                    const decl = <FunctionLikeDeclaration>node;
+                    if (decl.body) {
+                        topLevelNodes.push(node);
+                        addTopLevelNodes(decl.body, topLevelNodes);
                     }
                     break;
 
                 default:
-                    // Nodes within nested expressions are still sorted as if they were top-level,
-                    // so in this case we recurse with `addTopLevelNode` rather than calling `addTopLevelNodes`.
-                    forEachChild(node, child => addTopLevelNode(child, thisLevel));
+                    // There should be a case in addTopLevelNode for each case in getNextLevelOfDeclarations.
+                    throw new Error("Unreachable");
             }
-        }
-
-        function hasNamedFunctionDeclarations(nodes: NodeArray<Statement>): boolean {
-            for (const s of nodes) {
-                if (s.kind === SyntaxKind.FunctionDeclaration && !isEmpty((<FunctionDeclaration>s).name.text)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function isTopLevelFunctionDeclaration(functionDeclaration: FunctionLikeDeclaration): boolean {
-            if (functionDeclaration.kind === SyntaxKind.FunctionDeclaration) {
-                // A function declaration is 'top level' if it contains any function declarations
-                // within it.
-                if (functionDeclaration.body && functionDeclaration.body.kind === SyntaxKind.Block) {
-                    // Proper function declarations can only have identifier names
-                    if (hasNamedFunctionDeclarations((<Block>functionDeclaration.body).statements)) {
-                        return true;
-                    }
-
-                    // Or if it is not parented by another function. I.e all functions at module scope are 'top level'.
-                    if (!isFunctionBlock(functionDeclaration.parent)) {
-                        return true;
-                    }
-
-                    // Or if it is nested inside class methods and constructors.
-                    else {
-                        // We have made sure that a grand parent node exists with 'isFunctionBlock()' above.
-                        const grandParentKind = functionDeclaration.parent.parent.kind;
-                        if (grandParentKind === SyntaxKind.MethodDeclaration ||
-                            grandParentKind === SyntaxKind.Constructor) {
-
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         function getItemsWorker(nodes: Node[], createItem: (n: Node) => ts.NavigationBarItem): ts.NavigationBarItem[] {
@@ -271,6 +271,12 @@ namespace ts.NavigationBar {
                 const item = createItem(child);
                 if (item !== undefined) {
                     if (item.text.length > 0) {
+                        if (isDeclarationExpression(child)) {
+                            // Never merge
+                            items.push(item);
+                            continue;
+                        }
+
                         const key = item.text + "-" + item.kind + "-" + item.indent;
 
                         const itemWithSameName = keyToItem[key];
@@ -352,8 +358,10 @@ namespace ts.NavigationBar {
                 case SyntaxKind.PropertySignature:
                     return createItem(node, getTextOfNode((<PropertyDeclaration>node).name), ts.ScriptElementKind.memberVariableElement);
 
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
-                    return createItem(node, getTextOfNode((<FunctionLikeDeclaration>node).name), ts.ScriptElementKind.functionElement);
+                    return createItem(node, declarationExpressionName(<ArrowFunction | FunctionExpression | FunctionDeclaration>node), ts.ScriptElementKind.functionElement);
 
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
@@ -447,6 +455,8 @@ namespace ts.NavigationBar {
                 case SyntaxKind.ModuleDeclaration:
                     return createModuleItem(<ModuleDeclaration>node);
 
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionDeclaration:
                     return createFunctionItem(<FunctionDeclaration>node);
 
@@ -490,18 +500,25 @@ namespace ts.NavigationBar {
             }
 
             function createFunctionItem(node: FunctionDeclaration): ts.NavigationBarItem  {
-                if (node.body && node.body.kind === SyntaxKind.Block) {
-                    const childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
-
-                    return getNavigationBarItem(!node.name ? "default" : node.name.text,
-                        ts.ScriptElementKind.functionElement,
-                        getNodeModifiers(node),
-                        [getNodeSpan(node)],
-                        childItems,
-                        getIndent(node));
+                const children = node.body ? getChildNodes([node.body]) : [];
+                const isTopLevel = node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile ||
+                    // Functions with declaration children (not including local variables) are worthy
+                    children.some(child => child.kind !== SyntaxKind.VariableDeclaration && child.kind !== SyntaxKind.BindingElement) ||
+                    // Functions inside class methods are worthy
+                    node.parent.parent.kind === SyntaxKind.MethodDeclaration || node.parent.parent.kind === SyntaxKind.Constructor;
+                if (!isTopLevel) {
+                    return undefined;
                 }
 
-                return undefined;
+                const childItems = getItemsWorker(children, createChildItem);
+
+                return getNavigationBarItem(
+                    declarationExpressionName(node),
+                    ts.ScriptElementKind.functionElement,
+                    getNodeModifiers(node),
+                    [getNodeSpan(node)],
+                    childItems,
+                    getIndent(node));
             }
 
             function createTypeAliasItem(node: TypeAliasDeclaration): ts.NavigationBarItem {
@@ -514,28 +531,29 @@ namespace ts.NavigationBar {
             }
 
             function createMemberFunctionLikeItem(node: MethodDeclaration | ConstructorDeclaration): ts.NavigationBarItem  {
-                if (node.body && node.body.kind === SyntaxKind.Block) {
-                    const childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
-                    let scriptElementKind: string;
-                    let memberFunctionName: string;
-                    if (node.kind === SyntaxKind.MethodDeclaration) {
-                        memberFunctionName = getPropertyNameForPropertyNameNode(node.name);
-                        scriptElementKind = ts.ScriptElementKind.memberFunctionElement;
-                    }
-                    else {
-                        memberFunctionName = "constructor";
-                        scriptElementKind = ts.ScriptElementKind.constructorImplementationElement;
-                    }
-
-                    return getNavigationBarItem(memberFunctionName,
-                        scriptElementKind,
-                        getNodeModifiers(node),
-                        [getNodeSpan(node)],
-                        childItems,
-                        getIndent(node));
+                const childItems = getItemsWorker(sortNodes(node.body.statements), createChildItem);
+                // Don't include member functions as top-level if they don't contain other items.
+                if (!childItems.length) {
+                    return undefined;
                 }
 
-                return undefined;
+                let scriptElementKind: string;
+                let memberFunctionName: string;
+                if (node.kind === SyntaxKind.MethodDeclaration) {
+                    memberFunctionName = getPropertyNameForPropertyNameNode(node.name);
+                    scriptElementKind = ts.ScriptElementKind.memberFunctionElement;
+                }
+                else {
+                    memberFunctionName = "constructor";
+                    scriptElementKind = ts.ScriptElementKind.constructorImplementationElement;
+                }
+
+                return getNavigationBarItem(memberFunctionName,
+                    scriptElementKind,
+                    getNodeModifiers(node),
+                    [getNodeSpan(node)],
+                    childItems,
+                    getIndent(node));
             }
 
             function createSourceFileItem(node: SourceFile): ts.NavigationBarItem {
@@ -576,10 +594,8 @@ namespace ts.NavigationBar {
                     childItems = getItemsWorker(sortNodes(nodes), createChildItem);
                 }
 
-                const nodeName = !node.name ? "default" : node.name.text;
-
                 return getNavigationBarItem(
-                    nodeName,
+                    declarationExpressionName(node),
                     ts.ScriptElementKind.classElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
@@ -641,8 +657,6 @@ namespace ts.NavigationBar {
     }
 
     export function getJsNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): NavigationBarItem[] {
-        const anonFnText = "<function>";
-        const anonClassText = "<class>";
         let indent = 0;
 
         const rootName = isExternalModule(sourceFile) ?
@@ -672,8 +686,7 @@ namespace ts.NavigationBar {
                 topItem = lastTop;
                 indent--;
 
-                // If the last item added was an anonymous function expression, and it had no children, discard it.
-                if (newItem && newItem.text === anonFnText && newItem.childItems.length === 0) {
+                if (newItem && isAnonFn(newItem) && newItem.childItems.length === 0) {
                     topItem.childItems.pop();
                 }
             }
@@ -783,30 +796,7 @@ namespace ts.NavigationBar {
             }
 
             const fnExpr = node as FunctionExpression | ArrowFunction | ClassExpression;
-            let fnName: string;
-            if (fnExpr.name && getFullWidth(fnExpr.name) > 0) {
-                // The expression has an identifier, so use that as the name
-                fnName = declarationNameToString(fnExpr.name);
-            }
-            else {
-                // See if it is a var initializer. If so, use the var name.
-                if (fnExpr.parent.kind === SyntaxKind.VariableDeclaration) {
-                    fnName = declarationNameToString((fnExpr.parent as VariableDeclaration).name);
-                }
-                // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
-                else if (fnExpr.parent.kind === SyntaxKind.BinaryExpression &&
-                         (fnExpr.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    fnName = (fnExpr.parent as BinaryExpression).left.getText();
-                }
-                // See if it is a property assignment, and if so use the property name
-                else if (fnExpr.parent.kind === SyntaxKind.PropertyAssignment &&
-                         (fnExpr.parent as PropertyAssignment).name) {
-                    fnName = (fnExpr.parent as PropertyAssignment).name.getText();
-                }
-                else {
-                    fnName = node.kind === SyntaxKind.ClassExpression ? anonClassText : anonFnText;
-                }
-            }
+            const fnName = declarationExpressionName(fnExpr);
             const scriptKind = node.kind === SyntaxKind.ClassExpression ? ScriptElementKind.classElement : ScriptElementKind.functionElement;
             return getNavBarItem(fnName, scriptKind, [getNodeSpan(node)]);
         }
@@ -837,5 +827,43 @@ namespace ts.NavigationBar {
         }
 
         return sourceFileItem.childItems;
+    }
+
+    const anonFnText = "<function>";
+    const anonClassText = "<class>";
+
+    // Get the name for a (possibly anonymous) class/function expression.
+    function declarationExpressionName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
+        if (node.name && getFullWidth(node.name) > 0) {
+            return declarationNameToString(node.name);
+        }
+        // See if it is a var initializer. If so, use the var name.
+        else if (node.parent.kind === SyntaxKind.VariableDeclaration) {
+            return declarationNameToString((node.parent as VariableDeclaration).name);
+        }
+        // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
+        else if (node.parent.kind === SyntaxKind.BinaryExpression &&
+            (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+            return (node.parent as BinaryExpression).left.getText();
+        }
+        // See if it is a property assignment, and if so use the property name
+        else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
+            return (node.parent as PropertyAssignment).name.getText();
+        }
+        // Default exports are named "default"
+        else if (node.flags & NodeFlags.Default) {
+            return "default";
+        }
+        else {
+            return node.kind === SyntaxKind.ClassExpression ? anonClassText : anonFnText;
+        }
+    }
+
+    function isAnonFn(item: NavigationBarItem): boolean {
+        return item.text === anonFnText;
+    }
+
+    function isDeclarationExpression(node: Node) {
+        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || node.kind === SyntaxKind.ClassExpression;
     }
 }

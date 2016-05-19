@@ -238,7 +238,7 @@ declare namespace FourSlashInterface {
         printBreakpointAtCurrentLocation(): void;
         printNameOrDottedNameSpans(pos: number): void;
         printErrorList(): void;
-        printNavigationBar(): void;
+        printNavigationBar(showChildItems?: boolean): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
         printReferences(): void;

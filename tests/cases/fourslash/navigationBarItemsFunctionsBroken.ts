@@ -9,4 +9,4 @@ test.markers().forEach((marker) => {
     verify.navigationBarContains(marker.data.itemName, marker.data.kind, marker.fileName, marker.data.parentName);
 });
 
-verify.navigationBarCount(3); // <global> and 'f'. 
+verify.navigationBarCount(4); // <global> with child 'f' and 'f' with child '<function>'.

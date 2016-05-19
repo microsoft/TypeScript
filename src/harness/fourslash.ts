@@ -2058,7 +2058,7 @@ namespace FourSlash {
             }
         }
 
-        public printNavigationBar() {
+        public printNavigationBar(showChildItems = false) {
             const items = this.languageService.getNavigationBarItems(this.activeFile.fileName);
             const length = items && items.length;
 
@@ -2066,7 +2066,16 @@ namespace FourSlash {
 
             for (let i = 0; i < length; i++) {
                 const item = items[i];
-                Harness.IO.log(`name: ${item.text}, kind: ${item.kind}`);
+                const childrenText = showChildItems ? `, children: ${item.childItems.map(child => child.text)}` : "";
+                Harness.IO.log(`${strRepeat("  ", item.indent)}name: ${item.text}, kind: ${item.kind}${childrenText}`);
+            }
+
+            function strRepeat(str: string, times: number) {
+                let out = "";
+                for (let i = 0; i < times; i++) {
+                    out += str;
+                }
+                return out;
             }
         }
 
@@ -3267,8 +3276,8 @@ namespace FourSlashInterface {
             this.state.printNavigationItems(searchValue);
         }
 
-        public printNavigationBar() {
-            this.state.printNavigationBar();
+        public printNavigationBar(showChildItems = false) {
+            this.state.printNavigationBar(showChildItems);
         }
 
         public printReferences() {
