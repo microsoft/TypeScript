@@ -2296,7 +2296,7 @@
         "category": "Error",
         "code": 5062
     },
-    "Substututions for pattern '{0}' should be an array.": {
+    "Substitutions for pattern '{0}' should be an array.": {
         "category": "Error",
         "code": 5063
     },
