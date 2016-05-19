@@ -1300,7 +1300,7 @@ namespace ts.server {
                 }
                 else {
                     const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
-                    const newFileNames = ts.filter(projectOptions.files, sys.fileExists);
+                    const newFileNames = ts.filter(projectOptions.files, f => this.host.fileExists(f));
                     const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
 
