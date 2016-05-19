@@ -525,7 +525,7 @@ compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, cop
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
 
-var tsserverLibraryFile = path.join(builtLocalDirectory, "tslssl.js");
+var tsserverLibraryFile = path.join(builtLocalDirectory, "tsserverlibrary.js");
 compileFile(
     tsserverLibraryFile,
     languageServiceLibrarySources,
