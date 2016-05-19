@@ -388,7 +388,7 @@ namespace ts {
                 target.flags |= source.flags;
                 if (source.valueDeclaration &&
                     (!target.valueDeclaration ||
-                        (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }
@@ -657,8 +657,8 @@ namespace ts {
                                 useResult = result.flags & SymbolFlags.TypeParameter
                                     // type parameters are visible in parameter list, return type and type parameter list
                                     ? lastLocation === (<FunctionLikeDeclaration>location).type ||
-                                    lastLocation.kind === SyntaxKind.Parameter ||
-                                    lastLocation.kind === SyntaxKind.TypeParameter
+                                      lastLocation.kind === SyntaxKind.Parameter ||
+                                      lastLocation.kind === SyntaxKind.TypeParameter
                                     // local types not visible outside the function body
                                     : false;
                             }
@@ -4452,7 +4452,7 @@ namespace ts {
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) :
-                        getTypeParametersFromJSDocTemplate(declaration);
+                    getTypeParametersFromJSDocTemplate(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, minArgumentCount, isJSConstructSignature, classType);
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
@@ -5078,7 +5078,7 @@ namespace ts {
             if (typeSet.length === 0) {
                 return typeSet.containsNull ? nullType :
                     typeSet.containsUndefined ? undefinedType :
-                        neverType;
+                    neverType;
             }
             else if (typeSet.length === 1) {
                 return typeSet[0];
@@ -5314,8 +5314,8 @@ namespace ts {
             const count = sources.length;
             const mapper: TypeMapper =
                 count == 1 ? createUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
-                    count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                        createArrayTypeMapper(sources, targets);
+                count == 2 ? createBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
+                createArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
             return mapper;
         }
@@ -5634,8 +5634,8 @@ namespace ts {
         }
 
         function isSignatureAssignableTo(source: Signature,
-            target: Signature,
-            ignoreReturnTypes: boolean): boolean {
+                                         target: Signature,
+                                         ignoreReturnTypes: boolean): boolean {
             return compareSignaturesRelated(source, target, ignoreReturnTypes, /*reportErrors*/ false, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
@@ -5643,11 +5643,11 @@ namespace ts {
          * See signatureRelatedTo, compareSignaturesIdentical
          */
         function compareSignaturesRelated(source: Signature,
-            target: Signature,
-            ignoreReturnTypes: boolean,
-            reportErrors: boolean,
-            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
-            compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+                                          target: Signature,
+                                          ignoreReturnTypes: boolean,
+                                          reportErrors: boolean,
+                                          errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+                                          compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
                 return Ternary.True;
@@ -5724,10 +5724,10 @@ namespace ts {
         }
 
         function compareTypePredicateRelatedTo(source: TypePredicate,
-            target: TypePredicate,
-            reportErrors: boolean,
-            errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
-            compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+                                               target: TypePredicate,
+                                               reportErrors: boolean,
+                                               errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+                                               compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             if (source.kind !== target.kind) {
                 if (reportErrors) {
                     errorReporter(Diagnostics.A_this_based_type_guard_is_not_compatible_with_a_parameter_based_type_guard);
@@ -7648,7 +7648,7 @@ namespace ts {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
                         // antecedent of more than one node.
-                        for (let i = visitedFlowStart; i < visitedFlowCount; i++) {
+                        for (let i = visitedFlowStart; i < visitedFlowCount;  i++) {
                             if (visitedFlowNodes[i] === flow) {
                                 return visitedFlowTypes[i];
                             }
@@ -7957,7 +7957,7 @@ namespace ts {
                 const targetType = type.flags & TypeFlags.TypeParameter ? getApparentType(type) : type;
                 return isTypeAssignableTo(candidate, targetType) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                        neverType;
+                    neverType;
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -8339,9 +8339,9 @@ namespace ts {
                     getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                     // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
                     const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
-                        .left as PropertyAccessExpression)       // x.prototype.y
-                        .expression as PropertyAccessExpression) // x.prototype
-                        .expression;                             // x
+                                        .left as PropertyAccessExpression)       // x.prototype.y
+                                        .expression as PropertyAccessExpression) // x.prototype
+                                        .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
                         return getInferredClassType(classSymbol);
@@ -11474,7 +11474,7 @@ namespace ts {
                 // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                 if (links.type === emptyObjectType &&
                     (parameter.valueDeclaration.name.kind === SyntaxKind.ObjectBindingPattern ||
-                        parameter.valueDeclaration.name.kind === SyntaxKind.ArrayBindingPattern)) {
+                     parameter.valueDeclaration.name.kind === SyntaxKind.ArrayBindingPattern)) {
                     links.type = getTypeFromBindingPattern(<BindingPattern>parameter.valueDeclaration.name);
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
@@ -12792,7 +12792,7 @@ namespace ts {
                     let hasReportedError = false;
                     for (const { name } of parent.parameters) {
                         if (isBindingPattern(name) &&
-                            checkIfTypePredicateVariableIsDeclaredInBindingPattern(name, parameterName, typePredicate.parameterName)) {
+                                checkIfTypePredicateVariableIsDeclaredInBindingPattern(name, parameterName, typePredicate.parameterName)) {
                             hasReportedError = true;
                             break;
                         }
@@ -15892,7 +15892,7 @@ namespace ts {
                         }
                         break;
                     }
-                // fallthrough
+                    // fallthrough
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -16635,7 +16635,7 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.ModuleExports:
                         return getSymbolOfNode(entityName.parent.parent);
                     default:
-                    // Fall through if it is not a special property assignment
+                        // Fall through if it is not a special property assignment
                 }
             }
 
@@ -16974,7 +16974,7 @@ namespace ts {
                 let target: Symbol;
                 let next = symbol;
                 while (next = getSymbolLinks(next).target) {
-                    target = next;
+                   target = next;
                 }
                 if (target) {
                     return [target];
@@ -17409,7 +17409,7 @@ namespace ts {
 
                 // walk the parent chain for symbols to make sure that top level parent symbol is in the global scope
                 // external modules cannot define or contribute to type declaration files
-                let current = symbol;
+                let current =  symbol;
                 while (true) {
                     const parent = getParentOfSymbol(current);
                     if (parent) {
@@ -18259,9 +18259,9 @@ namespace ts {
             }
             else if (!doesAccessorHaveCorrectParameterCount(accessor)) {
                 return grammarErrorOnNode(accessor.name,
-                    kind === SyntaxKind.GetAccessor ?
-                        Diagnostics.A_get_accessor_cannot_have_parameters :
-                        Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
+                                          kind === SyntaxKind.GetAccessor ?
+                                          Diagnostics.A_get_accessor_cannot_have_parameters :
+                                          Diagnostics.A_set_accessor_must_have_exactly_one_parameter);
             }
             else if (kind === SyntaxKind.SetAccessor) {
                 if (accessor.type) {
@@ -18283,7 +18283,7 @@ namespace ts {
         }
 
         /** Does the accessor have the right number of parameters?
-    
+
             A get accessor has no parameters or a single `this` parameter.
             A set accessor has one parameter or a `this` parameter and one more parameter */
         function doesAccessorHaveCorrectParameterCount(accessor: AccessorDeclaration) {
