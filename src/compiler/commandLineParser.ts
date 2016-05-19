@@ -701,11 +701,11 @@ namespace ts {
                 }
                 else {
                     // by default exclude node_modules, and any specificied output directory
-                    exclude = ["node_modules"];
-                    const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
-                    if (outDir) {
-                        exclude.push(outDir);
-                    }
+                    exclude = ["node_modules", "bower_components", "jspm_packages"];
+                }
+                const outDir = json["compilerOptions"] && json["compilerOptions"]["outDir"];
+                if (outDir) {
+                    exclude.push(outDir);
                 }
                 exclude = map(exclude, normalizeSlashes);
 
