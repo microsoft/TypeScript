@@ -12,21 +12,16 @@ interface ComponentProps {
 class MyComponent extends React.Component<ComponentProps, {}> {
     render() {
         const { AnyComponent } = this.props;
-        const someProps = {};
-        const button = <AnyComponent {...someProps}/>
-        return (<div>{button}</div>);
+        return (<AnyComponent />);
     }
 }
 
+// Stateless Component As Props
 <MyComponent AnyComponent={() => <button>test</button>}/>
 
+// Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {
 }
 
 <MyComponent AnyComponent={MyButtonComponent} />
 
-type Invalid = string | React.ComponentClass<any>;
-
-var X: Invalid = "";
-
-<X /> // Should fail
