@@ -977,15 +977,19 @@ var lintTargets = compilerSources
     .concat(tslintRulesFiles)
     .concat(servicesLintTargets);
 
-desc("Runs tslint on the compiler sources");
+desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
+    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
     for (var i in lintTargets) {
-        var result = lintFile(lintOptions, lintTargets[i]);
-        if (result.failureCount > 0) {
-            console.log(result.output);
-            failed += result.failureCount;
+        var target = lintTargets[i];
+        if (fileMatcher.test(target)) {
+            var result = lintFile(lintOptions, target);
+            if (result.failureCount > 0) {
+                console.log(result.output);
+                failed += result.failureCount;
+            }
         }
     }
     if (failed > 0) {
