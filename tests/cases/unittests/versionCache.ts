@@ -1,13 +1,13 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 /// <reference path="..\..\..\src\server\editorServices.ts" />
 
-module ts {
+namespace ts {
     function editFlat(position: number, deletedLength: number, newText: string, source: string) {
         return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
     }
 
     function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
-        var lineInfo = lineIndex.lineNumberToInfo(line);
+        const lineInfo = lineIndex.lineNumberToInfo(line);
         return (lineInfo.offset + col - 1);
     }
 
@@ -19,9 +19,9 @@ module ts {
         assert.equal(editedText, checkText);
     }
 
-    describe('VersionCache TS code', () => {
+    describe(`VersionCache TS code`, () => {
         let validateEditAtLineCharIndex: (line: number, char: number, deleteLength: number, insertString: string) => void;
-        
+
         before(() => {
             let testContent = `/// <reference path="z.ts" />
 var x = 10;
@@ -32,9 +32,9 @@ class Point {
 }
 k=y;
 var p:Point=new Point();
-var q:Point=<Point>p;`
+var q:Point=<Point>p;`;
 
-            let {lines, lineMap} = server.LineIndex.linesFromText(testContent);
+            let { lines } = server.LineIndex.linesFromText(testContent);
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             let lineIndex = new server.LineIndex();
@@ -48,34 +48,34 @@ var q:Point=<Point>p;`
 
         after(() => {
             validateEditAtLineCharIndex = undefined;
-        })
+        });
 
-        it('change 9 1 0 1 {"y"}', () => {
+        it(`change 9 1 0 1 {"y"}`, () => {
             validateEditAtLineCharIndex(9, 1, 0, "y");
         });
 
-        it('change 9 2 0 1 {"."}', () => {
+        it(`change 9 2 0 1 {"."}`, () => {
             validateEditAtLineCharIndex(9, 2, 0, ".");
         });
 
-        it('change 9 3 0 1 {"\\n"}', () => {
+        it(`change 9 3 0 1 {"\\n"}`, () => {
             validateEditAtLineCharIndex(9, 3, 0, "\n");
         });
 
-        it('change 10 1 0 10 {"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n"}', () => {
+        it(`change 10 1 0 10 {"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n"}`, () => {
             validateEditAtLineCharIndex(10, 1, 0, "\n\n\n\n\n\n\n\n\n\n");
         });
 
-        it('change 19 1 1 0', () => {
+        it(`change 19 1 1 0`, () => {
             validateEditAtLineCharIndex(19, 1, 1, "");
         });
 
-        it('change 18 1 1 0', () => {
+        it(`change 18 1 1 0`, () => {
             validateEditAtLineCharIndex(18, 1, 1, "");
         });
     });
 
-    describe('VersionCache simple text', () => {
+    describe(`VersionCache simple text`, () => {
         let validateEditAtPosition: (position: number, deleteLength: number, insertString: string) => void;
         let testContent: string;
         let lines: string[];
@@ -88,7 +88,7 @@ that ate the grass
 that was purple at the tips
 and grew 1cm per day`;
 
-            ({lines, lineMap} = server.LineIndex.linesFromText(testContent));
+            ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             let lineIndex = new server.LineIndex();
@@ -96,90 +96,90 @@ and grew 1cm per day`;
 
             validateEditAtPosition = (position: number, deleteLength: number, insertString: string) => {
                 validateEdit(lineIndex, testContent, position, deleteLength, insertString);
-            }
+            };
         });
 
         after(() => {
-           validateEditAtPosition = undefined;
-           testContent = undefined;
-           lines = undefined;
-           lineMap = undefined; 
+            validateEditAtPosition = undefined;
+            testContent = undefined;
+            lines = undefined;
+            lineMap = undefined;
         });
 
-        it('Insert at end of file', () => {
+        it(`Insert at end of file`, () => {
             validateEditAtPosition(testContent.length, 0, "hmmmm...\r\n");
         });
 
-        it('Unusual line endings merge', () => {
+        it(`Unusual line endings merge`, () => {
             validateEditAtPosition(lines[0].length - 1, lines[1].length, "");
         });
 
-        it('Delete whole line and nothing but line (last line)', () => {
+        it(`Delete whole line and nothing but line (last line)`, () => {
             validateEditAtPosition(lineMap[lineMap.length - 2], lines[lines.length - 1].length, "");
         });
 
-        it('Delete whole line and nothing but line (first line)', () => {
+        it(`Delete whole line and nothing but line (first line)`, () => {
             validateEditAtPosition(0, lines[0].length, "");
         });
 
-        it('Delete whole line (first line) and insert with no line breaks', () => {
+        it(`Delete whole line (first line) and insert with no line breaks`, () => {
             validateEditAtPosition(0, lines[0].length, "moo, moo, moo! ");
         });
 
-        it('Delete whole line (first line) and insert with multiple line breaks', () => {
+        it(`Delete whole line (first line) and insert with multiple line breaks`, () => {
             validateEditAtPosition(0, lines[0].length, "moo, \r\nmoo, \r\nmoo! ");
         });
 
-        it('Delete multiple lines and nothing but lines (first and second lines)', () => {
+        it(`Delete multiple lines and nothing but lines (first and second lines)`, () => {
             validateEditAtPosition(0, lines[0].length + lines[1].length, "");
         });
 
-        it('Delete multiple lines and nothing but lines (second and third lines)', () => {
+        it(`Delete multiple lines and nothing but lines (second and third lines)`, () => {
             validateEditAtPosition(lines[0].length, lines[1].length + lines[2].length, "");
         });
 
-        it('Insert multiple line breaks', () => {
+        it(`Insert multiple line breaks`, () => {
             validateEditAtPosition(21, 1, "cr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr...\r\ncr");
         });
 
-        it('Insert multiple line breaks', () => {
+        it(`Insert multiple line breaks`, () => {
             validateEditAtPosition(21, 1, "cr...\r\ncr...\r\ncr");
         });
 
-        it('Insert multiple line breaks with leading \\n', () => {
+        it(`Insert multiple line breaks with leading \\n`, () => {
             validateEditAtPosition(21, 1, "\ncr...\r\ncr...\r\ncr");
         });
 
-        it('Single line no line breaks deleted or inserted, delete 1 char', () => {
+        it(`Single line no line breaks deleted or inserted, delete 1 char`, () => {
             validateEditAtPosition(21, 1, "");
         });
 
-        it('Single line no line breaks deleted or inserted, insert 1 char', () => {
+        it(`Single line no line breaks deleted or inserted, insert 1 char`, () => {
             validateEditAtPosition(21, 0, "b");
         });
 
-        it('Single line no line breaks deleted or inserted, delete 1, insert 2 chars', () => {
+        it(`Single line no line breaks deleted or inserted, delete 1, insert 2 chars`, () => {
             validateEditAtPosition(21, 1, "cr");
         });
 
-        it('Delete across line break (just the line break)', () => {
+        it(`Delete across line break (just the line break)`, () => {
             validateEditAtPosition(21, 22, "");
         });
 
-        it('Delete across line break', () => {
+        it(`Delete across line break`, () => {
             validateEditAtPosition(21, 32, "");
         });
 
-        it('Delete across multiple line breaks and insert no line breaks', () => {
+        it(`Delete across multiple line breaks and insert no line breaks`, () => {
             validateEditAtPosition(21, 42, "");
         });
 
-        it('Delete across multiple line breaks and insert text', () => {
+        it(`Delete across multiple line breaks and insert text`, () => {
             validateEditAtPosition(21, 42, "slithery ");
         });
     });
 
-    describe('VersionCache stress test', () => {
+    describe(`VersionCache stress test`, () => {
         let rsa: number[] = [];
         let la: number[] = [];
         let las: number[] = [];
@@ -187,7 +187,7 @@ and grew 1cm per day`;
         let ersa: number[] = [];
         let ela: number[] = [];
         const iterationCount = 20;
-        //const iterationCount = 20000; // uncomment for testing
+        // const iterationCount = 20000; // uncomment for testing
         let lines: string[];
         let lineMap: number[];
         let lineIndex: server.LineIndex;
@@ -200,7 +200,7 @@ and grew 1cm per day`;
             let totalChars = testContent.length;
             assert.isTrue(totalChars > 0, "Failed to read test file.");
 
-            ({lines, lineMap} = server.LineIndex.linesFromText(testContent));
+            ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
             assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
             lineIndex = new server.LineIndex();
