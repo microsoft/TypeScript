@@ -8606,7 +8606,12 @@ namespace ts {
                             }
                             return createArrayType(getUnionType(restTypes));
                         }
-                        return checkExpression(iife.arguments[indexOfParameter]);
+                        const links = getNodeLinks(iife);
+                        const cached = links.resolvedSignature;
+                        links.resolvedSignature = anySignature;
+                        const type = checkExpression(iife.arguments[indexOfParameter]);
+                        links.resolvedSignature = cached;
+                        return type;
                     }
                 }
                 const contextualSignature = getContextualSignature(func);
