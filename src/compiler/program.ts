@@ -1039,6 +1039,7 @@ namespace ts {
         program = {
             getRootFileNames: () => rootNames,
             getSourceFile,
+            getSourceFileByPath,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1115,7 +1116,11 @@ namespace ts {
                 (oldOptions.allowJs !== options.allowJs) ||
                 (oldOptions.rootDir !== options.rootDir) ||
                 (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
-                (oldOptions.configFilePath !== options.configFilePath)) {
+                (oldOptions.configFilePath !== options.configFilePath) ||
+                (oldOptions.baseUrl !== options.baseUrl) ||
+                (oldOptions.typesRoot !== options.typesRoot) ||
+                !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
+                !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
             }
 
@@ -1137,7 +1142,10 @@ namespace ts {
             const modifiedSourceFiles: SourceFile[] = [];
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                let newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
+                let newSourceFile = host.getSourceFileByPath
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
+                    : host.getSourceFile(oldSourceFile.fileName, options.target);
+
                 if (!newSourceFile) {
                     return false;
                 }
@@ -1232,6 +1240,7 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
+                getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
@@ -1307,7 +1316,11 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string): SourceFile {
-            return filesByName.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            return getSourceFileByPath(toPath(fileName, currentDirectory, getCanonicalFileName));
+        }
+
+        function getSourceFileByPath(path: Path): SourceFile {
+            return filesByName.get(path);
         }
 
         function getDiagnosticsHelper(
@@ -1895,7 +1908,7 @@ namespace ts {
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
-                    // - module name come from the list fo imports
+                    // - module name comes from the list of imports
                     const shouldAddFile = resolution &&
                         !options.noResolve &&
                         i < file.imports.length;

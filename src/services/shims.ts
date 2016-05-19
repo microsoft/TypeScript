@@ -1001,6 +1001,7 @@ namespace ts {
                             options: {},
                             typingOptions: {},
                             files: [],
+                            raw: {},
                             errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
@@ -1012,6 +1013,7 @@ namespace ts {
                         options: configFile.options,
                         typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
+                        raw: configFile.raw,
                         errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
                 });

@@ -315,10 +315,6 @@
         "category": "Error",
         "code": 1110
     },
-    "A class member cannot be declared optional.": {
-        "category": "Error",
-        "code": 1112
-    },
     "A 'default' clause cannot appear more than once in a 'switch' statement.": {
         "category": "Error",
         "code": 1113
@@ -1751,6 +1747,10 @@
         "category": "Error",
         "code": 2533
     },
+    "A function returning 'never' cannot have a reachable end point.": {
+        "category": "Error",
+        "code": 2534
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1907,7 +1907,7 @@
         "category": "Error",
         "code": 2681
     },
-    "A setter cannot have a 'this' parameter.": {
+    "'get' and 'set' accessor must have the same 'this' type.": {
         "category": "Error",
         "code": 2682
     },

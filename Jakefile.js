@@ -187,6 +187,12 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function(source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 })
 
+var es2017LibrarySource = ["es2017.object.d.ts"];
+
+var es2017LibrarySourceMap = es2017LibrarySource.map(function(source) {
+    return { target: "lib." + source, sources: ["header.d.ts", source] };
+})
+
 var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"]
 
 var librarySourceMap = [
@@ -200,11 +206,12 @@ var librarySourceMap = [
         { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
+        { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
         
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources), },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts"), },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap);
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);
@@ -705,6 +712,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -723,7 +731,7 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         console.log(cmd);
         exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            if (i === 0) {
+            if (lintFlag && i === 0) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
                     complete();
@@ -743,7 +751,7 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
     runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     runConsoleTests('mocha-fivemat-progress-reporter', []);
 }, {async: true});
@@ -954,6 +962,7 @@ function lintFileAsync(options, path, cb) {
 
 var servicesLintTargets = [
     "navigateTo.ts",
+    "navigationBar.ts",
     "outliningElementsCollector.ts",
     "patternMatcher.ts",
     "services.ts",
@@ -968,15 +977,19 @@ var lintTargets = compilerSources
     .concat(tslintRulesFiles)
     .concat(servicesLintTargets);
 
-desc("Runs tslint on the compiler sources");
+desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
+    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
     for (var i in lintTargets) {
-        var result = lintFile(lintOptions, lintTargets[i]);
-        if (result.failureCount > 0) {
-            console.log(result.output);
-            failed += result.failureCount;
+        var target = lintTargets[i];
+        if (fileMatcher.test(target)) {
+            var result = lintFile(lintOptions, target);
+            if (result.failureCount > 0) {
+                console.log(result.output);
+                failed += result.failureCount;
+            }
         }
     }
     if (failed > 0) {

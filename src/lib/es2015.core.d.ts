@@ -31,7 +31,7 @@ interface Array<T> {
       * @param end index to stop filling the array at. If end is negative, it is treated as
       * length+end.
       */
-    fill(value: T, start?: number, end?: number): T[];
+    fill(value: T, start?: number, end?: number): this;
 
     /**
       * Returns the this object after copying a section of the array identified by start and end
@@ -42,7 +42,7 @@ interface Array<T> {
       * is treated as length+end.
       * @param end If not specified, length of the this object is used as its default value.
       */
-    copyWithin(target: number, start: number, end?: number): T[];
+    copyWithin(target: number, start: number, end?: number): this;
 }
 
 interface ArrayConstructor {
@@ -401,6 +401,14 @@ interface String {
       * endPosition – length(this). Otherwise returns false.
       */
     endsWith(searchString: string, endPosition?: number): boolean;
+
+    /**
+      * Returns the String value result of normalizing the string into the normalization form
+      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+      * is "NFC"
+      */
+    normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
       * Returns the String value result of normalizing the string into the normalization form

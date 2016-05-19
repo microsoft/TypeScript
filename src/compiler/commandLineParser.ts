@@ -375,6 +375,7 @@ namespace ts {
                     "es2015": "lib.es2015.d.ts",
                     "es7": "lib.es2016.d.ts",
                     "es2016": "lib.es2016.d.ts",
+                    "es2017": "lib.es2017.d.ts",
                     // Host only
                     "dom": "lib.dom.d.ts",
                     "webworker": "lib.webworker.d.ts",
@@ -389,7 +390,8 @@ namespace ts {
                     "es2015.reflect": "lib.es2015.reflect.d.ts",
                     "es2015.symbol": "lib.es2015.symbol.d.ts",
                     "es2015.symbol.wellknown": "lib.es2015.symbol.wellknown.d.ts",
-                    "es2016.array.include": "lib.es2016.array.include.d.ts"
+                    "es2016.array.include": "lib.es2016.array.include.d.ts",
+                    "es2017.object": "lib.es2017.object.d.ts"
                 },
             },
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation_Colon
@@ -667,6 +669,7 @@ namespace ts {
         const compilerOptions: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
         const options = extend(existingOptions, compilerOptions);
         const typingOptions: TypingOptions = convertTypingOptionsFromJsonWorker(json["typingOptions"], basePath, errors, configFileName);
+
         options.configFilePath = configFileName;
 
         const fileNames = getFileNames(errors);
@@ -675,6 +678,7 @@ namespace ts {
             options,
             fileNames,
             typingOptions,
+            raw: json,
             errors
         };
 
