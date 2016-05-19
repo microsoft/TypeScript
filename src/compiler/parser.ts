@@ -658,6 +658,10 @@ namespace ts {
                     const saveParent = parent;
                     parent = n;
                     forEachChild(n, visitNode);
+                    if (n.jsDocComment) {
+                        n.jsDocComment.parent = n;
+                        forEachChild(n.jsDocComment, visitNode);
+                    }
                     parent = saveParent;
                 }
             }
