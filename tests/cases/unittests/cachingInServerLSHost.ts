@@ -60,6 +60,12 @@ module ts {
                 return {
                     close: () => { }
                 }
+            },
+            setTimeout: (callback, ms, ...args) => {
+                return setTimeout(callback, ms, args);
+            },
+            clearTimeout: (timeoutId) => {
+                clearTimeout(timeoutId);
             }
         };
     }

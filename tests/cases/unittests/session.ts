@@ -18,7 +18,9 @@ namespace ts.server {
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         readDirectory(): string[] { return []; },
-        exit(): void {}
+        exit(): void { },
+        setTimeout(callback, ms, ...args) { return 0; },
+        clearTimeout(timeoutId) { }
     };
     const mockLogger: Logger = {
         close(): void {},
