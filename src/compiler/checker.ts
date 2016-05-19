@@ -6030,7 +6030,7 @@ namespace ts {
                 if (type.flags & TypeFlags.ObjectType) {
                     const resolved = resolveStructuredTypeMembers(type);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
-                        (type === globalObjectType || resolved.properties.length === 0) ||
+                        (type === globalObjectType || isEmptyObjectType(resolved)) ||
                         resolved.stringIndexInfo || resolved.numberIndexInfo || getPropertyOfType(type, name)) {
                         return true;
                     }
@@ -6043,6 +6043,14 @@ namespace ts {
                     }
                 }
                 return false;
+            }
+
+            function isEmptyObjectType(t: ResolvedType) {
+                return t.properties.length === 0 &&
+                    t.callSignatures.length === 0 &&
+                    t.constructSignatures.length === 0 &&
+                    !t.stringIndexInfo &&
+                    !t.numberIndexInfo;
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
