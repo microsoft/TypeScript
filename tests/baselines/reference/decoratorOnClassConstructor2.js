@@ -49,7 +49,6 @@ var C = (function (_super) {
     }
     return C;
 }(_0_ts_1.base));
-exports.C = C;
 C = __decorate([
     __param(0, _0_ts_2.foo)
 ], C);

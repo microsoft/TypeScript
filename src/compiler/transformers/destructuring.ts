@@ -63,9 +63,10 @@ namespace ts {
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const expression = createAssignment(name, value, location);
-            if (isSimpleExpression(value)) {
-                context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
-            }
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(expression);
             expressions.push(expression);
@@ -98,9 +99,10 @@ namespace ts {
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange) {
             const declaration = createVariableDeclaration(name, value, location);
-            if (isSimpleExpression(value)) {
-                context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
-            }
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
 
             aggregateTransformFlags(declaration);
             declarations.push(declaration);
@@ -133,15 +135,12 @@ namespace ts {
 
         function emitAssignment(name: Identifier, value: Expression, location: TextRange, original: Node) {
             const declaration = createVariableDeclaration(name, value, location);
-            if (declarations.length === 0) {
-                declaration.pos = -1;
-            }
-
-            if (isSimpleExpression(value)) {
-                context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
-            }
-
             declaration.original = original;
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(declaration, NodeEmitFlags.NoNestedSourceMaps);
+
             declarations.push(declaration);
             aggregateTransformFlags(declaration);
         }
@@ -189,11 +188,12 @@ namespace ts {
 
         function emitPendingAssignment(name: Expression, value: Expression, location: TextRange, original: Node) {
             const expression = createAssignment(name, value, location);
-            if (isSimpleExpression(value)) {
-                context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
-            }
-
             expression.original = original;
+
+            // NOTE: this completely disables source maps, but aligns with the behavior of
+            //       `emitAssignment` in the old emitter.
+            context.setNodeEmitFlags(expression, NodeEmitFlags.NoNestedSourceMaps);
+
             pendingAssignments.push(expression);
             return expression;
         }
@@ -251,7 +251,7 @@ namespace ts {
                 emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, location);
             }
             else {
-                const name = getRelocatedClone(<Identifier>target, /*location*/ target);
+                const name = getSynthesizedClone(<Identifier>target, { sourceMapRange: target, commentRange: target });
                 emitAssignment(name, value, location, /*original*/ undefined);
             }
         }
@@ -341,8 +341,7 @@ namespace ts {
                 }
             }
             else {
-                const clonedName = getSynthesizedClone(name);
-                emitAssignment(clonedName, value, target, target);
+                emitAssignment(name, value, target, target);
             }
         }
 

@@ -112,15 +112,15 @@ sourceFile:sourceMapValidationFunctions.ts
 ---
 >>>    if (n === void 0) { n = 10; }
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
 4 >                        ^^^^^^
 1->
-2 >    n = 10
-3 >                     
+2 >    
+3 >                      
 4 >                        n = 10
 1->Emitted(7, 5) Source(6, 35) + SourceIndex(0)
-2 >Emitted(7, 22) Source(6, 41) + SourceIndex(0)
+2 >Emitted(7, 23) Source(6, 35) + SourceIndex(0)
 3 >Emitted(7, 25) Source(6, 35) + SourceIndex(0)
 4 >Emitted(7, 31) Source(6, 41) + SourceIndex(0)
 ---
@@ -233,15 +233,15 @@ sourceFile:sourceMapValidationFunctions.ts
 ---
 >>>    if (n === void 0) { n = 10; }
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
 4 >                        ^^^^^^
 1->
-2 >    n = 10
-3 >                     
+2 >    
+3 >                      
 4 >                        n = 10
 1->Emitted(16, 5) Source(10, 32) + SourceIndex(0)
-2 >Emitted(16, 22) Source(10, 38) + SourceIndex(0)
+2 >Emitted(16, 23) Source(10, 32) + SourceIndex(0)
 3 >Emitted(16, 25) Source(10, 32) + SourceIndex(0)
 4 >Emitted(16, 31) Source(10, 38) + SourceIndex(0)
 ---

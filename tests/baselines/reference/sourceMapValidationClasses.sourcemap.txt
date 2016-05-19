@@ -439,21 +439,21 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>            for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^
-3 >                           ^^
-4 >                             ^^^^^^^^^^^^^^^^^^^^^
-5 >                                                  ^^
+2 >                 ^^^^^^^^^^^
+3 >                            ^
+4 >                             ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                   ^
 6 >                                                    ^^^^
 1->
 2 >                 ...restGreetings /* more greeting */: string[]
-3 >                           
+3 >                            
 4 >                             ...restGreetings /* more greeting */: string[]
-5 >                                                  
+5 >                                                   
 6 >                                                    ...restGreetings /* more greeting */: string[]
 1->Emitted(22, 18) Source(21, 37) + SourceIndex(0)
-2 >Emitted(22, 28) Source(21, 83) + SourceIndex(0)
+2 >Emitted(22, 29) Source(21, 83) + SourceIndex(0)
 3 >Emitted(22, 30) Source(21, 37) + SourceIndex(0)
-4 >Emitted(22, 51) Source(21, 83) + SourceIndex(0)
+4 >Emitted(22, 52) Source(21, 83) + SourceIndex(0)
 5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0)
 6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0)
 ---

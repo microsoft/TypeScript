@@ -1989,7 +1989,7 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 // These nodes are ES6 syntax.
-                transformFlags = TransformFlags.AssertES6;
+                transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
                 break;
 
             case SyntaxKind.Decorator:
@@ -2068,9 +2068,14 @@ namespace ts {
                 return computeVariableDeclaration(<VariableDeclaration>node, subtreeFlags);
 
             case SyntaxKind.VariableDeclarationList:
+                excludeFlags = TransformFlags.VariableDeclarationListExcludes;
+                if (subtreeFlags & TransformFlags.ContainsBindingPattern) {
+                    transformFlags |= TransformFlags.AssertES6;
+                }
+
                 // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
                 if (node.flags & NodeFlags.BlockScoped) {
-                    transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
+                    transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsBlockScopedBinding;
                 }
 
                 break;
@@ -2154,12 +2159,11 @@ namespace ts {
                 transformFlags = TransformFlags.AssertES6;
 
                 // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
-                // generic, or has both a computed property name and a decorator.
+                // generic, or has a decorator.
                 if ((<MethodDeclaration>node).body === undefined
                     || (<MethodDeclaration>node).typeParameters !== undefined
                     || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
-                    || (subtreeFlags & TransformFlags.ContainsDecorators
-                        && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
+                    || subtreeFlags & TransformFlags.ContainsDecorators) {
                     transformFlags |= TransformFlags.AssertTypeScript;
                 }
 
@@ -2170,12 +2174,11 @@ namespace ts {
                 // A GetAccessor or SetAccessor is ES5 syntax.
                 excludeFlags = TransformFlags.MethodOrAccessorExcludes;
 
-                // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
-                // or has both a computed property name and a decorator.
+                // A GetAccessor or SetAccessor is TypeScript syntax if it has async or abstract
+                // modifiers, or has a decorator.
                 if ((<AccessorDeclaration>node).body === undefined
-                    || hasModifier(node, ModifierFlags.Abstract)
-                    || (subtreeFlags & TransformFlags.ContainsDecorators
-                        && subtreeFlags & TransformFlags.ContainsComputedPropertyName)) {
+                    || hasModifier(node, ModifierFlags.Async | ModifierFlags.Abstract)
+                    || subtreeFlags & TransformFlags.ContainsDecorators) {
                     transformFlags = TransformFlags.AssertTypeScript;
                 }
 
@@ -2269,7 +2272,8 @@ namespace ts {
         }
 
         // If the parameter's name is 'this', then it is TypeScript syntax.
-        if (node.name && (node.name as Identifier).originalKeywordKind === SyntaxKind.ThisKeyword) {
+        if (subtreeFlags & TransformFlags.ContainsDecorators
+            || (node.name && isIdentifier(node.name) && node.name.originalKeywordKind === SyntaxKind.ThisKeyword)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -2280,11 +2284,11 @@ namespace ts {
 
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
         // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
-        if (isDefined(node.initializer) || isDefined(node.dotDotDotToken) || isBindingPattern(node.name)) {
+        if (subtreeFlags & TransformFlags.ContainsBindingPattern || isDefined(node.initializer) || isDefined(node.dotDotDotToken)) {
             transformFlags |= TransformFlags.AssertES6 | TransformFlags.ContainsDefaultValueAssignments;
         }
 
-        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
+        return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.ParameterExcludes);
     }
 
     function computeParenthesizedExpression(node: ParenthesizedExpression, subtreeFlags: TransformFlags) {
@@ -2426,8 +2430,8 @@ namespace ts {
         let transformFlags = TransformFlags.None;
 
         // A VariableDeclaration with a binding pattern is ES6 syntax.
-        if (isBindingPattern((<VariableDeclaration>node).name)) {
-            transformFlags = TransformFlags.AssertES6;
+        if (isBindingPattern(node.name)) {
+            transformFlags = TransformFlags.AssertES6 | TransformFlags.ContainsBindingPattern;
         }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);
@@ -2445,6 +2449,10 @@ namespace ts {
         // If a VariableStatement is exported, then it is either ES6 or TypeScript syntax.
         if (modifiers & ModifierFlags.Export) {
             transformFlags = TransformFlags.AssertES6 | TransformFlags.AssertTypeScript;
+        }
+
+        if (node.declarationList.transformFlags & TransformFlags.ContainsBindingPattern) {
+            transformFlags |= TransformFlags.AssertES6;
         }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.None);

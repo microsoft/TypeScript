@@ -214,20 +214,28 @@ namespace ts {
         function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
             if (exportEquals && resolver.isValueAliasDeclaration(exportEquals)) {
                 if (emitAsReturn) {
-                    statements.push(createReturn(exportEquals.expression));
+                    const statement = createReturn(
+                        exportEquals.expression,
+                        /*location*/ exportEquals
+                    );
+
+                    setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoComments);
+                    statements.push(statement);
                 }
                 else {
-                    statements.push(
-                        createStatement(
-                            createAssignment(
-                                createPropertyAccess(
-                                    createIdentifier("module"),
-                                    "exports"
-                                ),
-                                exportEquals.expression
-                            )
-                        )
+                    const statement = createStatement(
+                        createAssignment(
+                            createPropertyAccess(
+                                createIdentifier("module"),
+                                "exports"
+                            ),
+                            exportEquals.expression
+                        ),
+                        /*location*/ exportEquals
                     );
+
+                    setNodeEmitFlags(statement, NodeEmitFlags.NoComments);
+                    statements.push(statement);
                 }
             }
         }
@@ -507,10 +515,15 @@ namespace ts {
                 else {
                     statements.push(
                         createStatement(
-                            createObjectDefineProperty(
-                                createIdentifier("exports"),
-                                createLiteral("__esModule"),
-                                { value: createLiteral(true) }
+                            createCall(
+                                createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                                [
+                                    createIdentifier("exports"),
+                                    createLiteral("__esModule"),
+                                    createObjectLiteral([
+                                        createPropertyAssignment("value", createLiteral(true))
+                                    ])
+                                ]
                             )
                         )
                     );
@@ -656,13 +669,16 @@ namespace ts {
             const name = node.name || getGeneratedNameForNode(node);
             if (hasModifier(node, ModifierFlags.Export)) {
                 statements.push(
-                    createFunctionDeclaration(
-                        /*modifiers*/ undefined,
-                        /*asteriskToken*/ undefined,
-                        name,
-                        node.parameters,
-                        node.body,
-                        /*location*/ node
+                    setOriginalNode(
+                        createFunctionDeclaration(
+                            /*modifiers*/ undefined,
+                            /*asteriskToken*/ undefined,
+                            name,
+                            node.parameters,
+                            node.body,
+                            /*location*/ node
+                        ),
+                        /*original*/ node
                     )
                 );
 
@@ -727,15 +743,7 @@ namespace ts {
                 const classDecl = original as ClassDeclaration;
                 if (classDecl.name) {
                     const statements = [node];
-                    // Avoid emitting a default because a decorated default-exported class will have been rewritten in the TS transformer to
-                    // a decorator assignment (`foo = __decorate(...)`) followed by a separate default export declaration (`export default foo`).
-                    // We will eventually take care of that default export assignment when we transform the generated default export declaration.
-                    if (hasModifier(classDecl, ModifierFlags.Export) && !hasModifier(classDecl, ModifierFlags.Default)) {
-                        addExportMemberAssignment(statements, classDecl)
-                    }
-
                     addExportMemberAssignments(statements, classDecl.name);
-
                     return statements;
                 }
             }
