@@ -1069,7 +1069,14 @@ namespace ts {
                 setNodeEmitFlags(memberAccess, NodeEmitFlags.NoNestedSourceMaps);
             }
 
-            return createAssignment(memberAccess, initializer);
+            const assignment = createAssignment(memberAccess, initializer);
+            if (node.kind === SyntaxKind.ClassExpression && hasModifier(property, ModifierFlags.Static)) {
+                setOriginalNode(assignment, property);
+                setNodeEmitFlags(assignment, NodeEmitFlags.AdviseOnEmitNode);
+                classExpressionContainStaticPropertyDeclaration[getOriginalNodeId(property)] = <ClassExpression>node;
+            }
+
+            return assignment;
         }
 
         /**
