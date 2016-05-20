@@ -729,8 +729,11 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
         tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        exec(cmd, function () {
+        function finish() {
             deleteTemporaryProjectOutput();
+            complete();
+        }
+        exec(cmd, function () {
             if (lintFlag && i === 0) {
                 var lint = jake.Task['lint'];
                 lint.addListener('complete', function () {
@@ -738,10 +741,8 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
                 });
                 lint.invoke();
             }
-            else {
-                complete();
-            }
-        });
+            finish();
+        }, finish);
     });
 }
 
