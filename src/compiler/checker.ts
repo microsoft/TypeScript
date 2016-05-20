@@ -11882,18 +11882,14 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Property &&
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
-                    return !isInConstructor(getContainingFunction(expr));
-                    function isInConstructor(func: FunctionLikeDeclaration) {
-                        if (!func)
-                            return false;
-                        if (func.kind !== SyntaxKind.Constructor)
-                            return false;
-                        if (func.parent === symbol.valueDeclaration.parent) // If the symbol was declared in the class:
-                            return true;
-                        if (func === symbol.valueDeclaration.parent) // If symbolDecl is a parameter property of the constructor:
-                            return true;
-                        return false;
-                    }
+                    // Look for if this is the constructor for the class that `symbol` is a property of.
+                    const func = getContainingFunction(expr);
+                    if (!(func && func.kind === SyntaxKind.Constructor))
+                        return true;
+                    // If func.parent is a class and symbol is a (readonly) property of that class, or
+                    // if func is a constructor and symbol is a (readonly) parameter property declared in it,
+                    // then symbol is writeable here.
+                    return !(func.parent === symbol.valueDeclaration.parent || func === symbol.valueDeclaration.parent);
                 }
                 return true;
             }
