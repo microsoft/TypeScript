@@ -1,4 +1,4 @@
-=== tests/cases/compiler/genericInheritedImplicitConstructors.ts ===
+=== tests/cases/compiler/genericInheritedDefaultConstructors.ts ===
 interface Constructor<T> {
 >Constructor : Constructor<T>
 >T : T
@@ -30,6 +30,11 @@ var c:Constructor<B<boolean>> = B; // error here
 >c : Constructor<B<boolean>>
 >Constructor : Constructor<T>
 >B : B<V>
+>B : typeof B
+
+var x = new B<number>();
+>x : B<number>
+>new B<number>() : B<number>
 >B : typeof B
 
 //class A1 { a: boolean; }

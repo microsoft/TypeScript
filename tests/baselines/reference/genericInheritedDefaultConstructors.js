@@ -1,4 +1,4 @@
-//// [genericInheritedImplicitConstructors.ts]
+//// [genericInheritedDefaultConstructors.ts]
 interface Constructor<T> {
     new(...args: any[]): T;
     prototype: T;
@@ -7,13 +7,14 @@ interface Constructor<T> {
 class A<U> { a: U; }
 class B<V> extends A<V> { b: V; }
 var c:Constructor<B<boolean>> = B; // error here
+var x = new B<number>();
 
 //class A1 { a: boolean; }
 //class B1 extends A1 { b: boolean; }
 //var c1:Constructor<B1> = B1; // no error here
 
 
-//// [genericInheritedImplicitConstructors.js]
+//// [genericInheritedDefaultConstructors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -32,6 +33,7 @@ var B = (function (_super) {
     return B;
 }(A));
 var c = B; // error here
+var x = new B();
 //class A1 { a: boolean; }
 //class B1 extends A1 { b: boolean; }
 //var c1:Constructor<B1> = B1; // no error here
