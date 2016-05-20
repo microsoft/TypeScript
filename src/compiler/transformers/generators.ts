@@ -235,6 +235,7 @@ namespace ts {
             endLexicalEnvironment,
             hoistFunctionDeclaration,
             hoistVariableDeclaration,
+            setNodeEmitFlags,
             setSourceMapRange,
             setCommentRange
         } = context;
@@ -243,11 +244,11 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let renamedCatchVariables: Map<boolean>;
-        let renamedCatchVariableDeclarations: Map<Identifier>;
-
+        let currentSourceFile: SourceFile;
         let inGeneratorFunctionBody: boolean;
         let inStatementContainingYield: boolean;
+        let renamedCatchVariables: Map<boolean>;
+        let renamedCatchVariableDeclarations: Map<Identifier>;
 
         // Indicates whether the builder contains any exception blocks.
         let hasProtectedRegions: boolean;
@@ -297,8 +298,9 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (node.transformFlags & TransformFlags.ContainsGenerators) {
-                return visitEachChild(node, visitor, context);
+            if (node.transformFlags & TransformFlags.ContainsGenerator) {
+                currentSourceFile = node;
+                node = visitEachChild(node, visitor, context);
             }
 
             return node;
@@ -319,7 +321,10 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (node.transformFlags & TransformFlags.ContainsGenerators) {
+            else if (node.transformFlags & TransformFlags.Generator) {
+                return visitGenerator(node);
+            }
+            else if (node.transformFlags & TransformFlags.ContainsGenerator) {
                 return visitEachChild(node, visitor, context);
             }
             else {
@@ -386,15 +391,22 @@ namespace ts {
          */
         function visitJavaScriptInGeneratorFunctionBody(node: Node): Node {
             switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
-                case SyntaxKind.FunctionExpression:
-                    return visitFunctionExpression(<FunctionExpression>node);
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return visitAccessorDeclaration(<AccessorDeclaration>node);
                 default:
-                    if (node.transformFlags & TransformFlags.ContainsGenerators || containsYield(node)) {
+                    return visitGenerator(node);
+            }
+        }
+
+        function visitGenerator(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.FunctionDeclaration:
+                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                case SyntaxKind.FunctionExpression:
+                    return visitFunctionExpression(<FunctionExpression>node);
+                default:
+                    if (node.transformFlags & TransformFlags.ContainsGenerator || containsYield(node)) {
                         return visitEachChild(node, visitor, context);
                     }
                     else {
@@ -840,7 +852,7 @@ namespace ts {
             if (node.asteriskToken) {
                 emitYieldStar(
                     createCall(
-                        createIdentifier("__values"),
+                        createHelperName(currentSourceFile.tslibName, "__values"),
                         [visitNode(node.expression, visitor, isExpression)]
                     ),
                     /*location*/ node
@@ -1425,7 +1437,7 @@ namespace ts {
                 }
 
                 emitAssignment(keysIterator,
-                    createCall("__keys", [
+                    createCall(createHelperName(currentSourceFile.tslibName, "__keys"), [
                         visitNode(node.expression, visitor, isExpression)
                     ])
                 );
@@ -2522,7 +2534,7 @@ namespace ts {
             withBlockStack = undefined;
 
             return createCall(
-                createIdentifier("__generator"),
+                createHelperName(currentSourceFile.tslibName, "__generator"),
                 [createFunctionExpression(
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,

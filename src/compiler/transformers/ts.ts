@@ -90,11 +90,7 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            currentSourceFile = node;
-            currentScope = node;
-            const visited = visitEachChild(node, visitor, context);
-            setNodeEmitFlags(visited, NodeEmitFlags.EmitEmitHelpers | getNodeEmitFlags(node));
-            return visited;
+            return visitNode(node, visitor, isSourceFile);
         }
 
         /**
@@ -132,7 +128,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitorWorker(node: Node): VisitResult<Node> {
-            if (node.transformFlags & TransformFlags.TypeScript) {
+            if (node.kind === SyntaxKind.SourceFile) {
+                return visitSourceFile(<SourceFile>node);
+            }
+            else if (node.transformFlags & TransformFlags.TypeScript) {
                 // This node is explicitly marked as TypeScript, so we should transform the node.
                 return visitTypeScript(node);
             }
@@ -438,6 +437,51 @@ namespace ts {
             }
 
             return false;
+        }
+
+        function visitSourceFile(node: SourceFile) {
+            currentSourceFile = node;
+            if ((node.flags & NodeFlags.EmitHelperFlags)
+                && (compilerOptions.helpers === EmitHelpers.Import
+                    || compilerOptions.helpers === EmitHelpers.Global)) {
+                switch (compilerOptions.helpers) {
+                    case EmitHelpers.Import:
+                        if (isExternalModule(node) || compilerOptions.isolatedModules) {
+                            startLexicalEnvironment();
+                            const statements: Statement[] = [];
+                            const statementOffset = addPrologueDirectives(statements, node.statements);
+                            const tslibNameText = compilerOptions.helpersImport || "tslib";
+                            const tslibName = createUniqueName(tslibNameText);
+                            const tslibImport = createImportDeclaration(
+                                createImportClause(/*name*/ undefined, createNamespaceImport(tslibName)),
+                                createLiteral(tslibNameText)
+                            );
+                            tslibImport.parent = node;
+                            statements.push(tslibImport);
+
+                            addRange(statements, visitNodes(node.statements, visitor, isStatement));
+                            addRange(statements, endLexicalEnvironment());
+
+                            node = getMutableClone(node);
+                            node.tslibName = tslibName;
+                            node.statements = createNodeArray(statements, node.statements);
+                            break;
+                        }
+
+                        // fall through
+                    case EmitHelpers.Global:
+                        node = getMutableClone(node);
+                        node.tslibName = createIdentifier(compilerOptions.helpersNamespace || "__tslib");
+                        node.statements = visitNodes(node.statements, visitor, isStatement);
+                        break;
+                }
+            }
+            else {
+                node = visitEachChild(node, visitor, context);
+            }
+
+            setNodeEmitFlags(node, NodeEmitFlags.EmitEmitHelpers | NodeEmitFlags.Merge);
+            return node;
         }
 
         /**
@@ -1331,6 +1375,7 @@ namespace ts {
                 : undefined;
 
             const helper = createDecorateHelper(
+                currentSourceFile.tslibName,
                 decoratorExpressions,
                 prefix,
                 memberName,
@@ -1380,6 +1425,7 @@ namespace ts {
                 const expression = createAssignment(
                     decoratedClassAlias,
                     createDecorateHelper(
+                        currentSourceFile.tslibName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     )
@@ -1403,6 +1449,7 @@ namespace ts {
                 const result = createAssignment(
                     getDeclarationName(node),
                     createDecorateHelper(
+                        currentSourceFile.tslibName,
                         decoratorExpressions,
                         getDeclarationName(node)
                     ),
@@ -1434,7 +1481,7 @@ namespace ts {
             if (decorators) {
                 expressions = [];
                 for (const decorator of decorators) {
-                    const helper = createParamHelper(transformDecorator(decorator), parameterOffset, /*location*/ decorator.expression);
+                    const helper = createParamHelper(currentSourceFile.tslibName, transformDecorator(decorator), parameterOffset, /*location*/ decorator.expression);
                     setNodeEmitFlags(helper, NodeEmitFlags.NoComments);
                     expressions.push(helper);
                 }
@@ -1461,13 +1508,13 @@ namespace ts {
         function addOldTypeMetadata(node: Declaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFile.tslibName, "design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFile.tslibName, "design:paramtypes", serializeParameterTypesOfNode(node)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFile.tslibName, "design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1485,7 +1532,7 @@ namespace ts {
                     (properties || (properties = [])).push(createPropertyAssignment("returnType", createArrowFunction([], serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(createMetadataHelper("design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataHelper(currentSourceFile.tslibName, "design:typeinfo", createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)));
                 }
             }
         }
@@ -2158,6 +2205,7 @@ namespace ts {
                 statements.push(
                     createReturn(
                         createAwaiterHelper(
+                            currentSourceFile.tslibName,
                             hasLexicalArguments,
                             promiseConstructor,
                             transformFunctionBodyWorker(<Block>node.body)
@@ -2184,6 +2232,7 @@ namespace ts {
             }
             else {
                 return createAwaiterHelper(
+                    currentSourceFile.tslibName,
                     hasLexicalArguments,
                     promiseConstructor,
                     <Block>transformConciseBodyWorker(node.body, /*forceBlockFunctionBody*/ true)

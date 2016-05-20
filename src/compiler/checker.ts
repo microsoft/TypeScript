@@ -14298,8 +14298,7 @@ namespace ts {
                 }
             }
 
-            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
-            return unknownType;
+            return checkElementTypeOfIterable(inputType, errorNode);
         }
 
         /**
@@ -14350,7 +14349,10 @@ namespace ts {
                     typeAsIterable.iterableElementType = (<GenericType>type).typeArguments[0];
                 }
                 else {
-                    const iteratorFunction = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
+                    debugger;
+                    const iteratorFunction = getTypeOfPropertyOfType(type, languageVersion >= ScriptTarget.ES6
+                        ? getPropertyNameForKnownSymbolName("iterator")
+                        : "___iterator__");
                     if (isTypeAny(iteratorFunction)) {
                         return undefined;
                     }
@@ -14358,7 +14360,9 @@ namespace ts {
                     const iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
                     if (iteratorFunctionSignatures.length === 0) {
                         if (errorNode) {
-                            error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                            error(errorNode, languageVersion >= ScriptTarget.ES6
+                                ? Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator
+                                : Diagnostics.Type_must_have_an_iterator_method_that_returns_an_iterator);
                         }
                         return undefined;
                     }
@@ -16908,6 +16912,10 @@ namespace ts {
 
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
             node = getSourceTreeNode(node);
+            if (node === undefined) {
+                return true;
+            }
+
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 if (symbol && getSymbolLinks(symbol).referenced) {
@@ -17283,17 +17291,16 @@ namespace ts {
 
             getGlobalTemplateStringsArrayType = memoize(() => getGlobalType("TemplateStringsArray"));
 
+            getGlobalIteratorType = memoize(() => <GenericType>getGlobalType("Iterator", /*arity*/ 1));
             if (languageVersion >= ScriptTarget.ES6) {
                 getGlobalESSymbolType = memoize(() => getGlobalType("Symbol"));
                 getGlobalIterableType = memoize(() => <GenericType>getGlobalType("Iterable", /*arity*/ 1));
-                getGlobalIteratorType = memoize(() => <GenericType>getGlobalType("Iterator", /*arity*/ 1));
                 getGlobalIterableIteratorType = memoize(() => <GenericType>getGlobalType("IterableIterator", /*arity*/ 1));
             }
             else {
                 getGlobalESSymbolType = memoize(() => emptyObjectType);
-                getGlobalIterableType = memoize(() => emptyGenericType);
-                getGlobalIteratorType = memoize(() => emptyGenericType);
-                getGlobalIterableIteratorType = memoize(() => emptyGenericType);
+                getGlobalIterableType = memoize(() => <GenericType>getGlobalType("___Iterable", /*arity*/ 1));
+                getGlobalIterableIteratorType = memoize(() => <GenericType>getGlobalType("___IterableIterator", /*arity*/ 1));
             }
 
             anyArrayType = createArrayType(anyType);
@@ -17853,9 +17860,6 @@ namespace ts {
                 }
                 if (!node.body) {
                     return grammarErrorOnNode(node.asteriskToken, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
-                }
-                if (languageVersion < ScriptTarget.ES6) {
-                    return grammarErrorOnNode(node.asteriskToken, Diagnostics.Generators_are_only_available_when_targeting_ECMAScript_6_or_higher);
                 }
             }
         }

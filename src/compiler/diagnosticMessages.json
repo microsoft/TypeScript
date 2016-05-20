@@ -1743,6 +1743,10 @@
         "category": "Error",
         "code": 2531
     },
+    "Type must have an '__iterator__()' method that returns an iterator.": {
+        "category": "Error",
+        "code": 2532
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2300,6 +2304,30 @@
         "category": "Error",
         "code": 5064
     },
+    "Option 'noEmitHelpers' is deprecated. Please use option '--helpers none' instead.": {
+        "category": "Error",
+        "code": 5065
+    },
+    "Option 'helpersNamespace' cannot be used when '--helpers' is not 'global' or 'import'.": {
+        "category": "Error",
+        "code": 5066
+    },
+    "Invalid value for '--helpersNamespace'. '{0}' is not a valid identifier.": {
+        "category": "Error",
+        "code": 5067
+    },
+    "Option 'helpersImport' cannot be used without specifying '--helpers import' option.": {
+        "category": "Error",
+        "code": 5068
+    },
+    "Option 'helpers' for 'import' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
+        "category": "Error",
+        "code": 5069
+    },
+    "Invalid value for '--helpersImport'. '{0}' is not a valid top-level external module name.": {
+        "category": "Error",
+        "code": 5070
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2743,6 +2771,30 @@
     "Use the legacy emitter instead of the transforming emitter.": {
         "category": "Message",
         "code": 6129
+    },
+    "Specify emit helper location: 'inline' (default), 'none', 'import', 'global'": {
+        "category": "Message",
+        "code": 6130
+    },
+    "HELPER": {
+        "category": "Message",
+        "code": 6131
+    },
+    "Specify emit helper namespace when using '--helper global' (default: '__tslib').": {
+        "category": "Message",
+        "code": 6132
+    },
+    "NAMESPACE": {
+        "category": "Message",
+        "code": 6133
+    },
+    "Specify emit helper external module name when using '--helper import'. (default: 'tslib')": {
+        "category": "Message",
+        "code": 6134
+    },
+    "MODULE": {
+        "category": "Message",
+        "code": 6135
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

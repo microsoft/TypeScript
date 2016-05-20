@@ -380,33 +380,46 @@ namespace ts {
 
     export const enum NodeFlags {
         None =               0,
-        Let =                1 << 0,   // Variable declaration
-        Const =              1 << 1,   // Variable declaration
-        NestedNamespace =    1 << 2,   // Namespace declaration
-        Namespace =          1 << 12,  // Namespace declaration
-        ExportContext =      1 << 13,  // Export context (initialized by binding)
-        ContainsThis =       1 << 14,  // Interface contains references to "this"
-        HasImplicitReturn =  1 << 15,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =  1 << 16,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-        GlobalAugmentation = 1 << 17,  // Set if module declaration is an augmentation for the global scope
-        HasClassExtends =    1 << 18,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
-        HasDecorators =      1 << 19,  // If the file has decorators (initialized by binding)
-        HasParamDecorators = 1 << 20,  // If the file has parameter decorators (initialized by binding)
-        HasAsyncFunctions =  1 << 21,  // If the file has async functions (initialized by binding)
+        Let =                1 << 1,   // Variable declaration
+        Const =              1 << 2,   // Variable declaration
+        NestedNamespace =    1 << 3,   // Namespace declaration
+        Namespace =          1 << 4,   // Namespace declaration
+        ExportContext =      1 << 5,   // Export context (initialized by binding)
+        ContainsThis =       1 << 6,   // Interface contains references to "this"
+        HasImplicitReturn =  1 << 7,   // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =  1 << 8,   // If function has explicit reachable return on one of codepaths (initialized by binding)
+        GlobalAugmentation = 1 << 9,   // Set if module declaration is an augmentation for the global scope
+        HasClassExtends =    1 << 10,  // If the file has a non-ambient class with an extends clause in ES5 or lower (initialized by binding)
+        HasDecorators =      1 << 11,  // If the file has decorators (initialized by binding)
+        HasParamDecorators = 1 << 12,  // If the file has parameter decorators (initialized by binding)
+        HasAsyncFunctions =  1 << 13,  // If the file has async functions (initialized by binding)
+        HasGenerators =      1 << 14,  // If the file has generator functions (initialized by binding)
+        HasForOfOrYieldStar =1 << 15,  // If the file has for..of statements (initialized by binding)
+        HasSpread =          1 << 16,  // If the file has spread elements (initialized by binding)
+        HasYieldInForIn =    1 << 17,
         DisallowInContext =  1 << 22,  // If node was parsed in a context where 'in-expressions' are not allowed
         YieldContext =       1 << 23,  // If node was parsed in the 'yield' context created when parsing a generator
         DecoratorContext =   1 << 24,  // If node was parsed as part of a decorator
         AwaitContext =       1 << 25,  // If node was parsed in the 'await' context created when parsing an async function
         ThisNodeHasError =   1 << 26,  // If the parser encountered an error when parsing the code that created this node
         JavaScriptFile =     1 << 27,  // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 28,  // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 29,  // If we've computed data from children and cached it in this node
+        ThisNodeOrAnySubNodesHasError = 1 << 28, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 29, // If we've computed data from children and cached it in this node
         HasJsxSpreadAttribute = 1 << 30,
 
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
-        EmitHelperFlags = HasClassExtends | HasDecorators | HasParamDecorators | HasAsyncFunctions,
+
+        EmitHelperFlags =
+            HasClassExtends |
+            HasDecorators |
+            HasParamDecorators |
+            HasAsyncFunctions |
+            HasJsxSpreadAttribute |
+            HasGenerators |
+            HasForOfOrYieldStar |
+            HasYieldInForIn,
 
         // Parsing context flags
         ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile,
@@ -1651,6 +1664,7 @@ namespace ts {
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         /* @internal */ imports: LiteralExpression[];
         /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ tslibName: Identifier;
     }
 
     export interface ScriptReferenceHost {
@@ -2493,6 +2507,9 @@ namespace ts {
         mapRoot?: string;
         module?: ModuleKind;
         newLine?: NewLineKind;
+        helpers?: EmitHelpers;
+        helpersNamespace?: string;
+        helpersImport?: string;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
@@ -2625,6 +2642,14 @@ namespace ts {
     export const enum DiagnosticStyle {
         Simple,
         Pretty,
+    }
+
+    export const enum EmitHelpers {
+        None = 0,
+        Inline = 1,
+        Import = 2,
+        Global = 3,
+        Default = Inline
     }
 
     export interface ParsedCommandLine {
@@ -2868,6 +2893,7 @@ namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+
         getEnvironmentVariable?(name: string): string;
     }
 
@@ -2886,22 +2912,23 @@ namespace ts {
         ES6 = 1 << 6,
         ContainsES6 = 1 << 7,
         DestructuringAssignment = 1 << 8,
-        ContainsGenerators = 1 << 9,
+        Generator = 1 << 9,
+        ContainsGenerator = 1 << 10,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 10,
-        ContainsPropertyInitializer = 1 << 11,
-        ContainsLexicalThis = 1 << 12,
-        ContainsCapturedLexicalThis = 1 << 13,
-        ContainsLexicalThisInComputedPropertyName = 1 << 14,
-        ContainsDefaultValueAssignments = 1 << 15,
-        ContainsParameterPropertyAssignments = 1 << 16,
-        ContainsSpreadElementExpression = 1 << 17,
-        ContainsComputedPropertyName = 1 << 18,
-        ContainsBlockScopedBinding = 1 << 19,
-        ContainsBindingPattern = 1 << 20,
-	ContainsYield = 1 << 21,
+        ContainsDecorators = 1 << 11,
+        ContainsPropertyInitializer = 1 << 12,
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsParameterPropertyAssignments = 1 << 17,
+        ContainsSpreadElementExpression = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+	    ContainsYield = 1 << 22,
 
         HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
@@ -2911,6 +2938,7 @@ namespace ts {
         AssertJsx = Jsx | ContainsJsx,
         AssertES7 = ES7 | ContainsES7,
         AssertES6 = ES6 | ContainsES6,
+        AssertGenerator = Generator | ContainsGenerator,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
@@ -2954,14 +2982,14 @@ namespace ts {
         ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
         Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        Merge = 1 << 20,                         // When getting emit options, merge with existing emit options.
+        Merge = 1 << 24,                         // When getting emit options, merge with existing emit options.
 
         // SourceMap Specialization.
         // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
-        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+        SourceMapEmitOpenBraceAsToken = 1 << 25,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 26,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
     }
 
     /* @internal */

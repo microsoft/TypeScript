@@ -113,6 +113,29 @@ namespace ts {
             type: "boolean"
         },
         {
+            name: "helpers",
+            type: {
+                "none": EmitHelpers.None,
+                "inline": EmitHelpers.Inline,
+                "import": EmitHelpers.Import,
+                "global": EmitHelpers.Global
+            },
+            description: Diagnostics.Specify_emit_helper_location_Colon_inline_default_none_import_global,
+            paramType: Diagnostics.HELPER
+        },
+        {
+            name: "helpersNamespace",
+            type: "string",
+            description: Diagnostics.Specify_emit_helper_namespace_when_using_helper_global_default_Colon_tslib,
+            paramType: Diagnostics.NAMESPACE
+        },
+        {
+            name: "helpersImport",
+            type: "string",
+            description: Diagnostics.Specify_emit_helper_external_module_name_when_using_helper_import_default_Colon_tslib,
+            paramType: Diagnostics.MODULE
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
             description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,

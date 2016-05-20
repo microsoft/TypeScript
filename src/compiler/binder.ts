@@ -124,6 +124,11 @@ namespace ts {
         let hasDecorators: boolean;
         let hasParameterDecorators: boolean;
         let hasJsxSpreadAttribute: boolean;
+        let hasGenerators: boolean;
+        let hasForOfOrYieldStar: boolean;
+        let hasSpread: boolean;
+        let hasYieldInForIn: boolean;
+        let inForIn: boolean;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -172,6 +177,11 @@ namespace ts {
             hasParameterDecorators = false;
             subtreeTransformFlags = TransformFlags.None;
             hasJsxSpreadAttribute = false;
+            hasGenerators = false;
+            hasForOfOrYieldStar = false;
+            hasSpread = false;
+            hasYieldInForIn = false;
+            inForIn = false;
         }
 
         return bindSourceFile;
@@ -511,6 +521,18 @@ namespace ts {
                 }
                 if (hasJsxSpreadAttribute) {
                     flags |= NodeFlags.HasJsxSpreadAttribute;
+                }
+                if (hasGenerators) {
+                    flags |= NodeFlags.HasGenerators;
+                }
+                if (hasForOfOrYieldStar) {
+                    flags |= NodeFlags.HasForOfOrYieldStar;
+                }
+                if (hasSpread) {
+                    flags |= NodeFlags.HasSpread;
+                }
+                if (hasYieldInForIn) {
+                    flags |= NodeFlags.HasYieldInForIn;
                 }
             }
 
@@ -1216,6 +1238,7 @@ namespace ts {
                 updateStrictMode(node);
             }
 
+            const savedInForIn = inForIn;
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
             // destination symbol tables are:
@@ -1248,6 +1271,7 @@ namespace ts {
             }
 
             inStrictMode = savedInStrictMode;
+            inForIn = savedInForIn;
         }
 
         function updateStrictMode(node: Node) {
@@ -1356,6 +1380,23 @@ namespace ts {
 
                 case SyntaxKind.JsxSpreadAttribute:
                     hasJsxSpreadAttribute = true;
+                    return;
+
+                case SyntaxKind.YieldExpression:
+                    if ((<YieldExpression>node).asteriskToken) {
+                        hasForOfOrYieldStar = true;
+                    }
+                    if (inForIn) {
+                        hasYieldInForIn = true;
+                    }
+                    return;
+
+                case SyntaxKind.SpreadElementExpression:
+                    hasSpread = true;
+                    return;
+
+                case SyntaxKind.ForInStatement:
+                    inForIn = true;
                     return;
 
                 case SyntaxKind.CallSignature:
@@ -1684,9 +1725,13 @@ namespace ts {
         }
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
+            inForIn = false;
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
                     hasAsyncFunctions = true;
+                }
+                if (node.asteriskToken) {
+                    hasGenerators = true;
                 }
             }
 
@@ -1701,9 +1746,13 @@ namespace ts {
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
+            inForIn = false;
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
                     hasAsyncFunctions = true;
+                }
+                if (node.asteriskToken) {
+                    hasGenerators = true;
                 }
             }
 
@@ -1713,9 +1762,13 @@ namespace ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            inForIn = false;
             if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
                 if (isAsyncFunctionLike(node)) {
                     hasAsyncFunctions = true;
+                }
+                if (isMethodDeclaration(node) && node.asteriskToken) {
+                    hasGenerators = true;
                 }
                 if (nodeIsDecorated(node)) {
                     hasDecorators = true;
@@ -2162,7 +2215,7 @@ namespace ts {
                 transformFlags = TransformFlags.AssertES6;
 
                 if ((<MethodDeclaration>node).asteriskToken) {
-                    transformFlags |= TransformFlags.ContainsGenerators;
+                    transformFlags |= TransformFlags.AssertGenerator;
                 }
 
                 // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
@@ -2395,7 +2448,7 @@ namespace ts {
         }
 
         if ((<FunctionDeclaration>node).asteriskToken) {
-            transformFlags |= TransformFlags.ContainsGenerators;
+            transformFlags |= TransformFlags.AssertGenerator;
         }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.FunctionExcludes);
@@ -2416,7 +2469,7 @@ namespace ts {
         }
 
         if ((<FunctionExpression>node).asteriskToken) {
-            transformFlags |= TransformFlags.ContainsGenerators;
+            transformFlags |= TransformFlags.AssertGenerator;
         }
 
         return updateTransformFlags(node, subtreeFlags, transformFlags, TransformFlags.FunctionExcludes);

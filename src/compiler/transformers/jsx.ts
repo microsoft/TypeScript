@@ -6,6 +6,7 @@ namespace ts {
     const entities: Map<number> = createEntitiesMap();
 
     export function transformJsx(context: TransformationContext) {
+        let currentSourceFile: SourceFile;
         const compilerOptions = context.getCompilerOptions();
         return transformSourceFile;
 
@@ -15,6 +16,7 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
+            currentSourceFile = node;
             return visitEachChild(node, visitor, context);
         }
 
@@ -102,7 +104,7 @@ namespace ts {
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments)
-                    || createAssignHelper(segments);
+                    || createAssignHelper(currentSourceFile.tslibName, segments);
             }
 
             const element = createReactCreateElement(

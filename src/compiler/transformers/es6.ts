@@ -188,7 +188,8 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             currentSourceFile = node;
             currentText = node.text;
-            return visitNode(node, visitor, isSourceFile);
+            node = visitNode(node, visitor, isSourceFile);
+            return node;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -701,7 +702,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     createStatement(
-                        createExtendsHelper(getDeclarationName(node)),
+                        createExtendsHelper(currentSourceFile.tslibName, getDeclarationName(node)),
                         /*location*/ extendsClauseElement
                     )
                 );
@@ -1669,119 +1670,6 @@ namespace ts {
             return convertIterationStatementBodyIfNecessary(node);
         }
 
-        // // TODO(rbuckton): Switch to using __values helper for for..of?
-        // function visitForOfStatement2(node: ForOfStatement): OneOrMany<Statement> {
-        //     // [source]
-        //     //  for (let v of expr) {
-        //     //  }
-        //     //
-        //     // [output]
-        //     //  var __values = ...;
-        //     //  try {
-        //     //      for (_a = __values(expr), _b = _a.next(); !_b.done || (_a = void 0); _b = _a.next()) {
-        //     //          var v = _b.value;
-        //     //      }
-        //     //  }
-        //     //  finally {
-        //     //      if (_a && typeof _a.return === "function") _a.return();
-        //     //  }
-        //     //  var _a, b;
-
-        //     const iterator = createTempVariable();
-        //     const iteratorResult = createTempVariable();
-        //     hoistVariableDeclaration(iterator);
-        //     hoistVariableDeclaration(iteratorResult);
-        //     const expression = visitNode(node.expression, visitor, isExpression);
-        //     const initializer = node.initializer;
-        //     const statements: Statement[] = [];
-        //     if (isVariableDeclarationList(initializer)) {
-        //         const variable = getMutableClone(initializer.declarations[0]);
-        //         variable.initializer = createPropertyAccess(iteratorResult, "value");
-        //         statements.push(
-        //             createVariableStatement(
-        //                 /*modifiers*/ undefined,
-        //                 createVariableDeclarationList(
-        //                     isBindingPattern(variable.name)
-        //                         ? flattenVariableDestructuring(variable, /*value*/ undefined, visitor)
-        //                         : [variable]
-        //                 )
-        //             )
-        //         );
-        //     }
-        //     else {
-        //         statements.push(
-        //             createStatement(
-        //                 createAssignment(
-        //                     <Expression>node.initializer,
-        //                     createPropertyAccess(iteratorResult, "value")
-        //                 )
-        //             )
-        //         );
-        //     }
-
-        //     if (isBlock(node.statement)) {
-        //         addNodes(statements, visitNodes((<Block>node.statement).statements, visitor, isStatement));
-        //     }
-        //     else {
-        //         addNodes(statements, visitNodes(createNodeArray([node.statement]), visitor, isStatement));
-        //     }
-
-        //     return createTryFinally(
-        //         createBlock([
-        //             createFor(
-        //                 createComma(
-        //                     createAssignment(
-        //                         iterator,
-        //                         createCall(
-        //                             createIdentifier("__values"),
-        //                             [expression]
-        //                         )
-        //                     ),
-        //                     createAssignment(
-        //                         iteratorResult,
-        //                         createCall(
-        //                             createPropertyAccess(iterator, "next"),
-        //                             []
-        //                         )
-        //                     )
-        //                 ),
-        //                 createLogicalOr(
-        //                     createLogicalNot(createPropertyAccess(iteratorResult, "done")),
-        //                     createAssignment(iterator, createVoidZero())
-        //                 ),
-        //                 createAssignment(
-        //                     iteratorResult,
-        //                     createCall(
-        //                         createPropertyAccess(iterator, "next"),
-        //                         []
-        //                     )
-        //                 ),
-        //                 createBlock(statements)
-        //             )
-        //         ]),
-        //         createBlock([
-        //             createIf(
-        //                 createLogicalAnd(
-        //                     iterator,
-        //                     createStrictEquality(
-        //                         createTypeOf(
-        //                             createPropertyAccess(iterator, "return")
-        //                         ),
-        //                         createLiteral("function")
-        //                     )
-        //                 ),
-        //                 createStatement(
-        //                     createCall(
-        //                         createPropertyAccess(iterator, "return"),
-        //                         [],
-        //                         /*location*/ node.expression
-        //                     )
-        //                 )
-        //             )
-        //         ])
-        //     );
-        // }
-
         /**
          * Visits a ForOfStatement and converts it into a compatible ForStatement.
          *
@@ -1950,6 +1838,119 @@ namespace ts {
             setNodeEmitFlags(forStatement, NodeEmitFlags.NoTokenTrailingSourceMaps);
             return forStatement;
         }
+
+        // // TODO(rbuckton): Switch to using __values helper for for..of?
+        // function convertForOfToFor2(node: ForOfStatement, convertedLoopBodyStatements: Statement[]): ForStatement {
+        //     // [source]
+        //     //  for (let v of expr) {
+        //     //  }
+        //     //
+        //     // [output]
+        //     //  var __values = ...;
+        //     //  try {
+        //     //      for (_a = __values(expr), _b = _a.next(); !_b.done || (_a = void 0); _b = _a.next()) {
+        //     //          var v = _b.value;
+        //     //      }
+        //     //  }
+        //     //  finally {
+        //     //      if (_a && typeof _a.return === "function") _a.return();
+        //     //  }
+        //     //  var _a, b;
+
+        //     const iterator = createTempVariable();
+        //     const iteratorResult = createTempVariable();
+        //     hoistVariableDeclaration(iterator);
+        //     hoistVariableDeclaration(iteratorResult);
+        //     const expression = visitNode(node.expression, visitor, isExpression);
+        //     const initializer = node.initializer;
+        //     const statements: Statement[] = [];
+        //     if (isVariableDeclarationList(initializer)) {
+        //         const variable = getMutableClone(initializer.declarations[0]);
+        //         variable.initializer = createPropertyAccess(iteratorResult, "value");
+        //         statements.push(
+        //             createVariableStatement(
+        //                 /*modifiers*/ undefined,
+        //                 createVariableDeclarationList(
+        //                     isBindingPattern(variable.name)
+        //                         ? flattenVariableDestructuring(variable, /*value*/ undefined, visitor)
+        //                         : [variable]
+        //                 )
+        //             )
+        //         );
+        //     }
+        //     else {
+        //         statements.push(
+        //             createStatement(
+        //                 createAssignment(
+        //                     <Expression>node.initializer,
+        //                     createPropertyAccess(iteratorResult, "value")
+        //                 )
+        //             )
+        //         );
+        //     }
+
+        //     if (isBlock(node.statement)) {
+        //         addNodes(statements, visitNodes((<Block>node.statement).statements, visitor, isStatement));
+        //     }
+        //     else {
+        //         addNodes(statements, visitNodes(createNodeArray([node.statement]), visitor, isStatement));
+        //     }
+
+        //     return createTryFinally(
+        //         createBlock([
+        //             createFor(
+        //                 createComma(
+        //                     createAssignment(
+        //                         iterator,
+        //                         createCall(
+        //                             createHelperName(currentSourceFile.tslibName, "__values"),
+        //                             [expression]
+        //                         )
+        //                     ),
+        //                     createAssignment(
+        //                         iteratorResult,
+        //                         createCall(
+        //                             createPropertyAccess(iterator, "next"),
+        //                             []
+        //                         )
+        //                     )
+        //                 ),
+        //                 createLogicalOr(
+        //                     createLogicalNot(createPropertyAccess(iteratorResult, "done")),
+        //                     createAssignment(iterator, createVoidZero())
+        //                 ),
+        //                 createAssignment(
+        //                     iteratorResult,
+        //                     createCall(
+        //                         createPropertyAccess(iterator, "next"),
+        //                         []
+        //                     )
+        //                 ),
+        //                 createBlock(statements)
+        //             )
+        //         ]),
+        //         createBlock([
+        //             createIf(
+        //                 createLogicalAnd(
+        //                     iterator,
+        //                     createStrictEquality(
+        //                         createTypeOf(
+        //                             createPropertyAccess(iterator, "return")
+        //                         ),
+        //                         createLiteral("function")
+        //                     )
+        //                 ),
+        //                 createStatement(
+        //                     createCall(
+        //                         createPropertyAccess(iterator, "return"),
+        //                         [],
+        //                         /*location*/ node.expression
+        //                     )
+        //                 )
+        //             )
+        //         ])
+        //     );
+        // }
 
         /**
          * Visits an ObjectLiteralExpression with computed propety names.
@@ -2633,7 +2634,10 @@ namespace ts {
             }
 
             // Rewrite using the pattern <segment0>.concat(<segment1>, <segment2>, ...)
-            return createArrayConcat(segments.shift(), segments);
+            // return createArrayConcat(segments.shift(), segments);
+            return createCall(
+                createHelperName(currentSourceFile.tslibName, "__spread"),
+                segments);
         }
 
         function partitionSpreadElement(node: Expression) {

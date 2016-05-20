@@ -72,163 +72,137 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };`;
 
         const keysHelper = `
-var __keys = (this && this.__keys) || function (o) {
-    var a = [];
-    for (var k in o) a.push(k);
-    return __values(a);
+var __keys = (this && this.__keys) || function (obj) {
+    var ar = [];
+    for (var k in obj) ar.push(k);
+    return __values(ar);
 };`;
 
         const valuesHelper = `
-var __values = (this && this.__values) || function (o) {
-    if (typeof o.next === "function") {
-        return o;
+var __values = (this && this.__values) || function (obj) {
+    var it = (typeof Symbol === "function" && Symbol.iterator && obj[Symbol.iterator]) || obj.__iterator__;
+    if (typeof it === "function") return it.call(obj);
+    var i, done;
+    return {
+        __iterator__: function() { return this; },
+        next: function () { return { value: (done || (done = i >= obj.length)) ? undefined: obj[i++], done: done }; }
+    };
+};`;
+
+        const spreadHelper = `
+var __spread = (this && this.__spread) || function () {
+    var ar = [];
+    for (var i = 0; i < arguments.length; i++) {
+        var it = __values(arguments[i]);
+        try {
+            for (var r = it.next(); !r.done; r = it.next()) ar.push(r.value);
+        }
+        finally {
+            var ret = r && !r.done && it && it["return"];
+            if (typeof ret === "function") ret.call(it);
+        }
     }
-    if (typeof o.length === "number") {
-        var i, done;
-        return {
-            next: function() {
-                return done || (done = i >= o.length)
-                    ? { value: undefined, done: true }
-                    : { value: o[i++], done: false };
-            }
-        };
-    }
+    return ar;
 };`;
 
         const generatorHelper = `
 var __generator = (this && this.__generator) || function (body) {
-    var done, finallyStack, executing, state, yieldStar;
-    function step(opcode, arg) {
-        if (typeof Debug !== "undefined" && "setNonUserCodeExceptions" in Debug) {
-            Debug.setNonUserCodeExceptions = true;
-        }
-
-        if (executing) {
-            throw new TypeError("Generator is already executing.");
-        }
-
-        state = state || { label: 0 };
+    var done, finallyStack, executing, yieldStar, trys = [], state = { label: 0, trys: trys };
+    function step(op) {
+        if (typeof Debug !== "undefined" && "setNonUserCodeExceptions" in Debug) Debug.setNonUserCodeExceptions = true;
+        if (executing) throw new TypeError("Generator is already executing.");
         while (true) {
-            executing = false;
-            verb = yielded = undefined;
-            if (!done) {
-                var trys = state.trys;
-                var region = trys && trys[trys.length - 1];
-                if (region) {
-                    var tryLabel = region[0 /*try*/];
-                    var catchLabel = region[1 /*catch*/];
-                    var finallyLabel = region[2 /*finally*/];
-                    var endLabel = region[3 /*endtry*/];
-                }
-                else {
-                    if (opcode === 6 /*catch*/) {
-                        opcode = 1 /*throw*/;
-                    }
-                    if (opcode === 1 /*throw*/ || opcode === 2 /*return*/) {
-                        done = true;
-                    }
-                }
-            }
             if (done) {
-                finallyStack = void 0;
-                switch (opcode) {
+                switch (op[0]) {
                     case 0 /*next*/: return { value: void 0, done: true };
-                    case 1 /*throw*/: throw arg;
-                    case 2 /*return*/: return { value: arg, done: true };
+                    case 6 /*catch*/:
+                    case 1 /*throw*/: throw op[1];
+                    case 2 /*return*/: return { value: op[1], done: true };
                 }
             }
             try {
+                executing = true;
                 if (yieldStar) {
-                    executing = true;
-                    var verb = yieldStar[opcode === 2 ? "return" : opcode === 1 ? "throw" : "next"];
-                    executing = false;
+                    var verb = yieldStar[op[0] === 2 ? "return" : op[0] === 1 ? "throw" : "next"];
                     if (verb) {
-                        executing = true;
-                        var yielded = verb.call(yieldStar, arg);
-                        executing = false;
-                        if (!yielded.done) {
-                            return yielded;
-                        }
-
-                        opcode = 0 /*next*/;
-                        arg = yielded.value;
+                        var yielded = verb.call(yieldStar, op[1]);
+                        if (!yielded.done) return { value: yielded.value, done: false };
+                        op = [0 /*next*/, yielded.value];
                     }
 
                     yieldStar = void 0;
                     continue;
                 }
 
-                switch (opcode) {
+                switch (op[0]) {
                     case 0 /*next*/:
-                        state.sent = function() { return arg };
+                        state.sent = function() { return op[1]; };
                         break;
 
                     case 1 /*throw*/:
-                        state.sent = function() { throw arg };
+                        state.sent = function() { throw op[1]; };
                         break;
 
                     case 4 /*yield*/:
                         state.label++;
-                        return { value: arg, done: false };
+                        return { value: op[1], done: false };
 
-                    case 5 /*yield**/:
+                    case 5 /*yieldstar*/:
                         state.label++;
-                        yieldStar = arg;
-                        opcode = 0 /*next*/;
-                        arg = void 0;
+                        yieldStar = op[1];
+                        op = [0 /*next*/, void 0];
                         continue;
 
                     case 7 /*endfinally*/:
-                        arg = finallyStack.pop();
-                        opcode = finallyStack.pop();
+                        op = finallyStack.pop();
                         trys.pop();
                         continue;
 
                     default:
-                        if (opcode === 3 /*break*/ && (!region || (arg > tryLabel && arg < endLabel))) {
-                            state.label = arg;
+                        var rgn = trys.length && trys[trys.length - 1];
+                        if (!rgn && (op[0] === 6 /*catch*/ || op[0] === 1 /*throw*/ || op[0] === 2 /*return*/)) {
+                            done = true;
+                            finallyStack = void 0;
+                            continue;
                         }
-                        else if (opcode === 6 /*catch*/ && state.label < catchLabel) {
-                            state.error = arg;
-                            state.label = catchLabel;
+                        else if (op[0] === 3 /*break*/ && (!rgn || (op[1] > rgn[0] && op[1] < rgn[3]))) {
+                            state.label = op[1];
                         }
-                        else if (state.label < finallyLabel) {
-                            finallyStack = finallyStack || [];
-                            finallyStack.push(opcode, arg);
-                            state.label = finallyLabel;
+                        else if (op[0] === 6 /*catch*/ && rgn && state.label < rgn[1]) {
+                            state.error = op[1];
+                            state.label = rgn[1];
+                        }
+                        else if (rgn && state.label < rgn[2]) {
+                            (finallyStack || []).push(op);
+                            state.label = rgn[2];
                         }
                         else {
-                            if (finallyLabel) {
-                                finallyStack.pop();
-                                finallyStack.pop();
-                            }
-
+                            if (rgn[2]) finallyStack.pop();
                             trys.pop();
                             continue;
                         }
-
-                        break;
                 }
 
-                executing = true;
-                var operation = body(state);
-                opcode = operation[0];
-                arg = operation[1];
+                op = body(state);
             }
             catch (e) {
-                opcode = 6 /*catch*/;
-                arg = e;
+                op = [6 /*catch*/, e];
                 yieldStar = void 0;
+            }
+            finally {
+                executing = false;
+                verb = yielded = void 0;
             }
         }
     }
-    return {
-        next: function (v) { return step(0 /*next*/, v); },
-        "throw": function (v) { return step(1 /*throw*/, v); },
-        "return": function (v) { return step(2 /*return*/, v); },
+    var g = {
+        __iterator__: function() { return this; },
+        next: function (v) { return step([0 /*next*/, v]); },
+        "throw": function (v) { return step([1 /*throw*/, v]); },
+        "return": function (v) { return step([2 /*return*/, v]); }
     };
+    return g;
 };`;
-
 
         // emit output for the __export helper function
         const exportStarHelper = `
@@ -350,6 +324,10 @@ const _super = (function (geti, seti) {
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
             let awaiterEmitted: boolean;
+            let keysEmitted: boolean;
+            let valuesEmitted: boolean;
+            let spreadEmitted: boolean;
+            let generatorEmitted: boolean;
             let isOwnFileEmit: boolean;
 
             return doPrint;
@@ -410,6 +388,10 @@ const _super = (function (geti, seti) {
                 decorateEmitted = false;
                 paramEmitted = false;
                 awaiterEmitted = false;
+                keysEmitted = false;
+                valuesEmitted = false;
+                spreadEmitted = false;
+                generatorEmitted = false;
                 isOwnFileEmit = false;
             }
 
@@ -2195,17 +2177,11 @@ const _super = (function (geti, seti) {
 
                 const statements = node.statements;
                 const statementOffset = emitPrologueDirectives(statements);
-                if (getNodeEmitFlags(node) & NodeEmitFlags.NoLexicalEnvironment) {
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                }
-                else {
-                    const savedTempFlags = tempFlags;
-                    tempFlags = 0;
-                    emitHelpers(node);
-                    emitList(node, statements, ListFormat.MultiLine, statementOffset);
-                    tempFlags = savedTempFlags;
-                }
+                const savedTempFlags = tempFlags;
+                tempFlags = 0;
+                emitHelpers(node);
+                emitList(node, statements, ListFormat.MultiLine, statementOffset);
+                tempFlags = savedTempFlags;
 
                 emitTrailingDetachedComments(node.statements);
             }
@@ -2266,7 +2242,7 @@ const _super = (function (geti, seti) {
                 let helpersEmitted = false;
 
                 // Only emit helpers if the user did not say otherwise.
-                if (!compilerOptions.noEmitHelpers) {
+                if (compilerOptions.helpers === EmitHelpers.Inline) {
                     // Only Emit __extends function when target ES5.
                     // For target ES6 and above, we can emit classDeclaration as is.
                     if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
@@ -2300,6 +2276,32 @@ const _super = (function (geti, seti) {
                         writeLines(awaiterHelper);
                         awaiterEmitted = true;
                         helpersEmitted = true;
+                    }
+
+                    if (languageVersion < ScriptTarget.ES6) {
+                        if (!keysEmitted && (node.flags & NodeFlags.HasYieldInForIn)) {
+                            writeLines(keysHelper);
+                            keysEmitted = true;
+                            helpersEmitted = true;
+                        }
+
+                        if (!valuesEmitted && (node.flags & (NodeFlags.HasYieldInForIn | NodeFlags.HasForOfOrYieldStar | NodeFlags.HasSpread))) {
+                            writeLines(valuesHelper);
+                            valuesEmitted = true;
+                            helpersEmitted = true;
+                        }
+
+                        if (!spreadEmitted && (node.flags & NodeFlags.HasSpread)) {
+                            writeLines(spreadHelper);
+                            spreadEmitted = true;
+                            helpersEmitted = true;
+                        }
+
+                        if (!generatorEmitted && (node.flags & NodeFlags.HasGenerators)) {
+                            writeLines(generatorHelper);
+                            generatorEmitted = true;
+                            helpersEmitted = true;
+                        }
                     }
 
                     if (helpersEmitted) {

@@ -1884,10 +1884,15 @@ namespace ts {
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {
+            const hasImportedEmitHelpers = options.helpers === EmitHelpers.Import;
             collectExternalModuleReferences(file);
-            if (file.imports.length || file.moduleAugmentations.length) {
+            if (file.imports.length || file.moduleAugmentations.length || hasImportedEmitHelpers) {
                 file.resolvedModules = {};
                 const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
+                if (hasImportedEmitHelpers) {
+                    moduleNames.push(options.helpersImport || "tslib");
+                }
+
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
@@ -1896,9 +1901,9 @@ namespace ts {
                     // - resolution was successful
                     // - noResolve is falsy
                     // - module name come from the list fo imports
-                    const shouldAddFile = resolution &&
-                        !options.noResolve &&
-                        i < file.imports.length;
+                    const shouldAddFile = resolution
+                        && !options.noResolve
+                        && (i < file.imports.length);
 
                     if (shouldAddFile) {
                         const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
@@ -2076,7 +2081,7 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            // Report this error if user specified --module moduleKind 
+            // Report this error if user specified --module moduleKind
             // or if there is external module in compilation which defaults to commonjs
             const emitModuleKind = getEmitModuleKind(options);
             if (outFile && (options.module || firstExternalModuleSourceFile) && !(emitModuleKind === ModuleKind.AMD || emitModuleKind === ModuleKind.System)) {
@@ -2109,6 +2114,35 @@ namespace ts {
 
             if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
+            }
+
+            if (options.noEmitHelpers) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmitHelpers_is_deprecated_Please_use_option_helpers_none_instead));
+            }
+
+            if (options.helpers === EmitHelpers.Import) {
+                if (emitModuleKind === ModuleKind.None) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_helpers_for_import_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
+                }
+            }
+
+            if (options.helpersImport) {
+                if (options.helpers !== EmitHelpers.Import) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_helpersImport_cannot_be_used_without_specifying_helpers_import_option));
+                }
+                if (isExternalModuleNameRelative(options.helpersImport)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_helpersImport_0_is_not_a_valid_top_level_external_module_name, options.helpersImport));
+                }
+            }
+
+            if (options.helpersNamespace) {
+                if (options.helpers !== EmitHelpers.Global
+                    && options.helpers !== EmitHelpers.Import) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_helpersNamespace_cannot_be_used_when_helpers_is_not_global_or_import));
+                }
+                if (!isIdentifierText(options.helpersNamespace, languageVersion)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_helpersNamespace_0_is_not_a_valid_identifier));
+                }
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
