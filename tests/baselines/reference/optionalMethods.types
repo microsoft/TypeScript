@@ -7,13 +7,13 @@ interface Foo {
 >a : number
 
     b?: number;
->b : number | undefined
+>b : number
 
     f(): number;
 >f : () => number
 
     g?(): number;
->g : (() => number) | undefined
+>g : () => number
 }
 
 function test1(x: Foo) {
@@ -79,14 +79,14 @@ class Bar {
 >a : number
 
     b?: number;
->b : number | undefined
+>b : number
 
     c? = 2;
->c : number | undefined
+>c : number
 >2 : number
 
     constructor(public d?: number, public e = 10) {}
->d : number | undefined
+>d : number
 >e : number
 >10 : number
 
@@ -97,10 +97,10 @@ class Bar {
 >1 : number
     }
     g?(): number;  // Body of optional method can be omitted
->g : (() => number) | undefined
+>g : () => number
 
     h?() {
->h : (() => number) | undefined
+>h : () => number
 
         return 2;
 >2 : number
@@ -128,9 +128,9 @@ function test2(x: Bar) {
 >c : number | undefined
 
     x.d;
->x.d : number | undefined
+>x.d : number
 >x : Bar
->d : number | undefined
+>d : number
 
     x.e;
 >x.e : number
@@ -205,10 +205,10 @@ class Base {
 >Base : Base
 
     a?: number;
->a : number | undefined
+>a : number
 
     f?(): number;
->f : (() => number) | undefined
+>f : () => number
 }
 
 class Derived extends Base {
