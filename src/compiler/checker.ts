@@ -11882,8 +11882,18 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.Property &&
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
                     (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
-                    const func = getContainingFunction(expr);
-                    return !(func && func.kind === SyntaxKind.Constructor && func.parent === symbol.valueDeclaration.parent);
+                    return !isInConstructor(getContainingFunction(expr));
+                    function isInConstructor(func: FunctionLikeDeclaration) {
+                        if (!func)
+                            return false;
+                        if (func.kind !== SyntaxKind.Constructor)
+                            return false;
+                        if (func.parent === symbol.valueDeclaration.parent) // If the symbol was declared in the class:
+                            return true;
+                        if (func === symbol.valueDeclaration.parent) // If symbolDecl is a parameter property of the constructor:
+                            return true;
+                        return false;
+                    }
                 }
                 return true;
             }

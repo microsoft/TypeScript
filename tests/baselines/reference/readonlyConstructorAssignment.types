@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts ===
+class A {
+>A : A
+
+    constructor(readonly x: number) {
+>x : number
+
+        this.x = 7;
+>this.x = 7 : number
+>this.x : number
+>this : this
+>x : number
+>7 : number
+    }
+}
+
