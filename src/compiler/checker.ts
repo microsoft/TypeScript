@@ -2880,10 +2880,6 @@ namespace ts {
             return undefined;
         }
 
-        function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? addNullableKind(type, TypeFlags.Undefined) : type;
-        }
-
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
@@ -2915,7 +2911,7 @@ namespace ts {
 
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return addOptionality(getTypeFromTypeNode(declaration.type), /*optional*/ !!declaration.questionToken);
+                return getTypeFromTypeNode(declaration.type);
             }
 
             if (declaration.kind === SyntaxKind.Parameter) {
@@ -2937,13 +2933,13 @@ namespace ts {
                     ? getContextuallyTypedThisType(func)
                     : getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
-                    return addOptionality(type, /*optional*/ !!declaration.questionToken);
+                    return type;
                 }
             }
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                return addOptionality(checkExpressionCached(declaration.initializer), /*optional*/ !!declaration.questionToken);
+                return checkExpressionCached(declaration.initializer);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -3214,9 +3210,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                const type = createObjectType(TypeFlags.Anonymous, symbol);
-                links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ?
-                    addNullableKind(type, TypeFlags.Undefined) : type;
+                links.type = createObjectType(TypeFlags.Anonymous, symbol);
             }
             return links.type;
         }
@@ -8100,11 +8094,19 @@ namespace ts {
             checkCollisionWithCapturedThisVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getTypeOfSymbol(localOrExportSymbol);
-            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || isAssignmentTarget(node)) {
+            let type = getTypeOfSymbol(localOrExportSymbol);
+            // If the identifier doesn't denote a variable, parameter, property, method, or accessor, or if the
+            // identifier is the target of an assignment, go with the type of the symbol.
+            if (!(localOrExportSymbol.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor)) || isAssignmentTarget(node)) {
                 return type;
             }
             const declaration = localOrExportSymbol.valueDeclaration;
+            // In strict null checking mode, for an optional parameter, property or method, include undefined
+            // in the type.
+            if (strictNullChecks && (localOrExportSymbol.flags & SymbolFlags.Optional ||
+                declaration && declaration.kind === SyntaxKind.Parameter && (<ParameterDeclaration>declaration).questionToken)) {
+                type = addNullableKind(type, TypeFlags.Undefined);
+            }
             const assumeInitialized = !strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || !declaration ||
                 getRootDeclaration(declaration).kind === SyntaxKind.Parameter || isInAmbientContext(declaration) ||
                 getContainingFunctionOrModule(declaration) !== getContainingFunctionOrModule(node);
@@ -9950,9 +9952,19 @@ namespace ts {
                 checkClassPropertyAccess(node, left, apparentType, prop);
             }
 
-            const propType = getTypeOfSymbol(prop);
-            if (node.kind !== SyntaxKind.PropertyAccessExpression || isAssignmentTarget(node) ||
-                !(propType.flags & TypeFlags.Union) && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))) {
+            let propType = getTypeOfSymbol(prop);
+            // If the property access doesn't denote a variable, parameter, property, method, or accessor,
+            // if the property access denotes a non-optional method, or if the property access is the target
+            // of an assignment, go with the type of the symbol.
+            if (!(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Method | SymbolFlags.Accessor)) ||
+                prop.flags & SymbolFlags.Method && !(prop.flags & SymbolFlags.Optional) || isAssignmentTarget(node)) {
+                return propType;
+            }
+            // In strict null checking mode, for an optional property or method, include undefined in the type.
+            if (strictNullChecks && prop.flags & SymbolFlags.Optional) {
+                propType = addNullableKind(propType, TypeFlags.Undefined);
+            }
+            if (node.kind !== SyntaxKind.PropertyAccessExpression) {
                 return propType;
             }
             const leftmostNode = getLeftmostIdentifierOrThis(node);
@@ -11441,8 +11453,8 @@ namespace ts {
         function getTypeOfParameter(symbol: Symbol) {
             const type = getTypeOfSymbol(symbol);
             if (strictNullChecks) {
-                const declaration = symbol.valueDeclaration;
-                if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
+                const declaration = <VariableLikeDeclaration>symbol.valueDeclaration;
+                if (declaration && (declaration.questionToken || declaration.initializer)) {
                     return addNullableKind(type, TypeFlags.Undefined);
                 }
             }
