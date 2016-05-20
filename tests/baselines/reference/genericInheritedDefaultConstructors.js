@@ -1,4 +1,5 @@
 //// [genericInheritedDefaultConstructors.ts]
+// repro from #8166
 interface Constructor<T> {
     new(...args: any[]): T;
     prototype: T;
@@ -6,12 +7,7 @@ interface Constructor<T> {
 
 class A<U> { a: U; }
 class B<V> extends A<V> { b: V; }
-var c:Constructor<B<boolean>> = B; // error here
-var x = new B<number>();
-
-//class A1 { a: boolean; }
-//class B1 extends A1 { b: boolean; }
-//var c1:Constructor<B1> = B1; // no error here
+var c:Constructor<B<boolean>> = B; // shouldn't error here
 
 
 //// [genericInheritedDefaultConstructors.js]
@@ -32,8 +28,4 @@ var B = (function (_super) {
     }
     return B;
 }(A));
-var c = B; // error here
-var x = new B();
-//class A1 { a: boolean; }
-//class B1 extends A1 { b: boolean; }
-//var c1:Constructor<B1> = B1; // no error here
+var c = B; // shouldn't error here

@@ -1,4 +1,5 @@
 === tests/cases/compiler/genericInheritedDefaultConstructors.ts ===
+// repro from #8166
 interface Constructor<T> {
 >Constructor : Constructor<T>
 >T : T
@@ -26,18 +27,9 @@ class B<V> extends A<V> { b: V; }
 >b : V
 >V : V
 
-var c:Constructor<B<boolean>> = B; // error here
+var c:Constructor<B<boolean>> = B; // shouldn't error here
 >c : Constructor<B<boolean>>
 >Constructor : Constructor<T>
 >B : B<V>
 >B : typeof B
-
-var x = new B<number>();
->x : B<number>
->new B<number>() : B<number>
->B : typeof B
-
-//class A1 { a: boolean; }
-//class B1 extends A1 { b: boolean; }
-//var c1:Constructor<B1> = B1; // no error here
 
