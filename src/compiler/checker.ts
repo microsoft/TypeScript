@@ -5464,7 +5464,7 @@ namespace ts {
                         const declaration = <DeclarationWithTypeParameters>node;
                         if (declaration.typeParameters) {
                             for (const d of declaration.typeParameters) {
-                                if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getMergedSymbol(d.symbol)))) {
+                                if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode(d)))) {
                                     return true;
                                 }
                             }
