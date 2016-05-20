@@ -1,0 +1,63 @@
+=== tests/cases/compiler/optionalParameterDestructuring.ts ===
+
+declare function f1({ a, b }?: { a: number, b: string }): string;
+>f1 : Symbol(f1, Decl(optionalParameterDestructuring.ts, 0, 0))
+>a : Symbol(a, Decl(optionalParameterDestructuring.ts, 1, 21))
+>b : Symbol(b, Decl(optionalParameterDestructuring.ts, 1, 24))
+>a : Symbol(a, Decl(optionalParameterDestructuring.ts, 1, 32))
+>b : Symbol(b, Decl(optionalParameterDestructuring.ts, 1, 43))
+
+function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
+>f2 : Symbol(f2, Decl(optionalParameterDestructuring.ts, 1, 65))
+>a : Symbol(a, Decl(optionalParameterDestructuring.ts, 3, 13))
+>b : Symbol(b, Decl(optionalParameterDestructuring.ts, 3, 16))
+>a : Symbol(a, Decl(optionalParameterDestructuring.ts, 3, 23))
+>b : Symbol(b, Decl(optionalParameterDestructuring.ts, 3, 34))
+>a : Symbol(a, Decl(optionalParameterDestructuring.ts, 3, 50))
+>b : Symbol(b, Decl(optionalParameterDestructuring.ts, 3, 56))
+}
+
+// Repro from #8681
+
+interface Type { t: void }
+>Type : Symbol(Type, Decl(optionalParameterDestructuring.ts, 4, 1))
+>t : Symbol(Type.t, Decl(optionalParameterDestructuring.ts, 8, 16))
+
+interface QueryMetadata { q: void }
+>QueryMetadata : Symbol(QueryMetadata, Decl(optionalParameterDestructuring.ts, 8, 26))
+>q : Symbol(QueryMetadata.q, Decl(optionalParameterDestructuring.ts, 9, 25))
+
+interface QueryMetadataFactory {
+>QueryMetadataFactory : Symbol(QueryMetadataFactory, Decl(optionalParameterDestructuring.ts, 9, 35))
+
+    (selector: Type | string, {descendants, read}?: {
+>selector : Symbol(selector, Decl(optionalParameterDestructuring.ts, 12, 5))
+>Type : Symbol(Type, Decl(optionalParameterDestructuring.ts, 4, 1))
+>descendants : Symbol(descendants, Decl(optionalParameterDestructuring.ts, 12, 31))
+>read : Symbol(read, Decl(optionalParameterDestructuring.ts, 12, 43))
+
+        descendants?: boolean;
+>descendants : Symbol(descendants, Decl(optionalParameterDestructuring.ts, 12, 53))
+
+        read?: any;
+>read : Symbol(read, Decl(optionalParameterDestructuring.ts, 13, 30))
+
+    }): ParameterDecorator;
+>ParameterDecorator : Symbol(ParameterDecorator, Decl(lib.d.ts, --, --))
+
+    new (selector: Type | string, {descendants, read}?: {
+>selector : Symbol(selector, Decl(optionalParameterDestructuring.ts, 16, 9))
+>Type : Symbol(Type, Decl(optionalParameterDestructuring.ts, 4, 1))
+>descendants : Symbol(descendants, Decl(optionalParameterDestructuring.ts, 16, 35))
+>read : Symbol(read, Decl(optionalParameterDestructuring.ts, 16, 47))
+
+        descendants?: boolean;
+>descendants : Symbol(descendants, Decl(optionalParameterDestructuring.ts, 16, 57))
+
+        read?: any;
+>read : Symbol(read, Decl(optionalParameterDestructuring.ts, 17, 30))
+
+    }): QueryMetadata;
+>QueryMetadata : Symbol(QueryMetadata, Decl(optionalParameterDestructuring.ts, 8, 26))
+}
+
