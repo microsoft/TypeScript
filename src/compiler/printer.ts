@@ -155,7 +155,8 @@ const _super = (function (geti, seti) {
             const {
                 emitStart,
                 emitEnd,
-                emitPos
+                emitTokenStart,
+                emitTokenEnd
             } = sourceMap;
 
             const comments = createCommentWriter(host, writer, sourceMap);
@@ -172,6 +173,9 @@ const _super = (function (geti, seti) {
             let context: TransformationContext;
             let getNodeEmitFlags: (node: Node) => NodeEmitFlags;
             let setNodeEmitFlags: (node: Node, flags: NodeEmitFlags) => void;
+            let getSourceMapRange: (node: Node) => TextRange;
+            let getTokenSourceMapRange: (node: Node, token: SyntaxKind) => TextRange;
+            let getCommentRange: (node: Node) => TextRange;
             let isSubstitutionEnabled: (node: Node) => boolean;
             let isEmitNotificationEnabled: (node: Node) => boolean;
             let onSubstituteNode: (node: Node, isExpression: boolean) => Node;
@@ -232,6 +236,9 @@ const _super = (function (geti, seti) {
 
                 getNodeEmitFlags = undefined;
                 setNodeEmitFlags = undefined;
+                getSourceMapRange = undefined;
+                getTokenSourceMapRange = undefined;
+                getCommentRange = undefined;
                 isSubstitutionEnabled = undefined;
                 isEmitNotificationEnabled = undefined;
                 onSubstituteNode = undefined;
@@ -251,6 +258,9 @@ const _super = (function (geti, seti) {
                 context = _context;
                 getNodeEmitFlags = context.getNodeEmitFlags;
                 setNodeEmitFlags = context.setNodeEmitFlags;
+                getSourceMapRange = context.getSourceMapRange;
+                getTokenSourceMapRange = context.getTokenSourceMapRange;
+                getCommentRange = context.getCommentRange;
                 isSubstitutionEnabled = context.isSubstitutionEnabled;
                 isEmitNotificationEnabled = context.isEmitNotificationEnabled;
                 onSubstituteNode = context.onSubstituteNode;
@@ -285,7 +295,7 @@ const _super = (function (geti, seti) {
                 if (node) {
                     const flagsToAdd = flags & ~getNodeEmitFlags(node);
                     if (flagsToAdd) {
-                        setNodeEmitFlags(node, flagsToAdd);
+                        setNodeEmitFlags(node, getNodeEmitFlags(node) | flagsToAdd);
                         emit(node);
                         setNodeEmitFlags(node, getNodeEmitFlags(node) & ~flagsToAdd);
                         return;
@@ -334,12 +344,12 @@ const _super = (function (geti, seti) {
 
             function emitNodeWithWorker(node: Node, emitWorker: (node: Node) => void) {
                 if (node) {
-                    const leadingComments = getLeadingComments(node, shouldSkipLeadingCommentsForNode);
-                    const trailingComments = getTrailingComments(node, shouldSkipTrailingCommentsForNode);
-                    emitLeadingComments(node, leadingComments);
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    const leadingComments = getLeadingComments(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingCommentsForNode, getCommentRange);
+                    const trailingComments = getTrailingComments(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingCommentsForNode, getCommentRange);
+                    emitLeadingComments(/*range*/ node, leadingComments, /*contextNode*/ node, getCommentRange);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitWorker(node);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     emitTrailingComments(node, trailingComments);
                 }
             }
@@ -1299,14 +1309,14 @@ const _super = (function (geti, seti) {
 
             function emitBlock(node: Block, format?: ListFormat) {
                 if (isSingleLineEmptyBlock(node)) {
-                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                     write(" ");
-                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
                 else {
-                    writeToken(SyntaxKind.OpenBraceToken, node.pos);
+                    writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
                     emitBlockStatements(node);
-                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end);
+                    writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
                 }
             }
 
@@ -1335,15 +1345,15 @@ const _super = (function (geti, seti) {
             }
 
             function emitIfStatement(node: IfStatement) {
-                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos);
+                const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, node);
                 write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
                 emitExpression(node.expression);
-                writeToken(SyntaxKind.CloseParenToken, node.expression.end);
+                writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
                 emitEmbeddedStatement(node.thenStatement);
                 if (node.elseStatement) {
                     writeLine();
-                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end);
+                    writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
                     if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                         write(" ");
                         emit(node.elseStatement);
@@ -1377,9 +1387,32 @@ const _super = (function (geti, seti) {
             }
 
             function emitForStatement(node: ForStatement) {
+                if (getNodeEmitFlags(node) & NodeEmitFlags.SourceMapAdjustRestParameterLoop) {
+                    // TODO(rbuckton): This should be removed once source maps are aligned with the old
+                    //                 emitter and new baselines are taken. This exists solely to
+                    //                 align with the old emitter.
+                    const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
+                    write(" ");
+                    writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                    setNodeEmitFlags(node.initializer, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(node.initializer));
+                    emitForBinding(node.initializer);
+                    write(";");
+                    emitEnd(node.initializer);
+                    setNodeEmitFlags(node.condition, NodeEmitFlags.NoTrailingSourceMap | getNodeEmitFlags(node.condition));
+                    write(" ");
+                    emitExpression(node.condition);
+                    write(";");
+                    emitEnd(node.condition);
+                    write(" ");
+                    emitExpression(node.incrementor);
+                    write(")");
+                    emitEmbeddedStatement(node.statement);
+                    return;
+                }
+
                 const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
-                writeToken(SyntaxKind.OpenParenToken, openParenPos);
+                writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);
                 emitForBinding(node.initializer);
                 write(";");
                 emitExpressionWithPrefix(" ", node.condition);
@@ -1435,7 +1468,7 @@ const _super = (function (geti, seti) {
             }
 
             function emitReturnStatement(node: ReturnStatement) {
-                writeToken(SyntaxKind.ReturnKeyword, node.pos, node, shouldSkipSourceMapForToken);
+                writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
                 emitExpressionWithPrefix(" ", node.expression);
                 write(";");
             }
@@ -1523,7 +1556,7 @@ const _super = (function (geti, seti) {
                         const savedTempFlags = tempFlags;
                         tempFlags = 0;
                         emitSignatureHead(node);
-                        emitBlockFunctionBodyAndEndLexicalEnvironment(node, body);
+                        emitBlockFunctionBody(node, body);
                         if (indentedFlag) {
                             decreaseIndent();
                         }
@@ -1587,7 +1620,7 @@ const _super = (function (geti, seti) {
                 return true;
             }
 
-            function emitBlockFunctionBodyAndEndLexicalEnvironment(parentNode: Node, body: Block) {
+            function emitBlockFunctionBody(parentNode: Node, body: Block) {
                 // TODO(rbuckton): This should be removed once source maps are aligned with the old
                 //                 emitter and new baselines are taken. This exists solely to
                 //                 align with the old emitter.
@@ -1617,7 +1650,7 @@ const _super = (function (geti, seti) {
 
                 emitTrailingDetachedComments(body.statements, body, shouldSkipTrailingCommentsForNode);
                 decreaseIndent();
-                writeToken(SyntaxKind.CloseBraceToken, body.statements.end);
+                writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
             }
 
             function emitClassDeclaration(node: ClassDeclaration) {
@@ -1963,7 +1996,7 @@ const _super = (function (geti, seti) {
                 // "comment1" is not considered to be leading comment for node.initializer
                 // but rather a trailing comment on the previous node.
                 if (!shouldSkipLeadingCommentsForNode(node.initializer)) {
-                    emitLeadingComments(node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)));
+                    emitLeadingComments(/*range*/ node.initializer, getTrailingComments(collapseRangeToStart(node.initializer)), /*contextNode*/ node.initializer, getCommentRange);
                 }
                 emitExpression(node.initializer);
             }
@@ -2327,7 +2360,7 @@ const _super = (function (geti, seti) {
                         }
 
                         if (shouldEmitInterveningComments) {
-                            emitLeadingComments(child, getTrailingCommentsOfPosition(child.pos));
+                            emitLeadingComments(/*node*/ child, getTrailingCommentsOfPosition(child.pos), /*contextNode*/ child, getCommentRange);
                         }
                         else {
                             shouldEmitInterveningComments = true;
@@ -2381,18 +2414,18 @@ const _super = (function (geti, seti) {
                 }
             }
 
-            function writeToken(token: SyntaxKind, tokenStartPos: number): number;
-            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode: Node, shouldIgnoreSourceMapForTokenCallback: (contextNode: Node) => boolean): number;
-            function writeToken(token: SyntaxKind, tokenStartPos: number, contextNode?: Node, shouldIgnoreSourceMapForTokenCallback?: (contextNode: Node) => boolean) {
-                tokenStartPos = skipTrivia(currentText, tokenStartPos);
-                emitPos(tokenStartPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
+            function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
+                const tokenStartPos = emitTokenStart(token, pos, contextNode, shouldSkipLeadingSourceMapForToken, getTokenSourceMapRange);
                 const tokenEndPos = writeTokenText(token, tokenStartPos);
-                emitPos(tokenEndPos, contextNode, shouldIgnoreSourceMapForTokenCallback);
-                return tokenEndPos;
+                return emitTokenEnd(token, tokenEndPos, contextNode, shouldSkipTrailingSourceMapForToken, getTokenSourceMapRange);
             }
 
-            function shouldSkipSourceMapForToken(contextNode: Node) {
-                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenSourceMaps) !== 0;
+            function shouldSkipLeadingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenLeadingSourceMaps) !== 0;
+            }
+
+            function shouldSkipTrailingSourceMapForToken(contextNode: Node) {
+                return (getNodeEmitFlags(contextNode) & NodeEmitFlags.NoTokenTrailingSourceMaps) !== 0;
             }
 
             function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -2403,9 +2436,9 @@ const _super = (function (geti, seti) {
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    emitStart(node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitStart(/*range*/ node, /*contextNode*/ node, shouldSkipLeadingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                     writeTokenText(node.kind);
-                    emitEnd(node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren);
+                    emitEnd(/*range*/ node, /*contextNode*/ node, shouldSkipTrailingSourceMapForNode, shouldSkipSourceMapForChildren, getSourceMapRange);
                 }
             }
 

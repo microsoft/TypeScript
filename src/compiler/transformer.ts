@@ -54,7 +54,7 @@ namespace ts {
      * @param transforms An array of Transformers.
      */
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]) {
-        const nodeEmitFlags: NodeEmitFlags[] = [];
+        const nodeEmitOptions: NodeEmitOptions[] = [];
         const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
@@ -72,6 +72,12 @@ namespace ts {
             getEmitHost: () => host,
             getNodeEmitFlags,
             setNodeEmitFlags,
+            getSourceMapRange,
+            setSourceMapRange,
+            getTokenSourceMapRange,
+            setTokenSourceMapRange,
+            getCommentRange,
+            setCommentRange,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             startLexicalEnvironment,
@@ -104,10 +110,16 @@ namespace ts {
             return transformation(sourceFile);
         }
 
+        /**
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
+         */
         function enableSubstitution(kind: SyntaxKind) {
             enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.Substitution;
         }
 
+        /**
+         * Determines whether expression substitutions are enabled for the provided node.
+         */
         function isSubstitutionEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0;
         }
@@ -123,10 +135,17 @@ namespace ts {
             return node;
         }
 
+        /**
+         * Enables before/after emit notifications in the pretty printer for the provided SyntaxKind.
+         */
         function enableEmitNotification(kind: SyntaxKind) {
             enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
         }
 
+        /**
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
+         */
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
                 || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
@@ -151,14 +170,34 @@ namespace ts {
             emit(node);
         }
 
+        function getEmitOptions(node: Node, create?: boolean) {
+            let options = isSourceTreeNode(node)
+                ? nodeEmitOptions[getNodeId(node)]
+                : node.emitOptions;
+            if (!options && create) {
+                options = { };
+                if (isSourceTreeNode(node)) {
+                    nodeEmitOptions[getNodeId(node)] = options;
+                }
+                else {
+                    node.emitOptions = options;
+                }
+            }
+            return options;
+        }
+
         /**
          * Gets flags that control emit behavior of a node.
          */
         function getNodeEmitFlags(node: Node) {
             while (node) {
-                const nodeId = getNodeId(node);
-                if (nodeEmitFlags[nodeId] !== undefined) {
-                    return nodeEmitFlags[nodeId];
+                const options = getEmitOptions(node, /*create*/ false);
+                if (options && options.flags !== undefined) {
+                    if (options.flags & NodeEmitFlags.Merge) {
+                        options.flags = (options.flags | getNodeEmitFlags(node.original)) & ~NodeEmitFlags.Merge;
+                    }
+
+                    return options.flags;
                 }
 
                 node = node.original;
@@ -171,7 +210,103 @@ namespace ts {
          * Sets flags that control emit behavior of a node.
          */
         function setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags) {
-            nodeEmitFlags[getNodeId(node)] = flags;
+            const options = getEmitOptions(node, /*create*/ true);
+            if (flags & NodeEmitFlags.Merge) {
+                flags = options.flags | (flags & ~NodeEmitFlags.Merge);
+            }
+
+            options.flags = flags;
+            return node;
+        }
+
+        /**
+         * Gets a custom text range to use when emitting source maps.
+         */
+        function getSourceMapRange(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.sourceMapRange !== undefined) {
+                    return options.sourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
+        }
+
+        /**
+         * Sets a custom text range to use when emitting source maps.
+         */
+        function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
+            getEmitOptions(node, /*create*/ true).sourceMapRange = range;
+            return node;
+        }
+
+        function getTokenSourceMapRanges(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current);
+                if (options && options.tokenSourceMapRange) {
+                    return options.tokenSourceMapRange;
+                }
+
+                current = current.original;
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
+            const ranges = getTokenSourceMapRanges(node);
+            if (ranges) {
+                return ranges[token];
+            }
+
+            return undefined;
+        }
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
+            const options = getEmitOptions(node, /*create*/ true);
+            if (!options.tokenSourceMapRange) {
+                const existingRanges = getTokenSourceMapRanges(node);
+                const ranges = existingRanges ? clone(existingRanges) : { };
+                options.tokenSourceMapRange = ranges;
+            }
+
+            options.tokenSourceMapRange[token] = range;
+            return node;
+        }
+
+        /**
+         * Gets a custom text range to use when emitting comments.
+         */
+        function getCommentRange(node: Node) {
+            let current = node;
+            while (current) {
+                const options = getEmitOptions(current, /*create*/ false);
+                if (options && options.commentRange !== undefined) {
+                    return options.commentRange;
+                }
+
+                current = current.original;
+            }
+
+            return node;
+        }
+
+        /**
+         * Sets a custom text range to use when emitting comments.
+         */
+        function setCommentRange<T extends Node>(node: T, range: TextRange) {
+            getEmitOptions(node, /*create*/ true).commentRange = range;
             return node;
         }
 

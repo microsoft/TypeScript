@@ -145,6 +145,11 @@ namespace ts {
             hoistVariableDeclaration,
             getNodeEmitFlags,
             setNodeEmitFlags,
+            getCommentRange,
+            setCommentRange,
+            getSourceMapRange,
+            setSourceMapRange,
+            setTokenSourceMapRange,
         } = context;
 
         const resolver = context.getEmitResolver();
@@ -309,7 +314,7 @@ namespace ts {
                     return visitFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.VariableDeclaration:
-                    return visitVariableDeclaration(<VariableDeclaration>node);
+                    return visitVariableDeclaration(<VariableDeclaration>node, /*offset*/ undefined);
 
                 case SyntaxKind.Identifier:
                     return visitIdentifier(<Identifier>node);
@@ -385,7 +390,7 @@ namespace ts {
                     return visitSourceFileNode(<SourceFile>node);
 
                 case SyntaxKind.VariableStatement:
-                    return visitEachChild(node, visitor, context);
+                    return visitVariableStatement(<VariableStatement>node);
 
                 default:
                     Debug.failBadSyntaxKind(node);
@@ -544,18 +549,20 @@ namespace ts {
             //          return C;
             //      }());
 
-            return startOnNewLine(
-                createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList([
-                        createVariableDeclaration(
-                            getDeclarationName(node, /*allowComments*/ true),
-                            transformClassLikeDeclarationToExpression(node)
-                        )
-                    ]),
-                    node
-                )
+            const statement = createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        getDeclarationName(node, /*allowComments*/ true),
+                        transformClassLikeDeclarationToExpression(node)
+                    )
+                ]),
+                /*location*/ node
             );
+
+            setOriginalNode(statement, node);
+            startOnNewLine(statement);
+            return statement;
         }
 
         /**
@@ -832,18 +839,24 @@ namespace ts {
             else if (isBindingPattern(node.name)) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
-                return createParameter(
-                    getGeneratedNameForNode(node),
-                    /*initializer*/ undefined,
-                    /*location*/ node
+                return setOriginalNode(
+                    createParameter(
+                        getGeneratedNameForNode(node),
+                        /*initializer*/ undefined,
+                        /*location*/ node
+                    ),
+                    /*original*/ node
                 );
             }
             else if (node.initializer) {
                 // Initializers are elided
-                return createParameter(
-                    node.name,
-                    /*initializer*/ undefined,
-                    /*location*/ node
+                return setOriginalNode(
+                    createParameter(
+                        node.name,
+                        /*initializer*/ undefined,
+                        /*location*/ node
+                    ),
+                    /*original*/ node
                 );
             }
             else {
@@ -936,28 +949,30 @@ namespace ts {
          * @param initializer The initializer for the parameter.
          */
         function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
-            statements.push(
-                createIf(
-                    createStrictEquality(
-                        getSynthesizedClone(name),
-                        createVoidZero()
-                    ),
-                    setNodeEmitFlags(
-                        createBlock([
-                            createStatement(
-                                createAssignment(
-                                    getSynthesizedClone(name),
-                                    visitNode(initializer, visitor, isExpression)
-                                )
+            const statement = createIf(
+                createStrictEquality(
+                    getSynthesizedClone(name),
+                    createVoidZero()
+                ),
+                setNodeEmitFlags(
+                    createBlock([
+                        createStatement(
+                            createAssignment(
+                                setNodeEmitFlags(getMutableClone(name), NodeEmitFlags.NoSourceMap),
+                                setNodeEmitFlags(visitNode(initializer, visitor, isExpression), NodeEmitFlags.NoSourceMap | NodeEmitFlags.Merge),
+                                /*location*/ parameter
                             )
-                        ]),
-                        NodeEmitFlags.SingleLine
-                    ),
-                    /*elseStatement*/ undefined,
-                    /*location*/ undefined,
-                    { startOnNewLine: true }
-                )
+                        )
+                    ], /*location*/ parameter),
+                    NodeEmitFlags.SingleLine | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTokenSourceMaps
+                ),
+                /*elseStatement*/ undefined,
+                /*location*/ parameter,
+                { startOnNewLine: true }
             );
+
+            setNodeEmitFlags(statement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap);
+            statements.push(statement);
         }
 
         /**
@@ -1013,33 +1028,35 @@ namespace ts {
             // for (var _i = restIndex; _i < arguments.length; _i++) {
             //   param[_i - restIndex] = arguments[_i];
             // }
-            statements.push(
-                createFor(
-                    createVariableDeclarationList([
-                        createVariableDeclaration(temp, createLiteral(restIndex))
-                    ], /*location*/ parameter),
-                    createLessThan(
-                        temp,
-                        createPropertyAccess(createIdentifier("arguments"), "length"),
-                        /*location*/ parameter
-                    ),
-                    createPostfixIncrement(temp, /*location*/ parameter),
-                    createBlock([
-                        startOnNewLine(
-                            createStatement(
-                                createAssignment(
-                                    createElementAccess(
-                                        expressionName,
-                                        createSubtract(temp, createLiteral(restIndex))
-                                    ),
-                                    createElementAccess(createIdentifier("arguments"), temp)
+            const forStatement = createFor(
+                createVariableDeclarationList([
+                    createVariableDeclaration(temp, createLiteral(restIndex))
+                ], /*location*/ parameter),
+                createLessThan(
+                    temp,
+                    createPropertyAccess(createIdentifier("arguments"), "length"),
+                    /*location*/ parameter
+                ),
+                createPostfixIncrement(temp, /*location*/ parameter),
+                createBlock([
+                    startOnNewLine(
+                        createStatement(
+                            createAssignment(
+                                createElementAccess(
+                                    expressionName,
+                                    createSubtract(temp, createLiteral(restIndex))
                                 ),
-                                /*location*/ parameter
-                            )
+                                createElementAccess(createIdentifier("arguments"), temp)
+                            ),
+                            /*location*/ parameter
                         )
-                    ])
-                )
+                    )
+                ])
             );
+
+            setNodeEmitFlags(forStatement, NodeEmitFlags.SourceMapAdjustRestParameterLoop);
+            startOnNewLine(forStatement);
+            statements.push(forStatement);
         }
 
         /**
@@ -1051,17 +1068,19 @@ namespace ts {
         function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
             if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
                 enableSubstitutionsForCapturedThis();
-                statements.push(
-                    createVariableStatement(
-                        /*modifiers*/ undefined,
-                        createVariableDeclarationList([
-                            createVariableDeclaration(
-                                "_this",
-                                createThis()
-                            )
-                        ])
-                    )
+                const captureThisStatement = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            "_this",
+                            createThis()
+                        )
+                    ])
                 );
+
+                setNodeEmitFlags(captureThisStatement, NodeEmitFlags.NoComments);
+                setSourceMapRange(captureThisStatement, node);
+                statements.push(captureThisStatement);
             }
         }
 
@@ -1119,6 +1138,13 @@ namespace ts {
          * @param member The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration) {
+            const commentRange = getCommentRange(member);
+            const sourceMapRange = getSourceMapRange(member);
+
+            const func = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined);
+            setNodeEmitFlags(func, NodeEmitFlags.NoComments);
+            setSourceMapRange(func, sourceMapRange);
+
             const statement = createStatement(
                 createAssignment(
                     createMemberAccessForPropertyName(
@@ -1126,11 +1152,13 @@ namespace ts {
                         visitNode(member.name, visitor, isPropertyName),
                         /*location*/ member.name
                     ),
-                    transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined),
-                    /*location*/ moveRangeEnd(member, -1)
+                    func
                 ),
                 /*location*/ member
             );
+
+            setOriginalNode(statement, member);
+            setCommentRange(statement, commentRange);
 
             // The location for the statement is used to emit comments only.
             // No source map should be emitted for this statement to align with the
@@ -1148,7 +1176,7 @@ namespace ts {
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations): Statement {
             const statement = createStatement(
                 transformAccessorsToExpression(receiver, accessors),
-                /*location*/ accessors.firstAccessor
+                /*location*/ getSourceMapRange(accessors.firstAccessor)
             );
 
             // The location for the statement is used to emit source maps only.
@@ -1167,43 +1195,43 @@ namespace ts {
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations): Expression {
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
-            const target = getSynthesizedClone(receiver);
-            target.pos = firstAccessor.name.pos;
+            const target = getMutableClone(receiver);
+            setNodeEmitFlags(target, NodeEmitFlags.NoComments | NodeEmitFlags.NoTrailingSourceMap);
+            setSourceMapRange(target, firstAccessor.name);
 
             const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
-            propertyName.end = firstAccessor.name.end;
+            setNodeEmitFlags(propertyName, NodeEmitFlags.NoComments | NodeEmitFlags.NoLeadingSourceMap);
+            setSourceMapRange(propertyName, firstAccessor.name);
 
-            let getAccessorExpression: FunctionExpression;
+            const properties: ObjectLiteralElement[] = [];
             if (getAccessor) {
-                getAccessorExpression = transformFunctionLikeToExpression(getAccessor, /*location*/ getAccessor, /*name*/ undefined);
-                setNodeEmitFlags(getAccessorExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(getAccessorExpression));
+                const getterFunction = transformFunctionLikeToExpression(getAccessor, /*location*/ undefined, /*name*/ undefined);
+                setSourceMapRange(getterFunction, getSourceMapRange(getAccessor));
+                const getter = createPropertyAssignment("get", getterFunction);
+                setCommentRange(getter, getCommentRange(getAccessor));
+                properties.push(getter);
             }
 
-            let setAccessorExpression: FunctionExpression;
             if (setAccessor) {
-                setAccessorExpression = transformFunctionLikeToExpression(setAccessor, /*location*/ setAccessor, /*name*/ undefined);
-                setNodeEmitFlags(setAccessorExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(setAccessorExpression));
+                const setterFunction = transformFunctionLikeToExpression(setAccessor, /*location*/ undefined, /*name*/ undefined);
+                setSourceMapRange(setterFunction, getSourceMapRange(setAccessor));
+                const setter = createPropertyAssignment("set", setterFunction);
+                setCommentRange(setter, getCommentRange(setAccessor));
+                properties.push(setter);
             }
 
-            return setNodeEmitFlags(
-                createObjectDefineProperty(
+            properties.push(
+                createPropertyAssignment("enumerable", createLiteral(true)),
+                createPropertyAssignment("configurable", createLiteral(true))
+            );
+
+            return createCall(
+                createPropertyAccess(createIdentifier("Object"), "defineProperty"),
+                [
                     target,
                     propertyName,
-                    /*descriptor*/ {
-                        get: getAccessorExpression,
-                        set: setAccessorExpression,
-                        enumerable: true,
-                        configurable: true
-                    },
-                    /*preferNewLine*/ true,
-                    /*location*/ undefined,
-                    /*descriptorLocations*/ {
-                        get: { location: getAccessor, emitFlags: NodeEmitFlags.NoSourceMap },
-                        set: { location: setAccessor, emitFlags: NodeEmitFlags.NoSourceMap }
-                    },
-                    context
-                ),
-                NodeEmitFlags.NoComments
+                    createObjectLiteral(properties, /*location*/ undefined, /*multiLine*/ true)
+                ]
             );
         }
 
@@ -1288,6 +1316,7 @@ namespace ts {
             let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
             let singleLine = false; // indicates whether the block *may* be emitted as a single line
             let statementsLocation: TextRange;
+            let closeBraceLocation: TextRange;
 
             const statements: Statement[] = [];
             const body = node.body;
@@ -1338,9 +1367,13 @@ namespace ts {
                 }
 
                 const expression = visitNode(body, visitor, isExpression);
-                if (expression) {
-                    statements.push(createReturn(expression, /*location*/ statementsLocation));
-                }
+                const returnStatement = createReturn(expression, /*location*/ body);
+                setNodeEmitFlags(returnStatement, NodeEmitFlags.NoTokenSourceMaps | NodeEmitFlags.NoTrailingSourceMap | NodeEmitFlags.NoTrailingComments);
+                statements.push(returnStatement);
+
+                // To align with the source map emit for the old emitter, we set a custom
+                // source map location for the close brace.
+                closeBraceLocation = body;
             }
 
             const lexicalEnvironment = endLexicalEnvironment();
@@ -1354,6 +1387,10 @@ namespace ts {
             const block = createBlock(createNodeArray(statements, statementsLocation), node.body, multiLine);
             if (!multiLine && singleLine) {
                 setNodeEmitFlags(block, NodeEmitFlags.SingleLine);
+            }
+
+            if (closeBraceLocation) {
+                setTokenSourceMapRange(block, SyntaxKind.CloseBraceToken, closeBraceLocation);
             }
 
             setOriginalNode(block, node.body);
@@ -1450,6 +1487,7 @@ namespace ts {
                     return undefined;
                 }
             }
+
             return visitEachChild(node, visitor, context);
         }
 
@@ -1459,17 +1497,28 @@ namespace ts {
          * @param node A VariableDeclarationList node.
          */
         function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-            // If we are here it is because the list is defined as `let` or `const`.
-            Debug.assert((node.flags & NodeFlags.BlockScoped) !== 0);
+            if (node.flags & NodeFlags.BlockScoped) {
+                enableSubstitutionsForBlockScopedBindings();
+            }
 
-            enableSubstitutionsForBlockScopedBindings();
-            return setOriginalNode(
-                createVariableDeclarationList(
-                    flatten(map(node.declarations, visitVariableDeclarationInLetDeclarationList)),
-                    /*location*/ node
-                ),
-                node
-            );
+            const declarations = flatten(map(node.declarations, node.flags & NodeFlags.Let
+                ? visitVariableDeclarationInLetDeclarationList
+                : visitVariableDeclaration));
+
+            const declarationList = createVariableDeclarationList(declarations, /*location*/ node);
+            setOriginalNode(declarationList, node);
+
+            if (node.transformFlags & TransformFlags.ContainsBindingPattern
+                && (isBindingPattern(node.declarations[0].name)
+                    || isBindingPattern(lastOrUndefined(node.declarations).name))) {
+                // If the first or last declaration is a binding pattern, we need to modify
+                // the source map range for the declaration list.
+                const firstDeclaration = firstOrUndefined(declarations);
+                const lastDeclaration = lastOrUndefined(declarations);
+                setSourceMapRange(node, createRange(firstDeclaration.pos, lastDeclaration.end));
+            }
+
+            return declarationList;
         }
 
         /**
@@ -1546,13 +1595,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration) {
+        function visitVariableDeclarationInLetDeclarationList(node: VariableDeclaration, offset: number) {
             // For binding pattern names that lack initializers there is no point to emit
             // explicit initializer since downlevel codegen for destructuring will fail
             // in the absence of initializer so all binding elements will say uninitialized
             const name = node.name;
             if (isBindingPattern(name)) {
-                return visitVariableDeclaration(node);
+                return visitVariableDeclaration(node, offset);
             }
 
             if (!node.initializer && shouldEmitExplicitInitializerForLetDeclaration(node)) {
@@ -1569,11 +1618,13 @@ namespace ts {
          *
          * @param node A VariableDeclaration node.
          */
-        function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
+        function visitVariableDeclaration(node: VariableDeclaration, offset: number): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern.
-            Debug.assert(isBindingPattern(node.name));
+            if (isBindingPattern(node.name)) {
+                return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
+            }
 
-            return flattenVariableDestructuring(context, node, /*value*/ undefined, visitor);
+            return visitEachChild(node, visitor, context);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
@@ -1663,25 +1714,34 @@ namespace ts {
             // Initialize LHS
             // var v = _a[_i];
             if (isVariableDeclarationList(initializer)) {
-                const firstDeclaration = firstOrUndefined(initializer.declarations);
                 if (initializer.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
-                if (firstDeclaration && isBindingPattern(firstDeclaration.name)) {
+
+                const firstOriginalDeclaration = firstOrUndefined(initializer.declarations);
+                if (firstOriginalDeclaration && isBindingPattern(firstOriginalDeclaration.name)) {
                     // This works whether the declaration is a var, let, or const.
                     // It will use rhsIterationValue _a[_i] as the initializer.
+                    const declarations = flattenVariableDestructuring(
+                        context,
+                        firstOriginalDeclaration,
+                        createElementAccess(rhsReference, counter),
+                        visitor
+                    );
+
+                    const declarationList = createVariableDeclarationList(declarations, /*location*/ initializer);
+                    setOriginalNode(declarationList, initializer);
+
+                    // Adjust the source map range for the first declaration to align with the old
+                    // emitter.
+                    const firstDeclaration = declarations[0];
+                    const lastDeclaration = lastOrUndefined(declarations);
+                    setSourceMapRange(declarationList, createRange(firstDeclaration.pos, lastDeclaration.end));
+
                     statements.push(
                         createVariableStatement(
                             /*modifiers*/ undefined,
-                            createVariableDeclarationList(
-                                flattenVariableDestructuring(
-                                    context,
-                                    firstDeclaration,
-                                    createElementAccess(rhsReference, counter),
-                                    visitor
-                                )
-                            ),
-                            /*location*/ moveRangeEnd(initializer, -1)
+                            declarationList
                         )
                     );
                 }
@@ -1693,7 +1753,7 @@ namespace ts {
                             /*modifiers*/ undefined,
                             createVariableDeclarationList([
                                 createVariableDeclaration(
-                                    firstDeclaration ? firstDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
+                                    firstOriginalDeclaration ? firstOriginalDeclaration.name : createTempVariable(/*recordTempVariable*/ undefined),
                                     createElementAccess(rhsReference, counter)
                                 )
                             ], /*location*/ moveRangePos(initializer, -1)),
@@ -1726,13 +1786,17 @@ namespace ts {
                 }
             }
 
+            let bodyLocation: TextRange;
+            let statementsLocation: TextRange;
             if (convertedLoopBodyStatements) {
                 addRange(statements, convertedLoopBodyStatements);
             }
             else {
                 const statement = visitNode(node.statement, visitor, isStatement);
                 if (isBlock(statement)) {
-                    addRange(statements, (<Block>statement).statements);
+                    addRange(statements, statement.statements);
+                    bodyLocation = statement;
+                    statementsLocation = statement.statements;
                 }
                 else {
                     statements.push(statement);
@@ -1742,25 +1806,33 @@ namespace ts {
             // The old emitter does not emit source maps for the expression
             setNodeEmitFlags(expression, NodeEmitFlags.NoSourceMap | getNodeEmitFlags(expression));
 
-            return createFor(
-                createVariableDeclarationList(
-                    [
-                        createVariableDeclaration(counter, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
-                        createVariableDeclaration(rhsReference, expression, /*location*/ node.expression)
-                    ],
-                    /*location*/ node.expression
-                ),
+            // The old emitter does not emit source maps for the block.
+            // We add the location to preserve comments.
+            const body = createBlock(
+                createNodeArray(statements, /*location*/ statementsLocation),
+                /*location*/ bodyLocation
+            );
+
+            setNodeEmitFlags(body, NodeEmitFlags.NoSourceMap | NodeEmitFlags.NoTokenSourceMaps);
+
+            const forStatement = createFor(
+                createVariableDeclarationList([
+                    createVariableDeclaration(counter, createLiteral(0), /*location*/ moveRangePos(node.expression, -1)),
+                    createVariableDeclaration(rhsReference, expression, /*location*/ node.expression)
+                ], /*location*/ node.expression),
                 createLessThan(
                     counter,
                     createPropertyAccess(rhsReference, "length"),
                     /*location*/ node.expression
                 ),
                 createPostfixIncrement(counter, /*location*/ node.expression),
-                createBlock(
-                    statements
-                ),
+                body,
                 /*location*/ node
             );
+
+            // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
+            setNodeEmitFlags(forStatement, NodeEmitFlags.NoTokenTrailingSourceMaps);
+            return forStatement;
         }
 
         /**
@@ -2293,7 +2365,7 @@ namespace ts {
             // Methods on classes are handled in visitClassDeclaration/visitClassExpression.
             // Methods with computed property names are handled in visitObjectLiteralExpression.
             Debug.assert(!isComputedPropertyName(node.name));
-            const functionExpression = transformFunctionLikeToExpression(node, /*location*/ node, /*name*/ undefined);
+            const functionExpression = transformFunctionLikeToExpression(node, /*location*/ moveRangePos(node, -1), /*name*/ undefined);
             setNodeEmitFlags(functionExpression, NodeEmitFlags.NoLeadingComments | getNodeEmitFlags(functionExpression));
             return createPropertyAssignment(
                 node.name,

@@ -469,6 +469,7 @@ namespace ts {
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ emitOptions?: NodeEmitOptions;  // Options used to control node emit (used by transforms, should never be set directly on a source tree node)
     }
 
     export interface NodeArray<T extends Node> extends Array<T>, TextRange {
@@ -2893,6 +2894,7 @@ namespace ts {
         ContainsSpreadElementExpression = 1 << 16,
         ContainsComputedPropertyName = 1 << 17,
         ContainsBlockScopedBinding = 1 << 18,
+        ContainsBindingPattern = 1 << 19,
 
         HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
@@ -2916,6 +2918,8 @@ namespace ts {
         TypeExcludes = ~ContainsTypeScript,
         ObjectLiteralExcludes = ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
         ArrayLiteralOrCallOrNewExcludes = ContainsSpreadElementExpression,
+        VariableDeclarationListExcludes = ContainsBindingPattern,
+        ParameterExcludes = ContainsBindingPattern,
     }
 
     /* @internal */
@@ -2934,22 +2938,47 @@ namespace ts {
         NoTrailingSourceMap = 1 << 11,           // Do not emit a trailing source map location for this node.
         NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
         NoNestedSourceMaps = 1 << 12,            // Do not emit source map locations for children of this node.
-        NoTokenSourceMaps = 1 << 13,             // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 14,             // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 15,            // Do not emit trailing comments for this node.
+        NoTokenLeadingSourceMaps = 1 << 13,      // Do not emit leading source map location for token nodes.
+        NoTokenTrailingSourceMaps = 1 << 14,     // Do not emit trailing source map location for token nodes.
+        NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
+        NoLeadingComments = 1 << 15,             // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 16,            // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-        ExportName = 1 << 16,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 17,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 18,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        ExportName = 1 << 17,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 18,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        Indented = 1 << 19,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        Merge = 1 << 20,                         // When getting emit options, merge with existing emit options.
 
         // SourceMap Specialization.
-        // TODO(rbuckton): This should be removed once source maps are aligned with the old
+        // TODO(rbuckton): These should be removed once source maps are aligned with the old
         //                 emitter and new baselines are taken. This exists solely to
         //                 align with the old emitter.
-        SourceMapEmitOpenBraceAsToken = 1 << 19,
+        SourceMapEmitOpenBraceAsToken = 1 << 21,        // Emits the open brace of a block function body as a source mapped token.
+        SourceMapAdjustRestParameterLoop = 1 << 22,     // Emits adjusted source map positions for a ForStatement generated when transforming a rest parameter for ES5/3.
+    }
+
+    /* @internal */
+    export interface NodeEmitOptions {
+        /**
+         * Specifies a custom range to use when emitting source maps.
+         */
+        sourceMapRange?: TextRange;
+        /**
+         * Specifies a custom range to use when emitting tokens of a node.
+         */
+        tokenSourceMapRange?: Map<TextRange>;
+        /**
+         * Specifies a custom range to use when emitting comments.
+         */
+        commentRange?: TextRange;
+        /**
+         * Specifies flags to use to customize emit.
+         */
+        flags?: NodeEmitFlags;
     }
 
     /** Additional context provided to `visitEachChild` */
+    /* @internal */
     export interface LexicalEnvironment {
         /** Starts a new lexical environment. */
         startLexicalEnvironment(): void;
@@ -2963,20 +2992,64 @@ namespace ts {
         getCompilerOptions(): CompilerOptions;
         getEmitResolver(): EmitResolver;
         getEmitHost(): EmitHost;
+
+        /**
+         * Gets flags used to customize later transformations or emit.
+         */
         getNodeEmitFlags(node: Node): NodeEmitFlags;
+
+        /**
+         * Sets flags used to customize later transformations or emit.
+         */
         setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
+
+        /**
+         * Gets the TextRange to use for source maps for the node.
+         */
+        getSourceMapRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for the node.
+         */
+        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for source maps for a token of a node.
+         */
+        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
+
+        /**
+         * Sets the TextRange to use for source maps for a token of a node.
+         */
+        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
+
+        /**
+         * Gets the TextRange to use for comments for the node.
+         */
+        getCommentRange(node: Node): TextRange;
+
+        /**
+         * Sets the TextRange to use for comments for the node.
+         */
+        setCommentRange<T extends Node>(node: T, range: TextRange): T;
+
+        /**
+         * Hoists a function declaration to the containing scope.
+         */
         hoistFunctionDeclaration(node: FunctionDeclaration): void;
+
+        /**
+         * Hoists a variable declaration to the containing scope.
+         */
         hoistVariableDeclaration(node: Identifier): void;
 
         /**
-         * Enables expression substitutions in the pretty printer for
-         * the provided SyntaxKind.
+         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
          */
         enableSubstitution(kind: SyntaxKind): void;
 
         /**
-         * Determines whether expression substitutions are enabled for the
-         * provided node.
+         * Determines whether expression substitutions are enabled for the provided node.
          */
         isSubstitutionEnabled(node: Node): boolean;
 
@@ -2987,14 +3060,14 @@ namespace ts {
         onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
 
         /**
-         * Enables before/after emit notifications in the pretty printer for
-         * the provided SyntaxKind.
+         * Enables before/after emit notifications in the pretty printer for the provided
+         * SyntaxKind.
          */
         enableEmitNotification(kind: SyntaxKind): void;
 
         /**
-         * Determines whether before/after emit notifications should be raised
-         * in the pretty printer when it emits a node.
+         * Determines whether before/after emit notifications should be raised in the pretty
+         * printer when it emits a node.
          */
         isEmitNotificationEnabled(node: Node): boolean;
 

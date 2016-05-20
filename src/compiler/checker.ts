@@ -16854,6 +16854,11 @@ namespace ts {
 
         function isValueAliasDeclaration(node: Node): boolean {
             node = getSourceTreeNode(node);
+            if (node === undefined) {
+                // A synthesized node comes from an emit transformation and is always a value.
+                return true;
+            }
+
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ImportClause:

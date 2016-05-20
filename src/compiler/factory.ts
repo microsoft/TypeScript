@@ -8,7 +8,7 @@ namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
-    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): Node {
+    function createNode(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags, emitOptions?: NodeEmitOptions): Node {
         const ConstructorForKind = kind === SyntaxKind.SourceFile
             ? (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))
             : (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()));
@@ -19,6 +19,10 @@ namespace ts {
 
         if (flags) {
             node.flags = flags;
+        }
+
+        if (emitOptions) {
+            node.emitOptions = emitOptions;
         }
 
         return node;
@@ -64,11 +68,11 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node with no source map location.
      */
-    export function getSynthesizedClone<T extends Node>(node: T): T {
+    export function getSynthesizedClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
         // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
         // the original node. We also need to exclude specific properties and only include own-
         // properties (to skip members already defined on the shared prototype).
-        const clone = <T>createNode(node.kind, /*location*/ undefined);
+        const clone = <T>createNode(node.kind, /*location*/ undefined, /*flags*/ undefined, emitOptions);
         clone.flags = node.flags;
         clone.original = node;
 
@@ -86,8 +90,8 @@ namespace ts {
     /**
      * Creates a shallow, memberwise clone of a node for mutation.
      */
-    export function getMutableClone<T extends Node>(node: T): T {
-        const clone = getSynthesizedClone(node);
+    export function getMutableClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
+        const clone = getSynthesizedClone(node, emitOptions);
         clone.pos = node.pos;
         clone.end = node.end;
         clone.parent = node.parent;
@@ -95,20 +99,10 @@ namespace ts {
     }
 
     /**
-     * Creates a shallow, memberwise clone of a node at the specified source map location.
-     */
-    export function getRelocatedClone<T extends Node>(node: T, location: TextRange): T {
-        const clone = getSynthesizedClone(node);
-        clone.pos = location.pos;
-        clone.end = location.end;
-        return clone;
-    }
-
-    /**
      * Gets a clone of a node with a unique node ID.
      */
-    export function getUniqueClone<T extends Node>(node: T): T {
-        const clone = getMutableClone(node);
+    export function getUniqueClone<T extends Node>(node: T, emitOptions?: NodeEmitOptions): T {
+        const clone = getMutableClone(node, emitOptions);
         clone.id = undefined;
         getNodeId(clone);
         return clone;
@@ -116,26 +110,26 @@ namespace ts {
 
     // Literals
 
-    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange): StringLiteral;
-    export function createLiteral(value: string, location?: TextRange): StringLiteral;
-    export function createLiteral(value: number, location?: TextRange): LiteralExpression;
-    export function createLiteral(value: string | number | boolean, location?: TextRange): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange): PrimaryExpression {
+    export function createLiteral(textSource: StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
+    export function createLiteral(value: string, location?: TextRange, emitOptions?: NodeEmitOptions): StringLiteral;
+    export function createLiteral(value: number, location?: TextRange, emitOptions?: NodeEmitOptions): LiteralExpression;
+    export function createLiteral(value: string | number | boolean, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression;
+    export function createLiteral(value: string | number | boolean | StringLiteral | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions): PrimaryExpression {
         if (typeof value === "number") {
-            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location);
+            const node = <LiteralExpression>createNode(SyntaxKind.NumericLiteral, location, /*flags*/ undefined, emitOptions);
             node.text = value.toString();
             return node;
         }
         else if (typeof value === "boolean") {
-            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location);
+            return <PrimaryExpression>createNode(value ? SyntaxKind.TrueKeyword : SyntaxKind.FalseKeyword, location, /*flags*/ undefined, emitOptions);
         }
         else if (typeof value === "string") {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined, emitOptions);
             node.text = value;
             return node;
         }
         else {
-            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location);
+            const node = <StringLiteral>createNode(SyntaxKind.StringLiteral, location, /*flags*/ undefined, emitOptions);
             node.textSourceNode = value;
             node.text = value.text;
             return node;
@@ -211,10 +205,11 @@ namespace ts {
 
     // Type members
 
-    export function createMethod(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
+    export function createMethod(modifiers: Modifier[], asteriskToken: Node, name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <MethodDeclaration>createNode(SyntaxKind.MethodDeclaration, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
+        node.asteriskToken = asteriskToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
         node.parameters = createNodeArray(parameters);
@@ -233,33 +228,37 @@ namespace ts {
         return node;
     }
 
-    export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, body: Block, location?: TextRange) {
+    export function createGetAccessor(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <GetAccessorDeclaration>createNode(SyntaxKind.GetAccessor, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
-        node.parameters = createNodeArray<ParameterDeclaration>();
+        node.parameters = createNodeArray(parameters);
         node.body = body;
         return node;
     }
 
-    export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameter: ParameterDeclaration, body: Block, location?: TextRange) {
+    export function createSetAccessor(modifiers: Modifier[], name: string | PropertyName, parameters: ParameterDeclaration[], body: Block, location?: TextRange) {
         const node = <SetAccessorDeclaration>createNode(SyntaxKind.SetAccessor, location);
         node.decorators = undefined;
         node.modifiers = modifiers ? createNodeArray(modifiers) : undefined;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.typeParameters = undefined;
-        node.parameters = createNodeArray([parameter]);
+        node.parameters = createNodeArray(parameters);
         node.body = body;
         return node;
     }
 
     export function createParameter(name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange) {
+        return createParameterWithDotDotDotToken(/*dotDotDotToken*/ undefined, name, initializer, location);
+    }
+
+    export function createParameterWithDotDotDotToken(dotDotDotToken: Node, name: string | Identifier | BindingPattern, initializer?: Expression, location?: TextRange) {
         const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter, location);
         node.decorators = undefined;
         node.modifiers = undefined;
-        node.dotDotDotToken = undefined;
+        node.dotDotDotToken = dotDotDotToken;
         node.name = typeof name === "string" ? createIdentifier(name) : name;
         node.questionToken = undefined;
         node.type = undefined;
@@ -287,8 +286,8 @@ namespace ts {
         return node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange) {
-        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location);
+    export function createPropertyAccess(expression: Expression, name: string | Identifier, location?: TextRange, emitOptions?: NodeEmitOptions) {
+        const node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, location, /*flags*/ undefined, emitOptions);
         node.expression = parenthesizeForAccess(expression);
         node.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
         node.name = typeof name === "string" ? createIdentifier(name) : name;
@@ -505,8 +504,8 @@ namespace ts {
         return node;
     }
 
-    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange) {
-        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location);
+    export function createFor(initializer: ForInitializer, condition: Expression, incrementor: Expression, statement: Statement, location?: TextRange, emitOptions?: NodeEmitOptions) {
+        const node = <ForStatement>createNode(SyntaxKind.ForStatement, location, /*flags*/ undefined, emitOptions);
         node.initializer = initializer;
         node.condition = condition;
         node.incrementor = incrementor;
@@ -738,7 +737,7 @@ namespace ts {
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isIdentifier(memberName)) {
-            return createPropertyAccess(target, getSynthesizedClone(memberName), location);
+            return createPropertyAccess(target, memberName, location, { flags: NodeEmitFlags.NoNestedSourceMaps | NodeEmitFlags.Merge });
         }
         else if (isComputedPropertyName(memberName)) {
             return createElementAccess(target, memberName.expression, location);
@@ -749,8 +748,7 @@ namespace ts {
     }
 
     export function createRestParameter(name: string | Identifier) {
-        const node = createParameter(name, /*initializer*/ undefined);
-        node.dotDotDotToken = createSynthesizedNode(SyntaxKind.DotDotDotToken);
+        const node = createParameterWithDotDotDotToken(createSynthesizedNode(SyntaxKind.DotDotDotToken), name, /*initializer*/ undefined);
         return node;
     }
 
@@ -867,13 +865,14 @@ namespace ts {
         );
     }
 
-    export function createParamHelper(expression: Expression, parameterOffset: number) {
+    export function createParamHelper(expression: Expression, parameterOffset: number, location?: TextRange) {
         return createCall(
             createIdentifier("__param"),
             [
                 createLiteral(parameterOffset),
                 expression
-            ]
+            ],
+            location
         );
     }
 
@@ -887,7 +886,7 @@ namespace ts {
         );
     }
 
-    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression) {
+    export function createDecorateHelper(decoratorExpressions: Expression[], target: Expression, memberName?: Expression, descriptor?: Expression, location?: TextRange) {
         const argumentsArray: Expression[] = [];
         argumentsArray.push(createArrayLiteral(decoratorExpressions, /*location*/ undefined, /*multiLine*/ true));
         argumentsArray.push(target);
@@ -898,7 +897,7 @@ namespace ts {
             }
         }
 
-        return createCall(createIdentifier("__decorate"), argumentsArray);
+        return createCall(createIdentifier("__decorate"), argumentsArray, location);
     }
 
     export function createAwaiterHelper(hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression, body: Block) {
@@ -923,98 +922,6 @@ namespace ts {
             createPropertyAccess(target, "hasOwnProperty"),
             [propertyName]
         );
-    }
-
-    export interface PropertyDescriptorOptions {
-        [key: string]: boolean | Expression;
-        get?: Expression;
-        set?: Expression;
-        value?: Expression;
-        enumerable?: boolean | Expression;
-        configurable?: boolean | Expression;
-        writable?: boolean | Expression;
-    }
-
-    export interface PropertyDescriptorExtendedOptions {
-        [key: string]: PropertyDescriptorExtendedOption;
-        get?: PropertyDescriptorExtendedOption;
-        set?: PropertyDescriptorExtendedOption;
-        value?: PropertyDescriptorExtendedOption;
-        enumerable?: PropertyDescriptorExtendedOption;
-        configurable?: PropertyDescriptorExtendedOption;
-        writable?: PropertyDescriptorExtendedOption;
-    }
-
-    export interface PropertyDescriptorExtendedOption {
-        location?: TextRange;
-        emitFlags?: NodeEmitFlags;
-        newLine?: boolean;
-    }
-
-    export function createObjectDefineProperty(target: Expression, memberName: Expression, descriptor: PropertyDescriptorOptions, preferNewLine?: boolean, location?: TextRange, descriptorOptions?: PropertyDescriptorExtendedOptions, context?: TransformationContext) {
-        return createCall(
-            createPropertyAccess(
-                createIdentifier("Object"),
-                "defineProperty"
-            ),
-            [
-                target,
-                memberName,
-                createObjectLiteral(
-                    createPropertyDescriptorProperties(descriptor, descriptorOptions, preferNewLine, context),
-                    /*location*/ undefined,
-                    /*multiLine*/ preferNewLine
-                )
-            ],
-            location
-        );
-    }
-
-    function createPropertyDescriptorProperties(descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
-        const properties: ObjectLiteralElement[] = [];
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "get", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "set", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "value", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "enumerable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "configurable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        addPropertyDescriptorPropertyAssignmentIfNeeded(properties, "writable", descriptor, descriptorExtendedOptions, preferNewLine, context);
-        return properties;
-    }
-
-    function addPropertyDescriptorPropertyAssignmentIfNeeded(properties: ObjectLiteralElement[], name: string, descriptor: PropertyDescriptorOptions, descriptorExtendedOptions: PropertyDescriptorExtendedOptions, preferNewLine: boolean, context: TransformationContext) {
-        const value = getProperty(descriptor, name);
-        if (value !== undefined) {
-            let options: PropertyDescriptorExtendedOption;
-            let location: TextRange;
-            let emitFlags: NodeEmitFlags;
-            if (descriptorExtendedOptions !== undefined) {
-                options = getProperty(descriptorExtendedOptions, name);
-                if (options !== undefined) {
-                    location = options.location;
-                    emitFlags = options.emitFlags;
-                    if (options.newLine !== undefined) {
-                        preferNewLine = options.newLine;
-                    }
-                }
-            }
-
-            const property = createPropertyAssignment(
-                name,
-                typeof value === "boolean" ? createLiteral(value) : value,
-                location
-            );
-
-            if (emitFlags !== undefined) {
-                Debug.assert(context !== undefined, "TransformationContext must be supplied when emitFlags are provided.");
-                context.setNodeEmitFlags(property, emitFlags);
-            }
-
-            if (preferNewLine) {
-                startOnNewLine(property);
-            }
-
-            properties.push(property);
-        }
     }
 
     function createObjectCreate(prototype: Expression) {
@@ -1073,6 +980,7 @@ namespace ts {
         const getter = createGetAccessor(
             /*modifiers*/ undefined,
             "value",
+            [],
             createBlock([
                 createReturn(
                     createCall(
@@ -1087,7 +995,7 @@ namespace ts {
         const setter = createSetAccessor(
             /*modifiers*/ undefined,
             "value",
-            createParameter("v"),
+            [createParameter("v")],
             createBlock([
                 createStatement(
                     createCall(
@@ -1262,19 +1170,27 @@ namespace ts {
         return reduceLeft(expressions, createComma);
     }
 
-    export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
-        return isQualifiedName(node)
-            ? createPropertyAccess(
-                createExpressionFromEntityName(node.left),
-                getSynthesizedClone(node.right)
-            )
-            : getSynthesizedClone(node);
+    export function createExpressionFromEntityName(node: EntityName | Expression, emitOptions?: NodeEmitOptions): Expression {
+        if (isQualifiedName(node)) {
+            const left = createExpressionFromEntityName(node.left, emitOptions);
+            const right = getMutableClone(node.right, emitOptions && clone(emitOptions));
+            return createPropertyAccess(left, right, /*location*/ node, emitOptions && clone(emitOptions));
+        }
+        else {
+            return getMutableClone(node, emitOptions && clone(emitOptions));
+        }
     }
 
-    export function createExpressionForPropertyName(memberName: PropertyName, location?: TextRange): Expression {
-        return isIdentifier(memberName) ? createLiteral(memberName.text, location)
-             : isComputedPropertyName(memberName) ? getRelocatedClone(memberName.expression, location || synthesizedLocation)
-             : getRelocatedClone(memberName, location || synthesizedLocation);
+    export function createExpressionForPropertyName(memberName: PropertyName, emitOptions?: NodeEmitOptions): Expression {
+        if (isIdentifier(memberName)) {
+            return createLiteral(memberName, /*location*/ undefined, emitOptions);
+        }
+        else if (isComputedPropertyName(memberName)) {
+            return getMutableClone(memberName.expression, emitOptions);
+        }
+        else {
+            return getMutableClone(memberName, emitOptions);
+        }
     }
 
     // Utilities

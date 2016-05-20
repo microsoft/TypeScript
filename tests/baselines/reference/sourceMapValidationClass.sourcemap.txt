@@ -37,21 +37,21 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>        for (var _i = 1; _i < arguments.length; _i++) {
 1->^^^^^^^^^^^^^
-2 >             ^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^^^^^
-5 >                                              ^^
+2 >             ^^^^^^^^^^^
+3 >                        ^
+4 >                         ^^^^^^^^^^^^^^^^^^^^^^
+5 >                                               ^
 6 >                                                ^^^^
 1->
 2 >             ...b: string[]
-3 >                       
+3 >                        
 4 >                         ...b: string[]
-5 >                                              
+5 >                                               
 6 >                                                ...b: string[]
 1->Emitted(4, 14) Source(2, 42) + SourceIndex(0)
-2 >Emitted(4, 24) Source(2, 56) + SourceIndex(0)
+2 >Emitted(4, 25) Source(2, 56) + SourceIndex(0)
 3 >Emitted(4, 26) Source(2, 42) + SourceIndex(0)
-4 >Emitted(4, 47) Source(2, 56) + SourceIndex(0)
+4 >Emitted(4, 48) Source(2, 56) + SourceIndex(0)
 5 >Emitted(4, 49) Source(2, 42) + SourceIndex(0)
 6 >Emitted(4, 53) Source(2, 56) + SourceIndex(0)
 ---
